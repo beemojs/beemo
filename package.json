@@ -1,8 +1,5 @@
 {
-  "name": "rocket",
-  "version": "0.0.0",
-  "description": "Manage all build tool configurations in a single reusable repository.",
-  "main": "index.js",
+  "private": true,
   "scripts": {
     "test": "yarn run jest",
     "coverage": "run-coverage",
@@ -20,39 +17,18 @@
     "publish:force": "lerna publish --force-publish=*",
     "updated": "lerna updated"
   },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/milesj/rocket.git"
-  },
-  "keywords": [
-    "rocket",
-    "build",
-    "tool",
-    "config",
-    "manager",
-    "babel",
-    "eslint",
-    "jest"
-  ],
-  "author": "Miles Johnson",
-  "license": "MIT",
-  "bugs": {
-    "url": "https://github.com/milesj/rocket/issues"
-  },
-  "homepage": "https://github.com/milesj/rocket#readme",
   "devDependencies": {
     "@milesj/build-tool-config": "0.35.0",
     "lerna": "^2.4.0"
   },
-  "private": true,
   "workspaces": [
     "packages/*"
   ],
   "babel": {
-    "extends": "./node_modules/@milesj/build-tool-config/babel.json5"
+    "extends": "./node_modules/@milesj/build-tool-config/babel.node.json5"
   },
   "eslintConfig": {
-    "extends": "./node_modules/@milesj/build-tool-config/eslint.json5"
+    "extends": "./node_modules/@milesj/build-tool-config/eslint.node.json5"
   },
   "eslintIgnore": [
     "lib/",

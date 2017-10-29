@@ -1,0 +1,27 @@
+{
+  "name": "rocket",
+  "version": "0.0.0",
+  "description": "Manage all build tool configurations in a single reusable repository.",
+  "keywords": [
+    "rocket",
+    "build",
+    "tool",
+    "config",
+    "manager",
+    "babel",
+    "eslint",
+    "jest"
+  ],
+  "main": "./lib/index.js",
+  "scripts": {
+    "build": "build-lib ./src -d ./lib"
+  },
+  "repository": "https://github.com/milesj/rocket/tree/master/packages/rocket",
+  "license": "MIT",
+  "devDependencies": {
+    "@milesj/build-tool-config": "0.35.0"
+  },
+  "dependencies": {
+    "boost": "^0.2.0"
+  }
+}
