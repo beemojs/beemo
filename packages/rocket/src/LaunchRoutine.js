@@ -6,6 +6,6 @@
 
 import { Routine } from 'boost';
 
-export default class RunEngineRoutine extends Routine {
+export default class LaunchRoutine extends Routine {
 
 }

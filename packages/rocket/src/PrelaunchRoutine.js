@@ -6,13 +6,12 @@
 
 import { Routine } from 'boost';
 
-// TODO pass opts/args from command line / isolate scope
-export default class CreateConfigRoutine extends Routine {
+export default class PrelaunchRoutine extends Routine {
   bootstrap() {
     // TODO skip if file mtimes havent changed
     this
-      .task('Loading module config', this.loadConfigFromFilesystem)
-      .task('Loading project package.json config', this.extractConfigFromPackage)
+      .task('Loading external module config', this.loadConfigFromFilesystem)
+      .task('Loading local rocket config', this.extractConfigFromPackage)
       .task('Merging configs', this.mergeConfigs)
       .task('Creating config file', this.createConfigFile);
   }
@@ -59,6 +58,7 @@ export default class CreateConfigRoutine extends Routine {
    */
   loadConfigFromFilesystem(configs: Object[]): Object[] {
     // TODO Use ConfigLoader???
+    // TODO pass opts/args from command line / isolate scope
 
     return configs;
   }

@@ -8,9 +8,9 @@
 import typeof Tool from 'boost/lib/Tool'; // TODO export
 import ToolBuilder from 'boost/lib/ToolBuilder';
 import { Pipeline } from 'boost';
-import CleanOutputRoutine from './CleanOutputRoutine';
-import CreateConfigRoutine from './CreateConfigRoutine';
-import RunEngineRoutine from './RunEngineRoutine';
+import PrelaunchRoutine from './PrelaunchRoutine';
+import LaunchRoutine from './LaunchRoutine';
+import PostlaunchRoutine from './PostlaunchRoutine';
 import Engine from './Engine';
 
 export default class Rocket {
@@ -23,7 +23,7 @@ export default class Rocket {
   /**
    * Locate the engine (boost plugin) that will be ran.
    */
-  igniteEngine(engineName: string): Engine {
+  fuelEngine(engineName: string): Engine {
     const engine = this.tool.plugins.find(plugin => plugin.name === engineName);
 
     if (!engine) {
@@ -41,8 +41,8 @@ export default class Rocket {
 
     if (!config) {
       throw new Error(
-        'Rocket requires a "rocket.config" property within your package.json, ' +
-        'which is the name of a module that houses your configuration files.',
+        'Rocket requires a "rocket.config" property within your package.json. ' +
+        'This property is the name of a module that houses your configuration files.',
       );
     }
 
@@ -62,13 +62,13 @@ export default class Rocket {
    */
   launch(engineName: string): Promise<*> /* TODO */ {
     const configRoot = this.prepLaunchpad();
-    const engine = this.igniteEngine(engineName);
+    const engine = this.fuelEngine(engineName);
 
     return new Pipeline(this.tool)
       .pipe(
-        new CreateConfigRoutine('configure', 'Create unified configuration'),
-        new RunEngineRoutine('run', 'Start and run engine'),
-        new CleanOutputRoutine('cleanup', 'Display output and cleanup'),
+        new PrelaunchRoutine('prelaunch', 'Create unified configuration'),
+        new LaunchRoutine('launch', 'Start and run engine'),
+        new PostlaunchRoutine('postlaunch', 'Display output and cleanup'),
       )
       .run(engineName, {
         configRoot,
