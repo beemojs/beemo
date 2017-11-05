@@ -5,5 +5,7 @@
  */
 
 import Engine from './Engine';
+import Rocket from './Rocket';
 
 export { Engine };
+export default Rocket;

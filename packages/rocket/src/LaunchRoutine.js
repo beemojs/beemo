@@ -7,5 +7,7 @@
 import { Routine } from 'boost';
 
 export default class LaunchRoutine extends Routine {
-
+  execute(configPath: string): Promise<string> {
+    return this.serializeTasks([]);
+  }
 }

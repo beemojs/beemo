@@ -5,9 +5,7 @@
  */
 
 
-import typeof Tool from 'boost/lib/Tool'; // TODO export
-import ToolBuilder from 'boost/lib/ToolBuilder';
-import { Pipeline } from 'boost';
+import { Pipeline, Tool } from 'boost';
 import PrelaunchRoutine from './PrelaunchRoutine';
 import LaunchRoutine from './LaunchRoutine';
 import PostlaunchRoutine from './PostlaunchRoutine';
@@ -17,7 +15,13 @@ export default class Rocket {
   tool: Tool;
 
   constructor() {
-    this.tool = new ToolBuilder('rocket', 'engine').build();
+    this.tool = new Tool({
+      appName: 'rocket',
+      pluginName: 'engine',
+    });
+
+    // Immediately load config and plugins
+    this.tool.initialize();
   }
 
   /**
@@ -48,7 +52,7 @@ export default class Rocket {
 
     // Use Node's module resolution to find the module
     try {
-      // eslint-disable-next-line global-require, import/no-dynamic-require
+      // eslint-disable-next-line
       require(config);
     } catch (error) {
       throw new Error('Module defined in "rocket.config" could not be found.');
@@ -71,10 +75,11 @@ export default class Rocket {
         new PostlaunchRoutine('postlaunch', 'Display output and cleanup'),
       )
       .run(engineName, {
+        cliOptions: {},
         configRoot,
         engine,
         engineName,
-        root: process.cwd(),
+        root: this.tool.options.root,
       });
   }
 }

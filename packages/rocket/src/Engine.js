@@ -7,11 +7,7 @@
 import { Plugin } from 'boost';
 
 export default class Engine extends Plugin {
-  constructor() {
-
-  }
-
   merge(prev: Object, next: Object): Object {
-
+    throw new Error('Merging strategy has not been defined.');
   }
 }
