@@ -5,7 +5,9 @@
   "keywords": [
     "rocket",
     "engine",
-    "eslint"
+    "eslint",
+    "lint",
+    "linter"
   ],
   "main": "./lib/index.js",
   "scripts": {

@@ -28,13 +28,20 @@ export default class Rocket {
    * Locate the engine (boost plugin) that will be ran.
    */
   fuelEngine(engineName: string): Engine {
-    const engine = this.tool.plugins.find(plugin => plugin.name === engineName);
+    const engine = this.getEngines().find(plugin => plugin.name === engineName);
 
     if (!engine) {
       throw new Error(`Failed to load engine "${engineName}". Have you installed it?`);
     }
 
     return engine;
+  }
+
+  /**
+   * Return all the loaded engines.
+   */
+  getEngines(): Engine[] {
+    return this.tool.plugins;
   }
 
   /**
@@ -64,7 +71,7 @@ export default class Rocket {
   /**
    * Launch the rocket (boost pipeline) by executing all routines for the chosen engine.
    */
-  launch(engineName: string): Promise<*> /* TODO */ {
+  launch(engineName: string, cliArgs?: string[] = []): Promise<*> /* TODO */ {
     const configRoot = this.prepLaunchpad();
     const engine = this.fuelEngine(engineName);
 
@@ -75,7 +82,7 @@ export default class Rocket {
         new PostlaunchRoutine('postlaunch', 'Display output and cleanup'),
       )
       .run(engineName, {
-        cliOptions: {},
+        cliArgs,
         configRoot,
         engine,
         engineName,

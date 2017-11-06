@@ -70,7 +70,7 @@ export default class PrelaunchRoutine extends Routine {
   mergeConfigs(configs: Object[]): Object {
     const { engine } = this.context;
 
-    return configs.reduce((masterConfig, config) => engine.merge(masterConfig, config), {});
+    return configs.reduce((masterConfig, config) => engine.mergeConfig(masterConfig, config), {});
   }
 
   /**
@@ -78,11 +78,11 @@ export default class PrelaunchRoutine extends Routine {
    */
   loadConfigFromFilesystem(configs: Object[]): Object[] {
     const { config, configLoader } = this.tool;
-    const { cliOptions, engineName } = this.context;
+    const { cliArgs, engineName } = this.context;
     const filePath = configLoader.resolveModuleConfigPath(engineName, config.config);
 
     if (fs.existsSync(filePath)) {
-      configs.push(configLoader.parseFile(filePath, cliOptions));
+      configs.push(configLoader.parseFile(filePath, cliArgs));
     }
 
     return configs;
