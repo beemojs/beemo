@@ -44,3 +44,6 @@ jspm_packages
 # Custom paths
 lib/
 tests/bundle.min.js
+
+# Ignore for local testing
+.eslintrc

@@ -18,22 +18,32 @@ export default class PrelaunchRoutine extends Routine {
   }
 
   /**
-   * Create a temporary configuration file to pass as a CLI argument to each engine's command.
+   * Create a temporary configuration file or pass as an option.
    */
   createConfigFile(config: Object): string {
-    const tempPath = this.getTempFilePath();
-    const tempFolder = path.dirname(tempPath);
+    const { engine, engineName, root } = this.context;
+    const { fileName, useOption } = engine.meta;
+    let configPath = '';
 
-    // Make sure the folder existss
-    fs.mkdirSync(tempFolder);
+    // Pass the config as a CLI option
+    if (useOption) {
+      configPath = path.join(root, '.rocket', `${engineName}.json`);
+
+      // Make sure the folder existss
+      fs.mkdirSync(path.dirname(configPath));
+
+    // Create an rc file relative to the current root
+    } else {
+      configPath = path.join(root, fileName);
+    }
 
     // Overwrite existing files
-    fs.writeFileSync(tempPath, JSON.stringify(config));
+    fs.writeFileSync(configPath, JSON.stringify(config, null, 2));
 
     // Add to context
-    this.context.configFilePath = tempPath;
+    this.context.configFilePath = configPath;
 
-    return tempPath;
+    return configPath;
   }
 
   /**
@@ -58,13 +68,6 @@ export default class PrelaunchRoutine extends Routine {
   }
 
   /**
-   * Return a file path to the temporary config file, relative to the current project root.
-   */
-  getTempFilePath(): string {
-    return path.join(this.context.root, '.rocket', `${this.context.engineName}.json`);
-  }
-
-  /**
    * Merge multiple configuration sources using the current engine.
    */
   mergeConfigs(configs: Object[]): Object {
@@ -77,9 +80,13 @@ export default class PrelaunchRoutine extends Routine {
    * Load configuration from the node module (the consumer owned package).
    */
   loadConfigFromFilesystem(configs: Object[]): Object[] {
-    const { config, configLoader } = this.tool;
-    const { cliArgs, engineName } = this.context;
-    const filePath = configLoader.resolveModuleConfigPath(engineName, config.config);
+    const { config: { config: moduleName }, configLoader } = this.tool;
+    const { cliArgs, engineName, root } = this.context;
+
+    // Allow for local development
+    const filePath = (moduleName === '@local')
+      ? path.join(root, `config/${engineName}.js`)
+      : configLoader.resolveModuleConfigPath(engineName, moduleName);
 
     if (fs.existsSync(filePath)) {
       configs.push(configLoader.parseFile(filePath, cliArgs));

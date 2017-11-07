@@ -7,8 +7,8 @@
 import { Routine } from 'boost';
 
 export default class PostlaunchRoutine extends Routine {
-  bootstrap() {
-    this
-      .task('Deleting temporary config file', this.deleteConfigFile);
-  }
+  // bootstrap() {
+  //   this
+  //     .task('Deleting temporary config file', this.deleteConfigFile);
+  // }
 }

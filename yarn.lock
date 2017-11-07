@@ -1098,9 +1098,9 @@ boom@5.x.x:
   dependencies:
     hoek "4.x.x"
 
-boost@^0.6.0:
-  version "0.6.0"
-  resolved "https://registry.yarnpkg.com/boost/-/boost-0.6.0.tgz#d83922ed9e250e253331db03b6c06b0ef957ec67"
+boost@^0.7.0:
+  version "0.7.0"
+  resolved "https://registry.yarnpkg.com/boost/-/boost-0.7.0.tgz#c099910b5cc099f187ee5e4056577741082aa02b"
   dependencies:
     bluebird "^3.5.1"
     chalk "^2.3.0"

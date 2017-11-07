@@ -14,18 +14,17 @@ const rocket = new Rocket();
 rocket.getEngines().forEach((engine) => {
   const { meta, options } = engine;
 
-  app.command(meta.bin, meta.description || `Run ${meta.title}.`, (argv) => {
-    console.log(argv, engine);
-    rocket.launch(engine.name, options.args);
+  app.command(meta.bin, meta.description || `Run ${meta.title}.`, () => {
+    rocket.launch(engine.name, [
+      ...options.args,
+      ...process.argv.slice(3),
+    ]);
   });
 });
 
 // Run application
 // eslint-disable-next-line
 app
-  .command('*', 'Display all loaded engines.', () => {}, () => {
-    app.help();
-  })
   .usage('rocket <engine> [args..]')
   .help()
   .argv;

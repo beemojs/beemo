@@ -15,7 +15,8 @@
     "clean": "rimraf ./packages/{*}/lib/ && lerna clean --yes",
     "publish": "lerna publish",
     "publish:force": "lerna publish --force-publish=*",
-    "updated": "lerna updated"
+    "updated": "lerna updated",
+    "rocket": "node ./packages/rocket/bin/rocket"
   },
   "devDependencies": {
     "@milesj/build-tool-config": "0.35.0",
@@ -37,5 +38,14 @@
   ],
   "jest": {
     "preset": "@milesj/build-tool-config"
+  },
+  "rocket": {
+    "config": "@local",
+    "engines": ["eslint"],
+    "eslint": {
+      "env": {
+        "jest": true
+      }
+    }
   }
 }

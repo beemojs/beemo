@@ -5,7 +5,7 @@
  */
 
 import { Plugin } from 'boost';
-import Options, { boolean, string } from 'optimal';
+import Options, { bool, string } from 'optimal';
 
 type EngineOptions = {
   args: string[],
@@ -18,7 +18,7 @@ type Metadata = {
   fileName: string,
   optionName: string,
   title: string,
-  useFile: boolean,
+  useOption: boolean,
 };
 
 export default class Engine extends Plugin<EngineOptions> {
@@ -28,7 +28,13 @@ export default class Engine extends Plugin<EngineOptions> {
     fileName: '',
     optionName: '',
     title: '',
-    useFile: false,
+    useOption: false,
+  };
+
+  // TODO validate
+  options: EngineOptions = {
+    args: [],
+    env: {},
   };
 
   /**
@@ -51,7 +57,7 @@ export default class Engine extends Plugin<EngineOptions> {
       fileName: string().empty().or('optionName'),
       optionName: string().empty().match(/^--?[-a-z]+$/).or('fileName'),
       title: string(),
-      useFile: boolean(false),
+      useOption: bool(false),
     }, {
       name: this.constructor.name,
     });

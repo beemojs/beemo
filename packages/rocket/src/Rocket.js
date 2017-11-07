@@ -57,10 +57,14 @@ export default class Rocket {
       );
     }
 
+    // Allow for local development
+    if (config === '@local') {
+      return process.cwd();
+    }
+
     // Use Node's module resolution to find the module
     try {
-      // eslint-disable-next-line
-      require(config);
+      require(config); // eslint-disable-line
     } catch (error) {
       throw new Error('Module defined in "rocket.config" could not be found.');
     }
@@ -83,6 +87,7 @@ export default class Rocket {
       )
       .run(engineName, {
         cliArgs,
+        configFilePath: '',
         configRoot,
         engine,
         engineName,
