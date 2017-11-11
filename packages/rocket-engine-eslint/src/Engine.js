@@ -13,6 +13,7 @@ export default class ESLintEngine extends Engine {
       bin: 'eslint',
       description: 'Lint files using ESLint.',
       fileName: '.eslintrc',
+      helpOption: '--help',
       optionName: '--config',
       title: 'ESLint',
     });

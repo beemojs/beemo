@@ -12,13 +12,10 @@ const rocket = new Rocket();
 
 // Add a command for each engine
 rocket.getEngines().forEach((engine) => {
-  const { meta, options } = engine;
+  const { meta } = engine;
 
   app.command(meta.bin, meta.description || `Run ${meta.title}.`, () => {
-    rocket.launch(engine.name, [
-      ...options.args,
-      ...process.argv.slice(3),
-    ]);
+    rocket.launch(engine.name, process.argv.slice(3));
   });
 });
 
