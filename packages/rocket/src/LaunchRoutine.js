@@ -57,7 +57,7 @@ export default class LaunchRoutine extends Routine {
   runCommand(args: string[]) {
     const { cliArgs, engine } = this.context;
 
-    console.log(cliArgs, engine.options.args, args);
+    // console.log(cliArgs, engine.options.args, args);
 
     return this.executeCommand(engine.meta.bin, args, {
       env: engine.options.env,
@@ -69,12 +69,12 @@ export default class LaunchRoutine extends Routine {
         }
 
         // TODO Pass to renderer
-        console.log(output);
+        // console.log(output);
 
         return output.stdout;
       })
       .catch((error) => {
-        console.log(error);
+        // console.log(error);
       });
   }
 }

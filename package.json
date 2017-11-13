@@ -19,32 +19,31 @@
     "rocket": "node ./packages/rocket/bin/rocket"
   },
   "devDependencies": {
-    "@milesj/build-tool-config": "0.35.0",
+    "@milesj/build-tool-config": "0.41.2",
     "lerna": "^2.5.1"
   },
   "workspaces": [
     "packages/*"
   ],
   "babel": {
-    "extends": "./node_modules/@milesj/build-tool-config/babel.node.json5"
+    "presets": "@milesj/build-tool-config/babel"
   },
   "eslintConfig": {
-    "extends": "./node_modules/@milesj/build-tool-config/eslint.node.json5"
+    "extends": "./node_modules/@milesj/build-tool-config/eslint.js"
   },
   "eslintIgnore": [
     "lib/",
     "*.min.js",
     "*.map"
   ],
-  "jest": {
-    "preset": "@milesj/build-tool-config"
-  },
   "rocket": {
     "config": "@local",
-    "engines": ["eslint"],
+    "engines": [
+      "eslint"
+    ],
     "eslint": {
-      "env": {
-        "jest": true
+      "globals": {
+        "rocket": true
       }
     }
   }

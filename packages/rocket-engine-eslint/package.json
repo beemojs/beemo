@@ -19,8 +19,8 @@
   "repository": "https://github.com/milesj/rocket/tree/master/packages/rocket-engine-eslint",
   "license": "MIT",
   "devDependencies": {
-    "@milesj/build-tool-config": "0.35.0",
-    "eslint": "^4.10.0"
+    "@milesj/build-tool-config": "0.41.2",
+    "eslint": "^4.11.0"
   },
   "peerDependencies": {
     "eslint": "^4.10.0",
