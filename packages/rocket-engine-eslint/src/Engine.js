@@ -14,7 +14,6 @@ export default class ESLintEngine extends Engine {
       description: 'Lint files using ESLint.',
       fileName: '.eslintrc',
       helpOption: '--help',
-      optionName: '--config',
       title: 'ESLint',
     });
   }

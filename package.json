@@ -32,6 +32,7 @@
     "extends": "./node_modules/@milesj/build-tool-config/eslint.js"
   },
   "eslintIgnore": [
+    "esm/",
     "lib/",
     "*.min.js",
     "*.map"

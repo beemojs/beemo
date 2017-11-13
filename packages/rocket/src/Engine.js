@@ -5,7 +5,7 @@
  */
 
 import { Plugin } from 'boost';
-import Options, { bool, string } from 'optimal';
+import Options, { array, string } from 'optimal';
 
 type EngineOptions = {
   args: string[],
@@ -14,23 +14,21 @@ type EngineOptions = {
 
 type Metadata = {
   bin: string,
+  dependencies: string[],
   description: string,
   fileName: string,
   helpOption: string,
-  optionName: string,
   title: string,
-  useOption: boolean,
 };
 
 export default class Engine extends Plugin<EngineOptions> {
   meta: Metadata = {
     bin: '',
+    dependencies: [],
     description: '',
     fileName: '',
     helpOption: '',
-    optionName: '',
     title: '',
-    useOption: false,
   };
 
   // TODO validate
@@ -55,12 +53,11 @@ export default class Engine extends Plugin<EngineOptions> {
       ...meta,
     }, {
       bin: string().match(/^[-a-z0-9]+$/),
+      dependencies: array(string()),
       description: string().empty(),
-      fileName: string().empty().or('optionName'),
+      fileName: string(),
       helpOption: string(),
-      optionName: string().empty().match(/^--?[-a-z]+$/).or('fileName'),
       title: string(),
-      useOption: bool(false),
     }, {
       name: this.constructor.name,
     });

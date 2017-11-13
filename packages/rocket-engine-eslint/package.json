@@ -11,7 +11,7 @@
   ],
   "main": "./lib/index.js",
   "scripts": {
-    "build": "build-lib ./src -d ./lib"
+    "build": "build-lib"
   },
   "engines": {
     "node": ">=6.5.0"
