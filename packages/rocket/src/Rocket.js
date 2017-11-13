@@ -78,7 +78,7 @@ export default class Rocket {
   /**
    * Launch the rocket (boost pipeline) by executing all routines for the chosen engine.
    */
-  launch(engineName: string, cliArgs?: string[] = []): Promise<*> /* TODO */ {
+  launch(engineName: string, args?: string[] = []): Promise<*> /* TODO */ {
     const configRoot = this.getModuleConfigRoot();
     const primaryEngine = this.getEngine(engineName);
 
@@ -89,7 +89,7 @@ export default class Rocket {
         new PostlaunchRoutine('postlaunch', 'Displaying and cleaning output'),
       )
       .run(engineName, {
-        cliArgs,
+        args,
         configFilePaths: {},
         configRoot,
         engines: [primaryEngine],

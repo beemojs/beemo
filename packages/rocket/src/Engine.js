@@ -5,7 +5,7 @@
  */
 
 import { Plugin } from 'boost';
-import Options, { array, string } from 'optimal';
+import Options, { array, bool, number, object, string, union } from 'optimal';
 
 type EngineOptions = {
   args: string[],
@@ -31,11 +31,25 @@ export default class Engine extends Plugin<EngineOptions> {
     title: '',
   };
 
-  // TODO validate
   options: EngineOptions = {
     args: [],
     env: {},
   };
+
+  constructor(options?: Object = {}) {
+    super(options);
+
+    this.options = new Options(this.options, {
+      args: array(string()),
+      env: object(union([
+        bool(),
+        number(),
+        string(),
+      ])),
+    }, {
+      name: this.constructor.name,
+    });
+  }
 
   /**
    * Merge multiple configuration objects.

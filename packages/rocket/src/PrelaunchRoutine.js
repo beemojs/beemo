@@ -16,7 +16,7 @@ export default class PrelaunchRoutine extends Routine {
   execute(): Promise<*> {
     return this
       .pipe(new ResolveDependenciesRoutine('resolve', 'Resolving engine dependencies'))
-      .pipe(new GenerateConfigsRoutine('generate', 'Generating engine configurations'))
+      .pipe(new GenerateConfigsRoutine('generate', 'Generating configuration files'))
       .serializeSubroutines();
   }
 }

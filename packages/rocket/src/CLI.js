@@ -15,6 +15,9 @@ rocket.getEngines().forEach((engine) => {
   const { meta } = engine;
 
   app.command(meta.bin, meta.description || `Run ${meta.title}.`, () => {
+    // 0 node
+    // 1 rocket
+    // 2 <engine>
     rocket.launch(engine.name, process.argv.slice(3));
   });
 });

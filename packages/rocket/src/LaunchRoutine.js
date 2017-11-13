@@ -9,20 +9,16 @@ import { Routine } from 'boost';
 const OPTION_PATTERN: RegExp = /-?-[-a-z0-9]+/ig;
 
 export default class LaunchRoutine extends Routine {
-  bootstrap() {
-    const { engineName } = this.context;
-
+  execute(): Promise<string> {
     this
       .task('Filtering command options', this.filterCommandOptions)
-      .task(`Running ${engineName} command`, this.runCommand);
-  }
+      .task(`Running command`, this.runCommand);
 
-  execute(): Promise<string> {
     return null;
   }
 
   filterCommandOptions(): Promise<string[]> {
-    const { cliArgs, engine } = this.context;
+    const { args, engine } = this.context;
 
     return this.executeCommand(engine.meta.bin, [engine.meta.helpOption], {
       env: engine.options.env,
@@ -36,7 +32,7 @@ export default class LaunchRoutine extends Routine {
           // Generated arguments second
           // TODO
           // Manual passed arguments should override all
-          ...cliArgs,
+          ...args,
         ];
 
         return options.filter(option => (
@@ -55,26 +51,26 @@ export default class LaunchRoutine extends Routine {
   }
 
   runCommand(args: string[]) {
-    const { cliArgs, engine } = this.context;
-
-    // console.log(cliArgs, engine.options.args, args);
-
-    return this.executeCommand(engine.meta.bin, args, {
-      env: engine.options.env,
-    })
-      .then(this.handleOutput)
-      .then((output) => {
-        if (output.stderr) {
-          throw new Error(output.stderr);
-        }
-
-        // TODO Pass to renderer
-        // console.log(output);
-
-        return output.stdout;
-      })
-      .catch((error) => {
-        // console.log(error);
-      });
+    // const { args, engine } = this.context;
+    //
+    // // console.log(args, engine.options.args, args);
+    //
+    // return this.executeCommand(engine.meta.bin, args, {
+    //   env: engine.options.env,
+    // })
+    //   .then(this.handleOutput)
+    //   .then((output) => {
+    //     if (output.stderr) {
+    //       throw new Error(output.stderr);
+    //     }
+    //
+    //     // TODO Pass to renderer
+    //     // console.log(output);
+    //
+    //     return output.stdout;
+    //   })
+    //   .catch((error) => {
+    //     // console.log(error);
+    //   });
   }
 }
