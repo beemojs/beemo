@@ -12,9 +12,9 @@ const rocket = new Rocket();
 
 // Add a command for each engine
 rocket.getEngines().forEach((engine) => {
-  const { meta } = engine;
+  const { metadata } = engine;
 
-  app.command(meta.bin, meta.description || `Run ${meta.title}.`, () => {
+  app.command(metadata.bin, metadata.description || `Run ${metadata.title}.`, () => {
     // 0 node
     // 1 rocket
     // 2 <engine>

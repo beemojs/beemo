@@ -14,7 +14,7 @@ export default class GenerateConfigsRoutine extends Routine {
    */
   execute(): Promise<Object[]> {
     this.context.engines.forEach((engine) => {
-      const routine = new CreateConfigRoutine(engine.name, engine.meta.title);
+      const routine = new CreateConfigRoutine(engine.name, engine.metadata.title);
 
       routine.engine = engine;
 

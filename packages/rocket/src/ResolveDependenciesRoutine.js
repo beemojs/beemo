@@ -18,7 +18,7 @@ export default class ResolveDependenciesRoutine extends Routine {
     while (queue.length) {
       const engine = queue.shift();
 
-      engine.meta.dependencies.forEach((engineName) => {
+      engine.metadata.dependencies.forEach((engineName) => {
         this.context.engines.unshift(this.tool.getEngine(engineName));
       });
     }

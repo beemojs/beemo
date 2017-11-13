@@ -22,7 +22,7 @@ type Metadata = {
 };
 
 export default class Engine extends Plugin<EngineOptions> {
-  meta: Metadata = {
+  metadata: Metadata = {
     bin: '',
     dependencies: [],
     description: '',
@@ -59,12 +59,12 @@ export default class Engine extends Plugin<EngineOptions> {
   }
 
   /**
-   * Set metadata about the binary/executable in which this engine wraps.
+   * Set metadatadata about the binary/executable in which this engine wraps.
    */
-  setMetadata(meta: Object): this {
-    this.meta = new Options({
-      ...this.meta,
-      ...meta,
+  setMetadata(metadata: Object): this {
+    this.metadata = new Options({
+      ...this.metadata,
+      ...metadata,
     }, {
       bin: string().match(/^[-a-z0-9]+$/),
       dependencies: array(string()),

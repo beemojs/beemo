@@ -14,8 +14,8 @@ export default class CreateConfigRoutine extends Routine {
    * Create a temporary configuration file or pass as an option.
    */
   createConfigFile(config: Object): string {
-    const { meta, name } = this.engine;
-    const configPath = path.join(this.context.root, meta.fileName);
+    const { metadata, name } = this.engine;
+    const configPath = path.join(this.context.root, metadata.fileName);
 
     this.context.configFilePaths[name] = configPath;
 

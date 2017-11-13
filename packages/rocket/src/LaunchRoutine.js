@@ -20,7 +20,7 @@ export default class LaunchRoutine extends Routine {
   filterCommandOptions(): Promise<string[]> {
     const { args, engine } = this.context;
 
-    return this.executeCommand(engine.meta.bin, [engine.meta.helpOption], {
+    return this.executeCommand(engine.metadata.bin, [engine.metadata.helpOption], {
       env: engine.options.env,
     })
       .then(this.handleOutput)
@@ -55,7 +55,7 @@ export default class LaunchRoutine extends Routine {
     //
     // // console.log(args, engine.options.args, args);
     //
-    // return this.executeCommand(engine.meta.bin, args, {
+    // return this.executeCommand(engine.metadata.bin, args, {
     //   env: engine.options.env,
     // })
     //   .then(this.handleOutput)
