@@ -39,6 +39,7 @@
   ],
   "rocket": {
     "config": "@local",
+    "debug": true,
     "engines": [
       "eslint"
     ],
