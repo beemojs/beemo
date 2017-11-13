@@ -18,7 +18,7 @@ export default class LaunchRoutine extends Routine {
   }
 
   execute(): Promise<string> {
-    return this.serializeTasks();
+    return null;
   }
 
   filterCommandOptions(): Promise<string[]> {
