@@ -5,6 +5,7 @@
  */
 
 import { Plugin } from 'boost';
+import merge from 'lodash/merge';
 import Options, { array, bool, number, object, string, union } from 'optimal';
 
 type EngineOptions = {
@@ -55,22 +56,19 @@ export default class Engine extends Plugin<EngineOptions> {
    * Merge multiple configuration objects.
    */
   mergeConfig(prev: Object, next: Object): Object {
-    throw new Error('Merging strategy has not been defined.');
+    return merge(prev, next);
   }
 
   /**
    * Set metadatadata about the binary/executable in which this engine wraps.
    */
   setMetadata(metadata: Object): this {
-    this.metadata = new Options({
-      ...this.metadata,
-      ...metadata,
-    }, {
+    this.metadata = new Options(metadata, {
       bin: string().match(/^[-a-z0-9]+$/),
       dependencies: array(string()),
       description: string().empty(),
       fileName: string(),
-      helpOption: string(),
+      helpOption: string('--help'),
       title: string(),
     }, {
       name: this.constructor.name,

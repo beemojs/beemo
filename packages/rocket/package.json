@@ -28,6 +28,7 @@
   "dependencies": {
     "boost": "^0.10.0",
     "fs-extra": "^4.0.2",
+    "lodash": "^4.17.4",
     "yargs": "^10.0.3",
     "yargs-parser": "^8.0.0"
   }

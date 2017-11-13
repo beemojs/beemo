@@ -41,7 +41,9 @@
     "config": "@local",
     "debug": true,
     "engines": [
-      "eslint"
+      "babel",
+      "eslint",
+      "jest"
     ],
     "eslint": {
       "globals": {

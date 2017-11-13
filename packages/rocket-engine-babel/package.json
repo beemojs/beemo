@@ -1,0 +1,29 @@
+{
+  "name": "rocket-engine-babel",
+  "version": "0.0.0",
+  "description": "Babel engine for Rocket.",
+  "keywords": [
+    "rocket",
+    "engine",
+    "babel",
+    "transpile",
+    "compile"
+  ],
+  "main": "./lib/index.js",
+  "scripts": {
+    "build": "build-lib"
+  },
+  "engines": {
+    "node": ">=6.5.0"
+  },
+  "repository": "https://github.com/milesj/rocket/tree/master/packages/rocket-engine-babel",
+  "license": "MIT",
+  "devDependencies": {
+    "@milesj/build-tool-config": "0.41.2",
+    "babel-core": "^6.26.0"
+  },
+  "peerDependencies": {
+    "babel-core": "^6.26.0",
+    "rocket": "^0.0.0"
+  }
+}
