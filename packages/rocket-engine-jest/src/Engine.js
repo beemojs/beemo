@@ -10,9 +10,9 @@ export default class JestEngine extends Engine {
   bootstrap() {
     this.setMetadata({
       bin: 'jest',
+      configName: 'jest.json',
       dependencies: ['babel'],
       description: 'Unit test files with Jest.',
-      fileName: 'jest.json',
       title: 'Jest',
     });
   }

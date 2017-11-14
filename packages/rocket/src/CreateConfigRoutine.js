@@ -15,7 +15,7 @@ export default class CreateConfigRoutine extends Routine {
    */
   createConfigFile(config: Object): string {
     const { metadata, name } = this.engine;
-    const configPath = path.join(this.context.root, metadata.fileName);
+    const configPath = path.join(this.context.root, metadata.configName);
 
     this.context.configFilePaths[name] = configPath;
 

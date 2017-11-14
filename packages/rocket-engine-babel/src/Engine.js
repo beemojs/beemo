@@ -10,8 +10,8 @@ export default class BabelEngine extends Engine {
   bootstrap() {
     this.setMetadata({
       bin: 'babel',
+      configName: '.babelrc',
       description: 'Transpile files using Babel.',
-      fileName: '.babelrc',
       title: 'Babel',
     });
   }

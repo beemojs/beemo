@@ -15,9 +15,9 @@ type EngineOptions = {
 
 type Metadata = {
   bin: string,
+  configName: string,
   dependencies: string[],
   description: string,
-  fileName: string,
   helpOption: string,
   title: string,
 };
@@ -25,9 +25,9 @@ type Metadata = {
 export default class Engine extends Plugin<EngineOptions> {
   metadata: Metadata = {
     bin: '',
+    configName: '',
     dependencies: [],
     description: '',
-    fileName: '',
     helpOption: '',
     title: '',
   };
@@ -65,9 +65,9 @@ export default class Engine extends Plugin<EngineOptions> {
   setMetadata(metadata: Object): this {
     this.metadata = new Options(metadata, {
       bin: string().match(/^[-a-z0-9]+$/),
+      configName: string(),
       dependencies: array(string()),
       description: string().empty(),
-      fileName: string(),
       helpOption: string('--help'),
       title: string(),
     }, {

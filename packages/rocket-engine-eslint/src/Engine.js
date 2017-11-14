@@ -11,8 +11,8 @@ export default class ESLintEngine extends Engine {
   bootstrap() {
     this.setMetadata({
       bin: 'eslint',
+      configName: '.eslintrc',
       description: 'Lint files with ESLint.',
-      fileName: '.eslintrc',
       title: 'ESLint',
     });
   }
