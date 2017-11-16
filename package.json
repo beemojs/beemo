@@ -29,7 +29,10 @@
     "presets": "@milesj/build-tool-config/babel"
   },
   "eslintConfig": {
-    "extends": "./node_modules/@milesj/build-tool-config/eslint.js"
+    "extends": "./node_modules/@milesj/build-tool-config/eslint.js",
+    "rules": {
+      "import/first": "off"
+    }
   },
   "eslintIgnore": [
     "esm/",

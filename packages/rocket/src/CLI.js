@@ -1,7 +1,6 @@
 /**
  * @copyright   2017, Miles Johnson
  * @license     https://opensource.org/licenses/MIT
- * @flow
  */
 
 import app from 'yargs';
@@ -11,7 +10,7 @@ import Rocket from './Rocket';
 const rocket = new Rocket();
 
 // Add a command for each engine
-rocket.getEngines().forEach((engine) => {
+rocket.tool.plugins.forEach((engine) => {
   const { metadata } = engine;
 
   app.command(metadata.bin, metadata.description || `Run ${metadata.title}.`, () => {

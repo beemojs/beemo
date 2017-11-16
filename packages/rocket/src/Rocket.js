@@ -9,7 +9,8 @@ import { Pipeline, Tool } from 'boost';
 import PrelaunchRoutine from './PrelaunchRoutine';
 import LaunchRoutine from './LaunchRoutine';
 import PostlaunchRoutine from './PostlaunchRoutine';
-import Engine from './Engine';
+
+import type { ResultPromise } from 'boost';
 
 export default class Rocket {
   tool: Tool;
@@ -22,29 +23,6 @@ export default class Rocket {
 
     // Immediately load config and plugins
     this.tool.initialize();
-
-    // Provide some helper methods
-    this.tool.getEngine = this.getEngine;
-  }
-
-  /**
-   * Locate a engine (boost plugin) by name.
-   */
-  getEngine = (engineName: string): Engine => {
-    const engine = this.getEngines().find(plugin => plugin.name === engineName);
-
-    if (!engine) {
-      throw new Error(`Failed to find engine "${engineName}". Have you installed it?`);
-    }
-
-    return engine;
-  };
-
-  /**
-   * Return all loaded engines.
-   */
-  getEngines(): Engine[] {
-    return this.tool.plugins;
   }
 
   /**
@@ -78,15 +56,15 @@ export default class Rocket {
   /**
    * Launch the rocket (boost pipeline) by executing all routines for the chosen engine.
    */
-  launch(engineName: string, args?: string[] = []): Promise<*> /* TODO */ {
+  launch(engineName: string, args?: string[] = []): ResultPromise {
     const configRoot = this.getModuleConfigRoot();
-    const primaryEngine = this.getEngine(engineName);
+    const primaryEngine = this.tool.getPlugin(engineName);
 
     return new Pipeline(this.tool)
       .pipe(
-        new PrelaunchRoutine('prelaunch', 'Creating unified configurations'),
-        new LaunchRoutine('launch', 'Running primary engine'),
-        new PostlaunchRoutine('postlaunch', 'Displaying and cleaning output'),
+        new PrelaunchRoutine('configure', 'Creating unified configurations'),
+        new LaunchRoutine('execute', 'Executing primary engine'),
+        new PostlaunchRoutine('cleanup', 'Displaying and cleaning output'),
       )
       .run(engineName, {
         args,

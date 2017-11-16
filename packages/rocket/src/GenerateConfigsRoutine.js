@@ -5,14 +5,26 @@
  */
 
 import { Routine } from 'boost';
+import Config, { bool } from 'optimal';
 import CreateConfigRoutine from './CreateConfigRoutine';
 
-export default class GenerateConfigsRoutine extends Routine {
+import type { ResultPromise } from 'boost';
+import type { ConfigureConfig } from './types';
+
+export default class GenerateConfigsRoutine extends Routine<ConfigureConfig> {
+  bootstrap() {
+    this.config = new Config(this.config, {
+      parallel: bool(true),
+    }, {
+      name: 'GenerateConfigsRoutine',
+    });
+  }
+
   /**
    * Pipe a routine for every engine we need to create a configuration for,
    * and then run in parallel.
    */
-  execute(): Promise<Object[]> {
+  execute(): ResultPromise {
     this.context.engines.forEach((engine) => {
       const routine = new CreateConfigRoutine(engine.name, engine.metadata.title);
 
@@ -21,6 +33,8 @@ export default class GenerateConfigsRoutine extends Routine {
       this.pipe(routine);
     });
 
-    return this.parallelizeSubroutines();
+    return this.config.parallel
+      ? this.parallelizeSubroutines()
+      : this.serializeSubroutines();
   }
 }

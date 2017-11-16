@@ -8,8 +8,13 @@ import fs from 'fs-extra';
 import path from 'path';
 import parseArgs from 'yargs-parser';
 import { Routine } from 'boost';
+import Engine from './Engine';
 
-export default class CreateConfigRoutine extends Routine {
+import type { ResultPromise } from 'boost';
+
+export default class CreateConfigRoutine extends Routine<{}> {
+  engine: Engine;
+
   /**
    * Create a temporary configuration file or pass as an option.
    */
@@ -25,7 +30,7 @@ export default class CreateConfigRoutine extends Routine {
   /**
    * Create config by executing tasks in order.
    */
-  execute(): Promise<Object> {
+  execute(): ResultPromise {
     const { name } = this.engine;
 
     this
@@ -58,7 +63,7 @@ export default class CreateConfigRoutine extends Routine {
     return parseArgs([
       ...this.context.args,
       ...this.engine.options.args,
-    ].map(String));
+    ].map(value => String(value)));
   }
 
   /**

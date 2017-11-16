@@ -26,9 +26,10 @@
     "@milesj/build-tool-config": "0.41.2"
   },
   "dependencies": {
-    "boost": "^0.10.0",
+    "boost": "^0.12.1",
     "fs-extra": "^4.0.2",
     "lodash": "^4.17.4",
+    "optimal": "^0.14.0",
     "yargs": "^10.0.3",
     "yargs-parser": "^8.0.0"
   }
