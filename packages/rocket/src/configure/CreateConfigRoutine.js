@@ -8,7 +8,7 @@ import fs from 'fs-extra';
 import path from 'path';
 import parseArgs from 'yargs-parser';
 import { Routine } from 'boost';
-import Engine from './Engine';
+import Engine from '../Engine';
 
 import type { ResultPromise } from 'boost';
 
@@ -19,10 +19,10 @@ export default class CreateConfigRoutine extends Routine<{}> {
    * Create a temporary configuration file or pass as an option.
    */
   createConfigFile(config: Object): string {
-    const { metadata, name } = this.engine;
+    const { metadata } = this.engine;
     const configPath = path.join(this.context.root, metadata.configName);
 
-    this.context.configFilePaths[name] = configPath;
+    this.context.configPaths.push(configPath);
 
     return fs.writeJson(configPath, config, { spaces: 2 });
   }
@@ -33,11 +33,10 @@ export default class CreateConfigRoutine extends Routine<{}> {
   execute(): ResultPromise {
     const { name } = this.engine;
 
-    this
-      .task(`Loading external ${name} module config`, this.loadConfigFromFilesystem)
-      .task(`Loading local ${name} rocket config`, this.extractConfigFromPackage)
-      .task(`Merging ${name} config objects`, this.mergeConfigs)
-      .task(`Creating temporary ${name} config file`, this.createConfigFile);
+    this.task(`Loading external ${name} module config`, this.loadConfigFromFilesystem);
+    this.task(`Loading local ${name} rocket config`, this.extractConfigFromPackage);
+    this.task(`Merging ${name} config objects`, this.mergeConfigs);
+    this.task(`Creating temporary ${name} config file`, this.createConfigFile);
 
     return this.serializeTasks([]);
   }

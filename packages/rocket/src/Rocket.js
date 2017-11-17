@@ -6,14 +6,15 @@
 
 
 import { Pipeline, Tool } from 'boost';
-import PrelaunchRoutine from './PrelaunchRoutine';
+import ConfigureRoutine from './ConfigureRoutine';
 import LaunchRoutine from './LaunchRoutine';
-import PostlaunchRoutine from './PostlaunchRoutine';
+import CleanupRoutine from './CleanupRoutine';
 
-import type { ResultPromise } from 'boost';
+import type Engine from './Engine';
+import type { Renderer, ResultPromise } from 'boost';
 
 export default class Rocket {
-  tool: Tool;
+  tool: Tool<Engine, Renderer>;
 
   constructor() {
     this.tool = new Tool({
@@ -62,13 +63,13 @@ export default class Rocket {
 
     return new Pipeline(this.tool)
       .pipe(
-        new PrelaunchRoutine('configure', 'Creating unified configurations'),
+        new ConfigureRoutine('configure', 'Creating unified configurations'),
         new LaunchRoutine('execute', 'Executing primary engine'),
-        new PostlaunchRoutine('cleanup', 'Displaying and cleaning output'),
+        new CleanupRoutine('cleanup', 'Displaying and cleaning output'),
       )
       .run(engineName, {
         args,
-        configFilePaths: {},
+        configPaths: [],
         configRoot,
         engines: [primaryEngine],
         primaryEngine,

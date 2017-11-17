@@ -5,19 +5,15 @@
  */
 
 import { Routine } from 'boost';
-import Config, { bool } from 'optimal';
 import CreateConfigRoutine from './CreateConfigRoutine';
+import Config from './Config';
 
 import type { ResultPromise } from 'boost';
-import type { ConfigureConfig } from './types';
+import type { ConfigureConfig } from '../types';
 
 export default class GenerateConfigsRoutine extends Routine<ConfigureConfig> {
   bootstrap() {
-    this.config = new Config(this.config, {
-      parallel: bool(true),
-    }, {
-      name: 'GenerateConfigsRoutine',
-    });
+    this.config = new Config(this.config);
   }
 
   /**

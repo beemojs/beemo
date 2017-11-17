@@ -5,20 +5,17 @@
  */
 
 import { Routine } from 'boost';
-import Config, { bool } from 'optimal';
-import GenerateConfigsRoutine from './GenerateConfigsRoutine';
-import ResolveDependenciesRoutine from './ResolveDependenciesRoutine';
+import Config from './configure/Config';
+import GenerateConfigsRoutine from './configure/GenerateConfigsRoutine';
+import ResolveDependenciesRoutine from './configure/ResolveDependenciesRoutine';
 
 import type { ResultPromise } from 'boost';
 import type { ConfigureConfig } from './types';
 
-export default class PrelaunchRoutine extends Routine<ConfigureConfig> {
+// $FlowIgnore
+export default class ConfigureRoutine extends Routine<ConfigureConfig> {
   bootstrap() {
-    this.config = new Config(this.config, {
-      parallel: bool(true),
-    }, {
-      name: 'PrelaunchRoutine',
-    });
+    this.config = new Config(this.config);
   }
 
   /**

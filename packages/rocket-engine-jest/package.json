@@ -19,7 +19,7 @@
   "repository": "https://github.com/milesj/rocket/tree/master/packages/rocket-engine-jest",
   "license": "MIT",
   "devDependencies": {
-    "@milesj/build-tool-config": "0.41.2",
+    "@milesj/build-tool-config": "0.41.3",
     "jest": "^21.2.0"
   },
   "peerDependencies": {

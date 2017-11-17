@@ -6,18 +6,15 @@
 
 import fs from 'fs-extra';
 import { Routine } from 'boost';
-import Config, { bool } from 'optimal';
+import Config from './cleanup/Config';
 
 import type { ResultPromise } from 'boost';
 import type { CleanupConfig } from './types';
 
-export default class PostlaunchRoutine extends Routine<CleanupConfig> {
+// $FlowIgnore
+export default class CleanupRoutine extends Routine<CleanupConfig> {
   bootstrap() {
-    this.config = new Config(this.config, {
-      persist: bool(),
-    }, {
-      name: 'PostlaunchRoutine',
-    });
+    this.config = new Config(this.config);
   }
 
   /**
@@ -25,7 +22,7 @@ export default class PostlaunchRoutine extends Routine<CleanupConfig> {
    * the current execuction.
    */
   execute(): ResultPromise {
-    this.task('Deleting temporary config files', this.deleteConfigFiles);
+    this.task('Deleting temporary config files', this.deleteConfigFiles).skip(this.config.persist);
 
     return this.parallelizeTasks();
   }
@@ -34,8 +31,6 @@ export default class PostlaunchRoutine extends Routine<CleanupConfig> {
    * Delete all temporary config files.
    */
   deleteConfigFiles(): Promise<*[]> {
-    return Promise.all(
-      Object.values(this.context.configFilePaths).map(configPath => fs.remove(configPath)),
-    );
+    return Promise.all(this.context.configPaths.map(configPath => fs.remove(configPath)));
   }
 }

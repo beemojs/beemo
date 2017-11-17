@@ -23,10 +23,10 @@
   "repository": "https://github.com/milesj/rocket/tree/master/packages/rocket",
   "license": "MIT",
   "devDependencies": {
-    "@milesj/build-tool-config": "0.41.2"
+    "@milesj/build-tool-config": "0.41.3"
   },
   "dependencies": {
-    "boost": "^0.12.1",
+    "boost": "^0.13.0",
     "fs-extra": "^4.0.2",
     "lodash": "^4.17.4",
     "optimal": "^0.14.0",
