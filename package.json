@@ -46,6 +46,11 @@
       "babel",
       "eslint",
       "jest"
-    ]
+    ],
+    "eslint": {
+      "rules": {
+        "import/first": "off"
+      }
+    }
   }
 }

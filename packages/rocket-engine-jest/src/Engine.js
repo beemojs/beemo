@@ -20,9 +20,7 @@ export default class JestEngine extends Engine {
   }
 
   handleFailure({ stderr }: Execution) {
-    if (stderr) {
-      this.tool.logError(stderr);
-    }
+    this.tool.logError(stderr);
   }
 
   handleSuccess({ stdout }: Execution) {

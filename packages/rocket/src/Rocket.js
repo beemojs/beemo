@@ -58,10 +58,11 @@ export default class Rocket {
    * Launch the rocket (boost pipeline) by executing all routines for the chosen engine.
    */
   launch(engineName: string, args?: string[] = []): ResultPromise {
+    const { tool } = this;
     const configRoot = this.getModuleConfigRoot();
-    const primaryEngine = this.tool.getPlugin(engineName);
+    const primaryEngine = tool.getPlugin(engineName);
 
-    return new Pipeline(this.tool)
+    return new Pipeline(tool)
       .pipe(
         new ConfigureRoutine('configure', 'Creating unified configurations'),
         new ExecuteRoutine('execute', 'Executing primary engine'),
@@ -75,8 +76,12 @@ export default class Rocket {
         primaryEngine,
         root: this.tool.options.root,
       })
-      .catch(() => {
-        // TODO
+      .catch((error) => {
+        // Nothing has been logged yet, so lets show something to the user atleast
+        if (tool.errors.length === 0) {
+          tool.logError(error.message);
+          tool.renderer.update(true);
+        }
       });
   }
 }
