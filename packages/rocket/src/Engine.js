@@ -8,6 +8,8 @@ import { Plugin } from 'boost';
 import merge from 'lodash/merge';
 import Options, { array, bool, number, object, string, union } from 'optimal';
 
+import type { Execution } from './types';
+
 type EngineOptions = {
   args: string[],
   env: { [key: string]: string },
@@ -50,6 +52,20 @@ export default class Engine extends Plugin<EngineOptions> {
     }, {
       name: this.constructor.name,
     });
+  }
+
+  /**
+   * Handle command failures according to this engine.
+   */
+  handleFailure(error: Execution) {
+    throw new Error('Engine#handleFailure() must be defined.');
+  }
+
+  /**
+   * Handle successful commands according to this engine.
+   */
+  handleSuccess(response: Execution) {
+    throw new Error('Engine#handleSuccess() must be defined.');
   }
 
   /**

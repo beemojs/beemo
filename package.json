@@ -42,16 +42,10 @@
   ],
   "rocket": {
     "config": "@local",
-    "debug": true,
     "engines": [
       "babel",
       "eslint",
       "jest"
-    ],
-    "eslint": {
-      "globals": {
-        "rocket": true
-      }
-    }
+    ]
   }
 }

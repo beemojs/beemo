@@ -11,3 +11,14 @@ export type CleanupConfig = {
 export type ConfigureConfig = {
   parallel: boolean,
 };
+
+export type Execution = {
+  cmd: string,
+  code: string | number,
+  failed: boolean,
+  killed?: boolean,
+  signal: ?number,
+  stderr: string,
+  stdout: string,
+  timedOut: boolean,
+};
