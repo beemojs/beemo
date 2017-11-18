@@ -12,27 +12,17 @@ import Engine from './Engine';
 import type { ResultPromise } from 'boost';
 import type { ConfigureConfig } from './types';
 
+// $FlowIgnore
 export default class ConfigureRoutine extends Routine<ConfigureConfig> {
   bootstrap() {
     this.config = new Config(this.config);
   }
 
   /**
-   * The PrelaunchRoutine handles the process of creating a configuration file
-   * for every engine required for the current execution.
-   */
-  execute(): ResultPromise {
-    this.task('Resolving dependencies', this.resolveDependencies);
-    this.task('Generating configuration files', this.generateConfigs);
-
-    return this.serializeTasks();
-  }
-
-  /**
    * Pipe a routine for every engine we need to create a configuration for,
    * and then run in parallel.
    */
-  generateConfigs(engines: Engine[]): ResultPromise {
+  createConfigFiles(engines: Engine[]): ResultPromise {
     engines.forEach((engine) => {
       const routine = new CreateConfigRoutine(engine.name, engine.metadata.title);
 
@@ -45,6 +35,17 @@ export default class ConfigureRoutine extends Routine<ConfigureConfig> {
     return this.config.parallel
       ? this.parallelizeSubroutines()
       : this.serializeSubroutines();
+  }
+
+  /**
+   * The ConfigureRoutine handles the process of creating a configuration file
+   * for every engine required for the current execution.
+   */
+  execute(): ResultPromise {
+    this.task('Resolving dependencies', this.resolveDependencies);
+    this.task('Creating configuration files', this.createConfigFiles);
+
+    return this.serializeTasks();
   }
 
   /**

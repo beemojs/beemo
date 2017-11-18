@@ -4,19 +4,39 @@
  * @flow
  */
 
+import fs from 'fs-extra';
 import { Routine } from 'boost';
+import Config from './execute/Config';
 
 import type { ResultPromise } from 'boost';
-import type { Execution } from './types';
+import type { ExecuteConfig, Execution } from './types';
 
 const OPTION_PATTERN: RegExp = /-?-[-a-z0-9]+/ig;
 
-export default class ExecuteRoutine extends Routine<{}> {
+// $FlowIgnore
+export default class ExecuteRoutine extends Routine<ExecuteConfig> {
+  bootstrap() {
+    this.config = new Config(this.config);
+  }
+
+  /**
+   * Delete all temporary config files.
+   */
+  deleteConfigFiles(): Promise<*[]> {
+    return Promise.all(this.context.configPaths.map(configPath => fs.remove(configPath)));
+  }
+
+  /**
+   * The ExecuteRoutine handles the process of executing the engine's command
+   * and correctly handling the output.
+   */
   execute(): ResultPromise {
     const { primaryEngine } = this.context;
 
     this.task('Filtering options', this.filterUnknownOptionsFromArgs);
     this.task(`Running ${primaryEngine.metadata.bin} command`, this.runCommandWithArgs);
+    this.task('Deleting temporary config files', this.deleteConfigFiles)
+      .skip(!this.config.cleanup);
 
     return this.serializeTasks();
   }

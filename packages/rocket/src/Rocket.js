@@ -6,7 +6,6 @@
 
 
 import { Pipeline, Tool } from 'boost';
-import CleanupRoutine from './CleanupRoutine';
 import ConfigureRoutine from './ConfigureRoutine';
 import ExecuteRoutine from './ExecuteRoutine';
 
@@ -64,9 +63,8 @@ export default class Rocket {
 
     return new Pipeline(tool)
       .pipe(
-        new ConfigureRoutine('configure', 'Creating unified configurations'),
-        new ExecuteRoutine('execute', 'Executing primary engine'),
-        new CleanupRoutine('cleanup', 'Displaying and cleaning output'),
+        new ConfigureRoutine('configure', 'Generating configurations'),
+        new ExecuteRoutine('execute', 'Executing engine'),
       )
       .run(engineName, {
         args,

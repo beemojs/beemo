@@ -6,12 +6,12 @@
 
 import Options, { bool } from 'optimal';
 
-import type { CleanupConfig } from '../types';
+import type { ExecuteConfig } from '../types';
 
-export default function Config(config: Object): CleanupConfig {
+export default function Config(config: Object): ExecuteConfig {
   return new Options(config, {
-    persist: bool(),
+    cleanup: bool(true),
   }, {
-    name: 'CleanupConfig',
+    name: 'ExecuteConfig',
   });
 }

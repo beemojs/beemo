@@ -4,12 +4,12 @@
  * @flow
  */
 
-export type CleanupConfig = {
-  persist: boolean,
-};
-
 export type ConfigureConfig = {
   parallel: boolean,
+};
+
+export type ExecuteConfig = {
+  cleanup: boolean,
 };
 
 export type Execution = {
