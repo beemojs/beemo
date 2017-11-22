@@ -6,6 +6,8 @@
 
 import { Engine } from 'rocket';
 
+import type { Execution } from 'rocket';
+
 export default class BabelEngine extends Engine {
   bootstrap() {
     this.setMetadata({
@@ -14,5 +16,15 @@ export default class BabelEngine extends Engine {
       description: 'Transpile files using Babel.',
       title: 'Babel',
     });
+  }
+
+  handleFailure({ stderr }: Execution) {
+    this.tool.logError(stderr);
+  }
+
+  handleSuccess({ stdout }: Execution) {
+    if (stdout) {
+      this.tool.log(stdout);
+    }
   }
 }

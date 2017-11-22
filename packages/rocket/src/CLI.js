@@ -18,7 +18,7 @@ rocket.tool.plugins.forEach((engine) => {
     // 0 node
     // 1 rocket
     // 2 <engine>
-    rocket.launch(engine.name, process.argv.slice(3));
+    rocket.launchEngine(engine.name, process.argv.slice(3));
   });
 });
 
