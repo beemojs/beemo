@@ -1,0 +1,29 @@
+{
+  "name": "rocket-engine-flow",
+  "version": "0.0.0",
+  "description": "Flow engine for Rocket.",
+  "keywords": [
+    "rocket",
+    "engine",
+    "flow",
+    "flowtype",
+    "type"
+  ],
+  "main": "./lib/index.js",
+  "scripts": {
+    "build": "build-lib"
+  },
+  "engines": {
+    "node": ">=6.5.0"
+  },
+  "repository": "https://github.com/milesj/rocket/tree/master/packages/rocket-engine-flow",
+  "license": "MIT",
+  "devDependencies": {
+    "@milesj/build-tool-config": "0.41.3",
+    "flow-bin": "^0.59.0"
+  },
+  "peerDependencies": {
+    "flow-bin": "^0.59.0",
+    "rocket": "^0.0.0"
+  }
+}

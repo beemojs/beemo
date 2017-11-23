@@ -7,8 +7,6 @@
 import { Engine } from 'rocket';
 import ConfigOps from 'eslint/lib/config/config-ops';
 
-import type { Execution } from 'rocket';
-
 export default class ESLintEngine extends Engine {
   bootstrap() {
     this.setMetadata({
@@ -17,17 +15,6 @@ export default class ESLintEngine extends Engine {
       description: 'Lint files with ESLint.',
       title: 'ESLint',
     });
-  }
-
-  handleFailure({ stdout }: Execution) {
-    this.tool.logError(stdout);
-  }
-
-  handleSuccess({ stdout }: Execution) {
-    // Warnings are handled here
-    if (stdout) {
-      this.tool.log(stdout);
-    }
   }
 
   mergeConfig(prev: Object, next: Object): Object {

@@ -55,17 +55,35 @@ export default class Engine extends Plugin<EngineOptions> {
   }
 
   /**
+   * Format the configuration file before it's written.
+   */
+  formatFile(data: Object): string {
+    return JSON.stringify(data, null, 2);
+  }
+
+  /**
    * Handle command failures according to this engine.
    */
   handleFailure(error: Execution) {
-    throw new Error('Engine#handleFailure() must be defined.');
+    const { stderr, stdout } = error;
+    const out = stderr || stdout;
+
+    console.log({ ...error });
+
+    if (out) {
+      this.tool.logError(out);
+    }
   }
 
   /**
    * Handle successful commands according to this engine.
    */
   handleSuccess(response: Execution) {
-    throw new Error('Engine#handleSuccess() must be defined.');
+    const { stdout } = response;
+
+    if (stdout) {
+      this.tool.log(stdout);
+    }
   }
 
   /**
@@ -76,7 +94,7 @@ export default class Engine extends Plugin<EngineOptions> {
   }
 
   /**
-   * Set metadatadata about the binary/executable in which this engine wraps.
+   * Set metadata about the binary/executable in which this engine wraps.
    */
   setMetadata(metadata: Object): this {
     this.metadata = new Options(metadata, {

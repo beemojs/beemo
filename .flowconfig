@@ -1,6 +1,3 @@
-[include]
-./packages
-
 [ignore]
 .*/node_modules/.*
 .*/packages/.*/esm/.*
@@ -8,7 +5,11 @@
 .*/tests/.*
 .*\.test\.js
 
+[include]
+./packages
+
 [libs]
+./packages/rocket/rocket.js.flow
 ./node_modules/boost/boost.js.flow
 ./node_modules/optimal/optimal.js.flow
 

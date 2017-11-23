@@ -1,0 +1,12 @@
+declare module 'rocket' {
+  declare export type Execution = {
+    cmd: string,
+    code: string | number,
+    failed: boolean,
+    killed?: boolean,
+    signal: ?number,
+    stderr: string,
+    stdout: string,
+    timedOut: boolean,
+  };
+}

@@ -24,7 +24,7 @@ export default class CreateConfigRoutine extends Routine<{}> {
 
     this.context.configPaths.push(configPath);
 
-    return fs.writeJson(configPath, config, { spaces: 2 });
+    return fs.writeFile(configPath, this.engine.formatFile(config));
   }
 
   /**
