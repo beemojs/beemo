@@ -4,6 +4,6 @@
  * @flow
  */
 
-import Engine from './Engine';
+import Engine from './FlowEngine';
 
 export default Engine;

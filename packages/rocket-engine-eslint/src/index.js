@@ -4,6 +4,6 @@
  * @flow
  */
 
-import Engine from './Engine';
+import Engine from './ESLintEngine';
 
 export default Engine;
