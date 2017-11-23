@@ -1,6 +1,6 @@
 {
   "name": "@rocket/rocket",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "Manage all build tool configurations in a single reusable repository.",
   "keywords": [
     "rocket",
