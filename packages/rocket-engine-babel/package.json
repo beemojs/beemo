@@ -1,6 +1,6 @@
 {
   "name": "@rocket/engine-babel",
-  "version": "0.0.0",
+  "version": "0.1.0",
   "description": "Babel engine for Rocket.",
   "keywords": [
     "rocket",
