@@ -68,8 +68,6 @@ export default class Engine extends Plugin<EngineOptions> {
     const { stderr, stdout } = error;
     const out = stderr || stdout;
 
-    console.log({ ...error });
-
     if (out) {
       this.tool.logError(out);
     }
