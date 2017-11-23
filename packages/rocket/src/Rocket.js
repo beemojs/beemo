@@ -8,6 +8,7 @@
 import { Pipeline, Tool } from 'boost';
 import ConfigureRoutine from './ConfigureRoutine';
 import ExecuteRoutine from './ExecuteRoutine';
+import SyncDotfilesRoutine from './SyncDotfilesRoutine';
 
 import type Engine from './Engine';
 import type { RocketContext } from './types';
@@ -110,5 +111,14 @@ export default class Rocket {
           this.exitLaunch(error);
         }
       });
+  }
+
+  /**
+   * Sync dotfiles from the configuration module.
+   */
+  syncDotfiles(): ResultPromise {
+    return new Pipeline(this.tool)
+      .pipe(new SyncDotfilesRoutine('sync', 'Syncing dotfiles'))
+      .run(this.getModuleConfigRoot());
   }
 }

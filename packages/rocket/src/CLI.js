@@ -22,6 +22,11 @@ rocket.tool.plugins.forEach((engine) => {
   });
 });
 
+// Add rocket commands
+app.command('sync-dotfiles', 'Sync dotfiles from configuration module.', () => {
+  rocket.syncDotfiles();
+});
+
 // Run application
 // eslint-disable-next-line
 app
