@@ -1100,9 +1100,9 @@ boom@5.x.x:
   dependencies:
     hoek "4.x.x"
 
-boost@^0.16.0:
-  version "0.16.0"
-  resolved "https://registry.yarnpkg.com/boost/-/boost-0.16.0.tgz#b0dcd91d914499e2b787c2f02b59d741d69d578e"
+boost@^0.16.1:
+  version "0.16.1"
+  resolved "https://registry.yarnpkg.com/boost/-/boost-0.16.1.tgz#5245502b505d4a3b80d25e95f32cd871a815751b"
   dependencies:
     bluebird "^3.5.1"
     chalk "^2.3.0"
