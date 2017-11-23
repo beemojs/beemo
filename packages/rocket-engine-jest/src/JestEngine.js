@@ -4,7 +4,7 @@
  * @flow
  */
 
-import { Engine } from 'rocket';
+import { Engine } from '@rocket/rocket';
 
 export default class JestEngine extends Engine {
   bootstrap() {

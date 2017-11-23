@@ -1,5 +1,5 @@
 {
-  "name": "rocket",
+  "name": "@rocket/rocket",
   "version": "0.0.0",
   "description": "Manage all build tool configurations in a single reusable repository.",
   "keywords": [
@@ -26,7 +26,7 @@
     "@milesj/build-tool-config": "0.41.3"
   },
   "dependencies": {
-    "boost": "^0.15.1",
+    "boost": "^0.16.0",
     "fs-extra": "^4.0.2",
     "lodash": "^4.17.4",
     "optimal": "^0.14.0",

@@ -1,5 +1,5 @@
 {
-  "name": "rocket-engine-jest",
+  "name": "@rocket/engine-jest",
   "version": "0.0.0",
   "description": "Jest engine for Rocket.",
   "keywords": [
@@ -23,8 +23,8 @@
     "jest": "^21.2.0"
   },
   "peerDependencies": {
-    "jest": "^21.2.0",
-    "rocket": "^0.0.0",
-    "rocket-engine-babel": "^0.0.0"
+    "@rocket/rocket": "^0.0.0",
+    "@rocket/engine-babel": "^0.0.0",
+    "jest": "^21.2.0"
   }
 }

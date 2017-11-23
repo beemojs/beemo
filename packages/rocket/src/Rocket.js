@@ -26,6 +26,7 @@ export default class Rocket {
 
     this.tool = new Tool({
       appName: 'rocket',
+      namespace: true,
       pluginName: 'engine',
       title: `🚀  Rocket v${this.package.version}`,
     });

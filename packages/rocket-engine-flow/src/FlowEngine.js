@@ -4,9 +4,9 @@
  * @flow
  */
 
-import { Engine } from 'rocket';
+import { Engine } from '@rocket/rocket';
 
-import type { Execution } from 'rocket';
+import type { Execution } from '@rocket/rocket';
 
 export default class FlowEngine extends Engine {
   bootstrap() {
