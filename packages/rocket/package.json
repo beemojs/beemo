@@ -22,6 +22,9 @@
   },
   "repository": "https://github.com/milesj/rocket/tree/master/packages/rocket",
   "license": "MIT",
+  "publishConfig": {
+    "access": "public"
+  },
   "devDependencies": {
     "@milesj/build-tool-config": "0.41.3"
   },
