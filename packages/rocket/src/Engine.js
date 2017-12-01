@@ -66,7 +66,7 @@ export default class Engine extends Plugin<EngineOptions> {
    */
   handleFailure(error: Execution) {
     const { stderr, stdout } = error;
-    const out = stderr || stdout;
+    const out = (stderr || stdout).trim();
 
     if (out) {
       this.tool.logError(out);
@@ -77,10 +77,10 @@ export default class Engine extends Plugin<EngineOptions> {
    * Handle successful commands according to this engine.
    */
   handleSuccess(response: Execution) {
-    const { stdout } = response;
+    const out = response.stdout.trim();
 
-    if (stdout) {
-      this.tool.log(stdout);
+    if (out) {
+      this.tool.log(out);
     }
   }
 
