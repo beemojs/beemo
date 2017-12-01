@@ -16,7 +16,7 @@ import type { Reporter } from 'boost';
 export default class Rocket {
   package: Object;
 
-  tool: Tool<Engine, Reporter>;
+  tool: Tool<Engine, Reporter<Object>>;
 
   constructor() {
     // eslint-disable-next-line global-require
@@ -24,9 +24,9 @@ export default class Rocket {
 
     this.tool = new Tool({
       appName: 'rocket',
-      pluginName: 'engine',
+      footer: `🚀  Powered by Rocket v${this.package.version}`,
+      pluginAlias: 'engine',
       scoped: true,
-      title: `🚀  Rocket v${this.package.version}`,
     });
 
     // Immediately load config and plugins
