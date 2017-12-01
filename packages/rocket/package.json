@@ -26,10 +26,10 @@
     "access": "public"
   },
   "devDependencies": {
-    "@milesj/build-tool-config": "0.41.3"
+    "@milesj/build-tool-config": "0.42.0"
   },
   "dependencies": {
-    "boost": "^0.16.1",
+    "boost": "^0.19.1",
     "copy": "^0.3.1",
     "fs-extra": "^4.0.2",
     "lodash": "^4.17.4",

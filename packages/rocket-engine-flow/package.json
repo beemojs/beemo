@@ -22,7 +22,7 @@
     "access": "public"
   },
   "devDependencies": {
-    "@milesj/build-tool-config": "0.41.3",
+    "@milesj/build-tool-config": "0.42.0",
     "flow-bin": "^0.59.0"
   },
   "peerDependencies": {

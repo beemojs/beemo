@@ -10,27 +10,27 @@ import parseArgs from 'yargs-parser';
 import { Routine } from 'boost';
 import Engine from '../Engine';
 
-import type { ResultPromise } from 'boost';
+import type { RocketContext } from '../types';
 
-export default class CreateConfigRoutine extends Routine<{}> {
+export default class CreateConfigRoutine extends Routine<Object, RocketContext> {
   engine: Engine;
 
   /**
    * Create a temporary configuration file or pass as an option.
    */
-  createConfigFile(config: Object): string {
+  createConfigFile(config: Object): Promise<string> {
     const { metadata } = this.engine;
     const configPath = path.join(this.context.root, metadata.configName);
 
     this.context.configPaths.push(configPath);
 
-    return fs.writeFile(configPath, this.engine.formatFile(config));
+    return fs.writeFile(configPath, this.engine.formatFile(config)).then(() => configPath);
   }
 
   /**
    * Create config by executing tasks in order.
    */
-  execute(): ResultPromise {
+  execute(): Promise<string> {
     const { name } = this.engine;
 
     this.task(`Loading external ${name} module config`, this.loadConfigFromFilesystem);
@@ -44,7 +44,7 @@ export default class CreateConfigRoutine extends Routine<{}> {
   /**
    * Extract configuration from "rocket.<engine>" within the local project's package.json.
    */
-  extractConfigFromPackage(configs: Object[]): Object[] {
+  extractConfigFromPackage(configs: Object[]): Promise<Object[]> {
     const { name } = this.engine;
     const { config } = this.tool;
 
@@ -52,7 +52,7 @@ export default class CreateConfigRoutine extends Routine<{}> {
       configs.push(config[name]);
     }
 
-    return configs;
+    return Promise.resolve(configs);
   }
 
   /**
@@ -68,16 +68,16 @@ export default class CreateConfigRoutine extends Routine<{}> {
   /**
    * Merge multiple configuration sources using the current engine.
    */
-  mergeConfigs(configs: Object[]): Object {
-    return configs.reduce((masterConfig, config) => (
+  mergeConfigs(configs: Object[]): Promise<Object> {
+    return Promise.resolve(configs.reduce((masterConfig, config) => (
       this.engine.mergeConfig(masterConfig, config)
-    ), {});
+    ), {}));
   }
 
   /**
    * Load configuration from the node module (the consumer owned package).
    */
-  loadConfigFromFilesystem(configs: Object[]): Object[] {
+  loadConfigFromFilesystem(configs: Object[]): Promise<Object[]> {
     const { config: { config: moduleName }, configLoader } = this.tool;
     const { name } = this.engine;
 
@@ -90,6 +90,6 @@ export default class CreateConfigRoutine extends Routine<{}> {
       configs.push(configLoader.parseFile(filePath, this.getArgsToPass()));
     }
 
-    return configs;
+    return Promise.resolve(configs);
   }
 }

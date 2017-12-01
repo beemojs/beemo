@@ -21,7 +21,7 @@
     "rocket": "node ./packages/rocket/bin/rocket"
   },
   "devDependencies": {
-    "@milesj/build-tool-config": "0.41.3",
+    "@milesj/build-tool-config": "0.42.0",
     "lerna": "^2.5.1"
   },
   "workspaces": [

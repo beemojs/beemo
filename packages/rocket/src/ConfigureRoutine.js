@@ -9,11 +9,9 @@ import Config from './configure/Config';
 import CreateConfigRoutine from './configure/CreateConfigRoutine';
 import Engine from './Engine';
 
-import type { ResultPromise } from 'boost';
-import type { ConfigureConfig } from './types';
+import type { ConfigureConfig, RocketContext } from './types';
 
-// $FlowIgnore
-export default class ConfigureRoutine extends Routine<ConfigureConfig> {
+export default class ConfigureRoutine extends Routine<ConfigureConfig, RocketContext> {
   bootstrap() {
     this.config = new Config(this.config);
   }
@@ -22,7 +20,7 @@ export default class ConfigureRoutine extends Routine<ConfigureConfig> {
    * Pipe a routine for every engine we need to create a configuration for,
    * and then run in parallel.
    */
-  createConfigFiles(engines: Engine[]): ResultPromise {
+  createConfigFiles(engines: Engine[]): Promise<*> {
     engines.forEach((engine) => {
       const routine = new CreateConfigRoutine(engine.name, engine.metadata.title);
 
@@ -41,7 +39,7 @@ export default class ConfigureRoutine extends Routine<ConfigureConfig> {
    * The ConfigureRoutine handles the process of creating a configuration file
    * for every engine required for the current execution.
    */
-  execute(): ResultPromise {
+  execute(): Promise<*> {
     this.task('Resolving dependencies', this.resolveDependencies);
     this.task('Creating configuration files', this.createConfigFiles);
 

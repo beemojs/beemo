@@ -22,8 +22,8 @@
     "access": "public"
   },
   "devDependencies": {
-    "@milesj/build-tool-config": "0.41.3",
-    "eslint": "^4.11.0"
+    "@milesj/build-tool-config": "0.42.0",
+    "eslint": "^4.12.1"
   },
   "peerDependencies": {
     "@rocket/rocket": "^0.0.0",

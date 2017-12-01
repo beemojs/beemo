@@ -11,15 +11,12 @@ import ExecuteRoutine from './ExecuteRoutine';
 import SyncDotfilesRoutine from './SyncDotfilesRoutine';
 
 import type Engine from './Engine';
-import type { RocketContext } from './types';
-import type { Renderer, ResultPromise } from 'boost';
+import type { Reporter } from 'boost';
 
 export default class Rocket {
-  context: RocketContext;
-
   package: Object;
 
-  tool: Tool<Engine, Renderer>;
+  tool: Tool<Engine, Reporter>;
 
   constructor() {
     // eslint-disable-next-line global-require
@@ -32,25 +29,9 @@ export default class Rocket {
       title: `🚀  Rocket v${this.package.version}`,
     });
 
-    // Bind listeners
-    this.tool.on('exit', this.exitLaunch);
-
     // Immediately load config and plugins
     this.tool.initialize();
   }
-
-  /**
-   * Handle exit and failed launches.
-   */
-  exitLaunch = (error: ?Error = null) => {
-    const { tool } = this;
-
-    if (error) {
-      tool.logError(error.message);
-    }
-
-    tool.renderer.update(true);
-  };
 
   /**
    * Validate the configuration module and return its absolute path.
@@ -83,7 +64,7 @@ export default class Rocket {
   /**
    * Launch the rocket (boost pipeline) by executing all routines for the chosen engine.
    */
-  launchEngine(engineName: string, args?: string[] = []): ResultPromise {
+  launchEngine(engineName: string, args?: string[] = []): Promise<*> {
     const { tool } = this;
     const configRoot = this.getModuleConfigRoot();
     const primaryEngine = tool.getPlugin(engineName);
@@ -96,27 +77,16 @@ export default class Rocket {
       root: this.tool.options.root,
     };
 
-    // Set the context and make it available to the entire rocket
-    this.context = context;
-
     return new Pipeline(tool)
-      .pipe(
-        new ConfigureRoutine('configure', 'Generating configurations'),
-        new ExecuteRoutine('execute', 'Executing engine'),
-      )
-      .run(engineName, context)
-      .catch((error) => {
-        // Nothing has been logged yet, so lets show something to the user atleast
-        if (tool.errors.length === 0) {
-          this.exitLaunch(error);
-        }
-      });
+      .pipe(new ConfigureRoutine('configure', 'Generating configurations'))
+      .pipe(new ExecuteRoutine('execute', 'Executing engine'))
+      .run(engineName, context);
   }
 
   /**
    * Sync dotfiles from the configuration module.
    */
-  syncDotfiles(): ResultPromise {
+  syncDotfiles(): Promise<*> {
     return new Pipeline(this.tool)
       .pipe(new SyncDotfilesRoutine('sync', 'Syncing dotfiles'))
       .run(this.getModuleConfigRoot());

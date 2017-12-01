@@ -9,10 +9,8 @@ import fs from 'fs-extra';
 import path from 'path';
 import { Routine } from 'boost';
 
-import type { ResultPromise } from 'boost';
-
-export default class SyncDotfilesRoutine extends Routine<{}> {
-  execute(configRoot: string): ResultPromise {
+export default class SyncDotfilesRoutine extends Routine {
+  execute(configRoot: string): Promise<string[]> {
     this.task('Copying files', this.copyFilesFromConfigModule);
     this.task('Renaming files', this.renameFilesWithDot);
 
@@ -38,15 +36,16 @@ export default class SyncDotfilesRoutine extends Routine<{}> {
    * The original files are not prefixed with ".", as it causes git/npm issues
    * in the repository. So we need to rename them after they are copied.
    */
-  renameFilesWithDot(filePaths: string[]): ResultPromise {
+  renameFilesWithDot(filePaths: string[]): Promise<string[]> {
     return Promise.all(filePaths.map((filePath) => {
       const dir = path.dirname(filePath);
       const newName = `.${path.basename(filePath)}`;
+      const newPath = path.join(dir, newName);
 
       // TODO show from config module as prefix?
       this.tool.log(`-> ${newName}`);
 
-      return fs.rename(filePath, path.join(dir, newName));
+      return fs.rename(filePath, newPath).then(() => newPath);
     }));
   }
 }

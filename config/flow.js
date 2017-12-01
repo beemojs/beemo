@@ -1,6 +1,4 @@
 module.exports = function eslint(options) {
-  console.info('Flow engine config', options);
-
   return {
     ignore: [
       '.*/node_modules/.*',

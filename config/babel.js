@@ -1,6 +1,4 @@
 module.exports = function babel(options) {
-  console.info('Babel engine config', options);
-
   return {
     babelrc: false,
     comments: false,
