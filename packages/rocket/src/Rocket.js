@@ -5,15 +5,19 @@
  */
 
 
+import fs from 'fs-extra';
 import { Pipeline, Tool } from 'boost';
 import ConfigureRoutine from './ConfigureRoutine';
 import ExecuteRoutine from './ExecuteRoutine';
 import SyncDotfilesRoutine from './SyncDotfilesRoutine';
 
+import type { RocketContext } from './types';
 import type Engine from './Engine';
-import type { Reporter } from 'boost';
+import type { Event, Reporter } from 'boost';
 
 export default class Rocket {
+  context: RocketContext;
+
   package: Object;
 
   tool: Tool<Engine, Reporter<Object>>;
@@ -26,12 +30,26 @@ export default class Rocket {
       appName: 'rocket',
       footer: `🚀  Powered by Rocket v${this.package.version}`,
       pluginAlias: 'engine',
-      scoped: true,
     });
 
     // Immediately load config and plugins
     this.tool.initialize();
+
+    // Handle exit failures
+    this.tool.on('exit', this.cleanUpOnFailure);
   }
+
+  /**
+   * Delete config files on a failure.
+   */
+  cleanUpOnFailure = (event: Event, code: number) => {
+    if (code > 0) {
+      // Must not be async!
+      this.context.configPaths.forEach((path) => {
+        fs.removeSync(path);
+      });
+    }
+  };
 
   /**
    * Validate the configuration module and return its absolute path.
@@ -68,7 +86,8 @@ export default class Rocket {
     const { tool } = this;
     const configRoot = this.getModuleConfigRoot();
     const primaryEngine = tool.getPlugin(engineName);
-    const context = {
+
+    this.context = {
       args,
       configPaths: [],
       configRoot,
@@ -80,7 +99,7 @@ export default class Rocket {
     return new Pipeline(tool)
       .pipe(new ConfigureRoutine('configure', 'Generating configurations'))
       .pipe(new ExecuteRoutine('execute', 'Executing engine'))
-      .run(engineName, context);
+      .run(engineName, this.context);
   }
 
   /**
