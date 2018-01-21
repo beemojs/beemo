@@ -22,7 +22,7 @@
     "access": "public"
   },
   "devDependencies": {
-    "@milesj/build-tool-config": "0.42.0",
+    "@milesj/build-tool-config": "0.50.0",
     "babel-core": "^6.26.0"
   },
   "peerDependencies": {

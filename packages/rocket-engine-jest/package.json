@@ -22,8 +22,8 @@
     "access": "public"
   },
   "devDependencies": {
-    "@milesj/build-tool-config": "0.42.0",
-    "jest": "^21.2.0"
+    "@milesj/build-tool-config": "0.50.0",
+    "jest": "^22.1.4"
   },
   "peerDependencies": {
     "@rocket/engine-babel": "^0.0.0",
