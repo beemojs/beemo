@@ -62,6 +62,8 @@ export default class ConfigureRoutine extends Routine<ConfigureConfig, RocketCon
       });
     }
 
+    this.tool.emit('resolve-dependencies', null, [this.context.engines]);
+
     return Promise.resolve(this.context.engines);
   }
 }

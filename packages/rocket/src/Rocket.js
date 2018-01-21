@@ -96,6 +96,8 @@ export default class Rocket {
       root: this.tool.options.root,
     };
 
+    this.tool.emit('launch', null, [primaryEngine, this.context]);
+
     return new Pipeline(tool)
       .pipe(new ConfigureRoutine('configure', 'Generating configurations'))
       .pipe(new ExecuteRoutine('execute', 'Executing engine'))
@@ -106,6 +108,8 @@ export default class Rocket {
    * Sync dotfiles from the configuration module.
    */
   syncDotfiles(): Promise<*> {
+    this.tool.emit('sync');
+
     return new Pipeline(this.tool)
       .pipe(new SyncDotfilesRoutine('sync', 'Syncing dotfiles'))
       .run(this.getModuleConfigRoot());

@@ -26,7 +26,11 @@ export default class SyncDotfilesRoutine extends Routine {
         if (error) {
           reject(error);
         } else {
-          resolve(files.map(file => file.path));
+          resolve(files.map(file => {
+            this.tool.emit('create-dotfile', null, [file.path]);
+
+            return file.path;
+          }));
         }
       });
     });

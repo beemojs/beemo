@@ -24,6 +24,8 @@ export default class CreateConfigRoutine extends Routine<Object, RocketContext> 
 
     this.context.configPaths.push(configPath);
 
+    this.tool.emit('create-config', null, [configPath, config]);
+
     return fs.writeFile(configPath, this.engine.formatFile(config)).then(() => configPath);
   }
 
@@ -52,6 +54,8 @@ export default class CreateConfigRoutine extends Routine<Object, RocketContext> 
       configs.push(config[name]);
     }
 
+    this.tool.emit('load-package-config', null, [config]);
+
     return Promise.resolve(configs);
   }
 
@@ -69,9 +73,13 @@ export default class CreateConfigRoutine extends Routine<Object, RocketContext> 
    * Merge multiple configuration sources using the current engine.
    */
   mergeConfigs(configs: Object[]): Promise<Object> {
-    return Promise.resolve(configs.reduce((masterConfig, config) => (
+    const config = Promise.resolve(configs.reduce((masterConfig, config) => (
       this.engine.mergeConfig(masterConfig, config)
     ), {}));
+
+    this.tool.emit('merge-config', null, [config]);
+
+    return config;
   }
 
   /**
@@ -87,7 +95,11 @@ export default class CreateConfigRoutine extends Routine<Object, RocketContext> 
       : configLoader.resolveModuleConfigPath(name, moduleName);
 
     if (fs.existsSync(filePath)) {
-      configs.push(configLoader.parseFile(filePath, this.getArgsToPass()));
+      const config = configLoader.parseFile(filePath, this.getArgsToPass());
+
+      this.tool.emit('load-module-config', null, [filePath, config]);
+
+      configs.push(config);
     }
 
     return Promise.resolve(configs);
