@@ -4,6 +4,7 @@
  * @flow
  */
 
+import chalk from 'chalk';
 import fs from 'fs-extra';
 import path from 'path';
 import parseArgs from 'yargs-parser';
@@ -21,6 +22,8 @@ export default class CreateConfigRoutine extends Routine<Object, RocketContext> 
   createConfigFile(config: Object): Promise<string> {
     const { metadata } = this.engine;
     const configPath = path.join(this.context.root, metadata.configName);
+
+    this.tool.debug(`Creating config file ${chalk.cyan(configPath)}`);
 
     this.context.configPaths.push(configPath);
 
@@ -50,6 +53,13 @@ export default class CreateConfigRoutine extends Routine<Object, RocketContext> 
     const { name } = this.engine;
     const { config } = this.tool;
 
+    this.tool.invariant(
+      !config[name],
+      `Extracting ${chalk.magenta(name)} config from package.json "rocket" block`,
+      'Exists, extracting',
+      'Does not exist, skipping',
+    );
+
     if (config[name]) {
       configs.push(config[name]);
     }
@@ -63,6 +73,8 @@ export default class CreateConfigRoutine extends Routine<Object, RocketContext> 
    * Gather CLI arguments to pass to the configuration file.
    */
   getArgsToPass(): Object {
+    this.tool.debug('\tGathering arguments to pass to config file');
+
     return parseArgs([
       ...this.context.args,
       ...this.engine.options.args,
@@ -73,13 +85,15 @@ export default class CreateConfigRoutine extends Routine<Object, RocketContext> 
    * Merge multiple configuration sources using the current engine.
    */
   mergeConfigs(configs: Object[]): Promise<Object> {
-    const config = Promise.resolve(configs.reduce((masterConfig, config) => (
+    this.tool.debug(`Merging config from ${configs.length} sources`);
+
+    const config = configs.reduce((masterConfig, config) => (
       this.engine.mergeConfig(masterConfig, config)
-    ), {}));
+    ), {});
 
     this.tool.emit('merge-config', null, [config]);
 
-    return config;
+    return Promise.resolve(config);
   }
 
   /**
@@ -93,9 +107,19 @@ export default class CreateConfigRoutine extends Routine<Object, RocketContext> 
     const filePath = (moduleName === '@local')
       ? path.join(this.context.root, `config/${name}.js`)
       : configLoader.resolveModuleConfigPath(name, moduleName);
+    const fileExists = fs.existsSync(filePath);
 
-    if (fs.existsSync(filePath)) {
+    this.tool.invariant(
+      fileExists,
+      `Loading config from configuration module ${chalk.yellow(moduleName)}`,
+      'Exists, loading',
+      'Does not exist, skipping',
+    );
+
+    if (fileExists) {
       const config = configLoader.parseFile(filePath, this.getArgsToPass());
+
+      this.tool.debug(`\tParsing config from ${chalk.cyan(filePath)}`);
 
       this.tool.emit('load-module-config', null, [filePath, config]);
 

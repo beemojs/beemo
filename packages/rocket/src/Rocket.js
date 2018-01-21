@@ -4,9 +4,9 @@
  * @flow
  */
 
-
-import fs from 'fs-extra';
 import { Pipeline, Tool } from 'boost';
+import chalk from 'chalk';
+import fs from 'fs-extra';
 import ConfigureRoutine from './ConfigureRoutine';
 import ExecuteRoutine from './ExecuteRoutine';
 import SyncDotfilesRoutine from './SyncDotfilesRoutine';
@@ -57,6 +57,8 @@ export default class Rocket {
   getModuleConfigRoot(): string {
     const { config } = this.tool.config;
 
+    this.tool.debug('Gathering configuration module root');
+
     if (!config) {
       throw new Error(
         'Rocket requires a "rocket.config" property within your package.json. ' +
@@ -66,6 +68,8 @@ export default class Rocket {
 
     // Allow for local development
     if (config === '@local') {
+      this.tool.debug(`Using ${chalk.yellow('@local')} configuration module`);
+
       return process.cwd();
     }
 
@@ -75,6 +79,8 @@ export default class Rocket {
     } catch (error) {
       throw new Error('Module defined in "rocket.config" could not be found.');
     }
+
+    this.tool.debug(`Found configuration module root path: ${chalk.cyan(config)}`);
 
     return require.resolve(config);
   }
@@ -97,6 +103,8 @@ export default class Rocket {
     };
 
     this.tool.emit('launch', null, [primaryEngine, this.context]);
+
+    this.tool.debug(`Launching with ${chalk.magenta(primaryEngine.name)} engine`);
 
     return new Pipeline(tool)
       .pipe(new ConfigureRoutine('configure', 'Generating configurations'))

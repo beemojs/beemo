@@ -4,8 +4,9 @@
  * @flow
  */
 
-import fs from 'fs-extra';
 import { Routine } from 'boost';
+import chalk from 'chalk';
+import fs from 'fs-extra';
 import Config from './execute/Config';
 
 import type { ExecuteConfig, Execution, RocketContext } from './types';
@@ -22,6 +23,8 @@ export default class ExecuteRoutine extends Routine<ExecuteConfig, RocketContext
    */
   deleteConfigFiles(): Promise<*[]> {
     return Promise.all(this.context.configPaths.map(configPath => {
+      this.tool.debug(`Deleting config file ${chalk.cyan(configPath)}`);
+
       this.tool.emit('delete-config', null, [configPath]);
 
       fs.remove(configPath);
@@ -50,6 +53,8 @@ export default class ExecuteRoutine extends Routine<ExecuteConfig, RocketContext
   filterUnknownOptionsFromArgs(): Promise<string[]> {
     const { args, primaryEngine: engine } = this.context;
     const options = { env: engine.options.env };
+
+    this.tool.debug('Filtering unknown command line args and options');
 
     return this.executeCommand(engine.metadata.bin, [engine.metadata.helpOption], options)
       .then(({ stdout }) => {
@@ -110,6 +115,10 @@ export default class ExecuteRoutine extends Routine<ExecuteConfig, RocketContext
   runCommandWithArgs(args: string[]): Promise<Execution> {
     const { primaryEngine: engine } = this.context;
     const options = { env: engine.options.env };
+
+    this.tool.debug(
+      `Executing command ${chalk.magenta(engine.metadata.bin)} with args "${args.join(' ')}"`,
+    );
 
     this.tool.emit('execute', null, [engine, args]);
 

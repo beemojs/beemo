@@ -5,6 +5,7 @@
  */
 
 import { Routine } from 'boost';
+import chalk from 'chalk';
 import Config from './configure/Config';
 import CreateConfigRoutine from './configure/CreateConfigRoutine';
 import Engine from './Engine';
@@ -21,14 +22,20 @@ export default class ConfigureRoutine extends Routine<ConfigureConfig, RocketCon
    * and then run in parallel.
    */
   createConfigFiles(engines: Engine[]): Promise<*> {
-    engines.forEach((engine) => {
+    const names = engines.map((engine) => {
       const routine = new CreateConfigRoutine(engine.name, engine.metadata.title);
 
       // Make the engine easily available
       routine.engine = engine;
 
       this.pipe(routine);
+
+      return engine.name;
     });
+
+    this.tool.debug(
+      `Creating config files for the following engines: ${chalk.magenta(names.join(', '))}`,
+    );
 
     return this.config.parallel
       ? this.parallelizeSubroutines()
@@ -54,10 +61,14 @@ export default class ConfigureRoutine extends Routine<ConfigureConfig, RocketCon
     const { primaryEngine } = this.context;
     const queue = [primaryEngine];
 
+    this.tool.debug(`Resolving dependencies for ${chalk.magenta(primaryEngine.name)}`);
+
     while (queue.length) {
       const engine = queue.shift();
 
       engine.metadata.dependencies.forEach((name) => {
+        this.tool.debug(`\tIncluding dependency ${chalk.yellow(name)}`);
+
         this.context.engines.unshift(this.tool.getPlugin(name));
       });
     }
