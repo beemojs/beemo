@@ -31,5 +31,8 @@ app.command('sync-dotfiles', 'Sync dotfiles from configuration module.', () => {
 // eslint-disable-next-line
 app
   .usage('rocket <engine> [args..]')
+  .demandCommand(1, 'Please run a command.')
+  .showHelpOnFail(true)
+  .strict(true)
   .help()
   .argv;
