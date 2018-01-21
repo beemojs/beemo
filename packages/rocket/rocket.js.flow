@@ -1,6 +1,6 @@
 import { Plugin } from 'boost';
 
-declare module '@rocket/rocket' {
+declare module 'rocket' {
   declare export type Execution = {
     cmd: string,
     code: string | number,

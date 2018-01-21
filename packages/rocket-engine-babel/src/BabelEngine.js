@@ -4,7 +4,7 @@
  * @flow
  */
 
-import { Engine } from '@rocket/rocket';
+import { Engine } from 'rocket';
 
 export default class BabelEngine extends Engine {
   bootstrap() {

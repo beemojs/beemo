@@ -4,7 +4,7 @@
  * @flow
  */
 
-import { Engine } from '@rocket/rocket';
+import { Engine } from 'rocket';
 import ConfigOps from 'eslint/lib/config/config-ops';
 
 export default class ESLintEngine extends Engine {

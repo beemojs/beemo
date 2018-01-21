@@ -1,5 +1,5 @@
 {
-  "name": "@rocket/engine-babel",
+  "name": "rocket-engine-babel",
   "version": "0.1.2",
   "description": "Babel engine for Rocket.",
   "keywords": [
@@ -26,7 +26,7 @@
     "babel-core": "^6.26.0"
   },
   "peerDependencies": {
-    "@rocket/rocket": "^0.0.0",
+    "rocket": "^0.0.0",
     "babel-core": "^6.26.0"
   }
 }
