@@ -22,12 +22,14 @@ export default class ExecuteRoutine extends Routine<ExecuteConfig, RocketContext
    * Delete all temporary config files.
    */
   deleteConfigFiles(): Promise<*[]> {
-    return Promise.all(this.context.configPaths.map(configPath => {
+    return Promise.all(this.context.configPaths.map((configPath) => {
       this.tool.debug(`Deleting config file ${chalk.cyan(configPath)}`);
 
       this.tool.emit('delete-config', null, [configPath]);
 
       fs.remove(configPath);
+
+      return configPath;
     }));
   }
 

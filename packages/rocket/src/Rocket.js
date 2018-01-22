@@ -28,7 +28,7 @@ export default class Rocket {
 
     this.tool = new Tool({
       appName: 'rocket',
-      footer: `🚀  Powered by Rocket v${this.package.version}`,
+      footer: `\n🚀  Powered by Rocket v${this.package.version}`,
       pluginAlias: 'engine',
     });
 
@@ -83,6 +83,18 @@ export default class Rocket {
     this.tool.debug(`Found configuration module root path: ${chalk.cyan(config)}`);
 
     return require.resolve(config);
+  }
+
+  /**
+   * Override tool config with command line options.
+   */
+  inheritOptions(options: Object): this {
+    const { debug, silent } = options;
+
+    this.tool.config.debug = debug;
+    this.tool.config.silent = silent;
+
+    return this;
   }
 
   /**

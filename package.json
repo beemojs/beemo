@@ -44,7 +44,7 @@
   ],
   "rocket": {
     "config": "@local",
-    "debug": true,
+    "debug": false,
     "engines": [
       "babel",
       "eslint",

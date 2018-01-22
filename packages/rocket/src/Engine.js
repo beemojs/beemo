@@ -8,6 +8,7 @@ import { Plugin } from 'boost';
 import merge from 'lodash/merge';
 import Options, { array, bool, number, object, string, union } from 'optimal';
 
+import typeof Yargs from 'yargs';
 import type { Execution } from './types';
 
 type EngineOptions = {
@@ -108,4 +109,9 @@ export default class Engine extends Plugin<EngineOptions> {
 
     return this;
   }
+
+  /**
+   * Setup additional command options.
+   */
+  setOptions(command: Yargs) {}
 }

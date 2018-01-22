@@ -87,8 +87,8 @@ export default class CreateConfigRoutine extends Routine<Object, RocketContext> 
   mergeConfigs(configs: Object[]): Promise<Object> {
     this.tool.debug(`Merging config from ${configs.length} sources`);
 
-    const config = configs.reduce((masterConfig, config) => (
-      this.engine.mergeConfig(masterConfig, config)
+    const config = configs.reduce((masterConfig, cfg) => (
+      this.engine.mergeConfig(masterConfig, cfg)
     ), {});
 
     this.tool.emit('merge-config', null, [config]);
