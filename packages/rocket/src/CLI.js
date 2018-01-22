@@ -33,6 +33,5 @@ app
   .usage('rocket <engine> [args..]')
   .demandCommand(1, 'Please run a command.')
   .showHelpOnFail(true)
-  .strict(true)
   .help()
   .argv;
