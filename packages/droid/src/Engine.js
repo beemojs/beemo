@@ -39,10 +39,7 @@ export default class Engine extends Plugin<EngineOptions> {
     super(options);
 
     this.options = new Options(this.options, {
-      args: union([
-        string(),
-        array(string()),
-      ], []),
+      args: array(string()),
       env: object(union([
         bool(),
         number(),

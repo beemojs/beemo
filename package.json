@@ -46,14 +46,30 @@
     "config": "@local",
     "engines": [
       "babel",
-      "eslint",
-      "flow",
-      "jest"
+      {
+        "engine": "eslint",
+        "args": ["--color", "--report-unused-disable-directives"]
+      },
+      {
+        "engine": "flow",
+        "args": ["--color=auto"]
+      },
+      {
+        "engine": "jest",
+        "args": ["--colors", "--logHeapUsage"]
+      },
+      {
+        "engine": "prettier",
+        "args": ["--debug-check", "--write"]
+      }
     ],
     "eslint": {
       "rules": {
         "import/first": "off"
       }
+    },
+    "execute": {
+      "cleanup": true
     }
   }
 }

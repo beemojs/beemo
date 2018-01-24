@@ -39,7 +39,7 @@ export default class SyncDotfilesRoutine extends Routine {
           resolve(files.map((file) => {
             this.tool.emit('create-dotfile', null, [file.path]);
 
-            this.tool.debug(`\t${file.path}`);
+            this.tool.debug(`  ${file.path}`);
 
             return file.path;
           }));

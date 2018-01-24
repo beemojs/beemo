@@ -67,7 +67,7 @@ export default class ConfigureRoutine extends Routine<ConfigureConfig, DroidCont
       const engine = queue.shift();
 
       engine.metadata.dependencies.forEach((name) => {
-        this.tool.debug(`\tIncluding dependency ${chalk.yellow(name)}`);
+        this.tool.debug(`  Including dependency ${chalk.yellow(name)}`);
 
         this.context.engines.unshift(this.tool.getPlugin(name));
       });

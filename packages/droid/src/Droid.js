@@ -30,6 +30,7 @@ export default class Droid {
       appName: 'droid',
       footer: `\n🤖  Powered by Droid v${this.package.version}`,
       pluginAlias: 'engine',
+      scoped: true,
     });
 
     // Immediately load config and plugins

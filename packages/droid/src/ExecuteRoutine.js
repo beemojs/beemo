@@ -27,9 +27,7 @@ export default class ExecuteRoutine extends Routine<ExecuteConfig, DroidContext>
 
       this.tool.emit('delete-config', null, [configPath]);
 
-      fs.remove(configPath);
-
-      return configPath;
+      return fs.remove(configPath);
     }));
   }
 
@@ -53,12 +51,16 @@ export default class ExecuteRoutine extends Routine<ExecuteConfig, DroidContext>
    * Utilize the engine's help option/command to determine accurate options.
    */
   filterUnknownOptionsFromArgs(): Promise<string[]> {
-    const { args, primaryEngine: engine } = this.context;
-    const options = { env: engine.options.env };
+    const { args: commandArgs, primaryEngine: engine } = this.context;
+    const { args: engineArgs, env } = engine.options;
+    const args = [
+      ...engineArgs,
+      ...commandArgs,
+    ];
 
     this.tool.debug('Filtering unknown command line args and options');
 
-    return this.executeCommand(engine.metadata.bin, [engine.metadata.helpOption], options)
+    return this.executeCommand(engine.metadata.bin, [engine.metadata.helpOption], { env })
       .then(({ stdout }) => {
         const nativeOptions = {};
 

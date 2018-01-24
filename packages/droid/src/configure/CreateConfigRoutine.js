@@ -54,7 +54,7 @@ export default class CreateConfigRoutine extends Routine<Object, DroidContext> {
     const { config } = this.tool;
 
     this.tool.invariant(
-      !config[name],
+      !!config[name],
       `Extracting ${chalk.magenta(name)} config from package.json "droid" block`,
       'Exists, extracting',
       'Does not exist, skipping',
@@ -73,13 +73,11 @@ export default class CreateConfigRoutine extends Routine<Object, DroidContext> {
    * Gather CLI arguments to pass to the configuration file.
    */
   getArgsToPass(): Object {
-    this.tool.debug('\tGathering arguments to pass to config file');
-
-    const { args } = this.engine.options;
+    this.tool.debug('  Gathering arguments to pass to config file');
 
     return parseArgs([
       ...this.context.args,
-      ...(Array.isArray(args) ? args : args.split(' ')),
+      ...this.engine.options.args,
     ].map(value => String(value)));
   }
 
@@ -87,7 +85,9 @@ export default class CreateConfigRoutine extends Routine<Object, DroidContext> {
    * Merge multiple configuration sources using the current engine.
    */
   mergeConfigs(configs: Object[]): Promise<Object> {
-    this.tool.debug(`Merging config from ${configs.length} sources`);
+    this.tool.debug(
+      `Merging ${chalk.magenta(this.engine.name)} config from ${configs.length} sources`,
+    );
 
     const config = configs.reduce((masterConfig, cfg) => (
       this.engine.mergeConfig(masterConfig, cfg)
@@ -113,7 +113,7 @@ export default class CreateConfigRoutine extends Routine<Object, DroidContext> {
 
     this.tool.invariant(
       fileExists,
-      `Loading config from configuration module ${chalk.yellow(moduleName)}`,
+      `Loading ${chalk.magenta(name)} config from configuration module ${chalk.yellow(moduleName)}`,
       'Exists, loading',
       'Does not exist, skipping',
     );
@@ -121,7 +121,7 @@ export default class CreateConfigRoutine extends Routine<Object, DroidContext> {
     if (fileExists) {
       const config = configLoader.parseFile(filePath, this.getArgsToPass());
 
-      this.tool.debug(`\tParsing config from ${chalk.cyan(filePath)}`);
+      this.tool.debug(`  Parsing config from ${chalk.cyan(filePath)}`);
 
       this.tool.emit('load-module-config', null, [filePath, config]);
 

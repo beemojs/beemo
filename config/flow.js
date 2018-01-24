@@ -21,6 +21,8 @@ module.exports = function eslint(options) {
       sketchy_null_mixed: 'off',
       sketchy_null_number: 'off',
       sketchy_null_string: 'off',
+      unclear_type: 'off',
+      untyped_import: 'off',
     },
     options: {
       emoji: true,
