@@ -4,7 +4,7 @@
  * @flow
  */
 
-import { Engine } from '@droid/droid';
+import { Engine } from '@droid/core';
 
 export default class JestEngine extends Engine {
   bootstrap() {

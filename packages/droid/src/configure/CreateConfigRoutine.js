@@ -79,7 +79,7 @@ export default class CreateConfigRoutine extends Routine<Object, DroidContext> {
 
     return parseArgs([
       ...this.context.args,
-      ...(Array.isArray(args) ? args : args.split(' '))
+      ...(Array.isArray(args) ? args : args.split(' ')),
     ].map(value => String(value)));
   }
 

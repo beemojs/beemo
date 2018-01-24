@@ -27,7 +27,7 @@
   },
   "peerDependencies": {
     "@droid/engine-babel": "^0.0.0",
-    "@droid/droid": "^0.0.0",
+    "@droid/core": "^0.0.0",
     "jest": "^21.2.0"
   }
 }

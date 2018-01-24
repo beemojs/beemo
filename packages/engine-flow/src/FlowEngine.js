@@ -4,9 +4,9 @@
  * @flow
  */
 
-import { Engine } from '@droid/droid';
+import { Engine } from '@droid/core';
 
-import type { Execution } from '@droid/droid';
+import type { Execution } from '@droid/core';
 
 export default class FlowEngine extends Engine {
   bootstrap() {

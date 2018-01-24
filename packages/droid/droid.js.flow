@@ -1,6 +1,6 @@
 import { Plugin } from 'boost';
 
-declare module 'droid' {
+declare module '@droid/core' {
   declare export type Execution = {
     cmd: string,
     code: string | number,

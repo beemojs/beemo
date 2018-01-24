@@ -1,5 +1,5 @@
 {
-  "name": "@droid/droid",
+  "name": "@droid/core",
   "version": "0.1.3",
   "description": "Manage all build tool configurations in a single reusable repository.",
   "keywords": [
@@ -10,7 +10,9 @@
     "manager",
     "babel",
     "eslint",
-    "jest"
+    "flow",
+    "jest",
+    "prettier"
   ],
   "bin": "./bin/droid.js",
   "main": "./lib/index.js",
