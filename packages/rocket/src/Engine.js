@@ -35,16 +35,14 @@ export default class Engine extends Plugin<EngineOptions> {
     title: '',
   };
 
-  options: EngineOptions = {
-    args: [],
-    env: {},
-  };
-
   constructor(options?: Object = {}) {
     super(options);
 
     this.options = new Options(this.options, {
-      args: array(string()),
+      args: union([
+        string(),
+        array(string()),
+      ], []),
       env: object(union([
         bool(),
         number(),

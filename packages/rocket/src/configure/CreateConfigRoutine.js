@@ -75,9 +75,11 @@ export default class CreateConfigRoutine extends Routine<Object, RocketContext> 
   getArgsToPass(): Object {
     this.tool.debug('\tGathering arguments to pass to config file');
 
+    const { args } = this.engine.options;
+
     return parseArgs([
       ...this.context.args,
-      ...this.engine.options.args,
+      ...(Array.isArray(args) ? args : args.split(' '))
     ].map(value => String(value)));
   }
 
