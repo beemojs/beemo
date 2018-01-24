@@ -11,7 +11,7 @@ module.exports = function eslint(options) {
       './packages',
     ],
     libs: [
-      './packages/rocket/rocket.js.flow',
+      './packages/droid/droid.js.flow',
       './node_modules/boost/boost.js.flow',
       './node_modules/optimal/optimal.js.flow',
     ],

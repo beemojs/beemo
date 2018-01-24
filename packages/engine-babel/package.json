@@ -1,0 +1,32 @@
+{
+  "name": "@droid/engine-babel",
+  "version": "0.1.2",
+  "description": "Babel engine for Droid.",
+  "keywords": [
+    "droid",
+    "engine",
+    "babel",
+    "transpile",
+    "compile"
+  ],
+  "main": "./lib/index.js",
+  "scripts": {
+    "build": "build-lib"
+  },
+  "engines": {
+    "node": ">=6.5.0"
+  },
+  "repository": "https://github.com/milesj/droid/tree/master/packages/@droid/engine-babel",
+  "license": "MIT",
+  "publishConfig": {
+    "access": "public"
+  },
+  "devDependencies": {
+    "@milesj/build-tool-config": "0.50.0",
+    "babel-core": "^6.26.0"
+  },
+  "peerDependencies": {
+    "@droid/droid": "^0.0.0",
+    "babel-core": "^6.26.0"
+  }
+}

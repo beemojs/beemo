@@ -1,0 +1,32 @@
+{
+  "name": "@droid/engine-flow",
+  "version": "0.1.2",
+  "description": "Flow engine for Droid.",
+  "keywords": [
+    "droid",
+    "engine",
+    "flow",
+    "flowtype",
+    "type"
+  ],
+  "main": "./lib/index.js",
+  "scripts": {
+    "build": "build-lib"
+  },
+  "engines": {
+    "node": ">=6.5.0"
+  },
+  "repository": "https://github.com/milesj/droid/tree/master/packages/@droid/engine-flow",
+  "license": "MIT",
+  "publishConfig": {
+    "access": "public"
+  },
+  "devDependencies": {
+    "@milesj/build-tool-config": "0.50.0",
+    "flow-bin": "^0.63.1"
+  },
+  "peerDependencies": {
+    "@droid/droid": "^0.0.0",
+    "flow-bin": "^0.59.0"
+  }
+}

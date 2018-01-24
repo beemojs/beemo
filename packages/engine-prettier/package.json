@@ -1,0 +1,32 @@
+{
+  "name": "@droid/engine-prettier",
+  "version": "0.1.2",
+  "description": "Prettier engine for Droid.",
+  "keywords": [
+    "droid",
+    "engine",
+    "prettier",
+    "beautify",
+    "formatter"
+  ],
+  "main": "./lib/index.js",
+  "scripts": {
+    "build": "build-lib"
+  },
+  "engines": {
+    "node": ">=6.5.0"
+  },
+  "repository": "https://github.com/milesj/droid/tree/master/packages/@droid/engine-prettier",
+  "license": "MIT",
+  "publishConfig": {
+    "access": "public"
+  },
+  "devDependencies": {
+    "@milesj/build-tool-config": "0.50.0",
+    "prettier": "^1.10.0"
+  },
+  "peerDependencies": {
+    "@droid/droid": "^0.0.0",
+    "prettier": "^1.10.0"
+  }
+}

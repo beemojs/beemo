@@ -1,2 +1,3 @@
-# rocket
-Dope as hell configuration layer.
+# Droid
+
+🤖 Super beep boop configuration layer.

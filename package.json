@@ -1,6 +1,6 @@
 {
   "private": true,
-  "name": "rocket",
+  "name": "droid",
   "version": "0.0.0",
   "scripts": {
     "test": "yarn run jest",
@@ -18,7 +18,7 @@
     "publish": "lerna publish",
     "publish:force": "lerna publish --force-publish *",
     "updated": "lerna updated",
-    "rocket": "node ./packages/rocket/bin/rocket"
+    "droid": "node ./packages/droid/bin/droid"
   },
   "devDependencies": {
     "@milesj/build-tool-config": "0.50.0",
@@ -42,7 +42,7 @@
     "*.min.js",
     "*.map"
   ],
-  "rocket": {
+  "droid": {
     "config": "@local",
     "engines": [
       "babel",
