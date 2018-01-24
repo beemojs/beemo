@@ -1,20 +1,25 @@
 # 🤖 Droid
 
-Manage build tools, their configuration, and all commands in a single centralized repository.
+Manage build tools, their configuration, and commands in a single centralized repository.
 Droid aims to solve the multi-project maintenance fatigue by removing the following burdens across
 all projects: config and dotfile management, multiple config patterns, up-to-date development
-dependencies, and continuous copy and paste.
+dependencies, and continuous copy and paste between projects.
 
 ### Features
 
-* Manage all build tools in a single repository.
+* Manage all build tools and configurations in a single repository.
 * Configure all build tools using `.js` files.
-* Customize and alter config at runtime through CLI options.
-* Pass custom CLI options to build tool commands.
+* Customize and alter config at runtime with CLI options.
+* Pass custom CLI options to build tool commands without failure.
 * Easily share config between build tools.
+* Avoid relative config or `extend` paths.
 * Automatic config file cleanup.
 * Dotfile synchronization.
 * And much more.
+
+### How does it work?
+
+TODO
 
 ## Requirements
 
@@ -26,6 +31,10 @@ dependencies, and continuous copy and paste.
   * [Installing Droid](#installing-droid)
   * [Configuring Engines](#configuring-engines)
   * [Adding Dotfiles](#adding-dotfiles)
+  * [Publishing](#publishing)
+* [Consumer Setup](#consumer-setup)
+  * [Synchronizing Dotfiles](#synchronizing-dotfiles)
+  * [Running Commands](#running-commands)
 
 ### Repository Setup
 
@@ -46,22 +55,7 @@ clutter NPM with dumb packages. It also avoids collisions and easily announces o
 npm init --scope=droid
 ```
 
-Enter `0.0.0` for the version, and whatever you want on the remaining questions. Let's move
-forward by immediately publishing the package to NPM with public access. This is mandatory if
-using a scope.
-
-```
-npm version minor
-npm publish --access=public
-```
-
-You can also set the access in `package.json`.
-
-```
-"publishConfig": {
-  "access": "public"
-},
-```
+Enter `0.0.0` for the version, and whatever you want on the remaining questions.
 
 #### Installing Droid
 
@@ -134,7 +128,7 @@ module.exports = function (options) {
 };
 ```
 
-> Command line arguments are parsed into an object using [yargs-parser](https://www.npmjs.com/package/yargs-parser)
+> Command line arguments are parsed into an object using [yargs-parser](https://www.npmjs.com/package/yargs-parser).
 
 #### Adding Dotfiles
 
@@ -153,11 +147,29 @@ Then add dotfiles you want to synchronize, without the leading `.`. For example,
 would simply be `gitignore`. Why no leading period? Well, because otherwise, those dotfiles and
 their functionality would be applied to your repository (git will actually ignore files). So to
 get around this, we remove the period, and then rename the file after synchronizing. If all goes
-well, you should have folder structure like the following.
+well, you should have a folder structure like the following.
 
 ```
 dotfiles/
   gitignore
   npmignore
   travis.yml
+```
+
+#### Publishing
+
+Now that Droid and its engines are installed, let's move forward by publishing the package to
+NPM with public access. This is mandatory if using a scope.
+
+```
+npm version minor
+npm publish --access=public
+```
+
+You can also set the access in `package.json`.
+
+```
+"publishConfig": {
+  "access": "public"
+},
 ```

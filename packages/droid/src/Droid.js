@@ -18,17 +18,15 @@ import type { Event, Reporter } from 'boost';
 export default class Droid {
   context: DroidContext;
 
-  package: Object;
-
   tool: Tool<Engine, Reporter<Object>>;
 
   constructor() {
     // eslint-disable-next-line global-require
-    this.package = require('../package.json');
+    const { version } = require('../package.json');
 
     this.tool = new Tool({
       appName: 'droid',
-      footer: `\n🤖  Powered by Droid v${this.package.version}`,
+      footer: `\n🤖  Powered by Droid v${version}`,
       pluginAlias: 'engine',
       scoped: true,
     });
