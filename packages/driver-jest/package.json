@@ -1,6 +1,6 @@
 {
   "name": "@beemo/driver-jest",
-  "version": "0.0.1",
+  "version": "0.1.0",
   "description": "Jest driver for Beemo.",
   "keywords": [
     "beemo",
@@ -27,8 +27,8 @@
     "jest": "^22.1.4"
   },
   "peerDependencies": {
-    "@beemo/driver-babel": "^0.0.0",
     "@beemo/core": "^0.0.0",
+    "@beemo/driver-babel": "^0.0.0",
     "jest": "^21.2.0"
   }
 }
