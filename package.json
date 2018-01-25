@@ -24,6 +24,9 @@
     "@milesj/build-tool-config": "0.50.0",
     "lerna": "^2.8.0"
   },
+  "publishConfig": {
+    "access": "public"
+  },
   "workspaces": [
     "packages/*"
   ],
