@@ -4,8 +4,8 @@
  * @flow
  */
 
+import Beemo from '@beemo/core';
 import app from 'yargs';
-import Beemo from './Beemo';
 
 // Initialize
 const beemo = new Beemo();
@@ -20,7 +20,7 @@ beemo.tool.plugins.forEach((driver) => {
       beemo
         .inheritOptions(app.argv)
         // 0 node, 1 beemo, 2 driver
-        .runDriver(driver.name, process.argv.slice(3));
+        .executeDriver(driver.name, process.argv.slice(3));
     },
   );
 

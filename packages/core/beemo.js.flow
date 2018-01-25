@@ -1,6 +1,18 @@
 import { Plugin } from 'boost';
 
 declare module '@beemo/core' {
+  import type { Event, Tool, Reporter } from 'boost';
+  import typeof Yargs from 'yargs';
+
+  declare export type Context = {
+    args: string[],
+    configPaths: string[],
+    configRoot: string,
+    drivers: Driver[],
+    primaryDriver: Driver,
+    root: string,
+  };
+
   declare export type Execution = {
     cmd: string,
     code: string | number,
@@ -36,5 +48,17 @@ declare module '@beemo/core' {
     handleSuccess(response: Execution): void;
     mergeConfig(prev: Object, next: Object): Object;
     setMetadata(metadata: Object): this;
+    setOptions(command: Yargs): void;
+  }
+
+  declare export default class Beemo {
+    context: Context;
+    tool: Tool<Driver, Reporter<Object>>;
+
+    cleanUpOnFailure(event: Event, code: number): void;
+    getConfigModuleRoot(): string;
+    inheritOptions(options: Object): this;
+    executeDriver(driverName: string, args?: string[]): Promise<*>;
+    syncDotfiles(): Promise<*>;
   }
 }

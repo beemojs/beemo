@@ -11,9 +11,9 @@ import ConfigureRoutine from './ConfigureRoutine';
 import ExecuteRoutine from './ExecuteRoutine';
 import SyncDotfilesRoutine from './SyncDotfilesRoutine';
 
+import type { Event, Reporter } from 'boost';
 import type { BeemoContext } from './types';
 import type Driver from './Driver';
-import type { Event, Reporter } from 'boost';
 
 export default class Beemo {
   context: BeemoContext;
@@ -53,7 +53,7 @@ export default class Beemo {
   /**
    * Validate the configuration module and return its absolute path.
    */
-  getModuleConfigRoot(): string {
+  getConfigModuleRoot(): string {
     const { config } = this.tool.config;
 
     this.tool.debug('Gathering configuration module root');
@@ -97,11 +97,11 @@ export default class Beemo {
   }
 
   /**
-   * Run the driver (boost pipeline) by executing all routines for the chosen driver.
+   * Execute all routines for the chosen driver.
    */
-  runDriver(driverName: string, args?: string[] = []): Promise<*> {
+  executeDriver(driverName: string, args?: string[] = []): Promise<*> {
     const { tool } = this;
-    const configRoot = this.getModuleConfigRoot();
+    const configRoot = this.getConfigModuleRoot();
     const primaryDriver = tool.getPlugin(driverName);
 
     this.context = {
@@ -131,6 +131,6 @@ export default class Beemo {
 
     return new Pipeline(this.tool)
       .pipe(new SyncDotfilesRoutine('sync', 'Syncing dotfiles'))
-      .run(this.getModuleConfigRoot());
+      .run(this.getConfigModuleRoot());
   }
 }

@@ -14,7 +14,6 @@
     "jest",
     "prettier"
   ],
-  "bin": "./bin/beemo.js",
   "main": "./lib/index.js",
   "scripts": {
     "build": "build-lib"
@@ -37,7 +36,6 @@
     "fs-extra": "^5.0.0",
     "lodash": "^4.17.4",
     "optimal": "^0.14.0",
-    "yargs": "^11.0.0",
     "yargs-parser": "^9.0.2"
   }
 }

@@ -18,7 +18,7 @@
     "publish": "lerna publish",
     "publish:force": "lerna publish --force-publish *",
     "updated": "lerna updated",
-    "beemo": "node ./packages/core/bin/beemo"
+    "beemo": "beemo"
   },
   "devDependencies": {
     "@milesj/build-tool-config": "0.50.0",
