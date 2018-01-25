@@ -3,7 +3,7 @@
 Manage build tools, their configuration, and commands in a single centralized repository.
 Beemo aims to solve the multi-project maintenance fatigue by removing the following burdens across
 all projects: config and dotfile management, multiple config patterns, up-to-date development
-dependencies, and continuous copy and paste between projects.
+dependencies, continuous copy and paste, and more.
 
 ### Features
 
@@ -34,7 +34,8 @@ TODO
   * [Publishing](#publishing)
 * [Consumer Setup](#consumer-setup)
   * [Synchronizing Dotfiles](#synchronizing-dotfiles)
-  * [Running Commands](#running-commands)
+  * [Using Drivers](#using-drivers)
+  * [Executing Drivers](#executing-drivers)
 
 ### Repository Setup
 
@@ -52,7 +53,7 @@ username scope, like `@beemo/build-tool-config`. Why a scope? Because we don't w
 clutter NPM with dumb packages. It also avoids collisions and easily announces ownership.
 
 ```
-npm init --scope=beemo
+npm init --scope=<username>
 ```
 
 Enter `0.0.0` for the version, and whatever you want on the remaining questions.
@@ -132,10 +133,11 @@ module.exports = function (options) {
 
 #### Adding Dotfiles
 
-Beemo supports synchronizing dotfiles across all projects that consume your configuration module
-(the repository you just created). This includes things like `.gitignore`, `.npmignore`,
-`.travis.yml`, and more. This *does not* include configuration dotfiles like `.babelrc` and
-`.flowconfig`, as those are handled automatically by the drivers mentioned above.
+Beemo supports [synchronizing dotfiles](#synchronizing-dotfiles) across all projects that consume
+your configuration module (the repository you just created). This includes things like
+`.gitignore`, `.npmignore`, `.travis.yml`, and more. This *does not* include configuration
+dotfiles like `.babelrc` and `.flowconfig`, as those are handled automatically by the drivers
+mentioned above.
 
 To begin, create a `dotfiles/` folder.
 
@@ -173,3 +175,44 @@ You can also set the access in `package.json`.
   "access": "public"
 },
 ```
+
+### Consumer Setup
+
+Now that you have a configuration module, we can integrate it across all projects. But first,
+go ahead and delete all the old config files and dependencies in each project (if they exist),
+as all that logic should now be housed in your configuration module.
+
+Once you have a clean slate, install Beemo's CLI and your configuration module.
+
+```
+yarn add @beemo/cli --dev
+yarn add @<username>/build-tool-config --dev
+```
+
+Add a `beemo` configuration block to your `package.json`, with a `config` property that matches
+the name of your configuration module, or another third-party module.
+
+```json
+{
+  "beemo": {
+    "config": "@<username>/build-tool-config"
+  }
+}
+```
+
+##### Options
+
+* `config` (string) - Name of your configuration module.
+* `configure.parallel` (boolean) - Create configuration files in parallel. Defaults to `true`.
+* `debug` (boolean) - Enable debug output. Can be toggled with `--debug`. Defaults to `false`.
+* `drivers` (string[]|object[]) - List of drivers to enable for the consumer.
+* `execute.cleanup` (boolean) - Remove generated config files after execution. Defaults to `true`.
+* `silent` (boolean) - Hide all output. Can be toggled with `--silent`. Defaults to `false`.
+
+> Periods denote nested objects.
+
+#### Synchronizing Dotfiles
+
+#### Using Drivers
+
+#### Executing Drivers
