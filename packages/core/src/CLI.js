@@ -5,26 +5,26 @@
  */
 
 import app from 'yargs';
-import Droid from './Droid';
+import Beemo from './Beemo';
 
 // Initialize
-const droid = new Droid();
+const beemo = new Beemo();
 
 // Add a command for each engine
-droid.tool.plugins.forEach((engine) => {
+beemo.tool.plugins.forEach((engine) => {
   const { metadata } = engine;
   const command = app.command(
     metadata.bin,
     metadata.description || `Run ${metadata.title}.`,
     () => {
-      droid
+      beemo
         .inheritOptions(app.argv)
-        // 0 node, 1 droid, 2 engine
+        // 0 node, 1 beemo, 2 engine
         .launchEngine(engine.name, process.argv.slice(3));
     },
   );
 
-  // Set Droid options
+  // Set Beemo options
   command
     .option('debug', {
       boolean: true,
@@ -41,15 +41,15 @@ droid.tool.plugins.forEach((engine) => {
   engine.setOptions(command);
 });
 
-// Add Droid commands
+// Add Beemo commands
 app.command('sync-dotfiles', 'Sync dotfiles from configuration module.', () => {
-  droid.syncDotfiles();
+  beemo.syncDotfiles();
 });
 
 // Run application
 // eslint-disable-next-line
 app
-  .usage('droid <engine> [args..]')
+  .usage('beemo <engine> [args..]')
   .demandCommand(1, 'Please run a command.')
   .showHelpOnFail(true)
   .help()

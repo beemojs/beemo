@@ -11,12 +11,12 @@ import ConfigureRoutine from './ConfigureRoutine';
 import ExecuteRoutine from './ExecuteRoutine';
 import SyncDotfilesRoutine from './SyncDotfilesRoutine';
 
-import type { DroidContext } from './types';
+import type { BeemoContext } from './types';
 import type Engine from './Engine';
 import type { Event, Reporter } from 'boost';
 
-export default class Droid {
-  context: DroidContext;
+export default class Beemo {
+  context: BeemoContext;
 
   tool: Tool<Engine, Reporter<Object>>;
 
@@ -25,8 +25,8 @@ export default class Droid {
     const { version } = require('../package.json');
 
     this.tool = new Tool({
-      appName: 'droid',
-      footer: `\n🤖  Powered by Droid v${version}`,
+      appName: 'beemo',
+      footer: `\n🤖  Powered by Beemo v${version}`,
       pluginAlias: 'engine',
       scoped: true,
     });
@@ -60,7 +60,7 @@ export default class Droid {
 
     if (!config) {
       throw new Error(
-        'Droid requires a "droid.config" property within your package.json. ' +
+        'Beemo requires a "beemo.config" property within your package.json. ' +
         'This property is the name of a module that houses your configuration files.',
       );
     }
@@ -76,7 +76,7 @@ export default class Droid {
     try {
       require(config); // eslint-disable-line
     } catch (error) {
-      throw new Error('Module defined in "droid.config" could not be found.');
+      throw new Error('Module defined in "beemo.config" could not be found.');
     }
 
     this.tool.debug(`Found configuration module root path: ${chalk.cyan(config)}`);

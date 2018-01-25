@@ -9,11 +9,11 @@ import chalk from 'chalk';
 import fs from 'fs-extra';
 import Config from './execute/Config';
 
-import type { ExecuteConfig, Execution, DroidContext } from './types';
+import type { ExecuteConfig, Execution, BeemoContext } from './types';
 
 const OPTION_PATTERN: RegExp = /-?-[-a-z0-9]+/ig;
 
-export default class ExecuteRoutine extends Routine<ExecuteConfig, DroidContext> {
+export default class ExecuteRoutine extends Routine<ExecuteConfig, BeemoContext> {
   bootstrap() {
     this.config = new Config(this.config);
   }

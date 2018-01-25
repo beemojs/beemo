@@ -4,9 +4,9 @@
  * @flow
  */
 
-import { Engine } from '@droid/core';
+import { Engine } from '@beemo/core';
 
-import type { Execution } from '@droid/core';
+import type { Execution } from '@beemo/core';
 
 export default class FlowEngine extends Engine {
   bootstrap() {

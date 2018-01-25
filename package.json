@@ -1,6 +1,6 @@
 {
   "private": true,
-  "name": "droid",
+  "name": "beemo",
   "version": "0.0.0",
   "scripts": {
     "test": "yarn run jest",
@@ -18,7 +18,7 @@
     "publish": "lerna publish",
     "publish:force": "lerna publish --force-publish *",
     "updated": "lerna updated",
-    "droid": "node ./packages/droid/bin/droid"
+    "beemo": "node ./packages/beemo/bin/beemo"
   },
   "devDependencies": {
     "@milesj/build-tool-config": "0.50.0",
@@ -42,7 +42,7 @@
     "*.min.js",
     "*.map"
   ],
-  "droid": {
+  "beemo": {
     "config": "@local",
     "engines": [
       "babel",

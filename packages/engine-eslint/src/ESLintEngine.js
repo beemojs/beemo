@@ -4,7 +4,7 @@
  * @flow
  */
 
-import { Engine } from '@droid/core';
+import { Engine } from '@beemo/core';
 import ConfigOps from 'eslint/lib/config/config-ops';
 
 export default class ESLintEngine extends Engine {

@@ -10,9 +10,9 @@ import Config from './configure/Config';
 import CreateConfigRoutine from './configure/CreateConfigRoutine';
 import Engine from './Engine';
 
-import type { ConfigureConfig, DroidContext } from './types';
+import type { ConfigureConfig, BeemoContext } from './types';
 
-export default class ConfigureRoutine extends Routine<ConfigureConfig, DroidContext> {
+export default class ConfigureRoutine extends Routine<ConfigureConfig, BeemoContext> {
   bootstrap() {
     this.config = new Config(this.config);
   }

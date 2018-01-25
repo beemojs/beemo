@@ -1,9 +1,9 @@
 {
-  "name": "@droid/engine-jest",
+  "name": "@beemo/engine-jest",
   "version": "0.1.2",
-  "description": "Jest engine for Droid.",
+  "description": "Jest engine for Beemo.",
   "keywords": [
-    "droid",
+    "beemo",
     "engine",
     "jest",
     "test",
@@ -16,7 +16,7 @@
   "engines": {
     "node": ">=6.5.0"
   },
-  "repository": "https://github.com/milesj/droid/tree/master/packages/@droid/engine-jest",
+  "repository": "https://github.com/milesj/beemo/tree/master/packages/@beemo/engine-jest",
   "license": "MIT",
   "publishConfig": {
     "access": "public"
@@ -26,8 +26,8 @@
     "jest": "^22.1.4"
   },
   "peerDependencies": {
-    "@droid/engine-babel": "^0.0.0",
-    "@droid/core": "^0.0.0",
+    "@beemo/engine-babel": "^0.0.0",
+    "@beemo/core": "^0.0.0",
     "jest": "^21.2.0"
   }
 }

@@ -11,9 +11,9 @@ import parseArgs from 'yargs-parser';
 import { Routine } from 'boost';
 import Engine from '../Engine';
 
-import type { DroidContext } from '../types';
+import type { BeemoContext } from '../types';
 
-export default class CreateConfigRoutine extends Routine<Object, DroidContext> {
+export default class CreateConfigRoutine extends Routine<Object, BeemoContext> {
   engine: Engine;
 
   /**
@@ -39,7 +39,7 @@ export default class CreateConfigRoutine extends Routine<Object, DroidContext> {
     const { name } = this.engine;
 
     this.task(`Loading external ${name} module config`, this.loadConfigFromFilesystem);
-    this.task(`Loading local ${name} Droid config`, this.extractConfigFromPackage);
+    this.task(`Loading local ${name} Beemo config`, this.extractConfigFromPackage);
     this.task(`Merging ${name} config objects`, this.mergeConfigs);
     this.task(`Creating temporary ${name} config file`, this.createConfigFile);
 
@@ -47,7 +47,7 @@ export default class CreateConfigRoutine extends Routine<Object, DroidContext> {
   }
 
   /**
-   * Extract configuration from "droid.<engine>" within the local project's package.json.
+   * Extract configuration from "beemo.<engine>" within the local project's package.json.
    */
   extractConfigFromPackage(configs: Object[]): Promise<Object[]> {
     const { name } = this.engine;
@@ -55,7 +55,7 @@ export default class CreateConfigRoutine extends Routine<Object, DroidContext> {
 
     this.tool.invariant(
       !!config[name],
-      `Extracting ${chalk.magenta(name)} config from package.json "droid" block`,
+      `Extracting ${chalk.magenta(name)} config from package.json "beemo" block`,
       'Exists, extracting',
       'Does not exist, skipping',
     );

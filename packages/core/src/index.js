@@ -5,7 +5,7 @@
  */
 
 import Engine from './Engine';
-import Droid from './Droid';
+import Beemo from './Beemo';
 
 export { Engine };
-export default Droid;
+export default Beemo;

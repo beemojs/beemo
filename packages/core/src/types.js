@@ -25,7 +25,7 @@ export type Execution = {
   timedOut: boolean,
 };
 
-export type DroidContext = {
+export type BeemoContext = {
   args: string[],
   configPaths: string[],
   configRoot: string,

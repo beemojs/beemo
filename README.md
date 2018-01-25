@@ -1,7 +1,7 @@
-# 🤖 Droid
+# 🤖 Beemo
 
 Manage build tools, their configuration, and commands in a single centralized repository.
-Droid aims to solve the multi-project maintenance fatigue by removing the following burdens across
+Beemo aims to solve the multi-project maintenance fatigue by removing the following burdens across
 all projects: config and dotfile management, multiple config patterns, up-to-date development
 dependencies, and continuous copy and paste between projects.
 
@@ -28,7 +28,7 @@ TODO
 ## Documentation
 
 * [Repository Setup](#repository-setup)
-  * [Installing Droid](#installing-droid)
+  * [Installing Beemo](#installing-beemo)
   * [Configuring Engines](#configuring-engines)
   * [Adding Dotfiles](#adding-dotfiles)
   * [Publishing](#publishing)
@@ -48,30 +48,30 @@ cd build-tool-config/
 ```
 
 Once cloned, initialize a new NPM package, and provide the name `build-tool-config` with your
-username scope, like `@droid/build-tool-config`. Why a scope? Because we don't want to
+username scope, like `@beemo/build-tool-config`. Why a scope? Because we don't want to
 clutter NPM with dumb packages. It also avoids collisions and easily announces ownership.
 
 ```
-npm init --scope=droid
+npm init --scope=beemo
 ```
 
 Enter `0.0.0` for the version, and whatever you want on the remaining questions.
 
-#### Installing Droid
+#### Installing Beemo
 
-Now that we have a repository, we can install and setup Droid. It's as easy as...
+Now that we have a repository, we can install and setup Beemo. It's as easy as...
 
 ```
-yarn add @droid/core
+yarn add @beemo/core
 ```
 
 This will only install the core functionality. To support different build tools like Babel,
 ESLint, and Jest, we need to install packages known as "engines" ([view all available engines](https://www.npmjs.com/search?q=babel-plugin)).
 
 ```
-yarn add @droid/engine-babel babel-core
-yarn add @droid/engine-eslint eslint
-yarn add @droid/engine-jest jest
+yarn add @beemo/engine-babel babel-core
+yarn add @beemo/engine-eslint eslint
+yarn add @beemo/engine-jest jest
 ```
 
 > Be sure to install required peer dependencies!
@@ -89,7 +89,7 @@ config/
   jest.js
 ```
 
-> The benefit of Droid is that we can avoid build tool conventions and standardize on a single
+> The benefit of Beemo is that we can avoid build tool conventions and standardize on a single
 > implementation. No more `.foorc`, `.foorc.js`, or `.foorc.json` nonsense. Just `config/foo.js`.
 
 Each configuration file should return a JavaScript object. Sounds easy enough.
@@ -132,7 +132,7 @@ module.exports = function (options) {
 
 #### Adding Dotfiles
 
-Droid supports synchronizing dotfiles across all projects that consume your configuration module
+Beemo supports synchronizing dotfiles across all projects that consume your configuration module
 (the repository you just created). This includes things like `.gitignore`, `.npmignore`,
 `.travis.yml`, and more. This *does not* include configuration dotfiles like `.babelrc` and
 `.flowconfig`, as those are handled automatically by the engines mentioned above.
@@ -158,7 +158,7 @@ dotfiles/
 
 #### Publishing
 
-Now that Droid and its engines are installed, let's move forward by publishing the package to
+Now that Beemo and its engines are installed, let's move forward by publishing the package to
 NPM with public access. This is mandatory if using a scope.
 
 ```

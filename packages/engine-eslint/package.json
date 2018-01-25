@@ -1,9 +1,9 @@
 {
-  "name": "@droid/engine-eslint",
+  "name": "@beemo/engine-eslint",
   "version": "0.1.2",
-  "description": "ESLint engine for Droid.",
+  "description": "ESLint engine for Beemo.",
   "keywords": [
-    "droid",
+    "beemo",
     "engine",
     "eslint",
     "lint",
@@ -16,7 +16,7 @@
   "engines": {
     "node": ">=6.5.0"
   },
-  "repository": "https://github.com/milesj/droid/tree/master/packages/@droid/engine-eslint",
+  "repository": "https://github.com/milesj/beemo/tree/master/packages/@beemo/engine-eslint",
   "license": "MIT",
   "publishConfig": {
     "access": "public"
@@ -26,7 +26,7 @@
     "eslint": "^4.16.0"
   },
   "peerDependencies": {
-    "@droid/core": "^0.0.0",
+    "@beemo/core": "^0.0.0",
     "eslint": "^4.10.0"
   }
 }

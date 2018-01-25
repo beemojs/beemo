@@ -1,9 +1,9 @@
 {
-  "name": "@droid/engine-flow",
+  "name": "@beemo/engine-flow",
   "version": "0.1.2",
-  "description": "Flow engine for Droid.",
+  "description": "Flow engine for Beemo.",
   "keywords": [
-    "droid",
+    "beemo",
     "engine",
     "flow",
     "flowtype",
@@ -16,7 +16,7 @@
   "engines": {
     "node": ">=6.5.0"
   },
-  "repository": "https://github.com/milesj/droid/tree/master/packages/@droid/engine-flow",
+  "repository": "https://github.com/milesj/beemo/tree/master/packages/@beemo/engine-flow",
   "license": "MIT",
   "publishConfig": {
     "access": "public"
@@ -26,7 +26,7 @@
     "flow-bin": "^0.63.1"
   },
   "peerDependencies": {
-    "@droid/core": "^0.0.0",
+    "@beemo/core": "^0.0.0",
     "flow-bin": "^0.59.0"
   }
 }
