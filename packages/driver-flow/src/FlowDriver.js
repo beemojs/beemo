@@ -4,11 +4,11 @@
  * @flow
  */
 
-import { Engine } from '@beemo/core';
+import { Driver } from '@beemo/core';
 
 import type { Execution } from '@beemo/core';
 
-export default class FlowEngine extends Engine {
+export default class FlowDriver extends Driver {
   bootstrap() {
     this.setMetadata({
       bin: 'flow',

@@ -4,6 +4,6 @@
  * @flow
  */
 
-import Engine from './FlowEngine';
+import Driver from './JestDriver';
 
-export default Engine;
+export default Driver;

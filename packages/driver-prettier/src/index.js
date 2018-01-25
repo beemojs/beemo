@@ -4,6 +4,6 @@
  * @flow
  */
 
-import Engine from './ESLintEngine';
+import Driver from './PrettierDriver';
 
-export default Engine;
+export default Driver;

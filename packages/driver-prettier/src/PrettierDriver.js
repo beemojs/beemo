@@ -4,9 +4,9 @@
  * @flow
  */
 
-import { Engine } from '@beemo/core';
+import { Driver } from '@beemo/core';
 
-export default class PrettierEngine extends Engine {
+export default class PrettierDriver extends Driver {
   bootstrap() {
     this.setMetadata({
       bin: 'prettier',

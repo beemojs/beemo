@@ -1,13 +1,14 @@
 {
-  "name": "@beemo/engine-prettier",
-  "version": "0.1.2",
-  "description": "Prettier engine for Beemo.",
+  "name": "@beemo/driver-eslint",
+  "version": "0.0.0",
+  "description": "ESLint driver for Beemo.",
   "keywords": [
     "beemo",
-    "engine",
-    "prettier",
-    "beautify",
-    "formatter"
+    "beemo-driver",
+    "driver",
+    "eslint",
+    "lint",
+    "linter"
   ],
   "main": "./lib/index.js",
   "scripts": {
@@ -16,17 +17,17 @@
   "engines": {
     "node": ">=6.5.0"
   },
-  "repository": "https://github.com/milesj/beemo/tree/master/packages/@beemo/engine-prettier",
+  "repository": "https://github.com/milesj/beemo/tree/master/packages/driver-eslint",
   "license": "MIT",
   "publishConfig": {
     "access": "public"
   },
   "devDependencies": {
     "@milesj/build-tool-config": "0.50.0",
-    "prettier": "^1.10.0"
+    "eslint": "^4.16.0"
   },
   "peerDependencies": {
     "@beemo/core": "^0.0.0",
-    "prettier": "^1.10.0"
+    "eslint": "^4.10.0"
   }
 }

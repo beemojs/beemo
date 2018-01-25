@@ -4,6 +4,6 @@
  * @flow
  */
 
-import Engine from './PrettierEngine';
+import Driver from './FlowDriver';
 
-export default Engine;
+export default Driver;

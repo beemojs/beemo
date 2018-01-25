@@ -12,13 +12,13 @@ import ExecuteRoutine from './ExecuteRoutine';
 import SyncDotfilesRoutine from './SyncDotfilesRoutine';
 
 import type { BeemoContext } from './types';
-import type Engine from './Engine';
+import type Driver from './Driver';
 import type { Event, Reporter } from 'boost';
 
 export default class Beemo {
   context: BeemoContext;
 
-  tool: Tool<Engine, Reporter<Object>>;
+  tool: Tool<Driver, Reporter<Object>>;
 
   constructor() {
     // eslint-disable-next-line global-require
@@ -27,7 +27,7 @@ export default class Beemo {
     this.tool = new Tool({
       appName: 'beemo',
       footer: `\n🤖  Powered by Beemo v${version}`,
-      pluginAlias: 'engine',
+      pluginAlias: 'driver',
       scoped: true,
     });
 
@@ -97,30 +97,30 @@ export default class Beemo {
   }
 
   /**
-   * Launch the engine (boost pipeline) by executing all routines for the chosen engine.
+   * Run the driver (boost pipeline) by executing all routines for the chosen driver.
    */
-  launchEngine(engineName: string, args?: string[] = []): Promise<*> {
+  runDriver(driverName: string, args?: string[] = []): Promise<*> {
     const { tool } = this;
     const configRoot = this.getModuleConfigRoot();
-    const primaryEngine = tool.getPlugin(engineName);
+    const primaryDriver = tool.getPlugin(driverName);
 
     this.context = {
       args,
       configPaths: [],
       configRoot,
-      engines: [primaryEngine],
-      primaryEngine,
+      drivers: [primaryDriver],
+      primaryDriver,
       root: this.tool.options.root,
     };
 
-    this.tool.emit('launch', null, [primaryEngine, this.context]);
+    this.tool.emit('run', null, [primaryDriver, this.context]);
 
-    this.tool.debug(`Launching with ${chalk.magenta(primaryEngine.name)} engine`);
+    this.tool.debug(`Running with ${chalk.magenta(primaryDriver.name)} driver`);
 
     return new Pipeline(tool)
       .pipe(new ConfigureRoutine('configure', 'Generating configurations'))
-      .pipe(new ExecuteRoutine('execute', 'Executing engine'))
-      .run(engineName, this.context);
+      .pipe(new ExecuteRoutine('execute', 'Executing driver'))
+      .run(driverName, this.context);
   }
 
   /**

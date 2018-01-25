@@ -11,7 +11,7 @@ import Options, { array, bool, number, object, string, union } from 'optimal';
 import typeof Yargs from 'yargs';
 import type { Execution } from './types';
 
-type EngineOptions = {
+type DriverOptions = {
   args: string[],
   env: { [key: string]: string },
 };
@@ -25,7 +25,7 @@ type Metadata = {
   title: string,
 };
 
-export default class Engine extends Plugin<EngineOptions> {
+export default class Driver extends Plugin<DriverOptions> {
   metadata: Metadata = {
     bin: '',
     configName: '',
@@ -58,7 +58,7 @@ export default class Engine extends Plugin<EngineOptions> {
   }
 
   /**
-   * Handle command failures according to this engine.
+   * Handle command failures according to this driver.
    */
   handleFailure(error: Execution) {
     const { stderr, stdout } = error;
@@ -70,7 +70,7 @@ export default class Engine extends Plugin<EngineOptions> {
   }
 
   /**
-   * Handle successful commands according to this engine.
+   * Handle successful commands according to this driver.
    */
   handleSuccess(response: Execution) {
     const out = response.stdout.trim();
@@ -88,7 +88,7 @@ export default class Engine extends Plugin<EngineOptions> {
   }
 
   /**
-   * Set metadata about the binary/executable in which this engine wraps.
+   * Set metadata about the binary/executable in which this driver wraps.
    */
   setMetadata(metadata: Object): this {
     this.metadata = new Options(metadata, {

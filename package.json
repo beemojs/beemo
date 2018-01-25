@@ -1,7 +1,6 @@
 {
   "private": true,
   "name": "beemo",
-  "version": "0.0.0",
   "scripts": {
     "test": "yarn run jest",
     "coverage": "run-coverage",
@@ -44,22 +43,22 @@
   ],
   "beemo": {
     "config": "@local",
-    "engines": [
+    "drivers": [
       "babel",
       {
-        "engine": "eslint",
+        "driver": "eslint",
         "args": ["--color", "--report-unused-disable-directives"]
       },
       {
-        "engine": "flow",
+        "driver": "flow",
         "args": ["--color=auto"]
       },
       {
-        "engine": "jest",
+        "driver": "jest",
         "args": ["--colors", "--logHeapUsage"]
       },
       {
-        "engine": "prettier",
+        "driver": "prettier",
         "args": ["--debug-check", "--write"]
       }
     ],

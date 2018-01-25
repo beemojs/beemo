@@ -22,7 +22,7 @@
   "engines": {
     "node": ">=6.5.0"
   },
-  "repository": "https://github.com/milesj/beemo/tree/master/packages/beemo",
+  "repository": "https://github.com/milesj/beemo/tree/master/packages/core",
   "license": "MIT",
   "publishConfig": {
     "access": "public"

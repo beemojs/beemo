@@ -4,8 +4,8 @@
  * @flow
  */
 
-import Engine from './Engine';
+import Driver from './Driver';
 import Beemo from './Beemo';
 
-export { Engine };
+export { Driver };
 export default Beemo;

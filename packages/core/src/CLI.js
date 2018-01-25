@@ -10,17 +10,17 @@ import Beemo from './Beemo';
 // Initialize
 const beemo = new Beemo();
 
-// Add a command for each engine
-beemo.tool.plugins.forEach((engine) => {
-  const { metadata } = engine;
+// Add a command for each driver
+beemo.tool.plugins.forEach((driver) => {
+  const { metadata } = driver;
   const command = app.command(
     metadata.bin,
     metadata.description || `Run ${metadata.title}.`,
     () => {
       beemo
         .inheritOptions(app.argv)
-        // 0 node, 1 beemo, 2 engine
-        .launchEngine(engine.name, process.argv.slice(3));
+        // 0 node, 1 beemo, 2 driver
+        .runDriver(driver.name, process.argv.slice(3));
     },
   );
 
@@ -34,11 +34,11 @@ beemo.tool.plugins.forEach((engine) => {
     .option('silent', {
       boolean: true,
       default: false,
-      describe: 'Hide engine output',
+      describe: 'Hide driver output',
     });
 
   // Set additional options
-  engine.setOptions(command);
+  driver.setOptions(command);
 });
 
 // Add Beemo commands
@@ -49,7 +49,7 @@ app.command('sync-dotfiles', 'Sync dotfiles from configuration module.', () => {
 // Run application
 // eslint-disable-next-line
 app
-  .usage('beemo <engine> [args..]')
+  .usage('beemo <driver> [args..]')
   .demandCommand(1, 'Please run a command.')
   .showHelpOnFail(true)
   .help()

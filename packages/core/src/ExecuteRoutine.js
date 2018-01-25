@@ -32,15 +32,15 @@ export default class ExecuteRoutine extends Routine<ExecuteConfig, BeemoContext>
   }
 
   /**
-   * The ExecuteRoutine handles the process of executing the engine's command
+   * The ExecuteRoutine handles the process of executing the driver's command
    * and correctly handling the output.
    */
   execute(): Promise<*> {
-    const { primaryEngine } = this.context;
+    const { primaryDriver } = this.context;
     const { cleanup } = this.config;
 
     this.task('Filtering options', this.filterUnknownOptionsFromArgs);
-    this.task(`Running ${primaryEngine.metadata.bin} command`, this.runCommandWithArgs);
+    this.task(`Running ${primaryDriver.metadata.bin} command`, this.runCommandWithArgs);
     this.task('Deleting temporary config files', this.deleteConfigFiles).skip(!cleanup);
 
     return this.serializeTasks();
@@ -48,19 +48,19 @@ export default class ExecuteRoutine extends Routine<ExecuteConfig, BeemoContext>
 
   /**
    * Filter unknown and or unsupported CLI options from the arguments passed to the CLI.
-   * Utilize the engine's help option/command to determine accurate options.
+   * Utilize the driver's help option/command to determine accurate options.
    */
   filterUnknownOptionsFromArgs(): Promise<string[]> {
-    const { args: commandArgs, primaryEngine: engine } = this.context;
-    const { args: engineArgs, env } = engine.options;
+    const { args: commandArgs, primaryDriver: driver } = this.context;
+    const { args: driverArgs, env } = driver.options;
     const args = [
-      ...engineArgs,
+      ...driverArgs,
       ...commandArgs,
     ];
 
     this.tool.debug('Filtering unknown command line args and options');
 
-    return this.executeCommand(engine.metadata.bin, [engine.metadata.helpOption], { env })
+    return this.executeCommand(driver.metadata.bin, [driver.metadata.helpOption], { env })
       .then(({ stdout }) => {
         const nativeOptions = {};
 
@@ -113,31 +113,31 @@ export default class ExecuteRoutine extends Routine<ExecuteConfig, BeemoContext>
   }
 
   /**
-   * Execute the engine's command with the filtered arguments and handle the
-   * success and failures with the engine itself.
+   * Execute the driver's command with the filtered arguments and handle the
+   * success and failures with the driver itself.
    */
   runCommandWithArgs(args: string[]): Promise<Execution> {
-    const { primaryEngine: engine } = this.context;
-    const options = { env: engine.options.env };
+    const { primaryDriver: driver } = this.context;
+    const options = { env: driver.options.env };
 
     this.tool.debug(
-      `Executing command ${chalk.magenta(engine.metadata.bin)} with args "${args.join(' ')}"`,
+      `Executing command ${chalk.magenta(driver.metadata.bin)} with args "${args.join(' ')}"`,
     );
 
-    this.tool.emit('execute', null, [engine, args]);
+    this.tool.emit('execute', null, [driver, args]);
 
-    return this.executeCommand(engine.metadata.bin, args, options)
+    return this.executeCommand(driver.metadata.bin, args, options)
       .then((response) => {
-        engine.handleSuccess(response);
+        driver.handleSuccess(response);
 
-        this.tool.emit('successful-execute', null, [engine, response]);
+        this.tool.emit('successful-execute', null, [driver, response]);
 
         return response;
       })
       .catch((error) => {
-        engine.handleFailure(error);
+        driver.handleFailure(error);
 
-        this.tool.emit('failed-execute', null, [engine, error]);
+        this.tool.emit('failed-execute', null, [driver, error]);
 
         throw error;
       });

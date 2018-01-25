@@ -4,7 +4,7 @@
  * @flow
  */
 
-import type Engine from './Engine';
+import type Driver from './Driver';
 
 export type ConfigureConfig = {
   parallel: boolean,
@@ -29,7 +29,7 @@ export type BeemoContext = {
   args: string[],
   configPaths: string[],
   configRoot: string,
-  engines: Engine[],
-  primaryEngine: Engine,
+  drivers: Driver[],
+  primaryDriver: Driver,
   root: string,
 };

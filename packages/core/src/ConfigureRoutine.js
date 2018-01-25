@@ -8,7 +8,7 @@ import { Routine } from 'boost';
 import chalk from 'chalk';
 import Config from './configure/Config';
 import CreateConfigRoutine from './configure/CreateConfigRoutine';
-import Engine from './Engine';
+import Driver from './Driver';
 
 import type { ConfigureConfig, BeemoContext } from './types';
 
@@ -18,23 +18,23 @@ export default class ConfigureRoutine extends Routine<ConfigureConfig, BeemoCont
   }
 
   /**
-   * Pipe a routine for every engine we need to create a configuration for,
+   * Pipe a routine for every driver we need to create a configuration for,
    * and then run in parallel.
    */
-  createConfigFiles(engines: Engine[]): Promise<*> {
-    const names = engines.map((engine) => {
-      const routine = new CreateConfigRoutine(engine.name, engine.metadata.title);
+  createConfigFiles(drivers: Driver[]): Promise<*> {
+    const names = drivers.map((driver) => {
+      const routine = new CreateConfigRoutine(driver.name, driver.metadata.title);
 
-      // Make the engine easily available
-      routine.engine = engine;
+      // Make the driver easily available
+      routine.driver = driver;
 
       this.pipe(routine);
 
-      return engine.name;
+      return driver.name;
     });
 
     this.tool.debug(
-      `Creating config files for the following engines: ${chalk.magenta(names.join(', '))}`,
+      `Creating config files for the following drivers: ${chalk.magenta(names.join(', '))}`,
     );
 
     return this.config.parallel
@@ -44,7 +44,7 @@ export default class ConfigureRoutine extends Routine<ConfigureConfig, BeemoCont
 
   /**
    * The ConfigureRoutine handles the process of creating a configuration file
-   * for every engine required for the current execution.
+   * for every driver required for the current execution.
    */
   execute(): Promise<*> {
     this.task('Resolving dependencies', this.resolveDependencies);
@@ -54,27 +54,27 @@ export default class ConfigureRoutine extends Routine<ConfigureConfig, BeemoCont
   }
 
   /**
-   * Recursively loop through an engine's dependencies, adding a dependenct engine for each,
-   * starting from the primary engine (the command that initiated the process).
+   * Recursively loop through an driver's dependencies, adding a dependenct driver for each,
+   * starting from the primary driver (the command that initiated the process).
    */
-  resolveDependencies(): Promise<Engine[]> {
-    const { primaryEngine } = this.context;
-    const queue = [primaryEngine];
+  resolveDependencies(): Promise<Driver[]> {
+    const { primaryDriver } = this.context;
+    const queue = [primaryDriver];
 
-    this.tool.debug(`Resolving dependencies for ${chalk.magenta(primaryEngine.name)}`);
+    this.tool.debug(`Resolving dependencies for ${chalk.magenta(primaryDriver.name)}`);
 
     while (queue.length) {
-      const engine = queue.shift();
+      const driver = queue.shift();
 
-      engine.metadata.dependencies.forEach((name) => {
+      driver.metadata.dependencies.forEach((name) => {
         this.tool.debug(`  Including dependency ${chalk.yellow(name)}`);
 
-        this.context.engines.unshift(this.tool.getPlugin(name));
+        this.context.drivers.unshift(this.tool.getPlugin(name));
       });
     }
 
-    this.tool.emit('resolve-dependencies', null, [this.context.engines]);
+    this.tool.emit('resolve-dependencies', null, [this.context.drivers]);
 
-    return Promise.resolve(this.context.engines);
+    return Promise.resolve(this.context.drivers);
   }
 }

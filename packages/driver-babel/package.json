@@ -1,10 +1,11 @@
 {
-  "name": "@beemo/engine-babel",
-  "version": "0.1.2",
-  "description": "Babel engine for Beemo.",
+  "name": "@beemo/driver-babel",
+  "version": "0.0.0",
+  "description": "Babel driver for Beemo.",
   "keywords": [
     "beemo",
-    "engine",
+    "beemo-driver",
+    "driver",
     "babel",
     "transpile",
     "compile"
@@ -16,7 +17,7 @@
   "engines": {
     "node": ">=6.5.0"
   },
-  "repository": "https://github.com/milesj/beemo/tree/master/packages/@beemo/engine-babel",
+  "repository": "https://github.com/milesj/beemo/tree/master/packages/driver-babel",
   "license": "MIT",
   "publishConfig": {
     "access": "public"

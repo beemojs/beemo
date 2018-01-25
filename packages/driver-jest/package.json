@@ -1,13 +1,14 @@
 {
-  "name": "@beemo/engine-flow",
-  "version": "0.1.2",
-  "description": "Flow engine for Beemo.",
+  "name": "@beemo/driver-jest",
+  "version": "0.0.0",
+  "description": "Jest driver for Beemo.",
   "keywords": [
     "beemo",
-    "engine",
-    "flow",
-    "flowtype",
-    "type"
+    "beemo-driver",
+    "driver",
+    "jest",
+    "test",
+    "runner"
   ],
   "main": "./lib/index.js",
   "scripts": {
@@ -16,17 +17,18 @@
   "engines": {
     "node": ">=6.5.0"
   },
-  "repository": "https://github.com/milesj/beemo/tree/master/packages/@beemo/engine-flow",
+  "repository": "https://github.com/milesj/beemo/tree/master/packages/driver-jest",
   "license": "MIT",
   "publishConfig": {
     "access": "public"
   },
   "devDependencies": {
     "@milesj/build-tool-config": "0.50.0",
-    "flow-bin": "^0.63.1"
+    "jest": "^22.1.4"
   },
   "peerDependencies": {
+    "@beemo/driver-babel": "^0.0.0",
     "@beemo/core": "^0.0.0",
-    "flow-bin": "^0.59.0"
+    "jest": "^21.2.0"
   }
 }

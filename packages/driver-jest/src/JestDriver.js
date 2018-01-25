@@ -4,9 +4,9 @@
  * @flow
  */
 
-import { Engine } from '@beemo/core';
+import { Driver } from '@beemo/core';
 
-export default class JestEngine extends Engine {
+export default class JestDriver extends Driver {
   bootstrap() {
     this.setMetadata({
       bin: 'jest',

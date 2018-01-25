@@ -1,13 +1,14 @@
 {
-  "name": "@beemo/engine-jest",
-  "version": "0.1.2",
-  "description": "Jest engine for Beemo.",
+  "name": "@beemo/driver-prettier",
+  "version": "0.0.0",
+  "description": "Prettier driver for Beemo.",
   "keywords": [
     "beemo",
-    "engine",
-    "jest",
-    "test",
-    "runner"
+    "beemo-driver",
+    "driver",
+    "prettier",
+    "beautify",
+    "formatter"
   ],
   "main": "./lib/index.js",
   "scripts": {
@@ -16,18 +17,17 @@
   "engines": {
     "node": ">=6.5.0"
   },
-  "repository": "https://github.com/milesj/beemo/tree/master/packages/@beemo/engine-jest",
+  "repository": "https://github.com/milesj/beemo/tree/master/packages/driver-prettier",
   "license": "MIT",
   "publishConfig": {
     "access": "public"
   },
   "devDependencies": {
     "@milesj/build-tool-config": "0.50.0",
-    "jest": "^22.1.4"
+    "prettier": "^1.10.0"
   },
   "peerDependencies": {
-    "@beemo/engine-babel": "^0.0.0",
     "@beemo/core": "^0.0.0",
-    "jest": "^21.2.0"
+    "prettier": "^1.10.0"
   }
 }

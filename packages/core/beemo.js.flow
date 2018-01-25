@@ -12,7 +12,7 @@ declare module '@beemo/core' {
     timedOut: boolean,
   };
 
-  declare export type EngineMetadata = {
+  declare export type DriverMetadata = {
     bin: string,
     configName: string,
     dependencies: string[],
@@ -21,14 +21,14 @@ declare module '@beemo/core' {
     title: string,
   };
 
-  declare export type EngineOptions = {
+  declare export type DriverOptions = {
     args: string[],
     env: { [key: string]: string },
   };
 
-  declare export class Engine extends Plugin<EngineOptions> {
-    metadata: EngineMetadata;
-    options: EngineOptions;
+  declare export class Driver extends Plugin<DriverOptions> {
+    metadata: DriverMetadata;
+    options: DriverOptions;
 
     constructor(options?: Object): this;
     formatFile(data: Object): string;

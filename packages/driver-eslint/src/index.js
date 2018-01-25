@@ -4,6 +4,6 @@
  * @flow
  */
 
-import Engine from './JestEngine';
+import Driver from './ESLintDriver';
 
-export default Engine;
+export default Driver;

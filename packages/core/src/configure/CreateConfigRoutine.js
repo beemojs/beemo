@@ -9,18 +9,18 @@ import fs from 'fs-extra';
 import path from 'path';
 import parseArgs from 'yargs-parser';
 import { Routine } from 'boost';
-import Engine from '../Engine';
+import Driver from '../Driver';
 
 import type { BeemoContext } from '../types';
 
 export default class CreateConfigRoutine extends Routine<Object, BeemoContext> {
-  engine: Engine;
+  driver: Driver;
 
   /**
    * Create a temporary configuration file or pass as an option.
    */
   createConfigFile(config: Object): Promise<string> {
-    const { metadata } = this.engine;
+    const { metadata } = this.driver;
     const configPath = path.join(this.context.root, metadata.configName);
 
     this.tool.debug(`Creating config file ${chalk.cyan(configPath)}`);
@@ -29,14 +29,14 @@ export default class CreateConfigRoutine extends Routine<Object, BeemoContext> {
 
     this.tool.emit('create-config', null, [configPath, config]);
 
-    return fs.writeFile(configPath, this.engine.formatFile(config)).then(() => configPath);
+    return fs.writeFile(configPath, this.driver.formatFile(config)).then(() => configPath);
   }
 
   /**
    * Create config by executing tasks in order.
    */
   execute(): Promise<string> {
-    const { name } = this.engine;
+    const { name } = this.driver;
 
     this.task(`Loading external ${name} module config`, this.loadConfigFromFilesystem);
     this.task(`Loading local ${name} Beemo config`, this.extractConfigFromPackage);
@@ -47,10 +47,10 @@ export default class CreateConfigRoutine extends Routine<Object, BeemoContext> {
   }
 
   /**
-   * Extract configuration from "beemo.<engine>" within the local project's package.json.
+   * Extract configuration from "beemo.<driver>" within the local project's package.json.
    */
   extractConfigFromPackage(configs: Object[]): Promise<Object[]> {
-    const { name } = this.engine;
+    const { name } = this.driver;
     const { config } = this.tool;
 
     this.tool.invariant(
@@ -77,20 +77,20 @@ export default class CreateConfigRoutine extends Routine<Object, BeemoContext> {
 
     return parseArgs([
       ...this.context.args,
-      ...this.engine.options.args,
+      ...this.driver.options.args,
     ].map(value => String(value)));
   }
 
   /**
-   * Merge multiple configuration sources using the current engine.
+   * Merge multiple configuration sources using the current driver.
    */
   mergeConfigs(configs: Object[]): Promise<Object> {
     this.tool.debug(
-      `Merging ${chalk.magenta(this.engine.name)} config from ${configs.length} sources`,
+      `Merging ${chalk.magenta(this.driver.name)} config from ${configs.length} sources`,
     );
 
     const config = configs.reduce((masterConfig, cfg) => (
-      this.engine.mergeConfig(masterConfig, cfg)
+      this.driver.mergeConfig(masterConfig, cfg)
     ), {});
 
     this.tool.emit('merge-config', null, [config]);
@@ -103,7 +103,7 @@ export default class CreateConfigRoutine extends Routine<Object, BeemoContext> {
    */
   loadConfigFromFilesystem(configs: Object[]): Promise<Object[]> {
     const { config: { config: moduleName }, configLoader } = this.tool;
-    const { name } = this.engine;
+    const { name } = this.driver;
 
     // Allow for local development
     const filePath = (moduleName === '@local')

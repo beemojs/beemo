@@ -4,6 +4,6 @@
  * @flow
  */
 
-import Engine from './BabelEngine';
+import Driver from './BabelDriver';
 
-export default Engine;
+export default Driver;

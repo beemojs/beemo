@@ -29,7 +29,7 @@ TODO
 
 * [Repository Setup](#repository-setup)
   * [Installing Beemo](#installing-beemo)
-  * [Configuring Engines](#configuring-engines)
+  * [Configuring Drivers](#configuring-drivers)
   * [Adding Dotfiles](#adding-dotfiles)
   * [Publishing](#publishing)
 * [Consumer Setup](#consumer-setup)
@@ -66,20 +66,20 @@ yarn add @beemo/core
 ```
 
 This will only install the core functionality. To support different build tools like Babel,
-ESLint, and Jest, we need to install packages known as "engines" ([view all available engines](https://www.npmjs.com/search?q=babel-plugin)).
+ESLint, and Jest, we need to install packages known as "drivers" ([view all available drivers](https://www.npmjs.com/search?q=beemo-driver)).
 
 ```
-yarn add @beemo/engine-babel babel-core
-yarn add @beemo/engine-eslint eslint
-yarn add @beemo/engine-jest jest
+yarn add @beemo/driver-babel babel-core
+yarn add @beemo/driver-eslint eslint
+yarn add @beemo/driver-jest jest
 ```
 
 > Be sure to install required peer dependencies!
 
-#### Configuring Engines
+#### Configuring Drivers
 
-For each engine you install, there should be an associated `.js` configuration file within a
-`config/` folder, named after the package name (excluding "engine-"). Using the example above,
+For each driver you install, there should be an associated `.js` configuration file within a
+`config/` folder, named after the package name (excluding "driver-"). Using the example above,
 we'd have the following:
 
 ```
@@ -135,7 +135,7 @@ module.exports = function (options) {
 Beemo supports synchronizing dotfiles across all projects that consume your configuration module
 (the repository you just created). This includes things like `.gitignore`, `.npmignore`,
 `.travis.yml`, and more. This *does not* include configuration dotfiles like `.babelrc` and
-`.flowconfig`, as those are handled automatically by the engines mentioned above.
+`.flowconfig`, as those are handled automatically by the drivers mentioned above.
 
 To begin, create a `dotfiles/` folder.
 
@@ -158,8 +158,8 @@ dotfiles/
 
 #### Publishing
 
-Now that Beemo and its engines are installed, let's move forward by publishing the package to
-NPM with public access. This is mandatory if using a scope.
+Now that Beemo and its drivers are installed, let's move forward by publishing your configuration
+module to NPM with public access. This is mandatory if using a scope.
 
 ```
 npm version minor

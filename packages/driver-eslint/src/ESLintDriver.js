@@ -4,10 +4,10 @@
  * @flow
  */
 
-import { Engine } from '@beemo/core';
+import { Driver } from '@beemo/core';
 import ConfigOps from 'eslint/lib/config/config-ops';
 
-export default class ESLintEngine extends Engine {
+export default class ESLintDriver extends Driver {
   bootstrap() {
     this.setMetadata({
       bin: 'eslint',
