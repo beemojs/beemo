@@ -1,6 +1,7 @@
 {
   "private": true,
   "name": "beemo",
+  "version": "0.0.0",
   "scripts": {
     "test": "yarn run jest",
     "coverage": "run-coverage",
@@ -17,7 +18,7 @@
     "publish": "lerna publish",
     "publish:force": "lerna publish --force-publish *",
     "updated": "lerna updated",
-    "beemo": "node ./packages/beemo/bin/beemo"
+    "beemo": "node ./packages/core/bin/beemo"
   },
   "devDependencies": {
     "@milesj/build-tool-config": "0.50.0",

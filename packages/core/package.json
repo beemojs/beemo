@@ -1,6 +1,6 @@
 {
   "name": "@beemo/core",
-  "version": "0.0.0",
+  "version": "0.0.1",
   "description": "Manage all build tool configurations in a single centralized repository.",
   "keywords": [
     "beemo",
@@ -37,7 +37,7 @@
     "fs-extra": "^5.0.0",
     "lodash": "^4.17.4",
     "optimal": "^0.14.0",
-    "yargs": "^10.1.1",
+    "yargs": "^11.0.0",
     "yargs-parser": "^9.0.2"
   }
 }
