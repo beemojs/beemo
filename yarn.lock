@@ -1176,9 +1176,9 @@ boom@5.x.x:
   dependencies:
     hoek "4.x.x"
 
-boost@^0.22.0:
-  version "0.22.0"
-  resolved "https://registry.npmjs.org/boost/-/boost-0.22.0.tgz#db01197531b2f045481d487cc46e7aba4e032269"
+boost@^0.23.0:
+  version "0.23.0"
+  resolved "https://registry.npmjs.org/boost/-/boost-0.23.0.tgz#ecdc9b414da645943e6fab910507cb11ce9a6b5e"
   dependencies:
     chalk "^2.3.0"
     elegant-spinner "^1.0.1"

@@ -25,7 +25,7 @@ export default class ExecuteRoutine extends Routine<ExecuteConfig, BeemoContext>
     return Promise.all(this.context.configPaths.map((configPath) => {
       this.tool.debug(`Deleting config file ${chalk.cyan(configPath)}`);
 
-      this.tool.emit('delete-config', null, [configPath]);
+      this.tool.emit('delete-config-file', [configPath]);
 
       return fs.remove(configPath);
     }));
@@ -124,20 +124,20 @@ export default class ExecuteRoutine extends Routine<ExecuteConfig, BeemoContext>
       `Executing command ${chalk.magenta(driver.metadata.bin)} with args "${args.join(' ')}"`,
     );
 
-    this.tool.emit('execute', null, [driver, args]);
+    this.tool.emit('execute', [driver, args]);
 
     return this.executeCommand(driver.metadata.bin, args, options)
       .then((response) => {
         driver.handleSuccess(response);
 
-        this.tool.emit('successful-execute', null, [driver, response]);
+        this.tool.emit('successful-execute', [driver, response]);
 
         return response;
       })
       .catch((error) => {
         driver.handleFailure(error);
 
-        this.tool.emit('failed-execute', null, [driver, error]);
+        this.tool.emit('failed-execute', [driver, error]);
 
         throw error;
       });

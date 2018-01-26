@@ -113,7 +113,7 @@ export default class Beemo {
       root: this.tool.options.root,
     };
 
-    this.tool.emit('run', null, [primaryDriver, this.context]);
+    this.tool.emit('run', [primaryDriver, this.context]);
 
     this.tool.debug(`Running with ${chalk.magenta(primaryDriver.name)} driver`);
 

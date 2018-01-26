@@ -27,7 +27,7 @@ export default class CreateConfigRoutine extends Routine<Object, BeemoContext> {
 
     this.context.configPaths.push(configPath);
 
-    this.tool.emit('create-config', null, [configPath, config]);
+    this.tool.emit('create-config-file', [configPath, config]);
 
     return fs.writeFile(configPath, this.driver.formatFile(config)).then(() => configPath);
   }
@@ -64,7 +64,7 @@ export default class CreateConfigRoutine extends Routine<Object, BeemoContext> {
       configs.push(config[name]);
     }
 
-    this.tool.emit('load-package-config', null, [config]);
+    this.tool.emit('load-package-config', [config]);
 
     return Promise.resolve(configs);
   }
@@ -93,7 +93,7 @@ export default class CreateConfigRoutine extends Routine<Object, BeemoContext> {
       this.driver.mergeConfig(masterConfig, cfg)
     ), {});
 
-    this.tool.emit('merge-config', null, [config]);
+    this.tool.emit('merge-config', [config]);
 
     return Promise.resolve(config);
   }
@@ -123,7 +123,7 @@ export default class CreateConfigRoutine extends Routine<Object, BeemoContext> {
 
       this.tool.debug(`  Parsing config from ${chalk.cyan(filePath)}`);
 
-      this.tool.emit('load-module-config', null, [filePath, config]);
+      this.tool.emit('load-module-config', [filePath, config]);
 
       configs.push(config);
     }
