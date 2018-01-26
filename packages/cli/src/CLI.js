@@ -13,9 +13,15 @@ const beemo = new Beemo();
 // Add a command for each driver
 beemo.tool.plugins.forEach((driver) => {
   const { metadata } = driver;
-  const command = app.command(
+
+  app.command(
     metadata.bin,
     metadata.description || `Run ${metadata.title}.`,
+    (command) => {
+      driver.bootstrapCommand(command);
+
+      return command;
+    },
     () => {
       beemo
         .inheritOptions(app.argv)
@@ -23,28 +29,25 @@ beemo.tool.plugins.forEach((driver) => {
         .executeDriver(driver.name, process.argv.slice(3));
     },
   );
-
-  // Set Beemo options
-  command
-    .option('debug', {
-      boolean: true,
-      default: false,
-      describe: 'Show debug messages',
-    })
-    .option('silent', {
-      boolean: true,
-      default: false,
-      describe: 'Hide driver output',
-    });
-
-  // Set additional options
-  driver.setOptions(command);
 });
 
 // Add Beemo commands
 app.command('sync-dotfiles', 'Sync dotfiles from configuration module.', () => {
   beemo.syncDotfiles();
 });
+
+// Add Beemo options
+app
+  .option('debug', {
+    boolean: true,
+    default: false,
+    describe: 'Show debug messages',
+  })
+  .option('silent', {
+    boolean: true,
+    default: false,
+    describe: 'Hide driver output',
+  });
 
 // Run application
 // eslint-disable-next-line

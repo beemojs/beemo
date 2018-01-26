@@ -8,6 +8,7 @@ import { Plugin } from 'boost';
 import merge from 'lodash/merge';
 import Options, { array, bool, number, object, string, union } from 'optimal';
 
+import type { EventListener } from 'boost';
 import typeof Yargs from 'yargs';
 import type { Execution } from './types';
 
@@ -51,6 +52,13 @@ export default class Driver extends Plugin<DriverOptions> {
   }
 
   /**
+   * Setup additional command options.
+   */
+  bootstrapCommand(command: Yargs): this {
+    return this;
+  }
+
+  /**
    * Format the configuration file before it's written.
    */
   formatFile(data: Object): string {
@@ -88,6 +96,15 @@ export default class Driver extends Plugin<DriverOptions> {
   }
 
   /**
+   * Easily bind event listeners.
+   */
+  on(eventName: string, listener: EventListener): this {
+    this.tool.on(eventName, listener);
+
+    return this;
+  }
+
+  /**
    * Set metadata about the binary/executable in which this driver wraps.
    */
   setMetadata(metadata: Object): this {
@@ -104,9 +121,4 @@ export default class Driver extends Plugin<DriverOptions> {
 
     return this;
   }
-
-  /**
-   * Setup additional command options.
-   */
-  setOptions(command: Yargs) {}
 }

@@ -1,11 +1,12 @@
 import { Plugin } from 'boost';
 
 declare module '@beemo/core' {
-  import type { Event, Tool, Reporter } from 'boost';
+  import type { Event, EventListener, Tool, Reporter } from 'boost';
   import typeof Yargs from 'yargs';
 
   declare export type Context = {
     args: string[],
+    argsObject: Object,
     configPaths: string[],
     configRoot: string,
     drivers: Driver[],
@@ -43,12 +44,13 @@ declare module '@beemo/core' {
     options: DriverOptions;
 
     constructor(options?: Object): this;
+    bootstrapCommand(command: Yargs): this;
     formatFile(data: Object): string;
     handleFailure(error: Execution): void;
     handleSuccess(response: Execution): void;
     mergeConfig(prev: Object, next: Object): Object;
+    on(eventName: string, listener: EventListener): this;
     setMetadata(metadata: Object): this;
-    setOptions(command: Yargs): void;
   }
 
   declare export default class Beemo {
