@@ -7,6 +7,7 @@
 import { Pipeline, Tool } from 'boost';
 import chalk from 'chalk';
 import fs from 'fs-extra';
+import path from 'path';
 import ConfigureRoutine from './ConfigureRoutine';
 import ExecuteRoutine from './ExecuteRoutine';
 import SyncDotfilesRoutine from './SyncDotfilesRoutine';
@@ -72,16 +73,15 @@ export default class Beemo {
       return process.cwd();
     }
 
-    // Use Node's module resolution to find the module
-    try {
-      require(config); // eslint-disable-line
-    } catch (error) {
+    const rootPath = path.join(process.cwd(), 'node_modules', config);
+
+    if (!fs.existsSync(rootPath)) {
       throw new Error('Module defined in "beemo.config" could not be found.');
     }
 
     this.tool.debug(`Found configuration module root path: ${chalk.cyan(config)}`);
 
-    return require.resolve(config);
+    return rootPath;
   }
 
   /**

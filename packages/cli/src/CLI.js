@@ -22,9 +22,9 @@ beemo.tool.plugins.forEach((driver) => {
 
       return command;
     },
-    () => {
+    (argv) => {
       beemo
-        .inheritOptions(app.argv)
+        .inheritOptions(argv)
         // 0 node, 1 beemo, 2 driver
         .executeDriver(driver.name, process.argv.slice(3));
     },
