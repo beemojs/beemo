@@ -106,6 +106,7 @@ export default class Beemo {
 
     this.context = {
       args,
+      argsObject: {},
       configPaths: [],
       configRoot,
       drivers: [primaryDriver],

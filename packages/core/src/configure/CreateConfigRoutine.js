@@ -76,8 +76,8 @@ export default class CreateConfigRoutine extends Routine<Object, BeemoContext> {
     this.tool.debug('  Gathering arguments to pass to config file');
 
     return parseArgs([
-      ...this.context.args,
       ...this.driver.options.args,
+      ...this.context.args,
     ].map(value => String(value)));
   }
 

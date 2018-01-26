@@ -7,6 +7,7 @@
 import { Routine } from 'boost';
 import chalk from 'chalk';
 import fs from 'fs-extra';
+import parseArgs from 'yargs-parser';
 import Config from './execute/Config';
 
 import type { ExecuteConfig, Execution, BeemoContext } from './types';
@@ -57,6 +58,9 @@ export default class ExecuteRoutine extends Routine<ExecuteConfig, BeemoContext>
       ...driverArgs,
       ...commandArgs,
     ];
+
+    // Set before its filtered
+    this.context.argsObject = parseArgs(args);
 
     this.tool.debug('Filtering unknown command line args and options');
 
@@ -117,14 +121,14 @@ export default class ExecuteRoutine extends Routine<ExecuteConfig, BeemoContext>
    * success and failures with the driver itself.
    */
   runCommandWithArgs(args: string[]): Promise<Execution> {
-    const { primaryDriver: driver } = this.context;
+    const { argsObject, primaryDriver: driver } = this.context;
     const options = { env: driver.options.env };
 
     this.tool.debug(
       `Executing command ${chalk.magenta(driver.metadata.bin)} with args "${args.join(' ')}"`,
     );
 
-    this.tool.emit('execute', [driver, args]);
+    this.tool.emit('execute', [driver, args, argsObject]);
 
     return this.executeCommand(driver.metadata.bin, args, options)
       .then((response) => {

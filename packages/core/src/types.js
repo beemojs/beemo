@@ -27,6 +27,7 @@ export type Execution = {
 
 export type BeemoContext = {
   args: string[],
+  argsObject: Object,
   configPaths: string[],
   configRoot: string,
   drivers: Driver[],
