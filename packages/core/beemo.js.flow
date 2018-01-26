@@ -44,7 +44,7 @@ declare module '@beemo/core' {
     options: DriverOptions;
 
     constructor(options?: Object): this;
-    bootstrapCommand(command: Yargs): this;
+    bootstrapCommand(command: Yargs): void;
     formatFile(data: Object): string;
     handleFailure(error: Execution): void;
     handleSuccess(response: Execution): void;

@@ -54,9 +54,7 @@ export default class Driver extends Plugin<DriverOptions> {
   /**
    * Setup additional command options.
    */
-  bootstrapCommand(command: Yargs): this {
-    return this;
-  }
+  bootstrapCommand(command: Yargs) {}
 
   /**
    * Format the configuration file before it's written.
