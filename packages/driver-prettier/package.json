@@ -1,6 +1,6 @@
 {
   "name": "@beemo/driver-prettier",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "description": "Prettier driver for Beemo.",
   "keywords": [
     "beemo",
