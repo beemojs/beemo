@@ -16,7 +16,7 @@
     "build": "lerna run build",
     "clean": "rimraf ./packages/{*}/lib/ && lerna clean --yes",
     "publish": "lerna publish",
-    "publish:force": "lerna publish --force-publish *",
+    "publish:force": "lerna publish --force-publish=*",
     "updated": "lerna updated",
     "beemo": "beemo"
   },
