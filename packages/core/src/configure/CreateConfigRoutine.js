@@ -55,7 +55,7 @@ export default class CreateConfigRoutine extends Routine<Object, BeemoContext> {
 
     this.tool.invariant(
       !!config[name],
-      `Extracting ${chalk.magenta(name)} config from package.json "beemo" block`,
+      `Extracting ${chalk.magenta(name)} config from package.json "beemo" property`,
       'Exists, extracting',
       'Does not exist, skipping',
     );
