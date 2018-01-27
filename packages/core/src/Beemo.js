@@ -45,8 +45,8 @@ export default class Beemo {
   cleanUpOnFailure = (event: Event, code: number) => {
     if (code > 0) {
       // Must not be async!
-      this.context.configPaths.forEach((path) => {
-        fs.removeSync(path);
+      this.context.configPaths.forEach((configPath) => {
+        fs.removeSync(configPath);
       });
     }
   };

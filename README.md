@@ -200,6 +200,8 @@ the name of your configuration module, or another third-party module.
 }
 ```
 
+> Configuration can also be defined in a `config/beemo.js` file.
+
 ##### Options
 
 * `config` (string) - Name of your configuration module.
