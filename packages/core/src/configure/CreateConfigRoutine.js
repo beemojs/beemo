@@ -73,7 +73,7 @@ export default class CreateConfigRoutine extends Routine<Object, BeemoContext> {
    * Gather CLI arguments to pass to the configuration file.
    */
   getArgsToPass(): Object {
-    this.tool.debug('  Gathering arguments to pass to config file');
+    this.tool.debug('Gathering arguments to pass to config file');
 
     return parseArgs([
       ...this.driver.options.args,
@@ -120,8 +120,6 @@ export default class CreateConfigRoutine extends Routine<Object, BeemoContext> {
 
     if (fileExists) {
       const config = configLoader.parseFile(filePath, this.getArgsToPass());
-
-      this.tool.debug(`  Parsing config from ${chalk.cyan(filePath)}`);
 
       this.tool.emit('load-module-config', [filePath, config]);
 

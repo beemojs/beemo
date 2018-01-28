@@ -43,7 +43,7 @@ export default class Beemo {
    * Delete config files on a failure.
    */
   cleanUpOnFailure = (event: Event, code: number) => {
-    if (code > 0) {
+    if (code > 0 && this.context) {
       // Must not be async!
       this.context.configPaths.forEach((configPath) => {
         fs.removeSync(configPath);
@@ -57,7 +57,7 @@ export default class Beemo {
   getConfigModuleRoot(): string {
     const { config } = this.tool.config;
 
-    this.tool.debug('Gathering configuration module root');
+    this.tool.debug('Locating configuration module root');
 
     if (!config) {
       throw new Error(
@@ -79,7 +79,7 @@ export default class Beemo {
       throw new Error('Module defined in "beemo.config" could not be found.');
     }
 
-    this.tool.debug(`Found configuration module root path: ${chalk.cyan(config)}`);
+    this.tool.debug(`Found configuration module root path: ${chalk.cyan(rootPath)}`);
 
     return rootPath;
   }
