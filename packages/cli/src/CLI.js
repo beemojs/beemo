@@ -32,8 +32,10 @@ beemo.tool.plugins.forEach((driver) => {
 });
 
 // Add Beemo commands
-app.command('sync-dotfiles', 'Sync dotfiles from configuration module.', () => {
-  beemo.syncDotfiles();
+app.command('sync-dotfiles', 'Sync dotfiles from configuration module.', (argv) => {
+  beemo
+    .inheritOptions(argv)
+    .syncDotfiles();
 });
 
 // Add Beemo options

@@ -209,7 +209,7 @@ the name of your configuration module, or another third-party module.
 * `debug` (boolean) - Enable debug output. Can be toggled with `--debug`. Defaults to `false`.
 * `drivers` (string[]|object[]) - List of drivers to enable for the consumer.
 * `execute.cleanup` (boolean) - Remove generated config files after execution. Defaults to `true`.
-* `silent` (boolean) - Hide all output. Can be toggled with `--silent`. Defaults to `false`.
+* `silent` (boolean) - Hide Beemo output. Can be toggled with `--silent`. Defaults to `false`.
 
 > Periods denote nested objects.
 

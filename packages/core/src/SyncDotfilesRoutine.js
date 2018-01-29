@@ -39,7 +39,7 @@ export default class SyncDotfilesRoutine extends Routine {
           resolve(files.map((file) => {
             this.tool.emit('create-dotfile', [file.path]);
 
-            this.tool.debug(`  ${file.path}`);
+            this.tool.debug(`  ${chalk.gray(file.path)}`);
 
             return file.path;
           }));
@@ -60,13 +60,12 @@ export default class SyncDotfilesRoutine extends Routine {
       const newName = `.${path.basename(filePath)}`;
       const newPath = path.join(dir, newName);
 
-      // TODO show from config module as prefix?
-      this.tool.log(`-> ${newName}`);
-
       return fs.rename(filePath, newPath).then(() => {
         this.tool.emit('rename-dotfile', [newPath]);
 
-        this.tool.debug(`  ${newPath}`);
+        this.tool.log(`${chalk.gray('->')} ${newName}`);
+
+        this.tool.debug(`  ${chalk.gray(newPath)}`);
 
         return newPath;
       });
