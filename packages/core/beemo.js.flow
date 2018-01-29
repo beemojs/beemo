@@ -57,6 +57,7 @@ declare module '@beemo/core' {
     context: Context;
     tool: Tool<Driver, Reporter<Object>>;
 
+    constructor(argv: string[]): this;
     cleanUpOnFailure(event: Event, code: number): void;
     getConfigModuleRoot(): string;
     inheritOptions(options: Object): this;

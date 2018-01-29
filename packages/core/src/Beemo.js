@@ -17,11 +17,15 @@ import type { BeemoContext } from './types';
 import type Driver from './Driver';
 
 export default class Beemo {
+  argv: string[];
+
   context: BeemoContext;
 
   tool: Tool<Driver, Reporter<Object>>;
 
-  constructor() {
+  constructor(argv: string[]) {
+    this.argv = argv;
+
     // eslint-disable-next-line global-require
     const { version } = require('../package.json');
 
@@ -30,7 +34,7 @@ export default class Beemo {
       footer: `🤖  Powered by Beemo v${version}`,
       pluginAlias: 'driver',
       scoped: true,
-    });
+    }, argv);
 
     // Immediately load config and plugins
     this.tool.initialize();
@@ -85,27 +89,16 @@ export default class Beemo {
   }
 
   /**
-   * Override tool config with command line options.
-   */
-  inheritOptions(options: Object): this {
-    const { debug, silent } = options;
-
-    this.tool.config.debug = debug;
-    this.tool.config.silent = silent;
-
-    return this;
-  }
-
-  /**
    * Execute all routines for the chosen driver.
    */
-  executeDriver(driverName: string, args?: string[] = []): Promise<*> {
+  executeDriver(driverName: string): Promise<*> {
     const { tool } = this;
     const configRoot = this.getConfigModuleRoot();
     const primaryDriver = tool.getPlugin(driverName);
 
     this.context = {
-      args,
+      // 0 node, 1 beemo, 2 driver
+      args: this.argv.slice(3),
       argsObject: {},
       configPaths: [],
       configRoot,

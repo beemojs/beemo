@@ -8,7 +8,7 @@ import Beemo from '@beemo/core';
 import app from 'yargs';
 
 // Initialize
-const beemo = new Beemo();
+const beemo = new Beemo(process.argv);
 
 // Add a command for each driver
 beemo.tool.plugins.forEach((driver) => {
@@ -22,20 +22,15 @@ beemo.tool.plugins.forEach((driver) => {
 
       return command;
     },
-    (argv) => {
-      beemo
-        .inheritOptions(argv)
-        // 0 node, 1 beemo, 2 driver
-        .executeDriver(driver.name, process.argv.slice(3));
+    () => {
+      beemo.executeDriver(driver.name);
     },
   );
 });
 
 // Add Beemo commands
-app.command('sync-dotfiles', 'Sync dotfiles from configuration module.', (argv) => {
-  beemo
-    .inheritOptions(argv)
-    .syncDotfiles();
+app.command('sync-dotfiles', 'Sync dotfiles from configuration module.', {}, () => {
+  beemo.syncDotfiles();
 });
 
 // Add Beemo options
