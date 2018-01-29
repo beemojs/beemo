@@ -7,8 +7,8 @@ dependencies, continuous copy and paste, and more.
 
 ### Features
 
-* Manage all build tools and configurations in a single repository.
-* Configure all build tools using `.js` files.
+* Manage build tools and configurations in a single repository.
+* Configure supported build tools using `.js` files.
 * Customize and alter config at runtime with CLI options.
 * Pass custom CLI options to build tool commands without failure.
 * Easily share config between build tools.
@@ -40,6 +40,7 @@ TODO
   * Overriding Config
 * Creating A Driver
 * Pro Tips
+  * Editor Integration
 
 ### Repository Setup
 
@@ -270,7 +271,7 @@ Furthermore, each driver can be configured with options by using an object, like
 * `driver` (string) - The name of the driver module.
 * `args` (string[]) - Arguments to always pass when executing the driver binary,
   and to pass to the config file.
-* `env` (object) - Environment variables to pass when executing the driver binary within
+* `env` (object) - Environment variables to pass when executing the driver binary with
   [execa](https://github.com/sindresorhus/execa).
 
 #### Executing Drivers

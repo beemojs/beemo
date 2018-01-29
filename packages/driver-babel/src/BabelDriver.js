@@ -32,12 +32,8 @@ export default class BabelDriver extends Driver {
   }
 
   handleExecute(event: Event, driver: Driver, args: string[], options: Object) {
-    if (!options.clean || !options.ourDir) {
-      return;
-    }
-
     // Automatically clean the target folder
-    if (options.clean && options.ourDir) {
+    if (options.clean && options.outDir) {
       rimraf.sync(path.resolve(options.outDir));
     }
   }
