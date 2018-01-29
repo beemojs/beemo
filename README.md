@@ -1,4 +1,4 @@
-# 🤖 Beemo
+# 🤖 Beemo [ALPHA]
 
 Manage build tools, their configuration, and commands in a single centralized repository.
 Beemo aims to solve the multi-project maintenance fatigue by removing the following burdens across
@@ -24,6 +24,7 @@ TODO
 ## Requirements
 
 * Node 6.5+
+* GitHub, Bitbucket, or another VCS
 
 ## Documentation
 
@@ -36,6 +37,9 @@ TODO
   * [Synchronizing Dotfiles](#synchronizing-dotfiles)
   * [Using Drivers](#using-drivers)
   * [Executing Drivers](#executing-drivers)
+  * Overriding Config
+* Creating A Driver
+* Pro Tips
 
 ### Repository Setup
 
@@ -215,6 +219,83 @@ the name of your configuration module, or another third-party module.
 
 #### Synchronizing Dotfiles
 
+Once Beemo is setup in your project, and you have dotfiles within your configuration module,
+you can run `yarn beemo sync-dotfiles` (or `npx beemo sync-dotfiles`) to copy them into the
+project.
+
+This process is a simple copy and write, so previous files will be overwritten. Be sure to
+`git diff` and verify your changes!
+
 #### Using Drivers
 
+Drivers may have been installed in your configuration module, but that does not make them
+available to the current project, as not all drivers will always be necessary. To enable drivers
+per project, a `drivers` property must be defined in your `beemo` config.
+
+This property accepts an array of strings or objects, with the names of each driver you want
+to enable. For example, if we want to use Babel, ESLint, and Jest, we would have the following.
+
+```json
+{
+  "beemo": {
+    "config": "@<username>/build-tool-config",
+    "drivers": ["babel", "eslint", "jest"]
+  }
+}
+```
+
+Furthermore, each driver can be configured with options by using an object, like so.
+
+```json
+{
+  "beemo": {
+    "config": "@<username>/build-tool-config",
+    "drivers": [
+      "babel",
+      {
+        "driver": "eslint",
+        "args": ["--color", "--report-unused-disable-directives"]
+      },
+      {
+        "driver": "jest",
+        "env": { "MAX_WORKERS": 2 }
+      }
+    ]
+  }
+}
+```
+
+##### Options
+
+* `driver` (string) - The name of the driver module.
+* `args` (string[]) - Arguments to always pass when executing the driver binary,
+  and to pass to the config file.
+* `env` (object) - Environment variables to pass when executing the driver binary within
+  [execa](https://github.com/sindresorhus/execa).
+
 #### Executing Drivers
+
+Now for the fun part, executing the driver! It's as simple as `yarn beemo <driver>` (or
+`npx beemo <driver>`). Once entered, this will initialize Beemo's pipeline, generate a temporary
+configuration file, execute the underlying driver binary, handle stdout and stderr output, cleanup
+after itself, and lastly, leave a beautiful message in your terminal.
+
+> All arguments passed to Beemo are passed to the driver's underlying binary.
+
+That being said, consistently remembering the correct commands and arguments to pass to `yarn` and
+`npx` is tedious. So why not use scripts? Feel free to steal the following.
+
+```json
+{
+  "scripts": {
+    "babel": "beemo babel ./src --out-dir ./lib",
+    "eslint": "beemo eslint ./src ./tests",
+    "flow": "beemo flow check",
+    "jest": "beemo jest",
+    "prettier": "beemo prettier --write ./{src,tests}/**/*.{js,json,md}",
+    "posttest": "yarn run flow --silent",
+    "pretest": "yarn run eslint --silent",
+    "test": "yarn run jest --silent"
+  },
+}
+```
