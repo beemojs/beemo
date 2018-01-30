@@ -31,6 +31,7 @@ export default class Beemo {
 
     this.tool = new Tool({
       appName: 'beemo',
+      configFolder: './configs',
       footer: `🤖  Powered by Beemo v${version}`,
       pluginAlias: 'driver',
       scoped: true,
