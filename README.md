@@ -271,6 +271,7 @@ Furthermore, each driver can be configured with options by using an object, like
 * `driver` (string) - The name of the driver module.
 * `args` (string[]) - Arguments to always pass when executing the driver binary,
   and to pass to the config file.
+* `dependencies` (string[]) - Other drivers that are required for this driver to run.
 * `env` (object) - Environment variables to pass when executing the driver binary with
   [execa](https://github.com/sindresorhus/execa).
 

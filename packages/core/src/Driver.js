@@ -14,6 +14,7 @@ import type { Execution } from './types';
 
 type DriverOptions = {
   args: string[],
+  dependencies: string[],
   env: { [key: string]: string },
 };
 
@@ -41,6 +42,7 @@ export default class Driver extends Plugin<DriverOptions> {
 
     this.options = new Options(this.options, {
       args: array(string()),
+      dependencies: array(string()),
       env: object(union([
         bool(),
         number(),

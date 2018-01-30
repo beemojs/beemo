@@ -65,8 +65,14 @@ export default class ConfigureRoutine extends Routine<ConfigureConfig, BeemoCont
 
     while (queue.length) {
       const driver = queue.shift();
+      const deps = new Set([
+        // Always required; configured by the driver
+        ...driver.metadata.dependencies,
+        // Custom; configured by the consumer
+        ...driver.options.dependencies,
+      ]);
 
-      driver.metadata.dependencies.forEach((name) => {
+      deps.forEach((name) => {
         this.tool.debug(`  Including dependency ${chalk.magenta(name)}`);
 
         this.context.drivers.unshift(this.tool.getPlugin(name));

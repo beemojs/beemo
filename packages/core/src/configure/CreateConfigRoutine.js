@@ -107,7 +107,7 @@ export default class CreateConfigRoutine extends Routine<Object, BeemoContext> {
 
     // Allow for local development
     const filePath = (moduleName === '@local')
-      ? path.join(this.context.root, `config/${name}.js`)
+      ? path.join(this.context.root, `configs/${name}.js`)
       : configLoader.resolveModuleConfigPath(name, moduleName);
     const fileExists = fs.existsSync(filePath);
 
