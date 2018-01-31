@@ -26,6 +26,8 @@
   },
   "dependencies": {
     "@beemo/core": "^0.6.0",
+    "chalk": "^2.3.0",
+    "semver": "^5.5.0",
     "yargs": "^11.0.0"
   }
 }

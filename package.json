@@ -8,7 +8,6 @@
     "eslint": "run-linter ./src ./tests ./packages/*/{src,tests}",
     "flow": "type-check",
     "jest": "run-tests",
-    "posttest": "yarn run flow",
     "pretest": "yarn run eslint",
     "assemble": "yarn run clean && yarn run bootstrap && yarn run build && yarn test",
     "bootstrap": "lerna bootstrap",

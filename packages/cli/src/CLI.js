@@ -4,8 +4,23 @@
  * @flow
  */
 
-import Beemo from '@beemo/core';
+/* eslint-disable no-console, unicorn/no-process-exit */
+
+import chalk from 'chalk';
+import semver from 'semver';
 import app from 'yargs';
+import Beemo from '@beemo/core';
+import corePackage from '@beemo/core/package.json';
+import cliPackage from '../package.json';
+
+if (!semver.satisfies(cliPackage.version, `^${corePackage.version}`)) {
+  console.error(chalk.red(`@beemo/cli version out of date; must be ^${corePackage.version}.`));
+  process.exit(1);
+
+} else if (!semver.satisfies(corePackage.version, cliPackage.dependencies['@beemo/core'])) {
+  console.error(chalk.red('@beemo/core mismatched version. Please keep core and cli package versions in sync.'));
+  process.exit(2);
+}
 
 // Initialize
 const beemo = new Beemo(process.argv);
