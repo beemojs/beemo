@@ -10,6 +10,8 @@ import { Driver } from '@beemo/core';
 
 import typeof Yargs from 'yargs';
 
+// Success: Writes file list to stdout
+// Failure: Throws SyntaxError to stderr
 export default class BabelDriver extends Driver {
   bootstrap() {
     this
@@ -32,7 +34,6 @@ export default class BabelDriver extends Driver {
   }
 
   handleExecute(event: Event, driver: Driver, args: string[], options: Object) {
-    // Automatically clean the target folder
     if (options.clean && options.outDir) {
       rimraf.sync(path.resolve(options.outDir));
     }

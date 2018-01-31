@@ -7,6 +7,8 @@
 import { Driver } from '@beemo/core';
 import ConfigOps from 'eslint/lib/config/config-ops';
 
+// Success: Writes nothing to stdout or stderr
+// Failure: Writes to stdout
 export default class ESLintDriver extends Driver {
   bootstrap() {
     this.setMetadata({

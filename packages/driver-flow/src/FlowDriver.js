@@ -8,6 +8,8 @@ import { Driver } from '@beemo/core';
 
 import type { Execution } from '@beemo/core';
 
+// Success: Writes no errors message to stdout and server output to stderr
+// Failure: Writes file list to stdout and server output to stderr
 export default class FlowDriver extends Driver {
   bootstrap() {
     this.setMetadata({
