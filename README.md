@@ -1,4 +1,5 @@
 # 🤖 Beemo [ALPHA]
+[![Build Status](https://travis-ci.org/milesj/beemo.svg?branch=master)](https://travis-ci.org/milesj/beemo)
 
 Manage build tools, their configuration, and commands in a single centralized repository.
 Beemo aims to solve the multi-project maintenance fatigue by removing the following burdens across

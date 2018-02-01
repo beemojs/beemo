@@ -5,17 +5,19 @@
   "scripts": {
     "test": "yarn run jest",
     "coverage": "run-coverage",
+    "docs": "cp ./README.md ./packages/core/README.md",
     "eslint": "run-linter ./src ./tests ./packages/*/{src,tests}",
     "flow": "type-check",
     "jest": "run-tests",
     "pretest": "yarn run eslint",
     "assemble": "yarn run clean && yarn run bootstrap && yarn run build && yarn test",
     "bootstrap": "lerna bootstrap",
-    "bootstrap:slow": "yarn run bootstrap --concurrency 1",
+    "bootstrap:slow": "yarn run bootstrap --concurrency=1",
     "build": "lerna run build",
     "clean": "rimraf ./packages/{*}/lib/ && lerna clean --yes",
-    "publish": "lerna publish",
-    "publish:force": "lerna publish --force-publish=*",
+    "publish": "yarn run prerelease && lerna publish",
+    "publish:force": "yarn run prerelease && lerna publish --force-publish=*",
+    "prerelease": "yarn run docs && yarn run assemble",
     "updated": "lerna updated",
     "beemo": "beemo"
   },
@@ -29,15 +31,6 @@
   "workspaces": [
     "packages/*"
   ],
-  "babel": {
-    "presets": "@milesj/build-tool-config/babel"
-  },
-  "eslintConfig": {
-    "extends": "./node_modules/@milesj/build-tool-config/eslint.js",
-    "rules": {
-      "import/first": "off"
-    }
-  },
   "eslintIgnore": [
     "esm/",
     "lib/",

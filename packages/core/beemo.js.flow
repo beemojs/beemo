@@ -28,14 +28,17 @@ declare module '@beemo/core' {
   declare export type DriverMetadata = {
     bin: string,
     configName: string,
+    configOption: string,
     dependencies: string[],
     description: string,
     helpOption: string,
     title: string,
+    useConfigOption: boolean,
   };
 
   declare export type DriverOptions = {
     args: string[],
+    dependencies: string[],
     env: { [key: string]: string },
   };
 
