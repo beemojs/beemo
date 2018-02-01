@@ -60,6 +60,7 @@
         "driver": "jest",
         "args": ["--colors", "--logHeapUsage"]
       },
+      "mocha",
       {
         "driver": "prettier",
         "args": ["--debug-check", "--write"]

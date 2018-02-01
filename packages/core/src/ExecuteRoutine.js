@@ -41,8 +41,14 @@ export default class ExecuteRoutine extends Routine<ExecuteConfig, BeemoContext>
     const { cleanup } = this.config;
 
     this.task('Filtering options', this.filterUnknownOptionsFromArgs);
+
+    this.task('Including config option', this.includeConfigOption)
+      .skip(!primaryDriver.metadata.useConfigOption);
+
     this.task(`Running ${primaryDriver.metadata.bin} command`, this.runCommandWithArgs);
-    this.task('Deleting temporary config files', this.deleteConfigFiles).skip(!cleanup);
+
+    this.task('Deleting temporary config files', this.deleteConfigFiles)
+      .skip(!cleanup);
 
     return this.serializeTasks();
   }
@@ -114,6 +120,20 @@ export default class ExecuteRoutine extends Routine<ExecuteConfig, BeemoContext>
 
         return filteredArgs;
       });
+  }
+
+  /**
+   * Include --config option if driver requires it (instead of auto-lookup resolution).
+   */
+  includeConfigOption(args: string[]): Promise<string[]> {
+    const { configPaths, primaryDriver } = this.context;
+
+    args.push(
+      primaryDriver.metadata.configOption,
+      configPaths.find(path => path.endsWith(primaryDriver.metadata.configName)),
+    );
+
+    return Promise.resolve(args);
   }
 
   /**

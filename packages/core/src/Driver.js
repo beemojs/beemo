@@ -21,20 +21,24 @@ type DriverOptions = {
 type Metadata = {
   bin: string,
   configName: string,
+  configOption: string,
   dependencies: string[],
   description: string,
   helpOption: string,
   title: string,
+  useConfigOption: boolean,
 };
 
 export default class Driver extends Plugin<DriverOptions> {
   metadata: Metadata = {
     bin: '',
     configName: '',
+    configOption: '',
     dependencies: [],
     description: '',
     helpOption: '',
     title: '',
+    useConfigOption: false,
   };
 
   constructor(options?: Object = {}) {
@@ -72,6 +76,9 @@ export default class Driver extends Plugin<DriverOptions> {
     const { stderr, stdout } = error;
     const out = (stderr || stdout).trim();
 
+    // Integration debugging
+    // this.tool.logError(JSON.stringify(error));
+
     if (out) {
       this.tool.logError(out);
     }
@@ -82,6 +89,9 @@ export default class Driver extends Plugin<DriverOptions> {
    */
   handleSuccess(response: Execution) {
     const out = response.stdout.trim();
+
+    // Integration debugging
+    // this.tool.log(JSON.stringify(response));
 
     if (out) {
       this.tool.log(out);
@@ -110,11 +120,13 @@ export default class Driver extends Plugin<DriverOptions> {
   setMetadata(metadata: Object): this {
     this.metadata = new Options(metadata, {
       bin: string().match(/^[-a-z0-9]+$/),
-      configName: string(),
+      configName: string().required(),
+      configOption: string('--config'),
       dependencies: array(string()),
       description: string().empty(),
       helpOption: string('--help'),
       title: string(),
+      useConfigOption: bool(),
     }, {
       name: this.constructor.name,
     });
