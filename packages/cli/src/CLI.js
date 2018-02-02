@@ -17,7 +17,7 @@ if (!semver.satisfies(cliPackage.version, `^${corePackage.version}`)) {
   console.error(chalk.red(`@beemo/cli version out of date; must be ^${corePackage.version}.`));
   process.exit(1);
 
-} else if (!semver.satisfies(corePackage.version, cliPackage.dependencies['@beemo/core'])) {
+} else if (!semver.satisfies(corePackage.version, cliPackage.peerDependencies['@beemo/core'])) {
   console.error(chalk.red('@beemo/core mismatched version. Please keep core and cli package versions in sync.'));
   process.exit(2);
 }

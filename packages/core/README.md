@@ -38,10 +38,10 @@ TODO
   * [Synchronizing Dotfiles](#synchronizing-dotfiles)
   * [Using Drivers](#using-drivers)
   * [Executing Drivers](#executing-drivers)
-  * Overriding Config
-* Creating A Driver
-* Pro Tips
-  * Editor Integration
+  * [Overriding Config](#overriding-config)
+* [Creating A Driver](#creating-a-driver)
+* [Pro Tips](#pro-tips)
+  * [Editor Integration](#editor-integration)
 
 ### Repository Setup
 
@@ -69,7 +69,7 @@ Enter `0.0.0` for the version, and whatever you want on the remaining questions.
 Now that we have a repository, we can install and setup Beemo. It's as easy as...
 
 ```
-yarn add @beemo/core
+yarn add @beemo/core @beemo/cli
 ```
 
 This will only install the core functionality. To support different build tools like Babel,
@@ -188,15 +188,15 @@ Now that you have a configuration module, we can integrate it across all project
 go ahead and delete all the old config files and dependencies in each project (if they exist),
 as all that logic should now be housed in your configuration module.
 
-Once you have a clean slate, install Beemo's CLI and your configuration module.
+Once you have a clean slate your configuration module, and BOOM, it's as easy as that. No more
+development dependency hell, just a single dependency.
 
 ```
-yarn add @beemo/cli --dev
 yarn add @<username>/build-tool-config --dev
 ```
 
-Add a `beemo` configuration block to your `package.json`, with a `config` property that matches
-the name of your configuration module, or another third-party module.
+That being said, add a `beemo` configuration block to your `package.json`, with a `config`
+property that matches the name of your configuration module, or another third-party module.
 
 ```json
 {
@@ -302,3 +302,63 @@ That being said, consistently remembering the correct commands and arguments to 
   },
 }
 ```
+
+#### Overriding Config
+
+Your configuration module may house all configuration now, but that doesn't mean it's applicable
+to *all* projects. So because of that, Beemo does allow overriding of config. To do so,
+edit your `package.json` to include a block under `beemo.<driver>`, like so.
+
+```json
+{
+  "beemo": {
+    "config": "@<username>/build-tool-config",
+    "drivers": ["eslint"],
+    "eslint": {
+      "rules": {
+        "no-param-reassign": 0
+      }
+    }
+  }
+}
+```
+
+> Some build tools support `package.json` overrides like this, but it's preferred to use the
+> Beemo approach for interoperability.
+
+### Creating A Driver
+
+TODO
+
+### Pro Tips
+
+Some useful tips on utilizing Beemo like a pro!
+
+#### Editor Integration
+
+By default, Beemo generates local config files before execution, and then removes them. But some
+editors require those local files for in-editor functionality (like ESLint and Prettier). To
+support this, we can do something like the following.
+
+First, add the config file names to `dotfiles/gitignore` for each driver you have installed in your
+configuration module (be sure to sync afterwards).
+
+```
+.eslintrc
+.prettierrc
+```
+
+Then disable `cleanup` in your `beemo` config.
+
+```json
+{
+  "beemo": {
+    "execute": {
+      "cleanup": false
+    }
+  }
+}
+```
+
+With these changes, the local config files will persist after executing a driver, but will also
+be ignored in Git and some editors. Pretty nice huh?
