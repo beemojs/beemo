@@ -12,7 +12,7 @@ import ConfigureRoutine from './ConfigureRoutine';
 import ExecuteRoutine from './ExecuteRoutine';
 import SyncDotfilesRoutine from './SyncDotfilesRoutine';
 
-import type { Event, Reporter } from 'boost';
+import type { Event, Reporter } from 'boost'; // eslint-disable-line
 import type { BeemoContext } from './types';
 import type Driver from './Driver';
 

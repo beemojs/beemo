@@ -27,7 +27,7 @@
     "jest": "^22.1.4"
   },
   "peerDependencies": {
-    "@beemo/core": "^0.1.0",
+    "@beemo/core": "^0.8.0",
     "@beemo/driver-babel": "^0.0.0",
     "jest": "^21.2.0"
   }

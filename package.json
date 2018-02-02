@@ -31,6 +31,12 @@
   "workspaces": [
     "packages/*"
   ],
+  "babel": {
+    "presets": "@milesj/build-tool-config/babel"
+  },
+  "eslintConfig": {
+    "extends": "./node_modules/@milesj/build-tool-config/eslint.js"
+  },
   "eslintIgnore": [
     "esm/",
     "lib/",
