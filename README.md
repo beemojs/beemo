@@ -15,6 +15,7 @@ dependencies, continuous copy and paste, and more.
 * Easily share config between build tools.
 * Avoid relative config or `extend` paths.
 * Automatic config file cleanup.
+* Custom scripts with CLI options.
 * Dotfile synchronization.
 * And much more.
 
@@ -31,13 +32,15 @@ TODO
 
 * [Repository Setup](#repository-setup)
   * [Installing Beemo](#installing-beemo)
-  * [Configuring Drivers](#configuring-drivers)
-  * [Adding Dotfiles](#adding-dotfiles)
+  * [Drivers](#drivers)
+  * [Dotfiles](#dotfiles)
+  * [Scripts](#scripts)
   * [Publishing](#publishing)
 * [Consumer Setup](#consumer-setup)
   * [Synchronizing Dotfiles](#synchronizing-dotfiles)
   * [Using Drivers](#using-drivers)
   * [Executing Drivers](#executing-drivers)
+  * [Executing Scripts](#executing-scripts)
   * [Overriding Config](#overriding-config)
 * [Creating A Driver](#creating-a-driver)
 * [Pro Tips](#pro-tips)
@@ -83,7 +86,7 @@ yarn add @beemo/driver-jest jest
 
 > Drivers and their peer dependencies must not be installed as development dependencies.
 
-#### Configuring Drivers
+#### Drivers
 
 For each driver you install, there should be an associated `.js` configuration file within a
 `config/` folder, named after the package name (excluding "driver-"). Using the example above,
@@ -137,7 +140,7 @@ module.exports = function (options) {
 
 > Command line arguments are parsed into an object using [yargs-parser](https://www.npmjs.com/package/yargs-parser).
 
-#### Adding Dotfiles
+#### Dotfiles
 
 Beemo supports [synchronizing dotfiles](#synchronizing-dotfiles) across all projects that consume
 your configuration module (the repository you just created). This includes things like
@@ -163,6 +166,48 @@ dotfiles/
   npmignore
   travis.yml
 ```
+
+#### Scripts
+
+Beemo supports executing custom scripts found within your configuration module. To utilize a script,
+create a JavaScript file within the `scripts/` folder, extend the `Script` class provided by Beemo,
+and define the `run()` and `parse()` methods.
+
+```js
+// scripts/init.js
+const { Script } = require('@beemo/core');
+
+module.exports = class InitScript extends Script {
+  parse() {
+    return {
+      boolean: ['workspaces'],
+    };
+  }
+
+  run(options, tool) {
+    if (options.workspaces) {
+      // Do something
+    }
+  }
+}
+```
+
+The `parse()` method is optional and can be used to define parsing rules for CLI options (powered
+by [yargs-parser](https://www.npmjs.com/package/yargs-parser#api)). If no rules are provided,
+Yargs default parsing rules will be used.
+
+The `run()` method is required and is triggered when the `beemo run-script` command is ran. The
+method receives options (parsed with `parse()`) as the 1st argument, and the current Beemo tool
+instance as the 2nd argument. The tool instance supports the following, which can be used
+to hook into the applications lifecycle.
+
+* `config` (object) - Loaded Beemo configuration.
+* `package` (object) - Loaded `package.json` found within the current root.
+* `debug(message)` - Log debug information (shown during `--debug`).
+* `log(message)` - Log information on success.
+* `logError(message)` - Log information on failure.
+
+> Returning a promise in `run()` is preferred.
 
 #### Publishing
 
@@ -302,6 +347,13 @@ That being said, consistently remembering the correct commands and arguments to 
   },
 }
 ```
+
+#### Executing Scripts
+
+A script within your configuration module can be executed using `yarn beemo run-script <name>`
+(or `npx beemo run-script <name>`).
+
+> All arguments passed to Beemo are passed to the script's `run()` method.
 
 #### Overriding Config
 
