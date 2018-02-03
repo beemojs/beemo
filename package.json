@@ -9,7 +9,6 @@
     "eslint": "run-linter ./src ./tests ./packages/*/{src,tests}",
     "flow": "yarn run beemo flow check",
     "jest": "run-tests",
-    "pretest": "yarn run eslint",
     "assemble": "yarn run clean && yarn run bootstrap && yarn run build && yarn test",
     "bootstrap": "lerna bootstrap",
     "bootstrap:slow": "yarn run bootstrap --concurrency=1",
