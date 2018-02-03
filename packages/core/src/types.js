@@ -26,26 +26,23 @@ export type Execution = {
   timedOut: boolean,
 };
 
-export type DotfilesContext = {
+export type Context = {|
+  args: string[],
   configRoot: string,
   root: string,
-};
+|};
 
-export type DriverContext = {
-  args: string[],
+export type DriverContext = {|
+  ...Context,
   argsObject: Object,
   configPaths: string[],
-  configRoot: string,
   drivers: Driver[],
   primaryDriver: Driver,
-  root: string,
-};
+|};
 
-export type ScriptContext = {
-  args: string[],
-  configRoot: string,
-  root: string,
-  script: ?Script<Object>,
+export type ScriptContext = {|
+  ...Context,
+  script: ?Script,
   scriptName: string,
   scriptPath: string,
-};
+|};

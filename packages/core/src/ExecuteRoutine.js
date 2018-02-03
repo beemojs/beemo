@@ -127,13 +127,13 @@ export default class ExecuteRoutine extends Routine<ExecuteConfig, DriverContext
    */
   includeConfigOption(args: string[]): Promise<string[]> {
     const { configPaths, primaryDriver } = this.context;
-
-    args.push(primaryDriver.metadata.configOption);
-
     const configPath = configPaths.find(path => path.endsWith(primaryDriver.metadata.configName));
 
     if (configPath) {
-      args.push(configPath);
+      args.push(
+        primaryDriver.metadata.configOption,
+        configPath,
+      );
     }
 
     return Promise.resolve(args);
@@ -151,7 +151,7 @@ export default class ExecuteRoutine extends Routine<ExecuteConfig, DriverContext
       `Executing command ${chalk.magenta(driver.metadata.bin)} with args "${args.join(' ')}"`,
     );
 
-    this.tool.emit('run-driver', [driver, args, argsObject]);
+    this.tool.emit('execute-driver', [driver, args, argsObject]);
 
     return this.executeCommand(driver.metadata.bin, args, options)
       .then((response) => {

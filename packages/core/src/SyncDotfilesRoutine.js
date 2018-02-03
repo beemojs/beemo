@@ -10,9 +10,9 @@ import fs from 'fs-extra';
 import path from 'path';
 import { Routine } from 'boost';
 
-import type { DotfilesContext } from './types';
+import type { Context } from './types';
 
-export default class SyncDotfilesRoutine extends Routine<Object, DotfilesContext> {
+export default class SyncDotfilesRoutine extends Routine<Object, Context> {
   execute(): Promise<string[]> {
     this.task('Copying files', this.copyFilesFromConfigModule);
     this.task('Renaming files', this.renameFilesWithDot);

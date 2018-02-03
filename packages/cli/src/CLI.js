@@ -68,7 +68,7 @@ app
 // Run application
 // eslint-disable-next-line
 app
-  .usage('beemo <driver> [args..]')
+  .usage('beemo <command> [args..]')
   .demandCommand(1, 'Please run a command.')
   .showHelpOnFail(true)
   .help()

@@ -22,7 +22,7 @@ export default class RunScriptRoutine extends Routine<Object, ScriptContext> {
   /**
    * Attempt to load a script from the configuration module.
    */
-  loadScript(scriptName: string): Promise<Script<Object>> {
+  loadScript(scriptName: string): Promise<Script> {
     const filePath = path.join(this.context.configRoot, 'scripts', `${scriptName}.js`);
     const loader = new ModuleLoader(this.tool, 'script', Script);
 
@@ -30,6 +30,9 @@ export default class RunScriptRoutine extends Routine<Object, ScriptContext> {
 
     return new Promise((resolve) => {
       const script = loader.importModule(filePath);
+
+      // Is not set by Boost, so set it here
+      script.name = scriptName;
 
       this.context.script = script;
       this.context.scriptPath = filePath;
@@ -41,14 +44,14 @@ export default class RunScriptRoutine extends Routine<Object, ScriptContext> {
   /**
    * Run the script while also parsing arguments to use as options.
    */
-  runScript(script: Script<Object>): Promise<*> {
+  runScript(script: Script): Promise<*> {
     const { args } = this.context;
 
     this.tool.debug(`Executing script with args "${args.join(' ')}"`);
 
-    this.tool.emit('run-script', [script, args]);
+    this.tool.emit('execute-script', [script, args]);
 
-    const options = parseArgs(args, script.setup());
+    const options = parseArgs(args, script.parse());
 
     return Promise.resolve(script.run(options, this.tool))
       .then((response) => {

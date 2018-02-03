@@ -16,15 +16,11 @@ import RunScriptRoutine from './RunScriptRoutine';
 import SyncDotfilesRoutine from './SyncDotfilesRoutine';
 
 import type { Event, Reporter } from 'boost'; // eslint-disable-line
-import type { DriverContext, ScriptContext } from './types';
+import type { Context, DriverContext, ScriptContext } from './types';
 import type Driver from './Driver';
 
 export default class Beemo {
   argv: string[];
-
-  driverContext: DriverContext;
-
-  scriptContext: ScriptContext;
 
   tool: Tool<Driver, Reporter<Object>>;
 
@@ -44,22 +40,20 @@ export default class Beemo {
 
     // Immediately load config and plugins
     this.tool.initialize();
-
-    // Handle exit failures
-    this.tool.on('exit', this.cleanUpOnFailure);
   }
 
   /**
-   * Delete config files on a failure.
+   * Create a re-usable context for each pipeline.
    */
-  cleanUpOnFailure = (event: Event, code: number) => {
-    if (code > 0 && this.driverContext) {
-      // Must not be async!
-      this.driverContext.configPaths.forEach((configPath) => {
-        fs.removeSync(configPath);
-      });
-    }
-  };
+  createContext(context?: Object = {}, slice?: number = 3): * {
+    return {
+      ...context,
+      // 0 node, 1 beemo, 2 <driver, command>
+      args: this.argv.slice(slice),
+      configRoot: this.getConfigModuleRoot(),
+      root: this.tool.options.root,
+    };
+  }
 
   /**
    * Validate the configuration module and return its absolute path.
@@ -99,28 +93,34 @@ export default class Beemo {
    */
   executeDriver(driverName: string): Promise<*> {
     const { tool } = this;
-    const configRoot = this.getConfigModuleRoot();
     const primaryDriver = tool.getPlugin(driverName);
-
-    this.driverContext = {
-      // 0 node, 1 beemo, 2 <driver>
-      args: this.argv.slice(3),
+    const context: DriverContext = this.createContext({
       argsObject: {},
       configPaths: [],
-      configRoot,
       drivers: [primaryDriver],
       primaryDriver,
-      root: tool.options.root,
-    };
+    });
 
-    tool.emit('execute-driver', [driverName, this.driverContext]);
+    // Delete config files on failure
+    tool.on('exit', (event, code) => {
+      if (code === 0) {
+        return;
+      }
+
+      // Must not be async!
+      context.configPaths.forEach((configPath) => {
+        fs.removeSync(configPath);
+      });
+    });
+
+    tool.emit('driver', [driverName, context]);
 
     tool.debug(`Running with ${driverName} driver`);
 
     return new Pipeline(tool)
       .pipe(new ConfigureRoutine('configure', 'Generating configurations'))
       .pipe(new ExecuteRoutine('execute', `Executing ${driverName} driver`))
-      .run(driverName, this.driverContext);
+      .run(driverName, context);
   }
 
   /**
@@ -128,39 +128,33 @@ export default class Beemo {
    */
   executeScript(scriptName: string): Promise<*> {
     const { tool } = this;
-    const configRoot = this.getConfigModuleRoot();
-
-    this.scriptContext = {
-      // 0 node, 1 beemo, 2 run-script, 3 <script>
-      args: this.argv.slice(4),
-      configRoot,
-      root: tool.options.root,
+    const context: ScriptContext = this.createContext({
       script: null,
       scriptName,
       scriptPath: '',
-    };
+    }, 4);
 
-    tool.emit('execute-script', [scriptName, this.scriptContext]);
+    tool.emit('script', [scriptName, context]);
 
     tool.debug(`Running with ${scriptName} script`);
 
-    return new Pipeline(this.tool)
+    return new Pipeline(tool)
       .pipe(new RunScriptRoutine('script', `Executing ${scriptName} script`))
-      .run(scriptName, this.scriptContext);
+      .run(scriptName, context);
   }
 
   /**
    * Sync dotfiles from the configuration module.
    */
   syncDotfiles(): Promise<*> {
-    const context = {
-      configRoot: this.getConfigModuleRoot(),
-      root: this.tool.options.root,
-    };
+    const { tool } = this;
+    const context: Context = this.createContext();
 
-    this.tool.emit('sync-dotfiles', [context]);
+    tool.emit('dotfiles', [context]);
 
-    return new Pipeline(this.tool)
+    tool.debug('Running dotfiles command');
+
+    return new Pipeline(tool)
       .pipe(new SyncDotfilesRoutine('sync', 'Syncing dotfiles'))
       .run(null, context);
   }
