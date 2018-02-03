@@ -45,11 +45,11 @@ export default class RunScriptRoutine extends Routine<Object, ScriptContext> {
    * Run the script while also parsing arguments to use as options.
    */
   runScript(script: Script): Promise<*> {
-    const { args } = this.context;
+    const { args, yargs } = this.context;
 
     this.tool.debug(`Executing script with args "${args.join(' ')}"`);
 
-    this.tool.emit('execute-script', [script, args]);
+    this.tool.emit('execute-script', [script, args, yargs]);
 
     const options = parseArgs(args, script.parse());
 

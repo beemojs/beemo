@@ -65,8 +65,9 @@ export default class ExecuteRoutine extends Routine<ExecuteConfig, DriverContext
       ...commandArgs,
     ];
 
-    // Set before its filtered
-    this.context.argsObject = parseArgs(args);
+    // Since we combine multiple args, we need to rebuild this.
+    // And we also need to set this before we filter them.
+    this.context.yargs = parseArgs(args);
 
     this.tool.debug('Filtering unknown command line args and options');
 
@@ -144,14 +145,14 @@ export default class ExecuteRoutine extends Routine<ExecuteConfig, DriverContext
    * success and failures with the driver itself.
    */
   runCommandWithArgs(args: string[]): Promise<Execution> {
-    const { argsObject, primaryDriver: driver } = this.context;
+    const { primaryDriver: driver, yargs } = this.context;
     const options = { env: driver.options.env };
 
     this.tool.debug(
       `Executing command ${chalk.magenta(driver.metadata.bin)} with args "${args.join(' ')}"`,
     );
 
-    this.tool.emit('execute-driver', [driver, args, argsObject]);
+    this.tool.emit('execute-driver', [driver, args, yargs]);
 
     return this.executeCommand(driver.metadata.bin, args, options)
       .then((response) => {

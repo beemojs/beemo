@@ -30,11 +30,11 @@ export type Context = {|
   args: string[],
   configRoot: string,
   root: string,
+  yargs: Object,
 |};
 
 export type DriverContext = {|
   ...Context,
-  argsObject: Object,
   configPaths: string[],
   drivers: Driver[],
   primaryDriver: Driver,

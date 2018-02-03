@@ -8,11 +8,11 @@ declare module '@beemo/core' {
     args: string[],
     configRoot: string,
     root: string,
+    yargs: Object,
   |};
 
   declare export type DriverContext = {|
     ...Context,
-    argsObject: Object,
     configPaths: string[],
     drivers: Driver[],
     primaryDriver: Driver,

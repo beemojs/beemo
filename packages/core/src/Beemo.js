@@ -10,6 +10,7 @@ import { Pipeline, Tool } from 'boost';
 import chalk from 'chalk';
 import fs from 'fs-extra';
 import path from 'path';
+import parseArgs from 'yargs-parser';
 import ConfigureRoutine from './ConfigureRoutine';
 import ExecuteRoutine from './ExecuteRoutine';
 import RunScriptRoutine from './RunScriptRoutine';
@@ -46,12 +47,15 @@ export default class Beemo {
    * Create a re-usable context for each pipeline.
    */
   createContext(context?: Object = {}, slice?: number = 3): * {
+    // 0 node, 1 beemo, 2 <driver, command>
+    const args = this.argv.slice(slice);
+
     return {
       ...context,
-      // 0 node, 1 beemo, 2 <driver, command>
-      args: this.argv.slice(slice),
+      args,
       configRoot: this.getConfigModuleRoot(),
       root: this.tool.options.root,
+      yargs: parseArgs(args),
     };
   }
 
@@ -95,7 +99,6 @@ export default class Beemo {
     const { tool } = this;
     const primaryDriver = tool.getPlugin(driverName);
     const context: DriverContext = this.createContext({
-      argsObject: {},
       configPaths: [],
       drivers: [primaryDriver],
       primaryDriver,
