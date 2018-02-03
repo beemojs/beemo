@@ -81,7 +81,7 @@ yarn add @beemo/driver-eslint eslint
 yarn add @beemo/driver-jest jest
 ```
 
-> Be sure to install required peer dependencies!
+> Drivers and their peer dependencies must not be installed as development dependencies.
 
 #### Configuring Drivers
 
