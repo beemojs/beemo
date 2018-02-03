@@ -44,6 +44,10 @@ beemo.tool.plugins.forEach((driver) => {
 });
 
 // Add Beemo commands
+app.command('run-script <name>', 'Run script from configuration module.', {}, (args) => {
+  beemo.executeScript(args.name);
+});
+
 app.command('sync-dotfiles', 'Sync dotfiles from configuration module.', {}, () => {
   beemo.syncDotfiles();
 });
@@ -58,7 +62,7 @@ app
   .option('silent', {
     boolean: true,
     default: false,
-    describe: 'Hide driver output',
+    describe: 'Hide Beemo output',
   });
 
 // Run application

@@ -4,8 +4,9 @@
  * @flow
  */
 
-import Driver from './Driver';
 import Beemo from './Beemo';
+import Driver from './Driver';
+import Script from './Script';
 
-export { Driver };
+export { Driver, Script };
 export default Beemo;

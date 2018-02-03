@@ -11,11 +11,11 @@ import path from 'path';
 import { Routine } from 'boost';
 
 export default class SyncDotfilesRoutine extends Routine {
-  execute(configRoot: string): Promise<string[]> {
+  execute(): Promise<string[]> {
     this.task('Copying files', this.copyFilesFromConfigModule);
     this.task('Renaming files', this.renameFilesWithDot);
 
-    return this.serializeTasks(configRoot);
+    return this.serializeTasks(this.context.configRoot);
   }
 
   /**

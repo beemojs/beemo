@@ -5,6 +5,7 @@
  */
 
 import type Driver from './Driver';
+import type Script from './Script';
 
 export type ConfigureConfig = {
   parallel: boolean,
@@ -25,7 +26,7 @@ export type Execution = {
   timedOut: boolean,
 };
 
-export type BeemoContext = {
+export type DriverContext = {
   args: string[],
   argsObject: Object,
   configPaths: string[],
@@ -33,4 +34,13 @@ export type BeemoContext = {
   drivers: Driver[],
   primaryDriver: Driver,
   root: string,
+};
+
+export type ScriptContext = {
+  args: string[],
+  configRoot: string,
+  root: string,
+  script: ?Script,
+  scriptName: string,
+  scriptPath: string,
 };

@@ -148,20 +148,20 @@ export default class ExecuteRoutine extends Routine<ExecuteConfig, BeemoContext>
       `Executing command ${chalk.magenta(driver.metadata.bin)} with args "${args.join(' ')}"`,
     );
 
-    this.tool.emit('execute', [driver, args, argsObject]);
+    this.tool.emit('run-driver', [driver, args, argsObject]);
 
     return this.executeCommand(driver.metadata.bin, args, options)
       .then((response) => {
         driver.handleSuccess(response);
 
-        this.tool.emit('successful-execute', [driver, response]);
+        this.tool.emit('successful-driver', [driver, response]);
 
         return response;
       })
       .catch((error) => {
         driver.handleFailure(error);
 
-        this.tool.emit('failed-execute', [driver, error]);
+        this.tool.emit('failed-driver', [driver, error]);
 
         throw error;
       });

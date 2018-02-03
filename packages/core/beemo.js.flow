@@ -1,10 +1,10 @@
-import { Plugin } from 'boost';
+import { Module, Plugin } from 'boost';
 
 declare module '@beemo/core' {
   import type { Event, EventListener, Tool, Reporter } from 'boost';
   import typeof Yargs from 'yargs';
 
-  declare export type Context = {
+  declare export type DriverContext = {
     args: string[],
     argsObject: Object,
     configPaths: string[],
@@ -12,6 +12,15 @@ declare module '@beemo/core' {
     drivers: Driver[],
     primaryDriver: Driver,
     root: string,
+  };
+
+  declare export type ScriptContext = {
+    args: string[],
+    configRoot: string,
+    root: string,
+    script: ?Script,
+    scriptName: string,
+    scriptPath: string,
   };
 
   declare export type Execution = {
@@ -42,6 +51,11 @@ declare module '@beemo/core' {
     env: { [key: string]: string },
   };
 
+  declare export class Script<To: Object> extends Module<To> {
+    run(options: Object, tool: Tool<Driver, Reporter<Object>>): Promise<*>;
+    setup(): Object;
+  }
+
   declare export class Driver extends Plugin<DriverOptions> {
     metadata: DriverMetadata;
     options: DriverOptions;
@@ -63,8 +77,8 @@ declare module '@beemo/core' {
     constructor(argv: string[]): this;
     cleanUpOnFailure(event: Event, code: number): void;
     getConfigModuleRoot(): string;
-    inheritOptions(options: Object): this;
-    executeDriver(driverName: string, args?: string[]): Promise<*>;
+    executeDriver(driverName: string): Promise<*>;
+    executeScript(scriptName: string): Promise<*>;
     syncDotfiles(): Promise<*>;
   }
 }

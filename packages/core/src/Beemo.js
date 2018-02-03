@@ -4,22 +4,27 @@
  * @flow
  */
 
+/* eslint-disable no-magic-numbers */
+
 import { Pipeline, Tool } from 'boost';
 import chalk from 'chalk';
 import fs from 'fs-extra';
 import path from 'path';
 import ConfigureRoutine from './ConfigureRoutine';
 import ExecuteRoutine from './ExecuteRoutine';
+import RunScriptRoutine from './RunScriptRoutine';
 import SyncDotfilesRoutine from './SyncDotfilesRoutine';
 
 import type { Event, Reporter } from 'boost'; // eslint-disable-line
-import type { BeemoContext } from './types';
+import type { DriverContext, ScriptContext } from './types';
 import type Driver from './Driver';
 
 export default class Beemo {
   argv: string[];
 
-  context: BeemoContext;
+  driverContext: DriverContext;
+
+  scriptContext: ScriptContext;
 
   tool: Tool<Driver, Reporter<Object>>;
 
@@ -48,9 +53,9 @@ export default class Beemo {
    * Delete config files on a failure.
    */
   cleanUpOnFailure = (event: Event, code: number) => {
-    if (code > 0 && this.context) {
+    if (code > 0 && this.driverContext) {
       // Must not be async!
-      this.context.configPaths.forEach((configPath) => {
+      this.driverContext.configPaths.forEach((configPath) => {
         fs.removeSync(configPath);
       });
     }
@@ -97,35 +102,66 @@ export default class Beemo {
     const configRoot = this.getConfigModuleRoot();
     const primaryDriver = tool.getPlugin(driverName);
 
-    this.context = {
-      // 0 node, 1 beemo, 2 driver
+    this.driverContext = {
+      // 0 node, 1 beemo, 2 <driver>
       args: this.argv.slice(3),
       argsObject: {},
       configPaths: [],
       configRoot,
       drivers: [primaryDriver],
       primaryDriver,
-      root: this.tool.options.root,
+      root: tool.options.root,
     };
 
-    this.tool.emit('run', [primaryDriver, this.context]);
+    tool.emit('execute-driver', [driverName, this.driverContext]);
 
-    this.tool.debug(`Running with ${chalk.magenta(primaryDriver.name)} driver`);
+    tool.debug(`Running with ${driverName} driver`);
 
     return new Pipeline(tool)
       .pipe(new ConfigureRoutine('configure', 'Generating configurations'))
-      .pipe(new ExecuteRoutine('execute', 'Executing driver'))
-      .run(driverName, this.context);
+      .pipe(new ExecuteRoutine('execute', `Executing ${driverName} driver`))
+      .run(driverName, this.driverContext);
+  }
+
+  /**
+   * Run a script found within the configuration module.
+   */
+  executeScript(scriptName: string): Promise<*> {
+    const { tool } = this;
+    const configRoot = this.getConfigModuleRoot();
+
+    this.scriptContext = {
+      // 0 node, 1 beemo, 2 run-script, 3 <script>
+      args: this.argv.slice(4),
+      configRoot,
+      root: tool.options.root,
+      script: null,
+      scriptName,
+      scriptPath: '',
+    };
+
+    tool.emit('execute-script', [scriptName, this.scriptContext]);
+
+    tool.debug(`Running with ${scriptName} script`);
+
+    return new Pipeline(this.tool)
+      .pipe(new RunScriptRoutine('script', `Executing ${scriptName} script`))
+      .run(scriptName, this.scriptContext);
   }
 
   /**
    * Sync dotfiles from the configuration module.
    */
   syncDotfiles(): Promise<*> {
-    this.tool.emit('sync');
+    const context = {
+      configRoot: this.getConfigModuleRoot(),
+      root: this.tool.options.root,
+    };
+
+    this.tool.emit('sync-dotfiles', [context]);
 
     return new Pipeline(this.tool)
       .pipe(new SyncDotfilesRoutine('sync', 'Syncing dotfiles'))
-      .run(this.getConfigModuleRoot());
+      .run(null, context);
   }
 }
