@@ -6,7 +6,7 @@
 
 import { Module } from 'boost';
 
-import type { Tool, Reporter } from 'boost'; // eslint-disable-line
+import type { Tool, Reporter } from 'boost';
 import type Driver from './Driver';
 
 export default class Script<To: Object = {}> extends Module<To> {

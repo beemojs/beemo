@@ -10,11 +10,11 @@ import fs from 'fs-extra';
 import parseArgs from 'yargs-parser';
 import Config from './execute/Config';
 
-import type { ExecuteConfig, Execution, BeemoContext } from './types';
+import type { DriverContext, ExecuteConfig, Execution } from './types';
 
 const OPTION_PATTERN: RegExp = /-?-[-a-z0-9]+/ig;
 
-export default class ExecuteRoutine extends Routine<ExecuteConfig, BeemoContext> {
+export default class ExecuteRoutine extends Routine<ExecuteConfig, DriverContext> {
   bootstrap() {
     this.config = new Config(this.config);
   }
@@ -128,10 +128,13 @@ export default class ExecuteRoutine extends Routine<ExecuteConfig, BeemoContext>
   includeConfigOption(args: string[]): Promise<string[]> {
     const { configPaths, primaryDriver } = this.context;
 
-    args.push(
-      primaryDriver.metadata.configOption,
-      configPaths.find(path => path.endsWith(primaryDriver.metadata.configName)),
-    );
+    args.push(primaryDriver.metadata.configOption);
+
+    const configPath = configPaths.find(path => path.endsWith(primaryDriver.metadata.configName));
+
+    if (configPath) {
+      args.push(configPath);
+    }
 
     return Promise.resolve(args);
   }

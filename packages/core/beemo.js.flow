@@ -18,7 +18,7 @@ declare module '@beemo/core' {
     args: string[],
     configRoot: string,
     root: string,
-    script: ?Script,
+    script: ?Script<Object>,
     scriptName: string,
     scriptPath: string,
   };
@@ -71,7 +71,8 @@ declare module '@beemo/core' {
   }
 
   declare export default class Beemo {
-    context: Context;
+    driverContext: DriverContext;
+    scriptContext: ScriptContext;
     tool: Tool<Driver, Reporter<Object>>;
 
     constructor(argv: string[]): this;

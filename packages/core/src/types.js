@@ -26,6 +26,11 @@ export type Execution = {
   timedOut: boolean,
 };
 
+export type DotfilesContext = {
+  configRoot: string,
+  root: string,
+};
+
 export type DriverContext = {
   args: string[],
   argsObject: Object,
@@ -40,7 +45,7 @@ export type ScriptContext = {
   args: string[],
   configRoot: string,
   root: string,
-  script: ?Script,
+  script: ?Script<Object>,
   scriptName: string,
   scriptPath: string,
 };

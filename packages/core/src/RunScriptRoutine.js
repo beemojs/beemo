@@ -9,7 +9,9 @@ import { ModuleLoader, Routine } from 'boost';
 import parseArgs from 'yargs-parser';
 import Script from './Script';
 
-export default class RunScriptRoutine extends Routine {
+import type { ScriptContext } from './types';
+
+export default class RunScriptRoutine extends Routine<Object, ScriptContext> {
   execute(scriptName: string): Promise<string[]> {
     this.task('Loading script', this.loadScript);
     this.task('Running script', this.runScript);
@@ -20,7 +22,7 @@ export default class RunScriptRoutine extends Routine {
   /**
    * Attempt to load a script from the configuration module.
    */
-  loadScript(scriptName: string): Promise<Script> {
+  loadScript(scriptName: string): Promise<Script<Object>> {
     const filePath = path.join(this.context.configRoot, 'scripts', `${scriptName}.js`);
     const loader = new ModuleLoader(this.tool, 'script', Script);
 
@@ -39,7 +41,7 @@ export default class RunScriptRoutine extends Routine {
   /**
    * Run the script while also parsing arguments to use as options.
    */
-  runScript(script: Script): Promise<*> {
+  runScript(script: Script<Object>): Promise<*> {
     const { args } = this.context;
 
     this.tool.debug(`Executing script with args "${args.join(' ')}"`);

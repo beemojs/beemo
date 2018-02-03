@@ -30,7 +30,7 @@
     "@milesj/build-tool-config": "0.50.0"
   },
   "dependencies": {
-    "boost": "^0.29.0",
+    "boost": "^0.29.1",
     "chalk": "^2.3.0",
     "copy": "^0.3.1",
     "fs-extra": "^5.0.0",

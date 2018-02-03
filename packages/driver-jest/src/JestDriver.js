@@ -6,6 +6,8 @@
 
 import { Driver } from '@beemo/core';
 
+import type { Execution } from '@beemo/core';
+
 // Success: Writes passed tests to stderr (Bug? https://github.com/facebook/jest/issues/5064)
 // Failure: Writes failed tests to stderr
 export default class JestDriver extends Driver {

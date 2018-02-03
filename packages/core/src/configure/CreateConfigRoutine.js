@@ -11,9 +11,9 @@ import parseArgs from 'yargs-parser';
 import { Routine } from 'boost';
 import Driver from '../Driver';
 
-import type { BeemoContext } from '../types';
+import type { DriverContext } from '../types';
 
-export default class CreateConfigRoutine extends Routine<Object, BeemoContext> {
+export default class CreateConfigRoutine extends Routine<Object, DriverContext> {
   driver: Driver;
 
   /**
