@@ -7,7 +7,7 @@
     "coverage": "run-coverage",
     "docs": "cp ./README.md ./packages/core/README.md",
     "eslint": "run-linter ./src ./tests ./packages/*/{src,tests}",
-    "flow": "type-check",
+    "flow": "yarn run beemo flow check",
     "jest": "run-tests",
     "pretest": "yarn run eslint",
     "assemble": "yarn run clean && yarn run bootstrap && yarn run build && yarn test",

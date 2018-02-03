@@ -10,9 +10,9 @@ import Config from './configure/Config';
 import CreateConfigRoutine from './configure/CreateConfigRoutine';
 import Driver from './Driver';
 
-import type { ConfigureConfig, BeemoContext } from './types';
+import type { ConfigureConfig, DriverContext } from './types';
 
-export default class ConfigureRoutine extends Routine<ConfigureConfig, BeemoContext> {
+export default class ConfigureRoutine extends Routine<ConfigureConfig, DriverContext> {
   bootstrap() {
     this.config = new Config(this.config);
   }

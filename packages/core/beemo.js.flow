@@ -1,18 +1,29 @@
-import { Plugin } from 'boost';
+import { Module, Plugin } from 'boost';
 
 declare module '@beemo/core' {
   import type { Event, EventListener, Tool, Reporter } from 'boost';
   import typeof Yargs from 'yargs';
 
-  declare export type Context = {
+  declare export type Context = {|
     args: string[],
+    configRoot: string,
+    root: string,
+  |};
+
+  declare export type DriverContext = {|
+    ...Context,
     argsObject: Object,
     configPaths: string[],
-    configRoot: string,
     drivers: Driver[],
     primaryDriver: Driver,
-    root: string,
-  };
+  |};
+
+  declare export type ScriptContext = {|
+    ...Context,
+    script: ?Script,
+    scriptName: string,
+    scriptPath: string,
+  |};
 
   declare export type Execution = {
     cmd: string,
@@ -42,6 +53,11 @@ declare module '@beemo/core' {
     env: { [key: string]: string },
   };
 
+  declare export class Script extends Module<Object> {
+    parse(): Object;
+    run(options: Object, tool: Tool<Driver, Reporter<Object>>): Promise<*>;
+  }
+
   declare export class Driver extends Plugin<DriverOptions> {
     metadata: DriverMetadata;
     options: DriverOptions;
@@ -57,14 +73,14 @@ declare module '@beemo/core' {
   }
 
   declare export default class Beemo {
-    context: Context;
+    argv: string[];
     tool: Tool<Driver, Reporter<Object>>;
 
     constructor(argv: string[]): this;
-    cleanUpOnFailure(event: Event, code: number): void;
+    createContext<T: Object>(context?: Object, slice?: number): T;
     getConfigModuleRoot(): string;
-    inheritOptions(options: Object): this;
-    executeDriver(driverName: string, args?: string[]): Promise<*>;
+    executeDriver(driverName: string): Promise<*>;
+    executeScript(scriptName: string): Promise<*>;
     syncDotfiles(): Promise<*>;
   }
 }

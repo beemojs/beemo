@@ -10,11 +10,11 @@ import fs from 'fs-extra';
 import parseArgs from 'yargs-parser';
 import Config from './execute/Config';
 
-import type { ExecuteConfig, Execution, BeemoContext } from './types';
+import type { DriverContext, ExecuteConfig, Execution } from './types';
 
 const OPTION_PATTERN: RegExp = /-?-[-a-z0-9]+/ig;
 
-export default class ExecuteRoutine extends Routine<ExecuteConfig, BeemoContext> {
+export default class ExecuteRoutine extends Routine<ExecuteConfig, DriverContext> {
   bootstrap() {
     this.config = new Config(this.config);
   }
@@ -127,11 +127,14 @@ export default class ExecuteRoutine extends Routine<ExecuteConfig, BeemoContext>
    */
   includeConfigOption(args: string[]): Promise<string[]> {
     const { configPaths, primaryDriver } = this.context;
+    const configPath = configPaths.find(path => path.endsWith(primaryDriver.metadata.configName));
 
-    args.push(
-      primaryDriver.metadata.configOption,
-      configPaths.find(path => path.endsWith(primaryDriver.metadata.configName)),
-    );
+    if (configPath) {
+      args.push(
+        primaryDriver.metadata.configOption,
+        configPath,
+      );
+    }
 
     return Promise.resolve(args);
   }
@@ -148,20 +151,20 @@ export default class ExecuteRoutine extends Routine<ExecuteConfig, BeemoContext>
       `Executing command ${chalk.magenta(driver.metadata.bin)} with args "${args.join(' ')}"`,
     );
 
-    this.tool.emit('execute', [driver, args, argsObject]);
+    this.tool.emit('execute-driver', [driver, args, argsObject]);
 
     return this.executeCommand(driver.metadata.bin, args, options)
       .then((response) => {
         driver.handleSuccess(response);
 
-        this.tool.emit('successful-execute', [driver, response]);
+        this.tool.emit('successful-driver', [driver, response]);
 
         return response;
       })
       .catch((error) => {
         driver.handleFailure(error);
 
-        this.tool.emit('failed-execute', [driver, error]);
+        this.tool.emit('failed-driver', [driver, error]);
 
         throw error;
       });

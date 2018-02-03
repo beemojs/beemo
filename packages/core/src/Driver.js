@@ -119,13 +119,13 @@ export default class Driver extends Plugin<DriverOptions> {
    */
   setMetadata(metadata: Object): this {
     this.metadata = new Options(metadata, {
-      bin: string().match(/^[-a-z0-9]+$/),
+      bin: string().match(/^[-a-z0-9]+$/).required(),
       configName: string().required(),
       configOption: string('--config'),
       dependencies: array(string()),
       description: string().empty(),
       helpOption: string('--help'),
-      title: string(),
+      title: string().required(),
       useConfigOption: bool(),
     }, {
       name: this.constructor.name,

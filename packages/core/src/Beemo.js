@@ -4,22 +4,23 @@
  * @flow
  */
 
+/* eslint-disable no-magic-numbers */
+
 import { Pipeline, Tool } from 'boost';
 import chalk from 'chalk';
 import fs from 'fs-extra';
 import path from 'path';
 import ConfigureRoutine from './ConfigureRoutine';
 import ExecuteRoutine from './ExecuteRoutine';
+import RunScriptRoutine from './RunScriptRoutine';
 import SyncDotfilesRoutine from './SyncDotfilesRoutine';
 
 import type { Event, Reporter } from 'boost'; // eslint-disable-line
-import type { BeemoContext } from './types';
+import type { Context, DriverContext, ScriptContext } from './types';
 import type Driver from './Driver';
 
 export default class Beemo {
   argv: string[];
-
-  context: BeemoContext;
 
   tool: Tool<Driver, Reporter<Object>>;
 
@@ -39,22 +40,20 @@ export default class Beemo {
 
     // Immediately load config and plugins
     this.tool.initialize();
-
-    // Handle exit failures
-    this.tool.on('exit', this.cleanUpOnFailure);
   }
 
   /**
-   * Delete config files on a failure.
+   * Create a re-usable context for each pipeline.
    */
-  cleanUpOnFailure = (event: Event, code: number) => {
-    if (code > 0 && this.context) {
-      // Must not be async!
-      this.context.configPaths.forEach((configPath) => {
-        fs.removeSync(configPath);
-      });
-    }
-  };
+  createContext(context?: Object = {}, slice?: number = 3): * {
+    return {
+      ...context,
+      // 0 node, 1 beemo, 2 <driver, command>
+      args: this.argv.slice(slice),
+      configRoot: this.getConfigModuleRoot(),
+      root: this.tool.options.root,
+    };
+  }
 
   /**
    * Validate the configuration module and return its absolute path.
@@ -94,38 +93,69 @@ export default class Beemo {
    */
   executeDriver(driverName: string): Promise<*> {
     const { tool } = this;
-    const configRoot = this.getConfigModuleRoot();
     const primaryDriver = tool.getPlugin(driverName);
-
-    this.context = {
-      // 0 node, 1 beemo, 2 driver
-      args: this.argv.slice(3),
+    const context: DriverContext = this.createContext({
       argsObject: {},
       configPaths: [],
-      configRoot,
       drivers: [primaryDriver],
       primaryDriver,
-      root: this.tool.options.root,
-    };
+    });
 
-    this.tool.emit('run', [primaryDriver, this.context]);
+    // Delete config files on failure
+    tool.on('exit', (event, code) => {
+      if (code === 0) {
+        return;
+      }
 
-    this.tool.debug(`Running with ${chalk.magenta(primaryDriver.name)} driver`);
+      // Must not be async!
+      context.configPaths.forEach((configPath) => {
+        fs.removeSync(configPath);
+      });
+    });
+
+    tool.emit('driver', [driverName, context]);
+
+    tool.debug(`Running with ${driverName} driver`);
 
     return new Pipeline(tool)
       .pipe(new ConfigureRoutine('configure', 'Generating configurations'))
-      .pipe(new ExecuteRoutine('execute', 'Executing driver'))
-      .run(driverName, this.context);
+      .pipe(new ExecuteRoutine('execute', `Executing ${driverName} driver`))
+      .run(driverName, context);
+  }
+
+  /**
+   * Run a script found within the configuration module.
+   */
+  executeScript(scriptName: string): Promise<*> {
+    const { tool } = this;
+    const context: ScriptContext = this.createContext({
+      script: null,
+      scriptName,
+      scriptPath: '',
+    }, 4);
+
+    tool.emit('script', [scriptName, context]);
+
+    tool.debug(`Running with ${scriptName} script`);
+
+    return new Pipeline(tool)
+      .pipe(new RunScriptRoutine('script', `Executing ${scriptName} script`))
+      .run(scriptName, context);
   }
 
   /**
    * Sync dotfiles from the configuration module.
    */
   syncDotfiles(): Promise<*> {
-    this.tool.emit('sync');
+    const { tool } = this;
+    const context: Context = this.createContext();
 
-    return new Pipeline(this.tool)
+    tool.emit('dotfiles', [context]);
+
+    tool.debug('Running dotfiles command');
+
+    return new Pipeline(tool)
       .pipe(new SyncDotfilesRoutine('sync', 'Syncing dotfiles'))
-      .run(this.getConfigModuleRoot());
+      .run(null, context);
   }
 }
