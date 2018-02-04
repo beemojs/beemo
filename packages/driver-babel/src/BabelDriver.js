@@ -21,7 +21,7 @@ export default class BabelDriver extends Driver {
         description: 'Transpile files with Babel.',
         title: 'Babel',
       })
-      .on('execute', this.handleExecute);
+      .on('execute-driver', this.handleCleanTarget);
   }
 
   bootstrapCommand(command: Yargs) {
@@ -33,7 +33,10 @@ export default class BabelDriver extends Driver {
       });
   }
 
-  handleExecute(event: Event, driver: Driver, args: string[], options: Object) {
+  /**
+   * Automatically clean the target folder if --out-dir is used.
+   */
+  handleCleanTarget(event: Event, driver: Driver, args: string[], options: Object) {
     if (options.clean && options.outDir) {
       rimraf.sync(path.resolve(options.outDir));
     }

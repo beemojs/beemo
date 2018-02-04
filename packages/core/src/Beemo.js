@@ -116,6 +116,9 @@ export default class Beemo {
       });
     });
 
+    // Make the context available in the current driver
+    primaryDriver.context = context;
+
     tool.emit('driver', [driverName, context]);
 
     tool.debug(`Running with ${driverName} driver`);

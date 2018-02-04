@@ -8,6 +8,7 @@ import { Plugin } from 'boost';
 import merge from 'lodash/merge';
 import Options, { array, bool, number, object, string, union } from 'optimal';
 
+import type { DriverContext } from '@beemo/core';
 import type { EventListener } from 'boost';
 import typeof Yargs from 'yargs';
 import type { Execution } from './types';
@@ -30,6 +31,8 @@ type Metadata = {
 };
 
 export default class Driver extends Plugin<DriverOptions> {
+  context: DriverContext;
+
   metadata: Metadata = {
     bin: '',
     configName: '',
@@ -106,10 +109,13 @@ export default class Driver extends Plugin<DriverOptions> {
   }
 
   /**
-   * Easily bind event listeners.
+   * Only register listeners for the currently active driver.
+   * This should avoid non-running drivers from colliding.
    */
   on(eventName: string, listener: EventListener): this {
-    this.tool.on(eventName, listener);
+    if (this.context) {
+      this.tool.on(eventName, listener);
+    }
 
     return this;
   }

@@ -59,6 +59,7 @@ declare module '@beemo/core' {
   }
 
   declare export class Driver extends Plugin<DriverOptions> {
+    context: DriverContext;
     metadata: DriverMetadata;
     options: DriverOptions;
 
