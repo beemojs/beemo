@@ -13,11 +13,13 @@ import Beemo from '@beemo/core';
 import corePackage from '@beemo/core/package.json';
 import cliPackage from '../package.json';
 
+const peerVersion = cliPackage.peerDependencies['@beemo/core'];
+
 if (!semver.satisfies(cliPackage.version, `^${corePackage.version}`)) {
   console.error(chalk.red(`@beemo/cli version out of date; must be ^${corePackage.version}.`));
   process.exit(1);
 
-} else if (!semver.satisfies(corePackage.version, cliPackage.peerDependencies['@beemo/core'])) {
+} else if (peerVersion.charAt(1) !== '0' && !semver.satisfies(corePackage.version, peerVersion)) {
   console.error(chalk.red('@beemo/core mismatched version. Please keep core and cli package versions in sync.'));
   process.exit(2);
 }
