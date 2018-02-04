@@ -44,6 +44,7 @@ TODO
   * [Overriding Config](#overriding-config)
 * [Creating A Driver](#creating-a-driver)
 * [Pro Tips](#pro-tips)
+  * [Local Beemo Setup](#local-beemo-setup)
   * [Editor Integration](#editor-integration)
 
 ### Repository Setup
@@ -221,10 +222,12 @@ npm publish --access=public
 
 You can also set the access in `package.json`.
 
-```
-"publishConfig": {
-  "access": "public"
-},
+```json
+{
+  "publishConfig": {
+    "access": "public"
+  }
+}
 ```
 
 ### Consumer Setup
@@ -344,7 +347,7 @@ That being said, consistently remembering the correct commands and arguments to 
     "posttest": "yarn run flow --silent",
     "pretest": "yarn run eslint --silent",
     "test": "yarn run jest --silent"
-  },
+  }
 }
 ```
 
@@ -386,6 +389,24 @@ TODO
 
 Some useful tips on utilizing Beemo like a pro!
 
+#### Local Beemo Setup
+
+Beemo requires an external Node module (the configuration module) to run correctly, but technically,
+it can be setup locally to not require an external module. This is perfect for large applications,
+monorepos, or for testing your configuration module itself!
+
+In your `package.json` Beemo config, use `@local` instead of the name of your configuration
+module. This will use the current working directory (`process.cwd()`) instead of the Node module
+path.
+
+```json
+{
+  "beemo": {
+    "config": "@local"
+  }
+}
+```
+
 #### Editor Integration
 
 By default, Beemo generates local config files before execution, and then removes them. But some
@@ -396,6 +417,7 @@ First, add the config file names to `dotfiles/gitignore` for each driver you hav
 configuration module (be sure to sync afterwards).
 
 ```
+// dotfiles/gitignore
 .eslintrc
 .prettierrc
 ```
