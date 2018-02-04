@@ -109,13 +109,10 @@ export default class Driver extends Plugin<DriverOptions> {
   }
 
   /**
-   * Only register listeners for the currently active driver.
-   * This should avoid non-running drivers from colliding.
+   * Easily register events in the tool.
    */
   on(eventName: string, listener: EventListener): this {
-    if (this.context) {
-      this.tool.on(eventName, listener);
-    }
+    this.tool.on(eventName, listener);
 
     return this;
   }

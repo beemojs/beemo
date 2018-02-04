@@ -119,6 +119,9 @@ export default class Beemo {
     // Make the context available in the current driver
     primaryDriver.context = context;
 
+    // Namespace this pipeline
+    tool.setEventNamespace(driverName);
+
     tool.emit('driver', [driverName, context]);
 
     tool.debug(`Running with ${driverName} driver`);
@@ -140,6 +143,9 @@ export default class Beemo {
       scriptPath: '',
     }, 4);
 
+    // Namespace this pipeline
+    tool.setEventNamespace(scriptName);
+
     tool.emit('script', [scriptName, context]);
 
     tool.debug(`Running with ${scriptName} script`);
@@ -155,6 +161,9 @@ export default class Beemo {
   syncDotfiles(): Promise<*> {
     const { tool } = this;
     const context: Context = this.createContext();
+
+    // Namespace this pipeline
+    tool.setEventNamespace('beemo');
 
     tool.emit('dotfiles', [context]);
 

@@ -21,7 +21,7 @@ export default class BabelDriver extends Driver {
         description: 'Transpile files with Babel.',
         title: 'Babel',
       })
-      .on('execute-driver', this.handleCleanTarget);
+      .on('babel.execute-driver', this.handleCleanTarget);
   }
 
   bootstrapCommand(command: Yargs) {
