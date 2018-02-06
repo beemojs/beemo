@@ -27,7 +27,7 @@
     "mocha": "^5.0.0"
   },
   "peerDependencies": {
-    "@beemo/core": "^0.10.0",
+    "@beemo/core": "^0.10.1",
     "mocha": "^5.0.0"
   }
 }
