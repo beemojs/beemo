@@ -1176,9 +1176,9 @@ boom@5.x.x:
   dependencies:
     hoek "4.x.x"
 
-boost@^0.30.0:
-  version "0.30.0"
-  resolved "https://registry.npmjs.org/boost/-/boost-0.30.0.tgz#b7248d8dd87397c7cd8238775fbb9e1c2d6943e3"
+boost@^0.31.0:
+  version "0.31.0"
+  resolved "https://registry.npmjs.org/boost/-/boost-0.31.0.tgz#8288dfc20275279df9a44e530f9736aa65701d43"
   dependencies:
     chalk "^2.3.0"
     elegant-spinner "^1.0.1"
@@ -1186,7 +1186,7 @@ boost@^0.30.0:
     figures "^2.0.0"
     glob "^7.1.2"
     json5 "^0.5.1"
-    lodash "^4.17.2"
+    lodash "^4.17.5"
     log-update "^2.3.0"
     optimal "^0.14.0"
     pluralize "^7.0.0"
@@ -2505,6 +2505,48 @@ eslint@4.5.0:
 eslint@^4.16.0:
   version "4.16.0"
   resolved "https://registry.npmjs.org/eslint/-/eslint-4.16.0.tgz#934ada9e98715e1d7bbfd6f6f0519ed2fab35cc1"
+  dependencies:
+    ajv "^5.3.0"
+    babel-code-frame "^6.22.0"
+    chalk "^2.1.0"
+    concat-stream "^1.6.0"
+    cross-spawn "^5.1.0"
+    debug "^3.1.0"
+    doctrine "^2.1.0"
+    eslint-scope "^3.7.1"
+    eslint-visitor-keys "^1.0.0"
+    espree "^3.5.2"
+    esquery "^1.0.0"
+    esutils "^2.0.2"
+    file-entry-cache "^2.0.0"
+    functional-red-black-tree "^1.0.1"
+    glob "^7.1.2"
+    globals "^11.0.1"
+    ignore "^3.3.3"
+    imurmurhash "^0.1.4"
+    inquirer "^3.0.6"
+    is-resolvable "^1.0.0"
+    js-yaml "^3.9.1"
+    json-stable-stringify-without-jsonify "^1.0.1"
+    levn "^0.3.0"
+    lodash "^4.17.4"
+    minimatch "^3.0.2"
+    mkdirp "^0.5.1"
+    natural-compare "^1.4.0"
+    optionator "^0.8.2"
+    path-is-inside "^1.0.2"
+    pluralize "^7.0.0"
+    progress "^2.0.0"
+    require-uncached "^1.0.3"
+    semver "^5.3.0"
+    strip-ansi "^4.0.0"
+    strip-json-comments "~2.0.1"
+    table "^4.0.1"
+    text-table "~0.2.0"
+
+eslint@^4.17.0:
+  version "4.17.0"
+  resolved "https://registry.npmjs.org/eslint/-/eslint-4.17.0.tgz#dc24bb51ede48df629be7031c71d9dc0ee4f3ddf"
   dependencies:
     ajv "^5.3.0"
     babel-code-frame "^6.22.0"
@@ -4336,7 +4378,7 @@ lodash.zip@^4.2.0:
   version "4.2.0"
   resolved "https://registry.yarnpkg.com/lodash.zip/-/lodash.zip-4.2.0.tgz#ec6662e4896408ed4ab6c542a3990b72cc080020"
 
-lodash@^4.0.0, lodash@^4.1.0, lodash@^4.13.1, lodash@^4.14.0, lodash@^4.15.0, lodash@^4.17.2, lodash@^4.17.4, lodash@^4.2.0, lodash@^4.2.1, lodash@^4.3.0:
+lodash@^4.0.0, lodash@^4.1.0, lodash@^4.13.1, lodash@^4.14.0, lodash@^4.15.0, lodash@^4.17.4, lodash@^4.2.0, lodash@^4.2.1, lodash@^4.3.0:
   version "4.17.4"
   resolved "https://registry.yarnpkg.com/lodash/-/lodash-4.17.4.tgz#78203a4d1c328ae1d86dca6460e369b57f4055ae"
 
