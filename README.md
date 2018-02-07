@@ -254,15 +254,13 @@ property that matches the name of your configuration module, or another third-pa
 }
 ```
 
-> Configuration can also be defined in a `config/beemo.js` file.
-
 ##### Options
 
 * `config` (string) - Name of your configuration module.
 * `configure.parallel` (boolean) - Create configuration files in parallel. Defaults to `true`.
 * `debug` (boolean) - Enable debug output. Can be toggled with `--debug`. Defaults to `false`.
 * `drivers` (string[]|object[]) - List of drivers to enable for the consumer.
-* `execute.cleanup` (boolean) - Remove generated config files after execution. Defaults to `true`.
+* `execute.cleanup` (boolean) - Remove generated config files after execution. Defaults to `false`.
 * `silent` (boolean) - Hide Beemo output. Can be toggled with `--silent`. Defaults to `false`.
 
 > Periods denote nested objects.
@@ -383,7 +381,7 @@ edit your `package.json` to include a block under `beemo.<driver>`, like so.
 
 ### Creating A Driver
 
-TODO
+Will be available post-alpha.
 
 ### Pro Tips
 
@@ -409,12 +407,13 @@ path.
 
 #### Editor Integration
 
-By default, Beemo generates local config files before execution, and then removes them. But some
-editors require those local files for in-editor functionality (like ESLint and Prettier). To
-support this, we can do something like the following.
+By default, Beemo generates local config files at runtime before execution, and some editors
+utilize those files for in-editor functionality (like ESLint and Prettier). However, these files
+clutter your repository and should not be committed, so let's hide them!
 
-First, add the config file names to `dotfiles/gitignore` for each driver you have installed in your
-configuration module (be sure to sync afterwards).
+To utilize, add file names to `dotfiles/gitignore` (or another VCS) for each driver you have
+installed in your configuration module (be sure to sync afterwards). Also, be sure `cleanup` is
+disabled in your `beemo` config (is `false` by default).
 
 ```
 // dotfiles/gitignore
@@ -422,17 +421,5 @@ configuration module (be sure to sync afterwards).
 .prettierrc
 ```
 
-Then disable `cleanup` in your `beemo` config.
-
-```json
-{
-  "beemo": {
-    "execute": {
-      "cleanup": false
-    }
-  }
-}
-```
-
 With these changes, the local config files will persist after executing a driver, but will also
-be ignored in Git and some editors. Pretty nice huh?
+be ignored in Git. Pretty nice huh?

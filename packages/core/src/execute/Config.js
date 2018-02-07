@@ -10,7 +10,7 @@ import type { ExecuteConfig } from '../types';
 
 export default function Config(config: Object): ExecuteConfig {
   return new Options(config, {
-    cleanup: bool(true),
+    cleanup: bool(),
   }, {
     name: 'ExecuteConfig',
   });
