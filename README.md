@@ -90,23 +90,23 @@ yarn add @beemo/driver-jest jest
 #### Drivers
 
 For each driver you install, there should be an associated `.js` configuration file within a
-`config/` folder, named after the package name (excluding "driver-"). Using the example above,
+`configs/` folder, named after the package name (excluding "driver-"). Using the example above,
 we'd have the following:
 
 ```
-config/
+configs/
   babel.js
   eslint.js
   jest.js
 ```
 
 > The benefit of Beemo is that we can avoid build tool conventions and standardize on a single
-> implementation. No more `.foorc`, `.foorc.js`, or `.foorc.json` nonsense. Just `config/foo.js`.
+> implementation. No more `.foorc`, `.foorc.js`, or `.foorc.json` nonsense. Just `configs/foo.js`.
 
 Each configuration file should return a JavaScript object. Sounds easy enough.
 
 ```js
-// config/babel.js
+// configs/babel.js
 module.exports = {
   presets: [
     ['babel-preset-env', {
@@ -121,7 +121,7 @@ which allows for runtime conditional logic. For example, if `--react` was passed
 the React preset.
 
 ```js
-// config/babel.js
+// configs/babel.js
 module.exports = function (options) {
   const presets = [
     ['babel-preset-env', {

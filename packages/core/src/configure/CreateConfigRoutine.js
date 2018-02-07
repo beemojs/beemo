@@ -102,7 +102,7 @@ export default class CreateConfigRoutine extends Routine<Object, DriverContext> 
    * Load configuration from the node module (the consumer owned package).
    */
   loadConfigFromFilesystem(configs: Object[]): Promise<Object[]> {
-    const { config: { config: moduleName }, configLoader } = this.tool;
+    const { config: { module: moduleName }, configLoader } = this.tool;
     const { name } = this.driver;
 
     // Allow for local development

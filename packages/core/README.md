@@ -90,23 +90,23 @@ yarn add @beemo/driver-jest jest
 #### Drivers
 
 For each driver you install, there should be an associated `.js` configuration file within a
-`config/` folder, named after the package name (excluding "driver-"). Using the example above,
+`configs/` folder, named after the package name (excluding "driver-"). Using the example above,
 we'd have the following:
 
 ```
-config/
+configs/
   babel.js
   eslint.js
   jest.js
 ```
 
 > The benefit of Beemo is that we can avoid build tool conventions and standardize on a single
-> implementation. No more `.foorc`, `.foorc.js`, or `.foorc.json` nonsense. Just `config/foo.js`.
+> implementation. No more `.foorc`, `.foorc.js`, or `.foorc.json` nonsense. Just `configs/foo.js`.
 
 Each configuration file should return a JavaScript object. Sounds easy enough.
 
 ```js
-// config/babel.js
+// configs/babel.js
 module.exports = {
   presets: [
     ['babel-preset-env', {
@@ -121,7 +121,7 @@ which allows for runtime conditional logic. For example, if `--react` was passed
 the React preset.
 
 ```js
-// config/babel.js
+// configs/babel.js
 module.exports = function (options) {
   const presets = [
     ['babel-preset-env', {
@@ -243,22 +243,22 @@ development dependency hell, just a single dependency.
 yarn add @<username>/build-tool-config --dev
 ```
 
-That being said, add a `beemo` configuration block to your `package.json`, with a `config`
+That being said, add a `beemo` configuration block to your `package.json`, with a `module`
 property that matches the name of your configuration module, or another third-party module.
 
 ```json
 {
   "beemo": {
-    "config": "@<username>/build-tool-config"
+    "module": "@<username>/build-tool-config"
   }
 }
 ```
 
-> Configuration can also be defined in a `config/beemo.js` file.
+> Configuration can also be defined in a `configs/beemo.js` file.
 
 ##### Options
 
-* `config` (string) - Name of your configuration module.
+* `module` (string) - Name of your configuration module.
 * `configure.parallel` (boolean) - Create configuration files in parallel. Defaults to `true`.
 * `debug` (boolean) - Enable debug output. Can be toggled with `--debug`. Defaults to `false`.
 * `drivers` (string[]|object[]) - List of drivers to enable for the consumer.
@@ -288,7 +288,7 @@ to enable. For example, if we want to use Babel, ESLint, and Jest, we would have
 ```json
 {
   "beemo": {
-    "config": "@<username>/build-tool-config",
+    "module": "@<username>/build-tool-config",
     "drivers": ["babel", "eslint", "jest"]
   }
 }
@@ -299,7 +299,7 @@ Furthermore, each driver can be configured with options by using an object, like
 ```json
 {
   "beemo": {
-    "config": "@<username>/build-tool-config",
+    "module": "@<username>/build-tool-config",
     "drivers": [
       "babel",
       {
@@ -367,7 +367,7 @@ edit your `package.json` to include a block under `beemo.<driver>`, like so.
 ```json
 {
   "beemo": {
-    "config": "@<username>/build-tool-config",
+    "module": "@<username>/build-tool-config",
     "drivers": ["eslint"],
     "eslint": {
       "rules": {
@@ -402,7 +402,7 @@ path.
 ```json
 {
   "beemo": {
-    "config": "@local"
+    "module": "@local"
   }
 }
 ```

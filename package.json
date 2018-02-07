@@ -43,7 +43,7 @@
     "*.map"
   ],
   "beemo": {
-    "config": "@local",
+    "module": "@local",
     "drivers": [
       "babel",
       {

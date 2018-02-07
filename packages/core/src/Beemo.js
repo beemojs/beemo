@@ -53,7 +53,7 @@ export default class Beemo {
     return {
       ...context,
       args,
-      configRoot: this.getConfigModuleRoot(),
+      moduleRoot: this.getConfigModuleRoot(),
       root: this.tool.options.root,
       yargs: parseArgs(args),
     };
@@ -63,28 +63,28 @@ export default class Beemo {
    * Validate the configuration module and return its absolute path.
    */
   getConfigModuleRoot(): string {
-    const { config } = this.tool.config;
+    const { module } = this.tool.config;
 
     this.tool.debug('Locating configuration module root');
 
-    if (!config) {
+    if (!module) {
       throw new Error(
-        'Beemo requires a "beemo.config" property within your package.json. ' +
+        'Beemo requires a "beemo.module" property within your package.json. ' +
         'This property is the name of a module that houses your configuration files.',
       );
     }
 
     // Allow for local development
-    if (config === '@local') {
+    if (module === '@local') {
       this.tool.debug(`Using ${chalk.yellow('@local')} configuration module`);
 
       return process.cwd();
     }
 
-    const rootPath = path.join(process.cwd(), 'node_modules', config);
+    const rootPath = path.join(process.cwd(), 'node_modules', module);
 
     if (!fs.existsSync(rootPath)) {
-      throw new Error('Module defined in "beemo.config" could not be found.');
+      throw new Error('Module defined in "beemo.module" could not be found.');
     }
 
     this.tool.debug(`Found configuration module root path: ${chalk.cyan(rootPath)}`);

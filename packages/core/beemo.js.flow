@@ -6,7 +6,7 @@ declare module '@beemo/core' {
 
   declare export type Context = {|
     args: string[],
-    configRoot: string,
+    moduleRoot: string,
     root: string,
     yargs: Object,
   |};

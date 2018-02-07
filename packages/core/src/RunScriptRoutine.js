@@ -23,7 +23,7 @@ export default class RunScriptRoutine extends Routine<Object, ScriptContext> {
    * Attempt to load a script from the configuration module.
    */
   loadScript(scriptName: string): Promise<Script> {
-    const filePath = path.join(this.context.configRoot, 'scripts', `${scriptName}.js`);
+    const filePath = path.join(this.context.moduleRoot, 'scripts', `${scriptName}.js`);
     const loader = new ModuleLoader(this.tool, 'script', Script);
 
     this.tool.debug('Loading script');

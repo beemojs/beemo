@@ -17,14 +17,14 @@ export default class SyncDotfilesRoutine extends Routine<Object, Context> {
     this.task('Copying files', this.copyFilesFromConfigModule);
     this.task('Renaming files', this.renameFilesWithDot);
 
-    return this.serializeTasks(this.context.configRoot);
+    return this.serializeTasks(this.context.moduleRoot);
   }
 
   /**
    * Copy all files from the config module's "dotfiles/" folder.
    */
-  copyFilesFromConfigModule(configRoot: string): Promise<string[]> {
-    const dotfilePath = path.join(configRoot, 'dotfiles/*');
+  copyFilesFromConfigModule(moduleRoot: string): Promise<string[]> {
+    const dotfilePath = path.join(moduleRoot, 'dotfiles/*');
 
     return new Promise((resolve, reject) => {
       copy(dotfilePath, this.tool.options.root, (error, files) => {

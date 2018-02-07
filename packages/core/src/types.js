@@ -29,7 +29,7 @@ export type Execution = {
 
 export type Context = {|
   args: string[],
-  configRoot: string,
+  moduleRoot: string,
   root: string,
   yargs: Object,
 |};
