@@ -13,6 +13,7 @@ export type ConfigureConfig = {
 
 export type ExecuteConfig = {
   cleanup: boolean,
+  parallelArgs: string[],
 };
 
 export type Execution = {

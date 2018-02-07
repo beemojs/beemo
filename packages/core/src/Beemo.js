@@ -12,7 +12,7 @@ import fs from 'fs-extra';
 import path from 'path';
 import parseArgs from 'yargs-parser';
 import ConfigureRoutine from './ConfigureRoutine';
-import ExecuteRoutine from './ExecuteRoutine';
+import RunDriverRoutine from './RunDriverRoutine';
 import RunScriptRoutine from './RunScriptRoutine';
 import SyncDotfilesRoutine from './SyncDotfilesRoutine';
 
@@ -128,7 +128,7 @@ export default class Beemo {
 
     return new Pipeline(tool)
       .pipe(new ConfigureRoutine('configure', 'Generating configurations'))
-      .pipe(new ExecuteRoutine('execute', `Executing ${driverName} driver`))
+      .pipe(new RunDriverRoutine('execute', `Executing ${driverName} driver`))
       .run(driverName, context);
   }
 

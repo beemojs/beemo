@@ -8,9 +8,9 @@ import { Routine } from 'boost';
 import chalk from 'chalk';
 import fs from 'fs-extra';
 import parseArgs from 'yargs-parser';
-import Config from './execute/Config';
+import Config from './Config';
 
-import type { DriverContext, ExecuteConfig, Execution } from './types';
+import type { DriverContext, ExecuteConfig, Execution } from '../types';
 
 const OPTION_PATTERN: RegExp = /-?-[-a-z0-9]+/ig;
 
@@ -45,7 +45,7 @@ export default class ExecuteRoutine extends Routine<ExecuteConfig, DriverContext
     this.task('Including config option', this.includeConfigOption)
       .skip(!primaryDriver.metadata.useConfigOption);
 
-    this.task(`Running ${primaryDriver.metadata.bin} command`, this.runCommandWithArgs);
+    this.task('Running command', this.runCommandWithArgs);
 
     this.task('Deleting temporary config files', this.deleteConfigFiles)
       .skip(!cleanup);
@@ -61,8 +61,12 @@ export default class ExecuteRoutine extends Routine<ExecuteConfig, DriverContext
     const { args: commandArgs, primaryDriver: driver } = this.context;
     const { args: driverArgs, env } = driver.options;
     const args = [
+      // Passed by the driver
       ...driverArgs,
+      // Passed on the command line
       ...commandArgs,
+      // Parallel args passed on the command line
+      ...this.config.parallelArgs,
     ];
 
     // Since we combine multiple args, we need to rebuild this.
