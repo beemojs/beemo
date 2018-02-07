@@ -6,39 +6,15 @@
 
 import { Routine } from 'boost';
 import chalk from 'chalk';
-import fs from 'fs-extra';
 import parseArgs from 'yargs-parser';
-import Config from './Config';
 
-import type { DriverContext, ExecuteConfig, Execution } from '../types';
+import type { DriverContext, Execution } from '../types';
 
 const OPTION_PATTERN: RegExp = /-?-[-a-z0-9]+/ig;
 
-export default class ExecuteRoutine extends Routine<ExecuteConfig, DriverContext> {
-  bootstrap() {
-    this.config = new Config(this.config);
-  }
-
-  /**
-   * Delete all temporary config files.
-   */
-  deleteConfigFiles(): Promise<*[]> {
-    return Promise.all(this.context.configPaths.map((configPath) => {
-      this.tool.debug(`Deleting config file ${chalk.cyan(configPath)}`);
-
-      this.tool.emit('delete-config-file', [configPath]);
-
-      return fs.remove(configPath);
-    }));
-  }
-
-  /**
-   * The ExecuteRoutine handles the process of executing the driver's command
-   * and correctly handling the output.
-   */
+export default class RunCommandRoutine extends Routine<Object, DriverContext> {
   execute(): Promise<*> {
     const { primaryDriver } = this.context;
-    const { cleanup } = this.config;
 
     this.task('Filtering options', this.filterUnknownOptionsFromArgs);
 
@@ -46,9 +22,6 @@ export default class ExecuteRoutine extends Routine<ExecuteConfig, DriverContext
       .skip(!primaryDriver.metadata.useConfigOption);
 
     this.task('Running command', this.runCommandWithArgs);
-
-    this.task('Deleting temporary config files', this.deleteConfigFiles)
-      .skip(!cleanup);
 
     return this.serializeTasks();
   }
@@ -66,7 +39,7 @@ export default class ExecuteRoutine extends Routine<ExecuteConfig, DriverContext
       // Passed on the command line
       ...commandArgs,
       // Parallel args passed on the command line
-      ...this.config.parallelArgs,
+      ...(this.config.parallelArgs || []),
     ];
 
     // Since we combine multiple args, we need to rebuild this.
@@ -87,6 +60,7 @@ export default class ExecuteRoutine extends Routine<ExecuteConfig, DriverContext
       })
       .then((nativeOptions) => {
         const filteredArgs = [];
+        const unknownArgs = [];
         let skipNext = false;
 
         args.forEach((arg, i) => {
@@ -106,6 +80,8 @@ export default class ExecuteRoutine extends Routine<ExecuteConfig, DriverContext
 
             // Not a valid option, exclude
             if (!nativeOptions[option]) {
+              unknownArgs.push(option);
+
               return;
             }
 
@@ -122,6 +98,10 @@ export default class ExecuteRoutine extends Routine<ExecuteConfig, DriverContext
 
           filteredArgs.push(arg);
         });
+
+        if (unknownArgs.length > 0) {
+          this.tool.debug(`Filtered args: ${unknownArgs.join(', ')}`);
+        }
 
         return filteredArgs;
       });

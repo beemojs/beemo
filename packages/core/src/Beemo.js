@@ -11,9 +11,10 @@ import chalk from 'chalk';
 import fs from 'fs-extra';
 import path from 'path';
 import parseArgs from 'yargs-parser';
+import CleanupRoutine from './CleanupRoutine';
 import ConfigureRoutine from './ConfigureRoutine';
-import RunDriverRoutine from './RunDriverRoutine';
-import RunScriptRoutine from './RunScriptRoutine';
+import ExecuteDriverRoutine from './ExecuteDriverRoutine';
+import ExecuteScriptRoutine from './ExecuteScriptRoutine';
 import SyncDotfilesRoutine from './SyncDotfilesRoutine';
 
 import type { Event, Reporter } from 'boost'; // eslint-disable-line
@@ -100,6 +101,7 @@ export default class Beemo {
     const primaryDriver = tool.getPlugin(driverName);
     const context: DriverContext = this.createContext({
       configPaths: [],
+      driverName,
       drivers: [primaryDriver],
       primaryDriver,
     });
@@ -119,7 +121,6 @@ export default class Beemo {
     // Make the context available in the current driver
     primaryDriver.context = context;
 
-    // Namespace this pipeline
     tool.setEventNamespace(driverName);
 
     tool.emit('driver', [driverName, context]);
@@ -127,8 +128,9 @@ export default class Beemo {
     tool.debug(`Running with ${driverName} driver`);
 
     return new Pipeline(tool)
-      .pipe(new ConfigureRoutine('configure', 'Generating configurations'))
-      .pipe(new RunDriverRoutine('execute', `Executing ${driverName} driver`))
+      .pipe(new ConfigureRoutine('config', 'Generating configurations'))
+      .pipe(new ExecuteDriverRoutine('driver', 'Executing driver'))
+      .pipe(new CleanupRoutine('cleanup', 'Cleaning up'))
       .run(driverName, context);
   }
 
@@ -143,7 +145,6 @@ export default class Beemo {
       scriptPath: '',
     }, 4);
 
-    // Namespace this pipeline
     tool.setEventNamespace(scriptName);
 
     tool.emit('script', [scriptName, context]);
@@ -151,7 +152,7 @@ export default class Beemo {
     tool.debug(`Running with ${scriptName} script`);
 
     return new Pipeline(tool)
-      .pipe(new RunScriptRoutine('script', `Executing ${scriptName} script`))
+      .pipe(new ExecuteScriptRoutine('script', `Executing ${scriptName} script`))
       .run(scriptName, context);
   }
 
@@ -162,7 +163,6 @@ export default class Beemo {
     const { tool } = this;
     const context: Context = this.createContext();
 
-    // Namespace this pipeline
     tool.setEventNamespace('beemo');
 
     tool.emit('dotfiles', [context]);
@@ -170,7 +170,7 @@ export default class Beemo {
     tool.debug('Running dotfiles command');
 
     return new Pipeline(tool)
-      .pipe(new SyncDotfilesRoutine('sync', 'Syncing dotfiles'))
+      .pipe(new SyncDotfilesRoutine('dotfiles', 'Syncing dotfiles'))
       .run(null, context);
   }
 }

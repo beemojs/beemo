@@ -8,12 +8,8 @@ import type Driver from './Driver';
 import type Script from './Script';
 
 export type ConfigureConfig = {
-  parallel: boolean,
-};
-
-export type ExecuteConfig = {
   cleanup: boolean,
-  parallelArgs: string[],
+  parallel: boolean,
 };
 
 export type Execution = {
@@ -37,6 +33,7 @@ export type Context = {|
 export type DriverContext = {|
   ...Context,
   configPaths: string[],
+  driverName: string,
   drivers: Driver[],
   primaryDriver: Driver,
 |};

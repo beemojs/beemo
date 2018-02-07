@@ -9,9 +9,9 @@ import { ModuleLoader, Routine } from 'boost';
 import parseArgs from 'yargs-parser';
 import Script from './Script';
 
-import type { ScriptContext } from './types';
+import type { Execution, ScriptContext } from './types';
 
-export default class RunScriptRoutine extends Routine<Object, ScriptContext> {
+export default class ExecuteScriptRoutine extends Routine<Object, ScriptContext> {
   execute(scriptName: string): Promise<string[]> {
     this.task('Loading script', this.loadScript);
     this.task('Running script', this.runScript);
@@ -44,7 +44,7 @@ export default class RunScriptRoutine extends Routine<Object, ScriptContext> {
   /**
    * Run the script while also parsing arguments to use as options.
    */
-  runScript(script: Script): Promise<*> {
+  runScript(script: Script): Promise<Execution> {
     const { args, yargs } = this.context;
 
     this.tool.debug(`Executing script with args "${args.join(' ')}"`);

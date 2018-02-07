@@ -58,10 +58,10 @@ export default class ConfigureRoutine extends Routine<ConfigureConfig, DriverCon
    * starting from the primary driver (the command that initiated the process).
    */
   resolveDependencies(): Promise<Driver[]> {
-    const { primaryDriver } = this.context;
+    const { driverName, primaryDriver } = this.context;
     const queue = [primaryDriver];
 
-    this.tool.debug(`Resolving dependencies for ${chalk.magenta(primaryDriver.name)}`);
+    this.tool.debug(`Resolving dependencies for ${chalk.magenta(driverName)}`);
 
     while (queue.length) {
       const driver = queue.shift();

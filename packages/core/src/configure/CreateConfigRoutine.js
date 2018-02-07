@@ -16,6 +16,17 @@ import type { DriverContext } from '../types';
 export default class CreateConfigRoutine extends Routine<Object, DriverContext> {
   driver: Driver;
 
+  execute(): Promise<string> {
+    const { name } = this.driver;
+
+    this.task(`Loading external ${name} module config`, this.loadConfigFromFilesystem);
+    this.task(`Loading local ${name} Beemo config`, this.extractConfigFromPackage);
+    this.task(`Merging ${name} config objects`, this.mergeConfigs);
+    this.task(`Creating temporary ${name} config file`, this.createConfigFile);
+
+    return this.serializeTasks([]);
+  }
+
   /**
    * Create a temporary configuration file or pass as an option.
    */
@@ -30,20 +41,6 @@ export default class CreateConfigRoutine extends Routine<Object, DriverContext> 
     this.tool.emit('create-config-file', [configPath, config]);
 
     return fs.writeFile(configPath, this.driver.formatFile(config)).then(() => configPath);
-  }
-
-  /**
-   * Create config by executing tasks in order.
-   */
-  execute(): Promise<string> {
-    const { name } = this.driver;
-
-    this.task(`Loading external ${name} module config`, this.loadConfigFromFilesystem);
-    this.task(`Loading local ${name} Beemo config`, this.extractConfigFromPackage);
-    this.task(`Merging ${name} config objects`, this.mergeConfigs);
-    this.task(`Creating temporary ${name} config file`, this.createConfigFile);
-
-    return this.serializeTasks([]);
   }
 
   /**
