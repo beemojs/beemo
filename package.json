@@ -1,27 +1,24 @@
 {
   "private": true,
-  "name": "beemo",
-  "version": "0.0.0",
+  "name": "beemo-root",
   "scripts": {
     "test": "yarn run jest",
-    "coverage": "run-coverage",
-    "docs": "cp ./README.md ./packages/core/README.md",
-    "eslint": "run-linter ./src ./tests ./packages/*/{src,tests}",
-    "flow": "yarn run beemo flow check",
-    "jest": "run-tests",
+    "coverage": "yarn run jest --coverage",
+    "eslint": "beemo eslint ./packages/*/{src,tests}",
+    "flow": "beemo flow --workspaces",
+    "jest": "beemo jest --workspaces",
+    "prettier": "beemo prettier --write ./README.md ./packages/*/{src,tests}/**/*.{js,json,md}",
     "package": "yarn run clean && yarn run bootstrap && yarn run build && yarn test",
     "bootstrap": "lerna bootstrap",
     "bootstrap:slow": "yarn run bootstrap --concurrency=1",
     "build": "lerna run build",
     "clean": "rimraf ./packages/*/{lib,esm}/ && lerna clean --yes",
-    "publish": "yarn run prerelease && lerna publish",
-    "publish:force": "yarn run prerelease && lerna publish --force-publish=*",
-    "prerelease": "yarn run docs && yarn run package",
-    "updated": "lerna updated",
-    "beemo": "beemo"
+    "release": "lerna publish",
+    "release:force": "yarn run release --force-publish=*",
+    "prerelease": "yarn run package"
   },
   "devDependencies": {
-    "@milesj/build-tool-config": "0.50.0",
+    "@milesj/build-tool-config": "0.61.0",
     "lerna": "^2.8.0"
   },
   "publishConfig": {
@@ -30,47 +27,43 @@
   "workspaces": [
     "packages/*"
   ],
-  "babel": {
-    "presets": "@milesj/build-tool-config/babel"
-  },
-  "eslintConfig": {
-    "extends": "./node_modules/@milesj/build-tool-config/eslint.js"
-  },
-  "eslintIgnore": [
-    "esm/",
-    "lib/",
-    "*.min.js",
-    "*.map"
-  ],
   "beemo": {
     "module": "@local",
     "drivers": [
       "babel",
       {
         "driver": "eslint",
-        "args": ["--color", "--report-unused-disable-directives"]
+        "args": [
+          "--color",
+          "--report-unused-disable-directives"
+        ]
       },
       {
         "driver": "flow",
-        "args": ["--color=auto"]
+        "args": [
+          "--color=auto"
+        ]
       },
       {
         "driver": "jest",
-        "args": ["--colors", "--logHeapUsage"]
+        "args": [
+          "--colors",
+          "--logHeapUsage"
+        ]
       },
       "mocha",
       {
         "driver": "prettier",
-        "args": ["--debug-check", "--write"]
+        "args": [
+          "--debug-check",
+          "--write"
+        ]
       }
     ],
     "eslint": {
       "rules": {
         "import/first": "off"
       }
-    },
-    "execute": {
-      "cleanup": true
     }
   }
 }

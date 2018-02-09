@@ -15,9 +15,6 @@
     "prettier"
   ],
   "main": "./lib/index.js",
-  "scripts": {
-    "build": "build-lib"
-  },
   "engines": {
     "node": ">=6.5.0"
   },
@@ -25,9 +22,6 @@
   "license": "MIT",
   "publishConfig": {
     "access": "public"
-  },
-  "devDependencies": {
-    "@milesj/build-tool-config": "0.50.0"
   },
   "dependencies": {
     "boost": "^0.31.0",

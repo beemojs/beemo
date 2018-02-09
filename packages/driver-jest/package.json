@@ -11,9 +11,6 @@
     "runner"
   ],
   "main": "./lib/index.js",
-  "scripts": {
-    "build": "build-lib"
-  },
   "engines": {
     "node": ">=6.5.0"
   },
@@ -23,8 +20,7 @@
     "access": "public"
   },
   "devDependencies": {
-    "@milesj/build-tool-config": "0.50.0",
-    "jest": "^22.1.4"
+    "jest": "^22.2.1"
   },
   "peerDependencies": {
     "@beemo/core": "^0.10.1",

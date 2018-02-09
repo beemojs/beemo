@@ -11,9 +11,6 @@
     "formatter"
   ],
   "main": "./lib/index.js",
-  "scripts": {
-    "build": "build-lib"
-  },
   "engines": {
     "node": ">=6.5.0"
   },
@@ -23,7 +20,6 @@
     "access": "public"
   },
   "devDependencies": {
-    "@milesj/build-tool-config": "0.50.0",
     "prettier": "^1.10.0"
   },
   "peerDependencies": {

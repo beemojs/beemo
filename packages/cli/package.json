@@ -10,9 +10,6 @@
   "bin": {
     "beemo": "./bin/beemo.js"
   },
-  "scripts": {
-    "build": "build-lib"
-  },
   "engines": {
     "node": ">=6.5.0"
   },
@@ -20,9 +17,6 @@
   "license": "MIT",
   "publishConfig": {
     "access": "public"
-  },
-  "devDependencies": {
-    "@milesj/build-tool-config": "0.50.0"
   },
   "dependencies": {
     "chalk": "^2.3.0",
