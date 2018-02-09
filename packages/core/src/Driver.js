@@ -8,32 +8,14 @@ import { Plugin } from 'boost';
 import merge from 'lodash/merge';
 import Options, { array, bool, number, object, string, union } from 'optimal';
 
-import type { DriverContext } from '@beemo/core';
 import type { EventListener } from 'boost';
 import typeof Yargs from 'yargs';
-import type { Execution } from './types';
-
-type DriverOptions = {
-  args: string[],
-  dependencies: string[],
-  env: { [key: string]: string },
-};
-
-type Metadata = {
-  bin: string,
-  configName: string,
-  configOption: string,
-  dependencies: string[],
-  description: string,
-  helpOption: string,
-  title: string,
-  useConfigOption: boolean,
-};
+import type { DriverContext, DriverOptions, DriverMetadata, Execution } from './types';
 
 export default class Driver extends Plugin<DriverOptions> {
   context: DriverContext;
 
-  metadata: Metadata = {
+  metadata: DriverMetadata = {
     bin: '',
     configName: '',
     configOption: '',
@@ -70,6 +52,18 @@ export default class Driver extends Plugin<DriverOptions> {
    */
   formatFile(data: Object): string {
     return JSON.stringify(data, null, 2);
+  }
+
+  /**
+   * Return a list of dependent drivers.
+   */
+  getDependencies(): string[] {
+    return [
+      // Always required; configured by the driver
+      ...this.metadata.dependencies,
+      // Custom; configured by the consumer
+      ...this.options.dependencies,
+    ];
   }
 
   /**

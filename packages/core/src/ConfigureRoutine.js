@@ -17,11 +17,18 @@ export default class ConfigureRoutine extends Routine<ConfigureConfig, DriverCon
     this.config = new Config(this.config);
   }
 
+  execute(): Promise<string | string[]> {
+    this.task('Resolving dependencies', this.resolveDependencies);
+    this.task('Creating configuration files', this.createConfigFiles);
+
+    return this.serializeTasks();
+  }
+
   /**
    * Pipe a routine for every driver we need to create a configuration for,
    * and then run in parallel.
    */
-  createConfigFiles(drivers: Driver[]): Promise<*> {
+  createConfigFiles(drivers: Driver[]): Promise<string | string[]> {
     const names = drivers.map(driver => {
       const routine = new CreateConfigRoutine(driver.name, driver.metadata.title);
 
@@ -41,17 +48,6 @@ export default class ConfigureRoutine extends Routine<ConfigureConfig, DriverCon
   }
 
   /**
-   * The ConfigureRoutine handles the process of creating a configuration file
-   * for every driver required for the current execution.
-   */
-  execute(): Promise<*> {
-    this.task('Resolving dependencies', this.resolveDependencies);
-    this.task('Creating configuration files', this.createConfigFiles);
-
-    return this.serializeTasks();
-  }
-
-  /**
    * Recursively loop through an driver's dependencies, adding a dependenct driver for each,
    * starting from the primary driver (the command that initiated the process).
    */
@@ -63,12 +59,7 @@ export default class ConfigureRoutine extends Routine<ConfigureConfig, DriverCon
 
     while (queue.length) {
       const driver = queue.shift();
-      const deps = new Set([
-        // Always required; configured by the driver
-        ...driver.metadata.dependencies,
-        // Custom; configured by the consumer
-        ...driver.options.dependencies,
-      ]);
+      const deps = new Set(driver.getDependencies());
 
       deps.forEach(name => {
         this.tool.debug(`  Including dependency ${chalk.magenta(name)}`);

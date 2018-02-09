@@ -4,8 +4,6 @@
  * @flow
  */
 
-/* eslint-disable no-magic-numbers */
-
 import { Pipeline, Tool } from 'boost';
 import chalk from 'chalk';
 import fs from 'fs-extra';
@@ -17,14 +15,12 @@ import ExecuteDriverRoutine from './ExecuteDriverRoutine';
 import ExecuteScriptRoutine from './ExecuteScriptRoutine';
 import SyncDotfilesRoutine from './SyncDotfilesRoutine';
 
-import type { Event, Reporter } from 'boost'; // eslint-disable-line
-import type { Context, DriverContext, ScriptContext } from './types';
-import type Driver from './Driver';
+import type { BeemoTool, Context, DriverContext, ScriptContext } from './types';
 
 export default class Beemo {
   argv: string[];
 
-  tool: Tool<Driver, Reporter<Object>>;
+  tool: BeemoTool;
 
   constructor(argv: string[]) {
     this.argv = argv;
@@ -38,9 +34,9 @@ export default class Beemo {
         configFolder: './configs',
         footer: `🤖  Powered by Beemo v${version}`,
         pluginAlias: 'driver',
-        scoped: true,
+        scoped: true
       },
-      argv,
+      argv
     );
 
     // Immediately load config and plugins
@@ -50,16 +46,13 @@ export default class Beemo {
   /**
    * Create a re-usable context for each pipeline.
    */
-  createContext(context?: Object = {}, slice?: number = 3): * {
-    // 0 node, 1 beemo, 2 <driver, command>
-    const args = this.argv.slice(slice);
-
+  createContext(context?: Object = {}): * {
     return {
       ...context,
-      args,
+      args: this.argv,
       moduleRoot: this.getConfigModuleRoot(),
       root: this.tool.options.root,
-      yargs: parseArgs(args),
+      yargs: parseArgs(this.argv)
     };
   }
 
@@ -74,7 +67,7 @@ export default class Beemo {
     if (!module) {
       throw new Error(
         'Beemo requires a "beemo.module" property within your package.json. ' +
-          'This property is the name of a module that houses your configuration files.',
+          'This property is the name of a module that houses your configuration files.'
       );
     }
 
@@ -106,7 +99,7 @@ export default class Beemo {
       configPaths: [],
       driverName,
       drivers: [primaryDriver],
-      primaryDriver,
+      primaryDriver
     });
 
     // Delete config files on failure
@@ -142,14 +135,11 @@ export default class Beemo {
    */
   executeScript(scriptName: string): Promise<*> {
     const { tool } = this;
-    const context: ScriptContext = this.createContext(
-      {
-        script: null,
-        scriptName,
-        scriptPath: '',
-      },
-      4,
-    );
+    const context: ScriptContext = this.createContext({
+      script: null,
+      scriptName,
+      scriptPath: ''
+    });
 
     tool.setEventNamespace(scriptName);
 

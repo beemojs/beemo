@@ -4,12 +4,32 @@
  * @flow
  */
 
+import type { Tool, Reporter } from 'boost';
 import type Driver from './Driver';
 import type Script from './Script';
+
+export type BeemoTool = Tool<Driver, Reporter<Object>>;
 
 export type ConfigureConfig = {
   cleanup: boolean,
   parallel: boolean,
+};
+
+export type DriverOptions = {
+  args: string[],
+  dependencies: string[],
+  env: { [key: string]: string },
+};
+
+export type DriverMetadata = {
+  bin: string,
+  configName: string,
+  configOption: string,
+  dependencies: string[],
+  description: string,
+  helpOption: string,
+  title: string,
+  useConfigOption: boolean,
 };
 
 export type Execution = {
