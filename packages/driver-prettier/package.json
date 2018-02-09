@@ -2,14 +2,7 @@
   "name": "@beemo/driver-prettier",
   "version": "0.10.1",
   "description": "Prettier driver for Beemo.",
-  "keywords": [
-    "beemo",
-    "beemo-driver",
-    "driver",
-    "prettier",
-    "beautify",
-    "formatter"
-  ],
+  "keywords": ["beemo", "beemo-driver", "driver", "prettier", "beautify", "formatter"],
   "main": "./lib/index.js",
   "engines": {
     "node": ">=6.5.0"

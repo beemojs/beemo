@@ -7,7 +7,7 @@
     "eslint": "beemo eslint ./packages/*/{src,tests}",
     "flow": "beemo flow --workspaces",
     "jest": "beemo jest --workspaces",
-    "prettier": "beemo prettier --write ./README.md ./packages/*/{src,tests}/**/*.{js,json,md}",
+    "prettier": "beemo prettier --write ./README.md ./packages/*/{bin,src,tests}/{,**/}*.js ./packages/*/*.{md,json}",
     "package": "yarn run clean && yarn run bootstrap && yarn run build && yarn test",
     "bootstrap": "lerna bootstrap",
     "bootstrap:slow": "yarn run bootstrap --concurrency=1",

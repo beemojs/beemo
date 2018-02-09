@@ -1,9 +1,10 @@
 # 🤖 Beemo [ALPHA]
+
 [![Build Status](https://travis-ci.org/milesj/beemo.svg?branch=master)](https://travis-ci.org/milesj/beemo)
 
-Manage build tools, their configuration, and commands in a single centralized repository.
-Beemo aims to solve the multi-project maintenance fatigue by removing the following burdens across
-all projects: config and dotfile management, multiple config patterns, up-to-date development
+Manage build tools, their configuration, and commands in a single centralized repository. Beemo aims
+to solve the multi-project maintenance fatigue by removing the following burdens across all
+projects: config and dotfile management, multiple config patterns, up-to-date development
 dependencies, continuous copy and paste, and more.
 
 ### Features
@@ -50,8 +51,8 @@ TODO
 ### Repository Setup
 
 To begin, create and clone a new repository on GitHub (or another VCS). This repository will be
-known as your "configuration module" going forward. I suggest naming it `build-tool-config`,
-as it's straight forward, easy to understand, and defines intent.
+known as your "configuration module" going forward. I suggest naming it `build-tool-config`, as it's
+straight forward, easy to understand, and defines intent.
 
 ```
 git clone git@github.com:<username>/build-tool-config.git
@@ -59,8 +60,8 @@ cd build-tool-config/
 ```
 
 Once cloned, initialize a new NPM package, and provide the name `build-tool-config` with your
-username scope, like `@beemo/build-tool-config`. Why a scope? Because we don't want to
-clutter NPM with dumb packages. It also avoids collisions and easily announces ownership.
+username scope, like `@beemo/build-tool-config`. Why a scope? Because we don't want to clutter NPM
+with dumb packages. It also avoids collisions and easily announces ownership.
 
 ```
 npm init --scope=<username>
@@ -76,8 +77,9 @@ Now that we have a repository, we can install and setup Beemo. It's as easy as..
 yarn add @beemo/core @beemo/cli
 ```
 
-This will only install the core functionality. To support different build tools like Babel,
-ESLint, and Jest, we need to install packages known as "drivers" ([view all available drivers](https://www.npmjs.com/search?q=beemo-driver)).
+This will only install the core functionality. To support different build tools like Babel, ESLint,
+and Jest, we need to install packages known as "drivers"
+([view all available drivers](https://www.npmjs.com/search?q=beemo-driver)).
 
 ```
 yarn add @beemo/driver-babel babel-core
@@ -90,8 +92,8 @@ yarn add @beemo/driver-jest jest
 #### Drivers
 
 For each driver you install, there should be an associated `.js` configuration file within a
-`configs/` folder, named after the package name (excluding "driver-"). Using the example above,
-we'd have the following:
+`configs/` folder, named after the package name (excluding "driver-"). Using the example above, we'd
+have the following:
 
 ```
 configs/
@@ -109,24 +111,30 @@ Each configuration file should return a JavaScript object. Sounds easy enough.
 // configs/babel.js
 module.exports = {
   presets: [
-    ['babel-preset-env', {
-      targets: { node: '6.5' },
-    }],
+    [
+      'babel-preset-env',
+      {
+        targets: { node: '6.5' },
+      },
+    ],
   ],
 };
 ```
 
-If you return a function, you can access the options that were passed on the command line,
-which allows for runtime conditional logic. For example, if `--react` was passed, we can enable
-the React preset.
+If you return a function, you can access the options that were passed on the command line, which
+allows for runtime conditional logic. For example, if `--react` was passed, we can enable the React
+preset.
 
 ```js
 // configs/babel.js
-module.exports = function (options) {
+module.exports = function(options) {
   const presets = [
-    ['babel-preset-env', {
-      targets: { node: '6.5' },
-    }],
+    [
+      'babel-preset-env',
+      {
+        targets: { node: '6.5' },
+      },
+    ],
   ];
 
   if (options.react) {
@@ -139,15 +147,15 @@ module.exports = function (options) {
 };
 ```
 
-> Command line arguments are parsed into an object using [yargs-parser](https://www.npmjs.com/package/yargs-parser).
+> Command line arguments are parsed into an object using
+> [yargs-parser](https://www.npmjs.com/package/yargs-parser).
 
 #### Dotfiles
 
 Beemo supports [synchronizing dotfiles](#synchronizing-dotfiles) across all projects that consume
-your configuration module (the repository you just created). This includes things like
-`.gitignore`, `.npmignore`, `.travis.yml`, and more. This *does not* include configuration
-dotfiles like `.babelrc` and `.flowconfig`, as those are handled automatically by the drivers
-mentioned above.
+your configuration module (the repository you just created). This includes things like `.gitignore`,
+`.npmignore`, `.travis.yml`, and more. This _does not_ include configuration dotfiles like
+`.babelrc` and `.flowconfig`, as those are handled automatically by the drivers mentioned above.
 
 To begin, create a `dotfiles/` folder.
 
@@ -155,11 +163,11 @@ To begin, create a `dotfiles/` folder.
 mkdir dotfiles/
 ```
 
-Then add dotfiles you want to synchronize, without the leading `.`. For example, `.gitignore`
-would simply be `gitignore`. Why no leading period? Well, because otherwise, those dotfiles and
-their functionality would be applied to your repository (git will actually ignore files). So to
-get around this, we remove the period, and then rename the file after synchronizing. If all goes
-well, you should have a folder structure like the following.
+Then add dotfiles you want to synchronize, without the leading `.`. For example, `.gitignore` would
+simply be `gitignore`. Why no leading period? Well, because otherwise, those dotfiles and their
+functionality would be applied to your repository (git will actually ignore files). So to get around
+this, we remove the period, and then rename the file after synchronizing. If all goes well, you
+should have a folder structure like the following.
 
 ```
 dotfiles/
@@ -190,17 +198,17 @@ module.exports = class InitScript extends Script {
       // Do something
     }
   }
-}
+};
 ```
 
-The `parse()` method is optional and can be used to define parsing rules for CLI options (powered
-by [yargs-parser](https://www.npmjs.com/package/yargs-parser#api)). If no rules are provided,
-Yargs default parsing rules will be used.
+The `parse()` method is optional and can be used to define parsing rules for CLI options (powered by
+[yargs-parser](https://www.npmjs.com/package/yargs-parser#api)). If no rules are provided, Yargs
+default parsing rules will be used.
 
 The `run()` method is required and is triggered when the `beemo run-script` command is ran. The
 method receives options (parsed with `parse()`) as the 1st argument, and the current Beemo tool
-instance as the 2nd argument. The tool instance supports the following, which can be used
-to hook into the applications lifecycle.
+instance as the 2nd argument. The tool instance supports the following, which can be used to hook
+into the applications lifecycle.
 
 * `config` (object) - Loaded Beemo configuration.
 * `package` (object) - Loaded `package.json` found within the current root.
@@ -232,9 +240,9 @@ You can also set the access in `package.json`.
 
 ### Consumer Setup
 
-Now that you have a configuration module, we can integrate it across all projects. But first,
-go ahead and delete all the old config files and dependencies in each project (if they exist),
-as all that logic should now be housed in your configuration module.
+Now that you have a configuration module, we can integrate it across all projects. But first, go
+ahead and delete all the old config files and dependencies in each project (if they exist), as all
+that logic should now be housed in your configuration module.
 
 Once you have a clean slate your configuration module, and BOOM, it's as easy as that. No more
 development dependency hell, just a single dependency.
@@ -243,8 +251,8 @@ development dependency hell, just a single dependency.
 yarn add @<username>/build-tool-config --dev
 ```
 
-That being said, add a `beemo` configuration block to your `package.json`, with a `module`
-property that matches the name of your configuration module, or another third-party module.
+That being said, add a `beemo` configuration block to your `package.json`, with a `module` property
+that matches the name of your configuration module, or another third-party module.
 
 ```json
 {
@@ -269,21 +277,20 @@ property that matches the name of your configuration module, or another third-pa
 
 #### Synchronizing Dotfiles
 
-Once Beemo is setup in your project, and you have dotfiles within your configuration module,
-you can run `yarn beemo sync-dotfiles` (or `npx beemo sync-dotfiles`) to copy them into the
-project.
+Once Beemo is setup in your project, and you have dotfiles within your configuration module, you can
+run `yarn beemo sync-dotfiles` (or `npx beemo sync-dotfiles`) to copy them into the project.
 
 This process is a simple copy and write, so previous files will be overwritten. Be sure to
 `git diff` and verify your changes!
 
 #### Using Drivers
 
-Drivers may have been installed in your configuration module, but that does not make them
-available to the current project, as not all drivers will always be necessary. To enable drivers
-per project, a `drivers` property must be defined in your `beemo` config.
+Drivers may have been installed in your configuration module, but that does not make them available
+to the current project, as not all drivers will always be necessary. To enable drivers per project,
+a `drivers` property must be defined in your `beemo` config.
 
-This property accepts an array of strings or objects, with the names of each driver you want
-to enable. For example, if we want to use Babel, ESLint, and Jest, we would have the following.
+This property accepts an array of strings or objects, with the names of each driver you want to
+enable. For example, if we want to use Babel, ESLint, and Jest, we would have the following.
 
 ```json
 {
@@ -318,8 +325,8 @@ Furthermore, each driver can be configured with options by using an object, like
 ##### Options
 
 * `driver` (string) - The name of the driver module.
-* `args` (string[]) - Arguments to always pass when executing the driver binary,
-  and to pass to the config file.
+* `args` (string[]) - Arguments to always pass when executing the driver binary, and to pass to the
+  config file.
 * `dependencies` (string[]) - Other drivers that are required for this driver to run.
 * `env` (object) - Environment variables to pass when executing the driver binary with
   [execa](https://github.com/sindresorhus/execa).
@@ -353,16 +360,16 @@ That being said, consistently remembering the correct commands and arguments to 
 
 #### Executing Scripts
 
-A script within your configuration module can be executed using `yarn beemo run-script <name>`
-(or `npx beemo run-script <name>`).
+A script within your configuration module can be executed using `yarn beemo run-script <name>` (or
+`npx beemo run-script <name>`).
 
 > All arguments passed to Beemo are passed to the script's `run()` method.
 
 #### Overriding Config
 
-Your configuration module may house all configuration now, but that doesn't mean it's applicable
-to *all* projects. So because of that, Beemo does allow overriding of config. To do so,
-edit your `package.json` to include a block under `beemo.<driver>`, like so.
+Your configuration module may house all configuration now, but that doesn't mean it's applicable to
+_all_ projects. So because of that, Beemo does allow overriding of config. To do so, edit your
+`package.json` to include a block under `beemo.<driver>`, like so.
 
 ```json
 {
@@ -378,8 +385,8 @@ edit your `package.json` to include a block under `beemo.<driver>`, like so.
 }
 ```
 
-> Some build tools support `package.json` overrides like this, but it's preferred to use the
-> Beemo approach for interoperability.
+> Some build tools support `package.json` overrides like this, but it's preferred to use the Beemo
+> approach for interoperability.
 
 ### Creating A Driver
 
@@ -395,9 +402,8 @@ Beemo requires an external Node module (the configuration module) to run correct
 it can be setup locally to not require an external module. This is perfect for large applications,
 monorepos, or for testing your configuration module itself!
 
-In your `package.json` Beemo config, use `@local` instead of the name of your configuration
-module. This will use the current working directory (`process.cwd()`) instead of the Node module
-path.
+In your `package.json` Beemo config, use `@local` instead of the name of your configuration module.
+This will use the current working directory (`process.cwd()`) instead of the Node module path.
 
 ```json
 {
@@ -410,8 +416,8 @@ path.
 #### Editor Integration
 
 By default, Beemo generates local config files before execution, and then removes them. But some
-editors require those local files for in-editor functionality (like ESLint and Prettier). To
-support this, we can do something like the following.
+editors require those local files for in-editor functionality (like ESLint and Prettier). To support
+this, we can do something like the following.
 
 First, add the config file names to `dotfiles/gitignore` for each driver you have installed in your
 configuration module (be sure to sync afterwards).
@@ -434,5 +440,5 @@ Then disable `cleanup` in your `beemo` config.
 }
 ```
 
-With these changes, the local config files will persist after executing a driver, but will also
-be ignored in Git and some editors. Pretty nice huh?
+With these changes, the local config files will persist after executing a driver, but will also be
+ignored in Git and some editors. Pretty nice huh?

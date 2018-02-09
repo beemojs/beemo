@@ -2,14 +2,7 @@
   "name": "@beemo/driver-babel",
   "version": "0.10.1",
   "description": "Babel driver for Beemo.",
-  "keywords": [
-    "beemo",
-    "beemo-driver",
-    "driver",
-    "babel",
-    "transpile",
-    "compile"
-  ],
+  "keywords": ["beemo", "beemo-driver", "driver", "babel", "transpile", "compile"],
   "main": "./lib/index.js",
   "engines": {
     "node": ">=6.5.0"

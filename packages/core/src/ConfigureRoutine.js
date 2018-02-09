@@ -22,7 +22,7 @@ export default class ConfigureRoutine extends Routine<ConfigureConfig, DriverCon
    * and then run in parallel.
    */
   createConfigFiles(drivers: Driver[]): Promise<*> {
-    const names = drivers.map((driver) => {
+    const names = drivers.map(driver => {
       const routine = new CreateConfigRoutine(driver.name, driver.metadata.title);
 
       // Make the driver easily available
@@ -37,9 +37,7 @@ export default class ConfigureRoutine extends Routine<ConfigureConfig, DriverCon
       `Creating config files for the following drivers: ${chalk.magenta(names.join(', '))}`,
     );
 
-    return this.config.parallel
-      ? this.parallelizeSubroutines()
-      : this.serializeSubroutines();
+    return this.config.parallel ? this.parallelizeSubroutines() : this.serializeSubroutines();
   }
 
   /**
@@ -72,7 +70,7 @@ export default class ConfigureRoutine extends Routine<ConfigureConfig, DriverCon
         ...driver.options.dependencies,
       ]);
 
-      deps.forEach((name) => {
+      deps.forEach(name => {
         this.tool.debug(`  Including dependency ${chalk.magenta(name)}`);
 
         this.context.drivers.unshift(this.tool.getPlugin(name));

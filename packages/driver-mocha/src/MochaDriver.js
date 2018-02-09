@@ -23,17 +23,15 @@ export default class MochaDriver extends Driver {
   formatFile(data: Object): string {
     const output = [];
 
-    Object.keys(data).forEach((key) => {
+    Object.keys(data).forEach(key => {
       const option = `--${key.replace(/_/g, '-')}`;
       const value = data[key];
       const type = typeof value;
 
       if (type === 'boolean') {
         output.push(option);
-
       } else if (type === 'number' || type === 'string') {
         output.push(option, value);
-
       } else if (Array.isArray(value)) {
         output.push(option, value.join(','));
       }

@@ -18,9 +18,10 @@ const peerVersion = cliPackage.peerDependencies['@beemo/core'];
 if (!semver.satisfies(cliPackage.version, `^${corePackage.version}`)) {
   console.error(chalk.red(`@beemo/cli version out of date; must be ^${corePackage.version}.`));
   process.exit(1);
-
 } else if (peerVersion.charAt(1) !== '0' && !semver.satisfies(corePackage.version, peerVersion)) {
-  console.error(chalk.red('@beemo/core mismatched version. Please keep core and cli package versions in sync.'));
+  console.error(
+    chalk.red('@beemo/core mismatched version. Please keep core and cli package versions in sync.'),
+  );
   process.exit(2);
 }
 
@@ -28,13 +29,13 @@ if (!semver.satisfies(cliPackage.version, `^${corePackage.version}`)) {
 const beemo = new Beemo(process.argv);
 
 // Add a command for each driver
-beemo.tool.plugins.forEach((driver) => {
+beemo.tool.plugins.forEach(driver => {
   const { metadata } = driver;
 
   app.command(
     metadata.bin,
     metadata.description || `Run ${metadata.title}.`,
-    (command) => {
+    command => {
       driver.bootstrapCommand(command);
 
       return command;
@@ -46,7 +47,7 @@ beemo.tool.plugins.forEach((driver) => {
 });
 
 // Add Beemo commands
-app.command('run-script <name>', 'Run script from configuration module.', {}, (args) => {
+app.command('run-script <name>', 'Run script from configuration module.', {}, args => {
   beemo.executeScript(args.name);
 });
 
@@ -73,5 +74,4 @@ app
   .usage('beemo <command> [args..]')
   .demandCommand(1, 'Please run a command.')
   .showHelpOnFail(true)
-  .help()
-  .argv;
+  .help().argv;

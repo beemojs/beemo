@@ -10,7 +10,7 @@ import parseArgs from 'yargs-parser';
 
 import type { DriverContext, Execution } from '../types';
 
-const OPTION_PATTERN: RegExp = /-?-[-a-z0-9]+/ig;
+const OPTION_PATTERN: RegExp = /-?-[-a-z0-9]+/gi;
 
 export default class RunCommandRoutine extends Routine<Object, DriverContext> {
   execute(): Promise<*> {
@@ -18,8 +18,9 @@ export default class RunCommandRoutine extends Routine<Object, DriverContext> {
 
     this.task('Filtering options', this.filterUnknownOptionsFromArgs);
 
-    this.task('Including config option', this.includeConfigOption)
-      .skip(!primaryDriver.metadata.useConfigOption);
+    this.task('Including config option', this.includeConfigOption).skip(
+      !primaryDriver.metadata.useConfigOption,
+    );
 
     this.task('Running command', this.runCommandWithArgs);
 
@@ -52,13 +53,13 @@ export default class RunCommandRoutine extends Routine<Object, DriverContext> {
       .then(({ stdout }) => {
         const nativeOptions = {};
 
-        stdout.match(OPTION_PATTERN).forEach((option) => {
+        stdout.match(OPTION_PATTERN).forEach(option => {
           nativeOptions[option] = true;
         });
 
         return nativeOptions;
       })
-      .then((nativeOptions) => {
+      .then(nativeOptions => {
         const filteredArgs = [];
         const unknownArgs = [];
         let skipNext = false;
@@ -115,10 +116,7 @@ export default class RunCommandRoutine extends Routine<Object, DriverContext> {
     const configPath = configPaths.find(path => path.endsWith(primaryDriver.metadata.configName));
 
     if (configPath) {
-      args.push(
-        primaryDriver.metadata.configOption,
-        configPath,
-      );
+      args.push(primaryDriver.metadata.configOption, configPath);
     }
 
     return Promise.resolve(args);
@@ -139,14 +137,14 @@ export default class RunCommandRoutine extends Routine<Object, DriverContext> {
     this.tool.emit('execute-driver', [driver, args, yargs]);
 
     return this.executeCommand(driver.metadata.bin, args, options)
-      .then((response) => {
+      .then(response => {
         driver.handleSuccess(response);
 
         this.tool.emit('successful-driver', [driver, response]);
 
         return response;
       })
-      .catch((error) => {
+      .catch(error => {
         driver.handleFailure(error);
 
         this.tool.emit('failed-driver', [driver, error]);

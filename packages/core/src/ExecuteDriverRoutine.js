@@ -17,16 +17,15 @@ export default class ExecuteDriverRoutine extends Routine<Object, DriverContext>
     if (parallel.length > 0) {
       const filteredArgs = args.filter(arg => !arg.startsWith('--parallel'));
 
-      parallel.forEach((extraArgs) => {
+      parallel.forEach(extraArgs => {
         const parallelArgs = extraArgs.split(' ');
-        const combinedArgs = [
-          ...filteredArgs,
-          ...parallelArgs,
-        ];
+        const combinedArgs = [...filteredArgs, ...parallelArgs];
 
-        this.pipe(new RunCommandRoutine(driverName, `${driverName} ${combinedArgs.join(' ')}`, {
-          parallelArgs,
-        }));
+        this.pipe(
+          new RunCommandRoutine(driverName, `${driverName} ${combinedArgs.join(' ')}`, {
+            parallelArgs,
+          }),
+        );
       });
     } else {
       this.pipe(new RunCommandRoutine(driverName, `${driverName} ${args.join(' ')}`));

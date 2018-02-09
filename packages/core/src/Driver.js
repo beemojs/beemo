@@ -47,17 +47,17 @@ export default class Driver extends Plugin<DriverOptions> {
   constructor(options?: Object = {}) {
     super(options);
 
-    this.options = new Options(this.options, {
-      args: array(string()),
-      dependencies: array(string()),
-      env: object(union([
-        bool(),
-        number(),
-        string(),
-      ])),
-    }, {
-      name: this.constructor.name,
-    });
+    this.options = new Options(
+      this.options,
+      {
+        args: array(string()),
+        dependencies: array(string()),
+        env: object(union([bool(), number(), string()])),
+      },
+      {
+        name: this.constructor.name,
+      },
+    );
   }
 
   /**
@@ -121,18 +121,24 @@ export default class Driver extends Plugin<DriverOptions> {
    * Set metadata about the binary/executable in which this driver wraps.
    */
   setMetadata(metadata: Object): this {
-    this.metadata = new Options(metadata, {
-      bin: string().match(/^[-a-z0-9]+$/).required(),
-      configName: string().required(),
-      configOption: string('--config'),
-      dependencies: array(string()),
-      description: string().empty(),
-      helpOption: string('--help'),
-      title: string().required(),
-      useConfigOption: bool(),
-    }, {
-      name: this.constructor.name,
-    });
+    this.metadata = new Options(
+      metadata,
+      {
+        bin: string()
+          .match(/^[-a-z0-9]+$/)
+          .required(),
+        configName: string().required(),
+        configOption: string('--config'),
+        dependencies: array(string()),
+        description: string().empty(),
+        helpOption: string('--help'),
+        title: string().required(),
+        useConfigOption: bool(),
+      },
+      {
+        name: this.constructor.name,
+      },
+    );
 
     return this;
   }

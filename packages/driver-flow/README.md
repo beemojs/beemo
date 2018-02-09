@@ -3,7 +3,6 @@
 Provides [Flow](https://github.com/facebook/flow) support for
 [Beemo](https://github.com/milesj/beemo), a build tool manager.
 
-
 ## Installation
 
 ```
@@ -24,8 +23,8 @@ More information on how to get started can be found in the
 
 ### Config Format
 
-In Beemo, Flow is configured using a JavaScript file, and not the `.flowconfig` file. To
-support this, the following conventions must be followed.
+In Beemo, Flow is configured using a JavaScript file, and not the `.flowconfig` file. To support
+this, the following conventions must be followed.
 
 * `ignore`, `include`, and `libs` are an array of strings.
 * `lints` is an object. Properties are snake case (underscored instead of dashed).
@@ -38,14 +37,8 @@ An example:
 ```js
 // configs/flow.js
 module.exports = {
-  ignore: [
-    '.*/node_modules/.*',
-    '.*/tests/.*',
-    '.*\\.test\\.js',
-  ],
-  include: [
-    './src',
-  ],
+  ignore: ['.*/node_modules/.*', '.*/tests/.*', '.*\\.test\\.js'],
+  include: ['./src'],
   lints: {
     untyped_import: 'warn',
   },

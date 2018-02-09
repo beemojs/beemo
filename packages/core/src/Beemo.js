@@ -32,13 +32,16 @@ export default class Beemo {
     // eslint-disable-next-line global-require
     const { version } = require('../package.json');
 
-    this.tool = new Tool({
-      appName: 'beemo',
-      configFolder: './configs',
-      footer: `🤖  Powered by Beemo v${version}`,
-      pluginAlias: 'driver',
-      scoped: true,
-    }, argv);
+    this.tool = new Tool(
+      {
+        appName: 'beemo',
+        configFolder: './configs',
+        footer: `🤖  Powered by Beemo v${version}`,
+        pluginAlias: 'driver',
+        scoped: true,
+      },
+      argv,
+    );
 
     // Immediately load config and plugins
     this.tool.initialize();
@@ -71,7 +74,7 @@ export default class Beemo {
     if (!module) {
       throw new Error(
         'Beemo requires a "beemo.module" property within your package.json. ' +
-        'This property is the name of a module that houses your configuration files.',
+          'This property is the name of a module that houses your configuration files.',
       );
     }
 
@@ -113,7 +116,7 @@ export default class Beemo {
       }
 
       // Must not be async!
-      context.configPaths.forEach((configPath) => {
+      context.configPaths.forEach(configPath => {
         fs.removeSync(configPath);
       });
     });
@@ -139,11 +142,14 @@ export default class Beemo {
    */
   executeScript(scriptName: string): Promise<*> {
     const { tool } = this;
-    const context: ScriptContext = this.createContext({
-      script: null,
-      scriptName,
-      scriptPath: '',
-    }, 4);
+    const context: ScriptContext = this.createContext(
+      {
+        script: null,
+        scriptName,
+        scriptPath: '',
+      },
+      4,
+    );
 
     tool.setEventNamespace(scriptName);
 

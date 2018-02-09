@@ -13,14 +13,12 @@ import ConfigOps from 'eslint/lib/config/config-ops';
 // Failure: Writes to stdout
 export default class ESLintDriver extends Driver {
   bootstrap() {
-    this
-      .setMetadata({
-        bin: 'eslint',
-        configName: '.eslintrc.json',
-        description: 'Lint files with ESLint.',
-        title: 'ESLint',
-      })
-      .on('eslint.create-config-file', this.handleCreateIgnoreFile);
+    this.setMetadata({
+      bin: 'eslint',
+      configName: '.eslintrc.json',
+      description: 'Lint files with ESLint.',
+      title: 'ESLint',
+    }).on('eslint.create-config-file', this.handleCreateIgnoreFile);
   }
 
   mergeConfig(prev: Object, next: Object): Object {

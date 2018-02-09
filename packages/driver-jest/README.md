@@ -3,7 +3,6 @@
 Provides [Jest](https://github.com/facebook/jest) support for
 [Beemo](https://github.com/milesj/beemo), a build tool manager.
 
-
 ## Installation
 
 ```
@@ -14,8 +13,8 @@ npm install @beemo/driver-jest jest --save
 
 ## Usage
 
-In your configuration module, install the driver, Jest, and [Babel](../driver-babel). Create a
-file at `configs/jest.js` in which to house your Jest configuration.
+In your configuration module, install the driver, Jest, and [Babel](../driver-babel). Create a file
+at `configs/jest.js` in which to house your Jest configuration.
 
 In your consuming project, enable the driver by adding `jest` to your `drivers` config.
 

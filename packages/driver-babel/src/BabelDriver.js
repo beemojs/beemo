@@ -14,23 +14,20 @@ import typeof Yargs from 'yargs';
 // Failure: Throws SyntaxError to stderr
 export default class BabelDriver extends Driver {
   bootstrap() {
-    this
-      .setMetadata({
-        bin: 'babel',
-        configName: '.babelrc',
-        description: 'Transpile files with Babel.',
-        title: 'Babel',
-      })
-      .on('babel.execute-driver', this.handleCleanTarget);
+    this.setMetadata({
+      bin: 'babel',
+      configName: '.babelrc',
+      description: 'Transpile files with Babel.',
+      title: 'Babel',
+    }).on('babel.execute-driver', this.handleCleanTarget);
   }
 
   bootstrapCommand(command: Yargs) {
-    command
-      .option('clean', {
-        boolean: true,
-        default: true,
-        describe: 'Clean the target folder',
-      });
+    command.option('clean', {
+      boolean: true,
+      default: true,
+      describe: 'Clean the target folder',
+    });
   }
 
   /**

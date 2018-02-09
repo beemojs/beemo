@@ -28,7 +28,7 @@ export default class ExecuteScriptRoutine extends Routine<Object, ScriptContext>
 
     this.tool.debug('Loading script');
 
-    return new Promise((resolve) => {
+    return new Promise(resolve => {
       const script = loader.importModule(filePath);
 
       // Is not set by Boost, so set it here
@@ -54,12 +54,12 @@ export default class ExecuteScriptRoutine extends Routine<Object, ScriptContext>
     const options = parseArgs(args, script.parse());
 
     return Promise.resolve(script.run(options, this.tool))
-      .then((response) => {
+      .then(response => {
         this.tool.emit('successful-script', [script, response]);
 
         return response;
       })
-      .catch((error) => {
+      .catch(error => {
         this.tool.emit('failed-script', [script, error]);
 
         throw error;

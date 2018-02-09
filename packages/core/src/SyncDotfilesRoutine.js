@@ -38,13 +38,15 @@ export default class SyncDotfilesRoutine extends Routine<Object, Context> {
         if (error) {
           reject(error);
         } else {
-          resolve(files.map((file) => {
-            this.tool.emit('create-dotfile', [file.path]);
+          resolve(
+            files.map(file => {
+              this.tool.emit('create-dotfile', [file.path]);
 
-            this.tool.debug(`  ${chalk.gray(file.path)}`);
+              this.tool.debug(`  ${chalk.gray(file.path)}`);
 
-            return file.path;
-          }));
+              return file.path;
+            }),
+          );
         }
       });
     });
@@ -57,20 +59,22 @@ export default class SyncDotfilesRoutine extends Routine<Object, Context> {
   renameFilesWithDot(filePaths: string[]): Promise<string[]> {
     this.tool.debug('Renaming dotfiles and prefixing with a period');
 
-    return Promise.all(filePaths.map((filePath) => {
-      const dir = path.dirname(filePath);
-      const newName = `.${path.basename(filePath)}`;
-      const newPath = path.join(dir, newName);
+    return Promise.all(
+      filePaths.map(filePath => {
+        const dir = path.dirname(filePath);
+        const newName = `.${path.basename(filePath)}`;
+        const newPath = path.join(dir, newName);
 
-      return fs.rename(filePath, newPath).then(() => {
-        this.tool.emit('rename-dotfile', [newPath]);
+        return fs.rename(filePath, newPath).then(() => {
+          this.tool.emit('rename-dotfile', [newPath]);
 
-        this.tool.log(`${chalk.gray('->')} ${newName}`);
+          this.tool.log(`${chalk.gray('->')} ${newName}`);
 
-        this.tool.debug(`  ${chalk.gray(newPath)}`);
+          this.tool.debug(`  ${chalk.gray(newPath)}`);
 
-        return newPath;
-      });
-    }));
+          return newPath;
+        });
+      }),
+    );
   }
 }

@@ -72,10 +72,9 @@ export default class CreateConfigRoutine extends Routine<Object, DriverContext> 
   getArgsToPass(): Object {
     this.tool.debug('Gathering arguments to pass to config file');
 
-    return parseArgs([
-      ...this.driver.options.args,
-      ...this.context.args,
-    ].map(value => String(value)));
+    return parseArgs(
+      [...this.driver.options.args, ...this.context.args].map(value => String(value)),
+    );
   }
 
   /**
@@ -86,9 +85,10 @@ export default class CreateConfigRoutine extends Routine<Object, DriverContext> 
       `Merging ${chalk.magenta(this.driver.name)} config from ${configs.length} sources`,
     );
 
-    const config = configs.reduce((masterConfig, cfg) => (
-      this.driver.mergeConfig(masterConfig, cfg)
-    ), {});
+    const config = configs.reduce(
+      (masterConfig, cfg) => this.driver.mergeConfig(masterConfig, cfg),
+      {},
+    );
 
     this.tool.emit('merge-config', [config]);
 
@@ -103,9 +103,10 @@ export default class CreateConfigRoutine extends Routine<Object, DriverContext> 
     const { name } = this.driver;
 
     // Allow for local development
-    const filePath = (moduleName === '@local')
-      ? path.join(this.context.root, `configs/${name}.js`)
-      : configLoader.resolveModuleConfigPath(name, moduleName);
+    const filePath =
+      moduleName === '@local'
+        ? path.join(this.context.root, `configs/${name}.js`)
+        : configLoader.resolveModuleConfigPath(name, moduleName);
     const fileExists = fs.existsSync(filePath);
 
     this.tool.invariant(

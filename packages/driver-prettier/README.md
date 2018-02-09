@@ -3,7 +3,6 @@
 Provides [Prettier](https://github.com/prettier/prettier) support for
 [Beemo](https://github.com/milesj/beemo), a build tool manager.
 
-
 ## Installation
 
 ```

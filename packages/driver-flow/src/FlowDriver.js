@@ -23,7 +23,7 @@ export default class FlowDriver extends Driver {
   formatFile(data: Object): string {
     const output = [];
 
-    Object.keys(data).forEach((key) => {
+    Object.keys(data).forEach(key => {
       const value = data[key];
 
       if (!value) {
@@ -56,7 +56,7 @@ export default class FlowDriver extends Driver {
   formatLintsSection(lints: Object): string[] {
     const output = [];
 
-    Object.keys(lints).forEach((key) => {
+    Object.keys(lints).forEach(key => {
       let value = lints[key];
 
       if (value === 0) {
@@ -82,7 +82,7 @@ export default class FlowDriver extends Driver {
   formatOptionsSection(options: Object, path: string = ''): string[] {
     const output = [];
 
-    Object.keys(options).forEach((key) => {
+    Object.keys(options).forEach(key => {
       const value = options[key];
 
       // Mapped values
@@ -91,11 +91,11 @@ export default class FlowDriver extends Driver {
 
         output.push(`${path}${key}=${list}`);
 
-      // Nested objects
+        // Nested objects
       } else if (typeof value === 'object' && value.constructor === Object) {
         output.push(...this.formatOptionsSection(value, `${key}.`));
 
-      // Primitives
+        // Primitives
       } else {
         output.push(`${path}${key}=${this.formatOption(value)}`);
       }
