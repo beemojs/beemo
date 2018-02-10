@@ -24,19 +24,28 @@ export default class MochaDriver extends Driver {
     const output = [];
 
     Object.keys(data).forEach(key => {
-      const option = `--${key.replace(/_/g, '-')}`;
+      const option =
+        key === 'es_staging' || key === 'use_strict' ? `--${key}` : `--${key.replace(/_/g, '-')}`;
       const value = data[key];
       const type = typeof value;
 
       if (type === 'boolean') {
         output.push(option);
       } else if (type === 'number' || type === 'string') {
-        output.push(option, value);
+        output.push(`${option} ${value}`);
       } else if (Array.isArray(value)) {
-        output.push(option, value.join(','));
+        output.push(`${option} ${value.join(',')}`);
+      } else if (key === 'reporterOptions') {
+        output.push(`${option} ${this.formatReporterOptions(value)}`);
       }
     });
 
     return output.join('\n');
+  }
+
+  formatReporterOptions(options: Object): string {
+    return Object.keys(options)
+      .map(key => `${key}=${options[key]}`)
+      .join(',');
   }
 }
