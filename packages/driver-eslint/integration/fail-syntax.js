@@ -1,0 +1,1 @@
+cnst foo = 'foo';

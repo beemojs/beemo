@@ -27,7 +27,8 @@ export default class CleanupRoutine extends Routine<Object, DriverContext> {
 
         this.tool.emit('delete-config-file', [configPath]);
 
-        return fs.remove(configPath).then(() => true);
+        return true;
+        // return fs.remove(configPath).then(() => true);
       }),
     );
   }
