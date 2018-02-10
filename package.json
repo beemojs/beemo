@@ -11,7 +11,7 @@
     "package": "yarn run clean && yarn run bootstrap && yarn run build && yarn test",
     "bootstrap": "lerna bootstrap",
     "bootstrap:slow": "yarn run bootstrap --concurrency=1",
-    "build": "lerna run build",
+    "build": "find ./packages/* -prune -type d -exec babel {}/src --out-dir {}/lib \\;",
     "clean": "rimraf ./packages/*/{lib,esm}/ && lerna clean --yes",
     "release": "lerna publish",
     "release:force": "yarn run release --force-publish=*",
