@@ -34,9 +34,9 @@ export default class Beemo {
         configFolder: './configs',
         footer: `🤖  Powered by Beemo v${version}`,
         pluginAlias: 'driver',
-        scoped: true
+        scoped: true,
       },
-      argv
+      argv,
     );
 
     // Immediately load config and plugins
@@ -52,7 +52,7 @@ export default class Beemo {
       args: this.argv,
       moduleRoot: this.getConfigModuleRoot(),
       root: this.tool.options.root,
-      yargs: parseArgs(this.argv)
+      yargs: parseArgs(this.argv),
     };
   }
 
@@ -67,7 +67,7 @@ export default class Beemo {
     if (!module) {
       throw new Error(
         'Beemo requires a "beemo.module" property within your package.json. ' +
-          'This property is the name of a module that houses your configuration files.'
+          'This property is the name of a module that houses your configuration files.',
       );
     }
 
@@ -99,7 +99,7 @@ export default class Beemo {
       configPaths: [],
       driverName,
       drivers: [primaryDriver],
-      primaryDriver
+      primaryDriver,
     });
 
     // Delete config files on failure
@@ -138,7 +138,7 @@ export default class Beemo {
     const context: ScriptContext = this.createContext({
       script: null,
       scriptName,
-      scriptPath: ''
+      scriptPath: '',
     });
 
     tool.setEventNamespace(scriptName);
