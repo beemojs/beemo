@@ -1,0 +1,101 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`FlowDriver formatFile() [ignore] handles empty 1`] = `
+"[ignore]
+"
+`;
+
+exports[`FlowDriver formatFile() [ignore] supports 1`] = `
+"[ignore]
+.*/__tests__/.*
+"
+`;
+
+exports[`FlowDriver formatFile() [include] handles empty 1`] = `
+"[include]
+"
+`;
+
+exports[`FlowDriver formatFile() [include] supports 1`] = `
+"[include]
+./foo.js
+./bar
+"
+`;
+
+exports[`FlowDriver formatFile() [libs] handles empty 1`] = `
+"[libs]
+"
+`;
+
+exports[`FlowDriver formatFile() [libs] supports 1`] = `
+"[libs]
+./foo.js.flow
+"
+`;
+
+exports[`FlowDriver formatFile() [lints] handles values as numbers 1`] = `
+"[lints]
+all=error
+untyped-type-import=warn
+sketchy-null-bool=off
+"
+`;
+
+exports[`FlowDriver formatFile() [lints] supports 1`] = `
+"[lints]
+all=error
+untyped-type-import=warn
+sketchy-null-bool=off
+"
+`;
+
+exports[`FlowDriver formatFile() [lints] supports dashed keys 1`] = `
+"[lints]
+all=error
+untyped-type-import=warn
+sketchy-null-bool=off
+"
+`;
+
+exports[`FlowDriver formatFile() [options] handles arrays 1`] = `
+"[options]
+module.file_ext=.js
+module.file_ext=.jsx
+"
+`;
+
+exports[`FlowDriver formatFile() [options] handles escaped string 1`] = `
+"[options]
+suppress_comment=\\\\\\\\(.\\\\\\\\|\\\\n\\\\\\\\)*\\\\\\\\$FlowFixMe
+"
+`;
+
+exports[`FlowDriver formatFile() [options] handles objects 1`] = `
+"[options]
+module.name_mapper='^image![a-zA-Z0-9$_]+$' -> 'ImageStub'
+module.name_mapper.extension='css' -> '<PROJECT_ROOT>/CSSFlowStub.js.flow'
+"
+`;
+
+exports[`FlowDriver formatFile() [options] handles primitives 1`] = `
+"[options]
+emoji=true
+esproposal.class_instance_fields=ignore
+traces=3
+"
+`;
+
+exports[`FlowDriver formatFile() [options] handles regex 1`] = `
+"[options]
+suppress_comment=\\\\(.\\\\|\\\\n\\\\)*\\\\$FlowFixMe
+"
+`;
+
+exports[`FlowDriver formatFile() [version] handles empty 1`] = `""`;
+
+exports[`FlowDriver formatFile() [version] supports 1`] = `
+"[version]
+1.2.3
+"
+`;

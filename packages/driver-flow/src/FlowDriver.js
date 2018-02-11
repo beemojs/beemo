@@ -43,7 +43,9 @@ export default class FlowDriver extends Driver {
           output.push(...this.formatOptionsSection(value));
           break;
         case 'version':
-          output.push(String(value));
+          if (value) {
+            output.push(String(value));
+          }
           break;
       }
 
@@ -74,30 +76,44 @@ export default class FlowDriver extends Driver {
   }
 
   formatOption(value: *, quote: boolean = false): string {
-    const option = String(value);
+    let option = value;
+
+    // http://caml.inria.fr/pub/docs/manual-ocaml/libref/Str.html#TYPEregexp
+    if (value instanceof RegExp) {
+      option = value.source
+        .replace(/\|/g, '\\|')
+        .replace(/\(/g, '\\(')
+        .replace(/\)/g, '\\)')
+    } else {
+      option = String(value);
+    }
 
     return quote ? `'${option}'` : option;
   }
 
-  formatOptionsSection(options: Object, path: string = ''): string[] {
+  formatOptionsSection(options: Object): string[] {
     const output = [];
 
     Object.keys(options).forEach(key => {
       const value = options[key];
 
-      // Mapped values
+      // Multiple values
       if (Array.isArray(value)) {
-        const list = value.map(v => this.formatOption(v, true)).join(' -> ');
+        value.forEach(val => {
+          output.push(`${key}=${this.formatOption(val)}`);
+        });
 
-        output.push(`${path}${key}=${list}`);
-
-        // Nested objects
+        // Mapped objects
       } else if (typeof value === 'object' && value.constructor === Object) {
-        output.push(...this.formatOptionsSection(value, `${key}.`));
+        Object.keys(value).forEach((pattern) => {
+          output.push(
+            `${key}=${this.formatOption(pattern, true)} -> ${this.formatOption(value[pattern], true)}`,
+          );
+        });
 
         // Primitives
       } else {
-        output.push(`${path}${key}=${this.formatOption(value)}`);
+        output.push(`${key}=${this.formatOption(value)}`);
       }
     });
 

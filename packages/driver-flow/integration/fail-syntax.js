@@ -1,0 +1,3 @@
+// @flow
+
+cnst foo = 'foo';
