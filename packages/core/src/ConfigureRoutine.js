@@ -64,8 +64,10 @@ export default class ConfigureRoutine extends Routine<ConfigureConfig, DriverCon
       deps.forEach(name => {
         this.tool.debug(`  Including dependency ${chalk.magenta(name)}`);
 
-        this.context.drivers.unshift(this.tool.getPlugin(name));
+        queue.push(this.tool.getPlugin(name));
       });
+
+      this.context.drivers.unshift(driver);
     }
 
     this.tool.emit('resolve-dependencies', [this.context.drivers]);
