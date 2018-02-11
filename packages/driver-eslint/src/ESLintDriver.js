@@ -31,7 +31,7 @@ export default class ESLintDriver extends Driver {
   handleCreateIgnoreFile = (event: Event, configPath: string, config: Object) => {
     if (config.ignore) {
       if (!Array.isArray(config.ignore)) {
-        throw new Error('Ignore configuration must be an array of strings.');
+        throw new TypeError('Ignore configuration must be an array of strings.');
       }
 
       const ignorePath = path.join(path.dirname(configPath), '.eslintignore');

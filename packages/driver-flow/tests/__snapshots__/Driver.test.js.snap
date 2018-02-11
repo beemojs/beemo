@@ -37,24 +37,24 @@ exports[`FlowDriver formatFile() [libs] supports 1`] = `
 exports[`FlowDriver formatFile() [lints] handles values as numbers 1`] = `
 "[lints]
 all=error
-untyped-type-import=warn
 sketchy-null-bool=off
+untyped-type-import=warn
 "
 `;
 
 exports[`FlowDriver formatFile() [lints] supports 1`] = `
 "[lints]
 all=error
-untyped-type-import=warn
 sketchy-null-bool=off
+untyped-type-import=warn
 "
 `;
 
 exports[`FlowDriver formatFile() [lints] supports dashed keys 1`] = `
 "[lints]
 all=error
-untyped-type-import=warn
 sketchy-null-bool=off
+untyped-type-import=warn
 "
 `;
 

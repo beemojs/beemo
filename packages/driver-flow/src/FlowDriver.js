@@ -83,7 +83,7 @@ export default class FlowDriver extends Driver {
       option = value.source
         .replace(/\|/g, '\\|')
         .replace(/\(/g, '\\(')
-        .replace(/\)/g, '\\)')
+        .replace(/\)/g, '\\)');
     } else {
       option = String(value);
     }
@@ -105,9 +105,12 @@ export default class FlowDriver extends Driver {
 
         // Mapped objects
       } else if (typeof value === 'object' && value.constructor === Object) {
-        Object.keys(value).forEach((pattern) => {
+        Object.keys(value).forEach(pattern => {
           output.push(
-            `${key}=${this.formatOption(pattern, true)} -> ${this.formatOption(value[pattern], true)}`,
+            `${key}=${this.formatOption(pattern, true)} -> ${this.formatOption(
+              value[pattern],
+              true,
+            )}`,
           );
         });
 
