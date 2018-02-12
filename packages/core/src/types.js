@@ -5,6 +5,7 @@
  */
 
 import type { Tool, Reporter } from 'boost';
+import type { Options } from 'yargs';
 import type Driver from './Driver';
 import type Script from './Script';
 
@@ -14,6 +15,8 @@ export type ConfigureConfig = {
   cleanup: boolean,
   parallel: boolean,
 };
+
+export type DriverCommandOptions = { [name: string]: Options };
 
 export type DriverOptions = {
   args: string[],

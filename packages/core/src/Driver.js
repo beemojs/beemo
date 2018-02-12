@@ -6,31 +6,29 @@
 
 import { Plugin } from 'boost';
 import merge from 'lodash/merge';
-import Options, { array, bool, number, object, string, union } from 'optimal';
+import Options, { array, bool, number, object, shape, string, union } from 'optimal';
 
 import type { EventListener } from 'boost';
-import typeof Yargs from 'yargs';
-import type { DriverContext, DriverOptions, DriverMetadata, Execution } from './types';
+import type {
+  DriverCommandOptions,
+  DriverContext,
+  DriverOptions,
+  DriverMetadata,
+  Execution,
+} from './types';
 
 export default class Driver extends Plugin<DriverOptions> {
+  command: DriverCommandOptions = {};
+
   context: DriverContext;
 
-  metadata: DriverMetadata = {
-    bin: '',
-    configName: '',
-    configOption: '',
-    dependencies: [],
-    description: '',
-    helpOption: '',
-    title: '',
-    useConfigOption: false,
-  };
+  metadata: DriverMetadata;
 
-  constructor(options?: Object = {}) {
+  constructor(options?: $Shape<DriverOptions> = {}) {
     super(options);
 
     this.options = new Options(
-      this.options,
+      options,
       {
         args: array(string()),
         dependencies: array(string()),
@@ -41,11 +39,6 @@ export default class Driver extends Plugin<DriverOptions> {
       },
     );
   }
-
-  /**
-   * Setup additional command options.
-   */
-  bootstrapCommand(command: Yargs) {}
 
   /**
    * Format the configuration file before it's written.
@@ -112,9 +105,33 @@ export default class Driver extends Plugin<DriverOptions> {
   }
 
   /**
+   * Setup additional command options.
+   */
+  setCommandOptions(options: DriverCommandOptions): this {
+    const blueprint = {};
+
+    Object.keys(options).forEach((key) => {
+      blueprint[key] = shape({
+        alias: union([string(), array(string())], ''),
+        description: string().required(),
+      });
+    });
+
+    this.command = new Options(
+      options,
+      blueprint,
+      {
+        name: this.constructor.name,
+      },
+    );
+
+    return this;
+  }
+
+  /**
    * Set metadata about the binary/executable in which this driver wraps.
    */
-  setMetadata(metadata: Object): this {
+  setMetadata(metadata: $Shape<DriverMetadata>): this {
     this.metadata = new Options(
       metadata,
       {

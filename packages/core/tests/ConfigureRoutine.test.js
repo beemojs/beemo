@@ -5,10 +5,10 @@ describe('ConfigureRoutine', () => {
   let routine;
   let plugins = {};
 
-  function createDriver(name, deps = []) {
+  function createDriver(name, dependencies = []) {
     const driver = new Driver();
     driver.name = name;
-    driver.metadata.dependencies = deps;
+    driver.metadata = { dependencies };
 
     return driver;
   }
