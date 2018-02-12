@@ -1,8 +1,15 @@
 {
   "name": "@beemo/driver-flow",
-  "version": "0.10.1",
+  "version": "0.11.0",
   "description": "Flow driver for Beemo.",
-  "keywords": ["beemo", "beemo-driver", "driver", "flow", "flowtype", "type"],
+  "keywords": [
+    "beemo",
+    "beemo-driver",
+    "driver",
+    "flow",
+    "flowtype",
+    "type"
+  ],
   "main": "./lib/index.js",
   "engines": {
     "node": ">=6.5.0"
