@@ -2,7 +2,14 @@
   "name": "@beemo/driver-jest",
   "version": "0.10.1",
   "description": "Jest driver for Beemo.",
-  "keywords": ["beemo", "beemo-driver", "driver", "jest", "test", "runner"],
+  "keywords": [
+    "beemo",
+    "beemo-driver",
+    "driver",
+    "jest",
+    "test",
+    "runner"
+  ],
   "main": "./lib/index.js",
   "engines": {
     "node": ">=6.5.0"
@@ -13,11 +20,11 @@
     "access": "public"
   },
   "devDependencies": {
-    "jest": "^22.2.1"
+    "jest": "^22.2.2"
   },
   "peerDependencies": {
-    "@beemo/core": "^0.10.1",
-    "@beemo/driver-babel": "^0.10.1",
+    "@beemo/core": "^0.11.0",
+    "@beemo/driver-babel": "^0.11.0",
     "jest": "^22.0.0"
   }
 }
