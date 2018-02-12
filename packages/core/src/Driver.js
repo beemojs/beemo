@@ -50,7 +50,7 @@ export default class Driver extends Plugin<DriverOptions> {
   /**
    * Format the configuration file before it's written.
    */
-  formatFile(data: Object): string {
+  formatConfig(data: Object): string {
     return JSON.stringify(data, null, 2);
   }
 

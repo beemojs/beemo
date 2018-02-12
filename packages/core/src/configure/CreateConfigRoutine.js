@@ -40,7 +40,7 @@ export default class CreateConfigRoutine extends Routine<Object, DriverContext> 
 
     this.tool.emit('create-config-file', [configPath, config]);
 
-    return fs.writeFile(configPath, this.driver.formatFile(config)).then(() => configPath);
+    return fs.writeFile(configPath, this.driver.formatConfig(config)).then(() => configPath);
   }
 
   /**

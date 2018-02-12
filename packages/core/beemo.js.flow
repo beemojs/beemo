@@ -65,7 +65,7 @@ declare module '@beemo/core' {
 
     constructor(options?: Object): this;
     bootstrapCommand(command: Yargs): void;
-    formatFile(data: Object): string;
+    formatConfig(data: Object): string;
     handleFailure(error: Execution): void;
     handleSuccess(response: Execution): void;
     mergeConfig(prev: Object, next: Object): Object;

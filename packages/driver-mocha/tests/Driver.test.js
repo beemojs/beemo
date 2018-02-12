@@ -35,10 +35,10 @@ describe('MochaDriver', () => {
     });
   });
 
-  describe('formatFile()', () => {
+  describe('formatConfig()', () => {
     it('supports primitives', () => {
       expect(
-        driver.formatFile({
+        driver.formatConfig({
           bar: 'abc',
           baz: true,
           foo: 123,
@@ -48,7 +48,7 @@ describe('MochaDriver', () => {
 
     it('supports arrays', () => {
       expect(
-        driver.formatFile({
+        driver.formatConfig({
           ext: ['js', 'jsx'],
         }),
       ).toMatchSnapshot();
@@ -56,7 +56,7 @@ describe('MochaDriver', () => {
 
     it('handles reporter options', () => {
       expect(
-        driver.formatFile({
+        driver.formatConfig({
           reporterOptions: {
             abc: '123',
             def: '456',
@@ -67,7 +67,7 @@ describe('MochaDriver', () => {
 
     it('handles always underscored options', () => {
       expect(
-        driver.formatFile({
+        driver.formatConfig({
           es_staging: true,
           use_strict: true,
         }),

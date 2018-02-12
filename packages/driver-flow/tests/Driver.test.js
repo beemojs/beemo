@@ -35,11 +35,11 @@ describe('FlowDriver', () => {
     });
   });
 
-  describe('formatFile()', () => {
+  describe('formatConfig()', () => {
     describe('[include]', () => {
       it('supports', () => {
         expect(
-          driver.formatFile({
+          driver.formatConfig({
             include: ['./foo.js', './bar'],
           }),
         ).toMatchSnapshot();
@@ -47,7 +47,7 @@ describe('FlowDriver', () => {
 
       it('handles empty', () => {
         expect(
-          driver.formatFile({
+          driver.formatConfig({
             include: [],
           }),
         ).toMatchSnapshot();
@@ -57,7 +57,7 @@ describe('FlowDriver', () => {
     describe('[ignore]', () => {
       it('supports', () => {
         expect(
-          driver.formatFile({
+          driver.formatConfig({
             ignore: ['.*/__tests__/.*'],
           }),
         ).toMatchSnapshot();
@@ -65,7 +65,7 @@ describe('FlowDriver', () => {
 
       it('handles empty', () => {
         expect(
-          driver.formatFile({
+          driver.formatConfig({
             ignore: [],
           }),
         ).toMatchSnapshot();
@@ -75,7 +75,7 @@ describe('FlowDriver', () => {
     describe('[libs]', () => {
       it('supports', () => {
         expect(
-          driver.formatFile({
+          driver.formatConfig({
             libs: ['./foo.js.flow'],
           }),
         ).toMatchSnapshot();
@@ -83,7 +83,7 @@ describe('FlowDriver', () => {
 
       it('handles empty', () => {
         expect(
-          driver.formatFile({
+          driver.formatConfig({
             libs: [],
           }),
         ).toMatchSnapshot();
@@ -93,7 +93,7 @@ describe('FlowDriver', () => {
     describe('[lints]', () => {
       it('supports', () => {
         expect(
-          driver.formatFile({
+          driver.formatConfig({
             lints: {
               all: 'error',
               sketchy_null_bool: 'off',
@@ -105,7 +105,7 @@ describe('FlowDriver', () => {
 
       it('handles values as numbers', () => {
         expect(
-          driver.formatFile({
+          driver.formatConfig({
             lints: {
               all: 2,
               sketchy_null_bool: 0,
@@ -117,7 +117,7 @@ describe('FlowDriver', () => {
 
       it('supports dashed keys', () => {
         expect(
-          driver.formatFile({
+          driver.formatConfig({
             lints: {
               all: 'error',
               'sketchy-null-bool': 'off',
@@ -131,7 +131,7 @@ describe('FlowDriver', () => {
     describe('[options]', () => {
       it('handles primitives', () => {
         expect(
-          driver.formatFile({
+          driver.formatConfig({
             options: {
               emoji: true,
               'esproposal.class_instance_fields': 'ignore',
@@ -143,7 +143,7 @@ describe('FlowDriver', () => {
 
       it('handles arrays', () => {
         expect(
-          driver.formatFile({
+          driver.formatConfig({
             options: {
               'module.file_ext': ['.js', '.jsx'],
             },
@@ -153,7 +153,7 @@ describe('FlowDriver', () => {
 
       it('handles objects', () => {
         expect(
-          driver.formatFile({
+          driver.formatConfig({
             options: {
               'module.name_mapper': {
                 '^image![a-zA-Z0-9$_]+$': 'ImageStub',
@@ -168,7 +168,7 @@ describe('FlowDriver', () => {
 
       it('handles regex', () => {
         expect(
-          driver.formatFile({
+          driver.formatConfig({
             options: {
               suppress_comment: /(.|\n)*\$FlowFixMe/,
             },
@@ -178,7 +178,7 @@ describe('FlowDriver', () => {
 
       it('handles escaped string', () => {
         expect(
-          driver.formatFile({
+          driver.formatConfig({
             options: {
               suppress_comment: '\\\\(.\\\\|\\n\\\\)*\\\\$FlowFixMe',
             },
@@ -190,7 +190,7 @@ describe('FlowDriver', () => {
     describe('[version]', () => {
       it('supports', () => {
         expect(
-          driver.formatFile({
+          driver.formatConfig({
             version: '1.2.3',
           }),
         ).toMatchSnapshot();
@@ -198,7 +198,7 @@ describe('FlowDriver', () => {
 
       it('handles empty', () => {
         expect(
-          driver.formatFile({
+          driver.formatConfig({
             version: '',
           }),
         ).toMatchSnapshot();

@@ -20,7 +20,7 @@ export default class FlowDriver extends Driver {
     });
   }
 
-  formatFile(data: Object): string {
+  formatConfig(data: Object): string {
     const output = [];
 
     Object.keys(data).forEach(key => {
