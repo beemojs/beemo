@@ -14,10 +14,12 @@ describe('ConfigureRoutine', () => {
   }
 
   beforeEach(() => {
+    plugins = {};
+
     routine = new ConfigureRoutine('config', 'Generating configurations');
     routine.context = {
-      drivers: [],
       driverName: 'foo',
+      drivers: [],
       primaryDriver: createDriver('foo'),
     };
     routine.tool = {
@@ -35,9 +37,7 @@ describe('ConfigureRoutine', () => {
     it('adds primary driver when no dependencies', async () => {
       const drivers = await routine.resolveDependencies();
 
-      expect(drivers).toEqual([
-        routine.context.primaryDriver,
-      ]);
+      expect(drivers).toEqual([routine.context.primaryDriver]);
       expect(routine.context.drivers).toEqual(drivers);
     });
 
@@ -47,10 +47,7 @@ describe('ConfigureRoutine', () => {
       const drivers = await routine.resolveDependencies();
       const bar = createDriver('bar');
 
-      expect(drivers).toEqual([
-        bar,
-        routine.context.primaryDriver,
-      ]);
+      expect(drivers).toEqual([bar, routine.context.primaryDriver]);
       expect(routine.context.drivers).toEqual(drivers);
     });
 

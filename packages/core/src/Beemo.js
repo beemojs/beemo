@@ -98,7 +98,7 @@ export default class Beemo {
     const context: DriverContext = this.createContext({
       configPaths: [],
       driverName,
-      drivers: [primaryDriver],
+      drivers: [],
       primaryDriver,
     });
 

@@ -3,14 +3,19 @@
 module.exports = function flow(options) {
   // return {
   //   ...baseFlow(options),
-    // libs: [
-    //   './packages/core/beemo.js.flow',
-    //   './node_modules/boost/boost.js.flow',
-    //   './node_modules/optimal/optimal.js.flow',
-    // ],
+  // libs: [
+  //   './packages/core/beemo.js.flow',
+  //   './node_modules/boost/boost.js.flow',
+  //   './node_modules/optimal/optimal.js.flow',
+  // ],
   // };
 
-  const ignore = ['.*/node_modules/.*', '.*/tests/.*', '.*\\.test\\.js'];
+  const ignore = [
+    '.*/node_modules/.*',
+    '.*/tests/.*',
+    '.*\\.test\\.js',
+    '.*/packages/driver-flow/integration/.*',
+  ];
 
   if (options.workspaces) {
     ignore.push('.*/packages/.*/esm/.*', '.*/packages/.*/lib/.*');

@@ -110,20 +110,16 @@ export default class Driver extends Plugin<DriverOptions> {
   setCommandOptions(options: DriverCommandOptions): this {
     const blueprint = {};
 
-    Object.keys(options).forEach((key) => {
+    Object.keys(options).forEach(key => {
       blueprint[key] = shape({
         alias: union([string(), array(string())], ''),
         description: string().required(),
       });
     });
 
-    this.command = new Options(
-      options,
-      blueprint,
-      {
-        name: this.constructor.name,
-      },
-    );
+    this.command = new Options(options, blueprint, {
+      name: this.constructor.name,
+    });
 
     return this;
   }

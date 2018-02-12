@@ -33,11 +33,8 @@ const beemo = new Beemo(process.argv.slice(3));
 beemo.tool.plugins.forEach(driver => {
   const { command = {}, metadata } = driver;
 
-  app.command(
-    metadata.bin,
-    metadata.description || `Run ${metadata.title}.`,
-    command,
-    () => beemo.executeDriver(driver.name),
+  app.command(metadata.bin, metadata.description || `Run ${metadata.title}.`, command, () =>
+    beemo.executeDriver(driver.name),
   );
 });
 

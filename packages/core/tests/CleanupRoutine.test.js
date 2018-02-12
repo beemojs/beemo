@@ -23,16 +23,13 @@ describe('CleanupRoutine', () => {
     });
 
     it('does nothing when no config paths', async () => {
-      const result = await routine.deleteConfigFiles();
+      await routine.deleteConfigFiles();
 
       expect(fs.remove).not.toHaveBeenCalled();
     });
 
     it('calls remove for each config path', async () => {
-      routine.context.configPaths = [
-        './foo.json',
-        './.barrc',
-      ];
+      routine.context.configPaths = ['./foo.json', './.barrc'];
 
       const result = await routine.deleteConfigFiles();
 

@@ -18,7 +18,9 @@ export default class ESLintDriver extends Driver {
       configName: '.eslintrc.json',
       description: 'Lint files with ESLint.',
       title: 'ESLint',
-    }).on('eslint.create-config-file', this.handleCreateIgnoreFile);
+    });
+
+    this.on('eslint.create-config-file', this.handleCreateIgnoreFile);
   }
 
   mergeConfig(prev: Object, next: Object): Object {
