@@ -24,6 +24,6 @@
   },
   "peerDependencies": {
     "@beemo/core": "^0.11.0",
-    "prettier": "^1.10.0"
+    "prettier": "^1.0.0"
   }
 }

@@ -1,0 +1,9 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Driver formatConfig() formats to JSON 1`] = `
+"{
+  \\"foo\\": 123,
+  \\"bar\\": \\"abc\\",
+  \\"baz\\": true
+}"
+`;

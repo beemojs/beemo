@@ -17,6 +17,19 @@ describe('CleanupRoutine', () => {
     };
   });
 
+  describe('execute()', () => {
+    it('doesnt call `deleteConfigFiles` if `cleanup` is false', () => {
+      routine.tool.config = {
+        config: { cleanup: true },
+      };
+
+      routine.deleteConfigFiles = jest.fn();
+      routine.execute();
+
+      expect(routine.deleteConfigFiles).not.toHaveBeenCalled();
+    });
+  });
+
   describe('deleteConfigFiles()', () => {
     beforeEach(() => {
       fs.remove.mockImplementation(() => Promise.resolve());
