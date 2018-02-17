@@ -35,6 +35,7 @@ export default class ExecuteScriptRoutine extends Routine<BeemoConfig, ScriptCon
       script.name = scriptName;
 
       this.context.script = script;
+      this.context.scriptName = scriptName;
       this.context.scriptPath = filePath;
 
       resolve(script);

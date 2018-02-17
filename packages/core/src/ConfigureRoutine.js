@@ -39,7 +39,9 @@ export default class ConfigureRoutine extends Routine<BeemoConfig, DriverContext
       `Creating config files for the following drivers: ${chalk.magenta(names.join(', '))}`,
     );
 
-    return this.config.parallel ? this.parallelizeSubroutines() : this.serializeSubroutines();
+    return this.tool.config.config.parallel
+      ? this.parallelizeSubroutines()
+      : this.serializeSubroutines();
   }
 
   /**

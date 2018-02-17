@@ -8,7 +8,10 @@ describe('ConfigureRoutine', () => {
   function createDriver(name, dependencies = []) {
     const driver = new Driver();
     driver.name = name;
-    driver.metadata = { dependencies };
+    driver.metadata = {
+      dependencies,
+      title: name,
+    };
 
     return driver;
   }
@@ -23,15 +26,61 @@ describe('ConfigureRoutine', () => {
       primaryDriver: createDriver('foo'),
     };
     routine.tool = {
+      config: {
+        config: {
+          parallel: true,
+        },
+      },
       debug() {},
       emit() {},
       getPlugin(name) {
         return plugins[name] || createDriver(name);
       },
+      on() {},
     };
   });
 
-  describe.skip('createConfigFiles()');
+  describe('createConfigFiles()', () => {
+    beforeEach(() => {
+      routine.serializeSubroutines = jest.fn();
+      routine.parallelizeSubroutines = jest.fn();
+    });
+
+    it('pipes a routine for each driver', async () => {
+      const foo = createDriver('foo');
+      const bar = createDriver('bar');
+      const baz = createDriver('baz');
+
+      expect(routine.subroutines).toHaveLength(0);
+
+      await routine.createConfigFiles([foo, bar, baz]);
+
+      expect(routine.subroutines).toHaveLength(3);
+
+      expect(routine.subroutines[0].key).toBe('foo');
+      expect(routine.subroutines[0].driver).toBe(foo);
+      expect(routine.subroutines[1].key).toBe('bar');
+      expect(routine.subroutines[1].driver).toBe(bar);
+      expect(routine.subroutines[2].key).toBe('baz');
+      expect(routine.subroutines[2].driver).toBe(baz);
+    });
+
+    it('serializes if `parallel` config is false', async () => {
+      routine.tool.config.config.parallel = false;
+
+      await routine.createConfigFiles([createDriver('foo')]);
+
+      expect(routine.serializeSubroutines).toHaveBeenCalled();
+      expect(routine.parallelizeSubroutines).not.toHaveBeenCalled();
+    });
+
+    it('parallelizes if `parallel` config is true', async () => {
+      await routine.createConfigFiles([createDriver('foo')]);
+
+      expect(routine.serializeSubroutines).not.toHaveBeenCalled();
+      expect(routine.parallelizeSubroutines).toHaveBeenCalled();
+    });
+  });
 
   describe('resolveDependencies()', () => {
     it('adds primary driver when no dependencies', async () => {
