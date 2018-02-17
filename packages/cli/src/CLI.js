@@ -39,11 +39,16 @@ beemo.tool.plugins.forEach(driver => {
 });
 
 // Add Beemo commands
-app.command(['run <name>', 'run-script <name>'], 'Run script from configuration module.', {}, args => {
-  beemo.executeScript(args.name);
-});
+app.command(
+  ['run-script <name>', 'run <name>'],
+  'Run script from configuration module.',
+  {},
+  args => {
+    beemo.executeScript(args.name);
+  },
+);
 
-app.command(['sync', 'sync-dotfiles'], 'Sync dotfiles from configuration module.', {}, () => {
+app.command(['sync-dotfiles', 'sync'], 'Sync dotfiles from configuration module.', {}, () => {
   beemo.syncDotfiles();
 });
 

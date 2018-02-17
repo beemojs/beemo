@@ -15,7 +15,7 @@ export default class ESLintDriver extends Driver {
   bootstrap() {
     this.setMetadata({
       bin: 'eslint',
-      configName: '.eslintrc.json',
+      configName: '.eslintrc',
       description: 'Lint files with ESLint.',
       title: 'ESLint',
     });

@@ -2,9 +2,11 @@ import ModuleLoader from 'boost/lib/ModuleLoader';
 import ExecuteScriptRoutine from '../src/ExecuteScriptRoutine';
 import Script from '../src/Script';
 
-jest.mock('boost/lib/ModuleLoader', () => jest.fn(() => ({
-  importModule: jest.fn(() => ({})),
-})));
+jest.mock('boost/lib/ModuleLoader', () =>
+  jest.fn(() => ({
+    importModule: jest.fn(() => ({})),
+  })),
+);
 
 describe('ExecuteScriptRoutine', () => {
   let routine;

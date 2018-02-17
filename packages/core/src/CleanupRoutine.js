@@ -12,8 +12,9 @@ import type { BeemoConfig, DriverContext } from './types';
 
 export default class CleanupRoutine extends Routine<BeemoConfig, DriverContext> {
   execute(): Promise<boolean[]> {
-    this.task('Deleting config files', this.deleteConfigFiles)
-      .skip(!this.tool.config.config.cleanup);
+    this.task('Deleting config files', this.deleteConfigFiles).skip(
+      !this.tool.config.config.cleanup,
+    );
 
     return this.serializeTasks();
   }

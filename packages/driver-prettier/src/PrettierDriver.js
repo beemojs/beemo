@@ -12,7 +12,7 @@ export default class PrettierDriver extends Driver {
   bootstrap() {
     this.setMetadata({
       bin: 'prettier',
-      configName: '.prettierrc.json',
+      configName: '.prettierrc',
       description: 'Format code with Prettier.',
       title: 'Prettier',
     });

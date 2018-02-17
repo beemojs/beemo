@@ -2,14 +2,7 @@
   "name": "@beemo/driver-jest",
   "version": "0.11.0",
   "description": "Jest driver for Beemo.",
-  "keywords": [
-    "beemo",
-    "beemo-driver",
-    "driver",
-    "jest",
-    "test",
-    "runner"
-  ],
+  "keywords": ["beemo", "beemo-driver", "driver", "jest", "test", "runner"],
   "main": "./lib/index.js",
   "engines": {
     "node": ">=6.5.0"

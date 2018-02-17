@@ -1,0 +1,11 @@
+{
+  "root": "./docs",
+  "title": "Beemo",
+  "description": "Centralized configuration layer for build tools.",
+  "plugins": ["github"],
+  "pluginsConfig": {
+    "github": {
+      "url": "https://github.com/milesj/beemo"
+    }
+  }
+}

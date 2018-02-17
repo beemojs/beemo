@@ -35,7 +35,7 @@ describe('ESLintDriver', () => {
   it('sets correct metadata', () => {
     expect(driver.metadata).toEqual({
       bin: 'eslint',
-      configName: '.eslintrc.json',
+      configName: '.eslintrc',
       configOption: '--config',
       dependencies: [],
       description: 'Lint files with ESLint.',

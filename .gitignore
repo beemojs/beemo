@@ -9,6 +9,7 @@ logs/
 .yarnclean
 
 # Directories
+_book/
 coverage/
 esm/
 lib/

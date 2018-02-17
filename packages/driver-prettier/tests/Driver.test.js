@@ -25,7 +25,7 @@ describe('PrettierDriver', () => {
   it('sets correct metadata', () => {
     expect(driver.metadata).toEqual({
       bin: 'prettier',
-      configName: '.prettierrc.json',
+      configName: '.prettierrc',
       configOption: '--config',
       dependencies: [],
       description: 'Format code with Prettier.',

@@ -29,18 +29,14 @@ describe('SyncDotfilesRoutine', () => {
       routine.serializeTasks = jest.fn();
       routine.execute();
 
-      expect(routine.serializeTasks).toHaveBeenCalledWith('./root')
+      expect(routine.serializeTasks).toHaveBeenCalledWith('./root');
     });
   });
 
   describe('copyFilesFromConfigModule()', () => {
     beforeEach(() => {
       copy.mockImplementation((path, root, callback) => {
-        callback(null, [
-          { path: './foo' },
-          { path: './bar' },
-          { path: './baz' },
-        ]);
+        callback(null, [{ path: './foo' }, { path: './bar' }, { path: './baz' }]);
       });
     });
 
@@ -53,11 +49,7 @@ describe('SyncDotfilesRoutine', () => {
     it('returns file paths as strings', async () => {
       const paths = await routine.copyFilesFromConfigModule('./root');
 
-      expect(paths).toEqual([
-        './foo',
-        './bar',
-        './baz',
-      ]);
+      expect(paths).toEqual(['./foo', './bar', './baz']);
     });
   });
 
@@ -67,17 +59,9 @@ describe('SyncDotfilesRoutine', () => {
     });
 
     it('renames each file path', async () => {
-      const paths = await routine.renameFilesWithDot([
-        'foo',
-        './path/bar',
-        '/path/baz',
-      ]);
+      const paths = await routine.renameFilesWithDot(['foo', './path/bar', '/path/baz']);
 
-      expect(paths).toEqual([
-        '.foo',
-        'path/.bar',
-        '/path/.baz',
-      ]);
+      expect(paths).toEqual(['.foo', 'path/.bar', '/path/.baz']);
 
       expect(fs.rename).toHaveBeenCalledWith('foo', '.foo');
       expect(fs.rename).toHaveBeenCalledWith('./path/bar', 'path/.bar');

@@ -23,11 +23,13 @@ describe('Driver', () => {
 
   describe('formatConfig()', () => {
     it('formats to JSON', () => {
-      expect(driver.formatConfig({
-        foo: 123,
-        bar: 'abc',
-        baz: true,
-      })).toMatchSnapshot();
+      expect(
+        driver.formatConfig({
+          foo: 123,
+          bar: 'abc',
+          baz: true,
+        }),
+      ).toMatchSnapshot();
     });
   });
 
@@ -105,17 +107,22 @@ describe('Driver', () => {
 
   describe('mergeConfig()', () => {
     it('deep merges objects', () => {
-      expect(driver.mergeConfig({
-        foo: 123,
-        bar: {
-          baz: 'abc',
-        },
-      }, {
-        bar: {
-          baz: 'xyz',
-          qux: true,
-        },
-      })).toEqual({
+      expect(
+        driver.mergeConfig(
+          {
+            foo: 123,
+            bar: {
+              baz: 'abc',
+            },
+          },
+          {
+            bar: {
+              baz: 'xyz',
+              qux: true,
+            },
+          },
+        ),
+      ).toEqual({
         foo: 123,
         bar: {
           baz: 'xyz',
@@ -172,10 +179,12 @@ describe('Driver', () => {
       expect(() => {
         driver.setCommandOptions({
           foo: {
-            alias: 123
+            alias: 123,
           },
         });
-      }).toThrowError('Invalid Driver option "foo.alias". Type must be one of: String, Array<String>');
+      }).toThrowError(
+        'Invalid Driver option "foo.alias". Type must be one of: String, Array<String>',
+      );
     });
 
     it('supports description as a string', () => {
@@ -217,7 +226,9 @@ describe('Driver', () => {
         driver.setCommandOptions({
           foo: {},
         });
-      }).toThrowError('Invalid Driver option "foo.description". Field is required and must be defined.');
+      }).toThrowError(
+        'Invalid Driver option "foo.description". Field is required and must be defined.',
+      );
     });
   });
 
@@ -250,7 +261,9 @@ describe('Driver', () => {
             ...options,
             bin: 'foo_123',
           });
-        }).toThrowError('Invalid Driver option "bin". String does not match pattern "^[-a-z0-9]+$".');
+        }).toThrowError(
+          'Invalid Driver option "bin". String does not match pattern "^[-a-z0-9]+$".',
+        );
       });
 
       it('doesnt support uppercase', () => {
@@ -259,7 +272,9 @@ describe('Driver', () => {
             ...options,
             bin: 'Foo_123',
           });
-        }).toThrowError('Invalid Driver option "bin". String does not match pattern "^[-a-z0-9]+$".');
+        }).toThrowError(
+          'Invalid Driver option "bin". String does not match pattern "^[-a-z0-9]+$".',
+        );
       });
     });
 
@@ -269,7 +284,9 @@ describe('Driver', () => {
           driver.setMetadata({
             bin: 'beemo',
           });
-        }).toThrowError('Invalid Driver option "configName". Field is required and must be defined.');
+        }).toThrowError(
+          'Invalid Driver option "configName". Field is required and must be defined.',
+        );
       });
 
       it('doesnt support non-strings', () => {
