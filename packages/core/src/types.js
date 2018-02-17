@@ -10,7 +10,7 @@ import type Driver from './Driver';
 import type Script from './Script';
 
 export type BeemoConfig = {
-  // ...ToolConfig,
+  ...ToolConfig,
   config: {
     cleanup: boolean,
     parallel: boolean,
@@ -57,7 +57,7 @@ export type Context = {|
 |};
 
 export type DriverContext = {|
-  // ...Context,
+  ...Context,
   configPaths: string[],
   driverName: string,
   drivers: Driver[],
@@ -65,7 +65,7 @@ export type DriverContext = {|
 |};
 
 export type ScriptContext = {|
-  // ...Context,
+  ...Context,
   script: ?Script,
   scriptName: string,
   scriptPath: string,

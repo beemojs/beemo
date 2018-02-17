@@ -21,7 +21,7 @@
     "docs:install": "gitbook install"
   },
   "devDependencies": {
-    "@milesj/build-tool-config": "0.63.0",
+    "@milesj/build-tool-config": "0.64.1",
     "lerna": "^2.9.0"
   },
   "publishConfig": {

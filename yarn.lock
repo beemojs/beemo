@@ -54,9 +54,9 @@
     lodash "^4.2.0"
     to-fast-properties "^2.0.0"
 
-"@milesj/build-tool-config@0.63.0":
-  version "0.63.0"
-  resolved "https://registry.npmjs.org/@milesj/build-tool-config/-/build-tool-config-0.63.0.tgz#cb9213f8905b08f6b5dfe606eac15e96fcb15c66"
+"@milesj/build-tool-config@0.64.1":
+  version "0.64.1"
+  resolved "https://registry.npmjs.org/@milesj/build-tool-config/-/build-tool-config-0.64.1.tgz#089ef5a5e1841cf689548269272f2381c3b43bd3"
   dependencies:
     "@beemo/cli" "^0.11.0"
     "@beemo/core" "^0.11.0"
@@ -82,18 +82,18 @@
     clean-webpack-plugin "^0.1.18"
     enzyme "^3.3.0"
     enzyme-adapter-react-16 "^1.1.1"
-    eslint "^4.17.0"
+    eslint "^4.18.0"
     eslint-config-airbnb "^16.1.0"
     eslint-config-prettier "^2.9.0"
     eslint-plugin-flowtype "^2.44.0"
     eslint-plugin-import "^2.8.0"
-    eslint-plugin-jest "^21.12.1"
+    eslint-plugin-jest "^21.12.2"
     eslint-plugin-jsx-a11y "^6.0.3"
     eslint-plugin-promise "^3.6.0"
     eslint-plugin-react "^7.6.1"
     eslint-plugin-unicorn "^4.0.2"
     execa "^0.9.0"
-    flow-bin "^0.65.0"
+    flow-bin "^0.66.0"
     fs-extra "^5.0.0"
     gitbook-cli "^2.3.2"
     jest "^22.3.0"
@@ -103,7 +103,7 @@
     react-dom "^16.2.0"
     react-test-renderer "^16.2.0"
     rimraf "^2.6.2"
-    uglifyjs-webpack-plugin "1.1.8"
+    uglifyjs-webpack-plugin "1.2.0"
     webpack "^3.11.0"
 
 "@types/node@*":
@@ -2651,9 +2651,9 @@ eslint-plugin-import@^2.8.0:
     minimatch "^3.0.3"
     read-pkg-up "^2.0.0"
 
-eslint-plugin-jest@^21.12.1:
-  version "21.12.1"
-  resolved "https://registry.npmjs.org/eslint-plugin-jest/-/eslint-plugin-jest-21.12.1.tgz#0a70b3e2be5172ab558f46bbff02ed11069266d6"
+eslint-plugin-jest@^21.12.2:
+  version "21.12.2"
+  resolved "https://registry.npmjs.org/eslint-plugin-jest/-/eslint-plugin-jest-21.12.2.tgz#325f7c6a5078aed51ea087c33c26792337b5ba37"
 
 eslint-plugin-jsx-a11y@^6.0.3:
   version "6.0.3"
@@ -2708,9 +2708,9 @@ eslint-visitor-keys@^1.0.0:
   version "1.0.0"
   resolved "https://registry.npmjs.org/eslint-visitor-keys/-/eslint-visitor-keys-1.0.0.tgz#3f3180fb2e291017716acb4c9d6d5b5c34a6a81d"
 
-eslint@^4.17.0, eslint@^4.5.0:
-  version "4.17.0"
-  resolved "https://registry.npmjs.org/eslint/-/eslint-4.17.0.tgz#dc24bb51ede48df629be7031c71d9dc0ee4f3ddf"
+eslint@^4.18.0:
+  version "4.18.0"
+  resolved "https://registry.npmjs.org/eslint/-/eslint-4.18.0.tgz#ebd0ba795af6dc59aa5cee17938160af5950e051"
   dependencies:
     ajv "^5.3.0"
     babel-code-frame "^6.22.0"
@@ -2750,9 +2750,9 @@ eslint@^4.17.0, eslint@^4.5.0:
     table "^4.0.1"
     text-table "~0.2.0"
 
-eslint@^4.18.0:
-  version "4.18.0"
-  resolved "https://registry.npmjs.org/eslint/-/eslint-4.18.0.tgz#ebd0ba795af6dc59aa5cee17938160af5950e051"
+eslint@^4.5.0:
+  version "4.17.0"
+  resolved "https://registry.npmjs.org/eslint/-/eslint-4.17.0.tgz#dc24bb51ede48df629be7031c71d9dc0ee4f3ddf"
   dependencies:
     ajv "^5.3.0"
     babel-code-frame "^6.22.0"
@@ -3088,10 +3088,6 @@ flat-cache@^1.2.1:
     del "^2.0.2"
     graceful-fs "^4.1.2"
     write "^0.2.1"
-
-flow-bin@^0.65.0:
-  version "0.65.0"
-  resolved "https://registry.npmjs.org/flow-bin/-/flow-bin-0.65.0.tgz#64ffeca27211c786e2d68508c65686ba1b8a2169"
 
 flow-bin@^0.66.0:
   version "0.66.0"
@@ -7428,9 +7424,9 @@ uglify-to-browserify@~1.0.0:
   version "1.0.2"
   resolved "https://registry.yarnpkg.com/uglify-to-browserify/-/uglify-to-browserify-1.0.2.tgz#6e0924d6bda6b5afe349e39a6d632850a0f882b7"
 
-uglifyjs-webpack-plugin@1.1.8:
-  version "1.1.8"
-  resolved "https://registry.npmjs.org/uglifyjs-webpack-plugin/-/uglifyjs-webpack-plugin-1.1.8.tgz#1302fb9471a7daf3d0a5174da6d65f0f415e75ad"
+uglifyjs-webpack-plugin@1.2.0:
+  version "1.2.0"
+  resolved "https://registry.npmjs.org/uglifyjs-webpack-plugin/-/uglifyjs-webpack-plugin-1.2.0.tgz#f706fa4c655000a086b4a97c7d835ed0f6e9b0ef"
   dependencies:
     cacache "^10.0.1"
     find-cache-dir "^1.0.0"
