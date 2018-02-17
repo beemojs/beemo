@@ -5,6 +5,7 @@
  */
 
 import { Pipeline, Tool } from 'boost';
+import { bool, shape } from 'optimal';
 import chalk from 'chalk';
 import fs from 'fs-extra';
 import path from 'path';
@@ -15,6 +16,7 @@ import ExecuteDriverRoutine from './ExecuteDriverRoutine';
 import ExecuteScriptRoutine from './ExecuteScriptRoutine';
 import SyncDotfilesRoutine from './SyncDotfilesRoutine';
 
+import type { Blueprint } from 'optimal';
 import type { BeemoTool, Context, DriverContext, ScriptContext } from './types';
 
 export default class Beemo {
@@ -31,7 +33,7 @@ export default class Beemo {
     this.tool = new Tool(
       {
         appName: 'beemo',
-        configFolder: './configs',
+        configBlueprint: this.getConfigBlueprint(),
         footer: `🤖  Powered by Beemo v${version}`,
         pluginAlias: 'driver',
         scoped: true,
@@ -53,6 +55,18 @@ export default class Beemo {
       moduleRoot: this.getConfigModuleRoot(),
       root: this.tool.options.root,
       yargs: parseArgs(this.argv),
+    };
+  }
+
+  /**
+   * Define the blueprint for Beemo configuration.
+   */
+  getConfigBlueprint(): Blueprint {
+    return {
+      config: shape({
+        cleanup: bool(false),
+        parallel: bool(true),
+      }),
     };
   }
 

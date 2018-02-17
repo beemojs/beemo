@@ -4,17 +4,20 @@
  * @flow
  */
 
-import type { Tool, Reporter } from 'boost';
+import type { Tool, ToolConfig, Reporter } from 'boost';
 import type { Options } from 'yargs';
 import type Driver from './Driver';
 import type Script from './Script';
 
-export type BeemoTool = Tool<Driver, Reporter<Object>>;
-
-export type ConfigureConfig = {
-  cleanup: boolean,
-  parallel: boolean,
+export type BeemoConfig = {
+  ...ToolConfig,
+  config: {
+    cleanup: boolean,
+    parallel: boolean,
+  },
 };
+
+export type BeemoTool = Tool<Driver, Reporter<Object>>;
 
 export type DriverCommandOptions = { [name: string]: Options };
 

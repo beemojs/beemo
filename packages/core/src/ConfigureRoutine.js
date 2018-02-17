@@ -6,17 +6,12 @@
 
 import { Routine } from 'boost';
 import chalk from 'chalk';
-import Config from './configure/Config';
 import CreateConfigRoutine from './configure/CreateConfigRoutine';
 import Driver from './Driver';
 
-import type { ConfigureConfig, DriverContext } from './types';
+import type { BeemoConfig, DriverContext } from './types';
 
-export default class ConfigureRoutine extends Routine<ConfigureConfig, DriverContext> {
-  bootstrap() {
-    this.config = new Config(this.config);
-  }
-
+export default class ConfigureRoutine extends Routine<BeemoConfig, DriverContext> {
   execute(): Promise<string | string[]> {
     this.task('Resolving dependencies', this.resolveDependencies);
     this.task('Creating configuration files', this.createConfigFiles);

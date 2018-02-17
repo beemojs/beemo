@@ -18,8 +18,8 @@
     "prerelease": "yarn run package"
   },
   "devDependencies": {
-    "@milesj/build-tool-config": "0.62.0",
-    "lerna": "^2.8.0"
+    "@milesj/build-tool-config": "0.63.0",
+    "lerna": "^2.9.0"
   },
   "publishConfig": {
     "access": "public"
@@ -72,8 +72,11 @@
       "libs": [
         "./packages/core/beemo.js.flow",
         "./node_modules/boost/boost.js.flow",
-        "./node_modules/optimal/optimal.js.flow",
-      ]
+        "./node_modules/optimal/optimal.js.flow"
+      ],
+      "lints": {
+        "all": "off"
+      }
     }
   }
 }

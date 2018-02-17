@@ -7,9 +7,9 @@
 import { Routine } from 'boost';
 import RunCommandRoutine from './driver/RunCommandRoutine';
 
-import type { DriverContext } from './types';
+import type { BeemoConfig, DriverContext } from './types';
 
-export default class ExecuteDriverRoutine extends Routine<Object, DriverContext> {
+export default class ExecuteDriverRoutine extends Routine<BeemoConfig, DriverContext> {
   execute(): Promise<string[]> {
     const { args, primaryDriver, yargs: { parallel = [] } } = this.context;
     const driverName = primaryDriver.name;
