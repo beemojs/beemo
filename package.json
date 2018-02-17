@@ -61,7 +61,8 @@
           "--debug-check",
           "--write"
         ]
-      }
+      },
+      "typescript"
     ],
     "eslint": {
       "rules": {

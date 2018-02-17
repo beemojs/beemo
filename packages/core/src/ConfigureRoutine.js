@@ -25,7 +25,7 @@ export default class ConfigureRoutine extends Routine<BeemoConfig, DriverContext
    */
   createConfigFiles(drivers: Driver[]): Promise<string | string[]> {
     const names = drivers.map(driver => {
-      const routine = new CreateConfigRoutine(driver.name, driver.metadata.title);
+      const routine = new CreateConfigRoutine(driver.name, driver.metadata.configName);
 
       // Make the driver easily available
       routine.driver = driver;

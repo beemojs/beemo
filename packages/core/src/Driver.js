@@ -135,7 +135,7 @@ export default class Driver extends Plugin<DriverOptions> {
           .match(/^[-a-z0-9]+$/)
           .required(),
         configName: string().required(),
-        configOption: string('--config'),
+        configOption: string('--config').empty(),
         dependencies: array(string()),
         description: string().empty(),
         helpOption: string('--help'),

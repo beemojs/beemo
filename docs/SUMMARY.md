@@ -19,6 +19,7 @@
   * [Jest](./drivers/jest.md)
   * [Mocha](./drivers/mocha.md)
   * [Prettier](./drivers/prettier.md)
+  * [TypeScript](./drivers/typescript.md)
 * [Creating A Driver](./driver.md#creating-a-driver)
 * [Pro Tips](./tips.md)
   * [Local Beemo Setup](./tips.md#local-beemo-setup)

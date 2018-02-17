@@ -13,6 +13,7 @@ export default class ExecuteDriverRoutine extends Routine<BeemoConfig, DriverCon
   execute(): Promise<string[]> {
     const { args, primaryDriver, yargs: { parallel = [] } } = this.context;
     const driverName = primaryDriver.name;
+    const binName = primaryDriver.metadata.bin;
 
     if (parallel.length > 0) {
       const filteredArgs = args.filter(arg => !arg.startsWith('--parallel'));
@@ -22,13 +23,13 @@ export default class ExecuteDriverRoutine extends Routine<BeemoConfig, DriverCon
         const combinedArgs = [...filteredArgs, ...parallelArgs];
 
         this.pipe(
-          new RunCommandRoutine(driverName, `${driverName} ${combinedArgs.join(' ')}`, {
+          new RunCommandRoutine(driverName, `${binName} ${combinedArgs.join(' ')}`, {
             parallelArgs,
           }),
         );
       });
     } else {
-      this.pipe(new RunCommandRoutine(driverName, `${driverName} ${args.join(' ')}`));
+      this.pipe(new RunCommandRoutine(driverName, `${binName} ${args.join(' ')}`));
     }
 
     return this.parallelizeSubroutines();

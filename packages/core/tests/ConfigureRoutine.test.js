@@ -9,6 +9,7 @@ describe('ConfigureRoutine', () => {
     const driver = new Driver();
     driver.name = name;
     driver.metadata = {
+      configName: name,
       dependencies,
       title: name,
     };
