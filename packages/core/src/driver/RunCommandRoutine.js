@@ -10,7 +10,7 @@ import parseArgs from 'yargs-parser';
 
 import type { DriverContext, Execution } from '../types';
 
-const OPTION_PATTERN: RegExp = /-?-[-a-z0-9]+/gi;
+const OPTION_PATTERN: RegExp = /-?-[-a-z0-9]+\s/gi;
 
 export default class RunCommandRoutine extends Routine<Object, DriverContext> {
   execute(): Promise<*> {
