@@ -2,7 +2,14 @@
   "name": "@beemo/driver-eslint",
   "version": "0.11.0",
   "description": "ESLint driver for Beemo.",
-  "keywords": ["beemo", "beemo-driver", "driver", "eslint", "lint", "linter"],
+  "keywords": [
+    "beemo",
+    "beemo-driver",
+    "driver",
+    "eslint",
+    "lint",
+    "linter"
+  ],
   "main": "./lib/index.js",
   "engines": {
     "node": ">=6.5.0"
@@ -13,7 +20,7 @@
     "access": "public"
   },
   "devDependencies": {
-    "eslint": "^4.18.0"
+    "eslint": "^4.18.1"
   },
   "peerDependencies": {
     "@beemo/core": "^0.11.0",
