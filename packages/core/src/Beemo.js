@@ -99,7 +99,7 @@ export default class Beemo {
     const rootPath = path.join(process.cwd(), 'node_modules', module);
 
     if (!fs.existsSync(rootPath)) {
-      throw new Error('Module defined in "beemo.module" could not be found.');
+      throw new Error(`Module ${module} defined in "beemo.module" could not be found.`);
     }
 
     this.tool.debug(`Found configuration module root path: ${chalk.cyan(rootPath)}`);
