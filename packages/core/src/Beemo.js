@@ -17,6 +17,7 @@ import ExecuteScriptRoutine from './ExecuteScriptRoutine';
 import SyncDotfilesRoutine from './SyncDotfilesRoutine';
 
 import type { Blueprint } from 'optimal';
+import type Driver from './Driver';
 import type { BeemoTool, Context, DriverContext, ScriptContext } from './types';
 
 export default class Beemo {
@@ -43,6 +44,9 @@ export default class Beemo {
 
     // Immediately load config and plugins
     this.tool.initialize();
+
+    // Temporarily disable console to avoid colliding with yargs
+    this.tool.console.stop();
   }
 
   /**
@@ -131,13 +135,12 @@ export default class Beemo {
     // Make the context available in the current driver
     primaryDriver.context = context;
 
-    tool.setEventNamespace(driverName);
+    tool
+      .setEventNamespace(driverName)
+      .debug(`Running with ${driverName} driver`)
+      .emit('driver', [driverName, context]);
 
-    tool.emit('driver', [driverName, context]);
-
-    tool.debug(`Running with ${driverName} driver`);
-
-    return new Pipeline(tool)
+    return this.startPipeline()
       .pipe(new ConfigureRoutine('config', 'Generating configurations'))
       .pipe(new ExecuteDriverRoutine('driver', 'Executing driver'))
       .pipe(new CleanupRoutine('cleanup', 'Cleaning up'))
@@ -148,38 +151,46 @@ export default class Beemo {
    * Run a script found within the configuration module.
    */
   executeScript(scriptName: string): Promise<*> {
-    const { tool } = this;
     const context: ScriptContext = this.createContext({
       script: null,
       scriptName,
       scriptPath: '',
     });
 
-    tool.setEventNamespace(scriptName);
+    this.tool
+      .setEventNamespace(scriptName)
+      .debug(`Running with ${scriptName} script`)
+      .emit('script', [scriptName, context]);
 
-    tool.emit('script', [scriptName, context]);
-
-    tool.debug(`Running with ${scriptName} script`);
-
-    return new Pipeline(tool)
+    return this.startPipeline()
       .pipe(new ExecuteScriptRoutine('script', `Executing ${scriptName} script`))
       .run(scriptName, context);
+  }
+
+  /**
+   * Setup and start a fresh pipeline.
+   */
+  startPipeline<T>(): Pipeline<Driver, T> {
+    const { tool } = this;
+
+    // Start rendering console again
+    tool.console.start();
+
+    return new Pipeline(tool);
   }
 
   /**
    * Sync dotfiles from the configuration module.
    */
   syncDotfiles(): Promise<*> {
-    const { tool } = this;
     const context: Context = this.createContext();
 
-    tool.setEventNamespace('beemo');
+    this.tool
+      .setEventNamespace('beemo')
+      .debug('Running dotfiles command')
+      .emit('dotfiles', [context]);
 
-    tool.emit('dotfiles', [context]);
-
-    tool.debug('Running dotfiles command');
-
-    return new Pipeline(tool)
+    return this.startPipeline()
       .pipe(new SyncDotfilesRoutine('dotfiles', 'Syncing dotfiles'))
       .run(null, context);
   }

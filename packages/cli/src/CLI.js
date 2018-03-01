@@ -33,8 +33,11 @@ const beemo = new Beemo(process.argv.slice(3));
 beemo.tool.plugins.forEach(driver => {
   const { command = {}, metadata } = driver;
 
-  app.command(driver.name, metadata.description || `Run ${metadata.title}.`, command, () =>
-    beemo.executeDriver(driver.name),
+  app.command(
+    driver.name,
+    metadata.description || `Run ${metadata.title}.`,
+    command,
+    () => beemo.executeDriver(driver.name),
   );
 });
 
@@ -69,6 +72,6 @@ app
 // eslint-disable-next-line
 app
   .usage('beemo <command> [args..]')
-  .demandCommand(1, 'Please run a command.')
+  .demandCommand(1, 'Please select a command.')
   .showHelpOnFail(true)
   .help().argv;
