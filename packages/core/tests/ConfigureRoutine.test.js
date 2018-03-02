@@ -59,11 +59,11 @@ describe('ConfigureRoutine', () => {
       expect(routine.subroutines).toHaveLength(3);
 
       expect(routine.subroutines[0].key).toBe('foo');
-      expect(routine.subroutines[0].driver).toBe(foo);
+      expect(routine.subroutines[0].config.driver).toBe(foo);
       expect(routine.subroutines[1].key).toBe('bar');
-      expect(routine.subroutines[1].driver).toBe(bar);
+      expect(routine.subroutines[1].config.driver).toBe(bar);
       expect(routine.subroutines[2].key).toBe('baz');
-      expect(routine.subroutines[2].driver).toBe(baz);
+      expect(routine.subroutines[2].config.driver).toBe(baz);
     });
 
     it('serializes if `parallel` config is false', async () => {

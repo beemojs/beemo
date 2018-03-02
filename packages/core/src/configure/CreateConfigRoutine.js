@@ -7,6 +7,7 @@
 import chalk from 'chalk';
 import fs from 'fs-extra';
 import path from 'path';
+import Options, { instance } from 'optimal';
 import parseArgs from 'yargs-parser';
 import { Routine } from 'boost';
 import Driver from '../Driver';
@@ -15,6 +16,14 @@ import type { DriverContext } from '../types';
 
 export default class CreateConfigRoutine extends Routine<Object, DriverContext> {
   driver: Driver;
+
+  bootstrap() {
+    this.config = new Options(this.config, {
+      driver: instance(Driver).required(),
+    }, {
+      name: 'CreateConfigRoutine',
+    });
+  }
 
   execute(): Promise<string> {
     const { name } = this.driver;
