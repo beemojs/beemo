@@ -11,26 +11,26 @@ import type { BeemoConfig, DriverContext } from './types';
 
 export default class ExecuteDriverRoutine extends Routine<BeemoConfig, DriverContext> {
   execute(): Promise<string[]> {
-    const { args, primaryDriver, yargs: { parallel = [] } } = this.context;
+    const { args, primaryDriver } = this.context;
     const driverName = primaryDriver.name;
     const binName = primaryDriver.metadata.bin;
 
-    if (parallel.length > 0) {
-      const filteredArgs = args.filter(arg => !arg.startsWith('--parallel'));
-
-      parallel.forEach(extraArgs => {
-        const parallelArgs = extraArgs.split(' ');
-        const combinedArgs = [...filteredArgs, ...parallelArgs];
-
-        this.pipe(
-          new RunCommandRoutine(driverName, `${binName} ${combinedArgs.join(' ')}`, {
-            parallelArgs,
-          }),
-        );
-      });
-    } else {
-      this.pipe(new RunCommandRoutine(driverName, `${binName} ${args.join(' ')}`));
-    }
+    // if (parallel.length > 0) {
+    //   const filteredArgs = args.filter(arg => !arg.startsWith('--parallel'));
+    //
+    //   parallel.forEach(extraArgs => {
+    //     const parallelArgs = extraArgs.split(' ');
+    //     const combinedArgs = [...filteredArgs, ...parallelArgs];
+    //
+    //     this.pipe(
+    //       new RunCommandRoutine(driverName, `${binName} ${combinedArgs.join(' ')}`, {
+    //         parallelArgs,
+    //       }),
+    //     );
+    //   });
+    // } else {
+    this.pipe(new RunCommandRoutine(driverName, `${binName} ${args.join(' ')}`));
+    // }
 
     return this.parallelizeSubroutines();
   }
