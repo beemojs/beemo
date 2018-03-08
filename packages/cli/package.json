@@ -1,8 +1,12 @@
 {
   "name": "@beemo/cli",
-  "version": "0.11.0",
+  "version": "0.12.0",
   "description": "Beemo CLI for consuming projects.",
-  "keywords": ["beemo", "cli", "command"],
+  "keywords": [
+    "beemo",
+    "cli",
+    "command"
+  ],
   "bin": {
     "beemo": "./bin/beemo.js"
   },
