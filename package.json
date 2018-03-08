@@ -4,7 +4,7 @@
   "scripts": {
     "test": "yarn run jest",
     "coverage": "yarn run jest --coverage",
-    "eslint": "beemo eslint ./packages/*/{src,tests}",
+    "eslint": "beemo eslint \"./packages/*/{src,tests}\"",
     "flow": "beemo flow --workspaces",
     "jest": "beemo jest --workspaces",
     "prettier": "beemo prettier --write ./README.md \"./configs/*.js\" \"./packages/*/{bin,src,tests}/**/*.js\" \"./packages/*/*.{md,json}\" \"./docs/**/*.md\"",
@@ -66,6 +66,7 @@
     ],
     "eslint": {
       "rules": {
+        "function-paren-newline": "off",
         "import/first": "off"
       }
     },

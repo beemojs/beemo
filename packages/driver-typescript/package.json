@@ -2,13 +2,7 @@
   "name": "@beemo/driver-typescript",
   "version": "0.0.0",
   "description": "TypeScript driver for Beemo.",
-  "keywords": [
-    "beemo",
-    "beemo-driver",
-    "driver",
-    "typescript",
-    "type"
-  ],
+  "keywords": ["beemo", "beemo-driver", "driver", "typescript", "type"],
   "main": "./lib/index.js",
   "engines": {
     "node": ">=6.5.0"

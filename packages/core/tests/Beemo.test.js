@@ -3,10 +3,14 @@ import Beemo from '../src/Beemo';
 
 jest.mock('boost/lib/Console');
 
-jest.mock('boost/lib/Pipeline', () => function PipelineMock() {
-  this.pipe = jest.fn(() => this);
-  this.run = jest.fn(() => this);
-});
+jest.mock(
+  'boost/lib/Pipeline',
+  () =>
+    function PipelineMock() {
+      this.pipe = jest.fn(() => this);
+      this.run = jest.fn(() => this);
+    },
+);
 
 describe('Beemo', () => {
   let beemo;
@@ -32,11 +36,13 @@ describe('Beemo', () => {
     });
 
     it('can pass extra context', () => {
-      expect(beemo.createContext({
-        foo: 'bar',
-        // Cant overwrite
-        args: ['baz'],
-      })).toEqual({
+      expect(
+        beemo.createContext({
+          foo: 'bar',
+          // Cant overwrite
+          args: ['baz'],
+        }),
+      ).toEqual({
         foo: 'bar',
         args: ['foo', 'bar'],
         moduleRoot: process.cwd(),
@@ -54,7 +60,9 @@ describe('Beemo', () => {
 
       expect(() => {
         beemo.getConfigModuleRoot();
-      }).toThrowError('Beemo requires a "beemo.module" property within your package.json. This property is the name of a module that houses your configuration files.');
+      }).toThrowError(
+        'Beemo requires a "beemo.module" property within your package.json. This property is the name of a module that houses your configuration files.',
+      );
     });
 
     it('errors if a fake and or missing node module', () => {
@@ -62,7 +70,9 @@ describe('Beemo', () => {
 
       expect(() => {
         beemo.getConfigModuleRoot();
-      }).toThrowError('Module beemo-this-should-never-exist defined in "beemo.module" could not be found.');
+      }).toThrowError(
+        'Module beemo-this-should-never-exist defined in "beemo.module" could not be found.',
+      );
     });
 
     it('returns cwd if using @local', () => {
@@ -108,25 +118,31 @@ describe('Beemo', () => {
     it('passes driver name and context to pipeline run', async () => {
       const pipeline = await beemo.executeDriver('foo-bar');
 
-      expect(pipeline.run).toHaveBeenCalledWith('foo-bar', expect.objectContaining({
-        args: ['foo', 'bar'],
-        driverName: 'foo-bar',
-      }));
+      expect(pipeline.run).toHaveBeenCalledWith(
+        'foo-bar',
+        expect.objectContaining({
+          args: ['foo', 'bar'],
+          driverName: 'foo-bar',
+        }),
+      );
     });
 
     it('sets primary driver with context', async () => {
       const pipeline = await beemo.executeDriver('foo-bar');
 
-      expect(pipeline.run).toHaveBeenCalledWith('foo-bar', expect.objectContaining({
-        args: ['foo', 'bar'],
-        primaryDriver: expect.objectContaining({
-          context: expect.objectContaining({
-            configPaths: [],
-            driverName: 'foo-bar',
-            drivers: [],
+      expect(pipeline.run).toHaveBeenCalledWith(
+        'foo-bar',
+        expect.objectContaining({
+          args: ['foo', 'bar'],
+          primaryDriver: expect.objectContaining({
+            context: expect.objectContaining({
+              configPaths: [],
+              driverName: 'foo-bar',
+              drivers: [],
+            }),
           }),
         }),
-      }));
+      );
     });
 
     it('registers an exit listener', async () => {
@@ -164,10 +180,13 @@ describe('Beemo', () => {
     it('passes script name and context to pipeline run', async () => {
       const pipeline = await beemo.executeScript('foo-bar');
 
-      expect(pipeline.run).toHaveBeenCalledWith('foo-bar', expect.objectContaining({
-        args: ['foo', 'bar'],
-        scriptName: 'foo-bar',
-      }));
+      expect(pipeline.run).toHaveBeenCalledWith(
+        'foo-bar',
+        expect.objectContaining({
+          args: ['foo', 'bar'],
+          scriptName: 'foo-bar',
+        }),
+      );
     });
   });
 
@@ -205,9 +224,12 @@ describe('Beemo', () => {
     it('passes context to pipeline run', async () => {
       const pipeline = await beemo.syncDotfiles();
 
-      expect(pipeline.run).toHaveBeenCalledWith(null, expect.objectContaining({
-        args: ['foo', 'bar'],
-      }));
+      expect(pipeline.run).toHaveBeenCalledWith(
+        null,
+        expect.objectContaining({
+          args: ['foo', 'bar'],
+        }),
+      );
     });
   });
 });

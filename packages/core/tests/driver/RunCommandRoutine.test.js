@@ -28,12 +28,14 @@ describe('RunCommandRoutine', () => {
 
       const options = await routine.extractNativeOptions();
 
-      expect(options).toEqual(expect.objectContaining({
-        '-f': true, // Short
-        '-M': true, // Uppercase short
-        '--filename': true, // Long
-        '--no-highlight-code': true, // With dashes
-      }));
+      expect(options).toEqual(
+        expect.objectContaining({
+          '-f': true, // Short
+          '-M': true, // Uppercase short
+          '--filename': true, // Long
+          '--no-highlight-code': true, // With dashes
+        }),
+      );
     });
 
     it('supports uppercased options', async () => {
@@ -45,11 +47,13 @@ describe('RunCommandRoutine', () => {
 
       const options = await routine.extractNativeOptions();
 
-      expect(options).toEqual(expect.objectContaining({
-        '-c': true, // Short
-        '--all': true, // Long
-        '--changedFilesWithAncestor': true, // Camel case
-      }));
+      expect(options).toEqual(
+        expect.objectContaining({
+          '-c': true, // Short
+          '--all': true, // Long
+          '--changedFilesWithAncestor': true, // Camel case
+        }),
+      );
     });
   });
 });

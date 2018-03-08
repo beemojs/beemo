@@ -18,11 +18,15 @@ export default class CreateConfigRoutine extends Routine<Object, DriverContext> 
   driver: Driver;
 
   bootstrap() {
-    this.config = new Options(this.config, {
-      driver: instance(Driver).required(),
-    }, {
-      name: 'CreateConfigRoutine',
-    });
+    this.config = new Options(
+      this.config,
+      {
+        driver: instance(Driver).required(),
+      },
+      {
+        name: 'CreateConfigRoutine',
+      },
+    );
   }
 
   execute(): Promise<string> {
