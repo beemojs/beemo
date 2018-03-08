@@ -20,7 +20,7 @@
     "access": "public"
   },
   "devDependencies": {
-    "eslint": "^4.18.1"
+    "eslint": "^4.18.2"
   },
   "peerDependencies": {
     "@beemo/core": "^0.11.0",

@@ -29,6 +29,7 @@ describe('MochaDriver', () => {
       configOption: '--opts',
       dependencies: [],
       description: 'Unit test files with Mocha.',
+      filterOptions: false,
       helpOption: '--help',
       title: 'Mocha',
       useConfigOption: true,

@@ -33,6 +33,7 @@ export type DriverMetadata = {
   configOption: string,
   dependencies: string[],
   description: string,
+  filterOptions: boolean,
   helpOption: string,
   title: string,
   useConfigOption: boolean,

@@ -2,7 +2,14 @@
   "name": "@beemo/driver-mocha",
   "version": "0.5.0",
   "description": "Mocha driver for Beemo.",
-  "keywords": ["beemo", "beemo-driver", "driver", "mocha", "test", "runner"],
+  "keywords": [
+    "beemo",
+    "beemo-driver",
+    "driver",
+    "mocha",
+    "test",
+    "runner"
+  ],
   "main": "./lib/index.js",
   "engines": {
     "node": ">=6.5.0"
@@ -13,7 +20,7 @@
     "access": "public"
   },
   "devDependencies": {
-    "mocha": "^5.0.1"
+    "mocha": "^5.0.4"
   },
   "peerDependencies": {
     "@beemo/core": "^0.11.0",

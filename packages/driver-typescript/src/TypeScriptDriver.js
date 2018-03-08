@@ -15,6 +15,7 @@ export default class TypeScriptDriver extends Driver {
       configName: 'tsconfig.json',
       configOption: '',
       description: 'Type check files with TypeScript.',
+      filterOptions: true,
       title: 'TypeScript',
     });
   }

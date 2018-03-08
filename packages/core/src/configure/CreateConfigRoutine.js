@@ -26,7 +26,7 @@ export default class CreateConfigRoutine extends Routine<Object, DriverContext> 
   }
 
   execute(): Promise<string> {
-    const { name } = this.driver;
+    const { name } = this.config.driver;
 
     this.task(`Loading external ${name} module config`, this.loadConfigFromFilesystem);
     this.task(`Loading local ${name} Beemo config`, this.extractConfigFromPackage);
@@ -40,7 +40,7 @@ export default class CreateConfigRoutine extends Routine<Object, DriverContext> 
    * Create a temporary configuration file or pass as an option.
    */
   createConfigFile(config: Object): Promise<string> {
-    const { metadata } = this.driver;
+    const { metadata } = this.config.driver;
     const configPath = path.join(this.context.root, metadata.configName);
 
     this.tool.debug(`Creating config file ${chalk.cyan(configPath)}`);
@@ -49,14 +49,14 @@ export default class CreateConfigRoutine extends Routine<Object, DriverContext> 
 
     this.tool.emit('create-config-file', [configPath, config]);
 
-    return fs.writeFile(configPath, this.driver.formatConfig(config)).then(() => configPath);
+    return fs.writeFile(configPath, this.config.driver.formatConfig(config)).then(() => configPath);
   }
 
   /**
    * Extract configuration from "beemo.<driver>" within the local project's package.json.
    */
   extractConfigFromPackage(configs: Object[]): Promise<Object[]> {
-    const { name } = this.driver;
+    const { name } = this.config.driver;
     const { config } = this.tool;
 
     this.tool.invariant(
@@ -82,7 +82,7 @@ export default class CreateConfigRoutine extends Routine<Object, DriverContext> 
     this.tool.debug('Gathering arguments to pass to config file');
 
     return parseArgs(
-      [...this.driver.options.args, ...this.context.args].map(value => String(value)),
+      [...this.config.driver.options.args, ...this.context.args].map(value => String(value)),
     );
   }
 
@@ -91,11 +91,11 @@ export default class CreateConfigRoutine extends Routine<Object, DriverContext> 
    */
   mergeConfigs(configs: Object[]): Promise<Object> {
     this.tool.debug(
-      `Merging ${chalk.magenta(this.driver.name)} config from ${configs.length} sources`,
+      `Merging ${chalk.magenta(this.config.driver.name)} config from ${configs.length} sources`,
     );
 
     const config = configs.reduce(
-      (masterConfig, cfg) => this.driver.mergeConfig(masterConfig, cfg),
+      (masterConfig, cfg) => this.config.driver.mergeConfig(masterConfig, cfg),
       {},
     );
 
@@ -109,7 +109,7 @@ export default class CreateConfigRoutine extends Routine<Object, DriverContext> 
    */
   loadConfigFromFilesystem(configs: Object[]): Promise<Object[]> {
     const { config: { module: moduleName }, configLoader } = this.tool;
-    const { name } = this.driver;
+    const { name } = this.config.driver;
 
     // Allow for local development
     const filePath =

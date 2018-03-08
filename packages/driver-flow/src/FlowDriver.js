@@ -16,6 +16,7 @@ export default class FlowDriver extends Driver {
       bin: 'flow',
       configName: '.flowconfig',
       description: 'Type check files with Flow.',
+      filterOptions: true,
       title: 'Flow',
     });
   }

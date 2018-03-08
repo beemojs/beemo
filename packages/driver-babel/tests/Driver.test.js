@@ -37,6 +37,7 @@ describe('BabelDriver', () => {
       configOption: '--config',
       dependencies: [],
       description: 'Transpile files with Babel.',
+      filterOptions: false,
       helpOption: '--help',
       title: 'Babel',
       useConfigOption: false,

@@ -29,6 +29,7 @@ describe('FlowDriver', () => {
       configOption: '--config',
       dependencies: [],
       description: 'Type check files with Flow.',
+      filterOptions: true,
       helpOption: '--help',
       title: 'Flow',
       useConfigOption: false,

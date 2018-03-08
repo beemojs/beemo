@@ -17,6 +17,7 @@ export default class JestDriver extends Driver {
       configName: 'jest.json',
       dependencies: ['babel'],
       description: 'Unit test files with Jest.',
+      filterOptions: true,
       title: 'Jest',
     });
   }

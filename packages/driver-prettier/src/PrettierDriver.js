@@ -14,6 +14,7 @@ export default class PrettierDriver extends Driver {
       bin: 'prettier',
       configName: '.prettierrc',
       description: 'Format code with Prettier.',
+      filterOptions: true,
       title: 'Prettier',
     });
   }

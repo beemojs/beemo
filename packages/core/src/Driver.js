@@ -138,6 +138,7 @@ export default class Driver extends Plugin<DriverOptions> {
         configOption: string('--config').empty(),
         dependencies: array(string()),
         description: string().empty(),
+        filterOptions: bool(false),
         helpOption: string('--help'),
         title: string().required(),
         useConfigOption: bool(),

@@ -10,56 +10,61 @@ import parseArgs from 'yargs-parser';
 
 import type { DriverContext, Execution } from '../types';
 
-const OPTION_PATTERN: RegExp = /-?-[-a-z0-9]+\s/gi;
+const OPTION_PATTERN: RegExp = /-?-[-a-z0-9]+(,|\s)/gi;
 
 export default class RunCommandRoutine extends Routine<Object, DriverContext> {
   execute(): Promise<*> {
-    const { primaryDriver } = this.context;
-
-    this.task('Filtering options', this.filterUnknownOptionsFromArgs);
-
-    this.task('Including config option', this.includeConfigOption).skip(
-      !primaryDriver.metadata.useConfigOption,
-    );
-
-    this.task('Running command', this.runCommandWithArgs);
-
-    return this.serializeTasks();
-  }
-
-  /**
-   * Filter unknown and or unsupported CLI options from the arguments passed to the CLI.
-   * Utilize the driver's help option/command to determine accurate options.
-   */
-  filterUnknownOptionsFromArgs(): Promise<string[]> {
-    const { args: commandArgs, primaryDriver: driver } = this.context;
-    const { args: driverArgs, env } = driver.options;
+    const { metadata } = this.context.primaryDriver;
     const args = [
       // Passed by the driver
-      ...driverArgs,
+      ...this.context.primaryDriver.options.args,
       // Passed on the command line
-      ...commandArgs,
+      ...this.context.args,
       // Parallel args passed on the command line
-      ...(this.config.parallelArgs || []),
+      // ...(this.config.parallelArgs || []),
     ];
 
     // Since we combine multiple args, we need to rebuild this.
     // And we also need to set this before we filter them.
     this.context.yargs = parseArgs(args);
 
-    this.tool.debug('Filtering unknown command line args and options');
+    this.task('Filtering options', this.filterUnknownOptionsFromArgs).skip(!metadata.filterOptions);
+
+    this.task('Including config option', this.includeConfigOption).skip(!metadata.useConfigOption);
+
+    this.task('Running command', this.runCommandWithArgs);
+
+    return this.serializeTasks(args);
+  }
+
+  /**
+   * Extract native supported options and flags from driver help output.
+   */
+  extractNativeOptions(): Promise<{ [option: string]: true }> {
+    const driver = this.context.primaryDriver;
+    const { env } = driver.options;
 
     return this.executeCommand(driver.metadata.bin, [driver.metadata.helpOption], { env })
       .then(({ stdout }) => {
         const nativeOptions = {};
 
         stdout.match(OPTION_PATTERN).forEach(option => {
-          nativeOptions[option] = true;
+          // Trim trailing comma or space
+          nativeOptions[option.slice(0, -1)] = true;
         });
 
         return nativeOptions;
-      })
-      .then(nativeOptions => {
+      });
+  }
+
+  /**
+   * Filter unknown and or unsupported CLI options from the arguments passed to the CLI.
+   * Utilize the driver's help option/command to determine accurate options.
+   */
+  filterUnknownOptionsFromArgs(args: string[]): Promise<string[]> {
+    this.tool.debug('Filtering unknown command line args and options');
+
+    return this.extractNativeOptions().then(nativeOptions => {
         const filteredArgs = [];
         const unknownArgs = [];
         let skipNext = false;

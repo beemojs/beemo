@@ -17,6 +17,7 @@ export default class ESLintDriver extends Driver {
       bin: 'eslint',
       configName: '.eslintrc',
       description: 'Lint files with ESLint.',
+      filterOptions: true,
       title: 'ESLint',
     });
 
