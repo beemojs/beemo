@@ -20,6 +20,6 @@
     "yargs": "^11.0.0"
   },
   "peerDependencies": {
-    "@beemo/core": "^0.11.0"
+    "@beemo/core": "^0.12.0"
   }
 }
