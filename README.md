@@ -13,7 +13,7 @@ dependencies, continuous copy and paste, and more.
 * Configure supported build tools using `.js` files.
 * Customize and alter config at runtime with CLI options.
 * Pass custom CLI options to build tool commands without failure.
-* Automatically expand glob pattern arguments (a better alternative to bash).
+* Automatically expand glob patterns (a better alternative to bash).
 * Easily share config between build tools.
 * Avoid relative config or `extend` paths.
 * Automatic config file cleanup.

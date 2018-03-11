@@ -56,7 +56,10 @@
         "args": [
           "--colors",
           "--logHeapUsage"
-        ]
+        ],
+        "env": {
+          "NODE_ENV": "test"
+        }
       },
       "mocha",
       {

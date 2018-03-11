@@ -24,3 +24,4 @@
 * [Pro Tips](./tips.md)
   * [Local Beemo Setup](./tips.md#local-beemo-setup)
   * [Editor Integration](./tips.md#editor-integration)
+  * [Glob Expansion](./tips.md#glob-expansion)

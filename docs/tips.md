@@ -37,3 +37,23 @@ your `beemo` config (is `false` by default).
 
 With these changes, the local config files will persist after executing a driver, but will also be
 ignored in your VCS. Pretty nice huh?
+
+## Glob Expansion
+
+Most scripts require [Bash filename expansion](http://tldp.org/LDP/abs/html/globbingref.html) to
+glob multiple filesystem paths, but this isn't entirely efficient, as Bash only supports a subset
+of the RE specification, nor does it support wildcards like `**` (recursive search).
+
+To work around this limitation, Beemo implements its own version of filename expansion using the
+[glob package](https://www.npmjs.com/package/glob). Simply wrap your command line argument in
+quotes to use it!
+
+```
+// Before
+beemo eslint ./packages/*/{src,tests}
+
+// After
+beemo eslint "./packages/*/{src,tests}"
+```
+
+> This approach has an additional benefit of not cluttering `stdout`.
