@@ -22,7 +22,11 @@
   },
   "devDependencies": {
     "@milesj/build-tool-config": "0.66.1",
-    "lerna": "^2.9.0"
+    "chalk": "^2.3.2",
+    "fs-extra": "^5.0.0",
+    "glob": "^7.1.2",
+    "lerna": "^2.9.0",
+    "semver": "^5.5.0"
   },
   "publishConfig": {
     "access": "public"
@@ -83,10 +87,5 @@
         "all": "off"
       }
     }
-  },
-  "dependencies": {
-    "fs-extra": "^5.0.0",
-    "glob": "^7.1.2",
-    "semver": "^5.5.0"
   }
 }

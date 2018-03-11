@@ -1,4 +1,5 @@
 const { Script } = require('@beemo/core');
+const chalk = require('chalk');
 const fs = require('fs-extra');
 const glob = require('glob');
 const semver = require('semver');
@@ -26,6 +27,8 @@ module.exports = class BumpPeerDepsScript extends Script {
     const packages = {};
     const packagePaths = {};
 
+    tool.log('Loading packages and incrementing versions');
+
     glob.sync('./packages/*/package.json', { cwd: tool.options.root }).forEach(path => {
       const data = fs.readJsonSync(path);
 
@@ -35,15 +38,21 @@ module.exports = class BumpPeerDepsScript extends Script {
     });
 
     return Promise.all(
-      Object.keys(packages).forEach(name => {
-        const data = packages[name];
-
+      Object.entries(packages).map(([name, data]) => {
         if (data.peerDependencies) {
           Object.keys(data.peerDependencies).forEach(peerName => {
-            if (versions[peerName]) {
-              // eslint-disable-next-line no-param-reassign
-              data.peerDependencies[peerName] = versions[peerName];
+            if (!versions[peerName]) {
+              return;
             }
+
+            const nextVersion = `^${versions[peerName]}`;
+
+            tool.log(
+              `Bumping ${chalk.yellow(name)} peer ${chalk.cyan(peerName)} from ${chalk.gray(data.peerDependencies[peerName])} to ${chalk.green(nextVersion)}`,
+            );
+
+            // eslint-disable-next-line no-param-reassign
+            data.peerDependencies[peerName] = nextVersion;
           });
         }
 
