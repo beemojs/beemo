@@ -138,7 +138,10 @@ export default class Beemo {
 
     // Delete config files on failure
     if (tool.config.config.cleanup) {
-      tool.on('exit', /* istanbul ignore next */ (event, code) => this.handleCleanupOnFailure(code, context));
+      tool.on(
+        'exit',
+        /* istanbul ignore next */ (event, code) => this.handleCleanupOnFailure(code, context),
+      );
     }
 
     // Make the context available in the current driver

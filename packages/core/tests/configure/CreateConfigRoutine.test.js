@@ -50,7 +50,10 @@ describe('CreateConfigRoutine', () => {
       const path = await routine.execute();
 
       expect(path).toBe('/.babelrc');
-      expect(fs.writeFile).toHaveBeenCalledWith('/.babelrc', JSON.stringify({ foo: 123, bar: 'abc' }, null, 2));
+      expect(fs.writeFile).toHaveBeenCalledWith(
+        '/.babelrc',
+        JSON.stringify({ foo: 123, bar: 'abc' }, null, 2),
+      );
     });
   });
 
@@ -60,7 +63,9 @@ describe('CreateConfigRoutine', () => {
 
       expect(() => {
         routine.bootstrap();
-      }).toThrowError('Invalid CreateConfigRoutine option "driver". Field is required and must be defined.');
+      }).toThrowError(
+        'Invalid CreateConfigRoutine option "driver". Field is required and must be defined.',
+      );
     });
   });
 
@@ -126,7 +131,7 @@ describe('CreateConfigRoutine', () => {
       const config = await routine.mergeConfigs([
         { foo: 123, qux: true },
         { bar: 'abc' },
-        { foo: 456 }
+        { foo: 456 },
       ]);
 
       expect(config).toEqual({
@@ -139,11 +144,7 @@ describe('CreateConfigRoutine', () => {
     it('calls `mergeConfig` on driver', async () => {
       const spy = jest.spyOn(driver, 'mergeConfig');
 
-      await routine.mergeConfigs([
-        { foo: 123, qux: true },
-        { bar: 'abc' },
-        { foo: 456 }
-      ]);
+      await routine.mergeConfigs([{ foo: 123, qux: true }, { bar: 'abc' }, { foo: 456 }]);
 
       expect(spy).toHaveBeenCalledTimes(3);
     });
@@ -154,7 +155,7 @@ describe('CreateConfigRoutine', () => {
       const config = await routine.mergeConfigs([
         { foo: 123, qux: true },
         { bar: 'abc' },
-        { foo: 456 }
+        { foo: 456 },
       ]);
 
       expect(spy).toHaveBeenCalledWith('merge-config', [config]);
@@ -174,7 +175,9 @@ describe('CreateConfigRoutine', () => {
   describe('loadConfigFromFilesystem()', () => {
     beforeEach(() => {
       routine.tool.configLoader = {
-        resolveModuleConfigPath: jest.fn((name, moduleName) => `/node_modules/${moduleName}/configs/${name}.js`),
+        resolveModuleConfigPath: jest.fn(
+          (name, moduleName) => `/node_modules/${moduleName}/configs/${name}.js`,
+        ),
         parseFile: jest.fn(filePath => ({ filePath })),
       };
     });
@@ -182,9 +185,7 @@ describe('CreateConfigRoutine', () => {
     it('loads config if it exists', async () => {
       const configs = await routine.loadConfigFromFilesystem([]);
 
-      expect(configs).toEqual([
-        { filePath: '/configs/babel.js' },
-      ]);
+      expect(configs).toEqual([{ filePath: '/configs/babel.js' }]);
     });
 
     it('does nothing if config does not exist', async () => {
@@ -198,9 +199,7 @@ describe('CreateConfigRoutine', () => {
     it('uses local path when using @local config', async () => {
       const configs = await routine.loadConfigFromFilesystem([]);
 
-      expect(configs).toEqual([
-        { filePath: '/configs/babel.js' },
-      ]);
+      expect(configs).toEqual([{ filePath: '/configs/babel.js' }]);
     });
 
     it('uses module path when using custom config', async () => {
@@ -208,9 +207,7 @@ describe('CreateConfigRoutine', () => {
 
       const configs = await routine.loadConfigFromFilesystem([]);
 
-      expect(configs).toEqual([
-        { filePath: '/node_modules/foo-bar/configs/babel.js' },
-      ]);
+      expect(configs).toEqual([{ filePath: '/node_modules/foo-bar/configs/babel.js' }]);
     });
 
     it('triggers `load-module-config` event', async () => {
@@ -237,14 +234,11 @@ describe('CreateConfigRoutine', () => {
     it('parses file with yargs options', async () => {
       await routine.loadConfigFromFilesystem([]);
 
-      expect(routine.tool.configLoader.parseFile).toHaveBeenCalledWith(
-        '/configs/babel.js',
-        {
-          _: [],
-          foo: true,
-          bar: true,
-        },
-      );
+      expect(routine.tool.configLoader.parseFile).toHaveBeenCalledWith('/configs/babel.js', {
+        _: [],
+        foo: true,
+        bar: true,
+      });
     });
   });
 });

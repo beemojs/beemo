@@ -114,7 +114,7 @@ describe('Beemo', () => {
 
     it('removes file for each config path', () => {
       beemo.handleCleanupOnFailure(1, {
-        configPaths: ['foo', 'bar']
+        configPaths: ['foo', 'bar'],
       });
 
       expect(fs.removeSync).toHaveBeenCalledWith('foo');

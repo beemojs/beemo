@@ -48,28 +48,30 @@ describe('ESLintDriver', () => {
 
   describe('mergeConfig()', () => {
     it('merges using eslint engine', () => {
-      expect(driver.mergeConfig(
-        {
-          env: {
-            node: true,
+      expect(
+        driver.mergeConfig(
+          {
+            env: {
+              node: true,
+            },
+            rules: {
+              foo: 'error',
+            },
           },
-          rules: {
-            foo: 'error',
+          {
+            rules: {
+              foo: ['error', 'always'],
+            },
           },
-        },
-        {
-          rules: {
-            foo: ['error', 'always'],
-          },
-        },
-      )).toEqual({
+        ),
+      ).toEqual({
         env: {
           node: true,
         },
         rules: {
           foo: ['error', 'always'],
         },
-      },);
+      });
     });
   });
 

@@ -87,7 +87,11 @@ describe('ExecuteScriptRoutine', () => {
 
       await routine.runScript(script);
 
-      expect(spy).toHaveBeenCalledWith('execute-script', [script, routine.context.args, routine.context.yargs]);
+      expect(spy).toHaveBeenCalledWith('execute-script', [
+        script,
+        routine.context.args,
+        routine.context.yargs,
+      ]);
     });
 
     it('triggers `successful-script` event on success', async () => {
