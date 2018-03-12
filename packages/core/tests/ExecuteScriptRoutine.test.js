@@ -19,6 +19,7 @@ describe('ExecuteScriptRoutine', () => {
       script: null,
       scriptName: '',
       scriptPath: '',
+      yargs: { foo: true },
     };
     routine.tool = {
       debug() {},
@@ -56,6 +57,7 @@ describe('ExecuteScriptRoutine', () => {
         script,
         scriptName: 'foo-bar',
         scriptPath: 'root/scripts/foo-bar.js',
+        yargs: { foo: true },
       });
     });
   });
@@ -73,6 +75,51 @@ describe('ExecuteScriptRoutine', () => {
 
       expect(script.parse).toHaveBeenCalledWith();
       expect(script.run).toHaveBeenCalledWith({ foo: true, _: [] }, routine.tool);
+    });
+
+    it('triggers `execute-script` event', async () => {
+      class MockScript extends Script {
+        run() {}
+      }
+
+      const spy = jest.spyOn(routine.tool, 'emit');
+      const script = new MockScript();
+
+      await routine.runScript(script);
+
+      expect(spy).toHaveBeenCalledWith('execute-script', [script, routine.context.args, routine.context.yargs]);
+    });
+
+    it('triggers `successful-script` event on success', async () => {
+      class SuccessScript extends Script {
+        run() {
+          return Promise.resolve(123);
+        }
+      }
+
+      const spy = jest.spyOn(routine.tool, 'emit');
+      const script = new SuccessScript();
+
+      await routine.runScript(script);
+
+      expect(spy).toHaveBeenCalledWith('successful-script', [script, 123]);
+    });
+
+    it('triggers `failed-script` event on failure', async () => {
+      class FailureScript extends Script {
+        run() {
+          return Promise.reject(new Error('Oops'));
+        }
+      }
+
+      const spy = jest.spyOn(routine.tool, 'emit');
+      const script = new FailureScript();
+
+      try {
+        await routine.runScript(script);
+      } catch (error) {
+        expect(spy).toHaveBeenCalledWith('failed-script', [script, error]);
+      }
     });
   });
 });

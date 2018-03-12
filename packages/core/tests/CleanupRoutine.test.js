@@ -50,5 +50,16 @@ describe('CleanupRoutine', () => {
       expect(fs.remove).toHaveBeenCalledWith('./.barrc');
       expect(result).toEqual([true, true]);
     });
+
+    it('triggers `delete-config-file` event', async () => {
+      const spy = jest.spyOn(routine.tool, 'emit');
+
+      routine.context.configPaths = ['./foo.json', './.barrc'];
+
+      await routine.deleteConfigFiles();
+
+      expect(spy).toHaveBeenCalledWith('delete-config-file', ['./foo.json']);
+      expect(spy).toHaveBeenCalledWith('delete-config-file', ['./.barrc']);
+    });
   });
 });

@@ -24,7 +24,7 @@ export default class JestDriver extends Driver {
 
   // Temporary!
   handleSuccess(response: Execution) {
-    const out = response.stderr.trim();
+    const out = (response.stdout || response.stderr).trim();
 
     if (out) {
       this.tool.log(out);

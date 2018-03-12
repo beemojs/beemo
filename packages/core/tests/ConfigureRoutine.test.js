@@ -41,6 +41,10 @@ describe('ConfigureRoutine', () => {
     };
   });
 
+  describe('execute()', () => {
+    it.skip('executes pipeline in order', () => {});
+  });
+
   describe('createConfigFiles()', () => {
     beforeEach(() => {
       routine.serializeSubroutines = jest.fn();
@@ -119,6 +123,16 @@ describe('ConfigureRoutine', () => {
         routine.context.primaryDriver,
       ]);
       expect(routine.context.drivers).toEqual(drivers);
+    });
+
+    it('triggers `delete-config-file` event', async () => {
+      const spy = jest.spyOn(routine.tool, 'emit');
+
+      routine.context.primaryDriver.metadata.dependencies = ['bar'];
+
+      const drivers = await routine.resolveDependencies();
+
+      expect(spy).toHaveBeenCalledWith('resolve-dependencies', [drivers]);
     });
   });
 });

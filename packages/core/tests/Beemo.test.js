@@ -1,4 +1,5 @@
 import path from 'path';
+import fs from 'fs-extra';
 import Beemo from '../src/Beemo';
 
 jest.mock('boost/lib/Console');
@@ -88,6 +89,39 @@ describe('Beemo', () => {
     });
   });
 
+  describe('handleCleanupOnFailure()', () => {
+    const oldRemove = fs.removeSync;
+
+    beforeEach(() => {
+      fs.removeSync = jest.fn();
+    });
+
+    afterEach(() => {
+      fs.removeSync = oldRemove;
+    });
+
+    it('does nothing if exit code is 0', () => {
+      beemo.handleCleanupOnFailure(0, {});
+
+      expect(fs.removeSync).not.toHaveBeenCalled();
+    });
+
+    it('does nothing if no config paths', () => {
+      beemo.handleCleanupOnFailure(1, {});
+
+      expect(fs.removeSync).not.toHaveBeenCalled();
+    });
+
+    it('removes file for each config path', () => {
+      beemo.handleCleanupOnFailure(1, {
+        configPaths: ['foo', 'bar']
+      });
+
+      expect(fs.removeSync).toHaveBeenCalledWith('foo');
+      expect(fs.removeSync).toHaveBeenCalledWith('bar');
+    });
+  });
+
   describe('executeDriver()', () => {
     beforeEach(() => {
       beemo.tool.getPlugin = () => ({});
@@ -101,7 +135,7 @@ describe('Beemo', () => {
       expect(spy).toHaveBeenCalledWith('foo-bar');
     });
 
-    it('triggers event with context', async () => {
+    it('triggers `driver` event with context', async () => {
       const spy = jest.spyOn(beemo.tool, 'emit');
 
       await beemo.executeDriver('foo-bar');
@@ -145,12 +179,22 @@ describe('Beemo', () => {
       );
     });
 
-    it('registers an exit listener', async () => {
+    it('registers an exit listener if cleanup is true', async () => {
       beemo.tool.on = jest.fn();
+      beemo.tool.config.config.cleanup = true;
 
       await beemo.executeDriver('foo-bar');
 
       expect(beemo.tool.on).toHaveBeenCalledWith('exit', expect.any(Function));
+    });
+
+    it('doesnt register exit listener if cleanup is false', async () => {
+      beemo.tool.on = jest.fn();
+      beemo.tool.config.config.cleanup = false;
+
+      await beemo.executeDriver('foo-bar');
+
+      expect(beemo.tool.on).not.toHaveBeenCalled();
     });
   });
 
@@ -163,7 +207,7 @@ describe('Beemo', () => {
       expect(spy).toHaveBeenCalledWith('foo-bar');
     });
 
-    it('triggers event with context', async () => {
+    it('triggers `script` event with context', async () => {
       const spy = jest.spyOn(beemo.tool, 'emit');
 
       await beemo.executeScript('foo-bar');
@@ -209,7 +253,7 @@ describe('Beemo', () => {
       expect(spy).toHaveBeenCalledWith('beemo');
     });
 
-    it('triggers event with context', async () => {
+    it('triggers `dotfiles` event with context', async () => {
       const spy = jest.spyOn(beemo.tool, 'emit');
 
       await beemo.syncDotfiles();

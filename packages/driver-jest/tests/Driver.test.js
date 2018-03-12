@@ -35,4 +35,18 @@ describe('JestDriver', () => {
       useConfigOption: false,
     });
   });
+
+  describe('handleSuccess()', () => {
+    it('outputs stderr (temporarily)', () => {
+      driver.tool = {
+        log: jest.fn(),
+      };
+
+      driver.handleSuccess({
+        stderr: ' Why??? ',
+      });
+
+      expect(driver.tool.log).toHaveBeenCalledWith('Why???');
+    });
+  });
 });

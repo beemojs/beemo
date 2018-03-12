@@ -108,6 +108,22 @@ export default class Beemo {
   }
 
   /**
+   * Delete config files if a process fails.
+   */
+  handleCleanupOnFailure(code: number, context: DriverContext) {
+    if (code === 0) {
+      return;
+    }
+
+    // Must not be async!
+    if (Array.isArray(context.configPaths)) {
+      context.configPaths.forEach(configPath => {
+        fs.removeSync(configPath);
+      });
+    }
+  }
+
+  /**
    * Execute all routines for the chosen driver.
    */
   executeDriver(driverName: string): Promise<*> {
@@ -121,16 +137,9 @@ export default class Beemo {
     });
 
     // Delete config files on failure
-    tool.on('exit', (event, code) => {
-      if (code === 0) {
-        return;
-      }
-
-      // Must not be async!
-      context.configPaths.forEach(configPath => {
-        fs.removeSync(configPath);
-      });
-    });
+    if (tool.config.config.cleanup) {
+      tool.on('exit', /* istanbul ignore next */ (event, code) => this.handleCleanupOnFailure(code, context));
+    }
 
     // Make the context available in the current driver
     primaryDriver.context = context;

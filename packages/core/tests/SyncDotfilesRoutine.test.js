@@ -51,6 +51,26 @@ describe('SyncDotfilesRoutine', () => {
 
       expect(paths).toEqual(['./foo', './bar', './baz']);
     });
+
+    it('handles errors', async () => {
+      copy.mockImplementation((path, root, callback) => callback(new Error('Oops')));
+
+      try {
+        await routine.copyFilesFromConfigModule('./root');
+      } catch (error) {
+        expect(error).toEqual(new Error('Oops'));
+      }
+    });
+
+    it('triggers `create-dotfile` event', async () => {
+      const spy = jest.spyOn(routine.tool, 'emit');
+
+      await routine.copyFilesFromConfigModule('./root');
+
+      expect(spy).toHaveBeenCalledWith('create-dotfile', ['./foo']);
+      expect(spy).toHaveBeenCalledWith('create-dotfile', ['./bar']);
+      expect(spy).toHaveBeenCalledWith('create-dotfile', ['./baz']);
+    });
   });
 
   describe('renameFilesWithDot()', () => {
@@ -66,6 +86,16 @@ describe('SyncDotfilesRoutine', () => {
       expect(fs.rename).toHaveBeenCalledWith('foo', '.foo');
       expect(fs.rename).toHaveBeenCalledWith('./path/bar', 'path/.bar');
       expect(fs.rename).toHaveBeenCalledWith('/path/baz', '/path/.baz');
+    });
+
+    it('triggers `rename-dotfile` event', async () => {
+      const spy = jest.spyOn(routine.tool, 'emit');
+
+      await routine.renameFilesWithDot(['foo', './path/bar', '/path/baz']);
+
+      expect(spy).toHaveBeenCalledWith('rename-dotfile', ['.foo']);
+      expect(spy).toHaveBeenCalledWith('rename-dotfile', ['path/.bar']);
+      expect(spy).toHaveBeenCalledWith('rename-dotfile', ['/path/.baz']);
     });
   });
 });

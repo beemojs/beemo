@@ -46,6 +46,33 @@ describe('ESLintDriver', () => {
     });
   });
 
+  describe('mergeConfig()', () => {
+    it('merges using eslint engine', () => {
+      expect(driver.mergeConfig(
+        {
+          env: {
+            node: true,
+          },
+          rules: {
+            foo: 'error',
+          },
+        },
+        {
+          rules: {
+            foo: ['error', 'always'],
+          },
+        },
+      )).toEqual({
+        env: {
+          node: true,
+        },
+        rules: {
+          foo: ['error', 'always'],
+        },
+      },);
+    });
+  });
+
   describe('handleCreateIgnoreFile()', () => {
     it('does nothing if no ignore field', () => {
       const config = { foo: 123 };
