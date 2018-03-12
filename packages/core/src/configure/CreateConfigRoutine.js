@@ -71,10 +71,12 @@ export default class CreateConfigRoutine extends Routine<Object, DriverContext> 
     );
 
     if (config[name]) {
-      configs.push(config[name]);
-    }
+      const pkgConfig = config[name];
 
-    this.tool.emit('load-package-config', [config]);
+      configs.push(pkgConfig);
+
+      this.tool.emit('load-package-config', [pkgConfig]);
+    }
 
     return Promise.resolve(configs);
   }
@@ -86,7 +88,7 @@ export default class CreateConfigRoutine extends Routine<Object, DriverContext> 
     this.tool.debug('Gathering arguments to pass to config file');
 
     return parseArgs(
-      [...this.config.driver.options.args, ...this.context.args].map(value => String(value)),
+      [...this.config.driver.getArgs(), ...this.context.args].map(value => String(value)),
     );
   }
 

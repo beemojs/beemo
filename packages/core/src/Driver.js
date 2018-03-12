@@ -48,6 +48,13 @@ export default class Driver extends Plugin<DriverOptions> {
   }
 
   /**
+   * Return a list of user defined arguments.
+   */
+  getArgs(): string[] {
+    return [...this.options.args];
+  }
+
+  /**
    * Return a list of dependent drivers.
    */
   getDependencies(): string[] {

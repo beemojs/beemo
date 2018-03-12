@@ -33,6 +33,14 @@ describe('Driver', () => {
     });
   });
 
+  describe('getArgs()', () => {
+    it('returns passed options', () => {
+      driver.options.args = ['--foo'];
+
+      expect(driver.getArgs()).toEqual(['--foo']);
+    });
+  });
+
   describe('getDependencies()', () => {
     it('returns both option and metadata dependencies', () => {
       driver.metadata.dependencies = ['foo'];
