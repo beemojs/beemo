@@ -22,6 +22,12 @@ describe('SyncDotfilesRoutine', () => {
       emit() {},
       log() {},
     };
+
+    copy.mockImplementation((path, root, callback) => {
+      callback(null, [{ path: './foo' }, { path: './bar' }, { path: './baz' }]);
+    });
+
+    fs.rename.mockImplementation(value => Promise.resolve(value));
   });
 
   describe('execute()', () => {
@@ -31,15 +37,20 @@ describe('SyncDotfilesRoutine', () => {
 
       expect(routine.serializeTasks).toHaveBeenCalledWith('./root');
     });
+
+    it('executes pipeline in order', async () => {
+      const copySpy = jest.spyOn(routine, 'copyFilesFromConfigModule');
+      const renameSpy = jest.spyOn(routine, 'renameFilesWithDot');
+
+      const paths = await routine.execute();
+
+      expect(copySpy).toHaveBeenCalledWith('./root', routine.context);
+      expect(renameSpy).toHaveBeenCalledWith(['./foo', './bar', './baz'], routine.context);
+      expect(paths).toEqual(['.foo', '.bar', '.baz']);
+    });
   });
 
   describe('copyFilesFromConfigModule()', () => {
-    beforeEach(() => {
-      copy.mockImplementation((path, root, callback) => {
-        callback(null, [{ path: './foo' }, { path: './bar' }, { path: './baz' }]);
-      });
-    });
-
     it('calls it with correct path arguments', async () => {
       await routine.copyFilesFromConfigModule('./root');
 
@@ -74,10 +85,6 @@ describe('SyncDotfilesRoutine', () => {
   });
 
   describe('renameFilesWithDot()', () => {
-    beforeEach(() => {
-      fs.rename.mockImplementation(value => Promise.resolve(value));
-    });
-
     it('renames each file path', async () => {
       const paths = await routine.renameFilesWithDot(['foo', './path/bar', '/path/baz']);
 

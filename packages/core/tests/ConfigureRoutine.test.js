@@ -42,7 +42,17 @@ describe('ConfigureRoutine', () => {
   });
 
   describe('execute()', () => {
-    it.skip('executes pipeline in order', () => {});
+    it('executes pipeline in order', async () => {
+      routine.parallelizeSubroutines = jest.fn();
+
+      const resSpy = jest.spyOn(routine, 'resolveDependencies');
+      const confSpy = jest.spyOn(routine, 'createConfigFiles');
+
+      await routine.execute();
+
+      expect(resSpy).toHaveBeenCalledWith(undefined, routine.context);
+      expect(confSpy).toHaveBeenCalledWith([routine.context.primaryDriver], routine.context);
+    });
   });
 
   describe('createConfigFiles()', () => {

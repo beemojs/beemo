@@ -206,4 +206,32 @@ describe('FlowDriver', () => {
       });
     });
   });
+
+  describe('handleFailure()', () => {
+    beforeEach(() => {
+      driver.tool = {
+        logError: jest.fn(),
+      };
+    });
+
+    it('logs stdout on error code 2', () => {
+      driver.handleFailure({
+        code: 2,
+        stdout: 'Out',
+        stderr: 'Err',
+      });
+
+      expect(driver.tool.logError).toHaveBeenCalledWith('Out');
+    });
+
+    it('logs stderr on other error codes', () => {
+      driver.handleFailure({
+        code: 1,
+        stdout: 'Out',
+        stderr: 'Err',
+      });
+
+      expect(driver.tool.logError).toHaveBeenCalledWith('Err');
+    });
+  });
 });

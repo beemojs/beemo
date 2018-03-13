@@ -37,16 +37,47 @@ describe('JestDriver', () => {
   });
 
   describe('handleSuccess()', () => {
-    it('outputs stderr (temporarily)', () => {
+    it('outputs stderr', () => {
       driver.tool = {
         log: jest.fn(),
       };
 
       driver.handleSuccess({
+        cmd: 'jest',
+        stdout: 'Hello',
         stderr: ' Why??? ',
       });
 
       expect(driver.tool.log).toHaveBeenCalledWith('Why???');
+    });
+
+    it('outputs nothing if empty strings', () => {
+      driver.tool = {
+        log: jest.fn(),
+      };
+
+      driver.handleSuccess({
+        cmd: 'jest',
+        stdout: '',
+        stderr: '',
+      });
+
+      expect(driver.tool.log).not.toHaveBeenCalled();
+    });
+
+    it('outputs stdout and stderr when running coverage', () => {
+      driver.tool = {
+        log: jest.fn(),
+      };
+
+      driver.handleSuccess({
+        cmd: 'jest --coverage',
+        stdout: 'Coverage',
+        stderr: 'Tests',
+      });
+
+      expect(driver.tool.log).toHaveBeenCalledWith('Tests');
+      expect(driver.tool.log).toHaveBeenCalledWith('Coverage');
     });
   });
 });

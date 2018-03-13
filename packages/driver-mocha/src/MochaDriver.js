@@ -29,14 +29,14 @@ export default class MochaDriver extends Driver {
       const value = data[key];
       const type = typeof value;
 
-      if (type === 'boolean') {
+      if (key === 'reporterOptions') {
+        output.push(`${option} ${this.formatReporterOptions(value)}`);
+      } else if (type === 'boolean') {
         output.push(option);
-      } else if (type === 'number' || type === 'string') {
-        output.push(`${option} ${value}`);
       } else if (Array.isArray(value)) {
         output.push(`${option} ${value.join(',')}`);
-      } else if (key === 'reporterOptions') {
-        output.push(`${option} ${this.formatReporterOptions(value)}`);
+      } else {
+        output.push(`${option} ${value}`);
       }
     });
 

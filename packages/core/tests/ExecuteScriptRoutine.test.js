@@ -4,7 +4,10 @@ import Script from '../src/Script';
 
 jest.mock('boost/lib/ModuleLoader', () =>
   jest.fn(() => ({
-    importModule: jest.fn(() => ({})),
+    importModule: jest.fn(() => ({
+      parse: () => ({}),
+      run: () => Promise.resolve(123),
+    })),
   })),
 );
 
@@ -25,6 +28,8 @@ describe('ExecuteScriptRoutine', () => {
       debug() {},
       emit() {},
     };
+
+    ModuleLoader.mockClear();
   });
 
   describe('execute()', () => {
@@ -34,13 +39,22 @@ describe('ExecuteScriptRoutine', () => {
 
       expect(routine.serializeTasks).toHaveBeenCalledWith('foo');
     });
+
+    it('executes pipeline in order', async () => {
+      const loadSpy = jest.spyOn(routine, 'loadScript');
+      const runSpy = jest.spyOn(routine, 'runScript');
+
+      const response = await routine.execute('foo-bar');
+
+      expect(loadSpy).toHaveBeenCalledWith('foo-bar', routine.context);
+      expect(runSpy).toHaveBeenCalledWith(expect.objectContaining({
+        name: 'foo-bar',
+      }), routine.context);
+      expect(response).toBe(123);
+    });
   });
 
   describe('loadScript()', () => {
-    beforeEach(() => {
-      ModuleLoader.mockClear();
-    });
-
     it('loads the script using ModuleLoader', async () => {
       await routine.loadScript('foo-bar');
 

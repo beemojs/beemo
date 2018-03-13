@@ -95,6 +95,14 @@ describe('Driver', () => {
       expect(driver.tool.log).toHaveBeenCalledWith('out');
     });
 
+    it('doesnt log stdout if empty', () => {
+      driver.handleSuccess({
+        stdout: '',
+      });
+
+      expect(driver.tool.log).not.toHaveBeenCalledWith();
+    });
+
     it('doesnt log stderr', () => {
       driver.handleFailure({
         stderr: 'error',
