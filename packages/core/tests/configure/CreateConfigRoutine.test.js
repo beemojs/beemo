@@ -92,7 +92,10 @@ describe('CreateConfigRoutine', () => {
 
       await routine.createConfigFile({ foo: 'bar' });
 
-      expect(spy).toHaveBeenCalledWith('create-config-file', [prependRoot('/.babelrc'), { foo: 'bar' }]);
+      expect(spy).toHaveBeenCalledWith('create-config-file', [
+        prependRoot('/.babelrc'),
+        { foo: 'bar' },
+      ]);
     });
   });
 
@@ -222,7 +225,7 @@ describe('CreateConfigRoutine', () => {
 
       expect(spy).toHaveBeenCalledWith('load-module-config', [
         prependRoot('/configs/babel.js'),
-        { filePath: prependRoot('/configs/babel.js'), },
+        { filePath: prependRoot('/configs/babel.js') },
       ]);
     });
 
@@ -239,12 +242,15 @@ describe('CreateConfigRoutine', () => {
     it('parses file with yargs options', async () => {
       await routine.loadConfigFromFilesystem([]);
 
-      expect(routine.tool.configLoader.parseFile).toHaveBeenCalledWith(prependRoot('/configs/babel.js'), {
-        _: ['baz'],
-        a: true,
-        foo: 'bar',
-        qux: true,
-      });
+      expect(routine.tool.configLoader.parseFile).toHaveBeenCalledWith(
+        prependRoot('/configs/babel.js'),
+        {
+          _: ['baz'],
+          a: true,
+          foo: 'bar',
+          qux: true,
+        },
+      );
     });
   });
 });

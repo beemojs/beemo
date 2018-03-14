@@ -41,9 +41,12 @@ describe('ExecuteScriptRoutine', () => {
       const response = await routine.execute('foo-bar');
 
       expect(loadSpy).toHaveBeenCalledWith('foo-bar', routine.context);
-      expect(runSpy).toHaveBeenCalledWith(expect.objectContaining({
-        name: 'foo-bar',
-      }), routine.context);
+      expect(runSpy).toHaveBeenCalledWith(
+        expect.objectContaining({
+          name: 'foo-bar',
+        }),
+        routine.context,
+      );
       expect(response).toBe(123);
     });
   });
@@ -59,10 +62,12 @@ describe('ExecuteScriptRoutine', () => {
       const script = await routine.loadScript('foo-bar');
 
       expect(script.name).toBe('foo-bar');
-      expect(routine.context).toEqual(expect.objectContaining({
-        scriptName: 'foo-bar',
-        scriptPath: prependRoot('scripts/foo-bar.js'),
-      }));
+      expect(routine.context).toEqual(
+        expect.objectContaining({
+          scriptName: 'foo-bar',
+          scriptPath: prependRoot('scripts/foo-bar.js'),
+        }),
+      );
     });
   });
 
@@ -78,11 +83,14 @@ describe('ExecuteScriptRoutine', () => {
       routine.runScript(script);
 
       expect(script.parse).toHaveBeenCalledWith();
-      expect(script.run).toHaveBeenCalledWith({
-        _: ['bar', 'baz'],
-        a: true,
-        foo: true,
-      }, routine.tool);
+      expect(script.run).toHaveBeenCalledWith(
+        {
+          _: ['bar', 'baz'],
+          a: true,
+          foo: true,
+        },
+        routine.tool,
+      );
     });
 
     it('triggers `execute-script` event', async () => {

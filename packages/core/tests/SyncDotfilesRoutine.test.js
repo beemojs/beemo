@@ -13,7 +13,7 @@ describe('SyncDotfilesRoutine', () => {
 
   beforeEach(() => {
     routine = new SyncDotfilesRoutine('sync', 'Syncing dotfiles');
-    routine.context = createContext()
+    routine.context = createContext();
     routine.tool = setupMockTool(new Tool());
 
     copy.mockImplementation((filePath, root, callback) => {
@@ -47,7 +47,11 @@ describe('SyncDotfilesRoutine', () => {
     it('calls it with correct path arguments', async () => {
       await routine.copyFilesFromConfigModule(process.cwd());
 
-      expect(copy).toHaveBeenCalledWith(prependRoot('dotfiles/*'), process.cwd(), expect.anything());
+      expect(copy).toHaveBeenCalledWith(
+        prependRoot('dotfiles/*'),
+        process.cwd(),
+        expect.anything(),
+      );
     });
 
     it('returns file paths as strings', async () => {

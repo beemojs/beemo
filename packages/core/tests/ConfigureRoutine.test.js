@@ -16,7 +16,7 @@ describe('ConfigureRoutine', () => {
     routine = new ConfigureRoutine('config', 'Generating configurations');
     routine.context = createDriverContext(createDriver('foo'), tool);
     routine.tool = tool;
-    routine.tool.getPlugin.mockImplementation((name) => plugins[name] || createDriver(name, tool));
+    routine.tool.getPlugin.mockImplementation(name => plugins[name] || createDriver(name, tool));
   });
 
   describe('execute()', () => {
