@@ -1,29 +1,22 @@
+import { Tool } from 'boost';
 import fs from 'fs-extra';
 import copy from 'copy';
 import SyncDotfilesRoutine from '../src/SyncDotfilesRoutine';
+import { createContext, setupMockTool, prependRoot } from '../../../tests/helpers';
 
 jest.mock('copy');
 jest.mock('fs-extra');
+jest.mock('boost/lib/Tool');
 
 describe('SyncDotfilesRoutine', () => {
   let routine;
 
   beforeEach(() => {
     routine = new SyncDotfilesRoutine('sync', 'Syncing dotfiles');
-    routine.context = {
-      moduleRoot: './root',
-    };
-    routine.tool = {
-      options: {
-        root: './',
-      },
-      invariant() {},
-      debug() {},
-      emit() {},
-      log() {},
-    };
+    routine.context = createContext()
+    routine.tool = setupMockTool(new Tool());
 
-    copy.mockImplementation((path, root, callback) => {
+    copy.mockImplementation((filePath, root, callback) => {
       callback(null, [{ path: './foo' }, { path: './bar' }, { path: './baz' }]);
     });
 
@@ -35,7 +28,7 @@ describe('SyncDotfilesRoutine', () => {
       routine.serializeTasks = jest.fn();
       routine.execute();
 
-      expect(routine.serializeTasks).toHaveBeenCalledWith('./root');
+      expect(routine.serializeTasks).toHaveBeenCalledWith(process.cwd());
     });
 
     it('executes pipeline in order', async () => {
@@ -44,7 +37,7 @@ describe('SyncDotfilesRoutine', () => {
 
       const paths = await routine.execute();
 
-      expect(copySpy).toHaveBeenCalledWith('./root', routine.context);
+      expect(copySpy).toHaveBeenCalledWith(process.cwd(), routine.context);
       expect(renameSpy).toHaveBeenCalledWith(['./foo', './bar', './baz'], routine.context);
       expect(paths).toEqual(['.foo', '.bar', '.baz']);
     });
@@ -52,9 +45,9 @@ describe('SyncDotfilesRoutine', () => {
 
   describe('copyFilesFromConfigModule()', () => {
     it('calls it with correct path arguments', async () => {
-      await routine.copyFilesFromConfigModule('./root');
+      await routine.copyFilesFromConfigModule(process.cwd());
 
-      expect(copy).toHaveBeenCalledWith('root/dotfiles/*', './', expect.anything());
+      expect(copy).toHaveBeenCalledWith(prependRoot('dotfiles/*'), process.cwd(), expect.anything());
     });
 
     it('returns file paths as strings', async () => {
@@ -64,7 +57,7 @@ describe('SyncDotfilesRoutine', () => {
     });
 
     it('handles errors', async () => {
-      copy.mockImplementation((path, root, callback) => callback(new Error('Oops')));
+      copy.mockImplementation((filePath, root, callback) => callback(new Error('Oops')));
 
       try {
         await routine.copyFilesFromConfigModule('./root');
@@ -74,7 +67,7 @@ describe('SyncDotfilesRoutine', () => {
     });
 
     it('triggers `create-dotfile` event', async () => {
-      const spy = jest.spyOn(routine.tool, 'emit');
+      const spy = routine.tool.emit;
 
       await routine.copyFilesFromConfigModule('./root');
 
@@ -96,7 +89,7 @@ describe('SyncDotfilesRoutine', () => {
     });
 
     it('triggers `rename-dotfile` event', async () => {
-      const spy = jest.spyOn(routine.tool, 'emit');
+      const spy = routine.tool.emit;
 
       await routine.renameFilesWithDot(['foo', './path/bar', '/path/baz']);
 

@@ -1,27 +1,23 @@
+import { Tool } from 'boost';
 import fs from 'fs-extra';
 import CleanupRoutine from '../src/CleanupRoutine';
+import { createDriverContext, setupMockTool } from '../../../tests/helpers';
 
 jest.mock('fs-extra');
+jest.mock('boost/lib/Tool');
 
 describe('CleanupRoutine', () => {
   let routine;
 
   beforeEach(() => {
     routine = new CleanupRoutine('cleanup', 'Cleaning up');
-    routine.context = {
-      configPaths: [],
-    };
-    routine.tool = {
-      debug() {},
-      emit() {},
-    };
+    routine.context = createDriverContext();
+    routine.tool = setupMockTool(new Tool());
   });
 
   describe('execute()', () => {
     it('doesnt call `deleteConfigFiles` if `cleanup` is false', () => {
-      routine.tool.config = {
-        config: { cleanup: true },
-      };
+      routine.tool.config.config.cleanup = true;
 
       routine.deleteConfigFiles = jest.fn();
       routine.execute();
@@ -52,7 +48,7 @@ describe('CleanupRoutine', () => {
     });
 
     it('triggers `delete-config-file` event', async () => {
-      const spy = jest.spyOn(routine.tool, 'emit');
+      const spy = routine.tool.emit;
 
       routine.context.configPaths = ['./foo.json', './.barrc'];
 

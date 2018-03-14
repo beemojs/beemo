@@ -1,6 +1,10 @@
+import { Tool } from 'boost';
 import ModuleLoader from 'boost/lib/ModuleLoader';
 import ExecuteScriptRoutine from '../src/ExecuteScriptRoutine';
 import Script from '../src/Script';
+import { createScriptContext, setupMockTool, prependRoot } from '../../../tests/helpers';
+
+jest.mock('boost/lib/Tool');
 
 jest.mock('boost/lib/ModuleLoader', () =>
   jest.fn(() => ({
@@ -16,18 +20,8 @@ describe('ExecuteScriptRoutine', () => {
 
   beforeEach(() => {
     routine = new ExecuteScriptRoutine('script', 'Executing script');
-    routine.context = {
-      args: ['--foo'],
-      moduleRoot: './root',
-      script: null,
-      scriptName: '',
-      scriptPath: '',
-      yargs: { foo: true },
-    };
-    routine.tool = {
-      debug() {},
-      emit() {},
-    };
+    routine.context = createScriptContext();
+    routine.tool = setupMockTool(new Tool());
 
     ModuleLoader.mockClear();
   });
@@ -65,14 +59,10 @@ describe('ExecuteScriptRoutine', () => {
       const script = await routine.loadScript('foo-bar');
 
       expect(script.name).toBe('foo-bar');
-      expect(routine.context).toEqual({
-        args: ['--foo'],
-        moduleRoot: './root',
-        script,
+      expect(routine.context).toEqual(expect.objectContaining({
         scriptName: 'foo-bar',
-        scriptPath: 'root/scripts/foo-bar.js',
-        yargs: { foo: true },
-      });
+        scriptPath: prependRoot('scripts/foo-bar.js'),
+      }));
     });
   });
 
@@ -88,7 +78,11 @@ describe('ExecuteScriptRoutine', () => {
       routine.runScript(script);
 
       expect(script.parse).toHaveBeenCalledWith();
-      expect(script.run).toHaveBeenCalledWith({ foo: true, _: [] }, routine.tool);
+      expect(script.run).toHaveBeenCalledWith({
+        _: ['bar', 'baz'],
+        a: true,
+        foo: true,
+      }, routine.tool);
     });
 
     it('triggers `execute-script` event', async () => {
@@ -96,7 +90,7 @@ describe('ExecuteScriptRoutine', () => {
         run() {}
       }
 
-      const spy = jest.spyOn(routine.tool, 'emit');
+      const spy = routine.tool.emit;
       const script = new MockScript();
 
       await routine.runScript(script);
@@ -115,7 +109,7 @@ describe('ExecuteScriptRoutine', () => {
         }
       }
 
-      const spy = jest.spyOn(routine.tool, 'emit');
+      const spy = routine.tool.emit;
       const script = new SuccessScript();
 
       await routine.runScript(script);
@@ -130,7 +124,7 @@ describe('ExecuteScriptRoutine', () => {
         }
       }
 
-      const spy = jest.spyOn(routine.tool, 'emit');
+      const spy = routine.tool.emit;
       const script = new FailureScript();
 
       try {

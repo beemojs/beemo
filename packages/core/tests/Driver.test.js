@@ -1,16 +1,14 @@
+import { Tool } from 'boost';
 import Driver from '../src/Driver';
+import { createDriver } from '../../../tests/helpers';
+
+jest.mock('boost/lib/Tool');
 
 describe('Driver', () => {
   let driver;
 
   beforeEach(() => {
-    driver = new Driver();
-    driver.metadata = {};
-    driver.tool = {
-      log: jest.fn(),
-      logError: jest.fn(),
-      on: jest.fn(),
-    };
+    driver = createDriver('foo', new Tool());
   });
 
   it('validates options', () => {

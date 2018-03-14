@@ -59,9 +59,10 @@ export default class CreateConfigRoutine extends Routine<Object, DriverContext> 
   /**
    * Extract configuration from "beemo.<driver>" within the local project's package.json.
    */
-  extractConfigFromPackage(configs: Object[]): Promise<Object[]> {
+  extractConfigFromPackage(prevConfigs: Object[]): Promise<Object[]> {
     const { name } = this.config.driver;
     const { config } = this.tool;
+    const configs = [...prevConfigs];
 
     this.tool.invariant(
       !!config[name],
@@ -113,9 +114,10 @@ export default class CreateConfigRoutine extends Routine<Object, DriverContext> 
   /**
    * Load configuration from the node module (the consumer owned package).
    */
-  loadConfigFromFilesystem(configs: Object[]): Promise<Object[]> {
+  loadConfigFromFilesystem(prevConfigs: Object[]): Promise<Object[]> {
     const { config: { module: moduleName }, configLoader } = this.tool;
     const { name } = this.config.driver;
+    const configs = [...prevConfigs];
 
     // Allow for local development
     const filePath =

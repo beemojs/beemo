@@ -1,44 +1,22 @@
+import { Tool } from 'boost';
 import ConfigureRoutine from '../src/ConfigureRoutine';
-import Driver from '../src/Driver';
+import { createDriver, createDriverContext, setupMockTool } from '../../../tests/helpers';
+
+jest.mock('boost/lib/Tool');
 
 describe('ConfigureRoutine', () => {
   let routine;
-  let plugins = {};
-
-  function createDriver(name, dependencies = []) {
-    const driver = new Driver();
-    driver.name = name;
-    driver.metadata = {
-      configName: name,
-      dependencies,
-      title: name,
-    };
-
-    return driver;
-  }
+  let plugins;
+  let tool;
 
   beforeEach(() => {
     plugins = {};
+    tool = setupMockTool(new Tool());
 
     routine = new ConfigureRoutine('config', 'Generating configurations');
-    routine.context = {
-      driverName: 'foo',
-      drivers: [],
-      primaryDriver: createDriver('foo'),
-    };
-    routine.tool = {
-      config: {
-        config: {
-          parallel: true,
-        },
-      },
-      debug() {},
-      emit() {},
-      getPlugin(name) {
-        return plugins[name] || createDriver(name);
-      },
-      on() {},
-    };
+    routine.context = createDriverContext(createDriver('foo'), tool);
+    routine.tool = tool;
+    routine.tool.getPlugin.mockImplementation((name) => plugins[name] || createDriver(name, tool));
   });
 
   describe('execute()', () => {
@@ -109,17 +87,17 @@ describe('ConfigureRoutine', () => {
       routine.context.primaryDriver.metadata.dependencies = ['bar'];
 
       const drivers = await routine.resolveDependencies();
-      const bar = createDriver('bar');
+      const bar = createDriver('bar', tool);
 
       expect(drivers).toEqual([bar, routine.context.primaryDriver]);
       expect(routine.context.drivers).toEqual(drivers);
     });
 
     it('handles sub-dependencies', async () => {
-      plugins.bar = createDriver('bar', ['baz', 'qux']);
-      plugins.baz = createDriver('baz');
-      plugins.qux = createDriver('qux', ['oof']);
-      plugins.oof = createDriver('oof');
+      plugins.bar = createDriver('bar', tool, { dependencies: ['baz', 'qux'] });
+      plugins.baz = createDriver('baz', tool);
+      plugins.qux = createDriver('qux', tool, { dependencies: ['oof'] });
+      plugins.oof = createDriver('oof', tool);
 
       routine.context.primaryDriver.metadata.dependencies = ['bar'];
 

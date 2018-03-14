@@ -1,35 +1,30 @@
+import { Tool } from 'boost';
 import fs from 'fs-extra';
 import CreateConfigRoutine from '../../src/configure/CreateConfigRoutine';
 import BabelDriver from '../../../driver-babel/src/BabelDriver';
+import { createDriverContext, setupMockTool, prependRoot } from '../../../../tests/helpers';
 
 jest.mock('fs-extra');
+
+jest.mock('boost/lib/Tool');
 
 describe('CreateConfigRoutine', () => {
   let routine;
   let driver;
+  let tool;
 
   beforeEach(() => {
-    driver = new BabelDriver({ args: ['--bar'] });
+    tool = setupMockTool(new Tool());
+
+    driver = new BabelDriver({ args: ['--qux'] });
     driver.name = 'babel';
+    driver.tool = tool;
+    driver.bootstrap();
 
     routine = new CreateConfigRoutine('babel', 'Configure Babel', { driver });
-    routine.context = {
-      args: ['--foo'],
-      configPaths: [],
-      root: '/',
-    };
-    routine.tool = {
-      config: {
-        module: '@local',
-      },
-      debug() {},
-      emit() {},
-      invariant() {},
-      on() {},
-    };
-
-    driver.tool = routine.tool;
-    driver.bootstrap();
+    routine.context = createDriverContext();
+    routine.tool = tool;
+    routine.tool.config.module = '@local';
   });
 
   beforeEach(() => {
@@ -39,19 +34,28 @@ describe('CreateConfigRoutine', () => {
 
   describe('execute()', () => {
     it('executes pipeline and returns final config path', async () => {
-      // Step 1
+      const loadSpy = jest.spyOn(routine, 'loadConfigFromFilesystem');
+      const extractSpy = jest.spyOn(routine, 'extractConfigFromPackage');
+      const mergeSpy = jest.spyOn(routine, 'mergeConfigs');
+      const createSpy = jest.spyOn(routine, 'createConfigFile');
+
+      // Load
       routine.tool.configLoader = {
         parseFile: () => ({ foo: 123 }),
       };
 
-      // Step 2
+      // Extract
       routine.tool.config.babel = { bar: 'abc' };
 
       const path = await routine.execute();
 
-      expect(path).toBe('/.babelrc');
+      expect(loadSpy).toHaveBeenCalledWith([], routine.context);
+      expect(extractSpy).toHaveBeenCalledWith([{ foo: 123 }], routine.context);
+      expect(mergeSpy).toHaveBeenCalledWith([{ foo: 123 }, { bar: 'abc' }], routine.context);
+      expect(createSpy).toHaveBeenCalledWith({ foo: 123, bar: 'abc' }, routine.context);
+      expect(path).toBe(prependRoot('/.babelrc'));
       expect(fs.writeFile).toHaveBeenCalledWith(
-        '/.babelrc',
+        prependRoot('/.babelrc'),
         JSON.stringify({ foo: 123, bar: 'abc' }, null, 2),
       );
     });
@@ -73,22 +77,22 @@ describe('CreateConfigRoutine', () => {
     it('adds path to context', async () => {
       await routine.createConfigFile({ foo: 'bar' });
 
-      expect(routine.context.configPaths).toEqual(['/.babelrc']);
+      expect(routine.context.configPaths).toEqual([prependRoot('/.babelrc')]);
     });
 
     it('writes and formats file', async () => {
       const path = await routine.createConfigFile({ foo: 'bar' });
 
-      expect(fs.writeFile).toHaveBeenCalledWith('/.babelrc', '{\n  "foo": "bar"\n}');
-      expect(path).toBe('/.babelrc');
+      expect(fs.writeFile).toHaveBeenCalledWith(prependRoot('/.babelrc'), '{\n  "foo": "bar"\n}');
+      expect(path).toBe(prependRoot('/.babelrc'));
     });
 
     it('triggers `create-config-file` event', async () => {
-      const spy = jest.spyOn(routine.tool, 'emit');
+      const spy = routine.tool.emit;
 
       await routine.createConfigFile({ foo: 'bar' });
 
-      expect(spy).toHaveBeenCalledWith('create-config-file', ['/.babelrc', { foo: 'bar' }]);
+      expect(spy).toHaveBeenCalledWith('create-config-file', [prependRoot('/.babelrc'), { foo: 'bar' }]);
     });
   });
 
@@ -108,7 +112,7 @@ describe('CreateConfigRoutine', () => {
     });
 
     it('triggers `load-package-config` event', async () => {
-      const spy = jest.spyOn(routine.tool, 'emit');
+      const spy = routine.tool.emit;
 
       routine.tool.config.babel = { foo: 'bar' };
 
@@ -118,7 +122,7 @@ describe('CreateConfigRoutine', () => {
     });
 
     it('doesnt trigger `load-package-config` if no config', async () => {
-      const spy = jest.spyOn(routine.tool, 'emit');
+      const spy = routine.tool.emit;
 
       await routine.extractConfigFromPackage([]);
 
@@ -150,7 +154,7 @@ describe('CreateConfigRoutine', () => {
     });
 
     it('triggers `merge-config` event with final config object', async () => {
-      const spy = jest.spyOn(routine.tool, 'emit');
+      const spy = routine.tool.emit;
 
       const config = await routine.mergeConfigs([
         { foo: 123, qux: true },
@@ -165,9 +169,10 @@ describe('CreateConfigRoutine', () => {
   describe('getArgsToPass()', () => {
     it('merges driver and context args', () => {
       expect(routine.getArgsToPass()).toEqual({
-        _: [],
-        foo: true,
-        bar: true,
+        _: ['baz'],
+        a: true,
+        foo: 'bar',
+        qux: true,
       });
     });
   });
@@ -185,7 +190,7 @@ describe('CreateConfigRoutine', () => {
     it('loads config if it exists', async () => {
       const configs = await routine.loadConfigFromFilesystem([]);
 
-      expect(configs).toEqual([{ filePath: '/configs/babel.js' }]);
+      expect(configs).toEqual([{ filePath: prependRoot('/configs/babel.js') }]);
     });
 
     it('does nothing if config does not exist', async () => {
@@ -199,7 +204,7 @@ describe('CreateConfigRoutine', () => {
     it('uses local path when using @local config', async () => {
       const configs = await routine.loadConfigFromFilesystem([]);
 
-      expect(configs).toEqual([{ filePath: '/configs/babel.js' }]);
+      expect(configs).toEqual([{ filePath: prependRoot('/configs/babel.js') }]);
     });
 
     it('uses module path when using custom config', async () => {
@@ -211,20 +216,20 @@ describe('CreateConfigRoutine', () => {
     });
 
     it('triggers `load-module-config` event', async () => {
-      const spy = jest.spyOn(routine.tool, 'emit');
+      const spy = routine.tool.emit;
 
       await routine.loadConfigFromFilesystem([]);
 
       expect(spy).toHaveBeenCalledWith('load-module-config', [
-        '/configs/babel.js',
-        { filePath: '/configs/babel.js' },
+        prependRoot('/configs/babel.js'),
+        { filePath: prependRoot('/configs/babel.js'), },
       ]);
     });
 
     it('doesnt trigger `load-module-config` event if files does not exist', async () => {
       fs.existsSync.mockImplementation(() => false);
 
-      const spy = jest.spyOn(routine.tool, 'emit');
+      const spy = routine.tool.emit;
 
       await routine.loadConfigFromFilesystem([]);
 
@@ -234,10 +239,11 @@ describe('CreateConfigRoutine', () => {
     it('parses file with yargs options', async () => {
       await routine.loadConfigFromFilesystem([]);
 
-      expect(routine.tool.configLoader.parseFile).toHaveBeenCalledWith('/configs/babel.js', {
-        _: [],
-        foo: true,
-        bar: true,
+      expect(routine.tool.configLoader.parseFile).toHaveBeenCalledWith(prependRoot('/configs/babel.js'), {
+        _: ['baz'],
+        a: true,
+        foo: 'bar',
+        qux: true,
       });
     });
   });
