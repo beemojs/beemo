@@ -82,6 +82,6 @@ declare module '@beemo/core' {
     getConfigModuleRoot(): string;
     executeDriver(driverName: string): Promise<*>;
     executeScript(scriptName: string): Promise<*>;
-    syncDotfiles(): Promise<*>;
+    syncDotfiles(filter?: string): Promise<*>;
   }
 }

@@ -33,7 +33,7 @@ const beemo = new Beemo(process.argv.slice(3));
 beemo.tool.plugins.forEach(driver => {
   const { command = {}, metadata } = driver;
 
-  app.command(driver.name, metadata.description || `Run ${metadata.title}.`, command, () =>
+  app.command(driver.name, metadata.description || `Run ${metadata.title}`, command, () =>
     beemo.executeDriver(driver.name),
   );
 });
@@ -41,16 +41,24 @@ beemo.tool.plugins.forEach(driver => {
 // Add Beemo commands
 app.command(
   ['run-script <name>', 'run <name>'],
-  'Run script from configuration module.',
+  'Run script from configuration module',
   {},
-  args => {
-    beemo.executeScript(args.name);
-  },
+  args => beemo.executeScript(args.name),
 );
 
-app.command(['sync-dotfiles', 'sync'], 'Sync dotfiles from configuration module.', {}, () => {
-  beemo.syncDotfiles();
-});
+app.command(
+  ['sync-dotfiles', 'sync'],
+  'Sync dotfiles from configuration module',
+  {
+    filter: {
+      alias: 'f',
+      default: '',
+      description: 'Filter filenames using a regex pattern',
+      string: true,
+    },
+  },
+  args => beemo.syncDotfiles(args.filter),
+);
 
 // Add Beemo options
 app
@@ -69,6 +77,6 @@ app
 // eslint-disable-next-line
 app
   .usage('beemo <command> [args..]')
-  .demandCommand(1, 'Please select a command.')
+  .demandCommand(1, 'Please select a command!')
   .showHelpOnFail(true)
   .help().argv;

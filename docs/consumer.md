@@ -41,6 +41,15 @@ run `yarn beemo sync-dotfiles` (or `npx beemo sync-dotfiles`) to copy them into 
 This process is a simple copy and write, so previous files will be overwritten. Be sure to
 `git diff` and verify your changes!
 
+### Filtering Files
+
+Not all dotfiles may be required, so you can filter them using the `--filter` option. This option
+accepts a string which will be used as a regex pattern.
+
+```
+yarn beemo sync-dotfiles --filter "*.yml"
+```
+
 ## Using Drivers
 
 Drivers may have been installed in your configuration module, but that does not make them available

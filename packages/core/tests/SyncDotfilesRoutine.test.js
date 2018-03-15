@@ -23,6 +23,18 @@ describe('SyncDotfilesRoutine', () => {
     fs.rename.mockImplementation(value => Promise.resolve(value));
   });
 
+  describe('bootstrap()', () => {
+    it('errors if filter is not a string', () => {
+      routine.config.filter = 123;
+
+      expect(() => {
+        routine.bootstrap();
+      }).toThrowError(
+        'Invalid SyncDotfilesRoutine option "filter". Must be a string.',
+      );
+    });
+  });
+
   describe('execute()', () => {
     it('passes module root to tasks', () => {
       routine.serializeTasks = jest.fn();
@@ -58,6 +70,14 @@ describe('SyncDotfilesRoutine', () => {
       const paths = await routine.copyFilesFromConfigModule('./root');
 
       expect(paths).toEqual(['./foo', './bar', './baz']);
+    });
+
+    it('filters files using config', async () => {
+      routine.config.filter = 'a(r|z)';
+
+      const paths = await routine.copyFilesFromConfigModule('./root');
+
+      expect(paths).toEqual(['./bar', './baz']);
     });
 
     it('handles errors', async () => {

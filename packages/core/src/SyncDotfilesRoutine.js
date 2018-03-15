@@ -9,10 +9,27 @@ import copy from 'copy';
 import fs from 'fs-extra';
 import path from 'path';
 import { Routine } from 'boost';
+import Options, { string } from 'optimal';
 
-import type { BeemoConfig, Context } from './types';
+import type { Context } from './types';
 
-export default class SyncDotfilesRoutine extends Routine<BeemoConfig, Context> {
+type SyncDotfilesConfig = {
+  filter: string,
+};
+
+export default class SyncDotfilesRoutine extends Routine<SyncDotfilesConfig, Context> {
+  bootstrap() {
+    this.config = new Options(
+      this.config,
+      {
+        filter: string(),
+      },
+      {
+        name: 'SyncDotfilesRoutine',
+      },
+    );
+  }
+
   execute(): Promise<string[]> {
     this.task('Copying files', this.copyFilesFromConfigModule);
     this.task('Renaming files', this.renameFilesWithDot);
@@ -25,6 +42,7 @@ export default class SyncDotfilesRoutine extends Routine<BeemoConfig, Context> {
    */
   copyFilesFromConfigModule(moduleRoot: string): Promise<string[]> {
     const dotfilePath = path.join(moduleRoot, 'dotfiles/*');
+    const { filter } = this.config;
 
     return new Promise((resolve, reject) => {
       copy(dotfilePath, this.tool.options.root, (error, files) => {
@@ -34,6 +52,15 @@ export default class SyncDotfilesRoutine extends Routine<BeemoConfig, Context> {
           'Copied',
           'Failed',
         );
+
+        if (filter) {
+          const pattern = new RegExp(filter);
+
+          this.tool.debug(`Filtering dotfiles with "${filter}"`);
+
+          // eslint-disable-next-line no-param-reassign
+          files = files.filter(file => file.path.match(pattern));
+        }
 
         if (error) {
           reject(error);

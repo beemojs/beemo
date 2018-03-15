@@ -275,5 +275,15 @@ describe('Beemo', () => {
         }),
       );
     });
+
+    it('passes filter to routine', async () => {
+      const pipeline = await beemo.syncDotfiles('foo');
+
+      expect(pipeline.pipe).toHaveBeenCalledWith(
+        expect.objectContaining({
+          config: { filter: 'foo' },
+        }),
+      );
+    });
   });
 });

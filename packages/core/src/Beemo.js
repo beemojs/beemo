@@ -194,7 +194,7 @@ export default class Beemo {
   /**
    * Sync dotfiles from the configuration module.
    */
-  syncDotfiles(): Promise<*> {
+  syncDotfiles(filter?: string = ''): Promise<*> {
     const context: Context = this.createContext();
 
     this.tool
@@ -203,7 +203,7 @@ export default class Beemo {
       .emit('dotfiles', [context]);
 
     return this.startPipeline()
-      .pipe(new SyncDotfilesRoutine('dotfiles', 'Syncing dotfiles'))
+      .pipe(new SyncDotfilesRoutine('dotfiles', 'Syncing dotfiles', { filter }))
       .run(null, context);
   }
 }
