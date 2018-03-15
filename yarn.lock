@@ -79,9 +79,9 @@
     lodash "^4.2.0"
     to-fast-properties "^2.0.0"
 
-"@milesj/build-tool-config@0.66.1":
-  version "0.66.1"
-  resolved "https://registry.npmjs.org/@milesj/build-tool-config/-/build-tool-config-0.66.1.tgz#eed66cf251e8e21a5e6d87280543b98467277d26"
+"@milesj/build-tool-config@0.67.0":
+  version "0.67.0"
+  resolved "https://registry.npmjs.org/@milesj/build-tool-config/-/build-tool-config-0.67.0.tgz#58f2404a071e756ce72c641135ddffc667e0fb08"
   dependencies:
     "@beemo/cli" "^0.12.0"
     "@beemo/core" "^0.12.0"

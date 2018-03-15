@@ -17,3 +17,28 @@ In your consuming project, enable the driver by adding `prettier` to your `drive
   }
 }
 ```
+
+## Ignoring Paths
+
+Instead of using an `.prettierignore` dotfile, you can define an `ignore` property in your  
+`configs/prettier.js` file. This property accepts an array of strings. For example:
+
+```bash
+# .prettierignore
+lib/
+*.min.js
+*.map
+```
+
+Becomes...
+
+```js
+// configs/prettier.js
+module.exports = {
+  // ...
+  ignore: ['lib/', '*.min.js', '*.map'],
+};
+```
+
+This feature follows the same configuration lifecycle as `.prettierrc`, with the added benefit of
+conditional logic, and being generated at runtime!

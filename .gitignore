@@ -26,5 +26,6 @@ tests/bundle.min.js
 .flowconfig
 jest.json
 .prettierrc
+.prettierignore
 tsconfig.json
 webpack.config.js

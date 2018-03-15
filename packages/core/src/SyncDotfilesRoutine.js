@@ -22,7 +22,7 @@ export default class SyncDotfilesRoutine extends Routine<SyncDotfilesConfig, Con
     this.config = new Options(
       this.config,
       {
-        filter: string(),
+        filter: string().empty(),
       },
       {
         name: 'SyncDotfilesRoutine',

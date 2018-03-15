@@ -2,7 +2,7 @@
   "private": true,
   "name": "beemo-root",
   "scripts": {
-    "test": "yarn run jest",
+    "test": "yarn run build && yarn run jest",
     "coverage": "yarn run jest --coverage",
     "eslint": "beemo eslint \"./packages/*/{src,tests}\"",
     "flow": "beemo flow --workspaces",
@@ -11,7 +11,7 @@
     "package": "yarn run clean && yarn run bootstrap && yarn run build && yarn test",
     "bootstrap": "lerna bootstrap",
     "bootstrap:slow": "yarn run bootstrap --concurrency=1",
-    "build": "find ./packages/* -prune -type d -exec babel {}/src --out-dir {}/lib \\;",
+    "build": "beemo babel ./packages/core/src --out-dir ./packages/core/lib --node && find ./packages/* -prune -type d -exec babel {}/src --out-dir {}/lib \\;",
     "clean": "rimraf ./packages/*/{lib,esm}/ && lerna clean --yes",
     "release": "lerna publish",
     "release:force": "yarn run release --force-publish=*",
@@ -21,7 +21,7 @@
     "docs:install": "gitbook install"
   },
   "devDependencies": {
-    "@milesj/build-tool-config": "0.66.1",
+    "@milesj/build-tool-config": "0.67.0",
     "chalk": "^2.3.2",
     "fs-extra": "^5.0.0",
     "glob": "^7.1.2",

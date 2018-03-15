@@ -39,11 +39,8 @@ beemo.tool.plugins.forEach(driver => {
 });
 
 // Add Beemo commands
-app.command(
-  ['run-script <name>', 'run <name>'],
-  'Run script from configuration module',
-  {},
-  args => beemo.executeScript(args.name),
+app.command(['run-script <name>', 'run <name>'], 'Run script from configuration module', {}, args =>
+  beemo.executeScript(args.name),
 );
 
 app.command(
