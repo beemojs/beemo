@@ -66,6 +66,19 @@ export default class RunCommandRoutine extends Routine<Object, DriverContext> {
   extractNativeOptions(): Promise<{ [option: string]: true }> {
     const driver = this.context.primaryDriver;
     const { env } = driver.options;
+    const options = driver.getSupportedOptions();
+
+    if (options.length > 0) {
+      this.tool.debug('Using supported options from driver');
+
+      const nativeOptions = {};
+
+      options.forEach(option => {
+        nativeOptions[option] = true;
+      });
+
+      return Promise.resolve(nativeOptions);
+    }
 
     this.tool.debug('Extracting native options from help output');
 

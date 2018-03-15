@@ -170,7 +170,7 @@ describe('RunCommandRoutine', () => {
 
       expect(options).toEqual(
         expect.objectContaining({
-          '-c': true, // Short
+          '-u': true, // Short
           '--all': true, // Long
           '--changedFilesWithAncestor': true, // Camel case
         }),

@@ -67,6 +67,13 @@ export default class Driver extends Plugin<DriverOptions> {
   }
 
   /**
+   * Return a list of supported CLI options.
+   */
+  getSupportedOptions(): string[] {
+    return [];
+  }
+
+  /**
    * Handle command failures according to this driver.
    */
   handleFailure(error: Execution) {

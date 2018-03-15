@@ -48,6 +48,12 @@ describe('Driver', () => {
     });
   });
 
+  describe('getSupportedOptions()', () => {
+    it('returns an array of options', () => {
+      expect(driver.getSupportedOptions()).toEqual([]);
+    });
+  });
+
   describe('handleFailure()', () => {
     it('logs stdout', () => {
       driver.handleFailure({

@@ -1295,16 +1295,16 @@ boom@5.x.x:
   dependencies:
     hoek "4.x.x"
 
-boost@^0.34.1:
-  version "0.34.1"
-  resolved "https://registry.npmjs.org/boost/-/boost-0.34.1.tgz#02db804b6557827ce73846ee67048673cd1beaeb"
+boost@^0.35.0:
+  version "0.35.0"
+  resolved "https://registry.npmjs.org/boost/-/boost-0.35.0.tgz#4cdb98218debf100b5892b12901880a363ddc944"
   dependencies:
     chalk "^2.3.2"
     elegant-spinner "^1.0.1"
     execa "^0.9.0"
     figures "^2.0.0"
     glob "^7.1.2"
-    json5 "^0.5.1"
+    json5 "^1.0.0"
     lodash "^4.17.5"
     log-update "^2.3.0"
     optimal "^0.14.0"
@@ -4640,6 +4640,12 @@ json-stringify-safe@^5.0.1, json-stringify-safe@~5.0.1:
 json5@^0.5.0, json5@^0.5.1:
   version "0.5.1"
   resolved "https://registry.yarnpkg.com/json5/-/json5-0.5.1.tgz#1eade7acc012034ad84e2396767ead9fa5495821"
+
+json5@^1.0.0:
+  version "1.0.0"
+  resolved "https://registry.npmjs.org/json5/-/json5-1.0.0.tgz#45f7f2db63d918e468a13197df6cfd9c06448054"
+  dependencies:
+    minimist "^1.2.0"
 
 jsonfile@^3.0.0:
   version "3.0.1"
