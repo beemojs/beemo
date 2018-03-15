@@ -104,25 +104,26 @@ export default class RunCommandRoutine extends Routine<Object, DriverContext> {
 
         if (arg.startsWith('-')) {
           let option = arg;
-
-          // Extract option from assignment
-          if (option.includes('=')) {
-            [option] = option.split('=');
-          }
-
-          // Not a valid option, exclude
-          if (!nativeOptions[option]) {
-            unknownArgs.push(option);
-
-            return;
-          }
-
-          // Check the next arg, incase the option is setting a value
           const nextArg = args[i + 1];
 
-          if (nextArg && !nextArg.startsWith('-')) {
-            skipNext = true;
-            filteredArgs.push(arg, nextArg);
+          // --opt=123
+          if (option.includes('=')) {
+            [option] = option.split('=');
+
+            if (!nativeOptions[option]) {
+              unknownArgs.push(arg);
+
+              return;
+            }
+
+            // --opt 123
+          } else if (!nativeOptions[option]) {
+            unknownArgs.push(arg);
+
+            if (nextArg && !nextArg.startsWith('-')) {
+              skipNext = true;
+              unknownArgs.push(nextArg);
+            }
 
             return;
           }
@@ -180,9 +181,10 @@ export default class RunCommandRoutine extends Routine<Object, DriverContext> {
   /**
    * Include --config option if driver requires it (instead of auto-lookup resolution).
    */
-  includeConfigOption(args: Args): Promise<Args> {
+  includeConfigOption(prevArgs: Args): Promise<Args> {
     const { configPaths, primaryDriver } = this.context;
     const configPath = configPaths.find(path => path.endsWith(primaryDriver.metadata.configName));
+    const args = [...prevArgs];
 
     if (configPath) {
       args.push(primaryDriver.metadata.configOption, configPath);
