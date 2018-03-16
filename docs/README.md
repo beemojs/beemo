@@ -19,6 +19,14 @@ dependencies, continuous copy and paste, and more.
 * Dotfile synchronization.
 * And much more.
 
-### How does it work?
+## Requirements
 
-TODO
+* Node 6.5+
+* GitHub, Bitbucket, or another VCS
+
+## Example
+
+Quick example of running Jest. Beemo will automatically generate `jest.json` and `.babelrc` files at
+runtime before executing the underlying command.
+
+![Beemo](https://raw.githubusercontent.com/milesj/beemo/master/docs/beemo.gif)

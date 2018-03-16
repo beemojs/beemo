@@ -21,10 +21,6 @@ dependencies, continuous copy and paste, and more.
 * Dotfile synchronization.
 * And much more.
 
-### How does it work?
-
-TODO
-
 ## Requirements
 
 * Node 6.5+
@@ -33,3 +29,5 @@ TODO
 ## Documentation
 
 [https://milesj.gitbooks.io/beemo](https://milesj.gitbooks.io/beemo)
+
+![Beemo](https://raw.githubusercontent.com/milesj/beemo/master/docs/beemo.gif)
