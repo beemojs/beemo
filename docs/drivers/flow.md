@@ -2,6 +2,10 @@
 
 Provides [Flow](https://github.com/facebook/flow) support.
 
+## Requirements
+
+* Flow
+
 ## Usage
 
 In your configuration module, install the driver and Flow. Create a file at `configs/flow.js` in

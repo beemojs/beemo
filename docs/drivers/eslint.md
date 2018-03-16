@@ -2,6 +2,10 @@
 
 Provides [ESLint](https://github.com/eslint/eslint) support.
 
+## Requirements
+
+* TypeScript ^4.0.0
+
 ## Usage
 
 In your configuration module, install the driver, ESLint, and any plugins. Create a file at

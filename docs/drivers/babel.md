@@ -2,6 +2,10 @@
 
 Provides [Babel](https://github.com/babel/babel) support.
 
+## Requirements
+
+* Babel ^6.0.0
+
 ## Usage
 
 In your configuration module, install the driver, Babel, and any plugins and presets. Create a file

@@ -2,6 +2,10 @@
 
 Provides [Mocha](https://github.com/facebook/mocha) support.
 
+## Requirements
+
+* Mocha ^5.0.0
+
 ## Usage
 
 In your configuration module, install the driver and Mocha. Create a file at `configs/mocha.js` in

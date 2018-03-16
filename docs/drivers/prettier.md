@@ -2,6 +2,10 @@
 
 Provides [Prettier](https://github.com/prettier/prettier) support.
 
+## Requirements
+
+* Prettier ^1.0.0
+
 ## Usage
 
 In your configuration module, install the driver and Prettier. Create a file at
@@ -27,7 +31,6 @@ Instead of using an `.prettierignore` dotfile, you can define an `ignore` proper
 # .prettierignore
 lib/
 *.min.js
-*.map
 ```
 
 Becomes...
@@ -36,7 +39,7 @@ Becomes...
 // configs/prettier.js
 module.exports = {
   // ...
-  ignore: ['lib/', '*.min.js', '*.map'],
+  ignore: ['lib/', '*.min.js'],
 };
 ```
 

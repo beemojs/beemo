@@ -2,6 +2,10 @@
 
 Provides [TypeScript](https://github.com/microsoft/typescript) support.
 
+## Requirements
+
+* TypeScript ^2.0.0
+
 ## Usage
 
 In your configuration module, install the driver and TypeScript. Create a file at

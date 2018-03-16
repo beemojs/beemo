@@ -2,6 +2,11 @@
 
 Provides [Jest](https://github.com/facebook/jest) support.
 
+## Requirements
+
+* Babel ^6.0.0
+* Jest ^22.0.0
+
 ## Usage
 
 In your configuration module, install the driver, Jest, and [Babel](./babel.md). Create a file at
