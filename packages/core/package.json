@@ -24,7 +24,7 @@
     "access": "public"
   },
   "dependencies": {
-    "boost": "^0.35.0",
+    "boost": "^0.35.1",
     "chalk": "^2.3.2",
     "copy": "^0.3.1",
     "fs-extra": "^5.0.0",

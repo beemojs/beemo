@@ -20,7 +20,6 @@ tests/bundle.min.js
 *.map
 
 # Configs
-.babelrc
 .eslintrc
 .eslintignore
 .flowconfig
