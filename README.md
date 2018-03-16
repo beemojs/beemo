@@ -21,10 +21,6 @@ dependencies, continuous copy and paste, and more.
 * Dotfile synchronization.
 * And much more.
 
-### How does it work?
-
-TODO
-
 ## Requirements
 
 * Node 6.5+
