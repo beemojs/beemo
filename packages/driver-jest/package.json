@@ -1,6 +1,6 @@
 {
   "name": "@beemo/driver-jest",
-  "version": "0.12.0",
+  "version": "0.13.0",
   "description": "Jest driver for Beemo.",
   "keywords": [
     "beemo",
