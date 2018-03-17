@@ -1,6 +1,7 @@
 # TypeScript Driver
 
-Provides [TypeScript](https://github.com/microsoft/typescript) support.
+Provides [TypeScript](https://github.com/microsoft/typescript) support by dynamically generating a
+`tsconfig.json` config file.
 
 ## Requirements
 

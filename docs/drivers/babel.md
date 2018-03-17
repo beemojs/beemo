@@ -1,6 +1,7 @@
 # Babel Driver
 
-Provides [Babel](https://github.com/babel/babel) support.
+Provides [Babel](https://github.com/babel/babel) support by dynamically generating a
+`.babelrc` config file.
 
 ## Requirements
 

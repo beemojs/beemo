@@ -1,6 +1,7 @@
 # Jest Driver
 
-Provides [Jest](https://github.com/facebook/jest) support.
+Provides [Jest](https://github.com/facebook/jest) support by dynamically generating a
+`jest.config.js` config file.
 
 ## Requirements
 

@@ -1,6 +1,7 @@
 # Flow Driver
 
-Provides [Flow](https://github.com/facebook/flow) support.
+Provides [Flow](https://github.com/facebook/flow) support by dynamically generating a
+`.flowconfig` config file.
 
 ## Requirements
 

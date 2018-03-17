@@ -1,6 +1,7 @@
 # ESLint Driver
 
-Provides [ESLint](https://github.com/eslint/eslint) support.
+Provides [ESLint](https://github.com/eslint/eslint) support by dynamically generating a
+`.eslintrc.js` config file.
 
 ## Requirements
 
