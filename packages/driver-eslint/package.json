@@ -23,7 +23,7 @@
     "eslint": "^4.18.2"
   },
   "peerDependencies": {
-    "@beemo/core": "^0.13.0",
+    "@beemo/core": "^0.14.0",
     "eslint": "^4.0.0"
   }
 }

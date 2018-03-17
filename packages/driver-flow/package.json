@@ -23,7 +23,7 @@
     "flow-bin": "^0.68.0"
   },
   "peerDependencies": {
-    "@beemo/core": "^0.13.0",
+    "@beemo/core": "^0.14.0",
     "flow-bin": "*"
   }
 }
