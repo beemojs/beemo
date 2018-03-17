@@ -1,6 +1,11 @@
 # Mocha Driver
 
-Provides [Mocha](https://github.com/facebook/mocha) support.
+Provides [Mocha](https://github.com/facebook/mocha) support by dynamically generating a `mocha.opts`
+config file.
+
+```
+yarn add @beemo/driver-mocha mocha
+```
 
 ## Requirements
 

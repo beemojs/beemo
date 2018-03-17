@@ -3,6 +3,10 @@
 Provides [TypeScript](https://github.com/microsoft/typescript) support by dynamically generating a
 `tsconfig.json` config file.
 
+```
+yarn add @beemo/driver-typescript typescript
+```
+
 ## Requirements
 
 * TypeScript ^2.0.0

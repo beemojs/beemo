@@ -3,6 +3,10 @@
 Provides [Babel](https://github.com/babel/babel) support by dynamically generating a `.babelrc`
 config file.
 
+```
+yarn add @beemo/driver-babel babel-core
+```
+
 ## Requirements
 
 * Babel ^6.0.0

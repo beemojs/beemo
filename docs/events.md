@@ -6,7 +6,7 @@ of a Beemo process.
 
 To begin, create an `index.js` file in the root of your configuration module that exports a
 function. This function will receive a [Beemo Tool instance](./tool.md) for the current process, in
-which listeners can be registered using `on()`.
+which listeners can be registered.
 
 ```js
 // index.js

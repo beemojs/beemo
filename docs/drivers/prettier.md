@@ -3,6 +3,10 @@
 Provides [Prettier](https://github.com/prettier/prettier) support by dynamically generating a
 `prettier.config.js` config file.
 
+```
+yarn add @beemo/driver-prettier prettier
+```
+
 ## Requirements
 
 * Prettier ^1.0.0

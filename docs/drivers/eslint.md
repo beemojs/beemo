@@ -3,9 +3,13 @@
 Provides [ESLint](https://github.com/eslint/eslint) support by dynamically generating a
 `.eslintrc.js` config file.
 
+```
+yarn add @beemo/driver-eslint eslint
+```
+
 ## Requirements
 
-* TypeScript ^4.0.0
+* ESLint ^4.0.0
 
 ## Usage
 

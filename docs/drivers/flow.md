@@ -3,6 +3,10 @@
 Provides [Flow](https://github.com/facebook/flow) support by dynamically generating a `.flowconfig`
 config file.
 
+```
+yarn add @beemo/driver-flow flow-bin
+```
+
 ## Requirements
 
 * Flow
