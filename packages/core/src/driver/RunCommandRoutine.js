@@ -220,20 +220,20 @@ export default class RunCommandRoutine extends Routine<Object, DriverContext> {
       `Executing command ${chalk.magenta(driver.metadata.bin)} with args "${args.join(' ')}"`,
     );
 
-    this.tool.emit('execute-driver', [driver, args, yargs]);
+    this.tool.emit('before-execute', [driver, args, yargs]);
 
     return this.executeCommand(driver.metadata.bin, args, options)
       .then(response => {
         driver.handleSuccess(response);
 
-        this.tool.emit('successful-driver', [driver, response]);
+        this.tool.emit('after-execute', [driver, response]);
 
         return response;
       })
       .catch(error => {
         driver.handleFailure(error);
 
-        this.tool.emit('failed-driver', [driver, error]);
+        this.tool.emit('failed-execute', [driver, error]);
 
         throw error;
       });

@@ -67,7 +67,7 @@ export default class SyncDotfilesRoutine extends Routine<SyncDotfilesConfig, Con
         } else {
           resolve(
             files.map(file => {
-              this.tool.emit('create-dotfile', [file.path]);
+              this.tool.emit('copy-dotfile', [file.path]);
 
               this.tool.debug(`  ${chalk.gray(file.path)}`);
 

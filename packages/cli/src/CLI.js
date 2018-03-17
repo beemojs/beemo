@@ -29,6 +29,9 @@ if (!semver.satisfies(cliPackage.version, `^${corePackage.version}`)) {
 // 0 node, 1 beemo, 2 <driver, command>
 const beemo = new Beemo(process.argv.slice(3));
 
+// Bootstrap the module
+beemo.bootstrapConfigModule();
+
 // Add a command for each driver
 beemo.tool.plugins.forEach(driver => {
   const { command = {}, metadata } = driver;

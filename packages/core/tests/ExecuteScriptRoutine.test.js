@@ -69,6 +69,14 @@ describe('ExecuteScriptRoutine', () => {
         }),
       );
     });
+
+    it('triggers `load-script` event', async () => {
+      const spy = routine.tool.emit;
+
+      const script = await routine.loadScript('foo-bar');
+
+      expect(spy).toHaveBeenCalledWith('load-script', [script]);
+    });
   });
 
   describe('runScript()', () => {
@@ -93,7 +101,7 @@ describe('ExecuteScriptRoutine', () => {
       );
     });
 
-    it('triggers `execute-script` event', async () => {
+    it('triggers `before-execute` event', async () => {
       class MockScript extends Script {
         run() {}
       }
@@ -103,14 +111,14 @@ describe('ExecuteScriptRoutine', () => {
 
       await routine.runScript(script);
 
-      expect(spy).toHaveBeenCalledWith('execute-script', [
+      expect(spy).toHaveBeenCalledWith('before-execute', [
         script,
         routine.context.args,
         routine.context.yargs,
       ]);
     });
 
-    it('triggers `successful-script` event on success', async () => {
+    it('triggers `after-execute` event on success', async () => {
       class SuccessScript extends Script {
         run() {
           return Promise.resolve(123);
@@ -122,10 +130,10 @@ describe('ExecuteScriptRoutine', () => {
 
       await routine.runScript(script);
 
-      expect(spy).toHaveBeenCalledWith('successful-script', [script, 123]);
+      expect(spy).toHaveBeenCalledWith('after-execute', [script, 123]);
     });
 
-    it('triggers `failed-script` event on failure', async () => {
+    it('triggers `failed-execute` event on failure', async () => {
       class FailureScript extends Script {
         run() {
           return Promise.reject(new Error('Oops'));
@@ -138,7 +146,7 @@ describe('ExecuteScriptRoutine', () => {
       try {
         await routine.runScript(script);
       } catch (error) {
-        expect(spy).toHaveBeenCalledWith('failed-script', [script, error]);
+        expect(spy).toHaveBeenCalledWith('failed-execute', [script, error]);
       }
     });
   });

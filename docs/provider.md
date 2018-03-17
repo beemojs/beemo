@@ -157,15 +157,8 @@ The `parse()` method is optional and can be used to define parsing rules for CLI
 default parsing rules will be used.
 
 The `run()` method is required and is triggered when the `beemo run-script` command is ran. This
-method receives options (parsed with `parse()`) as the 1st argument, and the current Beemo tool
-instance as the 2nd argument. The tool instance supports the following, which can be used to hook
-into the applications lifecycle.
-
-* `config` (object) - Loaded Beemo configuration.
-* `package` (object) - Loaded `package.json` found within the current root.
-* `debug(message)` - Log debug information (shown during `--debug`).
-* `log(message)` - Log information on success.
-* `logError(message)` - Log information on failure.
+method receives options (parsed with `parse()`) as the 1st argument, and the current
+[Beemo Tool instance](./tool.md) as the 2nd argument.
 
 > Returning a promise in `run()` is preferred.
 

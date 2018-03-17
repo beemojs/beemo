@@ -113,7 +113,7 @@ describe('ConfigureRoutine', () => {
       expect(routine.context.drivers).toEqual(drivers);
     });
 
-    it('triggers `delete-config-file` event', async () => {
+    it('triggers `resolve-dependencies` event', async () => {
       const spy = jest.spyOn(routine.tool, 'emit');
 
       routine.context.primaryDriver.metadata.dependencies = ['bar'];

@@ -304,27 +304,27 @@ describe('RunCommandRoutine', () => {
       }
     });
 
-    it('triggers `execute-driver` event', async () => {
+    it('triggers `before-execute` event', async () => {
       const spy = routine.tool.emit;
 
       await routine.runCommandWithArgs(['--wtf']);
 
-      expect(spy).toHaveBeenCalledWith('execute-driver', [
+      expect(spy).toHaveBeenCalledWith('before-execute', [
         driver,
         ['--wtf'],
         routine.context.yargs,
       ]);
     });
 
-    it('triggers `successful-driver` event on success', async () => {
+    it('triggers `after-execute` event on success', async () => {
       const spy = routine.tool.emit;
 
       await routine.runCommandWithArgs(['--wtf']);
 
-      expect(spy).toHaveBeenCalledWith('successful-driver', [driver, { success: true }]);
+      expect(spy).toHaveBeenCalledWith('after-execute', [driver, { success: true }]);
     });
 
-    it('triggers `failed-driver` event on failure', async () => {
+    it('triggers `failed-execute` event on failure', async () => {
       routine.executeCommand.mockImplementation(() => Promise.reject(new Error('Oops')));
 
       const spy = routine.tool.emit;
@@ -332,7 +332,7 @@ describe('RunCommandRoutine', () => {
       try {
         await routine.runCommandWithArgs(['--wtf']);
       } catch (error) {
-        expect(spy).toHaveBeenCalledWith('failed-driver', [driver, error]);
+        expect(spy).toHaveBeenCalledWith('failed-execute', [driver, error]);
       }
     });
   });

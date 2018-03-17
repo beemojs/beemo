@@ -23,6 +23,8 @@ import type { BeemoTool, Context, DriverContext, ScriptContext } from './types';
 export default class Beemo {
   argv: string[];
 
+  moduleRoot: string = '';
+
   tool: BeemoTool;
 
   constructor(argv: string[]) {
@@ -47,6 +49,35 @@ export default class Beemo {
 
     // Temporarily disable console to avoid colliding with yargs
     this.tool.console.stop();
+  }
+
+  /**
+   * If the configure module has an index export that is a function,
+   * execute it with the current tool instance.
+   */
+  bootstrapConfigModule() {
+    this.tool.debug('Bootstrapping configuration module');
+
+    const moduleRoot = this.getConfigModuleRoot();
+    const indexPath = path.join(moduleRoot, 'index.js');
+
+    if (!fs.existsSync(indexPath)) {
+      this.tool.debug('No index.js file detected, aborting bootstrap');
+
+      return this;
+    }
+
+    // eslint-disable-next-line
+    const bootstrap = require(indexPath);
+    const isFunction = typeof bootstrap === 'function';
+
+    this.tool.invariant(isFunction, 'Executing bootstrap function', 'Found', 'Not found');
+
+    if (isFunction) {
+      bootstrap(this.tool);
+    }
+
+    return this;
   }
 
   /**
@@ -78,6 +109,10 @@ export default class Beemo {
    * Validate the configuration module and return its absolute path.
    */
   getConfigModuleRoot(): string {
+    if (this.moduleRoot) {
+      return this.moduleRoot;
+    }
+
     const { module } = this.tool.config;
 
     this.tool.debug('Locating configuration module root');
@@ -93,7 +128,9 @@ export default class Beemo {
     if (module === '@local') {
       this.tool.debug(`Using ${chalk.yellow('@local')} configuration module`);
 
-      return process.cwd();
+      this.moduleRoot = process.cwd();
+
+      return this.moduleRoot;
     }
 
     const rootPath = path.join(process.cwd(), 'node_modules', module);
@@ -103,6 +140,8 @@ export default class Beemo {
     }
 
     this.tool.debug(`Found configuration module root path: ${chalk.cyan(rootPath)}`);
+
+    this.moduleRoot = rootPath;
 
     return rootPath;
   }
@@ -150,7 +189,7 @@ export default class Beemo {
     tool
       .setEventNamespace(driverName)
       .debug(`Running with ${driverName} driver`)
-      .emit('driver', [driverName, context]);
+      .emit('init-driver', [driverName, context]);
 
     return this.startPipeline()
       .pipe(new ConfigureRoutine('config', 'Generating configurations'))
@@ -172,7 +211,7 @@ export default class Beemo {
     this.tool
       .setEventNamespace(scriptName)
       .debug(`Running with ${scriptName} script`)
-      .emit('script', [scriptName, context]);
+      .emit('init-script', [scriptName, context]);
 
     return this.startPipeline()
       .pipe(new ExecuteScriptRoutine('script', `Executing ${scriptName} script`))
@@ -200,7 +239,7 @@ export default class Beemo {
     this.tool
       .setEventNamespace('beemo')
       .debug('Running dotfiles command')
-      .emit('dotfiles', [context]);
+      .emit('sync-dotfiles', [context]);
 
     return this.startPipeline()
       .pipe(new SyncDotfilesRoutine('dotfiles', 'Syncing dotfiles', { filter }))

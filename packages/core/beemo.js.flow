@@ -78,6 +78,7 @@ declare module '@beemo/core' {
     tool: Tool<Driver, Reporter<Object>>;
 
     constructor(argv: string[]): this;
+    bootstrapConfigModule(): void;
     createContext<T: Object>(context?: Object, slice?: number): T;
     getConfigModuleRoot(): string;
     executeDriver(driverName: string): Promise<*>;

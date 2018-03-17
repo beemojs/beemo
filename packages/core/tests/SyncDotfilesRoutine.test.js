@@ -88,14 +88,14 @@ describe('SyncDotfilesRoutine', () => {
       }
     });
 
-    it('triggers `create-dotfile` event', async () => {
+    it('triggers `copy-dotfile` event', async () => {
       const spy = routine.tool.emit;
 
       await routine.copyFilesFromConfigModule('./root');
 
-      expect(spy).toHaveBeenCalledWith('create-dotfile', ['./foo']);
-      expect(spy).toHaveBeenCalledWith('create-dotfile', ['./bar']);
-      expect(spy).toHaveBeenCalledWith('create-dotfile', ['./baz']);
+      expect(spy).toHaveBeenCalledWith('copy-dotfile', ['./foo']);
+      expect(spy).toHaveBeenCalledWith('copy-dotfile', ['./bar']);
+      expect(spy).toHaveBeenCalledWith('copy-dotfile', ['./baz']);
     });
   });
 

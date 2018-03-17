@@ -1,6 +1,9 @@
 import path from 'path';
 import fs from 'fs-extra';
 import Beemo from '../src/Beemo';
+import bootstrapIndex from '../../../index';
+
+jest.mock('fs-extra');
 
 jest.mock('boost/lib/Console');
 
@@ -13,15 +16,41 @@ jest.mock(
     },
 );
 
+jest.mock('../../../index', () => jest.fn());
+
 describe('Beemo', () => {
   let beemo;
 
   beforeEach(() => {
     beemo = new Beemo(['foo', 'bar']);
+    fs.existsSync.mockReset();
   });
 
   it('sets argv', () => {
     expect(beemo.argv).toEqual(['foo', 'bar']);
+  });
+
+  describe('bootstrapConfigModule()', () => {
+    beforeEach(() => {
+      bootstrapIndex.mockReset();
+      beemo.tool.config.module = '@local';
+    });
+
+    it('does nothing if no index file', () => {
+      fs.existsSync.mockImplementation(() => false);
+
+      beemo.bootstrapConfigModule();
+
+      expect(bootstrapIndex).not.toHaveBeenCalled();
+    });
+
+    it('calls bootstrap with tool if index exists', () => {
+      fs.existsSync.mockImplementation(() => true);
+
+      beemo.bootstrapConfigModule();
+
+      expect(bootstrapIndex).toHaveBeenCalledWith(beemo.tool);
+    });
   });
 
   describe('createContext()', () => {
@@ -80,24 +109,26 @@ describe('Beemo', () => {
       beemo.tool.config.module = '@local';
 
       expect(beemo.getConfigModuleRoot()).toBe(process.cwd());
+      expect(beemo.moduleRoot).toBe(process.cwd());
+      expect(beemo.getConfigModuleRoot()).toBe(beemo.moduleRoot);
     });
 
     it('returns node module path', () => {
+      fs.existsSync.mockImplementation(() => true);
+
       beemo.tool.config.module = 'boost';
 
-      expect(beemo.getConfigModuleRoot()).toBe(path.join(process.cwd(), 'node_modules/boost'));
+      const rootPath = path.join(process.cwd(), 'node_modules/boost');
+
+      expect(beemo.getConfigModuleRoot()).toBe(rootPath);
+      expect(beemo.moduleRoot).toBe(rootPath);
+      expect(beemo.getConfigModuleRoot()).toBe(beemo.moduleRoot);
     });
   });
 
   describe('handleCleanupOnFailure()', () => {
-    const oldRemove = fs.removeSync;
-
     beforeEach(() => {
-      fs.removeSync = jest.fn();
-    });
-
-    afterEach(() => {
-      fs.removeSync = oldRemove;
+      fs.removeSync.mockReset();
     });
 
     it('does nothing if exit code is 0', () => {
@@ -135,12 +166,12 @@ describe('Beemo', () => {
       expect(spy).toHaveBeenCalledWith('foo-bar');
     });
 
-    it('triggers `driver` event with context', async () => {
+    it('triggers `init-driver` event with context', async () => {
       const spy = jest.spyOn(beemo.tool, 'emit');
 
       await beemo.executeDriver('foo-bar');
 
-      expect(spy).toHaveBeenCalledWith('driver', [
+      expect(spy).toHaveBeenCalledWith('init-driver', [
         'foo-bar',
         expect.objectContaining({
           args: ['foo', 'bar'],
@@ -207,12 +238,12 @@ describe('Beemo', () => {
       expect(spy).toHaveBeenCalledWith('foo-bar');
     });
 
-    it('triggers `script` event with context', async () => {
+    it('triggers `init-script` event with context', async () => {
       const spy = jest.spyOn(beemo.tool, 'emit');
 
       await beemo.executeScript('foo-bar');
 
-      expect(spy).toHaveBeenCalledWith('script', [
+      expect(spy).toHaveBeenCalledWith('init-script', [
         'foo-bar',
         expect.objectContaining({
           args: ['foo', 'bar'],
@@ -253,12 +284,12 @@ describe('Beemo', () => {
       expect(spy).toHaveBeenCalledWith('beemo');
     });
 
-    it('triggers `dotfiles` event with context', async () => {
+    it('triggers `sync-dotfiles` event with context', async () => {
       const spy = jest.spyOn(beemo.tool, 'emit');
 
       await beemo.syncDotfiles();
 
-      expect(spy).toHaveBeenCalledWith('dotfiles', [
+      expect(spy).toHaveBeenCalledWith('sync-dotfiles', [
         expect.objectContaining({
           args: ['foo', 'bar'],
         }),

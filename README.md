@@ -14,6 +14,7 @@ dependencies, continuous copy and paste, and more.
 * Customize and alter config at runtime with CLI options.
 * Pass custom CLI options to build tool commands without failure.
 * Automatically expand glob patterns (a better alternative to bash).
+* Listen to and act upon events.
 * Easily share config between build tools.
 * Avoid relative config or `extend` paths.
 * Automatic config file cleanup.

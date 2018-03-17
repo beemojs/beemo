@@ -38,6 +38,8 @@ export default class ExecuteScriptRoutine extends Routine<BeemoConfig, ScriptCon
       this.context.scriptName = scriptName;
       this.context.scriptPath = filePath;
 
+      this.tool.emit('load-script', [script]);
+
       resolve(script);
     });
   }
@@ -50,18 +52,18 @@ export default class ExecuteScriptRoutine extends Routine<BeemoConfig, ScriptCon
 
     this.tool.debug(`Executing script with args "${args.join(' ')}"`);
 
-    this.tool.emit('execute-script', [script, args, yargs]);
+    this.tool.emit('before-execute', [script, args, yargs]);
 
     const options = parseArgs(args, script.parse());
 
     return Promise.resolve(script.run(options, this.tool))
       .then(response => {
-        this.tool.emit('successful-script', [script, response]);
+        this.tool.emit('after-execute', [script, response]);
 
         return response;
       })
       .catch(error => {
-        this.tool.emit('failed-script', [script, error]);
+        this.tool.emit('failed-execute', [script, error]);
 
         throw error;
       });
