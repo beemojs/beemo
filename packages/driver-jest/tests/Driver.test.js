@@ -25,7 +25,7 @@ describe('JestDriver', () => {
   it('sets correct metadata', () => {
     expect(driver.metadata).toEqual({
       bin: 'jest',
-      configName: 'jest.json',
+      configName: 'jest.config.js',
       configOption: '--config',
       dependencies: ['babel'],
       description: 'Unit test files with Jest.',

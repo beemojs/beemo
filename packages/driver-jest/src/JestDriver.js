@@ -15,7 +15,7 @@ export default class JestDriver extends Driver {
   bootstrap() {
     this.setMetadata({
       bin: 'jest',
-      configName: 'jest.json',
+      configName: 'jest.config.js',
       dependencies: ['babel'],
       description: 'Unit test files with Jest.',
       filterOptions: true,

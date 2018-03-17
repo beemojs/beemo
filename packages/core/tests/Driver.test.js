@@ -20,7 +20,21 @@ describe('Driver', () => {
   });
 
   describe('formatConfig()', () => {
-    it('formats to JSON', () => {
+    it('formats to JSON if config ends in .json', () => {
+      driver.metadata.configName = 'cfg.json';
+
+      expect(
+        driver.formatConfig({
+          foo: 123,
+          bar: 'abc',
+          baz: true,
+        }),
+      ).toMatchSnapshot();
+    });
+
+    it('formats to JS if config ends in .js', () => {
+      driver.metadata.configName = 'cfg.js';
+
       expect(
         driver.formatConfig({
           foo: 123,

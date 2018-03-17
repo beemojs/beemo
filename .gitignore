@@ -20,11 +20,11 @@ tests/bundle.min.js
 *.map
 
 # Configs
-.eslintrc
+.eslintrc.js
 .eslintignore
 .flowconfig
-jest.json
-.prettierrc
+jest.config.js
+prettier.config.js
 .prettierignore
 tsconfig.json
 webpack.config.js

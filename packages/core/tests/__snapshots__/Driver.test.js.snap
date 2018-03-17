@@ -1,6 +1,14 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`Driver formatConfig() formats to JSON 1`] = `
+exports[`Driver formatConfig() formats to JS if config ends in .js 1`] = `
+"module.exports = {
+  \\"foo\\": 123,
+  \\"bar\\": \\"abc\\",
+  \\"baz\\": true
+};"
+`;
+
+exports[`Driver formatConfig() formats to JSON if config ends in .json 1`] = `
 "{
   \\"foo\\": 123,
   \\"bar\\": \\"abc\\",

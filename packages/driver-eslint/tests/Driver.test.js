@@ -35,7 +35,7 @@ describe('ESLintDriver', () => {
   it('sets correct metadata', () => {
     expect(driver.metadata).toEqual({
       bin: 'eslint',
-      configName: '.eslintrc',
+      configName: '.eslintrc.js',
       configOption: '--config',
       dependencies: [],
       description: 'Lint files with ESLint.',
@@ -79,14 +79,14 @@ describe('ESLintDriver', () => {
     it('does nothing if no ignore field', () => {
       const config = { foo: 123 };
 
-      driver.handleCreateIgnoreFile(new Event('foo'), '/some/path/.eslintrc', config);
+      driver.handleCreateIgnoreFile(new Event('foo'), '/some/path/.eslintrc.js', config);
 
       expect(config).toEqual({ foo: 123 });
     });
 
     it('errors if not an array', () => {
       expect(() => {
-        driver.handleCreateIgnoreFile(new Event('foo'), '/some/path/.eslintrc', {
+        driver.handleCreateIgnoreFile(new Event('foo'), '/some/path/.eslintrc.js', {
           ignore: 'foo',
         });
       }).toThrowError('Ignore configuration must be an array of strings.');
@@ -98,7 +98,7 @@ describe('ESLintDriver', () => {
         ignore: ['foo', 'bar', 'baz'],
       };
 
-      driver.handleCreateIgnoreFile(new Event('foo'), '/some/path/.eslintrc', config);
+      driver.handleCreateIgnoreFile(new Event('foo'), '/some/path/.eslintrc.js', config);
 
       expect(fs.writeFileSync).toHaveBeenCalledWith('/some/path/.eslintignore', 'foo\nbar\nbaz');
 

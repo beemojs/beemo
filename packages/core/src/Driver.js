@@ -44,7 +44,13 @@ export default class Driver extends Plugin<DriverOptions> {
    * Format the configuration file before it's written.
    */
   formatConfig(data: Object): string {
-    return JSON.stringify(data, null, 2);
+    const content = JSON.stringify(data, null, 2);
+
+    if (this.metadata.configName.endsWith('.js')) {
+      return `module.exports = ${content};`;
+    }
+
+    return content;
   }
 
   /**
