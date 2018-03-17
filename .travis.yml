@@ -6,7 +6,9 @@ node_js:
 before_script:
   - curl -o- -L https://yarnpkg.com/install.sh | bash
   - export PATH=$HOME/.yarn/bin:$PATH
-script: yarn test --debug
+  - yarn run bootstrap:slow
+  - yarn list
+script: yarn test
 notifications:
   email: false
 cache:

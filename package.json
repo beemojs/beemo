@@ -56,8 +56,7 @@
         "driver": "jest",
         "args": [
           "--colors",
-          "--logHeapUsage",
-          "--debug"
+          "--logHeapUsage"
         ],
         "env": {
           "NODE_ENV": "test"
