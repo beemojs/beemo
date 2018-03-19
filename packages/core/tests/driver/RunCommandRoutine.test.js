@@ -132,12 +132,13 @@ describe('RunCommandRoutine', () => {
     });
 
     it('converts globs to paths', async () => {
-      const args = await routine.expandGlobPatterns(['--foo', './{scripts,tests}/*.js', 'bar']);
+      const args = await routine.expandGlobPatterns(['--foo', './{scripts,tests}/*.{sh,js}', 'bar']);
 
       expect(args).toEqual([
         '--foo',
-        './scripts/build-packages.js',
+        './scripts/build-packages.sh',
         './scripts/bump-peer-deps.js',
+        './scripts/link-packages.sh',
         './tests/helpers.js',
         './tests/setup.js',
         'bar',

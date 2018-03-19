@@ -10,9 +10,9 @@
     "jest": "beemo jest --workspaces",
     "prettier": "beemo prettier --write ./README.md \"./configs/*.js\" \"./packages/*/{bin,src,tests}/**/*.js\" \"./packages/*/*.{md,json}\" \"./docs/**/*.md\"",
     "package": "yarn run clean && yarn run bootstrap && yarn test",
-    "bootstrap": "lerna bootstrap && lerna link --force-local",
+    "bootstrap": "lerna bootstrap && bash ./scripts/link-packages.sh",
     "bootstrap:slow": "yarn run bootstrap --concurrency=1",
-    "build": "find ./packages/* -prune -type d -exec babel {}/src --out-dir {}/lib \\;",
+    "build": "bash ./scripts/build-packages.sh",
     "clean": "rimraf ./packages/*/{lib,esm}/ && lerna clean --yes",
     "release": "lerna publish",
     "release:force": "yarn run release --force-publish=*",
@@ -32,22 +32,9 @@
   "publishConfig": {
     "access": "public"
   },
-  "workspaces": {
-    "packages": [
-      "packages/*"
-    ],
-    "nohoist": [
-      "**/@beemo/cli",
-      "**/@beemo/core",
-      "**/@beemo/driver-babel",
-      "**/@beemo/driver-eslint",
-      "**/@beemo/driver-flow",
-      "**/@beemo/driver-jest",
-      "**/@beemo/driver-mocha",
-      "**/@beemo/driver-prettier",
-      "**/@beemo/driver-typescript"
-    ]
-  },
+  "workspaces": [
+    "packages/*"
+  ],
   "beemo": {
     "module": "@local",
     "drivers": [
