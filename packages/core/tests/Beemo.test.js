@@ -173,6 +173,7 @@ describe('Beemo', () => {
 
       expect(spy).toHaveBeenCalledWith('init-driver', [
         'foo-bar',
+        ['foo', 'bar'],
         expect.objectContaining({
           args: ['foo', 'bar'],
           driverName: 'foo-bar',
@@ -245,6 +246,7 @@ describe('Beemo', () => {
 
       expect(spy).toHaveBeenCalledWith('init-script', [
         'foo-bar',
+        ['foo', 'bar'],
         expect.objectContaining({
           args: ['foo', 'bar'],
           scriptName: 'foo-bar',

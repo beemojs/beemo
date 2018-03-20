@@ -213,16 +213,15 @@ export default class RunCommandRoutine extends Routine<Object, DriverContext> {
    * success and failures with the driver itself.
    */
   runCommandWithArgs(args: Args): Promise<Execution> {
-    const { primaryDriver: driver, yargs } = this.context;
-    const options = { env: driver.options.env };
+    const driver = this.context.primaryDriver;
 
     this.tool.debug(
       `Executing command ${chalk.magenta(driver.metadata.bin)} with args "${args.join(' ')}"`,
     );
 
-    this.tool.emit('before-execute', [driver, args, yargs]);
+    this.tool.emit('before-execute', [driver, args, this.context]);
 
-    return this.executeCommand(driver.metadata.bin, args, options)
+    return this.executeCommand(driver.metadata.bin, args, { env: driver.options.env })
       .then(response => {
         driver.handleSuccess(response);
 

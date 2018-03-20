@@ -313,7 +313,7 @@ describe('RunCommandRoutine', () => {
       expect(spy).toHaveBeenCalledWith('before-execute', [
         driver,
         ['--wtf'],
-        routine.context.yargs,
+        routine.context,
       ]);
     });
 

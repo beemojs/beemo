@@ -189,7 +189,7 @@ export default class Beemo {
     tool
       .setEventNamespace(driverName)
       .debug(`Running with ${driverName} driver`)
-      .emit('init-driver', [driverName, context]);
+      .emit('init-driver', [driverName, context.args, context]);
 
     return this.startPipeline()
       .pipe(new ConfigureRoutine('config', 'Generating configurations'))
@@ -211,7 +211,7 @@ export default class Beemo {
     this.tool
       .setEventNamespace(scriptName)
       .debug(`Running with ${scriptName} script`)
-      .emit('init-script', [scriptName, context]);
+      .emit('init-script', [scriptName, context.args, context]);
 
     return this.startPipeline()
       .pipe(new ExecuteScriptRoutine('script', `Executing ${scriptName} script`))
