@@ -48,5 +48,5 @@ module.exports = {
 };
 ```
 
-This feature follows the same configuration lifecycle as `.prettierrc`, with the added benefit of
-conditional logic, and being generated at runtime!
+This feature follows the same configuration lifecycle as `prettier.config.js`, with the added
+benefit of conditional logic, and being generated at runtime!

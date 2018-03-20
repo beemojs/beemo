@@ -132,7 +132,11 @@ describe('RunCommandRoutine', () => {
     });
 
     it('converts globs to paths', async () => {
-      const args = await routine.expandGlobPatterns(['--foo', './{scripts,tests}/*.{sh,js}', 'bar']);
+      const args = await routine.expandGlobPatterns([
+        '--foo',
+        './{scripts,tests}/*.{sh,js}',
+        'bar',
+      ]);
 
       expect(args).toEqual([
         '--foo',
@@ -310,11 +314,7 @@ describe('RunCommandRoutine', () => {
 
       await routine.runCommandWithArgs(['--wtf']);
 
-      expect(spy).toHaveBeenCalledWith('before-execute', [
-        driver,
-        ['--wtf'],
-        routine.context,
-      ]);
+      expect(spy).toHaveBeenCalledWith('before-execute', [driver, ['--wtf'], routine.context]);
     });
 
     it('triggers `after-execute` event on success', async () => {

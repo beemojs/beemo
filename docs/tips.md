@@ -31,8 +31,8 @@ your `beemo` config (is `false` by default).
 
 ```
 // dotfiles/gitignore
-.eslintrc
-.prettierrc
+.eslintrc.js
+prettier.config.js
 ```
 
 With these changes, the local config files will persist after executing a driver, but will also be
