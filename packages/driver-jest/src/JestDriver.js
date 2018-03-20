@@ -77,6 +77,8 @@ export default class JestDriver extends Driver {
       '--moduleNameMapper',
       '--modulePathIgnorePatterns',
       '--modulePaths',
+      '--no-cache',
+      '--no-watchman',
       '--noStackTrace',
       '--notify',
       '--notifyMode',
