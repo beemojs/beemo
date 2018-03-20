@@ -49,6 +49,7 @@ export default class CreateConfigRoutine extends Routine<Object, DriverContext> 
 
     this.tool.debug(`Creating config file ${chalk.cyan(configPath)}`);
 
+    this.config.driver.config = config;
     this.context.configPaths.push(configPath);
 
     this.tool.emit('create-config-file', [configPath, config]);

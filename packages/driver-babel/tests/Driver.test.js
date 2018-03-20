@@ -47,7 +47,7 @@ describe('BabelDriver', () => {
   describe('handleCleanTarget()', () => {
     it('doesnt run if no clean param', () => {
       driver.handleCleanTarget(new Event('foo'), driver, [], {
-        outDir: './lib',
+        yargs: { outDir: './lib' },
       });
 
       expect(rimraf.sync).not.toHaveBeenCalled();
@@ -55,7 +55,7 @@ describe('BabelDriver', () => {
 
     it('doesnt run if no outDir param', () => {
       driver.handleCleanTarget(new Event('foo'), driver, [], {
-        clean: true,
+        yargs: { clean: true },
       });
 
       expect(rimraf.sync).not.toHaveBeenCalled();
@@ -63,8 +63,10 @@ describe('BabelDriver', () => {
 
     it('runs if both params', () => {
       driver.handleCleanTarget(new Event('foo'), driver, [], {
-        clean: true,
-        outDir: './lib',
+        yargs: {
+          clean: true,
+          outDir: './lib',
+        },
       });
 
       expect(rimraf.sync).toHaveBeenCalledWith(path.resolve('./lib'));

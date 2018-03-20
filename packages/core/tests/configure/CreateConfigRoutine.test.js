@@ -87,6 +87,12 @@ describe('CreateConfigRoutine', () => {
       expect(path).toBe(prependRoot('/.babelrc'));
     });
 
+    it('sets config on driver', async () => {
+      const path = await routine.createConfigFile({ foo: 'bar' });
+
+      expect(driver.config).toEqual({ foo: 'bar' });
+    });
+
     it('triggers `create-config-file` event', async () => {
       const spy = routine.tool.emit;
 

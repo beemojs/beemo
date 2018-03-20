@@ -20,6 +20,8 @@ import type {
 export default class Driver extends Plugin<DriverOptions> {
   command: DriverCommandOptions = {};
 
+  config: Object = {};
+
   context: DriverContext;
 
   metadata: DriverMetadata;

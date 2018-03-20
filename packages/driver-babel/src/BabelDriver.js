@@ -27,13 +27,15 @@ export default class BabelDriver extends Driver {
       },
     });
 
-    this.on('babel.execute-driver', this.handleCleanTarget);
+    this.on('babel.before-execute', this.handleCleanTarget);
   }
 
   /**
    * Automatically clean the target folder if --out-dir is used.
    */
-  handleCleanTarget(event: Event, driver: Driver, args: string[], options: Object) {
+  handleCleanTarget(event: Event, driver: Driver, args: string[], context: Object) {
+    const options = context.yargs;
+
     if (options.clean && options.outDir) {
       rimraf.sync(path.resolve(options.outDir));
     }
