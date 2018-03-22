@@ -57,3 +57,28 @@ beemo eslint "./packages/*/{src,tests}"
 ```
 
 > This approach has an additional benefit of not cluttering `stdout`.
+
+## Custom Executable Name
+
+The Beemo command line executable can be renamed to offer a better and more immersive branding
+experience, especially when used at a large company. To start, create a new executable in your
+configuration module at `bin/<name>.js`, with the following contents (which simply runs Beemo's
+console).
+
+```
+#!/usr/bin/env node
+
+require('@beemo/cli/lib/CLI');
+```
+
+> Define a `MANUAL_URL` environment variable to change the manual URL in the help output.
+
+Lastly, be sure to reference your new executable in your configuration module's `package.json`.
+
+```json
+{
+  "bin": {
+    "<name>": "./bin/<bin>.js"
+  }
+}
+```

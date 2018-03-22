@@ -6,6 +6,7 @@
 
 /* eslint-disable no-console, unicorn/no-process-exit */
 
+import path from 'path';
 import chalk from 'chalk';
 import semver from 'semver';
 import app from 'yargs';
@@ -14,6 +15,8 @@ import corePackage from '@beemo/core/package.json';
 import cliPackage from '../package.json';
 
 const peerVersion = cliPackage.peerDependencies['@beemo/core'];
+const binName = path.basename(process.argv[1]);
+const manualURL = process.env.MANUAL_URL || 'https://milesj.gitbooks.io/beemo';
 
 if (!semver.satisfies(cliPackage.version, `^${corePackage.version}`)) {
   console.error(chalk.red(`@beemo/cli version out of date; must be ^${corePackage.version}.`));
@@ -42,8 +45,11 @@ beemo.tool.plugins.forEach(driver => {
 });
 
 // Add Beemo commands
-app.command(['run-script <name>', 'run <name>'], 'Run script from configuration module', {}, args =>
-  beemo.executeScript(args.name),
+app.command(
+  ['run-script <name>', 'run <name>'],
+  'Run custom script from configuration module',
+  {},
+  args => beemo.executeScript(args.name),
 );
 
 app.command(
@@ -60,6 +66,10 @@ app.command(
   args => beemo.syncDotfiles(args.filter),
 );
 
+app.command('*', false, {}, () => {
+  console.error(chalk.red('Please select a command!'));
+});
+
 // Add Beemo options
 app
   .option('debug', {
@@ -70,13 +80,21 @@ app
   .option('silent', {
     boolean: true,
     default: false,
-    describe: 'Hide Beemo output',
+    describe: `Hide ${binName} output`,
   });
 
 // Run application
 // eslint-disable-next-line
 app
-  .usage('beemo <command> [args..]')
-  .demandCommand(1, 'Please select a command!')
+  .usage(`${binName} <command> [args..]`)
+  .epilogue(
+    chalk.gray(
+      [
+        `For more information, view the manual: ${manualURL}`,
+        `Powered by Beemo v${corePackage.version}`,
+      ].join('\n'),
+    ),
+  )
+  .demandCommand(1, chalk.red('Please select a command!'))
   .showHelpOnFail(true)
   .help().argv;
