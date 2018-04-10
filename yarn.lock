@@ -1845,19 +1845,20 @@ boost@^0.34.1:
     pluralize "^7.0.0"
     split "^1.0.1"
 
-boost@^0.35.1:
-  version "0.35.1"
-  resolved "https://registry.npmjs.org/boost/-/boost-0.35.1.tgz#a3e2444b891f5a61f8e96bba27d03b0c170d57b1"
+boost@^0.38.1:
+  version "0.38.1"
+  resolved "https://registry.npmjs.org/boost/-/boost-0.38.1.tgz#95fd7c78584698b29c33cc7d975a907a9792066a"
   dependencies:
     chalk "^2.3.2"
+    debug "^3.1.0"
     elegant-spinner "^1.0.1"
     execa "^0.10.0"
     figures "^2.0.0"
     glob "^7.1.2"
-    json5 "^1.0.0"
+    json5 "^1.0.1"
     lodash "^4.17.5"
     log-update "^2.3.0"
-    optimal "^0.14.0"
+    optimal "^0.18.0"
     pluralize "^7.0.0"
     split "^1.0.1"
 
@@ -3825,9 +3826,9 @@ flow-bin@^0.66.0:
   version "0.66.0"
   resolved "https://registry.npmjs.org/flow-bin/-/flow-bin-0.66.0.tgz#a96dde7015dc3343fd552a7b4963c02be705ca26"
 
-flow-bin@^0.68.0:
-  version "0.68.0"
-  resolved "https://registry.npmjs.org/flow-bin/-/flow-bin-0.68.0.tgz#86c2d14857d306eb2e85e274f2eebf543564f623"
+flow-bin@^0.69.0:
+  version "0.69.0"
+  resolved "https://registry.npmjs.org/flow-bin/-/flow-bin-0.69.0.tgz#053159a684a6051fcbf0b71a2eb19a9679082da6"
 
 flush-write-stream@^1.0.0:
   version "1.0.2"
@@ -5708,9 +5709,9 @@ json5@^0.5.0, json5@^0.5.1:
   version "0.5.1"
   resolved "https://registry.yarnpkg.com/json5/-/json5-0.5.1.tgz#1eade7acc012034ad84e2396767ead9fa5495821"
 
-json5@^1.0.0:
-  version "1.0.0"
-  resolved "https://registry.npmjs.org/json5/-/json5-1.0.0.tgz#45f7f2db63d918e468a13197df6cfd9c06448054"
+json5@^1.0.1:
+  version "1.0.1"
+  resolved "https://registry.npmjs.org/json5/-/json5-1.0.1.tgz#779fb0018604fa854eacbf6252180d83543e3dbe"
   dependencies:
     minimist "^1.2.0"
 
@@ -6287,9 +6288,9 @@ mkdirp@0.5.1, "mkdirp@>=0.5 0", mkdirp@^0.5.0, mkdirp@^0.5.1, mkdirp@~0.5.0, mkd
   dependencies:
     minimist "0.0.8"
 
-mocha@^5.0.4:
-  version "5.0.4"
-  resolved "https://registry.npmjs.org/mocha/-/mocha-5.0.4.tgz#6b7aa328472da1088e69d47e75925fd3a3bb63c6"
+mocha@^5.0.5:
+  version "5.0.5"
+  resolved "https://registry.npmjs.org/mocha/-/mocha-5.0.5.tgz#e228e3386b9387a4710007a641f127b00be44b52"
   dependencies:
     browser-stdout "1.3.1"
     commander "2.11.0"
@@ -6965,6 +6966,12 @@ optimal@^0.14.0:
   resolved "https://registry.yarnpkg.com/optimal/-/optimal-0.14.0.tgz#5614fa22007d58c1fea5bac3dab9e7a246e36154"
   dependencies:
     babel-runtime "^6.25.0"
+
+optimal@^0.18.0:
+  version "0.18.0"
+  resolved "https://registry.npmjs.org/optimal/-/optimal-0.18.0.tgz#fe1c8a9b3b3dedf881b3762cd8d5e0d0f2f00c87"
+  dependencies:
+    babel-runtime "^6.26.0"
 
 optimist@0.6.1, optimist@^0.6.1:
   version "0.6.1"
@@ -8800,9 +8807,9 @@ typedarray@^0.0.6:
   version "0.0.6"
   resolved "https://registry.yarnpkg.com/typedarray/-/typedarray-0.0.6.tgz#867ac74e3864187b1d3d47d996a78ec5c8830777"
 
-typescript@^2.7.2:
-  version "2.7.2"
-  resolved "https://registry.npmjs.org/typescript/-/typescript-2.7.2.tgz#2d615a1ef4aee4f574425cdff7026edf81919836"
+typescript@^2.8.1:
+  version "2.8.1"
+  resolved "https://registry.npmjs.org/typescript/-/typescript-2.8.1.tgz#6160e4f8f195d5ba81d4876f9c0cc1fbc0820624"
 
 ua-parser-js@^0.7.9:
   version "0.7.17"
@@ -9269,6 +9276,12 @@ y18n@^3.2.1:
 yallist@^2.0.0, yallist@^2.1.2:
   version "2.1.2"
   resolved "https://registry.yarnpkg.com/yallist/-/yallist-2.1.2.tgz#1c11f9218f076089a47dd512f93c6699a6a81d52"
+
+yargs-parser@^10.0.0:
+  version "10.0.0"
+  resolved "https://registry.npmjs.org/yargs-parser/-/yargs-parser-10.0.0.tgz#c737c93de2567657750cb1f2c00be639fd19c994"
+  dependencies:
+    camelcase "^4.1.0"
 
 yargs-parser@^7.0.0:
   version "7.0.0"

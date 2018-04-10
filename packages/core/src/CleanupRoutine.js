@@ -22,9 +22,9 @@ export default class CleanupRoutine extends Routine<BeemoConfig, DriverContext> 
   /**
    * Delete all temporary config files.
    */
-  deleteConfigFiles(): Promise<boolean[]> {
+  deleteConfigFiles(context: DriverContext): Promise<boolean[]> {
     return Promise.all(
-      this.context.configPaths.map(configPath => {
+      context.configPaths.map(configPath => {
         this.tool.debug(`Deleting config file ${chalk.cyan(configPath)}`);
 
         this.tool.emit('delete-config-file', [configPath]);

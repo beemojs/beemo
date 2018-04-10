@@ -17,8 +17,8 @@ type Args = string[];
 const OPTION_PATTERN: RegExp = /-?-[-a-z0-9]+(,|\s)/gi;
 
 export default class RunCommandRoutine extends Routine<Object, DriverContext> {
-  execute(): Promise<*> {
-    const { metadata } = this.context.primaryDriver;
+  execute(context: DriverContext): Promise<*> {
+    const { metadata } = context.primaryDriver;
 
     this.task('Gathering arguments', this.gatherArgs);
 
@@ -36,7 +36,7 @@ export default class RunCommandRoutine extends Routine<Object, DriverContext> {
   /**
    * Expand arguments that look like globs.
    */
-  expandGlobPatterns(args: Args): Promise<Args> {
+  expandGlobPatterns(context: DriverContext, args: Args): Promise<Args> {
     const nextArgs = [];
 
     this.tool.debug('Expanding glob patterns');
@@ -44,7 +44,7 @@ export default class RunCommandRoutine extends Routine<Object, DriverContext> {
     args.forEach(arg => {
       if (isGlob(arg)) {
         const paths = glob.sync(arg, {
-          cwd: this.context.root,
+          cwd: context.root,
           debug: this.tool.config.debug,
           strict: true,
         });
@@ -100,7 +100,7 @@ export default class RunCommandRoutine extends Routine<Object, DriverContext> {
    * Filter unknown and or unsupported CLI options from the arguments passed to the CLI.
    * Utilize the driver's help option/command to determine accurate options.
    */
-  filterUnknownOptions(args: Args): Promise<Args> {
+  filterUnknownOptions(context: DriverContext, args: Args): Promise<Args> {
     this.tool.debug('Filtering unknown command line options');
 
     return this.extractNativeOptions().then(nativeOptions => {
@@ -156,16 +156,16 @@ export default class RunCommandRoutine extends Routine<Object, DriverContext> {
   /**
    * Gather arguments from all sources to pass to the driver.
    */
-  gatherArgs(): Promise<Args> {
-    const driverArgs = this.context.primaryDriver.getArgs();
-    const commandArgs = this.context.args;
+  gatherArgs(context: DriverContext): Promise<Args> {
+    const driverArgs = context.primaryDriver.getArgs();
+    const commandArgs = context.args;
     const args = [
       // Passed by the driver
       ...driverArgs,
       // Passed on the command line
       ...commandArgs,
       // Parallel args passed on the command line
-      // ...(this.config.parallelArgs || []),
+      // ...(this.options.parallelArgs || []),
     ];
 
     this.tool.debug('Gathering arguments to pass to driver');
@@ -186,7 +186,7 @@ export default class RunCommandRoutine extends Routine<Object, DriverContext> {
 
     // Since we combine multiple args, we need to rebuild this.
     // And we also need to set this before we filter them.
-    this.context.yargs = parseArgs(args);
+    context.yargs = parseArgs(args);
 
     return Promise.resolve(args);
   }
@@ -194,8 +194,8 @@ export default class RunCommandRoutine extends Routine<Object, DriverContext> {
   /**
    * Include --config option if driver requires it (instead of auto-lookup resolution).
    */
-  includeConfigOption(prevArgs: Args): Promise<Args> {
-    const { configPaths, primaryDriver } = this.context;
+  includeConfigOption(context: DriverContext, prevArgs: Args): Promise<Args> {
+    const { configPaths, primaryDriver } = context;
     const configPath = configPaths.find(path => path.endsWith(primaryDriver.metadata.configName));
     const args = [...prevArgs];
 
@@ -212,14 +212,14 @@ export default class RunCommandRoutine extends Routine<Object, DriverContext> {
    * Execute the driver's command with the filtered arguments and handle the
    * success and failures with the driver itself.
    */
-  runCommandWithArgs(args: Args): Promise<Execution> {
-    const driver = this.context.primaryDriver;
+  runCommandWithArgs(context: DriverContext, args: Args): Promise<Execution> {
+    const driver = context.primaryDriver;
 
     this.tool.debug(
       `Executing command ${chalk.magenta(driver.metadata.bin)} with args "${args.join(' ')}"`,
     );
 
-    this.tool.emit('before-execute', [driver, args, this.context]);
+    this.tool.emit('before-execute', [driver, args, context]);
 
     return this.executeCommand(driver.metadata.bin, args, { env: driver.options.env })
       .then(response => {

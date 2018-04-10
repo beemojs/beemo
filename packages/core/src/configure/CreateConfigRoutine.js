@@ -7,7 +7,7 @@
 import chalk from 'chalk';
 import fs from 'fs-extra';
 import path from 'path';
-import Options, { instance } from 'optimal';
+import optimal, { instance } from 'optimal';
 import parseArgs from 'yargs-parser';
 import { Routine } from 'boost';
 import Driver from '../Driver';
@@ -18,8 +18,8 @@ export default class CreateConfigRoutine extends Routine<Object, DriverContext> 
   driver: Driver;
 
   bootstrap() {
-    this.config = new Options(
-      this.config,
+    this.options = optimal(
+      this.options,
       {
         driver: instance(Driver).required(),
       },
@@ -30,7 +30,7 @@ export default class CreateConfigRoutine extends Routine<Object, DriverContext> 
   }
 
   execute(): Promise<string> {
-    const { name } = this.config.driver;
+    const { name } = this.options.driver;
 
     this.task(`Loading external ${name} module config`, this.loadConfigFromFilesystem);
     this.task(`Loading local ${name} Beemo config`, this.extractConfigFromPackage);
@@ -43,25 +43,25 @@ export default class CreateConfigRoutine extends Routine<Object, DriverContext> 
   /**
    * Create a temporary configuration file or pass as an option.
    */
-  createConfigFile(config: Object): Promise<string> {
-    const { metadata } = this.config.driver;
-    const configPath = path.join(this.context.root, metadata.configName);
+  createConfigFile(context: DriverContext, config: Object): Promise<string> {
+    const { metadata } = this.options.driver;
+    const configPath = path.join(context.root, metadata.configName);
 
     this.tool.debug(`Creating config file ${chalk.cyan(configPath)}`);
 
-    this.config.driver.config = config;
-    this.context.configPaths.push(configPath);
+    this.options.driver.config = config;
+    context.configPaths.push(configPath);
 
     this.tool.emit('create-config-file', [configPath, config]);
 
-    return fs.writeFile(configPath, this.config.driver.formatConfig(config)).then(() => configPath);
+    return fs.writeFile(configPath, this.options.driver.formatConfig(config)).then(() => configPath);
   }
 
   /**
    * Extract configuration from "beemo.<driver>" within the local project's package.json.
    */
-  extractConfigFromPackage(prevConfigs: Object[]): Promise<Object[]> {
-    const { name } = this.config.driver;
+  extractConfigFromPackage(context: DriverContext, prevConfigs: Object[]): Promise<Object[]> {
+    const { name } = this.options.driver;
     const { config } = this.tool;
     const configs = [...prevConfigs];
 
@@ -90,20 +90,20 @@ export default class CreateConfigRoutine extends Routine<Object, DriverContext> 
     this.tool.debug('Gathering arguments to pass to config file');
 
     return parseArgs(
-      [...this.config.driver.getArgs(), ...this.context.args].map(value => String(value)),
+      [...this.options.driver.getArgs(), ...this.context.args].map(value => String(value)),
     );
   }
 
   /**
    * Merge multiple configuration sources using the current driver.
    */
-  mergeConfigs(configs: Object[]): Promise<Object> {
+  mergeConfigs(context: DriverContext, configs: Object[]): Promise<Object> {
     this.tool.debug(
-      `Merging ${chalk.magenta(this.config.driver.name)} config from ${configs.length} sources`,
+      `Merging ${chalk.magenta(this.options.driver.name)} config from ${configs.length} sources`,
     );
 
     const config = configs.reduce(
-      (masterConfig, cfg) => this.config.driver.mergeConfig(masterConfig, cfg),
+      (masterConfig, cfg) => this.options.driver.mergeConfig(masterConfig, cfg),
       {},
     );
 
@@ -115,15 +115,15 @@ export default class CreateConfigRoutine extends Routine<Object, DriverContext> 
   /**
    * Load configuration from the node module (the consumer owned package).
    */
-  loadConfigFromFilesystem(prevConfigs: Object[]): Promise<Object[]> {
+  loadConfigFromFilesystem(context: DriverContext, prevConfigs: Object[]): Promise<Object[]> {
     const { config: { module: moduleName }, configLoader } = this.tool;
-    const { name } = this.config.driver;
+    const { name } = this.options.driver;
     const configs = [...prevConfigs];
 
     // Allow for local development
     const filePath =
       moduleName === '@local'
-        ? path.join(this.context.root, `configs/${name}.js`)
+        ? path.join(context.root, `configs/${name}.js`)
         : configLoader.resolveModuleConfigPath(name, moduleName);
     const fileExists = fs.existsSync(filePath);
 

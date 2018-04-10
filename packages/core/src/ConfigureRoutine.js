@@ -23,7 +23,7 @@ export default class ConfigureRoutine extends Routine<BeemoConfig, DriverContext
    * Pipe a routine for every driver we need to create a configuration for,
    * and then run in parallel.
    */
-  createConfigFiles(drivers: Driver[]): Promise<string | string[]> {
+  createConfigFiles(context: DriverContext, drivers: Driver[]): Promise<string | string[]> {
     const names = drivers.map(driver => {
       const routine = new CreateConfigRoutine(driver.name, driver.metadata.configName, { driver });
 
@@ -45,8 +45,8 @@ export default class ConfigureRoutine extends Routine<BeemoConfig, DriverContext
    * Recursively loop through an driver's dependencies, adding a dependenct driver for each,
    * starting from the primary driver (the command that initiated the process).
    */
-  resolveDependencies(): Promise<Driver[]> {
-    const { driverName, primaryDriver } = this.context;
+  resolveDependencies(context: DriverContext): Promise<Driver[]> {
+    const { driverName, primaryDriver } = context;
     const queue = [primaryDriver];
 
     this.tool.debug(`Resolving dependencies for ${chalk.magenta(driverName)}`);
@@ -61,11 +61,11 @@ export default class ConfigureRoutine extends Routine<BeemoConfig, DriverContext
         queue.push(this.tool.getPlugin(name));
       });
 
-      this.context.drivers.unshift(driver);
+      context.drivers.unshift(driver);
     }
 
-    this.tool.emit('resolve-dependencies', [this.context.drivers]);
+    this.tool.emit('resolve-dependencies', [context.drivers]);
 
-    return Promise.resolve(this.context.drivers);
+    return Promise.resolve(context.drivers);
   }
 }

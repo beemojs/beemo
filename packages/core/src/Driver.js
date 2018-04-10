@@ -6,7 +6,7 @@
 
 import { Plugin } from 'boost';
 import merge from 'lodash/merge';
-import Options, { array, bool, number, object, shape, string, union } from 'optimal';
+import optimal, { array, bool, number, object, shape, string, union } from 'optimal';
 
 import type { EventListener } from 'boost';
 import type {
@@ -29,7 +29,7 @@ export default class Driver extends Plugin<DriverOptions> {
   constructor(options?: $Shape<DriverOptions> = {}) {
     super(options);
 
-    this.options = new Options(
+    this.options = optimal(
       options,
       {
         args: array(string()),
@@ -139,7 +139,7 @@ export default class Driver extends Plugin<DriverOptions> {
       });
     });
 
-    this.command = new Options(options, blueprint, {
+    this.command = optimal(options, blueprint, {
       name: this.constructor.name,
     });
 
@@ -150,7 +150,7 @@ export default class Driver extends Plugin<DriverOptions> {
    * Set metadata about the binary/executable in which this driver wraps.
    */
   setMetadata(metadata: $Shape<DriverMetadata>): this {
-    this.metadata = new Options(
+    this.metadata = optimal(
       metadata,
       {
         bin: string()

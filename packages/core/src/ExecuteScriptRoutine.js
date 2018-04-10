@@ -12,7 +12,7 @@ import Script from './Script';
 import type { BeemoConfig, Execution, ScriptContext } from './types';
 
 export default class ExecuteScriptRoutine extends Routine<BeemoConfig, ScriptContext> {
-  execute(scriptName: string): Promise<string[]> {
+  execute(context: ScriptContext, scriptName: string): Promise<string[]> {
     this.task('Loading script', this.loadScript);
     this.task('Running script', this.runScript);
 
@@ -22,8 +22,8 @@ export default class ExecuteScriptRoutine extends Routine<BeemoConfig, ScriptCon
   /**
    * Attempt to load a script from the configuration module.
    */
-  loadScript(scriptName: string): Promise<Script> {
-    const filePath = path.join(this.context.moduleRoot, 'scripts', `${scriptName}.js`);
+  loadScript(context: ScriptContext, scriptName: string): Promise<Script> {
+    const filePath = path.join(context.moduleRoot, 'scripts', `${scriptName}.js`);
     const loader = new ModuleLoader(this.tool, 'script', Script);
 
     this.tool.debug('Loading script');
@@ -34,9 +34,9 @@ export default class ExecuteScriptRoutine extends Routine<BeemoConfig, ScriptCon
       // Is not set by Boost, so set it here
       script.name = scriptName;
 
-      this.context.script = script;
-      this.context.scriptName = scriptName;
-      this.context.scriptPath = filePath;
+      context.script = script;
+      context.scriptName = scriptName;
+      context.scriptPath = filePath;
 
       this.tool.emit('load-script', [script]);
 
@@ -47,12 +47,12 @@ export default class ExecuteScriptRoutine extends Routine<BeemoConfig, ScriptCon
   /**
    * Run the script while also parsing arguments to use as options.
    */
-  runScript(script: Script): Promise<Execution> {
+  runScript(context: ScriptContext, script: Script): Promise<Execution> {
     const { args } = this.context;
 
     this.tool.debug(`Executing script with args "${args.join(' ')}"`);
 
-    this.tool.emit('before-execute', [script, args, this.context]);
+    this.tool.emit('before-execute', [script, args, context]);
 
     const options = parseArgs(args, script.parse());
 

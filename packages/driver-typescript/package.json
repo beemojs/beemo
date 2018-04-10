@@ -19,7 +19,7 @@
     "access": "public"
   },
   "devDependencies": {
-    "typescript": "^2.7.2"
+    "typescript": "^2.8.1"
   },
   "peerDependencies": {
     "@beemo/core": "^0.16.0",

@@ -10,8 +10,8 @@ import RunCommandRoutine from './driver/RunCommandRoutine';
 import type { BeemoConfig, DriverContext } from './types';
 
 export default class ExecuteDriverRoutine extends Routine<BeemoConfig, DriverContext> {
-  execute(): Promise<string[]> {
-    const { args, primaryDriver } = this.context;
+  execute(context: DriverContext): Promise<string[]> {
+    const { args, primaryDriver } = context;
     const driverName = primaryDriver.name;
     const binName = primaryDriver.metadata.bin;
 

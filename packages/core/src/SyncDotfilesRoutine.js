@@ -9,7 +9,7 @@ import copy from 'copy';
 import fs from 'fs-extra';
 import path from 'path';
 import { Routine } from 'boost';
-import Options, { string } from 'optimal';
+import optimal, { string } from 'optimal';
 
 import type { Context } from './types';
 
@@ -19,8 +19,8 @@ type SyncDotfilesConfig = {
 
 export default class SyncDotfilesRoutine extends Routine<SyncDotfilesConfig, Context> {
   bootstrap() {
-    this.config = new Options(
-      this.config,
+    this.options = optimal(
+      this.options,
       {
         filter: string().empty(),
       },
@@ -30,19 +30,19 @@ export default class SyncDotfilesRoutine extends Routine<SyncDotfilesConfig, Con
     );
   }
 
-  execute(): Promise<string[]> {
+  execute(context: Context): Promise<string[]> {
     this.task('Copying files', this.copyFilesFromConfigModule);
     this.task('Renaming files', this.renameFilesWithDot);
 
-    return this.serializeTasks(this.context.moduleRoot);
+    return this.serializeTasks(context.moduleRoot);
   }
 
   /**
    * Copy all files from the config module's "dotfiles/" folder.
    */
-  copyFilesFromConfigModule(moduleRoot: string): Promise<string[]> {
+  copyFilesFromConfigModule(context: Context, moduleRoot: string): Promise<string[]> {
     const dotfilePath = path.join(moduleRoot, 'dotfiles/*');
-    const { filter } = this.config;
+    const { filter } = this.options;
 
     return new Promise((resolve, reject) => {
       copy(dotfilePath, this.tool.options.root, (error, files) => {
@@ -83,7 +83,7 @@ export default class SyncDotfilesRoutine extends Routine<SyncDotfilesConfig, Con
    * The original files are not prefixed with ".", as it causes git/npm issues
    * in the repository. So we need to rename them after they are copied.
    */
-  renameFilesWithDot(filePaths: string[]): Promise<string[]> {
+  renameFilesWithDot(context: Context, filePaths: string[]): Promise<string[]> {
     this.tool.debug('Renaming dotfiles and prefixing with a period');
 
     return Promise.all(

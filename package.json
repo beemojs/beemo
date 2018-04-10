@@ -82,11 +82,6 @@
       "ignore": [
         ".*/packages/driver-flow/integration/.*"
       ],
-      "libs": [
-        "./packages/core/beemo.js.flow",
-        "./node_modules/boost/boost.js.flow",
-        "./node_modules/optimal/optimal.js.flow"
-      ],
       "lints": {
         "all": "off"
       }
