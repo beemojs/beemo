@@ -2,27 +2,29 @@
   "private": true,
   "name": "beemo-root",
   "scripts": {
-    "pretest": "yarn run build",
-    "test": "yarn run jest",
-    "coverage": "yarn run jest --coverage",
-    "eslint": "beemo eslint \"./packages/*/{src,tests}\"",
-    "flow": "beemo flow --workspaces",
-    "jest": "beemo jest --workspaces",
-    "prettier": "beemo prettier --write ./README.md \"./configs/*.js\" \"./packages/*/{bin,src,tests}/**/*.js\" \"./packages/*/*.{md,json}\" \"./docs/**/*.md\"",
-    "package": "yarn run clean && yarn run bootstrap && yarn test",
-    "bootstrap": "lerna bootstrap && bash ./scripts/link-packages.sh",
-    "bootstrap:slow": "yarn run bootstrap --concurrency=1",
-    "build": "bash ./scripts/build-packages.sh",
+    "babel": "beemo run-script build-packages",
+    "build": "yarn run babel",
+    "build:dts": "beemo run-script generate-dts",
     "clean": "rimraf ./packages/*/{lib,esm}/ && lerna clean --yes",
+    "clean:cache": "rimraf ./cache",
+    "coverage": "yarn run jest --coverage",
+    "docs": "gitbook build --debug --log=debug",
+    "docs:serve": "gitbook serve",
+    "docs:install": "gitbook install",
+    "eslint": "beemo eslint",
+    "jest": "beemo jest",
+    "posttest": "yarn run eslint",
+    "pretest": "yarn run type",
+    "test": "yarn run jest",
+    "prettier": "beemo prettier",
+    "package": "yarn run clean && yarn run build && yarn test",
+    "prerelease": "yarn run package",
     "release": "lerna publish",
     "release:force": "yarn run release --force-publish=*",
-    "prerelease": "yarn run package",
-    "docs": "gitbook build --log=debug --debug",
-    "docs:serve": "gitbook serve",
-    "docs:install": "gitbook install"
+    "type": "beemo typescript --noEmit --workspaces"
   },
   "devDependencies": {
-    "@milesj/build-tool-config": "0.67.1",
+    "@milesj/build-tool-config": "0.82.2",
     "chalk": "^2.3.2",
     "fs-extra": "^5.0.0",
     "glob": "^7.1.2",
@@ -39,51 +41,21 @@
     "module": "@local",
     "drivers": [
       "babel",
-      {
-        "driver": "eslint",
-        "args": [
-          "--color",
-          "--report-unused-disable-directives"
-        ]
-      },
-      {
-        "driver": "flow",
-        "args": [
-          "--color=auto"
-        ]
-      },
+      "eslint",
       {
         "driver": "jest",
-        "args": [
-          "--colors",
-          "--logHeapUsage"
-        ],
         "env": {
           "NODE_ENV": "test"
         }
       },
       "mocha",
-      {
-        "driver": "prettier",
-        "args": [
-          "--debug-check",
-          "--write"
-        ]
-      },
+      "prettier",
       "typescript"
     ],
     "eslint": {
       "rules": {
         "function-paren-newline": "off",
         "import/first": "off"
-      }
-    },
-    "flow": {
-      "ignore": [
-        ".*/packages/driver-flow/integration/.*"
-      ],
-      "lints": {
-        "all": "off"
       }
     }
   }

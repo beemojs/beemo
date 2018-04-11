@@ -1,15 +1,13 @@
 /**
  * @copyright   2017, Miles Johnson
  * @license     https://opensource.org/licenses/MIT
- * @flow
  */
 
-import { Plugin } from 'boost';
+import { Plugin, EventListener } from 'boost';
 import merge from 'lodash/merge';
-import optimal, { array, bool, number, object, shape, string, union } from 'optimal';
-
-import type { EventListener } from 'boost';
-import type {
+import optimal, { array, bool, number, object, shape, string, union, Blueprint } from 'optimal';
+import {
+  BeemoConfig,
   DriverCommandOptions,
   DriverContext,
   DriverOptions,
@@ -20,13 +18,16 @@ import type {
 export default class Driver extends Plugin<DriverOptions> {
   command: DriverCommandOptions = {};
 
-  config: Object = {};
+  // @ts-ignore Set after instantiation
+  config: BeemoConfig = {};
 
+  // @ts-ignore Set after instantiation
   context: DriverContext;
 
+  // @ts-ignore Set after instantiation
   metadata: DriverMetadata;
 
-  constructor(options?: $Shape<DriverOptions> = {}) {
+  constructor(options: Partial<DriverOptions> = {}) {
     super(options);
 
     this.options = optimal(
@@ -45,7 +46,7 @@ export default class Driver extends Plugin<DriverOptions> {
   /**
    * Format the configuration file before it's written.
    */
-  formatConfig(data: Object): string {
+  formatConfig(data: object): string {
     const content = JSON.stringify(data, null, 2);
 
     if (this.metadata.configName.endsWith('.js')) {
@@ -113,7 +114,7 @@ export default class Driver extends Plugin<DriverOptions> {
   /**
    * Merge multiple configuration objects.
    */
-  mergeConfig(prev: Object, next: Object): Object {
+  mergeConfig(prev: object, next: object): object {
     return merge(prev, next);
   }
 
@@ -130,7 +131,7 @@ export default class Driver extends Plugin<DriverOptions> {
    * Setup additional command options.
    */
   setCommandOptions(options: DriverCommandOptions): this {
-    const blueprint = {};
+    const blueprint: Blueprint = {};
 
     Object.keys(options).forEach(key => {
       blueprint[key] = shape({
@@ -149,7 +150,7 @@ export default class Driver extends Plugin<DriverOptions> {
   /**
    * Set metadata about the binary/executable in which this driver wraps.
    */
-  setMetadata(metadata: $Shape<DriverMetadata>): this {
+  setMetadata(metadata: Partial<DriverMetadata>): this {
     this.metadata = optimal(
       metadata,
       {

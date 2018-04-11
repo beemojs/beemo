@@ -7,6 +7,7 @@ logs/
 .idea
 .npm
 .yarnclean
+.vscode
 
 # Directories
 _book/
