@@ -1,7 +1,6 @@
 /**
  * @copyright   2017, Miles Johnson
  * @license     https://opensource.org/licenses/MIT
- * @flow
  */
 
 import chalk from 'chalk';
@@ -9,15 +8,14 @@ import copy from 'copy';
 import fs from 'fs-extra';
 import path from 'path';
 import { Routine } from 'boost';
-import optimal, { string } from 'optimal';
+import optimal, { string, Struct } from 'optimal';
+import { Context } from './types';
 
-import type { Context } from './types';
+export interface SyncDotfilesOptions extends Struct {
+  filter: string;
+}
 
-type SyncDotfilesConfig = {
-  filter: string,
-};
-
-export default class SyncDotfilesRoutine extends Routine<SyncDotfilesConfig, Context> {
+export default class SyncDotfilesRoutine extends Routine<SyncDotfilesOptions, Context> {
   bootstrap() {
     this.options = optimal(
       this.options,

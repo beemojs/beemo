@@ -1,11 +1,10 @@
 /**
  * @copyright   2017, Miles Johnson
  * @license     https://opensource.org/licenses/MIT
- * @flow
  */
 
-import { Pipeline, Tool } from 'boost';
-import { bool, shape } from 'optimal';
+import { Pipeline, Tool, ToolInterface } from 'boost';
+import { bool, shape, Blueprint, Struct } from 'optimal';
 import chalk from 'chalk';
 import fs from 'fs-extra';
 import path from 'path';
@@ -15,17 +14,15 @@ import ConfigureRoutine from './ConfigureRoutine';
 import ExecuteDriverRoutine from './ExecuteDriverRoutine';
 import ExecuteScriptRoutine from './ExecuteScriptRoutine';
 import SyncDotfilesRoutine from './SyncDotfilesRoutine';
-
-import type { Blueprint } from 'optimal';
-import type Driver from './Driver';
-import type { BeemoTool, Context, DriverContext, ScriptContext } from './types';
+import Driver from './Driver';
+import { Context, DriverContext, ScriptContext, Execution } from './types';
 
 export default class Beemo {
   argv: string[];
 
   moduleRoot: string = '';
 
-  tool: BeemoTool;
+  tool: ToolInterface;
 
   constructor(argv: string[]) {
     this.argv = argv;
@@ -83,7 +80,7 @@ export default class Beemo {
   /**
    * Create a re-usable context for each pipeline.
    */
-  createContext(context?: Object = {}): * {
+  createContext(context: Struct = {}): any {
     return {
       ...context,
       args: this.argv,
@@ -165,9 +162,9 @@ export default class Beemo {
   /**
    * Execute all routines for the chosen driver.
    */
-  executeDriver(driverName: string): Promise<*> {
+  executeDriver(driverName: string): Promise<Execution[]> {
     const { tool } = this;
-    const primaryDriver = tool.getPlugin(driverName);
+    const primaryDriver = tool.getPlugin(driverName) as Driver;
     const context: DriverContext = this.createContext({
       configPaths: [],
       driverName,
@@ -186,9 +183,7 @@ export default class Beemo {
     // Make the context available in the current driver
     primaryDriver.context = context;
 
-    tool
-      .setEventNamespace(driverName)
-      .emit('init-driver', [driverName, context.args, context]);
+    tool.setEventNamespace(driverName).emit('init-driver', [driverName, context.args, context]);
 
     tool.debug(`Running with ${driverName} driver`);
 
@@ -202,7 +197,7 @@ export default class Beemo {
   /**
    * Run a script found within the configuration module.
    */
-  executeScript(scriptName: string): Promise<*> {
+  executeScript(scriptName: string): Promise<Execution> {
     const context: ScriptContext = this.createContext({
       script: null,
       scriptName,
@@ -235,12 +230,10 @@ export default class Beemo {
   /**
    * Sync dotfiles from the configuration module.
    */
-  syncDotfiles(filter?: string = ''): Promise<*> {
+  syncDotfiles(filter: string = ''): Promise<string[]> {
     const context: Context = this.createContext();
 
-    this.tool
-      .setEventNamespace('beemo')
-      .emit('sync-dotfiles', [context]);
+    this.tool.setEventNamespace('beemo').emit('sync-dotfiles', [context]);
 
     this.tool.debug('Running dotfiles command');
 

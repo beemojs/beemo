@@ -1,20 +1,20 @@
 /**
  * @copyright   2017, Miles Johnson
  * @license     https://opensource.org/licenses/MIT
- * @flow
  */
 
 import chalk from 'chalk';
 import fs from 'fs-extra';
 import path from 'path';
-import optimal, { instance } from 'optimal';
+import optimal, { instance, Struct } from 'optimal';
+import { Arguments } from 'yargs';
 import parseArgs from 'yargs-parser';
-import { Routine } from 'boost';
+import { ConfigLoader, Routine } from 'boost';
 import Driver from '../Driver';
+import { DriverContext } from '../types';
 
-import type { DriverContext } from '../types';
-
-export default class CreateConfigRoutine extends Routine<Object, DriverContext> {
+export default class CreateConfigRoutine extends Routine<Struct, DriverContext> {
+  // @ts-ignore Set after instantiation
   driver: Driver;
 
   bootstrap() {
@@ -54,13 +54,15 @@ export default class CreateConfigRoutine extends Routine<Object, DriverContext> 
 
     this.tool.emit('create-config-file', [configPath, config]);
 
-    return fs.writeFile(configPath, this.options.driver.formatConfig(config)).then(() => configPath);
+    return fs
+      .writeFile(configPath, this.options.driver.formatConfig(config))
+      .then(() => configPath);
   }
 
   /**
    * Extract configuration from "beemo.<driver>" within the local project's package.json.
    */
-  extractConfigFromPackage(context: DriverContext, prevConfigs: Object[]): Promise<Object[]> {
+  extractConfigFromPackage(context: DriverContext, prevConfigs: Struct[]): Promise<Struct[]> {
     const { name } = this.options.driver;
     const { config } = this.tool;
     const configs = [...prevConfigs];
@@ -86,7 +88,7 @@ export default class CreateConfigRoutine extends Routine<Object, DriverContext> 
   /**
    * Gather CLI arguments to pass to the configuration file.
    */
-  getArgsToPass(): Object {
+  getArgsToPass(): Arguments {
     this.tool.debug('Gathering arguments to pass to config file');
 
     return parseArgs(
@@ -97,7 +99,7 @@ export default class CreateConfigRoutine extends Routine<Object, DriverContext> 
   /**
    * Merge multiple configuration sources using the current driver.
    */
-  mergeConfigs(context: DriverContext, configs: Object[]): Promise<Object> {
+  mergeConfigs(context: DriverContext, configs: Struct[]): Promise<Struct> {
     this.tool.debug(
       `Merging ${chalk.magenta(this.options.driver.name)} config from ${configs.length} sources`,
     );
@@ -115,9 +117,10 @@ export default class CreateConfigRoutine extends Routine<Object, DriverContext> 
   /**
    * Load configuration from the node module (the consumer owned package).
    */
-  loadConfigFromFilesystem(context: DriverContext, prevConfigs: Object[]): Promise<Object[]> {
-    const { config: { module: moduleName }, configLoader } = this.tool;
+  loadConfigFromFilesystem(context: DriverContext, prevConfigs: Struct[]): Promise<Struct[]> {
+    const { config: { module: moduleName } } = this.tool;
     const { name } = this.options.driver;
+    const configLoader = new ConfigLoader(this.tool);
     const configs = [...prevConfigs];
 
     // Allow for local development

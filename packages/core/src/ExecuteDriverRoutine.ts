@@ -1,13 +1,11 @@
 /**
  * @copyright   2017, Miles Johnson
  * @license     https://opensource.org/licenses/MIT
- * @flow
  */
 
 import { Routine } from 'boost';
 import RunCommandRoutine from './driver/RunCommandRoutine';
-
-import type { BeemoConfig, DriverContext } from './types';
+import { BeemoConfig, DriverContext } from './types';
 
 export default class ExecuteDriverRoutine extends Routine<BeemoConfig, DriverContext> {
   execute(context: DriverContext): Promise<string[]> {

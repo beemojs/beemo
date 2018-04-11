@@ -1,7 +1,6 @@
 /**
  * @copyright   2017, Miles Johnson
  * @license     https://opensource.org/licenses/MIT
- * @flow
  */
 
 import { Routine } from 'boost';
@@ -9,15 +8,16 @@ import chalk from 'chalk';
 import glob from 'glob';
 import isGlob from 'is-glob';
 import parseArgs from 'yargs-parser';
-
-import type { DriverContext, Execution } from '../types';
+import { DriverContext, Execution } from '../types';
 
 type Args = string[];
+
+type OptionMap = { [option: string]: true };
 
 const OPTION_PATTERN: RegExp = /-?-[-a-z0-9]+(,|\s)/gi;
 
 export default class RunCommandRoutine extends Routine<Object, DriverContext> {
-  execute(context: DriverContext): Promise<*> {
+  execute(context: DriverContext): Promise<Execution> {
     const { metadata } = context.primaryDriver;
 
     this.task('Gathering arguments', this.gatherArgs);
@@ -37,7 +37,7 @@ export default class RunCommandRoutine extends Routine<Object, DriverContext> {
    * Expand arguments that look like globs.
    */
   expandGlobPatterns(context: DriverContext, args: Args): Promise<Args> {
-    const nextArgs = [];
+    const nextArgs: Args = [];
 
     this.tool.debug('Expanding glob patterns');
 
@@ -63,7 +63,7 @@ export default class RunCommandRoutine extends Routine<Object, DriverContext> {
   /**
    * Extract native supported options and flags from driver help output.
    */
-  extractNativeOptions(): Promise<{ [option: string]: true }> {
+  extractNativeOptions(): Promise<OptionMap> {
     const driver = this.context.primaryDriver;
     const { env } = driver.options;
     const options = driver.getSupportedOptions();
@@ -71,7 +71,7 @@ export default class RunCommandRoutine extends Routine<Object, DriverContext> {
     if (options.length > 0) {
       this.tool.debug('Using supported options from driver');
 
-      const nativeOptions = {};
+      const nativeOptions: OptionMap = {};
 
       options.forEach(option => {
         nativeOptions[option] = true;
@@ -84,9 +84,10 @@ export default class RunCommandRoutine extends Routine<Object, DriverContext> {
 
     return this.executeCommand(driver.metadata.bin, [driver.metadata.helpOption], { env }).then(
       ({ stdout }) => {
-        const nativeOptions = {};
+        const nativeOptions: OptionMap = {};
+        const matches = stdout.match(OPTION_PATTERN) || [];
 
-        stdout.match(OPTION_PATTERN).forEach(option => {
+        matches.forEach(option => {
           // Trim trailing comma or space
           nativeOptions[option.slice(0, -1)] = true;
         });
@@ -104,8 +105,8 @@ export default class RunCommandRoutine extends Routine<Object, DriverContext> {
     this.tool.debug('Filtering unknown command line options');
 
     return this.extractNativeOptions().then(nativeOptions => {
-      const filteredArgs = [];
-      const unknownArgs = [];
+      const filteredArgs: Args = [];
+      const unknownArgs: Args = [];
       let skipNext = false;
 
       args.forEach((arg, i) => {

@@ -1,15 +1,13 @@
 /**
  * @copyright   2017, Miles Johnson
  * @license     https://opensource.org/licenses/MIT
- * @flow
  */
 
 import { Routine } from 'boost';
 import chalk from 'chalk';
 import CreateConfigRoutine from './configure/CreateConfigRoutine';
 import Driver from './Driver';
-
-import type { BeemoConfig, DriverContext } from './types';
+import { BeemoConfig, DriverContext } from './types';
 
 export default class ConfigureRoutine extends Routine<BeemoConfig, DriverContext> {
   execute(): Promise<string | string[]> {
@@ -52,13 +50,13 @@ export default class ConfigureRoutine extends Routine<BeemoConfig, DriverContext
     this.tool.debug(`Resolving dependencies for ${chalk.magenta(driverName)}`);
 
     while (queue.length) {
-      const driver = queue.shift();
+      const driver = queue.shift()!;
       const deps = new Set(driver.getDependencies());
 
       deps.forEach(name => {
         this.tool.debug(`  Including dependency ${chalk.magenta(name)}`);
 
-        queue.push(this.tool.getPlugin(name));
+        queue.push(this.tool.getPlugin(name) as Driver);
       });
 
       context.drivers.unshift(driver);

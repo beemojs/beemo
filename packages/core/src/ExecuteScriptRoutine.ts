@@ -1,18 +1,16 @@
 /**
  * @copyright   2017, Miles Johnson
  * @license     https://opensource.org/licenses/MIT
- * @flow
  */
 
 import path from 'path';
 import { ModuleLoader, Routine } from 'boost';
 import parseArgs from 'yargs-parser';
 import Script from './Script';
-
-import type { BeemoConfig, Execution, ScriptContext } from './types';
+import { BeemoConfig, Execution, ScriptContext } from './types';
 
 export default class ExecuteScriptRoutine extends Routine<BeemoConfig, ScriptContext> {
-  execute(context: ScriptContext, scriptName: string): Promise<string[]> {
+  execute(context: ScriptContext, scriptName: string): Promise<Execution> {
     this.task('Loading script', this.loadScript);
     this.task('Running script', this.runScript);
 

@@ -558,6 +558,10 @@
     "@types/minimatch" "*"
     "@types/node" "*"
 
+"@types/is-glob@^4.0.0":
+  version "4.0.0"
+  resolved "https://registry.npmjs.org/@types/is-glob/-/is-glob-4.0.0.tgz#fb8a2bff539025d4dcd6d5efe7689e03341b876d"
+
 "@types/jest@^22.2.2":
   version "22.2.2"
   resolved "https://registry.npmjs.org/@types/jest/-/jest-22.2.2.tgz#afe5dacbd00d65325f52da0ed3e76e259629ac9d"
@@ -1817,9 +1821,9 @@ boom@5.x.x:
   dependencies:
     hoek "4.x.x"
 
-boost@^0.41.0:
-  version "0.41.0"
-  resolved "https://registry.npmjs.org/boost/-/boost-0.41.0.tgz#11d5ed8acb3419ba56754d5be81eb90676127688"
+boost@^0.42.0:
+  version "0.42.0"
+  resolved "https://registry.npmjs.org/boost/-/boost-0.42.0.tgz#f13adf0f52bc88874251eb562396a146dfd7a897"
   dependencies:
     "@types/chalk" "^2.2.0"
     "@types/debug" "^0.0.30"

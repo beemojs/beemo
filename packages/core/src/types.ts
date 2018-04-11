@@ -5,6 +5,7 @@
 
 import { ToolConfig } from 'boost';
 import { ExecaReturns } from 'execa';
+import { Struct } from 'optimal';
 import { Arguments, Options } from 'yargs';
 import Driver from './Driver';
 import Script from './Script';
@@ -16,17 +17,17 @@ export interface BeemoConfig extends ToolConfig {
   };
 }
 
-export interface DriverCommandOptions {
+export interface DriverCommandOptions extends Struct {
   [name: string]: Options;
 }
 
-export interface DriverOptions {
+export interface DriverOptions extends Struct {
   args: string[];
   dependencies: string[];
   env: { [key: string]: string };
 }
 
-export interface DriverMetadata {
+export interface DriverMetadata extends Struct {
   bin: string;
   configName: string;
   configOption: string;
@@ -40,7 +41,7 @@ export interface DriverMetadata {
 
 export type Execution = ExecaReturns;
 
-export interface Context {
+export interface Context extends Struct {
   args: string[];
   moduleRoot: string;
   root: string;
