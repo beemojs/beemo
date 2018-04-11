@@ -6,8 +6,8 @@ logs/
 .eslintcache
 .idea
 .npm
-.yarnclean
 .vscode
+.yarnclean
 
 # Directories
 _book/
@@ -17,15 +17,15 @@ lib/
 node_modules/
 
 # Custom
-tests/bundle.min.js
+*.min.js
 *.map
 
 # Configs
-.eslintrc.js
+.babelrc
 .eslintignore
-.flowconfig
+.eslintrc.js
+.prettierignore
 jest.config.js
 prettier.config.js
-.prettierignore
 tsconfig.json
 webpack.config.js
