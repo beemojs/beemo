@@ -3,8 +3,7 @@
   "name": "beemo-root",
   "scripts": {
     "babel": "beemo run-script build-packages",
-    "build": "yarn run babel",
-    "build:dts": "beemo run-script generate-dts",
+    "build": "lerna run babel --scope @beemo/core",
     "clean": "rimraf ./packages/*/{lib,esm}/ && lerna clean --yes",
     "clean:cache": "rimraf ./cache",
     "coverage": "yarn run jest --coverage",
@@ -24,7 +23,7 @@
     "type": "beemo typescript --noEmit --workspaces"
   },
   "devDependencies": {
-    "@milesj/build-tool-config": "0.82.2",
+    "@milesj/build-tool-config": "0.83.0",
     "chalk": "^2.3.2",
     "fs-extra": "^5.0.0",
     "glob": "^7.1.2",

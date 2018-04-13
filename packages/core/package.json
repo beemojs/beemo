@@ -18,6 +18,9 @@
   "engines": {
     "node": ">=6.5.0"
   },
+  "scripts": {
+    "babel": "beemo typescript --declaration"
+  },
   "repository": "https://github.com/milesj/beemo/tree/master/packages/core",
   "license": "MIT",
   "publishConfig": {
@@ -25,12 +28,12 @@
   },
   "dependencies": {
     "@types/execa": "^0.9.0",
-    "@types/fs-extra": "^5.0.1",
+    "@types/fs-extra": "^5.0.2",
     "@types/glob": "^5.0.35",
     "@types/is-glob": "^4.0.0",
     "@types/lodash": "^4.14.106",
     "@types/yargs": "^11.0.0",
-    "boost": "^0.42.0",
+    "boost": "^0.43.0",
     "chalk": "^2.3.2",
     "copy": "^0.3.1",
     "fs-extra": "^5.0.0",

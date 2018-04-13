@@ -443,9 +443,9 @@
     npmlog "^4.1.2"
     write-file-atomic "^2.3.0"
 
-"@milesj/build-tool-config@0.82.2":
-  version "0.82.2"
-  resolved "https://registry.npmjs.org/@milesj/build-tool-config/-/build-tool-config-0.82.2.tgz#9b57c0bb8fed8a0e975b1918d35b91bdbabb118a"
+"@milesj/build-tool-config@0.83.0":
+  version "0.83.0"
+  resolved "https://registry.npmjs.org/@milesj/build-tool-config/-/build-tool-config-0.83.0.tgz#8876e95c9e7b7cb2bd3d43bc27ea6bd9688011f3"
   dependencies:
     "@beemo/cli" "^0.16.0"
     "@beemo/core" "^0.16.0"
@@ -455,8 +455,8 @@
     "@beemo/driver-prettier" "^0.16.0"
     "@beemo/driver-typescript" "^0.5.0"
     "@types/enzyme" "^3.1.9"
-    "@types/jest" "^22.2.2"
-    "@types/react" "^16.0.41"
+    "@types/jest" "^22.2.3"
+    "@types/react" "^16.3.9"
     babel-cli "^6.26.0"
     babel-core "^6.26.0"
     babel-jest "^22.4.3"
@@ -470,7 +470,6 @@
     babel-preset-stage-2 "^6.24.1"
     babel-runtime "^6.26.0"
     clean-webpack-plugin "^0.1.19"
-    dts-generator "^2.1.0"
     enzyme "^3.3.0"
     enzyme-adapter-react-16 "^1.1.1"
     eslint "^4.19.1"
@@ -484,14 +483,14 @@
     eslint-plugin-promise "^3.7.0"
     eslint-plugin-react "^7.7.0"
     eslint-plugin-typescript "^0.11.0"
-    eslint-plugin-unicorn "^4.0.2"
+    eslint-plugin-unicorn "^4.0.3"
     execa "^0.10.0"
     fs-extra "^5.0.0"
     gitbook-cli "^2.3.2"
     jest "^22.4.3"
     jest-runner-eslint "^0.4.0"
     np "^2.20.1"
-    prettier "^1.11.1"
+    prettier "^1.12.0"
     react "^16.2.0"
     react-dom "^16.2.0"
     react-test-renderer "^16.2.0"
@@ -544,9 +543,9 @@
   version "2.0.0"
   resolved "https://registry.npmjs.org/@types/figures/-/figures-2.0.0.tgz#e624a9ad71db49b9c8b9bbd59fe1ad04c443913c"
 
-"@types/fs-extra@^5.0.1":
-  version "5.0.1"
-  resolved "https://registry.npmjs.org/@types/fs-extra/-/fs-extra-5.0.1.tgz#cd856fbbdd6af2c11f26f8928fd8644c9e9616c9"
+"@types/fs-extra@^5.0.2":
+  version "5.0.2"
+  resolved "https://registry.npmjs.org/@types/fs-extra/-/fs-extra-5.0.2.tgz#235a7e2b56452cc0a6a4809b53e1d1eaffff9c96"
   dependencies:
     "@types/node" "*"
 
@@ -562,9 +561,9 @@
   version "4.0.0"
   resolved "https://registry.npmjs.org/@types/is-glob/-/is-glob-4.0.0.tgz#fb8a2bff539025d4dcd6d5efe7689e03341b876d"
 
-"@types/jest@^22.2.2":
-  version "22.2.2"
-  resolved "https://registry.npmjs.org/@types/jest/-/jest-22.2.2.tgz#afe5dacbd00d65325f52da0ed3e76e259629ac9d"
+"@types/jest@^22.2.3":
+  version "22.2.3"
+  resolved "https://registry.npmjs.org/@types/jest/-/jest-22.2.3.tgz#0157c0316dc3722c43a7b71de3fdf3acbccef10d"
 
 "@types/json5@^0.0.29":
   version "0.0.29"
@@ -596,11 +595,17 @@
   version "0.0.28"
   resolved "https://registry.npmjs.org/@types/pluralize/-/pluralize-0.0.28.tgz#daf46f90fdaa6172600bfeac81e46065177f03ea"
 
-"@types/react@*", "@types/react@^16.0.41":
+"@types/react@*":
   version "16.3.6"
   resolved "https://registry.npmjs.org/@types/react/-/react-16.3.6.tgz#50cec71f14cbaaf49a53167dc1d6739be1d43f12"
   dependencies:
     csstype "^2.0.0"
+
+"@types/react@^16.3.9":
+  version "16.3.9"
+  resolved "https://registry.npmjs.org/@types/react/-/react-16.3.9.tgz#15be16b53c89aac558cf6445774502b2792555ff"
+  dependencies:
+    csstype "^2.2.0"
 
 "@types/split@^0.3.28":
   version "0.3.28"
@@ -1787,10 +1792,6 @@ block-stream@*, block-stream@0.0.9:
   dependencies:
     inherits "~2.0.0"
 
-bluebird@3.3.3:
-  version "3.3.3"
-  resolved "https://registry.npmjs.org/bluebird/-/bluebird-3.3.3.tgz#cf96a45d77b9a97a43c46a365c4619f62bf976d0"
-
 bluebird@^3.4.1, bluebird@^3.5.0, bluebird@^3.5.1, bluebird@~3.5.0:
   version "3.5.1"
   resolved "https://registry.yarnpkg.com/bluebird/-/bluebird-3.5.1.tgz#d9551f9de98f1fcda1e683d17ee91a0602ee2eb9"
@@ -1821,9 +1822,9 @@ boom@5.x.x:
   dependencies:
     hoek "4.x.x"
 
-boost@^0.42.0:
-  version "0.42.0"
-  resolved "https://registry.npmjs.org/boost/-/boost-0.42.0.tgz#f13adf0f52bc88874251eb562396a146dfd7a897"
+boost@^0.43.0:
+  version "0.43.0"
+  resolved "https://registry.npmjs.org/boost/-/boost-0.43.0.tgz#9ab32dbb643c137362d7d6c9bfde48790b480a40"
   dependencies:
     "@types/chalk" "^2.2.0"
     "@types/debug" "^0.0.30"
@@ -2776,6 +2777,10 @@ csstype@^2.0.0:
   version "2.1.1"
   resolved "https://registry.npmjs.org/csstype/-/csstype-2.1.1.tgz#37b01a7a9958ef0b88167ff6678deccd732e0ae2"
 
+csstype@^2.2.0:
+  version "2.2.0"
+  resolved "https://registry.npmjs.org/csstype/-/csstype-2.2.0.tgz#1656ef97553ac53b77090844a2531c6660ebd902"
+
 currently-unhandled@^0.4.1:
   version "0.4.1"
   resolved "https://registry.yarnpkg.com/currently-unhandled/-/currently-unhandled-0.4.1.tgz#988df33feab191ef799a61369dd76c17adf957ea"
@@ -3052,14 +3057,6 @@ dot-prop@^4.1.0:
   resolved "https://registry.npmjs.org/dot-prop/-/dot-prop-4.2.0.tgz#1f19e0c2e1aa0e32797c49799f2837ac6af69c57"
   dependencies:
     is-obj "^1.0.0"
-
-dts-generator@^2.1.0:
-  version "2.1.0"
-  resolved "https://registry.npmjs.org/dts-generator/-/dts-generator-2.1.0.tgz#039b87a4f5f847b3b8ef00ddee3eb09545decefe"
-  dependencies:
-    bluebird "3.3.3"
-    glob "7.0.0"
-    mkdirp "0.5.1"
 
 duplexer3@^0.1.4:
   version "0.1.4"
@@ -3365,9 +3362,9 @@ eslint-plugin-typescript@^0.11.0:
   dependencies:
     requireindex "~1.1.0"
 
-eslint-plugin-unicorn@^4.0.2:
-  version "4.0.2"
-  resolved "https://registry.npmjs.org/eslint-plugin-unicorn/-/eslint-plugin-unicorn-4.0.2.tgz#845de915e7a975f15779466fc92cc01973bbf103"
+eslint-plugin-unicorn@^4.0.3:
+  version "4.0.3"
+  resolved "https://registry.npmjs.org/eslint-plugin-unicorn/-/eslint-plugin-unicorn-4.0.3.tgz#7e9998711bf237809ed1881a51a77000b2f40586"
   dependencies:
     clean-regexp "^1.0.0"
     eslint-ast-utils "^1.0.0"
@@ -4241,16 +4238,6 @@ glob2base@^0.0.12:
   resolved "https://registry.npmjs.org/glob2base/-/glob2base-0.0.12.tgz#9d419b3e28f12e83a362164a277055922c9c0d56"
   dependencies:
     find-index "^0.1.1"
-
-glob@7.0.0:
-  version "7.0.0"
-  resolved "https://registry.npmjs.org/glob/-/glob-7.0.0.tgz#3b20a357fffcf46bb384aed6f8ae9a647fdb6ac4"
-  dependencies:
-    inflight "^1.0.4"
-    inherits "2"
-    minimatch "2 || 3"
-    once "^1.3.0"
-    path-is-absolute "^1.0.0"
 
 glob@7.1.2, glob@^7.0.3, glob@^7.0.5, glob@^7.1.1, glob@^7.1.2, glob@~7.1.2:
   version "7.1.2"
@@ -6305,7 +6292,7 @@ minimalistic-crypto-utils@^1.0.0, minimalistic-crypto-utils@^1.0.1:
   version "1.0.1"
   resolved "https://registry.yarnpkg.com/minimalistic-crypto-utils/-/minimalistic-crypto-utils-1.0.1.tgz#f6c00c1c0b082246e5c4d99dfb8c7c083b2b582a"
 
-"minimatch@2 || 3", minimatch@^3.0.0, minimatch@^3.0.2, minimatch@^3.0.3, minimatch@^3.0.4, minimatch@~3.0.3:
+minimatch@3.0.4, minimatch@^3.0.0, minimatch@^3.0.2, minimatch@^3.0.3, minimatch@^3.0.4, minimatch@~3.0.3:
   version "3.0.4"
   resolved "https://registry.yarnpkg.com/minimatch/-/minimatch-3.0.4.tgz#5166e286457f03306064be5497e8dbb0c3d32083"
   dependencies:
@@ -6392,9 +6379,9 @@ mkdirp@0.5.1, "mkdirp@>=0.5 0", mkdirp@^0.5.0, mkdirp@^0.5.1, mkdirp@~0.5.0, mkd
   dependencies:
     minimist "0.0.8"
 
-mocha@^5.0.5:
-  version "5.0.5"
-  resolved "https://registry.npmjs.org/mocha/-/mocha-5.0.5.tgz#e228e3386b9387a4710007a641f127b00be44b52"
+mocha@^5.1.0:
+  version "5.1.0"
+  resolved "https://registry.npmjs.org/mocha/-/mocha-5.1.0.tgz#5ff11cc39c0bb65330ac6c41f9086634e3e3f686"
   dependencies:
     browser-stdout "1.3.1"
     commander "2.11.0"
@@ -6404,6 +6391,7 @@ mocha@^5.0.5:
     glob "7.1.2"
     growl "1.10.3"
     he "1.1.1"
+    minimatch "3.0.4"
     mkdirp "0.5.1"
     supports-color "4.4.0"
 
@@ -7468,9 +7456,9 @@ preserve@^0.2.0:
   version "0.2.0"
   resolved "https://registry.yarnpkg.com/preserve/-/preserve-0.2.0.tgz#815ed1f6ebc65926f865b310c0713bcb3315ce4b"
 
-prettier@^1.11.1:
-  version "1.11.1"
-  resolved "https://registry.npmjs.org/prettier/-/prettier-1.11.1.tgz#61e43fc4cd44e68f2b0dfc2c38cd4bb0fccdcc75"
+prettier@^1.12.0:
+  version "1.12.0"
+  resolved "https://registry.npmjs.org/prettier/-/prettier-1.12.0.tgz#d26fc5894b9230de97629b39cae225b503724ce8"
 
 pretty-format@^22.4.0:
   version "22.4.0"
