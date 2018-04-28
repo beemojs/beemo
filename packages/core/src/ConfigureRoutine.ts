@@ -31,7 +31,8 @@ export default class ConfigureRoutine extends Routine<BeemoConfig, DriverContext
     });
 
     this.tool.debug(
-      `Creating config files for the following drivers: ${chalk.magenta(names.join(', '))}`,
+      'Creating config files for the following drivers: %s',
+      chalk.magenta(names.join(', ')),
     );
 
     return this.tool.config.config.parallel
@@ -47,14 +48,14 @@ export default class ConfigureRoutine extends Routine<BeemoConfig, DriverContext
     const { driverName, primaryDriver } = context;
     const queue = [primaryDriver];
 
-    this.tool.debug(`Resolving dependencies for ${chalk.magenta(driverName)}`);
+    this.tool.debug('Resolving dependencies for %s', chalk.magenta(driverName));
 
     while (queue.length) {
       const driver = queue.shift()!;
       const deps = new Set(driver.getDependencies());
 
       deps.forEach(name => {
-        this.tool.debug(`  Including dependency ${chalk.magenta(name)}`);
+        this.tool.debug('  Including dependency %s', chalk.magenta(name));
 
         queue.push(this.tool.getPlugin(name) as Driver);
       });

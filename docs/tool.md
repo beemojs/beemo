@@ -27,25 +27,21 @@ error messages can be logged `logError(message)` and will be displayed on failur
 tool.log('Something happened!');
 ```
 
-Debug messages that will only be displayed during `--debug` can be logged with `debug(message)`.
-Furthermore, `invariant(condition, message, pass, fail)` can be used to conditionally log successful
-and failure debug messages.
+Debug messages that will only be displayed during `--debug` can be logged with
+`debug(message, ...params)`. Furthermore, `debug.invariant(condition, message, pass, fail)` can be
+used to conditionally log successful and failure debug messages.
 
 ```js
-tool.invariant(loaded, 'Has it loaded?', 'Yes', 'No');
+tool.debug.invariant(loaded, 'Has it loaded?', 'Yes', 'No');
 ```
 
 ## Events
 
 Event listeners can be registered and unregistered with `on(event, listener)` and
-`off(event, listener)` respectively. Furthermore, all listeners will receive an `Event` instance as
-their 1st argument, which can be used to stop propagation and pass data between listeners.
+`off(event, listener)` respectively. Listeners may return false to stop propagation.
 
 ```js
-tool.on('init', event => {
-  event.value = data;
-  event.stop();
-});
+tool.on('init', () => false);
 ```
 
 > Event stopping should be used carefully.

@@ -1,5 +1,4 @@
 import fs from 'fs';
-import { Event } from 'boost';
 import PrettierDriver from '../src/PrettierDriver';
 
 jest.mock('fs');
@@ -50,14 +49,14 @@ describe('PrettierDriver', () => {
     it('does nothing if no ignore field', () => {
       const config = { foo: 123 };
 
-      driver.handleCreateIgnoreFile(new Event('foo'), '/some/path/prettier.config.js', config);
+      driver.handleCreateIgnoreFile('/some/path/prettier.config.js', config);
 
       expect(config).toEqual({ foo: 123 });
     });
 
     it('errors if not an array', () => {
       expect(() => {
-        driver.handleCreateIgnoreFile(new Event('foo'), '/some/path/prettier.config.js', {
+        driver.handleCreateIgnoreFile('/some/path/prettier.config.js', {
           ignore: 'foo',
         });
       }).toThrowError('Ignore configuration must be an array of strings.');
@@ -69,7 +68,7 @@ describe('PrettierDriver', () => {
         ignore: ['foo', 'bar', 'baz'],
       };
 
-      driver.handleCreateIgnoreFile(new Event('foo'), '/some/path/prettier.config.js', config);
+      driver.handleCreateIgnoreFile('/some/path/prettier.config.js', config);
 
       expect(fs.writeFileSync).toHaveBeenCalledWith('/some/path/.prettierignore', 'foo\nbar\nbaz');
 

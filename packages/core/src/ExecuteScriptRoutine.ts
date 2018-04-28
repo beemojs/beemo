@@ -10,6 +10,7 @@ import Script from './Script';
 import { BeemoConfig, Execution, ScriptContext } from './types';
 
 export default class ExecuteScriptRoutine extends Routine<BeemoConfig, ScriptContext> {
+  // @ts-ignore Debug generic value from parent
   execute(context: ScriptContext, scriptName: string): Promise<Execution> {
     this.task('Loading script', this.loadScript);
     this.task('Running script', this.runScript);
@@ -48,7 +49,7 @@ export default class ExecuteScriptRoutine extends Routine<BeemoConfig, ScriptCon
   runScript(context: ScriptContext, script: Script): Promise<Execution> {
     const { args } = this.context;
 
-    this.tool.debug(`Executing script with args "${args.join(' ')}"`);
+    this.tool.debug('Executing script with args "%s"', args.join(' '));
 
     this.tool.emit('before-execute', [script, args, context]);
 

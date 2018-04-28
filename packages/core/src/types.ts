@@ -45,6 +45,7 @@ export interface Context extends Struct {
   args: string[];
   moduleRoot: string;
   root: string;
+  workspaceRoot: string;
   yargs: Arguments;
 }
 

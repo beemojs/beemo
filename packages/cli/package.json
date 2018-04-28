@@ -19,7 +19,7 @@
     "access": "public"
   },
   "dependencies": {
-    "chalk": "^2.3.2",
+    "chalk": "^2.4.1",
     "semver": "^5.5.0",
     "yargs": "^11.0.0"
   },

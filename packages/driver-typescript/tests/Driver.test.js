@@ -1,6 +1,5 @@
 import path from 'path';
 import rimraf from 'rimraf';
-import { Event } from 'boost';
 import TypeScriptDriver from '../src/TypeScriptDriver';
 
 jest.mock('rimraf');
@@ -47,7 +46,7 @@ describe('TypeScriptDriver', () => {
   describe('handleCleanTarget()', () => {
     it('doesnt run if no clean param', () => {
       driver.config = { outDir: './lib' };
-      driver.handleCleanTarget(new Event('foo'), driver, [], {
+      driver.handleCleanTarget(driver, [], {
         yargs: {},
       });
 
@@ -56,7 +55,7 @@ describe('TypeScriptDriver', () => {
 
     it('doesnt run if no outDir param', () => {
       driver.config = {};
-      driver.handleCleanTarget(new Event('foo'), driver, [], {
+      driver.handleCleanTarget(driver, [], {
         yargs: { clean: true },
       });
 
@@ -65,7 +64,7 @@ describe('TypeScriptDriver', () => {
 
     it('runs if both params', () => {
       driver.config = { outDir: './lib' };
-      driver.handleCleanTarget(new Event('foo'), driver, [], {
+      driver.handleCleanTarget(driver, [], {
         yargs: { clean: true },
       });
 

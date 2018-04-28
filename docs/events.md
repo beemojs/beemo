@@ -12,7 +12,7 @@ which listeners can be registered.
 // index.js
 module.exports = function(tool) {
   // Add command line args to every execution
-  tool.on('eslint.before-execute', (event, driver, args) => {
+  tool.on('eslint.before-execute', (driver, args) => {
     args.push('--color', '--report-unused-disable-directives');
   });
 };

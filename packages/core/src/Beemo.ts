@@ -43,9 +43,6 @@ export default class Beemo {
 
     // Immediately load config and plugins
     this.tool.initialize();
-
-    // Temporarily disable console to avoid colliding with yargs
-    this.tool.console.stop();
   }
 
   /**
@@ -68,7 +65,7 @@ export default class Beemo {
     const bootstrap = require(indexPath);
     const isFunction = typeof bootstrap === 'function';
 
-    this.tool.invariant(isFunction, 'Executing bootstrap function', 'Found', 'Not found');
+    this.tool.debug.invariant(isFunction, 'Executing bootstrap function', 'Found', 'Not found');
 
     if (isFunction) {
       bootstrap(this.tool);
@@ -86,6 +83,7 @@ export default class Beemo {
       args: this.argv,
       moduleRoot: this.getConfigModuleRoot(),
       root: this.tool.options.root,
+      workspaceRoot: this.tool.options.workspaceRoot,
       yargs: parseArgs(this.argv),
     };
   }
@@ -123,7 +121,7 @@ export default class Beemo {
 
     // Allow for local development
     if (module === '@local') {
-      this.tool.debug(`Using ${chalk.yellow('@local')} configuration module`);
+      this.tool.debug('Using %s configuration module', chalk.yellow('@local'));
 
       this.moduleRoot = process.cwd();
 
@@ -136,7 +134,7 @@ export default class Beemo {
       throw new Error(`Module ${module} defined in "beemo.module" could not be found.`);
     }
 
-    this.tool.debug(`Found configuration module root path: ${chalk.cyan(rootPath)}`);
+    this.tool.debug('Found configuration module root path: %s', chalk.cyan(rootPath));
 
     this.moduleRoot = rootPath;
 
@@ -185,7 +183,7 @@ export default class Beemo {
 
     tool.setEventNamespace(driverName).emit('init-driver', [driverName, context.args, context]);
 
-    tool.debug(`Running with ${driverName} driver`);
+    tool.debug('Running with %s driver', driverName);
 
     return this.startPipeline()
       .pipe(new ConfigureRoutine('config', 'Generating configurations'))
@@ -208,7 +206,7 @@ export default class Beemo {
       .setEventNamespace(scriptName)
       .emit('init-script', [scriptName, context.args, context]);
 
-    this.tool.debug(`Running with ${scriptName} script`);
+    this.tool.debug('Running with %s script', scriptName);
 
     return this.startPipeline()
       .pipe(new ExecuteScriptRoutine('script', `Executing ${scriptName} script`))
@@ -219,12 +217,7 @@ export default class Beemo {
    * Setup and start a fresh pipeline.
    */
   startPipeline<T>(): Pipeline<Driver, T> {
-    const { tool } = this;
-
-    // Start rendering console again
-    tool.console.start();
-
-    return new Pipeline(tool);
+    return new Pipeline(this.tool);
   }
 
   /**

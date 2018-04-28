@@ -267,16 +267,6 @@ describe('Beemo', () => {
     });
   });
 
-  describe('startPipeline()', () => {
-    it('starts the tool console', () => {
-      beemo.tool.console.start = jest.fn();
-
-      beemo.startPipeline();
-
-      expect(beemo.tool.console.start).toHaveBeenCalled();
-    });
-  });
-
   describe('syncDotfiles()', () => {
     it('sets event namespace', async () => {
       const spy = jest.spyOn(beemo.tool, 'setEventNamespace');

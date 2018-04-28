@@ -93,7 +93,7 @@ export default class Driver extends Plugin<DriverOptions> {
     // this.tool.logError(JSON.stringify(error));
 
     if (out) {
-      this.tool.logError(out);
+      // this.tool.logError(out);
     }
   }
 
@@ -107,7 +107,7 @@ export default class Driver extends Plugin<DriverOptions> {
     // this.tool.log(JSON.stringify(response));
 
     if (out) {
-      this.tool.log(out);
+      // this.tool.log(out);
     }
   }
 

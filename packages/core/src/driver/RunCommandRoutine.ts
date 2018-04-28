@@ -10,9 +10,9 @@ import isGlob from 'is-glob';
 import parseArgs from 'yargs-parser';
 import { DriverContext, Execution } from '../types';
 
-type Args = string[];
+export type Args = string[];
 
-type OptionMap = { [option: string]: true };
+export type OptionMap = { [option: string]: true };
 
 const OPTION_PATTERN: RegExp = /-?-[-a-z0-9]+(,|\s)/gi;
 
@@ -49,7 +49,7 @@ export default class RunCommandRoutine extends Routine<Object, DriverContext> {
           strict: true,
         });
 
-        this.tool.debug(`  ${arg} ${chalk.gray('->')} ${paths.join(', ')}`);
+        this.tool.debug('  %s %s %s', arg, chalk.gray('->'), paths.join(', '));
 
         nextArgs.push(...paths);
       } else {
@@ -147,7 +147,7 @@ export default class RunCommandRoutine extends Routine<Object, DriverContext> {
       });
 
       if (unknownArgs.length > 0) {
-        this.tool.debug(`Filtered args: ${unknownArgs.join(', ')}`);
+        this.tool.debug('Filtered args: %s', unknownArgs.join(', '));
       }
 
       return filteredArgs;
@@ -171,14 +171,14 @@ export default class RunCommandRoutine extends Routine<Object, DriverContext> {
 
     this.tool.debug('Gathering arguments to pass to driver');
 
-    this.tool.invariant(
+    this.tool.debug.invariant(
       driverArgs.length > 0,
       '  From driver "args" option',
       driverArgs.join(' '),
       'No arguments',
     );
 
-    this.tool.invariant(
+    this.tool.debug.invariant(
       commandArgs.length > 0,
       '  From the command line',
       commandArgs.join(' '),
@@ -217,7 +217,9 @@ export default class RunCommandRoutine extends Routine<Object, DriverContext> {
     const driver = context.primaryDriver;
 
     this.tool.debug(
-      `Executing command ${chalk.magenta(driver.metadata.bin)} with args "${args.join(' ')}"`,
+      'Executing command %s with args "%s"',
+      chalk.magenta(driver.metadata.bin),
+      args.join(', '),
     );
 
     this.tool.emit('before-execute', [driver, args, context]);

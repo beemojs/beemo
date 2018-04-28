@@ -44,7 +44,7 @@ export default class SyncDotfilesRoutine extends Routine<SyncDotfilesOptions, Co
 
     return new Promise((resolve, reject) => {
       copy(dotfilePath, this.tool.options.root, (error, files) => {
-        this.tool.invariant(
+        this.tool.debug.invariant(
           !error,
           `Coping dotfiles from ${chalk.cyan(dotfilePath)}`,
           'Copied',
@@ -54,7 +54,7 @@ export default class SyncDotfilesRoutine extends Routine<SyncDotfilesOptions, Co
         if (filter) {
           const pattern = new RegExp(filter);
 
-          this.tool.debug(`Filtering dotfiles with "${filter}"`);
+          this.tool.debug('Filtering dotfiles with "%s"', filter);
 
           // eslint-disable-next-line no-param-reassign
           files = files.filter(file => file.path.match(pattern));
@@ -67,7 +67,7 @@ export default class SyncDotfilesRoutine extends Routine<SyncDotfilesOptions, Co
             files.map(file => {
               this.tool.emit('copy-dotfile', [file.path]);
 
-              this.tool.debug(`  ${chalk.gray(file.path)}`);
+              this.tool.debug('  %s', chalk.gray(file.path));
 
               return file.path;
             }),
@@ -93,9 +93,9 @@ export default class SyncDotfilesRoutine extends Routine<SyncDotfilesOptions, Co
         return fs.rename(filePath, newPath).then(() => {
           this.tool.emit('rename-dotfile', [newPath]);
 
-          this.tool.log(`${chalk.gray('->')} ${newName}`);
+          // this.tool.log(`${chalk.gray('->')} ${newName}`);
 
-          this.tool.debug(`  ${chalk.gray(newPath)}`);
+          this.tool.debug('  %s', chalk.gray(newPath));
 
           return newPath;
         });

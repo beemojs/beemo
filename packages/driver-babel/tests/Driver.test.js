@@ -1,6 +1,5 @@
 import path from 'path';
 import rimraf from 'rimraf';
-import { Event } from 'boost';
 import BabelDriver from '../src/BabelDriver';
 
 jest.mock('rimraf');
@@ -46,7 +45,7 @@ describe('BabelDriver', () => {
 
   describe('handleCleanTarget()', () => {
     it('doesnt run if no clean param', () => {
-      driver.handleCleanTarget(new Event('foo'), driver, [], {
+      driver.handleCleanTarget(driver, [], {
         yargs: { outDir: './lib' },
       });
 
@@ -54,7 +53,7 @@ describe('BabelDriver', () => {
     });
 
     it('doesnt run if no outDir param', () => {
-      driver.handleCleanTarget(new Event('foo'), driver, [], {
+      driver.handleCleanTarget(driver, [], {
         yargs: { clean: true },
       });
 
@@ -62,7 +61,7 @@ describe('BabelDriver', () => {
     });
 
     it('runs if both params', () => {
-      driver.handleCleanTarget(new Event('foo'), driver, [], {
+      driver.handleCleanTarget(driver, [], {
         yargs: {
           clean: true,
           outDir: './lib',

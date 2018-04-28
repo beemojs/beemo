@@ -47,7 +47,7 @@ export default class CreateConfigRoutine extends Routine<Struct, DriverContext> 
     const { metadata } = this.options.driver;
     const configPath = path.join(context.root, metadata.configName);
 
-    this.tool.debug(`Creating config file ${chalk.cyan(configPath)}`);
+    this.tool.debug('Creating config file %s', chalk.cyan(configPath));
 
     this.options.driver.config = config;
     context.configPaths.push(configPath);
@@ -67,7 +67,7 @@ export default class CreateConfigRoutine extends Routine<Struct, DriverContext> 
     const { config } = this.tool;
     const configs = [...prevConfigs];
 
-    this.tool.invariant(
+    this.tool.debug.invariant(
       !!config[name],
       `Extracting ${chalk.magenta(name)} config from package.json "beemo" property`,
       'Exists, extracting',
@@ -101,7 +101,9 @@ export default class CreateConfigRoutine extends Routine<Struct, DriverContext> 
    */
   mergeConfigs(context: DriverContext, configs: Struct[]): Promise<Struct> {
     this.tool.debug(
-      `Merging ${chalk.magenta(this.options.driver.name)} config from ${configs.length} sources`,
+      'Merging %s config from %d sources',
+      chalk.magenta(this.options.driver.name),
+      configs.length,
     );
 
     const config = configs.reduce(
@@ -118,7 +120,9 @@ export default class CreateConfigRoutine extends Routine<Struct, DriverContext> 
    * Load configuration from the node module (the consumer owned package).
    */
   loadConfigFromFilesystem(context: DriverContext, prevConfigs: Struct[]): Promise<Struct[]> {
-    const { config: { module: moduleName } } = this.tool;
+    const {
+      config: { module: moduleName },
+    } = this.tool;
     const { name } = this.options.driver;
     const configLoader = new ConfigLoader(this.tool);
     const configs = [...prevConfigs];
@@ -126,11 +130,11 @@ export default class CreateConfigRoutine extends Routine<Struct, DriverContext> 
     // Allow for local development
     const filePath =
       moduleName === '@local'
-        ? path.join(context.root, `configs/${name}.js`)
+        ? path.join(context.workspaceRoot || context.root, `configs/${name}.js`)
         : configLoader.resolveModuleConfigPath(name, moduleName);
     const fileExists = fs.existsSync(filePath);
 
-    this.tool.invariant(
+    this.tool.debug.invariant(
       fileExists,
       `Loading ${chalk.magenta(name)} config from configuration module ${chalk.yellow(moduleName)}`,
       'Exists, loading',

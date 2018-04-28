@@ -137,14 +137,14 @@ export default class JestDriver extends Driver {
 
     if (response.cmd.includes('--coverage')) {
       if (err) {
-        this.tool.log(err);
+        // this.tool.log(err);
       }
 
       if (out) {
-        this.tool.log(out);
+        // this.tool.log(out);
       }
     } else if (err) {
-      this.tool.log(err);
+      // this.tool.log(err);
     }
   }
 }
