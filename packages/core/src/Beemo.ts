@@ -80,11 +80,11 @@ export default class Beemo {
   createContext(context: Struct = {}): any {
     return {
       ...context,
-      args: this.argv,
+      args: parseArgs(this.argv),
+      argsList: this.argv,
       moduleRoot: this.getConfigModuleRoot(),
       root: this.tool.options.root,
       workspaceRoot: this.tool.options.workspaceRoot,
-      yargs: parseArgs(this.argv),
     };
   }
 
@@ -181,7 +181,7 @@ export default class Beemo {
     // Make the context available in the current driver
     primaryDriver.context = context;
 
-    tool.setEventNamespace(driverName).emit('init-driver', [driverName, context.args, context]);
+    tool.setEventNamespace(driverName).emit('init-driver', [driverName, context.argsList, context]);
 
     tool.debug('Running with %s driver', driverName);
 
@@ -204,7 +204,7 @@ export default class Beemo {
 
     this.tool
       .setEventNamespace(scriptName)
-      .emit('init-script', [scriptName, context.args, context]);
+      .emit('init-script', [scriptName, context.argsList, context]);
 
     this.tool.debug('Running with %s script', scriptName);
 

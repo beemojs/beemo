@@ -43,7 +43,7 @@ export default class CreateConfigRoutine extends Routine<Struct, DriverContext> 
   /**
    * Create a temporary configuration file or pass as an option.
    */
-  createConfigFile(context: DriverContext, config: Object): Promise<string> {
+  createConfigFile(context: DriverContext, config: object): Promise<string> {
     const { metadata } = this.options.driver;
     const configPath = path.join(context.root, metadata.configName);
 
@@ -92,7 +92,7 @@ export default class CreateConfigRoutine extends Routine<Struct, DriverContext> 
     this.tool.debug('Gathering arguments to pass to config file');
 
     return parseArgs(
-      [...this.options.driver.getArgs(), ...this.context.args].map(value => String(value)),
+      [...this.options.driver.getArgs(), ...this.context.argsList].map(value => String(value)),
     );
   }
 

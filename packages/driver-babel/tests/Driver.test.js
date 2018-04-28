@@ -46,7 +46,7 @@ describe('BabelDriver', () => {
   describe('handleCleanTarget()', () => {
     it('doesnt run if no clean param', () => {
       driver.handleCleanTarget(driver, [], {
-        yargs: { outDir: './lib' },
+        args: { outDir: './lib' },
       });
 
       expect(rimraf.sync).not.toHaveBeenCalled();
@@ -54,7 +54,7 @@ describe('BabelDriver', () => {
 
     it('doesnt run if no outDir param', () => {
       driver.handleCleanTarget(driver, [], {
-        yargs: { clean: true },
+        args: { clean: true },
       });
 
       expect(rimraf.sync).not.toHaveBeenCalled();
@@ -62,7 +62,7 @@ describe('BabelDriver', () => {
 
     it('runs if both params', () => {
       driver.handleCleanTarget(driver, [], {
-        yargs: {
+        args: {
           clean: true,
           outDir: './lib',
         },

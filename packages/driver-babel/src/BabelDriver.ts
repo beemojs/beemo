@@ -33,11 +33,11 @@ export default class BabelDriver extends Driver {
   /**
    * Automatically clean the target folder if --out-dir is used.
    */
-  handleCleanTarget = (driver: Driver, args: string[], context: object) => {
-    const options = context.yargs;
+  handleCleanTarget = (driver: Driver, argList: string[], context: object) => {
+    const { args } = context;
 
-    if (options.clean && options.outDir) {
-      rimraf.sync(path.resolve(options.outDir));
+    if (args.clean && args.outDir) {
+      rimraf.sync(path.resolve(args.outDir));
     }
   };
 }

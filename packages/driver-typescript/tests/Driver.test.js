@@ -47,7 +47,7 @@ describe('TypeScriptDriver', () => {
     it('doesnt run if no clean param', () => {
       driver.config = { outDir: './lib' };
       driver.handleCleanTarget(driver, [], {
-        yargs: {},
+        args: {},
       });
 
       expect(rimraf.sync).not.toHaveBeenCalled();
@@ -56,7 +56,7 @@ describe('TypeScriptDriver', () => {
     it('doesnt run if no outDir param', () => {
       driver.config = {};
       driver.handleCleanTarget(driver, [], {
-        yargs: { clean: true },
+        args: { clean: true },
       });
 
       expect(rimraf.sync).not.toHaveBeenCalled();
@@ -65,7 +65,7 @@ describe('TypeScriptDriver', () => {
     it('runs if both params', () => {
       driver.config = { outDir: './lib' };
       driver.handleCleanTarget(driver, [], {
-        yargs: { clean: true },
+        args: { clean: true },
       });
 
       expect(rimraf.sync).toHaveBeenCalledWith(path.resolve('./lib'));

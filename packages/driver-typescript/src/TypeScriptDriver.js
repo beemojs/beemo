@@ -35,10 +35,11 @@ export default class TypeScriptDriver extends Driver {
   /**
    * Automatically clean the target folder if `outDir` is used.
    */
-  handleCleanTarget = (driver: Driver, args: string[], context: Object) => {
+  handleCleanTarget = (driver: Driver, argList: string[], context: Object) => {
     const { outDir } = this.options;
+    const { args } = context;
 
-    if (context.yargs.clean && outDir) {
+    if (args.clean && outDir) {
       rimraf.sync(path.resolve(outDir));
     }
   };

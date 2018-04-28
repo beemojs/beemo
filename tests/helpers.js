@@ -49,10 +49,10 @@ export function createDriver(name, tool, metadata = {}) {
 
 export function createContext(context = {}) {
   return {
-    args: ['-a', '--foo', 'bar', 'baz'],
+    args: parseArgs(['-a', '--foo', 'bar', 'baz']),
+    argsList: ['-a', '--foo', 'bar', 'baz'],
     moduleRoot: process.cwd(),
     root: process.cwd(),
-    yargs: parseArgs(['-a', '--foo', 'bar', 'baz']),
     ...context,
   };
 }

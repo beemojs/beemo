@@ -47,15 +47,15 @@ export default class ExecuteScriptRoutine extends Routine<BeemoConfig, ScriptCon
    * Run the script while also parsing arguments to use as options.
    */
   runScript(context: ScriptContext, script: Script): Promise<Execution> {
-    const { args } = this.context;
+    const { argsList } = this.context;
 
-    this.tool.debug('Executing script with args "%s"', args.join(' '));
+    this.tool.debug('Executing script with args "%s"', argsList.join(' '));
 
-    this.tool.emit('before-execute', [script, args, context]);
+    this.tool.emit('before-execute', [script, argsList, context]);
 
-    const options = parseArgs(args, script.parse());
+    const args = parseArgs(argsList, script.parse());
 
-    return Promise.resolve(script.run(options, this.tool))
+    return Promise.resolve(script.run(args, this.tool))
       .then(response => {
         this.tool.emit('after-execute', [script, response]);
 

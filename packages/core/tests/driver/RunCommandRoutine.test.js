@@ -73,7 +73,7 @@ describe('RunCommandRoutine', () => {
     });
 
     it('executes pipeline in order', async () => {
-      routine.context.args.push('--out-dir', './lib');
+      routine.context.argsList.push('--out-dir', './lib');
 
       const argSpy = jest.spyOn(routine, 'gatherArgs');
       const globSpy = jest.spyOn(routine, 'expandGlobPatterns');
@@ -244,7 +244,7 @@ describe('RunCommandRoutine', () => {
     });
 
     it('rebuilds context yargs', async () => {
-      expect(routine.context.yargs).toEqual({
+      expect(routine.context.args).toEqual({
         _: ['baz'],
         a: true,
         foo: 'bar',
@@ -252,7 +252,7 @@ describe('RunCommandRoutine', () => {
 
       await routine.gatherArgs();
 
-      expect(routine.context.yargs).toEqual({
+      expect(routine.context.args).toEqual({
         _: ['baz'],
         a: true,
         foo: 'bar',

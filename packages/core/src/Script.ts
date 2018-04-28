@@ -6,7 +6,7 @@
 import { Module, ToolInterface } from 'boost';
 import { Options, Arguments } from 'yargs';
 
-export default class Script extends Module<{}> {
+export default class Script<T = {}> extends Module<T> {
   /**
    * Define a configuration object to parse args with.
    */
@@ -17,7 +17,7 @@ export default class Script extends Module<{}> {
   /**
    * Run the script with the options object and Beemo tool instance.
    */
-  run(options: Arguments, tool: ToolInterface): Promise<any> {
+  run(args: Arguments, tool: ToolInterface): Promise<any> {
     throw new Error(`${this.constructor.name} must define a run() method.`);
   }
 }

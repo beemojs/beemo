@@ -42,11 +42,11 @@ export interface DriverMetadata extends Struct {
 export type Execution = ExecaReturns;
 
 export interface Context extends Struct {
-  args: string[];
+  args: Arguments;
+  argsList: string[];
   moduleRoot: string;
   root: string;
   workspaceRoot: string;
-  yargs: Arguments;
 }
 
 export interface DriverContext extends Context {

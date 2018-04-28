@@ -159,7 +159,7 @@ export default class RunCommandRoutine extends Routine<Object, DriverContext> {
    */
   gatherArgs(context: DriverContext): Promise<Args> {
     const driverArgs = context.primaryDriver.getArgs();
-    const commandArgs = context.args;
+    const commandArgs = context.argsList;
     const args = [
       // Passed by the driver
       ...driverArgs,
@@ -187,7 +187,7 @@ export default class RunCommandRoutine extends Routine<Object, DriverContext> {
 
     // Since we combine multiple args, we need to rebuild this.
     // And we also need to set this before we filter them.
-    context.yargs = parseArgs(args);
+    context.args = parseArgs(args);
 
     return Promise.resolve(args);
   }
