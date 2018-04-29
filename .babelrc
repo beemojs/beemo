@@ -17,12 +17,11 @@
         "modules": "commonjs",
         "shippedProposals": true,
         "targets": {
-          "node": "6.5"
+          "node": 6.5
         },
         "useBuiltIns": "usage"
       }
     ],
-    "babel-preset-stage-2",
-    "babel-preset-flow"
+    "babel-preset-stage-2"
   ]
 }
