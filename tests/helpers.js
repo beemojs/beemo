@@ -18,7 +18,6 @@ export function setupMockTool(tool) {
       parallel: true,
     },
     debug: false,
-    silent: false,
   };
 
   tool.package = {};

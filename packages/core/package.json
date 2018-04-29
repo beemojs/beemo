@@ -36,7 +36,7 @@
     "@types/is-glob": "^4.0.0",
     "@types/lodash": "^4.14.108",
     "@types/yargs": "^11.0.0",
-    "boost": "^0.47.0",
+    "boost": "^0.48.0",
     "chalk": "^2.4.1",
     "copy": "^0.3.1",
     "fs-extra": "^5.0.0",

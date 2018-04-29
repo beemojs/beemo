@@ -29,12 +29,17 @@ export default class Beemo {
 
     // eslint-disable-next-line global-require
     const { version } = require('../package.json');
+    const args = parseArgs(argv);
 
     this.tool = new Tool(
       {
         appName: 'beemo',
         configBlueprint: this.getConfigBlueprint(),
-        footer: `🤖  Powered by Beemo v${version}`,
+        console: {
+          footer: `🤖  Powered by Beemo v${version}`,
+          silent: args.silent || false,
+          verbose: args.verbose || 0,
+        },
         pluginAlias: 'driver',
         scoped: true,
       },

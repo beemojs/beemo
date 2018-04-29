@@ -8,7 +8,7 @@
 import path from 'path';
 import chalk from 'chalk';
 import semver from 'semver';
-import yargs from 'yargs';
+import app from 'yargs';
 import Beemo, { Driver } from '@beemo/core';
 // @ts-ignore
 import corePackage from '../../core/package.json';
@@ -32,7 +32,7 @@ if (!semver.satisfies(cliPackage.version, `^${corePackage.version}`)) {
 // Initialize
 // 0 node, 1 beemo, 2 <driver, command>
 const beemo = new Beemo(process.argv.slice(3));
-const app = yargs(process.argv.slice(2));
+// const app = yargs(process.argv.slice(2));
 
 // Bootstrap the module
 beemo.bootstrapConfigModule();
@@ -83,6 +83,12 @@ app
     boolean: true,
     default: false,
     describe: `Hide ${binName} output`,
+  })
+  .option('verbose', {
+    alias: 'v',
+    count: true,
+    default: 0,
+    describe: 'Increase information in the output',
   });
 
 // Run application

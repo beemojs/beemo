@@ -141,7 +141,7 @@ export default class CreateConfigRoutine extends Routine<Struct, DriverContext> 
     );
 
     if (fileExists) {
-      const config = configLoader.parseFile(filePath, this.getArgsToPass());
+      const config = configLoader.parseFile(filePath, [this.getArgsToPass(), this.tool]);
 
       this.tool.emit('load-module-config', [filePath, config]);
 
