@@ -113,7 +113,7 @@ describe('ExecuteScriptRoutine', () => {
 
       expect(spy).toHaveBeenCalledWith('before-execute', [
         script,
-        routine.context.argsList,
+        routine.context.argv,
         routine.context,
       ]);
     });

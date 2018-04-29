@@ -159,7 +159,7 @@ export default class RunCommandRoutine extends Routine<Object, DriverContext> {
    */
   gatherArgs(context: DriverContext): Promise<Args> {
     const driverArgs = context.primaryDriver.getArgs();
-    const commandArgs = context.argsList;
+    const commandArgs = context.argv;
     const args = [
       // Passed by the driver
       ...driverArgs,

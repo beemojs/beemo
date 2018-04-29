@@ -91,7 +91,7 @@ export default class CreateConfigRoutine extends Routine<Struct, DriverContext> 
     this.tool.debug('Gathering arguments to pass to config file');
 
     return parseArgs(
-      [...this.options.driver.getArgs(), ...this.context.argsList].map(value => String(value)),
+      [...this.options.driver.getArgs(), ...this.context.argv].map(value => String(value)),
     );
   }
 

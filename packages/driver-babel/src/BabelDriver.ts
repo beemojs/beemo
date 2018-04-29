@@ -32,7 +32,7 @@ export default class BabelDriver extends Driver {
   /**
    * Automatically clean the target folder if --out-dir is used.
    */
-  handleCleanTarget = (driver: Driver, argList: string[], context: DriverContext) => {
+  handleCleanTarget = (driver: Driver, argv: string[], context: DriverContext) => {
     const { args } = context;
 
     if (args.clean && args.outDir) {

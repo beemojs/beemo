@@ -59,7 +59,7 @@ describe('Beemo', () => {
         args: {
           _: ['foo', 'bar'],
         },
-        argsList: ['foo', 'bar'],
+        argv: ['foo', 'bar'],
         moduleRoot: process.cwd(),
         root: process.cwd(),
       });
@@ -70,14 +70,14 @@ describe('Beemo', () => {
         beemo.createContext({
           foo: 'bar',
           // Cant overwrite
-          argsList: ['baz'],
+          argv: ['baz'],
         }),
       ).toEqual({
         foo: 'bar',
         args: {
           _: ['foo', 'bar'],
         },
-        argsList: ['foo', 'bar'],
+        argv: ['foo', 'bar'],
         moduleRoot: process.cwd(),
         root: process.cwd(),
       });
@@ -175,7 +175,7 @@ describe('Beemo', () => {
         'foo-bar',
         ['foo', 'bar'],
         expect.objectContaining({
-          argsList: ['foo', 'bar'],
+          argv: ['foo', 'bar'],
           driverName: 'foo-bar',
         }),
       ]);
@@ -187,7 +187,7 @@ describe('Beemo', () => {
       expect(pipeline.run).toHaveBeenCalledWith(
         'foo-bar',
         expect.objectContaining({
-          argsList: ['foo', 'bar'],
+          argv: ['foo', 'bar'],
           driverName: 'foo-bar',
         }),
       );
@@ -199,7 +199,7 @@ describe('Beemo', () => {
       expect(pipeline.run).toHaveBeenCalledWith(
         'foo-bar',
         expect.objectContaining({
-          argsList: ['foo', 'bar'],
+          argv: ['foo', 'bar'],
           primaryDriver: expect.objectContaining({
             context: expect.objectContaining({
               configPaths: [],
@@ -248,7 +248,7 @@ describe('Beemo', () => {
         'foo-bar',
         ['foo', 'bar'],
         expect.objectContaining({
-          argsList: ['foo', 'bar'],
+          argv: ['foo', 'bar'],
           scriptName: 'foo-bar',
         }),
       ]);
@@ -260,7 +260,7 @@ describe('Beemo', () => {
       expect(pipeline.run).toHaveBeenCalledWith(
         'foo-bar',
         expect.objectContaining({
-          argsList: ['foo', 'bar'],
+          argv: ['foo', 'bar'],
           scriptName: 'foo-bar',
         }),
       );
@@ -283,7 +283,7 @@ describe('Beemo', () => {
 
       expect(spy).toHaveBeenCalledWith('sync-dotfiles', [
         expect.objectContaining({
-          argsList: ['foo', 'bar'],
+          argv: ['foo', 'bar'],
         }),
       ]);
     });
@@ -294,7 +294,7 @@ describe('Beemo', () => {
       expect(pipeline.run).toHaveBeenCalledWith(
         null,
         expect.objectContaining({
-          argsList: ['foo', 'bar'],
+          argv: ['foo', 'bar'],
         }),
       );
     });

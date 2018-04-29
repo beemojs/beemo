@@ -34,7 +34,7 @@ export default class TypeScriptDriver extends Driver {
   /**
    * Automatically clean the target folder if `outDir` is used.
    */
-  handleCleanTarget = (driver: Driver, argList: string[], context: DriverContext) => {
+  handleCleanTarget = (driver: Driver, argv: string[], context: DriverContext) => {
     const { outDir } = this.options;
     const { args } = context;
 

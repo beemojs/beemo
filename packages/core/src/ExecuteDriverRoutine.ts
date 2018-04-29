@@ -9,11 +9,11 @@ import { BeemoConfig, DriverContext } from './types';
 
 export default class ExecuteDriverRoutine extends Routine<BeemoConfig, DriverContext> {
   execute(context: DriverContext): Promise<string[]> {
-    const { argsList, primaryDriver } = context;
+    const { argv, primaryDriver } = context;
     const driverName = primaryDriver.name;
     const binName = primaryDriver.metadata.bin;
 
-    this.pipe(new RunCommandRoutine(driverName, `${binName} ${argsList.join(' ')}`));
+    this.pipe(new RunCommandRoutine(driverName, `${binName} ${argv.join(' ')}`));
 
     return this.parallelizeSubroutines();
   }

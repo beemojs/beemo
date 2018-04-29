@@ -73,7 +73,7 @@ describe('RunCommandRoutine', () => {
     });
 
     it('executes pipeline in order', async () => {
-      routine.context.argsList.push('--out-dir', './lib');
+      routine.context.argv.push('--out-dir', './lib');
 
       const argSpy = jest.spyOn(routine, 'gatherArgs');
       const globSpy = jest.spyOn(routine, 'expandGlobPatterns');

@@ -43,7 +43,7 @@ export type Execution = ExecaReturns;
 
 export interface Context extends Struct {
   args: Arguments;
-  argsList: string[];
+  argv: string[];
   moduleRoot: string;
   root: string;
   workspaceRoot: string;
