@@ -1,12 +1,10 @@
 /**
  * @copyright   2017, Miles Johnson
  * @license     https://opensource.org/licenses/MIT
- * @flow
  */
 
-import { Driver } from '@beemo/core';
-
-import type { Execution } from '@beemo/core';
+import { Driver, Execution } from '@beemo/core';
+import { FlowConfig, LintsConfig, OptionsConfig } from './types';
 
 // Success: Writes no errors message to stdout and server output to stderr
 // Failure: Writes file list to stdout and server output to stderr
@@ -21,11 +19,11 @@ export default class FlowDriver extends Driver {
     });
   }
 
-  formatConfig(data: Object): string {
-    const output = [];
+  formatConfig(data: FlowConfig): string {
+    const output: string[] = [];
 
     Object.keys(data).forEach(key => {
-      const value = data[key];
+      const value = data[key as keyof FlowConfig];
 
       if (!value) {
         return;
@@ -35,18 +33,17 @@ export default class FlowDriver extends Driver {
 
       switch (key) {
         default:
-          output.push(...value.map(v => String(v)));
-          break;
-        case 'lints':
-          output.push(...this.formatLintsSection(value));
-          break;
-        case 'options':
-          output.push(...this.formatOptionsSection(value));
-          break;
-        case 'version':
-          if (value) {
+          if (Array.isArray(value)) {
+            output.push(...value.map(v => String(v)));
+          } else if (value) {
             output.push(String(value));
           }
+          break;
+        case 'lints':
+          output.push(...this.formatLintsSection(value as LintsConfig));
+          break;
+        case 'options':
+          output.push(...this.formatOptionsSection(value as OptionsConfig));
           break;
       }
 
@@ -56,8 +53,8 @@ export default class FlowDriver extends Driver {
     return output.join('\n');
   }
 
-  formatLintsSection(lints: Object): string[] {
-    const output = [];
+  formatLintsSection(lints: LintsConfig): string[] {
+    const output: string[] = [];
 
     Object.keys(lints).forEach(key => {
       let value = lints[key];
@@ -76,7 +73,7 @@ export default class FlowDriver extends Driver {
     return output;
   }
 
-  formatOption(value: *, quote: boolean = false): string {
+  formatOption(value: any, quote: boolean = false): string {
     let option = value;
 
     // http://caml.inria.fr/pub/docs/manual-ocaml/libref/Str.html#TYPEregexp
@@ -92,20 +89,23 @@ export default class FlowDriver extends Driver {
     return quote ? `'${option}'` : option;
   }
 
-  formatOptionsSection(options: Object): string[] {
-    const output = [];
+  formatOptionsSection(options: OptionsConfig): string[] {
+    const output: string[] = [];
 
     Object.keys(options).forEach(key => {
-      const value = options[key];
+      const value = options[key as keyof OptionsConfig];
 
-      // Multiple values
-      if (Array.isArray(value)) {
+      if (!value) {
+        return;
+
+        // Multiple values
+      } else if (Array.isArray(value)) {
         value.forEach(val => {
           output.push(`${key}=${this.formatOption(val)}`);
         });
 
         // Mapped objects
-      } else if (typeof value === 'object' && value.constructor === Object) {
+      } else if (typeof value === 'object' && !(value instanceof RegExp)) {
         Object.keys(value).forEach(pattern => {
           output.push(
             `${key}=${this.formatOption(pattern, true)} -> ${this.formatOption(

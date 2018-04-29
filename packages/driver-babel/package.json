@@ -11,11 +11,12 @@
     "compile"
   ],
   "main": "./lib/index.js",
+  "types": "./lib/index.d.ts",
   "engines": {
     "node": ">=6.5.0"
   },
   "scripts": {
-    "babel": "beemo typescript --declaration"
+    "babel": "beemo typescript"
   },
   "repository": "https://github.com/milesj/beemo/tree/master/packages/driver-babel",
   "license": "MIT",
@@ -23,6 +24,7 @@
     "access": "public"
   },
   "devDependencies": {
+    "@types/rimraf": "^2.0.2",
     "babel-core": "^6.26.3"
   },
   "peerDependencies": {

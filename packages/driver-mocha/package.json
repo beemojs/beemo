@@ -11,6 +11,7 @@
     "runner"
   ],
   "main": "./lib/index.js",
+  "types": "./lib/index.d.ts",
   "engines": {
     "node": ">=6.5.0"
   },

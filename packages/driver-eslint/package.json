@@ -11,6 +11,7 @@
     "linter"
   ],
   "main": "./lib/index.js",
+  "types": "./lib/index.d.ts",
   "engines": {
     "node": ">=6.5.0"
   },
@@ -20,6 +21,7 @@
     "access": "public"
   },
   "devDependencies": {
+    "@types/eslint": "^4.16.1",
     "eslint": "^4.19.1"
   },
   "peerDependencies": {

@@ -3,4 +3,5 @@
  * @license     https://opensource.org/licenses/MIT
  */
 
+export * from './types';
 export { default } from './BabelDriver';

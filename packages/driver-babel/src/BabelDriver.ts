@@ -6,7 +6,7 @@
 
 import path from 'path';
 import rimraf from 'rimraf';
-import { Driver } from '@beemo/core';
+import { Driver, DriverContext } from '@beemo/core';
 
 // Success: Writes file list to stdout
 // Failure: Throws SyntaxError to stderr
@@ -33,7 +33,7 @@ export default class BabelDriver extends Driver {
   /**
    * Automatically clean the target folder if --out-dir is used.
    */
-  handleCleanTarget = (driver: Driver, argList: string[], context: object) => {
+  handleCleanTarget = (driver: Driver, argList: string[], context: DriverContext) => {
     const { args } = context;
 
     if (args.clean && args.outDir) {
