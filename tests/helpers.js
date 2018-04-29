@@ -1,7 +1,7 @@
 /* eslint-disable no-param-reassign */
 
 import path from 'path';
-import parseArgs from 'yargs-parser';
+import { parse as parseArgs } from 'yargs';
 import Driver from '../packages/core/src/Driver';
 
 export function setupMockTool(tool) {

@@ -12,7 +12,8 @@
     "eslint",
     "flow",
     "jest",
-    "prettier"
+    "prettier",
+    "typescript"
   ],
   "main": "./lib/index.js",
   "types": "./lib/index.d.ts",
@@ -43,6 +44,6 @@
     "is-glob": "^4.0.0",
     "lodash": "^4.17.10",
     "optimal": "^0.19.0",
-    "yargs-parser": "^10.0.0"
+    "yargs": "^11.0.0"
   }
 }

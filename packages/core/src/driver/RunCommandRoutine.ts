@@ -7,7 +7,7 @@ import { Routine } from 'boost';
 import chalk from 'chalk';
 import glob from 'glob';
 import isGlob from 'is-glob';
-import parseArgs from 'yargs-parser';
+import { parse as parseArgs } from 'yargs';
 import { DriverContext, Execution } from '../types';
 
 export type Args = string[];

@@ -115,12 +115,12 @@ That being said, consistently remembering the correct commands and arguments to 
   "scripts": {
     "babel": "beemo babel ./src --out-dir ./lib",
     "eslint": "beemo eslint ./src ./tests",
-    "flow": "beemo flow check",
     "jest": "beemo jest",
     "prettier": "beemo prettier --write \"./{src,tests}/**/*.{js,json,md}\"",
-    "posttest": "yarn run flow --silent",
+    "posttest": "yarn run typescript --silent",
     "pretest": "yarn run eslint --silent",
-    "test": "yarn run jest --silent"
+    "test": "yarn run jest --silent",
+    "typescript": "beemo typescript"
   }
 }
 ```

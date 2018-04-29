@@ -1,7 +1,6 @@
 /**
  * @copyright   2017, Miles Johnson
  * @license     https://opensource.org/licenses/MIT
- * @flow
  */
 
 /* eslint-disable no-console, unicorn/no-process-exit */
@@ -9,9 +8,11 @@
 import path from 'path';
 import chalk from 'chalk';
 import semver from 'semver';
-import app from 'yargs';
-import Beemo from '@beemo/core';
-import corePackage from '@beemo/core/package.json';
+import yargs from 'yargs';
+import Beemo, { Driver } from '@beemo/core';
+// @ts-ignore
+import corePackage from '../../core/package.json';
+// @ts-ignore
 import cliPackage from '../package.json';
 
 const peerVersion = cliPackage.peerDependencies['@beemo/core'];
@@ -31,13 +32,14 @@ if (!semver.satisfies(cliPackage.version, `^${corePackage.version}`)) {
 // Initialize
 // 0 node, 1 beemo, 2 <driver, command>
 const beemo = new Beemo(process.argv.slice(3));
+const app = yargs(process.argv.slice(2));
 
 // Bootstrap the module
 beemo.bootstrapConfigModule();
 
 // Add a command for each driver
 beemo.tool.plugins.forEach(driver => {
-  const { command = {}, metadata } = driver;
+  const { command = {}, metadata } = driver as Driver;
 
   app.command(driver.name, metadata.description || `Run ${metadata.title}`, command, () =>
     beemo.executeDriver(driver.name),

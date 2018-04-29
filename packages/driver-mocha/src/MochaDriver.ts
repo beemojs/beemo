@@ -1,10 +1,10 @@
 /**
  * @copyright   2017, Miles Johnson
  * @license     https://opensource.org/licenses/MIT
- * @flow
  */
 
 import { Driver } from '@beemo/core';
+import { MochaConfig, ReporterOptions } from './types';
 
 // Success: Writes passed tests to stdout
 // Failure: Writes failed tests to stdout
@@ -20,8 +20,8 @@ export default class MochaDriver extends Driver {
     });
   }
 
-  formatConfig(data: Object): string {
-    const output = [];
+  formatConfig(data: MochaConfig): string {
+    const output: string[] = [];
 
     Object.keys(data).forEach(key => {
       const option =
@@ -34,7 +34,9 @@ export default class MochaDriver extends Driver {
       } else if (type === 'boolean') {
         output.push(option);
       } else if (Array.isArray(value)) {
-        output.push(`${option} ${value.join(',')}`);
+        value.forEach(v => {
+          output.push(`${option} ${v}`);
+        });
       } else {
         output.push(`${option} ${value}`);
       }
@@ -43,7 +45,7 @@ export default class MochaDriver extends Driver {
     return output.join('\n');
   }
 
-  formatReporterOptions(options: Object): string {
+  formatReporterOptions(options: ReporterOptions): string {
     return Object.keys(options)
       .map(key => `${key}=${options[key]}`)
       .join(',');

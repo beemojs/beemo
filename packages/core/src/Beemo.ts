@@ -8,7 +8,7 @@ import { bool, shape, Blueprint, Struct } from 'optimal';
 import chalk from 'chalk';
 import fs from 'fs-extra';
 import path from 'path';
-import parseArgs from 'yargs-parser';
+import { parse as parseArgs } from 'yargs';
 import CleanupRoutine from './CleanupRoutine';
 import ConfigureRoutine from './ConfigureRoutine';
 import ExecuteDriverRoutine from './ExecuteDriverRoutine';

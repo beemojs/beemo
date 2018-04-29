@@ -1,12 +1,11 @@
 /**
  * @copyright   2017, Miles Johnson
  * @license     https://opensource.org/licenses/MIT
- * @flow
  */
 
 import path from 'path';
 import rimraf from 'rimraf';
-import { Driver } from '@beemo/core';
+import { Driver, DriverContext } from '@beemo/core';
 
 // Success: Writes nothing to stdout or stderr
 // Failure: Writes to stdout on syntax and type error
@@ -35,7 +34,7 @@ export default class TypeScriptDriver extends Driver {
   /**
    * Automatically clean the target folder if `outDir` is used.
    */
-  handleCleanTarget = (driver: Driver, argList: string[], context: Object) => {
+  handleCleanTarget = (driver: Driver, argList: string[], context: DriverContext) => {
     const { outDir } = this.options;
     const { args } = context;
 
