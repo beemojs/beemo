@@ -443,9 +443,9 @@
     npmlog "^4.1.2"
     write-file-atomic "^2.3.0"
 
-"@milesj/build-tool-config@0.87.0":
-  version "0.87.0"
-  resolved "https://registry.npmjs.org/@milesj/build-tool-config/-/build-tool-config-0.87.0.tgz#a6a0587ec4679a7bcc654c76a00361afcbb06285"
+"@milesj/build-tool-config@0.88.0":
+  version "0.88.0"
+  resolved "https://registry.npmjs.org/@milesj/build-tool-config/-/build-tool-config-0.88.0.tgz#899ddf1f5957e8f20a28dd13a0ab0cf18bddd4dd"
   dependencies:
     "@beemo/cli" "^0.16.0"
     "@beemo/core" "^0.16.0"

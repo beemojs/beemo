@@ -22,7 +22,7 @@
     "type": "lerna run type"
   },
   "devDependencies": {
-    "@milesj/build-tool-config": "0.87.0",
+    "@milesj/build-tool-config": "0.88.0",
     "chalk": "^2.4.1",
     "fs-extra": "^5.0.0",
     "glob": "^7.1.2",
