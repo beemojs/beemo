@@ -49,7 +49,6 @@ export default class ESLintDriver extends Driver {
     this.context.configPaths.push(ignorePath);
 
     // Delete the property else ESLint throws an error
-    // eslint-disable-next-line no-param-reassign
     delete config.ignore;
   };
 }

@@ -7,16 +7,35 @@ import { Routine } from 'boost';
 import chalk from 'chalk';
 import glob from 'glob';
 import isGlob from 'is-glob';
+import optimal, { bool, string, Struct } from 'optimal';
 import { parse as parseArgs } from 'yargs';
 import { DriverContext, Execution } from '../types';
+
+const OPTION_PATTERN: RegExp = /-?-[-a-z0-9]+(,|\s)/gi;
 
 export type Args = string[];
 
 export type OptionMap = { [option: string]: true };
 
-const OPTION_PATTERN: RegExp = /-?-[-a-z0-9]+(,|\s)/gi;
+export interface RunCommandRoutineOptions extends Struct {
+  forceConfigOption: boolean;
+  runInDir: string;
+}
 
-export default class RunCommandRoutine extends Routine<Object, DriverContext> {
+export default class RunCommandRoutine extends Routine<RunCommandRoutineOptions, DriverContext> {
+  bootstrap() {
+    this.options = optimal(
+      this.options,
+      {
+        forceConfigOption: bool(),
+        runInDir: string().empty(),
+      },
+      {
+        name: 'RunCommandRoutine',
+      },
+    );
+  }
+
   execute(context: DriverContext): Promise<Execution> {
     const { metadata } = context.primaryDriver;
 
@@ -26,7 +45,9 @@ export default class RunCommandRoutine extends Routine<Object, DriverContext> {
 
     this.task('Filtering options', this.filterUnknownOptions).skip(!metadata.filterOptions);
 
-    this.task('Including config option', this.includeConfigOption).skip(!metadata.useConfigOption);
+    this.task('Including config option', this.includeConfigOption).skip(
+      !metadata.useConfigOption && !this.options.forceConfigOption,
+    );
 
     this.task('Running command', this.runCommandWithArgs);
 
@@ -165,8 +186,6 @@ export default class RunCommandRoutine extends Routine<Object, DriverContext> {
       ...driverArgs,
       // Passed on the command line
       ...commandArgs,
-      // Parallel args passed on the command line
-      // ...(this.options.parallelArgs || []),
     ];
 
     this.tool.debug('Gathering arguments to pass to driver');
@@ -200,7 +219,7 @@ export default class RunCommandRoutine extends Routine<Object, DriverContext> {
     const configPath = configPaths.find(path => path.endsWith(primaryDriver.metadata.configName));
     const args = [...prevArgs];
 
-    if (configPath) {
+    if (configPath && primaryDriver.metadata.configOption) {
       args.push(primaryDriver.metadata.configOption, configPath);
     }
 
@@ -215,16 +234,21 @@ export default class RunCommandRoutine extends Routine<Object, DriverContext> {
    */
   runCommandWithArgs(context: DriverContext, args: Args): Promise<Execution> {
     const driver = context.primaryDriver;
+    const cwd = this.options.runInDir || context.root;
 
     this.tool.debug(
-      'Executing command %s with args "%s"',
+      'Executing command "%s %s" in %s',
       chalk.magenta(driver.metadata.bin),
-      args.join(', '),
+      args.join(' '),
+      chalk.cyan(cwd),
     );
 
     this.tool.emit('before-execute', [driver, args, context]);
 
-    return this.executeCommand(driver.metadata.bin, args, { env: driver.options.env })
+    return this.executeCommand(driver.metadata.bin, args, {
+      cwd,
+      env: driver.options.env,
+    })
       .then(response => {
         driver.handleSuccess(response);
 

@@ -12,10 +12,14 @@ import { ConfigLoader, Routine } from 'boost';
 import Driver from '../Driver';
 import { DriverContext } from '../types';
 
-export default class CreateConfigRoutine extends Routine<Struct, DriverContext> {
-  // @ts-ignore Set after instantiation
+export interface CreateConfigRoutineOptions extends Struct {
   driver: Driver;
+}
 
+export default class CreateConfigRoutine extends Routine<
+  CreateConfigRoutineOptions,
+  DriverContext
+> {
   bootstrap() {
     this.options = optimal(
       this.options,
@@ -48,7 +52,8 @@ export default class CreateConfigRoutine extends Routine<Struct, DriverContext> 
 
     this.tool.debug('Creating config file %s', chalk.cyan(configPath));
 
-    this.options.driver.config = config;
+    this.options.driver.config = config as any;
+
     context.configPaths.push(configPath);
 
     this.tool.emit('create-config-file', [configPath, config]);

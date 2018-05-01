@@ -1,7 +1,7 @@
 import path from 'path';
 import fs from 'fs-extra';
 import Beemo from '../src/Beemo';
-import bootstrapIndex from '../../../index';
+import bootstrapIndex from '../../..';
 
 jest.mock('fs-extra');
 

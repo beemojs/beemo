@@ -190,11 +190,11 @@ export default class Beemo {
 
     tool.debug('Running with %s driver', driverName);
 
-    return this.startPipeline()
+    return this.startPipeline(context)
       .pipe(new ConfigureRoutine('config', 'Generating configurations'))
       .pipe(new ExecuteDriverRoutine('driver', 'Executing driver'))
       .pipe(new CleanupRoutine('cleanup', 'Cleaning up'))
-      .run(context, driverName);
+      .run(driverName);
   }
 
   /**
@@ -213,16 +213,16 @@ export default class Beemo {
 
     this.tool.debug('Running with %s script', scriptName);
 
-    return this.startPipeline()
+    return this.startPipeline(context)
       .pipe(new ExecuteScriptRoutine('script', `Executing ${scriptName} script`))
-      .run(context, scriptName);
+      .run(scriptName);
   }
 
   /**
    * Setup and start a fresh pipeline.
    */
-  startPipeline<T>(): Pipeline<Driver, T> {
-    return new Pipeline(this.tool);
+  startPipeline<T>(context: any): Pipeline<Driver, T> {
+    return new Pipeline(this.tool, context);
   }
 
   /**
@@ -235,8 +235,8 @@ export default class Beemo {
 
     this.tool.debug('Running dotfiles command');
 
-    return this.startPipeline()
+    return this.startPipeline(context)
       .pipe(new SyncDotfilesRoutine('dotfiles', 'Syncing dotfiles', { filter }))
-      .run(context);
+      .run();
   }
 }

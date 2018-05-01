@@ -96,7 +96,7 @@ export default class FlowDriver extends Driver {
       const value = options[key as keyof OptionsConfig];
 
       if (!value) {
-        return;
+        return; // eslint-disable-line
 
         // Multiple values
       } else if (Array.isArray(value)) {

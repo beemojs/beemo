@@ -443,9 +443,9 @@
     npmlog "^4.1.2"
     write-file-atomic "^2.3.0"
 
-"@milesj/build-tool-config@0.88.0":
-  version "0.88.0"
-  resolved "https://registry.npmjs.org/@milesj/build-tool-config/-/build-tool-config-0.88.0.tgz#899ddf1f5957e8f20a28dd13a0ab0cf18bddd4dd"
+"@milesj/build-tool-config@0.88.1":
+  version "0.88.1"
+  resolved "https://registry.npmjs.org/@milesj/build-tool-config/-/build-tool-config-0.88.1.tgz#a5f768787076ddf483445e9207197d55f277d3ac"
   dependencies:
     "@beemo/cli" "^0.16.0"
     "@beemo/core" "^0.16.0"
@@ -1834,9 +1834,9 @@ boom@5.x.x:
   dependencies:
     hoek "4.x.x"
 
-boost@^0.48.0:
-  version "0.48.0"
-  resolved "https://registry.npmjs.org/boost/-/boost-0.48.0.tgz#0093d28014a2c4c725fbc4702d08fcd00e75c7f2"
+boost@^0.49.1:
+  version "0.49.1"
+  resolved "https://registry.npmjs.org/boost/-/boost-0.49.1.tgz#6059c99795b2b3197504a0149ce702d2a180f1a5"
   dependencies:
     "@types/chalk" "^2.2.0"
     "@types/debug" "^0.0.30"

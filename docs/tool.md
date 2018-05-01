@@ -25,6 +25,7 @@ error messages can be logged `logError(message)` and will be displayed on failur
 
 ```js
 tool.log('Something happened!');
+tool.logError('Oops, something is broken!');
 ```
 
 Debug messages that will only be displayed during `--debug` can be logged with

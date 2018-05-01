@@ -2,7 +2,7 @@
   "private": true,
   "name": "beemo-root",
   "scripts": {
-    "build": "lerna run build",
+    "build": "beemo typescript --workspaces",
     "clean": "rimraf ./packages/*/{lib,esm}/ && lerna clean --yes",
     "clean:cache": "rimraf ./cache",
     "coverage": "yarn run jest --coverage",
@@ -19,10 +19,10 @@
     "prerelease": "yarn run package",
     "release": "lerna publish",
     "release:force": "yarn run release --force-publish=*",
-    "type": "lerna run type"
+    "type": "beemo typescript --workspaces --noEmit"
   },
   "devDependencies": {
-    "@milesj/build-tool-config": "0.88.0",
+    "@milesj/build-tool-config": "0.88.1",
     "chalk": "^2.4.1",
     "fs-extra": "^5.0.0",
     "glob": "^7.1.2",
@@ -53,6 +53,7 @@
     "eslint": {
       "rules": {
         "function-paren-newline": "off",
+        "no-param-reassign": "off",
         "import/first": "off"
       }
     }

@@ -1,5 +1,3 @@
-/* eslint-disable no-param-reassign */
-
 import path from 'path';
 import { parse as parseArgs } from 'yargs';
 import Driver from '../packages/core/src/Driver';

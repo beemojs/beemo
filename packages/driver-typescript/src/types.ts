@@ -3,6 +3,8 @@
  * @license     https://opensource.org/licenses/MIT
  */
 
+/* eslint-disable import/prefer-default-export */
+
 import typescript from 'typescript';
 
 export interface TypeScriptConfig {

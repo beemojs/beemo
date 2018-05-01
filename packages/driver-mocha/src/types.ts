@@ -3,6 +3,8 @@
  * @license     https://opensource.org/licenses/MIT
  */
 
+/* eslint-disable camelcase */
+
 export interface ReporterOptions {
   [key: string]: any;
 }

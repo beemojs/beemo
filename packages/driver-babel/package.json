@@ -15,10 +15,6 @@
   "engines": {
     "node": ">=6.5.0"
   },
-  "scripts": {
-    "build": "beemo typescript",
-    "type": "beemo typescript --noEmit"
-  },
   "repository": "https://github.com/milesj/beemo/tree/master/packages/driver-babel",
   "license": "MIT",
   "publishConfig": {

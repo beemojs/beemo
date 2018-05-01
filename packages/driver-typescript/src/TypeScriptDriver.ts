@@ -14,7 +14,7 @@ export default class TypeScriptDriver extends Driver {
     this.setMetadata({
       bin: 'tsc',
       configName: 'tsconfig.json',
-      configOption: '',
+      configOption: '--project',
       description: 'Type check files with TypeScript.',
       filterOptions: true,
       title: 'TypeScript',

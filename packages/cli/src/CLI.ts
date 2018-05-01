@@ -8,7 +8,7 @@
 import path from 'path';
 import chalk from 'chalk';
 import semver from 'semver';
-import app from 'yargs';
+import yargs from 'yargs';
 import Beemo, { Driver } from '@beemo/core';
 // @ts-ignore
 import corePackage from '../../core/package.json';
@@ -32,7 +32,7 @@ if (!semver.satisfies(cliPackage.version, `^${corePackage.version}`)) {
 // Initialize
 // 0 node, 1 beemo, 2 <driver, command>
 const beemo = new Beemo(process.argv.slice(3));
-// const app = yargs(process.argv.slice(2));
+const app = yargs(process.argv.slice(2));
 
 // Bootstrap the module
 beemo.bootstrapConfigModule();
@@ -41,8 +41,18 @@ beemo.bootstrapConfigModule();
 beemo.tool.plugins.forEach(driver => {
   const { command = {}, metadata } = driver as Driver;
 
-  app.command(driver.name, metadata.description || `Run ${metadata.title}`, command, () =>
-    beemo.executeDriver(driver.name),
+  app.command(
+    driver.name,
+    metadata.description || `Run ${metadata.title}`,
+    {
+      ...command,
+      workspaces: {
+        boolean: true,
+        default: false,
+        description: 'Run command in all workspaces',
+      },
+    },
+    () => beemo.executeDriver(driver.name),
   );
 });
 
@@ -88,7 +98,7 @@ app
     alias: 'v',
     count: true,
     default: 0,
-    describe: 'Increase information in the output',
+    describe: 'Increase informational output',
   });
 
 // Run application

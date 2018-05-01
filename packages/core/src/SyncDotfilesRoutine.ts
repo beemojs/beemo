@@ -56,7 +56,6 @@ export default class SyncDotfilesRoutine extends Routine<SyncDotfilesOptions, Co
 
           this.tool.debug('Filtering dotfiles with "%s"', filter);
 
-          // eslint-disable-next-line no-param-reassign
           files = files.filter(file => file.path.match(pattern));
         }
 
@@ -93,7 +92,7 @@ export default class SyncDotfilesRoutine extends Routine<SyncDotfilesOptions, Co
         return fs.rename(filePath, newPath).then(() => {
           this.tool.emit('rename-dotfile', [newPath]);
 
-          // this.tool.log(`${chalk.gray('->')} ${newName}`);
+          this.tool.log('%s %s', chalk.gray('->'), newName);
 
           this.tool.debug('  %s', chalk.gray(newPath));
 

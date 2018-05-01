@@ -43,7 +43,6 @@ export default class PrettierDriver extends Driver {
     this.context.configPaths.push(ignorePath);
 
     // Delete the property
-    // eslint-disable-next-line no-param-reassign
     delete config.ignore;
   };
 }

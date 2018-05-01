@@ -3,18 +3,45 @@
  * @license     https://opensource.org/licenses/MIT
  */
 
+import path from 'path';
+import glob from 'glob';
 import { Routine } from 'boost';
 import RunCommandRoutine from './driver/RunCommandRoutine';
 import { BeemoConfig, DriverContext } from './types';
 
 export default class ExecuteDriverRoutine extends Routine<BeemoConfig, DriverContext> {
-  execute(context: DriverContext): Promise<string[]> {
-    const { argv, primaryDriver } = context;
+  bootstrap() {
+    const { args, argv, primaryDriver, root } = this.context;
+    const { workspaces } = this.tool.package;
     const driverName = primaryDriver.name;
-    const binName = primaryDriver.metadata.bin;
+    const command = `${primaryDriver.metadata.bin} ${argv.join(' ')}`;
 
-    this.pipe(new RunCommandRoutine(driverName, `${binName} ${argv.join(' ')}`));
+    if (args.workspaces) {
+      if (!workspaces) {
+        throw new Error('Option --workspaces provided but project is not workspaces enabled.');
+      }
 
+      glob
+        .sync(`${workspaces}/`, {
+          absolute: true,
+          cwd: root,
+          debug: this.tool.config.debug,
+          strict: true,
+        })
+        .forEach(dir => {
+          this.pipe(
+            new RunCommandRoutine(path.basename(dir), command, {
+              forceConfigOption: true,
+              runInDir: dir,
+            }),
+          );
+        });
+    } else {
+      this.pipe(new RunCommandRoutine(driverName, command));
+    }
+  }
+
+  execute(context: DriverContext): Promise<string[]> {
     return this.parallelizeSubroutines();
   }
 }
