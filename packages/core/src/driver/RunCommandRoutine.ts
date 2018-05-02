@@ -60,7 +60,7 @@ export default class RunCommandRoutine extends Routine<RunCommandRoutineOptions,
   expandGlobPatterns(context: DriverContext, args: Args): Promise<Args> {
     const nextArgs: Args = [];
 
-    this.tool.debug('Expanding glob patterns');
+    this.debug('Expanding glob patterns');
 
     args.forEach(arg => {
       if (isGlob(arg)) {
@@ -70,7 +70,7 @@ export default class RunCommandRoutine extends Routine<RunCommandRoutineOptions,
           strict: true,
         });
 
-        this.tool.debug('  %s %s %s', arg, chalk.gray('->'), paths.join(', '));
+        this.debug('  %s %s %s', arg, chalk.gray('->'), paths.join(', '));
 
         nextArgs.push(...paths);
       } else {
@@ -90,7 +90,7 @@ export default class RunCommandRoutine extends Routine<RunCommandRoutineOptions,
     const options = driver.getSupportedOptions();
 
     if (options.length > 0) {
-      this.tool.debug('Using supported options from driver');
+      this.debug('Using supported options from driver');
 
       const nativeOptions: OptionMap = {};
 
@@ -101,7 +101,7 @@ export default class RunCommandRoutine extends Routine<RunCommandRoutineOptions,
       return Promise.resolve(nativeOptions);
     }
 
-    this.tool.debug('Extracting native options from help output');
+    this.debug('Extracting native options from help output');
 
     return this.executeCommand(driver.metadata.bin, [driver.metadata.helpOption], { env }).then(
       ({ stdout }) => {
@@ -123,7 +123,7 @@ export default class RunCommandRoutine extends Routine<RunCommandRoutineOptions,
    * Utilize the driver's help option/command to determine accurate options.
    */
   filterUnknownOptions(context: DriverContext, args: Args): Promise<Args> {
-    this.tool.debug('Filtering unknown command line options');
+    this.debug('Filtering unknown command line options');
 
     return this.extractNativeOptions().then(nativeOptions => {
       const filteredArgs: Args = [];
@@ -168,7 +168,7 @@ export default class RunCommandRoutine extends Routine<RunCommandRoutineOptions,
       });
 
       if (unknownArgs.length > 0) {
-        this.tool.debug('Filtered args: %s', unknownArgs.join(', '));
+        this.debug('Filtered args: %s', unknownArgs.join(', '));
       }
 
       return filteredArgs;
@@ -188,16 +188,16 @@ export default class RunCommandRoutine extends Routine<RunCommandRoutineOptions,
       ...commandArgs,
     ];
 
-    this.tool.debug('Gathering arguments to pass to driver');
+    this.debug('Gathering arguments to pass to driver');
 
-    this.tool.debug.invariant(
+    this.debug.invariant(
       driverArgs.length > 0,
       '  From driver "args" option',
       driverArgs.join(' '),
       'No arguments',
     );
 
-    this.tool.debug.invariant(
+    this.debug.invariant(
       commandArgs.length > 0,
       '  From the command line',
       commandArgs.join(' '),
@@ -223,7 +223,7 @@ export default class RunCommandRoutine extends Routine<RunCommandRoutineOptions,
       args.push(primaryDriver.metadata.configOption, configPath);
     }
 
-    this.tool.debug('Including config option to args');
+    this.debug('Including config option to args');
 
     return Promise.resolve(args);
   }
@@ -236,7 +236,7 @@ export default class RunCommandRoutine extends Routine<RunCommandRoutineOptions,
     const driver = context.primaryDriver;
     const cwd = this.options.runInDir || context.root;
 
-    this.tool.debug(
+    this.debug(
       'Executing command "%s %s" in %s',
       chalk.magenta(driver.metadata.bin),
       args.join(' '),

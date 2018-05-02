@@ -50,7 +50,7 @@ export default class CreateConfigRoutine extends Routine<
     const { metadata } = this.options.driver;
     const configPath = path.join(context.root, metadata.configName);
 
-    this.tool.debug('Creating config file %s', chalk.cyan(configPath));
+    this.debug('Creating config file %s', chalk.cyan(configPath));
 
     this.options.driver.config = config as any;
 
@@ -71,7 +71,7 @@ export default class CreateConfigRoutine extends Routine<
     const { config } = this.tool;
     const configs = [...prevConfigs];
 
-    this.tool.debug.invariant(
+    this.debug.invariant(
       !!config[name],
       `Extracting ${chalk.magenta(name)} config from package.json "beemo" property`,
       'Exists, extracting',
@@ -93,7 +93,7 @@ export default class CreateConfigRoutine extends Routine<
    * Gather CLI arguments to pass to the configuration file.
    */
   getArgsToPass(): Arguments {
-    this.tool.debug('Gathering arguments to pass to config file');
+    this.debug('Gathering arguments to pass to config file');
 
     return parseArgs(
       [...this.options.driver.getArgs(), ...this.context.argv].map(value => String(value)),
@@ -104,7 +104,7 @@ export default class CreateConfigRoutine extends Routine<
    * Merge multiple configuration sources using the current driver.
    */
   mergeConfigs(context: DriverContext, configs: Struct[]): Promise<Struct> {
-    this.tool.debug(
+    this.debug(
       'Merging %s config from %d sources',
       chalk.magenta(this.options.driver.name),
       configs.length,
@@ -138,7 +138,7 @@ export default class CreateConfigRoutine extends Routine<
         : configLoader.resolveModuleConfigPath(name, moduleName);
     const fileExists = fs.existsSync(filePath);
 
-    this.tool.debug.invariant(
+    this.debug.invariant(
       fileExists,
       `Loading ${chalk.magenta(name)} config from configuration module ${chalk.yellow(moduleName)}`,
       'Exists, loading',

@@ -25,7 +25,7 @@ export default class ExecuteScriptRoutine extends Routine<BeemoConfig, ScriptCon
     const filePath = path.join(context.moduleRoot, 'scripts', `${scriptName}.js`);
     const loader = new ModuleLoader(this.tool, 'script', Script);
 
-    this.tool.debug('Loading script');
+    this.debug('Loading script');
 
     return new Promise(resolve => {
       const script = loader.importModule(filePath);
@@ -49,7 +49,7 @@ export default class ExecuteScriptRoutine extends Routine<BeemoConfig, ScriptCon
   runScript(context: ScriptContext, script: Script): Promise<Execution> {
     const { argv } = this.context;
 
-    this.tool.debug('Executing script with args "%s"', argv.join(' '));
+    this.debug('Executing script with args "%s"', argv.join(' '));
 
     this.tool.emit('before-execute', [script, argv, context]);
 

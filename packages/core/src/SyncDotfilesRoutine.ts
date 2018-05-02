@@ -44,7 +44,7 @@ export default class SyncDotfilesRoutine extends Routine<SyncDotfilesOptions, Co
 
     return new Promise((resolve, reject) => {
       copy(dotfilePath, this.tool.options.root, (error, files) => {
-        this.tool.debug.invariant(
+        this.debug.invariant(
           !error,
           `Coping dotfiles from ${chalk.cyan(dotfilePath)}`,
           'Copied',
@@ -54,7 +54,7 @@ export default class SyncDotfilesRoutine extends Routine<SyncDotfilesOptions, Co
         if (filter) {
           const pattern = new RegExp(filter);
 
-          this.tool.debug('Filtering dotfiles with "%s"', filter);
+          this.debug('Filtering dotfiles with "%s"', filter);
 
           files = files.filter(file => file.path.match(pattern));
         }
@@ -66,7 +66,7 @@ export default class SyncDotfilesRoutine extends Routine<SyncDotfilesOptions, Co
             files.map(file => {
               this.tool.emit('copy-dotfile', [file.path]);
 
-              this.tool.debug('  %s', chalk.gray(file.path));
+              this.debug('  %s', chalk.gray(file.path));
 
               return file.path;
             }),
@@ -81,7 +81,7 @@ export default class SyncDotfilesRoutine extends Routine<SyncDotfilesOptions, Co
    * in the repository. So we need to rename them after they are copied.
    */
   renameFilesWithDot(context: Context, filePaths: string[]): Promise<string[]> {
-    this.tool.debug('Renaming dotfiles and prefixing with a period');
+    this.debug('Renaming dotfiles and prefixing with a period');
 
     return Promise.all(
       filePaths.map(filePath => {
@@ -94,7 +94,7 @@ export default class SyncDotfilesRoutine extends Routine<SyncDotfilesOptions, Co
 
           this.tool.log('%s %s', chalk.gray('->'), newName);
 
-          this.tool.debug('  %s', chalk.gray(newPath));
+          this.debug('  %s', chalk.gray(newPath));
 
           return newPath;
         });
