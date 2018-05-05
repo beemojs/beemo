@@ -36,7 +36,7 @@ export default class Beemo {
         appName: 'beemo',
         configBlueprint: this.getConfigBlueprint(),
         console: {
-          footer: `🤖  Powered by Beemo v${version}`,
+          footer: `\n🤖  Powered by Beemo v${version}`,
           silent: args.silent || false,
           verbose: args.verbose || 3,
         },

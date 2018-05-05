@@ -5,7 +5,7 @@
 
 import path from 'path';
 import glob from 'glob';
-import { Routine } from 'boost';
+import { Routine, SynchronizedResponse } from 'boost';
 import RunCommandRoutine from './driver/RunCommandRoutine';
 import { BeemoConfig, DriverContext } from './types';
 
@@ -41,6 +41,14 @@ export default class ExecuteDriverRoutine extends Routine<BeemoConfig, DriverCon
   }
 
   execute(context: DriverContext): Promise<string[]> {
-    return this.parallelizeSubroutines();
+    return this.parallelizeSubroutines(null, true).then(data => {
+      const response = data as SynchronizedResponse;
+
+      if (response.errors.length > 0) {
+        throw new Error('Execution failure.');
+      }
+
+      return response.results;
+    });
   }
 }

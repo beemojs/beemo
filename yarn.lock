@@ -443,9 +443,9 @@
     npmlog "^4.1.2"
     write-file-atomic "^2.3.0"
 
-"@milesj/build-tool-config@0.89.0":
-  version "0.89.0"
-  resolved "https://registry.npmjs.org/@milesj/build-tool-config/-/build-tool-config-0.89.0.tgz#9e399c2f76212a939943d8539ac56169b4522cd1"
+"@milesj/build-tool-config@0.90.0":
+  version "0.90.0"
+  resolved "https://registry.npmjs.org/@milesj/build-tool-config/-/build-tool-config-0.90.0.tgz#00d37a04dc7493c8b4601c0538be597451c64a2f"
   dependencies:
     "@beemo/cli" "^0.16.0"
     "@beemo/core" "^0.16.0"
@@ -497,7 +497,7 @@
     typescript "^2.8.3"
     typescript-eslint-parser "^15.0.0"
     uglifyjs-webpack-plugin "1.2.5"
-    webpack "^4.6.0"
+    webpack "^4.7.0"
 
 "@mrmlnc/readdir-enhanced@^2.2.1":
   version "2.2.1"
@@ -1834,9 +1834,9 @@ boom@5.x.x:
   dependencies:
     hoek "4.x.x"
 
-boost@^0.51.1:
-  version "0.51.1"
-  resolved "https://registry.npmjs.org/boost/-/boost-0.51.1.tgz#6a63f258c7cdea5d28f9600751ec18ec9f1fcc66"
+boost@^0.52.1:
+  version "0.52.1"
+  resolved "https://registry.npmjs.org/boost/-/boost-0.52.1.tgz#2228ecd546adcdd7b61aff38e11ecf7f564d4b29"
   dependencies:
     "@types/chalk" "^2.2.0"
     "@types/debug" "^0.0.30"
@@ -9532,9 +9532,9 @@ webpack-sources@^1.1.0:
     source-list-map "^2.0.0"
     source-map "~0.6.1"
 
-webpack@^4.6.0:
-  version "4.6.0"
-  resolved "https://registry.npmjs.org/webpack/-/webpack-4.6.0.tgz#363eafa733710eb0ed28c512b2b9b9f5fb01e69b"
+webpack@^4.7.0:
+  version "4.7.0"
+  resolved "https://registry.npmjs.org/webpack/-/webpack-4.7.0.tgz#a04f68dab86d5545fd0277d07ffc44e4078154c9"
   dependencies:
     acorn "^5.0.0"
     acorn-dynamic-import "^3.0.0"
