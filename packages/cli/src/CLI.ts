@@ -95,10 +95,9 @@ app
     describe: `Hide ${binName} output`,
   })
   .option('verbose', {
-    alias: 'v',
-    count: true,
-    default: 0,
+    default: 3,
     describe: 'Increase informational output',
+    number: true,
   });
 
 // Run application

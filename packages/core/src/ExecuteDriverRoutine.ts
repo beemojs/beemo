@@ -11,13 +11,12 @@ import { BeemoConfig, DriverContext } from './types';
 
 export default class ExecuteDriverRoutine extends Routine<BeemoConfig, DriverContext> {
   bootstrap() {
-    const { args, argv, primaryDriver, root } = this.context;
-    const { workspaces } = this.tool.package;
+    const { args, argv, primaryDriver, root, workspaces } = this.context;
     const driverName = primaryDriver.name;
     const command = `${primaryDriver.metadata.bin} ${argv.join(' ')}`;
 
     if (args.workspaces) {
-      if (!workspaces) {
+      if (workspaces.length === 0) {
         throw new Error('Option --workspaces provided but project is not workspaces enabled.');
       }
 
@@ -32,7 +31,7 @@ export default class ExecuteDriverRoutine extends Routine<BeemoConfig, DriverCon
           this.pipe(
             new RunCommandRoutine(path.basename(dir), command, {
               forceConfigOption: true,
-              runInDir: dir,
+              workspaceRoot: dir,
             }),
           );
         });

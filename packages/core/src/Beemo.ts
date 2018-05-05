@@ -3,11 +3,11 @@
  * @license     https://opensource.org/licenses/MIT
  */
 
-import { Pipeline, Tool, ToolInterface } from 'boost';
-import { bool, shape, Blueprint, Struct } from 'optimal';
 import chalk from 'chalk';
 import fs from 'fs-extra';
 import path from 'path';
+import { Pipeline, Tool, ToolInterface } from 'boost';
+import { bool, shape, Blueprint, Struct } from 'optimal';
 import { parse as parseArgs } from 'yargs';
 import CleanupRoutine from './CleanupRoutine';
 import ConfigureRoutine from './ConfigureRoutine';
@@ -38,7 +38,7 @@ export default class Beemo {
         console: {
           footer: `🤖  Powered by Beemo v${version}`,
           silent: args.silent || false,
-          verbose: args.verbose || 0,
+          verbose: args.verbose || 3,
         },
         pluginAlias: 'driver',
         scoped: true,
@@ -89,7 +89,6 @@ export default class Beemo {
       argv: this.argv,
       moduleRoot: this.getConfigModuleRoot(),
       root: this.tool.options.root,
-      workspaceRoot: this.tool.options.workspaceRoot,
     };
   }
 
@@ -103,6 +102,35 @@ export default class Beemo {
         parallel: bool(true),
       }),
     };
+  }
+
+  /**
+   * Return a list of absolute paths for Yarn or Lerna workspaces.
+   */
+  getWorkspacePaths(): string[] {
+    const { workspaces } = this.tool.package;
+    const root = this.tool.options.workspaceRoot || this.tool.options.root;
+    const paths = [];
+
+    if (workspaces) {
+      if (Array.isArray(workspaces)) {
+        paths.push(...workspaces);
+      } else if (Array.isArray(workspaces.packages)) {
+        paths.push(...workspaces.packages);
+      }
+    }
+
+    const lernaPath = path.join(root, 'lerna.json');
+
+    if (paths.length === 0 && fs.existsSync(lernaPath)) {
+      const lerna = fs.readJsonSync(lernaPath);
+
+      if (Array.isArray(lerna.packages)) {
+        paths.push(...lerna.packages);
+      }
+    }
+
+    return paths.map(workspace => path.join(root, workspace));
   }
 
   /**
@@ -173,6 +201,8 @@ export default class Beemo {
       driverName,
       drivers: [],
       primaryDriver,
+      workspaceRoot: tool.options.workspaceRoot || tool.options.root,
+      workspaces: this.getWorkspacePaths(),
     });
 
     // Delete config files on failure

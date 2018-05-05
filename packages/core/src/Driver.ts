@@ -165,6 +165,7 @@ export default class Driver extends Plugin<DriverOptions> {
         helpOption: string('--help'),
         title: string().required(),
         useConfigOption: bool(),
+        workspaceStrategy: string('reference').oneOf(['reference', 'copy']),
       },
       {
         name: this.constructor.name,

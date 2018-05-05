@@ -14,10 +14,11 @@ export default class TypeScriptDriver extends Driver {
     this.setMetadata({
       bin: 'tsc',
       configName: 'tsconfig.json',
-      configOption: '--project',
-      description: 'Type check files with TypeScript.',
+      configOption: '',
+      description: 'Type check files with TypeScript',
       filterOptions: true,
       title: 'TypeScript',
+      workspaceStrategy: 'copy',
     });
 
     this.setCommandOptions({
@@ -34,9 +35,8 @@ export default class TypeScriptDriver extends Driver {
   /**
    * Automatically clean the target folder if `outDir` is used.
    */
-  handleCleanTarget = (driver: Driver, argv: string[], context: DriverContext) => {
+  handleCleanTarget = (driver: Driver, argv: string[], { args }: DriverContext) => {
     const { outDir } = this.options;
-    const { args } = context;
 
     if (args.clean && outDir) {
       rimraf.sync(path.resolve(outDir));

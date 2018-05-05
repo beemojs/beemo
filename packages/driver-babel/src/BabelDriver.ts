@@ -14,7 +14,7 @@ export default class BabelDriver extends Driver {
     this.setMetadata({
       bin: 'babel',
       configName: '.babelrc',
-      description: 'Transpile files with Babel.',
+      description: 'Transpile files with Babel',
       title: 'Babel',
     });
 
@@ -32,9 +32,7 @@ export default class BabelDriver extends Driver {
   /**
    * Automatically clean the target folder if --out-dir is used.
    */
-  handleCleanTarget = (driver: Driver, argv: string[], context: DriverContext) => {
-    const { args } = context;
-
+  handleCleanTarget = (driver: Driver, argv: string[], { args }: DriverContext) => {
     if (args.clean && args.outDir) {
       rimraf.sync(path.resolve(args.outDir));
     }

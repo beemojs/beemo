@@ -2,6 +2,7 @@
   "private": true,
   "name": "beemo-root",
   "scripts": {
+    "setup": "bash ./scripts/build-packages.sh",
     "build": "beemo typescript --workspaces",
     "clean": "rimraf ./packages/*/{lib,esm}/ && lerna clean --yes",
     "clean:cache": "rimraf ./cache",
@@ -22,9 +23,9 @@
     "type": "beemo typescript --workspaces --noEmit"
   },
   "devDependencies": {
-    "@milesj/build-tool-config": "0.88.1",
+    "@milesj/build-tool-config": "0.89.0",
     "chalk": "^2.4.1",
-    "fs-extra": "^5.0.0",
+    "fs-extra": "^6.0.0",
     "glob": "^7.1.2",
     "lerna": "3.0.0-beta.3",
     "semver": "^5.5.0"

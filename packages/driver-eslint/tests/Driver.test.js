@@ -37,7 +37,7 @@ describe('ESLintDriver', () => {
       configName: '.eslintrc.js',
       configOption: '--config',
       dependencies: [],
-      description: 'Lint files with ESLint.',
+      description: 'Lint files with ESLint',
       filterOptions: true,
       helpOption: '--help',
       title: 'ESLint',

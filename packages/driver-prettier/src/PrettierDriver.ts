@@ -15,7 +15,7 @@ export default class PrettierDriver extends Driver {
     this.setMetadata({
       bin: 'prettier',
       configName: 'prettier.config.js',
-      description: 'Format code with Prettier.',
+      description: 'Format code with Prettier',
       filterOptions: true,
       title: 'Prettier',
     });

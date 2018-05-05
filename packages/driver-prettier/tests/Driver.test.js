@@ -37,7 +37,7 @@ describe('PrettierDriver', () => {
       configName: 'prettier.config.js',
       configOption: '--config',
       dependencies: [],
-      description: 'Format code with Prettier.',
+      description: 'Format code with Prettier',
       filterOptions: true,
       helpOption: '--help',
       title: 'Prettier',

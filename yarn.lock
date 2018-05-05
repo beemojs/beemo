@@ -443,9 +443,9 @@
     npmlog "^4.1.2"
     write-file-atomic "^2.3.0"
 
-"@milesj/build-tool-config@0.88.1":
-  version "0.88.1"
-  resolved "https://registry.npmjs.org/@milesj/build-tool-config/-/build-tool-config-0.88.1.tgz#a5f768787076ddf483445e9207197d55f277d3ac"
+"@milesj/build-tool-config@0.89.0":
+  version "0.89.0"
+  resolved "https://registry.npmjs.org/@milesj/build-tool-config/-/build-tool-config-0.89.0.tgz#9e399c2f76212a939943d8539ac56169b4522cd1"
   dependencies:
     "@beemo/cli" "^0.16.0"
     "@beemo/core" "^0.16.0"
@@ -483,7 +483,7 @@
     eslint-plugin-typescript "^0.12.0"
     eslint-plugin-unicorn "^4.0.3"
     execa "^0.10.0"
-    fs-extra "^5.0.0"
+    fs-extra "^6.0.0"
     gitbook-cli "^2.3.2"
     jest "^22.4.3"
     jest-runner-eslint "^0.5.0"
@@ -572,9 +572,9 @@
   version "0.0.28"
   resolved "https://registry.npmjs.org/@types/pluralize/-/pluralize-0.0.28.tgz#daf46f90fdaa6172600bfeac81e46065177f03ea"
 
-"@types/prettier@^1.12.0":
-  version "1.12.0"
-  resolved "https://registry.npmjs.org/@types/prettier/-/prettier-1.12.0.tgz#61ed6bdc64386f49c9e1f179cf84ef26ddc4740c"
+"@types/prettier@^1.12.1":
+  version "1.12.1"
+  resolved "https://registry.npmjs.org/@types/prettier/-/prettier-1.12.1.tgz#d8aa9c353adc3e8c1c6e51e7acb642315fd79d2d"
 
 "@types/rimraf@^2.0.2":
   version "2.0.2"
@@ -1834,9 +1834,9 @@ boom@5.x.x:
   dependencies:
     hoek "4.x.x"
 
-boost@^0.49.1:
-  version "0.49.1"
-  resolved "https://registry.npmjs.org/boost/-/boost-0.49.1.tgz#6059c99795b2b3197504a0149ce702d2a180f1a5"
+boost@^0.51.1:
+  version "0.51.1"
+  resolved "https://registry.npmjs.org/boost/-/boost-0.51.1.tgz#6a63f258c7cdea5d28f9600751ec18ec9f1fcc66"
   dependencies:
     "@types/chalk" "^2.2.0"
     "@types/debug" "^0.0.30"
@@ -4023,6 +4023,14 @@ fs-extra@4.0.3:
 fs-extra@^5.0.0:
   version "5.0.0"
   resolved "https://registry.npmjs.org/fs-extra/-/fs-extra-5.0.0.tgz#414d0110cdd06705734d055652c5411260c31abd"
+  dependencies:
+    graceful-fs "^4.1.2"
+    jsonfile "^4.0.0"
+    universalify "^0.1.0"
+
+fs-extra@^6.0.0:
+  version "6.0.0"
+  resolved "https://registry.npmjs.org/fs-extra/-/fs-extra-6.0.0.tgz#0f0afb290bb3deb87978da816fcd3c7797f3a817"
   dependencies:
     graceful-fs "^4.1.2"
     jsonfile "^4.0.0"

@@ -14,7 +14,7 @@ export default class MochaDriver extends Driver {
       bin: 'mocha',
       configName: 'mocha.opts',
       configOption: '--opts',
-      description: 'Unit test files with Mocha.',
+      description: 'Unit test files with Mocha',
       title: 'Mocha',
       useConfigOption: true,
     });

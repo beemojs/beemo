@@ -28,7 +28,7 @@ describe('JestDriver', () => {
       configName: 'jest.config.js',
       configOption: '--config',
       dependencies: ['babel'],
-      description: 'Unit test files with Jest.',
+      description: 'Unit test files with Jest',
       filterOptions: true,
       helpOption: '--help',
       title: 'Jest',

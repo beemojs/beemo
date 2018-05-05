@@ -35,7 +35,7 @@ describe('TypeScriptDriver', () => {
       configName: 'tsconfig.json',
       configOption: '',
       dependencies: [],
-      description: 'Type check files with TypeScript.',
+      description: 'Type check files with TypeScript',
       filterOptions: true,
       helpOption: '--help',
       title: 'TypeScript',

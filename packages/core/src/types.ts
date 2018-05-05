@@ -46,7 +46,6 @@ export interface Context extends Struct {
   argv: string[];
   moduleRoot: string;
   root: string;
-  workspaceRoot: string;
 }
 
 export interface DriverContext extends Context {
@@ -54,6 +53,8 @@ export interface DriverContext extends Context {
   driverName: string;
   drivers: Driver[];
   primaryDriver: Driver;
+  workspaceRoot: string;
+  workspaces: string[];
 }
 
 export interface ScriptContext extends Context {

@@ -6,6 +6,8 @@
 import { Routine } from 'boost';
 import chalk from 'chalk';
 import glob from 'glob';
+import path from 'path';
+import fs from 'fs-extra';
 import isGlob from 'is-glob';
 import optimal, { bool, string, Struct } from 'optimal';
 import { parse as parseArgs } from 'yargs';
@@ -19,7 +21,7 @@ export type OptionMap = { [option: string]: true };
 
 export interface RunCommandRoutineOptions extends Struct {
   forceConfigOption: boolean;
-  runInDir: string;
+  workspaceRoot: string;
 }
 
 export default class RunCommandRoutine extends Routine<RunCommandRoutineOptions, DriverContext> {
@@ -28,7 +30,7 @@ export default class RunCommandRoutine extends Routine<RunCommandRoutineOptions,
       this.options,
       {
         forceConfigOption: bool(),
-        runInDir: string().empty(),
+        workspaceRoot: string().empty(),
       },
       {
         name: 'RunCommandRoutine',
@@ -37,6 +39,7 @@ export default class RunCommandRoutine extends Routine<RunCommandRoutineOptions,
   }
 
   execute(context: DriverContext): Promise<Execution> {
+    const { forceConfigOption, workspaceRoot } = this.options;
     const { metadata } = context.primaryDriver;
 
     this.task('Gathering arguments', this.gatherArgs);
@@ -45,13 +48,33 @@ export default class RunCommandRoutine extends Routine<RunCommandRoutineOptions,
 
     this.task('Filtering options', this.filterUnknownOptions).skip(!metadata.filterOptions);
 
-    this.task('Including config option', this.includeConfigOption).skip(
-      !metadata.useConfigOption && !this.options.forceConfigOption,
-    );
+    if (workspaceRoot && metadata.workspaceStrategy === 'copy') {
+      this.task('Copying config into workspace', this.copyConfigToWorkspace);
+    } else {
+      this.task('Including reference config option', this.includeConfigOption).skip(
+        !metadata.useConfigOption && !forceConfigOption,
+      );
+    }
 
     this.task('Running command', this.runCommandWithArgs);
 
     return this.serializeTasks();
+  }
+
+  /**
+   * When workspaces are enabled, some drivers require the config to be within each workspace,
+   * instead of being referenced from the root, so we need to copy it.
+   */
+  copyConfigToWorkspace(context: DriverContext, args: Args): Promise<Args> {
+    const { workspaceRoot } = this.options;
+
+    this.debug('Copying config files to workspace');
+
+    context.configPaths.forEach(configPath => {
+      fs.copyFileSync(configPath, path.join(workspaceRoot, path.basename(configPath)));
+    });
+
+    return Promise.resolve(args);
   }
 
   /**
@@ -216,7 +239,7 @@ export default class RunCommandRoutine extends Routine<RunCommandRoutineOptions,
    */
   includeConfigOption(context: DriverContext, prevArgs: Args): Promise<Args> {
     const { configPaths, primaryDriver } = context;
-    const configPath = configPaths.find(path => path.endsWith(primaryDriver.metadata.configName));
+    const configPath = configPaths.find(p => p.endsWith(primaryDriver.metadata.configName));
     const args = [...prevArgs];
 
     if (configPath && primaryDriver.metadata.configOption) {
@@ -234,7 +257,7 @@ export default class RunCommandRoutine extends Routine<RunCommandRoutineOptions,
    */
   runCommandWithArgs(context: DriverContext, args: Args): Promise<Execution> {
     const driver = context.primaryDriver;
-    const cwd = this.options.runInDir || context.root;
+    const cwd = this.options.workspaceRoot || context.root;
 
     this.debug(
       'Executing command "%s %s" in %s',
