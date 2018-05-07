@@ -41,9 +41,7 @@ export default class ExecuteDriverRoutine extends Routine<BeemoConfig, DriverCon
   }
 
   execute(context: DriverContext): Promise<string[]> {
-    return this.parallelizeSubroutines(null, true).then(data => {
-      const response = data as SynchronizedResponse;
-
+    return this.synchronizeSubroutines().then(response => {
       if (response.errors.length > 0) {
         throw new Error('Execution failure.');
       }

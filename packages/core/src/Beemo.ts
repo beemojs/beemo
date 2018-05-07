@@ -209,7 +209,7 @@ export default class Beemo {
     if (tool.config.config.cleanup) {
       tool.on(
         'exit',
-        /* istanbul ignore next */ (event, code) => this.handleCleanupOnFailure(code, context),
+        /* istanbul ignore next */ code => this.handleCleanupOnFailure(code, context),
       );
     }
 

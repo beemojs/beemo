@@ -12,6 +12,7 @@ import isGlob from 'is-glob';
 import optimal, { bool, string, Struct } from 'optimal';
 import { parse as parseArgs } from 'yargs';
 import { DriverContext, Execution } from '../types';
+import { TaskInterface } from 'boost/lib/Task';
 
 const OPTION_PATTERN: RegExp = /-?-[-a-z0-9]+(,|\s)/gi;
 
@@ -255,7 +256,7 @@ export default class RunCommandRoutine extends Routine<RunCommandRoutineOptions,
    * Execute the driver's command with the filtered arguments and handle the
    * success and failures with the driver itself.
    */
-  runCommandWithArgs(context: DriverContext, args: Args): Promise<Execution> {
+  runCommandWithArgs(context: DriverContext, args: Args, task: TaskInterface): Promise<Execution> {
     const driver = context.primaryDriver;
     const cwd = this.options.workspaceRoot || context.root;
 
@@ -271,6 +272,7 @@ export default class RunCommandRoutine extends Routine<RunCommandRoutineOptions,
     return this.executeCommand(driver.metadata.bin, args, {
       cwd,
       env: driver.options.env,
+      task,
     })
       .then(response => {
         driver.handleSuccess(response);
