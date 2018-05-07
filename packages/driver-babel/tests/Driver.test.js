@@ -30,17 +30,19 @@ describe('BabelDriver', () => {
   });
 
   it('sets correct metadata', () => {
-    expect(driver.metadata).toEqual({
-      bin: 'babel',
-      configName: '.babelrc',
-      configOption: '--config',
-      dependencies: [],
-      description: 'Transpile files with Babel',
-      filterOptions: false,
-      helpOption: '--help',
-      title: 'Babel',
-      useConfigOption: false,
-    });
+    expect(driver.metadata).toEqual(
+      expect.objectContaining({
+        bin: 'babel',
+        configName: '.babelrc',
+        configOption: '--config',
+        dependencies: [],
+        description: 'Transpile files with Babel',
+        filterOptions: false,
+        helpOption: '--help',
+        title: 'Babel',
+        useConfigOption: false,
+      }),
+    );
   });
 
   describe('handleCleanTarget()', () => {

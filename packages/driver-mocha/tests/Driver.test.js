@@ -23,17 +23,19 @@ describe('MochaDriver', () => {
   });
 
   it('sets correct metadata', () => {
-    expect(driver.metadata).toEqual({
-      bin: 'mocha',
-      configName: 'mocha.opts',
-      configOption: '--opts',
-      dependencies: [],
-      description: 'Unit test files with Mocha',
-      filterOptions: false,
-      helpOption: '--help',
-      title: 'Mocha',
-      useConfigOption: true,
-    });
+    expect(driver.metadata).toEqual(
+      expect.objectContaining({
+        bin: 'mocha',
+        configName: 'mocha.opts',
+        configOption: '--opts',
+        dependencies: [],
+        description: 'Unit test files with Mocha',
+        filterOptions: false,
+        helpOption: '--help',
+        title: 'Mocha',
+        useConfigOption: true,
+      }),
+    );
   });
 
   describe('formatConfig()', () => {
@@ -51,6 +53,14 @@ describe('MochaDriver', () => {
       expect(
         driver.formatConfig({
           ext: ['js', 'jsx'],
+        }),
+      ).toMatchSnapshot();
+    });
+
+    it('supports arrays with a comma', () => {
+      expect(
+        driver.formatConfig({
+          globals: ['foo', 'bar'],
         }),
       ).toMatchSnapshot();
     });

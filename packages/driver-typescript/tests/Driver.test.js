@@ -30,22 +30,25 @@ describe('TypeScriptDriver', () => {
   });
 
   it('sets correct metadata', () => {
-    expect(driver.metadata).toEqual({
-      bin: 'tsc',
-      configName: 'tsconfig.json',
-      configOption: '',
-      dependencies: [],
-      description: 'Type check files with TypeScript',
-      filterOptions: true,
-      helpOption: '--help',
-      title: 'TypeScript',
-      useConfigOption: false,
-    });
+    expect(driver.metadata).toEqual(
+      expect.objectContaining({
+        bin: 'tsc',
+        configName: 'tsconfig.json',
+        configOption: '',
+        dependencies: [],
+        description: 'Type check files with TypeScript',
+        filterOptions: true,
+        helpOption: '--help',
+        title: 'TypeScript',
+        useConfigOption: false,
+        workspaceStrategy: 'copy',
+      }),
+    );
   });
 
   describe('handleCleanTarget()', () => {
     it('doesnt run if no clean param', () => {
-      driver.config = { outDir: './lib' };
+      driver.options = { outDir: './lib' };
       driver.handleCleanTarget(driver, [], {
         args: {},
       });
@@ -54,7 +57,7 @@ describe('TypeScriptDriver', () => {
     });
 
     it('doesnt run if no outDir param', () => {
-      driver.config = {};
+      driver.options = {};
       driver.handleCleanTarget(driver, [], {
         args: { clean: true },
       });
@@ -63,7 +66,7 @@ describe('TypeScriptDriver', () => {
     });
 
     it('runs if both params', () => {
-      driver.config = { outDir: './lib' };
+      driver.options = { outDir: './lib' };
       driver.handleCleanTarget(driver, [], {
         args: { clean: true },
       });

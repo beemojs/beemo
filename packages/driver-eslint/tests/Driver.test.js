@@ -32,17 +32,19 @@ describe('ESLintDriver', () => {
   });
 
   it('sets correct metadata', () => {
-    expect(driver.metadata).toEqual({
-      bin: 'eslint',
-      configName: '.eslintrc.js',
-      configOption: '--config',
-      dependencies: [],
-      description: 'Lint files with ESLint',
-      filterOptions: true,
-      helpOption: '--help',
-      title: 'ESLint',
-      useConfigOption: false,
-    });
+    expect(driver.metadata).toEqual(
+      expect.objectContaining({
+        bin: 'eslint',
+        configName: '.eslintrc.js',
+        configOption: '--config',
+        dependencies: [],
+        description: 'Lint files with ESLint',
+        filterOptions: true,
+        helpOption: '--help',
+        title: 'ESLint',
+        useConfigOption: false,
+      }),
+    );
   });
 
   describe('mergeConfig()', () => {

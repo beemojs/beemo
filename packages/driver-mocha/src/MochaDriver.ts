@@ -34,9 +34,13 @@ export default class MochaDriver extends Driver {
       } else if (type === 'boolean') {
         output.push(option);
       } else if (Array.isArray(value)) {
-        value.forEach(v => {
-          output.push(`${option} ${v}`);
-        });
+        if (key === 'globals') {
+          output.push(value.join(', '));
+        } else {
+          value.forEach(v => {
+            output.push(`${option} ${v}`);
+          });
+        }
       } else {
         output.push(`${option} ${value}`);
       }

@@ -23,17 +23,19 @@ describe('FlowDriver', () => {
   });
 
   it('sets correct metadata', () => {
-    expect(driver.metadata).toEqual({
-      bin: 'flow',
-      configName: '.flowconfig',
-      configOption: '--config',
-      dependencies: [],
-      description: 'Type check files with Flow.',
-      filterOptions: true,
-      helpOption: '--help',
-      title: 'Flow',
-      useConfigOption: false,
-    });
+    expect(driver.metadata).toEqual(
+      expect.objectContaining({
+        bin: 'flow',
+        configName: '.flowconfig',
+        configOption: '--config',
+        dependencies: [],
+        description: 'Type check files with Flow',
+        filterOptions: true,
+        helpOption: '--help',
+        title: 'Flow',
+        useConfigOption: false,
+      }),
+    );
   });
 
   describe('formatConfig()', () => {

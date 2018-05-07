@@ -32,17 +32,19 @@ describe('PrettierDriver', () => {
   });
 
   it('sets correct metadata', () => {
-    expect(driver.metadata).toEqual({
-      bin: 'prettier',
-      configName: 'prettier.config.js',
-      configOption: '--config',
-      dependencies: [],
-      description: 'Format code with Prettier',
-      filterOptions: true,
-      helpOption: '--help',
-      title: 'Prettier',
-      useConfigOption: false,
-    });
+    expect(driver.metadata).toEqual(
+      expect.objectContaining({
+        bin: 'prettier',
+        configName: 'prettier.config.js',
+        configOption: '--config',
+        dependencies: [],
+        description: 'Format code with Prettier',
+        filterOptions: true,
+        helpOption: '--help',
+        title: 'Prettier',
+        useConfigOption: false,
+      }),
+    );
   });
 
   describe('handleCreateIgnoreFile()', () => {

@@ -23,17 +23,19 @@ describe('JestDriver', () => {
   });
 
   it('sets correct metadata', () => {
-    expect(driver.metadata).toEqual({
-      bin: 'jest',
-      configName: 'jest.config.js',
-      configOption: '--config',
-      dependencies: ['babel'],
-      description: 'Unit test files with Jest',
-      filterOptions: true,
-      helpOption: '--help',
-      title: 'Jest',
-      useConfigOption: false,
-    });
+    expect(driver.metadata).toEqual(
+      expect.objectContaining({
+        bin: 'jest',
+        configName: 'jest.config.js',
+        configOption: '--config',
+        dependencies: ['babel'],
+        description: 'Unit test files with Jest',
+        filterOptions: true,
+        helpOption: '--help',
+        title: 'Jest',
+        useConfigOption: false,
+      }),
+    );
   });
 
   describe('handleSuccess()', () => {
