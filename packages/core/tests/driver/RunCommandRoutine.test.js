@@ -64,6 +64,8 @@ describe('RunCommandRoutine', () => {
     routine = new RunCommandRoutine('babel', 'Run babel');
     routine.context = createDriverContext(driver);
     routine.tool = tool;
+    routine.debug = jest.fn();
+    routine.debug.invariant = jest.fn();
   });
 
   describe('execute()', () => {
@@ -81,19 +83,25 @@ describe('RunCommandRoutine', () => {
       const optSpy = jest.spyOn(routine, 'includeConfigOption');
       const runSpy = jest.spyOn(routine, 'runCommandWithArgs');
 
-      const response = await routine.execute();
+      const response = await routine.execute(routine.context);
 
-      expect(argSpy).toHaveBeenCalledWith(undefined, routine.context);
+      expect(argSpy).toHaveBeenCalledWith(routine.context, null, expect.anything());
       expect(globSpy).toHaveBeenCalledWith(
-        ['--qux', '-a', '--foo', 'bar', 'baz', '--out-dir', './lib'],
         routine.context,
+        ['--qux', '-a', '--foo', 'bar', 'baz', '--out-dir', './lib'],
+        expect.anything(),
       );
       expect(filterSpy).toHaveBeenCalledWith(
-        ['--qux', '-a', '--foo', 'bar', 'baz', '--out-dir', './lib'],
         routine.context,
+        ['--qux', '-a', '--foo', 'bar', 'baz', '--out-dir', './lib'],
+        expect.anything(),
       );
       expect(optSpy).not.toHaveBeenCalled();
-      expect(runSpy).toHaveBeenCalledWith(['baz', '--out-dir', './lib'], routine.context);
+      expect(runSpy).toHaveBeenCalledWith(
+        routine.context,
+        ['baz', '--out-dir', './lib'],
+        expect.anything(),
+      );
       expect(response).toEqual({ stdout: BABEL_HELP });
     });
 
@@ -104,12 +112,13 @@ describe('RunCommandRoutine', () => {
       const optSpy = jest.spyOn(routine, 'includeConfigOption');
       const runSpy = jest.spyOn(routine, 'runCommandWithArgs');
 
-      await routine.execute();
+      await routine.execute(routine.context);
 
-      expect(optSpy).toHaveBeenCalledWith(['baz'], routine.context);
+      expect(optSpy).toHaveBeenCalledWith(routine.context, ['baz'], expect.anything());
       expect(runSpy).toHaveBeenCalledWith(
-        ['baz', '--config', prependRoot(driver.metadata.configName)],
         routine.context,
+        ['baz', '--config', prependRoot(driver.metadata.configName)],
+        expect.anything(),
       );
     });
 
@@ -118,7 +127,7 @@ describe('RunCommandRoutine', () => {
 
       const filterSpy = jest.spyOn(routine, 'filterUnknownOptions');
 
-      await routine.execute();
+      await routine.execute(routine.context);
 
       expect(filterSpy).not.toHaveBeenCalled();
     });
@@ -126,13 +135,13 @@ describe('RunCommandRoutine', () => {
 
   describe('expandGlobPatterns()', () => {
     it('passes through if no globs', async () => {
-      const args = await routine.expandGlobPatterns(['--foo', 'bar', '-z']);
+      const args = await routine.expandGlobPatterns(routine.context, ['--foo', 'bar', '-z']);
 
       expect(args).toEqual(['--foo', 'bar', '-z']);
     });
 
     it('converts globs to paths', async () => {
-      const args = await routine.expandGlobPatterns([
+      const args = await routine.expandGlobPatterns(routine.context, [
         '--foo',
         './{scripts,tests}/*.{sh,js}',
         'bar',
@@ -144,7 +153,6 @@ describe('RunCommandRoutine', () => {
         './scripts/bump-peer-deps.js',
         './scripts/link-packages.sh',
         './tests/helpers.js',
-        './tests/setup.js',
         'bar',
       ]);
     });
@@ -189,7 +197,7 @@ describe('RunCommandRoutine', () => {
     });
 
     it('returns supported options', async () => {
-      const args = await routine.filterUnknownOptions([
+      const args = await routine.filterUnknownOptions(routine.context, [
         './src',
         '-o',
         './lib',
@@ -202,7 +210,7 @@ describe('RunCommandRoutine', () => {
     });
 
     it('filters unsupported options', async () => {
-      const args = await routine.filterUnknownOptions([
+      const args = await routine.filterUnknownOptions(routine.context, [
         './src',
         '--foo',
         '-o',
@@ -215,11 +223,11 @@ describe('RunCommandRoutine', () => {
       ]);
 
       expect(args).toEqual(['./src', '-o', './lib', '--out-dir', './dist', '--minified']);
-      expect(routine.tool.debug).toHaveBeenCalledWith('Filtered args: --foo, -X, --bar');
+      expect(routine.debug).toHaveBeenCalledWith('Filtered args: %s', '--foo, -X, --bar');
     });
 
     it('skips unsupported option setters', async () => {
-      const args = await routine.filterUnknownOptions([
+      const args = await routine.filterUnknownOptions(routine.context, [
         '--foo',
         '123',
         '--bar=456',
@@ -230,40 +238,45 @@ describe('RunCommandRoutine', () => {
       ]);
 
       expect(args).toEqual(['-w']);
-      expect(routine.tool.debug).toHaveBeenCalledWith(
-        'Filtered args: --foo, 123, --bar=456, -c, 789, -c=666',
+      expect(routine.debug).toHaveBeenCalledWith(
+        'Filtered args: %s',
+        '--foo, 123, --bar=456, -c, 789, -c=666',
       );
     });
   });
 
   describe('gatherArgs()', () => {
     it('merges driver and command line args', async () => {
-      const args = await routine.gatherArgs();
+      const args = await routine.gatherArgs(routine.context);
 
       expect(args).toEqual(['--qux', '-a', '--foo', 'bar', 'baz']);
     });
 
     it('rebuilds context yargs', async () => {
-      expect(routine.context.args).toEqual({
-        _: ['baz'],
-        a: true,
-        foo: 'bar',
-      });
+      expect(routine.context.args).toEqual(
+        expect.objectContaining({
+          _: ['baz'],
+          a: true,
+          foo: 'bar',
+        }),
+      );
 
-      await routine.gatherArgs();
+      await routine.gatherArgs(routine.context);
 
-      expect(routine.context.args).toEqual({
-        _: ['baz'],
-        a: true,
-        foo: 'bar',
-        qux: true,
-      });
+      expect(routine.context.args).toEqual(
+        expect.objectContaining({
+          _: ['baz'],
+          a: true,
+          foo: 'bar',
+          qux: true,
+        }),
+      );
     });
   });
 
   describe('includeConfigOption()', () => {
     it('does nothing if a config path doesnt match', async () => {
-      const args = await routine.includeConfigOption(['--foo']);
+      const args = await routine.includeConfigOption(routine.context, ['--foo']);
 
       expect(args).toEqual(['--foo']);
     });
@@ -271,7 +284,7 @@ describe('RunCommandRoutine', () => {
     it('appends config path for a match', async () => {
       routine.context.configPaths.push(prependRoot(driver.metadata.configName));
 
-      const args = await routine.includeConfigOption(['--foo']);
+      const args = await routine.includeConfigOption(routine.context, ['--foo']);
 
       expect(args).toEqual(['--foo', '--config', prependRoot(driver.metadata.configName)]);
     });
@@ -285,15 +298,19 @@ describe('RunCommandRoutine', () => {
     });
 
     it('executes command with correct args', async () => {
-      await routine.runCommandWithArgs(['--wtf']);
+      const task = {};
+
+      await routine.runCommandWithArgs(routine.context, ['--wtf'], task);
 
       expect(routine.executeCommand).toHaveBeenCalledWith('babel', ['--wtf'], {
+        cwd: process.cwd(),
         env: { DEV: true },
+        task,
       });
     });
 
     it('handles success using driver', async () => {
-      const response = await routine.runCommandWithArgs(['--wtf']);
+      const response = await routine.runCommandWithArgs(routine.context, ['--wtf']);
 
       expect(response).toEqual({ success: true });
       expect(driver.handleSuccess).toHaveBeenCalledWith({ success: true });
@@ -303,37 +320,35 @@ describe('RunCommandRoutine', () => {
       routine.executeCommand.mockImplementation(() => Promise.reject(new Error('Oops')));
 
       try {
-        await routine.runCommandWithArgs(['--wtf']);
+        await routine.runCommandWithArgs(routine.context, ['--wtf']);
       } catch (error) {
         expect(driver.handleFailure).toHaveBeenCalledWith(error);
       }
     });
 
     it('triggers `before-execute` event', async () => {
-      const spy = routine.tool.emit;
+      await routine.runCommandWithArgs(routine.context, ['--wtf']);
 
-      await routine.runCommandWithArgs(['--wtf']);
-
-      expect(spy).toHaveBeenCalledWith('before-execute', [driver, ['--wtf'], routine.context]);
+      expect(routine.tool.emit).toHaveBeenCalledWith('before-execute', [
+        driver,
+        ['--wtf'],
+        routine.context,
+      ]);
     });
 
     it('triggers `after-execute` event on success', async () => {
-      const spy = routine.tool.emit;
+      await routine.runCommandWithArgs(routine.context, ['--wtf']);
 
-      await routine.runCommandWithArgs(['--wtf']);
-
-      expect(spy).toHaveBeenCalledWith('after-execute', [driver, { success: true }]);
+      expect(routine.tool.emit).toHaveBeenCalledWith('after-execute', [driver, { success: true }]);
     });
 
     it('triggers `failed-execute` event on failure', async () => {
       routine.executeCommand.mockImplementation(() => Promise.reject(new Error('Oops')));
 
-      const spy = routine.tool.emit;
-
       try {
-        await routine.runCommandWithArgs(['--wtf']);
+        await routine.runCommandWithArgs(routine.context, ['--wtf']);
       } catch (error) {
-        expect(spy).toHaveBeenCalledWith('failed-execute', [driver, error]);
+        expect(routine.tool.emit).toHaveBeenCalledWith('failed-execute', [driver, error]);
       }
     });
   });

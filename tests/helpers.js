@@ -20,6 +20,12 @@ export function setupMockTool(tool) {
 
   tool.package = {};
 
+  tool.console = {
+    emit: jest.fn(),
+  };
+
+  tool.createDebugger = () => jest.fn();
+
   return tool;
 }
 
@@ -60,6 +66,8 @@ export function createDriverContext(driver = null) {
     driverName: driver ? driver.name : '',
     drivers: [],
     primaryDriver: driver,
+    workspaceRoot: '',
+    workspaces: [],
   });
 }
 

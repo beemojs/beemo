@@ -11,12 +11,12 @@ describe('Driver', () => {
     driver = createDriver('foo', new Tool());
   });
 
-  it('validates options', () => {
+  it('validates fields', () => {
     expect(() => {
       driver = new Driver({
         args: true,
       });
-    }).toThrowError('Invalid Driver option "args". Must be an array.');
+    }).toThrowError('Invalid Driver field "args". Must be an array.');
   });
 
   describe('formatConfig()', () => {
@@ -46,7 +46,7 @@ describe('Driver', () => {
   });
 
   describe('getArgs()', () => {
-    it('returns passed options', () => {
+    it('returns passed fields', () => {
       driver.options.args = ['--foo'];
 
       expect(driver.getArgs()).toEqual(['--foo']);
@@ -54,7 +54,7 @@ describe('Driver', () => {
   });
 
   describe('getDependencies()', () => {
-    it('returns both option and metadata dependencies', () => {
+    it('returns both field and metadata dependencies', () => {
       driver.metadata.dependencies = ['foo'];
       driver.options.dependencies = ['bar'];
 
@@ -63,7 +63,7 @@ describe('Driver', () => {
   });
 
   describe('getSupportedOptions()', () => {
-    it('returns an array of options', () => {
+    it('returns an array of fields', () => {
       expect(driver.getSupportedOptions()).toEqual([]);
     });
   });
@@ -217,7 +217,7 @@ describe('Driver', () => {
           },
         });
       }).toThrowError(
-        'Invalid Driver option "foo.alias". Type must be one of: String, Array<String>',
+        'Invalid Driver field "foo.alias". Type must be one of: string, array<string>',
       );
     });
 
@@ -242,7 +242,7 @@ describe('Driver', () => {
             description: 123,
           },
         });
-      }).toThrowError('Invalid Driver option "foo.description". Must be a string.');
+      }).toThrowError('Invalid Driver field "foo.description". Must be a string.');
     });
 
     it('doesnt support empty descriptions', () => {
@@ -252,7 +252,7 @@ describe('Driver', () => {
             description: '',
           },
         });
-      }).toThrowError('Invalid Driver option "foo.description". String cannot be empty.');
+      }).toThrowError('Invalid Driver field "foo.description". String cannot be empty.');
     });
 
     it('requires a description', () => {
@@ -261,7 +261,7 @@ describe('Driver', () => {
           foo: {},
         });
       }).toThrowError(
-        'Invalid Driver option "foo.description". Field is required and must be defined.',
+        'Invalid Driver field "foo.description". Field is required and must be defined.',
       );
     });
   });
@@ -277,7 +277,7 @@ describe('Driver', () => {
       it('is required', () => {
         expect(() => {
           driver.setMetadata({});
-        }).toThrowError('Invalid Driver option "bin". Field is required and must be defined.');
+        }).toThrowError('Invalid Driver field "bin". Field is required and must be defined.');
       });
 
       it('supports alpha, numeric, and dashes', () => {
@@ -296,7 +296,7 @@ describe('Driver', () => {
             bin: 'foo_123',
           });
         }).toThrowError(
-          'Invalid Driver option "bin". String does not match pattern "^[-a-z0-9]+$".',
+          'Invalid Driver field "bin". String does not match pattern "^[-a-z0-9]+$".',
         );
       });
 
@@ -307,7 +307,7 @@ describe('Driver', () => {
             bin: 'Foo_123',
           });
         }).toThrowError(
-          'Invalid Driver option "bin". String does not match pattern "^[-a-z0-9]+$".',
+          'Invalid Driver field "bin". String does not match pattern "^[-a-z0-9]+$".',
         );
       });
     });
@@ -319,7 +319,7 @@ describe('Driver', () => {
             bin: 'beemo',
           });
         }).toThrowError(
-          'Invalid Driver option "configName". Field is required and must be defined.',
+          'Invalid Driver field "configName". Field is required and must be defined.',
         );
       });
 
@@ -329,7 +329,7 @@ describe('Driver', () => {
             ...options,
             configName: 123,
           });
-        }).toThrowError('Invalid Driver option "configName". Must be a string.');
+        }).toThrowError('Invalid Driver field "configName". Must be a string.');
       });
     });
 
@@ -340,7 +340,7 @@ describe('Driver', () => {
             bin: 'beemo',
             configName: 'beemo',
           });
-        }).toThrowError('Invalid Driver option "title". Field is required and must be defined.');
+        }).toThrowError('Invalid Driver field "title". Field is required and must be defined.');
       });
 
       it('doesnt support non-strings', () => {
@@ -349,7 +349,7 @@ describe('Driver', () => {
             ...options,
             title: 123,
           });
-        }).toThrowError('Invalid Driver option "title". Must be a string.');
+        }).toThrowError('Invalid Driver field "title". Must be a string.');
       });
     });
   });

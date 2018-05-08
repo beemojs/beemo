@@ -1,6 +1,6 @@
 import { Tool } from 'boost';
-import fs from 'fs-extra';
 import copy from 'copy';
+import fs from 'fs-extra';
 import SyncDotfilesRoutine from '../src/SyncDotfilesRoutine';
 import { createContext, setupMockTool, prependRoot } from '../../../tests/helpers';
 
@@ -15,6 +15,8 @@ describe('SyncDotfilesRoutine', () => {
     routine = new SyncDotfilesRoutine('sync', 'Syncing dotfiles');
     routine.context = createContext();
     routine.tool = setupMockTool(new Tool());
+    routine.debug = jest.fn();
+    routine.debug.invariant = jest.fn();
 
     copy.mockImplementation((filePath, root, callback) => {
       callback(null, [{ path: './foo' }, { path: './bar' }, { path: './baz' }]);
@@ -25,18 +27,18 @@ describe('SyncDotfilesRoutine', () => {
 
   describe('bootstrap()', () => {
     it('errors if filter is not a string', () => {
-      routine.config.filter = 123;
+      routine.options.filter = 123;
 
       expect(() => {
         routine.bootstrap();
-      }).toThrowError('Invalid SyncDotfilesRoutine option "filter". Must be a string.');
+      }).toThrowError('Invalid SyncDotfilesRoutine field "filter". Must be a string.');
     });
   });
 
   describe('execute()', () => {
     it('passes module root to tasks', () => {
       routine.serializeTasks = jest.fn();
-      routine.execute();
+      routine.execute(routine.context);
 
       expect(routine.serializeTasks).toHaveBeenCalledWith(process.cwd());
     });
@@ -45,17 +47,21 @@ describe('SyncDotfilesRoutine', () => {
       const copySpy = jest.spyOn(routine, 'copyFilesFromConfigModule');
       const renameSpy = jest.spyOn(routine, 'renameFilesWithDot');
 
-      const paths = await routine.execute();
+      const paths = await routine.execute(routine.context);
 
-      expect(copySpy).toHaveBeenCalledWith(process.cwd(), routine.context);
-      expect(renameSpy).toHaveBeenCalledWith(['./foo', './bar', './baz'], routine.context);
+      expect(copySpy).toHaveBeenCalledWith(routine.context, process.cwd(), expect.anything());
+      expect(renameSpy).toHaveBeenCalledWith(
+        routine.context,
+        ['./foo', './bar', './baz'],
+        expect.anything(),
+      );
       expect(paths).toEqual(['.foo', '.bar', '.baz']);
     });
   });
 
   describe('copyFilesFromConfigModule()', () => {
     it('calls it with correct path arguments', async () => {
-      await routine.copyFilesFromConfigModule(process.cwd());
+      await routine.copyFilesFromConfigModule(routine.context, process.cwd());
 
       expect(copy).toHaveBeenCalledWith(
         prependRoot('dotfiles/*'),
@@ -65,15 +71,15 @@ describe('SyncDotfilesRoutine', () => {
     });
 
     it('returns file paths as strings', async () => {
-      const paths = await routine.copyFilesFromConfigModule('./root');
+      const paths = await routine.copyFilesFromConfigModule(routine.context, './root');
 
       expect(paths).toEqual(['./foo', './bar', './baz']);
     });
 
     it('filters files using config', async () => {
-      routine.config.filter = 'a(r|z)';
+      routine.options.filter = 'a(r|z)';
 
-      const paths = await routine.copyFilesFromConfigModule('./root');
+      const paths = await routine.copyFilesFromConfigModule(routine.context, './root');
 
       expect(paths).toEqual(['./bar', './baz']);
     });
@@ -82,7 +88,7 @@ describe('SyncDotfilesRoutine', () => {
       copy.mockImplementation((filePath, root, callback) => callback(new Error('Oops')));
 
       try {
-        await routine.copyFilesFromConfigModule('./root');
+        await routine.copyFilesFromConfigModule(routine.context, './root');
       } catch (error) {
         expect(error).toEqual(new Error('Oops'));
       }
@@ -91,7 +97,7 @@ describe('SyncDotfilesRoutine', () => {
     it('triggers `copy-dotfile` event', async () => {
       const spy = routine.tool.emit;
 
-      await routine.copyFilesFromConfigModule('./root');
+      await routine.copyFilesFromConfigModule(routine.context, './root');
 
       expect(spy).toHaveBeenCalledWith('copy-dotfile', ['./foo']);
       expect(spy).toHaveBeenCalledWith('copy-dotfile', ['./bar']);
@@ -101,7 +107,11 @@ describe('SyncDotfilesRoutine', () => {
 
   describe('renameFilesWithDot()', () => {
     it('renames each file path', async () => {
-      const paths = await routine.renameFilesWithDot(['foo', './path/bar', '/path/baz']);
+      const paths = await routine.renameFilesWithDot(routine.context, [
+        'foo',
+        './path/bar',
+        '/path/baz',
+      ]);
 
       expect(paths).toEqual(['.foo', 'path/.bar', '/path/.baz']);
 
@@ -113,7 +123,7 @@ describe('SyncDotfilesRoutine', () => {
     it('triggers `rename-dotfile` event', async () => {
       const spy = routine.tool.emit;
 
-      await routine.renameFilesWithDot(['foo', './path/bar', '/path/baz']);
+      await routine.renameFilesWithDot(routine.context, ['foo', './path/bar', '/path/baz']);
 
       expect(spy).toHaveBeenCalledWith('rename-dotfile', ['.foo']);
       expect(spy).toHaveBeenCalledWith('rename-dotfile', ['path/.bar']);

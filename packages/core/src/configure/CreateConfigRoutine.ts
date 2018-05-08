@@ -12,14 +12,11 @@ import { ConfigLoader, Routine } from 'boost';
 import Driver from '../Driver';
 import { DriverContext } from '../types';
 
-export interface CreateConfigRoutineOptions extends Struct {
+export interface CreateConfigOptions extends Struct {
   driver: Driver;
 }
 
-export default class CreateConfigRoutine extends Routine<
-  CreateConfigRoutineOptions,
-  DriverContext
-> {
+export default class CreateConfigRoutine extends Routine<CreateConfigOptions, DriverContext> {
   bootstrap() {
     this.options = optimal(
       this.options,

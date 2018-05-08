@@ -22,6 +22,7 @@ describe('ExecuteScriptRoutine', () => {
     routine = new ExecuteScriptRoutine('script', 'Executing script');
     routine.context = createScriptContext();
     routine.tool = setupMockTool(new Tool());
+    routine.debug = jest.fn();
 
     ModuleLoader.mockClear();
   });
@@ -29,7 +30,7 @@ describe('ExecuteScriptRoutine', () => {
   describe('execute()', () => {
     it('passes script name to tasks', () => {
       routine.serializeTasks = jest.fn();
-      routine.execute('foo');
+      routine.execute(routine.context, 'foo');
 
       expect(routine.serializeTasks).toHaveBeenCalledWith('foo');
     });
@@ -38,14 +39,15 @@ describe('ExecuteScriptRoutine', () => {
       const loadSpy = jest.spyOn(routine, 'loadScript');
       const runSpy = jest.spyOn(routine, 'runScript');
 
-      const response = await routine.execute('foo-bar');
+      const response = await routine.execute(routine.context, 'foo-bar');
 
-      expect(loadSpy).toHaveBeenCalledWith('foo-bar', routine.context);
+      expect(loadSpy).toHaveBeenCalledWith(routine.context, 'foo-bar', expect.anything());
       expect(runSpy).toHaveBeenCalledWith(
+        routine.context,
         expect.objectContaining({
           name: 'foo-bar',
         }),
-        routine.context,
+        expect.anything(),
       );
       expect(response).toBe(123);
     });
@@ -53,13 +55,13 @@ describe('ExecuteScriptRoutine', () => {
 
   describe('loadScript()', () => {
     it('loads the script using ModuleLoader', async () => {
-      await routine.loadScript('foo-bar');
+      await routine.loadScript(routine.context, 'foo-bar');
 
       expect(ModuleLoader).toHaveBeenCalledWith(routine.tool, 'script', Script);
     });
 
     it('sets values to context', async () => {
-      const script = await routine.loadScript('foo-bar');
+      const script = await routine.loadScript(routine.context, 'foo-bar');
 
       expect(script.name).toBe('foo-bar');
       expect(routine.context).toEqual(
@@ -73,7 +75,7 @@ describe('ExecuteScriptRoutine', () => {
     it('triggers `load-script` event', async () => {
       const spy = routine.tool.emit;
 
-      const script = await routine.loadScript('foo-bar');
+      const script = await routine.loadScript(routine.context, 'foo-bar');
 
       expect(spy).toHaveBeenCalledWith('load-script', [script]);
     });
@@ -88,15 +90,15 @@ describe('ExecuteScriptRoutine', () => {
         run: jest.fn(),
       };
 
-      routine.runScript(script);
+      routine.runScript(routine.context, script);
 
       expect(script.parse).toHaveBeenCalledWith();
       expect(script.run).toHaveBeenCalledWith(
-        {
+        expect.objectContaining({
           _: ['bar', 'baz'],
           a: true,
           foo: true,
-        },
+        }),
         routine.tool,
       );
     });
@@ -109,7 +111,7 @@ describe('ExecuteScriptRoutine', () => {
       const spy = routine.tool.emit;
       const script = new MockScript();
 
-      await routine.runScript(script);
+      await routine.runScript(routine.context, script);
 
       expect(spy).toHaveBeenCalledWith('before-execute', [
         script,
@@ -128,7 +130,7 @@ describe('ExecuteScriptRoutine', () => {
       const spy = routine.tool.emit;
       const script = new SuccessScript();
 
-      await routine.runScript(script);
+      await routine.runScript(routine.context, script);
 
       expect(spy).toHaveBeenCalledWith('after-execute', [script, 123]);
     });
@@ -144,7 +146,7 @@ describe('ExecuteScriptRoutine', () => {
       const script = new FailureScript();
 
       try {
-        await routine.runScript(script);
+        await routine.runScript(routine.context, script);
       } catch (error) {
         expect(spy).toHaveBeenCalledWith('failed-execute', [script, error]);
       }
