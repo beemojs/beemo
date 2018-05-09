@@ -13,6 +13,7 @@ describe('CleanupRoutine', () => {
     routine = new CleanupRoutine('cleanup', 'Cleaning up');
     routine.context = createDriverContext();
     routine.tool = setupMockTool(new Tool());
+    routine.debug = jest.fn();
   });
 
   describe('execute()', () => {
@@ -32,7 +33,7 @@ describe('CleanupRoutine', () => {
     });
 
     it('does nothing when no config paths', async () => {
-      await routine.deleteConfigFiles();
+      await routine.deleteConfigFiles(routine.context);
 
       expect(fs.remove).not.toHaveBeenCalled();
     });
@@ -40,7 +41,7 @@ describe('CleanupRoutine', () => {
     it('calls remove for each config path', async () => {
       routine.context.configPaths = ['./foo.json', './.barrc'];
 
-      const result = await routine.deleteConfigFiles();
+      const result = await routine.deleteConfigFiles(routine.context);
 
       expect(fs.remove).toHaveBeenCalledWith('./foo.json');
       expect(fs.remove).toHaveBeenCalledWith('./.barrc');
@@ -48,14 +49,12 @@ describe('CleanupRoutine', () => {
     });
 
     it('triggers `delete-config-file` event', async () => {
-      const spy = routine.tool.emit;
-
       routine.context.configPaths = ['./foo.json', './.barrc'];
 
-      await routine.deleteConfigFiles();
+      await routine.deleteConfigFiles(routine.context);
 
-      expect(spy).toHaveBeenCalledWith('delete-config-file', ['./foo.json']);
-      expect(spy).toHaveBeenCalledWith('delete-config-file', ['./.barrc']);
+      expect(routine.tool.emit).toHaveBeenCalledWith('delete-config-file', ['./foo.json']);
+      expect(routine.tool.emit).toHaveBeenCalledWith('delete-config-file', ['./.barrc']);
     });
   });
 });

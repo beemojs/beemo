@@ -56,9 +56,9 @@ describe('Beemo', () => {
   describe('createContext()', () => {
     it('returns a base context object', () => {
       expect(beemo.createContext()).toEqual({
-        args: {
+        args: expect.objectContaining({
           _: ['foo', 'bar'],
-        },
+        }),
         argv: ['foo', 'bar'],
         moduleRoot: process.cwd(),
         root: process.cwd(),
@@ -74,9 +74,9 @@ describe('Beemo', () => {
         }),
       ).toEqual({
         foo: 'bar',
-        args: {
+        args: expect.objectContaining({
           _: ['foo', 'bar'],
-        },
+        }),
         argv: ['foo', 'bar'],
         moduleRoot: process.cwd(),
         root: process.cwd(),
@@ -182,22 +182,24 @@ describe('Beemo', () => {
     });
 
     it('passes driver name and context to pipeline run', async () => {
+      const spy = jest.spyOn(beemo, 'startPipeline');
       const pipeline = await beemo.executeDriver('foo-bar');
 
-      expect(pipeline.run).toHaveBeenCalledWith(
-        'foo-bar',
+      expect(spy).toHaveBeenCalledWith(
         expect.objectContaining({
           argv: ['foo', 'bar'],
           driverName: 'foo-bar',
         }),
       );
+
+      expect(pipeline.run).toHaveBeenCalledWith('foo-bar');
     });
 
     it('sets primary driver with context', async () => {
+      const spy = jest.spyOn(beemo, 'startPipeline');
       const pipeline = await beemo.executeDriver('foo-bar');
 
-      expect(pipeline.run).toHaveBeenCalledWith(
-        'foo-bar',
+      expect(spy).toHaveBeenCalledWith(
         expect.objectContaining({
           argv: ['foo', 'bar'],
           primaryDriver: expect.objectContaining({
@@ -255,15 +257,17 @@ describe('Beemo', () => {
     });
 
     it('passes script name and context to pipeline run', async () => {
+      const spy = jest.spyOn(beemo, 'startPipeline');
       const pipeline = await beemo.executeScript('foo-bar');
 
-      expect(pipeline.run).toHaveBeenCalledWith(
-        'foo-bar',
+      expect(spy).toHaveBeenCalledWith(
         expect.objectContaining({
           argv: ['foo', 'bar'],
           scriptName: 'foo-bar',
         }),
       );
+
+      expect(pipeline.run).toHaveBeenCalledWith('foo-bar');
     });
   });
 
@@ -288,11 +292,11 @@ describe('Beemo', () => {
       ]);
     });
 
-    it('passes context to pipeline run', async () => {
+    it('passes context to pipeline', async () => {
+      const spy = jest.spyOn(beemo, 'startPipeline');
       const pipeline = await beemo.syncDotfiles();
 
-      expect(pipeline.run).toHaveBeenCalledWith(
-        null,
+      expect(spy).toHaveBeenCalledWith(
         expect.objectContaining({
           argv: ['foo', 'bar'],
         }),
@@ -304,7 +308,7 @@ describe('Beemo', () => {
 
       expect(pipeline.pipe).toHaveBeenCalledWith(
         expect.objectContaining({
-          config: { filter: 'foo' },
+          options: { filter: 'foo' },
         }),
       );
     });

@@ -17,28 +17,45 @@ describe('ConfigureRoutine', () => {
     routine.context = createDriverContext(createDriver('foo'), tool);
     routine.tool = tool;
     routine.tool.getPlugin.mockImplementation(name => plugins[name] || createDriver(name, tool));
+    routine.debug = jest.fn();
   });
 
-  describe('execute()', () => {
-    it('executes pipeline in order', async () => {
-      routine.parallelizeSubroutines = jest.fn();
-
+  describe('bootstrap()', () => {
+    it('bootstraps pipeline in order', async () => {
       const resSpy = jest.spyOn(routine, 'resolveDependencies');
-      const confSpy = jest.spyOn(routine, 'createConfigFiles');
+      const confSpy = jest.spyOn(routine, 'setupConfigFiles');
 
-      await routine.execute();
+      await routine.bootstrap();
 
-      expect(resSpy).toHaveBeenCalledWith(undefined, routine.context);
-      expect(confSpy).toHaveBeenCalledWith([routine.context.primaryDriver], routine.context);
+      expect(resSpy).toHaveBeenCalled();
+      expect(confSpy).toHaveBeenCalled();
     });
   });
 
-  describe('createConfigFiles()', () => {
+  describe('execute()', () => {
     beforeEach(() => {
       routine.serializeSubroutines = jest.fn();
       routine.parallelizeSubroutines = jest.fn();
     });
 
+    it('serializes if `parallel` config is false', async () => {
+      routine.tool.config.config.parallel = false;
+
+      await routine.execute();
+
+      expect(routine.serializeSubroutines).toHaveBeenCalled();
+      expect(routine.parallelizeSubroutines).not.toHaveBeenCalled();
+    });
+
+    it('parallelizes if `parallel` config is true', async () => {
+      await routine.execute();
+
+      expect(routine.serializeSubroutines).not.toHaveBeenCalled();
+      expect(routine.parallelizeSubroutines).toHaveBeenCalled();
+    });
+  });
+
+  describe('setupConfigFiles()', () => {
     it('pipes a routine for each driver', async () => {
       const foo = createDriver('foo');
       const bar = createDriver('bar');
@@ -46,51 +63,37 @@ describe('ConfigureRoutine', () => {
 
       expect(routine.subroutines).toHaveLength(0);
 
-      await routine.createConfigFiles([foo, bar, baz]);
+      routine.context.drivers = [foo, bar, baz];
+
+      await routine.setupConfigFiles();
 
       expect(routine.subroutines).toHaveLength(3);
 
       expect(routine.subroutines[0].key).toBe('foo');
-      expect(routine.subroutines[0].config.driver).toBe(foo);
+      expect(routine.subroutines[0].options.driver).toBe(foo);
       expect(routine.subroutines[1].key).toBe('bar');
-      expect(routine.subroutines[1].config.driver).toBe(bar);
+      expect(routine.subroutines[1].options.driver).toBe(bar);
       expect(routine.subroutines[2].key).toBe('baz');
-      expect(routine.subroutines[2].config.driver).toBe(baz);
-    });
-
-    it('serializes if `parallel` config is false', async () => {
-      routine.tool.config.config.parallel = false;
-
-      await routine.createConfigFiles([createDriver('foo')]);
-
-      expect(routine.serializeSubroutines).toHaveBeenCalled();
-      expect(routine.parallelizeSubroutines).not.toHaveBeenCalled();
-    });
-
-    it('parallelizes if `parallel` config is true', async () => {
-      await routine.createConfigFiles([createDriver('foo')]);
-
-      expect(routine.serializeSubroutines).not.toHaveBeenCalled();
-      expect(routine.parallelizeSubroutines).toHaveBeenCalled();
+      expect(routine.subroutines[2].options.driver).toBe(baz);
     });
   });
 
   describe('resolveDependencies()', () => {
     it('adds primary driver when no dependencies', async () => {
-      const drivers = await routine.resolveDependencies();
+      await routine.resolveDependencies();
 
-      expect(drivers).toEqual([routine.context.primaryDriver]);
-      expect(routine.context.drivers).toEqual(drivers);
+      expect(routine.context.drivers).toEqual([routine.context.primaryDriver]);
     });
 
     it('adds dependency to driver list', async () => {
       routine.context.primaryDriver.metadata.dependencies = ['bar'];
 
-      const drivers = await routine.resolveDependencies();
-      const bar = createDriver('bar', tool);
+      await routine.resolveDependencies();
 
-      expect(drivers).toEqual([bar, routine.context.primaryDriver]);
-      expect(routine.context.drivers).toEqual(drivers);
+      expect(routine.context.drivers).toEqual([
+        createDriver('bar', tool),
+        routine.context.primaryDriver,
+      ]);
     });
 
     it('handles sub-dependencies', async () => {
@@ -101,16 +104,15 @@ describe('ConfigureRoutine', () => {
 
       routine.context.primaryDriver.metadata.dependencies = ['bar'];
 
-      const drivers = await routine.resolveDependencies();
+      await routine.resolveDependencies();
 
-      expect(drivers).toEqual([
+      expect(routine.context.drivers).toEqual([
         plugins.oof,
         plugins.qux,
         plugins.baz,
         plugins.bar,
         routine.context.primaryDriver,
       ]);
-      expect(routine.context.drivers).toEqual(drivers);
     });
 
     it('triggers `resolve-dependencies` event', async () => {
@@ -118,9 +120,9 @@ describe('ConfigureRoutine', () => {
 
       routine.context.primaryDriver.metadata.dependencies = ['bar'];
 
-      const drivers = await routine.resolveDependencies();
+      await routine.resolveDependencies();
 
-      expect(spy).toHaveBeenCalledWith('resolve-dependencies', [drivers]);
+      expect(spy).toHaveBeenCalledWith('resolve-dependencies', [routine.context.drivers]);
     });
   });
 });

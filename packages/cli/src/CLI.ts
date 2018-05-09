@@ -114,4 +114,5 @@ app
   )
   .demandCommand(1, chalk.red('Please select a command!'))
   .showHelpOnFail(true)
-  .help().argv;
+  .help()
+  .parse();

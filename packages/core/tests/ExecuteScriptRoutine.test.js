@@ -86,13 +86,16 @@ describe('ExecuteScriptRoutine', () => {
       const script = {
         parse: jest.fn(() => ({
           boolean: ['foo'],
+          default: {
+            foo: false,
+          },
         })),
         run: jest.fn(),
       };
 
       routine.runScript(routine.context, script);
 
-      expect(script.parse).toHaveBeenCalledWith();
+      expect(script.parse).toHaveBeenCalledWith('sds');
       expect(script.run).toHaveBeenCalledWith(
         expect.objectContaining({
           _: ['bar', 'baz'],
