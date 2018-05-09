@@ -5,7 +5,7 @@
 
 import path from 'path';
 import rimraf from 'rimraf';
-import { Driver, DriverContext } from '@beemo/core';
+import { Argv, Driver, DriverContext } from '@beemo/core';
 
 // Success: Writes nothing to stdout or stderr
 // Failure: Writes to stdout on syntax and type error
@@ -35,7 +35,7 @@ export default class TypeScriptDriver extends Driver {
   /**
    * Automatically clean the target folder if `outDir` is used.
    */
-  handleCleanTarget = (driver: Driver, argv: string[], { args }: DriverContext) => {
+  handleCleanTarget = (driver: Driver, argv: Argv, { args }: DriverContext) => {
     const { outDir } = this.options;
 
     if (args.clean && outDir) {

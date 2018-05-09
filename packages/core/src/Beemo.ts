@@ -15,16 +15,16 @@ import ExecuteDriverRoutine from './ExecuteDriverRoutine';
 import ExecuteScriptRoutine from './ExecuteScriptRoutine';
 import SyncDotfilesRoutine from './SyncDotfilesRoutine';
 import Driver from './Driver';
-import { Context, DriverContext, ScriptContext, Execution } from './types';
+import { Argv, Context, DriverContext, ScriptContext, Execution } from './types';
 
 export default class Beemo {
-  argv: string[];
+  argv: Argv;
 
   moduleRoot: string = '';
 
   tool: ToolInterface;
 
-  constructor(argv: string[]) {
+  constructor(argv: Argv) {
     this.argv = argv;
 
     // eslint-disable-next-line global-require

@@ -7,6 +7,7 @@ import { Plugin, EventListener } from 'boost';
 import merge from 'lodash/merge';
 import optimal, { array, bool, number, object, shape, string, union, Blueprint } from 'optimal';
 import {
+  Argv,
   BeemoConfig,
   DriverCommandOptions,
   DriverContext,
@@ -59,7 +60,7 @@ export default class Driver extends Plugin<DriverOptions> {
   /**
    * Return a list of user defined arguments.
    */
-  getArgs(): string[] {
+  getArgs(): Argv {
     return [...this.options.args];
   }
 

@@ -1843,9 +1843,9 @@ boom@5.x.x:
   dependencies:
     hoek "4.x.x"
 
-boost@^0.54.0:
-  version "0.54.0"
-  resolved "https://registry.npmjs.org/boost/-/boost-0.54.0.tgz#385105ad75fe6ed3203ab01bc30057d402325e01"
+boost@^0.54.1:
+  version "0.54.1"
+  resolved "https://registry.npmjs.org/boost/-/boost-0.54.1.tgz#c1cfce578266eda24d66b201e6682b93ba80a9c5"
   dependencies:
     "@types/chalk" "^2.2.0"
     "@types/debug" "^0.0.30"

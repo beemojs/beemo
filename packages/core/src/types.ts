@@ -10,6 +10,10 @@ import { Arguments, Options } from 'yargs';
 import Driver from './Driver';
 import Script from './Script';
 
+export { Arguments };
+
+export type Argv = string[];
+
 export interface BeemoConfig extends ToolConfig {
   config: {
     cleanup: boolean;
@@ -43,7 +47,7 @@ export type Execution = ExecaReturns;
 
 export interface Context extends Struct {
   args: Arguments;
-  argv: string[];
+  argv: Argv;
   moduleRoot: string;
   root: string;
 }
