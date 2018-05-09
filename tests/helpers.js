@@ -1,5 +1,5 @@
 import path from 'path';
-import { parse as parseArgs } from 'yargs';
+import parseArgs from 'yargs-parser';
 import Driver from '../packages/core/src/Driver';
 
 export function setupMockTool(tool) {

@@ -5,7 +5,7 @@
 
 import path from 'path';
 import { ModuleLoader, Routine } from 'boost';
-import { parse as parseArgs } from 'yargs';
+import parseArgs from 'yargs-parser';
 import Script from './Script';
 import { BeemoConfig, Execution, ScriptContext } from './types';
 

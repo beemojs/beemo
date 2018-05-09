@@ -10,7 +10,7 @@ import path from 'path';
 import fs from 'fs-extra';
 import isGlob from 'is-glob';
 import optimal, { bool, string, Struct } from 'optimal';
-import { parse as parseArgs } from 'yargs';
+import parseArgs from 'yargs-parser';
 import { DriverContext, Execution } from '../types';
 import { TaskInterface } from 'boost/lib/Task';
 

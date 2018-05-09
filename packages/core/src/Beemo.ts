@@ -8,7 +8,7 @@ import fs from 'fs-extra';
 import path from 'path';
 import { Pipeline, Tool, ToolInterface } from 'boost';
 import { bool, shape, Blueprint, Struct } from 'optimal';
-import { parse as parseArgs } from 'yargs';
+import parseArgs from 'yargs-parser';
 import CleanupRoutine from './CleanupRoutine';
 import ConfigureRoutine from './ConfigureRoutine';
 import ExecuteDriverRoutine from './ExecuteDriverRoutine';

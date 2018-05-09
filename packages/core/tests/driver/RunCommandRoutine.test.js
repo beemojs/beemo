@@ -85,7 +85,7 @@ describe('RunCommandRoutine', () => {
 
       const response = await routine.execute(routine.context);
 
-      expect(argSpy).toHaveBeenCalledWith(routine.context, null, expect.anything());
+      expect(argSpy).toHaveBeenCalledWith(routine.context, undefined, expect.anything());
       expect(globSpy).toHaveBeenCalledWith(
         routine.context,
         ['--qux', '-a', '--foo', 'bar', 'baz', '--out-dir', './lib'],

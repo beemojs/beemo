@@ -95,7 +95,7 @@ describe('ExecuteScriptRoutine', () => {
 
       routine.runScript(routine.context, script);
 
-      expect(script.parse).toHaveBeenCalledWith('sds');
+      expect(script.parse).toHaveBeenCalled();
       expect(script.run).toHaveBeenCalledWith(
         expect.objectContaining({
           _: ['bar', 'baz'],

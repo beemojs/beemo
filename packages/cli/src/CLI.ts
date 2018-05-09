@@ -101,7 +101,6 @@ app
   });
 
 // Run application
-// eslint-disable-next-line
 app
   .usage(`${binName} <command> [args..]`)
   .epilogue(
