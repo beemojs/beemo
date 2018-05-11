@@ -46,9 +46,14 @@ beemo.tool.plugins.forEach(driver => {
     metadata.description || `Run ${metadata.title}`,
     {
       ...command,
+      priority: {
+        default: '',
+        description: 'Workspaces with high priority to run first',
+        string: true,
+      },
       workspaces: {
         default: '',
-        description: 'Run command in all workspaces using a regex pattern',
+        description: 'Run command in workspaces using a regex pattern',
         string: true,
       },
     },

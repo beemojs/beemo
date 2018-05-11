@@ -5,7 +5,7 @@
 
 import path from 'path';
 import glob from 'glob';
-import { Routine, SynchronizedResponse } from 'boost';
+import { Routine, RoutineInterface, SynchronizedResponse } from 'boost';
 import RunCommandRoutine from './driver/RunCommandRoutine';
 import isPatternMatch from './utils/isPatternMatch';
 import { BeemoConfig, DriverContext } from './types';
@@ -35,13 +35,17 @@ export default class ExecuteDriverRoutine extends Routine<BeemoConfig, DriverCon
   }
 
   execute(context: DriverContext): Promise<string[]> {
-    return this.synchronizeRoutines().then(response => {
-      if (response.errors.length > 0) {
-        throw new Error('Execution failure.');
-      }
+    const { other, priority } = this.groupRoutinesByPriority();
 
-      return response.results;
-    });
+    return this.serializeRoutines(null, priority).then(() =>
+      this.synchronizeRoutines(null, other).then(response => {
+        if (response.errors.length > 0) {
+          throw new Error('Execution failure.');
+        }
+
+        return response.results;
+      }),
+    );
   }
 
   getWorkspaceFilteredPaths(): string[] {
@@ -55,5 +59,28 @@ export default class ExecuteDriverRoutine extends Routine<BeemoConfig, DriverCon
         strict: true,
       })
       .filter(filePath => isPatternMatch(path.basename(filePath), args.workspaces));
+  }
+
+  groupRoutinesByPriority(): { priority: RoutineInterface[]; other: RoutineInterface[] } {
+    const priorityNames: string[] = this.context.args.priority.split(',');
+
+    // Extract high priority in order provided
+    const priority: RoutineInterface[] = [];
+
+    priorityNames.forEach(name => {
+      this.routines.forEach(routine => {
+        if (isPatternMatch(routine.key, name)) {
+          priority.push(routine);
+        }
+      });
+    });
+
+    // Extract all others
+    const other = this.routines.filter(routine => !priorityNames.includes(routine.key));
+
+    return {
+      other,
+      priority,
+    };
   }
 }

@@ -3,7 +3,7 @@
   "name": "beemo-root",
   "scripts": {
     "setup": "bash ./scripts/build-packages.sh",
-    "build": "beemo typescript --workspaces=*",
+    "build": "beemo typescript --workspaces=* --priority=core",
     "clean": "rimraf ./packages/*/{lib,esm}/ && lerna clean --yes",
     "clean:cache": "rimraf ./cache",
     "coverage": "yarn run jest --coverage",
