@@ -84,19 +84,28 @@ export default class RunCommandRoutine extends Routine<RunCommandOptions, Driver
     this.debug('Expanding glob patterns');
 
     argv.forEach(arg => {
-      if (isGlob(arg)) {
+      if (arg.charAt(0) !== '-' && isGlob(arg)) {
         const paths = glob.sync(arg, {
           cwd: context.root,
           debug: this.tool.config.debug,
           strict: true,
         });
 
-        this.debug('  %s %s %s', arg, chalk.gray('->'), paths.join(', '));
+        this.debug(
+          '  %s %s %s',
+          arg,
+          chalk.gray('->'),
+          paths.length > 0 ? paths.join(', ') : chalk.gray('(no match)'),
+        );
 
-        nextArgv.push(...paths);
-      } else {
-        nextArgv.push(arg);
+        if (paths.length > 0) {
+          nextArgv.push(...paths);
+
+          return;
+        }
       }
+
+      nextArgv.push(arg);
     });
 
     return Promise.resolve(nextArgv);
@@ -213,14 +222,14 @@ export default class RunCommandRoutine extends Routine<RunCommandOptions, Driver
 
     this.debug.invariant(
       driverArgs.length > 0,
-      '  From driver "args" option',
+      'From driver "args" option',
       driverArgs.join(' '),
       'No arguments',
     );
 
     this.debug.invariant(
       commandArgs.length > 0,
-      '  From the command line',
+      'From the command line',
       commandArgs.join(' '),
       'No arguments',
     );
