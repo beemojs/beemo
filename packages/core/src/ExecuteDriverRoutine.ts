@@ -7,6 +7,7 @@ import path from 'path';
 import glob from 'glob';
 import { Routine, SynchronizedResponse } from 'boost';
 import RunCommandRoutine from './driver/RunCommandRoutine';
+import isPatternMatch from './utils/isPatternMatch';
 import { BeemoConfig, DriverContext } from './types';
 
 export default class ExecuteDriverRoutine extends Routine<BeemoConfig, DriverContext> {
@@ -53,10 +54,6 @@ export default class ExecuteDriverRoutine extends Routine<BeemoConfig, DriverCon
         debug: this.tool.config.debug,
         strict: true,
       })
-      .filter(
-        filePath =>
-          args.workspaces === '*' ||
-          path.basename(filePath).match(new RegExp(args.workspaces.replace(/,/g, '|'))),
-      );
+      .filter(filePath => isPatternMatch(path.basename(filePath), args.workspaces));
   }
 }

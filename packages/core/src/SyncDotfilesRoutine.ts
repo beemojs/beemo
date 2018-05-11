@@ -9,6 +9,7 @@ import fs from 'fs-extra';
 import path from 'path';
 import { Routine } from 'boost';
 import optimal, { string, Struct } from 'optimal';
+import isPatternMatch from './utils/isPatternMatch';
 import { Context } from './types';
 
 export interface SyncDotfilesOptions extends Struct {
@@ -52,11 +53,9 @@ export default class SyncDotfilesRoutine extends Routine<SyncDotfilesOptions, Co
         );
 
         if (filter) {
-          const pattern = new RegExp(filter);
-
           this.debug('Filtering dotfiles with "%s"', filter);
 
-          files = files.filter(file => file.path.match(pattern));
+          files = files.filter(file => isPatternMatch(file.path, filter));
         }
 
         if (error) {
