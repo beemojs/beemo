@@ -3,7 +3,7 @@
   "name": "beemo-root",
   "scripts": {
     "setup": "bash ./scripts/build-packages.sh",
-    "build": "beemo typescript --workspaces",
+    "build": "beemo typescript --workspaces=*",
     "clean": "rimraf ./packages/*/{lib,esm}/ && lerna clean --yes",
     "clean:cache": "rimraf ./cache",
     "coverage": "yarn run jest --coverage",
@@ -20,7 +20,7 @@
     "prerelease": "yarn run package",
     "release": "lerna publish",
     "release:force": "yarn run release --force-publish=*",
-    "type": "beemo typescript --workspaces --noEmit"
+    "type": "beemo typescript --workspaces=* --noEmit"
   },
   "devDependencies": {
     "@milesj/build-tool-config": "0.91.0",

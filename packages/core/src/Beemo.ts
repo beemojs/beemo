@@ -15,7 +15,7 @@ import ExecuteDriverRoutine from './ExecuteDriverRoutine';
 import ExecuteScriptRoutine from './ExecuteScriptRoutine';
 import SyncDotfilesRoutine from './SyncDotfilesRoutine';
 import Driver from './Driver';
-import { Argv, Context, DriverContext, ScriptContext, Execution } from './types';
+import { Argv, Arguments, Context, DriverContext, ScriptContext, Execution } from './types';
 
 export default class Beemo {
   argv: Argv;
@@ -82,10 +82,10 @@ export default class Beemo {
   /**
    * Create a re-usable context for each pipeline.
    */
-  createContext(context: Struct = {}): any {
+  createContext(args: Arguments, context: Struct = {}): any {
     return {
       ...context,
-      args: parseArgs(this.argv),
+      args,
       argv: this.argv,
       moduleRoot: this.getConfigModuleRoot(),
       root: this.tool.options.root,
@@ -193,10 +193,10 @@ export default class Beemo {
   /**
    * Execute all routines for the chosen driver.
    */
-  executeDriver(driverName: string): Promise<Execution[]> {
+  executeDriver(driverName: string, args: Arguments): Promise<Execution[]> {
     const { tool } = this;
     const primaryDriver = tool.getPlugin(driverName) as Driver;
-    const context: DriverContext = this.createContext({
+    const context: DriverContext = this.createContext(args, {
       configPaths: [],
       driverName,
       drivers: [],
@@ -230,8 +230,8 @@ export default class Beemo {
   /**
    * Run a script found within the configuration module.
    */
-  executeScript(scriptName: string): Promise<Execution> {
-    const context: ScriptContext = this.createContext({
+  executeScript(scriptName: string, args: Arguments): Promise<Execution> {
+    const context: ScriptContext = this.createContext(args, {
       script: null,
       scriptName,
       scriptPath: '',
@@ -258,15 +258,15 @@ export default class Beemo {
   /**
    * Sync dotfiles from the configuration module.
    */
-  syncDotfiles(filter: string = ''): Promise<string[]> {
-    const context: Context = this.createContext();
+  syncDotfiles(args: Arguments): Promise<string[]> {
+    const context: Context = this.createContext(args);
 
     this.tool.setEventNamespace('beemo').emit('sync-dotfiles', [context]);
 
     this.tool.debug('Running dotfiles command');
 
     return this.startPipeline(context)
-      .pipe(new SyncDotfilesRoutine('dotfiles', 'Syncing dotfiles', { filter }))
+      .pipe(new SyncDotfilesRoutine('dotfiles', 'Syncing dotfiles', { filter: args.filter }))
       .run();
   }
 }

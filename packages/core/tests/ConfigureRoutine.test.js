@@ -34,8 +34,8 @@ describe('ConfigureRoutine', () => {
 
   describe('execute()', () => {
     beforeEach(() => {
-      routine.serializeSubroutines = jest.fn();
-      routine.parallelizeSubroutines = jest.fn();
+      routine.serializeRoutines = jest.fn();
+      routine.parallelizeRoutines = jest.fn();
     });
 
     it('serializes if `parallel` config is false', async () => {
@@ -43,15 +43,15 @@ describe('ConfigureRoutine', () => {
 
       await routine.execute();
 
-      expect(routine.serializeSubroutines).toHaveBeenCalled();
-      expect(routine.parallelizeSubroutines).not.toHaveBeenCalled();
+      expect(routine.serializeRoutines).toHaveBeenCalled();
+      expect(routine.parallelizeRoutines).not.toHaveBeenCalled();
     });
 
     it('parallelizes if `parallel` config is true', async () => {
       await routine.execute();
 
-      expect(routine.serializeSubroutines).not.toHaveBeenCalled();
-      expect(routine.parallelizeSubroutines).toHaveBeenCalled();
+      expect(routine.serializeRoutines).not.toHaveBeenCalled();
+      expect(routine.parallelizeRoutines).toHaveBeenCalled();
     });
   });
 
@@ -61,20 +61,20 @@ describe('ConfigureRoutine', () => {
       const bar = createDriver('bar');
       const baz = createDriver('baz');
 
-      expect(routine.subroutines).toHaveLength(0);
+      expect(routine.routines).toHaveLength(0);
 
       routine.context.drivers = [foo, bar, baz];
 
       await routine.setupConfigFiles();
 
-      expect(routine.subroutines).toHaveLength(3);
+      expect(routine.routines).toHaveLength(3);
 
-      expect(routine.subroutines[0].key).toBe('foo');
-      expect(routine.subroutines[0].options.driver).toBe(foo);
-      expect(routine.subroutines[1].key).toBe('bar');
-      expect(routine.subroutines[1].options.driver).toBe(bar);
-      expect(routine.subroutines[2].key).toBe('baz');
-      expect(routine.subroutines[2].options.driver).toBe(baz);
+      expect(routine.routines[0].key).toBe('foo');
+      expect(routine.routines[0].options.driver).toBe(foo);
+      expect(routine.routines[1].key).toBe('bar');
+      expect(routine.routines[1].options.driver).toBe(bar);
+      expect(routine.routines[2].key).toBe('baz');
+      expect(routine.routines[2].options.driver).toBe(baz);
     });
   });
 

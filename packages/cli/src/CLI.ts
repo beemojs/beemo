@@ -47,12 +47,12 @@ beemo.tool.plugins.forEach(driver => {
     {
       ...command,
       workspaces: {
-        boolean: true,
-        default: false,
-        description: 'Run command in all workspaces',
+        default: '',
+        description: 'Run command in all workspaces using a regex pattern',
+        string: true,
       },
     },
-    () => beemo.executeDriver(driver.name),
+    args => beemo.executeDriver(driver.name, args),
   );
 });
 
@@ -61,7 +61,7 @@ app.command(
   ['run-script <name>', 'run <name>'],
   'Run custom script from configuration module',
   {},
-  args => beemo.executeScript(args.name),
+  args => beemo.executeScript(args.name, args),
 );
 
 app.command(
@@ -75,7 +75,7 @@ app.command(
       string: true,
     },
   },
-  args => beemo.syncDotfiles(args.filter),
+  args => beemo.syncDotfiles(args),
 );
 
 app.command('*', false, {}, () => {

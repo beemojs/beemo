@@ -11,7 +11,7 @@ import { BeemoConfig, DriverContext } from './types';
 
 export default class ExecuteDriverRoutine extends Routine<BeemoConfig, DriverContext> {
   bootstrap() {
-    const { args, argv, primaryDriver, root, workspaces } = this.context;
+    const { args, argv, primaryDriver, workspaces } = this.context;
     const driverName = primaryDriver.name;
     const command = `${primaryDriver.metadata.bin} ${argv.join(' ')}`;
 
@@ -20,33 +20,43 @@ export default class ExecuteDriverRoutine extends Routine<BeemoConfig, DriverCon
         throw new Error('Option --workspaces provided but project is not workspaces enabled.');
       }
 
-      glob
-        .sync(`${workspaces}/`, {
-          absolute: true,
-          cwd: root,
-          debug: this.tool.config.debug,
-          strict: true,
-        })
-        .forEach(dir => {
-          this.pipe(
-            new RunCommandRoutine(path.basename(dir), command, {
-              forceConfigOption: true,
-              workspaceRoot: dir,
-            }),
-          );
-        });
+      this.getWorkspaceFilteredPaths().forEach(filePath => {
+        this.pipe(
+          new RunCommandRoutine(path.basename(filePath), command, {
+            forceConfigOption: true,
+            workspaceRoot: filePath,
+          }),
+        );
+      });
     } else {
       this.pipe(new RunCommandRoutine(driverName, command));
     }
   }
 
   execute(context: DriverContext): Promise<string[]> {
-    return this.synchronizeSubroutines().then(response => {
+    return this.synchronizeRoutines().then(response => {
       if (response.errors.length > 0) {
         throw new Error('Execution failure.');
       }
 
       return response.results;
     });
+  }
+
+  getWorkspaceFilteredPaths(): string[] {
+    const { args, root, workspaces } = this.context;
+
+    return glob
+      .sync(`${workspaces}/`, {
+        absolute: true,
+        cwd: root,
+        debug: this.tool.config.debug,
+        strict: true,
+      })
+      .filter(
+        filePath =>
+          args.workspaces === '*' ||
+          path.basename(filePath).match(new RegExp(args.workspaces.replace(/,/g, '|'))),
+      );
   }
 }
