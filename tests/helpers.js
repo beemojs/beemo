@@ -6,7 +6,7 @@ export function setupMockTool(tool) {
   tool.options = {
     appName: 'Beemo',
     pluginAlias: 'driver',
-    root: process.cwd(),
+    root: __dirname,
     scoped: true,
   };
 
@@ -54,8 +54,8 @@ export function createContext(context = {}) {
   return {
     args: parseArgs(['-a', '--foo', 'bar', 'baz']),
     argv: ['-a', '--foo', 'bar', 'baz'],
-    moduleRoot: process.cwd(),
-    root: process.cwd(),
+    moduleRoot: __dirname,
+    root: __dirname,
     ...context,
   };
 }
@@ -80,5 +80,9 @@ export function createScriptContext(script = null) {
 }
 
 export function prependRoot(part) {
-  return path.join(process.cwd(), part);
+  return path.join(__dirname, part);
+}
+
+export function getFixturePath(part) {
+  return path.join(__dirname, 'fixtures', part);
 }

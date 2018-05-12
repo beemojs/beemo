@@ -2,6 +2,7 @@ import path from 'path';
 import fs from 'fs-extra';
 import Beemo from '../src/Beemo';
 import bootstrapIndex from '../../..';
+import { getFixturePath } from '../../../tests/helpers';
 
 jest.mock('fs-extra');
 
@@ -18,11 +19,16 @@ jest.mock(
 
 jest.mock('../../../index', () => jest.fn());
 
+const root = path.join(__dirname, '../../tests');
+
 describe('Beemo', () => {
   let beemo;
 
   beforeEach(() => {
     beemo = new Beemo(['foo', 'bar']);
+    beemo.tool.options.moduleRoot = root;
+    beemo.tool.options.root = root;
+
     fs.existsSync.mockReset();
   });
 
@@ -59,7 +65,7 @@ describe('Beemo', () => {
         args: {},
         argv: ['foo', 'bar'],
         moduleRoot: process.cwd(),
-        root: process.cwd(),
+        root,
       });
     });
 
@@ -68,7 +74,7 @@ describe('Beemo', () => {
         args: { _: ['wtf'] },
         argv: ['foo', 'bar'],
         moduleRoot: process.cwd(),
-        root: process.cwd(),
+        root,
       });
     });
 
@@ -87,7 +93,7 @@ describe('Beemo', () => {
         args: {},
         argv: ['foo', 'bar'],
         moduleRoot: process.cwd(),
-        root: process.cwd(),
+        root,
       });
     });
   });
@@ -131,6 +137,65 @@ describe('Beemo', () => {
       expect(beemo.getConfigModuleRoot()).toBe(rootPath);
       expect(beemo.moduleRoot).toBe(rootPath);
       expect(beemo.getConfigModuleRoot()).toBe(beemo.moduleRoot);
+    });
+  });
+
+  describe('getWorkspacePaths()', () => {
+    it('returns empty array for no workspaces', () => {
+      beemo.tool.package = {};
+
+      expect(beemo.getWorkspacePaths()).toEqual([]);
+    });
+
+    it('returns empty array for non-array workspaces', () => {
+      beemo.tool.package = { workspaces: true };
+
+      expect(beemo.getWorkspacePaths()).toEqual([]);
+    });
+
+    it('returns workspaces from package.json', () => {
+      beemo.tool.package = { workspaces: ['packages/*'] };
+
+      expect(beemo.getWorkspacePaths()).toEqual([path.join(root, 'packages/*')]);
+    });
+
+    it('returns nohoist workspaces from package.json', () => {
+      beemo.tool.package = {
+        workspaces: {
+          nohoist: [],
+          packages: ['packages/*'],
+        },
+      };
+
+      expect(beemo.getWorkspacePaths()).toEqual([path.join(root, 'packages/*')]);
+    });
+
+    it('returns workspaces from lerna.json', () => {
+      fs.existsSync.mockImplementation(() => true);
+      fs.readJsonSync.mockImplementation(() => ({
+        packages: ['packages/*'],
+      }));
+
+      beemo.tool.package = {};
+      beemo.tool.options.workspaceRoot = getFixturePath('workspaces-lerna');
+
+      expect(beemo.getWorkspacePaths()).toEqual([
+        path.join(beemo.tool.options.workspaceRoot, 'packages/*'),
+      ]);
+    });
+
+    it('doesnt load lerna.json if workspaces are defined in package.json', () => {
+      fs.readJsonSync.mockImplementation(() => ({
+        packages: ['packages2/*'],
+      }));
+
+      beemo.tool.package = { workspaces: ['packages1/*'] };
+      beemo.tool.options.workspaceRoot = getFixturePath('workspaces-lerna');
+
+      expect(fs.existsSync).not.toHaveBeenCalled();
+      expect(beemo.getWorkspacePaths()).toEqual([
+        path.join(beemo.tool.options.workspaceRoot, 'packages1/*'),
+      ]);
     });
   });
 

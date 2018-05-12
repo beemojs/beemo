@@ -105,35 +105,6 @@ export default class Beemo {
   }
 
   /**
-   * Return a list of absolute paths for Yarn or Lerna workspaces.
-   */
-  getWorkspacePaths(): string[] {
-    const { workspaces } = this.tool.package;
-    const root = this.tool.options.workspaceRoot || this.tool.options.root;
-    const paths = [];
-
-    if (workspaces) {
-      if (Array.isArray(workspaces)) {
-        paths.push(...workspaces);
-      } else if (Array.isArray(workspaces.packages)) {
-        paths.push(...workspaces.packages);
-      }
-    }
-
-    const lernaPath = path.join(root, 'lerna.json');
-
-    if (paths.length === 0 && fs.existsSync(lernaPath)) {
-      const lerna = fs.readJsonSync(lernaPath);
-
-      if (Array.isArray(lerna.packages)) {
-        paths.push(...lerna.packages);
-      }
-    }
-
-    return paths.map(workspace => path.join(root, workspace));
-  }
-
-  /**
    * Validate the configuration module and return its absolute path.
    */
   getConfigModuleRoot(): string {
@@ -172,6 +143,35 @@ export default class Beemo {
     this.moduleRoot = rootPath;
 
     return rootPath;
+  }
+
+  /**
+   * Return a list of absolute paths for Yarn or Lerna workspaces.
+   */
+  getWorkspacePaths(): string[] {
+    const { workspaces } = this.tool.package;
+    const root = this.tool.options.workspaceRoot || this.tool.options.root;
+    const paths = [];
+
+    if (workspaces) {
+      if (Array.isArray(workspaces)) {
+        paths.push(...workspaces);
+      } else if (Array.isArray(workspaces.packages)) {
+        paths.push(...workspaces.packages);
+      }
+    }
+
+    const lernaPath = path.join(root, 'lerna.json');
+
+    if (paths.length === 0 && fs.existsSync(lernaPath)) {
+      const lerna = fs.readJsonSync(lernaPath);
+
+      if (Array.isArray(lerna.packages)) {
+        paths.push(...lerna.packages);
+      }
+    }
+
+    return paths.map(workspace => path.join(root, workspace));
   }
 
   /**
