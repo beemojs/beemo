@@ -11,6 +11,7 @@ import fs from 'fs-extra';
 import isGlob from 'is-glob';
 import optimal, { bool, string, Struct } from 'optimal';
 import parseArgs from 'yargs-parser';
+import { STRATEGY_COPY } from '../Driver';
 import { Argv, DriverContext, Execution } from '../types';
 
 const OPTION_PATTERN: RegExp = /-?-[-a-z0-9]+(,|\s)/gi;
@@ -46,7 +47,7 @@ export default class RunCommandRoutine extends Routine<RunCommandOptions, Driver
 
     this.task('Filtering options', this.filterUnknownOptions).skip(!metadata.filterOptions);
 
-    if (workspaceRoot && metadata.workspaceStrategy === 'copy') {
+    if (workspaceRoot && metadata.workspaceStrategy === STRATEGY_COPY) {
       this.task('Copying config into workspace', this.copyConfigToWorkspace);
     } else {
       this.task('Including reference config option', this.includeConfigOption).skip(

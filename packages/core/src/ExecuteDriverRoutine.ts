@@ -17,8 +17,10 @@ export default class ExecuteDriverRoutine extends Routine<BeemoConfig, DriverCon
     const command = `${primaryDriver.metadata.bin} ${argv.join(' ')}`;
 
     if (args.workspaces) {
-      if (workspaces.length === 0) {
-        throw new Error('Option --workspaces provided but project is not workspaces enabled.');
+      if (!workspaces || workspaces.length === 0) {
+        throw new Error(
+          `Option --workspaces=${args.workspaces} provided but project is not workspaces enabled.`,
+        );
       }
 
       this.getWorkspaceFilteredPaths().forEach(filePath => {
@@ -48,6 +50,9 @@ export default class ExecuteDriverRoutine extends Routine<BeemoConfig, DriverCon
     );
   }
 
+  /**
+   * Return a list of workspace paths optionally filtered.
+   */
   getWorkspaceFilteredPaths(): string[] {
     const { args, root, workspaces } = this.context;
 
@@ -61,15 +66,21 @@ export default class ExecuteDriverRoutine extends Routine<BeemoConfig, DriverCon
       .filter(filePath => isPatternMatch(path.basename(filePath), args.workspaces));
   }
 
-  groupRoutinesByPriority(): { priority: RoutineInterface[]; other: RoutineInterface[] } {
-    const priorityNames: string[] = this.context.args.priority.split(',');
+  /**
+   * Group routines in order of defined priority.
+   */
+  groupRoutinesByPriority(): {
+    priority: RoutineInterface[];
+    other: RoutineInterface[];
+  } {
+    const priorityNames: string[] = (this.context.args.priority || '').split(',');
 
     // Extract high priority in order provided
     const priority: RoutineInterface[] = [];
 
     priorityNames.forEach(name => {
       this.routines.forEach(routine => {
-        if (isPatternMatch(routine.key, name)) {
+        if (routine.key === name) {
           priority.push(routine);
         }
       });

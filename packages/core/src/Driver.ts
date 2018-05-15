@@ -16,6 +16,9 @@ import {
   Execution,
 } from './types';
 
+export const STRATEGY_REFERENCE = 'reference';
+export const STRATEGY_COPY = 'copy';
+
 export default class Driver extends Plugin<DriverOptions> {
   command: DriverCommandOptions = {};
 
@@ -166,7 +169,7 @@ export default class Driver extends Plugin<DriverOptions> {
         helpOption: string('--help'),
         title: string().required(),
         useConfigOption: bool(),
-        workspaceStrategy: string('reference').oneOf(['reference', 'copy']),
+        workspaceStrategy: string(STRATEGY_REFERENCE).oneOf([STRATEGY_REFERENCE, STRATEGY_COPY]),
       },
       {
         name: this.constructor.name,

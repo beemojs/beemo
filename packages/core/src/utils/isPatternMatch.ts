@@ -11,10 +11,10 @@ export default function isPatternMatch(string: string, pattern: string): boolean
   }
 
   // Whitelist (foo,bar)
-  // if (pattern.includes(',')) {
-  return !!string.match(new RegExp(pattern.replace(/,/g, '|')));
-  // }
+  if (pattern.includes(',') && !pattern.includes('{')) {
+    return pattern.split(',').some(part => string === part);
+  }
 
   // Patterns ([a-z], foo|bar, etc)
-  // return micromatch.isMatch(string, pattern);
+  return micromatch.isMatch(string, pattern);
 }

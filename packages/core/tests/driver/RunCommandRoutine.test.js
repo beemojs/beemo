@@ -1,4 +1,5 @@
 import { Tool } from 'boost';
+import fs from 'fs-extra';
 import RunCommandRoutine from '../../src/driver/RunCommandRoutine';
 import BabelDriver from '../../../driver-babel/src/BabelDriver';
 import JestDriver from '../../../driver-jest/src/JestDriver';
@@ -8,6 +9,8 @@ import {
   prependRoot,
   getRoot,
 } from '../../../../tests/helpers';
+
+jest.mock('fs-extra');
 
 jest.mock('boost/lib/Tool');
 
@@ -73,6 +76,24 @@ describe('RunCommandRoutine', () => {
     routine.debug.invariant = jest.fn();
   });
 
+  describe('bootstrap()', () => {
+    it('errors if `forceConfigOption` is not a boolean', () => {
+      routine.options.forceConfigOption = 'foo';
+
+      expect(() => {
+        routine.bootstrap();
+      }).toThrowError('Invalid RunCommandRoutine field "forceConfigOption". Must be a boolean.');
+    });
+
+    it('errors if `workspaceRoot` is not a string', () => {
+      routine.options.workspaceRoot = 123;
+
+      expect(() => {
+        routine.bootstrap();
+      }).toThrowError('Invalid RunCommandRoutine field "workspaceRoot". Must be a string.');
+    });
+  });
+
   describe('execute()', () => {
     beforeEach(() => {
       routine.executeCommand = jest.fn(() => Promise.resolve({ stdout: BABEL_HELP }));
@@ -135,6 +156,50 @@ describe('RunCommandRoutine', () => {
       await routine.execute(routine.context);
 
       expect(filterSpy).not.toHaveBeenCalled();
+    });
+
+    it('calls `copyConfigToWorkspace` when driver is workspaces enabled', async () => {
+      driver.metadata.workspaceStrategy = 'copy';
+      routine.options.workspaceRoot = '/some/root';
+
+      const copySpy = jest.spyOn(routine, 'copyConfigToWorkspace');
+
+      await routine.execute(routine.context);
+
+      expect(copySpy).toHaveBeenCalledWith(routine.context, ['baz'], expect.anything());
+    });
+
+    it('doesnt call `copyConfigToWorkspace` when driver is not workspaces enabled', async () => {
+      routine.options.workspaceRoot = '/some/root';
+
+      const copySpy = jest.spyOn(routine, 'copyConfigToWorkspace');
+
+      await routine.execute(routine.context);
+
+      expect(copySpy).not.toHaveBeenCalled();
+    });
+
+    it('doesnt call `copyConfigToWorkspace` when no workspace root', async () => {
+      driver.metadata.workspaceStrategy = 'copy';
+
+      const copySpy = jest.spyOn(routine, 'copyConfigToWorkspace');
+
+      await routine.execute(routine.context);
+
+      expect(copySpy).not.toHaveBeenCalled();
+    });
+  });
+
+  describe('copyConfigToWorkspace()', () => {
+    it('copies each config into workspace root', async () => {
+      routine.options.workspaceRoot = '/some/root';
+      routine.context.configPaths = ['.babelrc', 'jest.json'];
+
+      const args = await routine.copyConfigToWorkspace(routine.context, ['foo', '--bar']);
+
+      expect(args).toEqual(['foo', '--bar']);
+      expect(fs.copyFileSync).toHaveBeenCalledWith('.babelrc', '/some/root/.babelrc');
+      expect(fs.copyFileSync).toHaveBeenCalledWith('jest.json', '/some/root/jest.json');
     });
   });
 
