@@ -8,7 +8,7 @@ import { MochaConfig, ReporterOptions } from './types';
 
 // Success: Writes passed tests to stdout
 // Failure: Writes failed tests to stdout
-export default class MochaDriver extends Driver {
+export default class MochaDriver extends Driver<MochaConfig> {
   bootstrap() {
     this.setMetadata({
       bin: 'mocha',

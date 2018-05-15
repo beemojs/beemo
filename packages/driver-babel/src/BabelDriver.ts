@@ -6,10 +6,11 @@
 import path from 'path';
 import rimraf from 'rimraf';
 import { Argv, Driver, DriverContext } from '@beemo/core';
+import { BabelConfig } from './types';
 
 // Success: Writes file list to stdout
 // Failure: Throws SyntaxError to stderr
-export default class BabelDriver extends Driver {
+export default class BabelDriver extends Driver<BabelConfig> {
   bootstrap() {
     this.setMetadata({
       bin: 'babel',
@@ -32,7 +33,7 @@ export default class BabelDriver extends Driver {
   /**
    * Automatically clean the target folder if --out-dir is used.
    */
-  handleCleanTarget = (driver: Driver, argv: Argv, { args }: DriverContext) => {
+  handleCleanTarget = (driver: BabelDriver, argv: Argv, { args }: DriverContext) => {
     if (args.clean && args.outDir) {
       rimraf.sync(path.resolve(args.outDir));
     }

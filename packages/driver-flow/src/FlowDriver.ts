@@ -8,7 +8,7 @@ import { FlowConfig, LintsConfig, OptionsConfig } from './types';
 
 // Success: Writes no errors message to stdout and server output to stderr
 // Failure: Writes file list to stdout and server output to stderr
-export default class FlowDriver extends Driver {
+export default class FlowDriver extends Driver<FlowConfig> {
   bootstrap() {
     this.setMetadata({
       bin: 'flow',

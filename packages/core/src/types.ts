@@ -55,8 +55,8 @@ export interface Context extends Struct {
 export interface DriverContext extends Context {
   configPaths: string[];
   driverName: string;
-  drivers: Driver[];
-  primaryDriver: Driver;
+  drivers: Driver<any>[];
+  primaryDriver: Driver<any>;
   workspaceRoot: string;
   workspaces: string[];
 }

@@ -12,7 +12,7 @@ import { ESLintConfig } from './types';
 
 // Success: Writes nothing to stdout or stderr
 // Failure: Writes to stdout
-export default class ESLintDriver extends Driver {
+export default class ESLintDriver extends Driver<ESLintConfig> {
   bootstrap() {
     this.setMetadata({
       bin: 'eslint',

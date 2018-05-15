@@ -13,7 +13,7 @@ import Driver from '../Driver';
 import { DriverContext } from '../types';
 
 export interface CreateConfigOptions extends Struct {
-  driver: Driver;
+  driver: Driver<any>;
 }
 
 export default class CreateConfigRoutine extends Routine<CreateConfigOptions, DriverContext> {

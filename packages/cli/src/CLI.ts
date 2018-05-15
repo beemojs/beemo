@@ -39,7 +39,7 @@ beemo.bootstrapConfigModule();
 
 // Add a command for each driver
 beemo.tool.plugins.forEach(driver => {
-  const { command = {}, metadata } = driver as Driver;
+  const { command = {}, metadata } = driver as Driver<any>;
 
   app.command(
     driver.name,

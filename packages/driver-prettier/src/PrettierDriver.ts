@@ -10,7 +10,7 @@ import { PrettierConfig } from './types';
 
 // Success: Writes file list to stdout
 // Failure: Writes to stderr for no files found and syntax errors
-export default class PrettierDriver extends Driver {
+export default class PrettierDriver extends Driver<PrettierConfig> {
   bootstrap() {
     this.setMetadata({
       bin: 'prettier',

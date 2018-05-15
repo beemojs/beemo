@@ -55,7 +55,7 @@ export default class ConfigureRoutine extends Routine<BeemoConfig, DriverContext
       deps.forEach(name => {
         this.debug('  Including dependency %s', chalk.magenta(name));
 
-        queue.push(this.tool.getPlugin(name) as Driver);
+        queue.push(this.tool.getPlugin(name) as Driver<any>);
       });
 
       this.context.drivers.unshift(driver);

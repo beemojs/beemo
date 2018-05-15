@@ -19,11 +19,11 @@ import {
 export const STRATEGY_REFERENCE = 'reference';
 export const STRATEGY_COPY = 'copy';
 
-export default class Driver extends Plugin<DriverOptions> {
+export default class Driver<T> extends Plugin<DriverOptions> {
   command: DriverCommandOptions = {};
 
   // @ts-ignore Set after instantiation
-  config: BeemoConfig = {};
+  config: T;
 
   // @ts-ignore Set after instantiation
   context: DriverContext;
@@ -50,7 +50,7 @@ export default class Driver extends Plugin<DriverOptions> {
   /**
    * Format the configuration file before it's written.
    */
-  formatConfig(data: object): string {
+  formatConfig(data: T): string {
     const content = JSON.stringify(data, null, 2);
 
     if (this.metadata.configName.endsWith('.js')) {
@@ -118,7 +118,7 @@ export default class Driver extends Plugin<DriverOptions> {
   /**
    * Merge multiple configuration objects.
    */
-  mergeConfig(prev: object, next: object): object {
+  mergeConfig(prev: T, next: T): T {
     return merge(prev, next);
   }
 

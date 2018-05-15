@@ -195,7 +195,7 @@ export default class Beemo {
    */
   executeDriver(driverName: string, args: Arguments): Promise<Execution[]> {
     const { tool } = this;
-    const primaryDriver = tool.getPlugin(driverName) as Driver;
+    const primaryDriver = tool.getPlugin(driverName) as Driver<any>;
     const context: DriverContext = this.createContext(args, {
       configPaths: [],
       driverName,
@@ -251,7 +251,7 @@ export default class Beemo {
   /**
    * Setup and start a fresh pipeline.
    */
-  startPipeline<T>(context: any): Pipeline<Driver, T> {
+  startPipeline<T>(context: any): Pipeline<Driver<any>, T> {
     return new Pipeline(this.tool, context);
   }
 

@@ -13,6 +13,9 @@ describe('TypeScriptDriver', () => {
       on: jest.fn(),
     };
     driver.bootstrap();
+    driver.config = {
+      compilerOptions: {},
+    };
   });
 
   it('sets options from constructor', () => {
@@ -48,7 +51,7 @@ describe('TypeScriptDriver', () => {
 
   describe('handleCleanTarget()', () => {
     it('doesnt run if no clean param', () => {
-      driver.options = { outDir: './lib' };
+      driver.config.compilerOptions = { outDir: './lib' };
       driver.handleCleanTarget(driver, [], {
         args: {},
       });
@@ -57,7 +60,7 @@ describe('TypeScriptDriver', () => {
     });
 
     it('doesnt run if no outDir param', () => {
-      driver.options = {};
+      driver.config.compilerOptions = {};
       driver.handleCleanTarget(driver, [], {
         args: { clean: true },
       });
@@ -66,7 +69,7 @@ describe('TypeScriptDriver', () => {
     });
 
     it('runs if both params', () => {
-      driver.options = { outDir: './lib' };
+      driver.config.compilerOptions = { outDir: './lib' };
       driver.handleCleanTarget(driver, [], {
         args: { clean: true },
       });
