@@ -93,7 +93,7 @@ describe('ExecuteDriverRoutine', () => {
     });
   });
 
-  describe('groupRoutinesByPriority()', () => {
+  describe('execute()', () => {
     beforeEach(() => {
       // RunCommandRoutine is mocked, so use plain objects
       routine.routines = [
