@@ -83,6 +83,10 @@ export function prependRoot(part) {
   return path.join(__dirname, part);
 }
 
+export function getRoot() {
+  return __dirname;
+}
+
 export function getFixturePath(part) {
   return path.join(__dirname, 'fixtures', part);
 }

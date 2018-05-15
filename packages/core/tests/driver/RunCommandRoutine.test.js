@@ -2,7 +2,12 @@ import { Tool } from 'boost';
 import RunCommandRoutine from '../../src/driver/RunCommandRoutine';
 import BabelDriver from '../../../driver-babel/src/BabelDriver';
 import JestDriver from '../../../driver-jest/src/JestDriver';
-import { createDriverContext, setupMockTool, prependRoot } from '../../../../tests/helpers';
+import {
+  createDriverContext,
+  setupMockTool,
+  prependRoot,
+  getRoot,
+} from '../../../../tests/helpers';
 
 jest.mock('boost/lib/Tool');
 
@@ -143,16 +148,16 @@ describe('RunCommandRoutine', () => {
     it('converts globs to paths', async () => {
       const args = await routine.expandGlobPatterns(routine.context, [
         '--foo',
-        './{scripts,tests}/*.{sh,js}',
+        '../{scripts,tests}/*.{sh,js}',
         'bar',
       ]);
 
       expect(args).toEqual([
         '--foo',
-        './scripts/build-packages.sh',
-        './scripts/bump-peer-deps.js',
-        './scripts/link-packages.sh',
-        './tests/helpers.js',
+        '../scripts/build-packages.sh',
+        '../scripts/bump-peer-deps.js',
+        '../scripts/link-packages.sh',
+        '../tests/helpers.js',
         'bar',
       ]);
     });
@@ -303,7 +308,7 @@ describe('RunCommandRoutine', () => {
       await routine.runCommandWithArgs(routine.context, ['--wtf'], task);
 
       expect(routine.executeCommand).toHaveBeenCalledWith('babel', ['--wtf'], {
-        cwd: process.cwd(),
+        cwd: getRoot(),
         env: { DEV: true },
         task,
       });
