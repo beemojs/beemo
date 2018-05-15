@@ -30,3 +30,26 @@ In your consuming project, enable the driver by adding `typescript` to your `dri
 ### CLI Options
 
 * `--[no-]clean` (bool) - Clean the target `outDir` before transpiling. Defaults to `true`.
+
+## Workspaces Support
+
+TypeScript does not support workspaces easily by default. However, with Beemo, workspaces are
+possible with only minor degradation in functionality. When [using workspaces](../workspaces.md),
+TypeScript will copy the `tsconfig.json` from the root into each package, instead of referencing
+with a `--project` option, or using `extends` (which has many issues with relative paths).
+
+This works great if the root config is never used, but the situations where _it may be_ (for
+example, with Jest), then custom logic will need to be added to your `configs/typescript.js` file to
+handle both cases. Something like the following.
+
+```js
+// configs/typescript.js
+module.exports = function typescript(args, tool) {
+  // The --workspaces option is not passed, but the project uses workspaces.
+  const isWorkspaceRoot = !args.workspaces && tool.package.workspaces;
+
+  return {
+    include: [isWorkspaceRoot ? './packages/*/src/**/*' : './src/**/*'],
+  };
+};
+```

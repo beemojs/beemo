@@ -20,6 +20,7 @@ dependencies, continuous copy and paste, and more.
 * Automatic config file cleanup.
 * Custom scripts with CLI options.
 * Dotfile synchronization.
+* Workspaces (monorepo) support.
 * And much more.
 
 ## Requirements

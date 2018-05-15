@@ -78,7 +78,7 @@ Lastly, be sure to reference your new executable in your configuration module's 
 ```json
 {
   "bin": {
-    "<name>": "./bin/<bin>.js"
+    "<name>": "./bin/<name>.js"
   }
 }
 ```

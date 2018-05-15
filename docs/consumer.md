@@ -27,9 +27,7 @@ that matches the name of your configuration module, or another third-party modul
 * `module` (string) - Name of your configuration module.
 * `config.cleanup` (boolean) - Remove generated config files after execution. Defaults to `false`.
 * `config.parallel` (boolean) - Create configuration files in parallel. Defaults to `true`.
-* `debug` (boolean) - Enable debug output. Can be toggled with `--debug`. Defaults to `false`.
 * `drivers` (string[]|object[]) - List of drivers to enable for the consumer.
-* `silent` (boolean) - Hide Beemo output. Can be toggled with `--silent`. Defaults to `false`.
 
 > Periods denote nested objects.
 
@@ -47,8 +45,10 @@ Not all dotfiles may be required, so you can filter them using the `--filter` op
 accepts a string which will be used as a regex pattern.
 
 ```
-yarn beemo sync-dotfiles --filter "*.yml"
+yarn beemo sync-dotfiles --filter="*.yml"
 ```
+
+> Filtering is done with [micromatch](https://github.com/micromatch/micromatch).
 
 ## Using Drivers
 
@@ -82,7 +82,7 @@ Furthermore, each driver can be configured with options by using an object, like
       },
       {
         "driver": "jest",
-        "env": { "MAX_WORKERS": 2 }
+        "env": { "NODE_ENV": "test" }
       }
     ]
   }
