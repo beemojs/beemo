@@ -6,11 +6,12 @@
 import chalk from 'chalk';
 import fs from 'fs-extra';
 import path from 'path';
+import merge from 'lodash/merge';
 import optimal, { instance, Struct } from 'optimal';
-import { Arguments, parse as parseArgs } from 'yargs';
 import { ConfigLoader, Routine } from 'boost';
+import parseArgs from 'yargs-parser';
 import Driver from '../Driver';
-import { DriverContext } from '../types';
+import { Arguments, DriverContext } from '../types';
 
 export interface CreateConfigOptions extends Struct {
   driver: Driver<any>;
@@ -87,17 +88,6 @@ export default class CreateConfigRoutine extends Routine<CreateConfigOptions, Dr
   }
 
   /**
-   * Gather CLI arguments to pass to the configuration file.
-   */
-  getArgsToPass(): Arguments {
-    this.debug('Gathering arguments to pass to config file');
-
-    return parseArgs(
-      [...this.options.driver.getArgs(), ...this.context.argv].map(value => String(value)),
-    );
-  }
-
-  /**
    * Merge multiple configuration sources using the current driver.
    */
   mergeConfigs(context: DriverContext, configs: Struct[]): Promise<Struct> {
@@ -143,7 +133,8 @@ export default class CreateConfigRoutine extends Routine<CreateConfigOptions, Dr
     );
 
     if (fileExists) {
-      const config = configLoader.parseFile(filePath, [this.getArgsToPass(), this.tool]);
+      const args = merge({}, context.args, parseArgs(this.options.driver.getArgs()));
+      const config = configLoader.parseFile(filePath, [args, this.tool]);
 
       this.tool.emit('load-module-config', [filePath, config]);
 

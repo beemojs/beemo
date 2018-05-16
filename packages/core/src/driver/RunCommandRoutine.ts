@@ -9,6 +9,7 @@ import glob from 'glob';
 import path from 'path';
 import fs from 'fs-extra';
 import isGlob from 'is-glob';
+import merge from 'lodash/merge';
 import optimal, { bool, string, Struct } from 'optimal';
 import parseArgs from 'yargs-parser';
 import { STRATEGY_COPY } from '../Driver';
@@ -237,7 +238,7 @@ export default class RunCommandRoutine extends Routine<RunCommandOptions, Driver
 
     // Since we combine multiple args, we need to rebuild this.
     // And we also need to set this before we filter them.
-    context.args = parseArgs(args);
+    merge(context.args, parseArgs(driverArgs));
 
     return Promise.resolve(args);
   }

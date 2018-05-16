@@ -29,6 +29,8 @@ export default class Beemo {
 
     // eslint-disable-next-line global-require
     const { version } = require('../package.json');
+
+    // TODO replace?
     const args = parseArgs(argv);
 
     this.tool = new Tool(

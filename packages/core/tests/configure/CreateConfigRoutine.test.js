@@ -184,19 +184,6 @@ describe('CreateConfigRoutine', () => {
     });
   });
 
-  describe('getArgsToPass()', () => {
-    it('merges driver and context args', () => {
-      expect(routine.getArgsToPass()).toEqual(
-        expect.objectContaining({
-          _: ['baz'],
-          a: true,
-          foo: 'bar',
-          qux: true,
-        }),
-      );
-    });
-  });
-
   describe('loadConfigFromFilesystem()', () => {
     let parseSpy;
 
@@ -259,7 +246,10 @@ describe('CreateConfigRoutine', () => {
       expect(routine.tool.emit).not.toHaveBeenCalled();
     });
 
-    it('parses file with yargs options', async () => {
+    it('parses file with args (merge with driver and command options)', async () => {
+      routine.context.args.baseArg = true;
+      driver.options.args.push('--driverArg');
+
       await routine.loadConfigFromFilesystem(routine.context, []);
 
       expect(parseSpy).toHaveBeenCalledWith(prependRoot('/configs/babel.js'), [
@@ -268,6 +258,8 @@ describe('CreateConfigRoutine', () => {
           a: true,
           foo: 'bar',
           qux: true,
+          baseArg: true,
+          driverArg: true,
         }),
         tool,
       ]);

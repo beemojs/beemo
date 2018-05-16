@@ -30,7 +30,7 @@ The following list of events, and their arguments, can be listened to.
 | `<driver>.init-driver`          | `driverName: string, argv: string[], context: DriverContext` | Called before a driver is executed with `beemo <driver>`.                                   |
 | `<driver>.resolve-dependencies` | `drivers: Driver[]`                                          | Called after a list of `Driver`s have been resolved in which to create configuration files. |
 | `<driver>.load-module-config`   | `path: string, config: object`                               | Called after configuration has been loaded from the configuration module.                   |
-| `<driver>.load-package-config`  | `path: string, config: object`                               | Called after configuration has been extracted from `package.json`.                          |
+| `<driver>.load-package-config`  | `config: object`                                             | Called after configuration has been extracted from `package.json`.                          |
 | `<driver>.merge-config`         | `config: object`                                             | Called after multiple configuration sources have been merged into 1.                        |
 | `<driver>.create-config-file`   | `path: string, config: object`                               | Called before the configuration file is written.                                            |
 | `<driver>.delete-config-file`   | `path: string`                                               | Called before the configuration file is deleted. Occurs during the `cleanup` phase.         |
