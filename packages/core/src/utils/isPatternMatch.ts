@@ -1,6 +1,10 @@
 import micromatch from 'micromatch';
 
-export default function isPatternMatch(string: string, pattern: string): boolean {
+export default function isPatternMatch(
+  string: string,
+  pattern: string,
+  options?: micromatch.Options,
+): boolean {
   if (!string || !pattern) {
     return false;
   }
@@ -16,5 +20,5 @@ export default function isPatternMatch(string: string, pattern: string): boolean
   }
 
   // Patterns ([a-z], foo|bar, etc)
-  return micromatch.isMatch(string, pattern);
+  return micromatch.isMatch(string, pattern, options);
 }

@@ -106,6 +106,7 @@ app
   });
 
 // Run application
+// eslint-disable-next-line no-unused-expressions
 app
   .usage(`${binName} <command> [args..]`)
   .epilogue(
@@ -118,5 +119,4 @@ app
   )
   .demandCommand(1, chalk.red('Please select a command!'))
   .showHelpOnFail(true)
-  .help()
-  .parse();
+  .help().argv;

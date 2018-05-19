@@ -55,7 +55,8 @@ export default class SyncDotfilesRoutine extends Routine<SyncDotfilesOptions, Co
         if (filter) {
           this.debug('Filtering dotfiles with "%s"', filter);
 
-          files = files.filter(file => isPatternMatch(file.path, filter));
+          // @ts-ignore Contains not typed yet.
+          files = files.filter(file => isPatternMatch(file.path, filter, { contains: true }));
         }
 
         if (error) {
