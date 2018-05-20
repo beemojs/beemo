@@ -11,7 +11,7 @@
     "beemo": "./bin/beemo.js"
   },
   "engines": {
-    "node": ">=6.5.0"
+    "node": ">=8.0.0"
   },
   "repository": "https://github.com/milesj/beemo/tree/master/packages/cli",
   "license": "MIT",
