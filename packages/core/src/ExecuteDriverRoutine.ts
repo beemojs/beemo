@@ -42,7 +42,9 @@ export default class ExecuteDriverRoutine extends Routine<BeemoConfig, DriverCon
     return this.serializeRoutines(null, priority).then(() =>
       this.synchronizeRoutines(null, other).then(response => {
         if (response.errors.length > 0) {
-          throw new Error('Execution failure.');
+          const messages = response.errors.map(error => error.message);
+
+          throw new Error(`Execution failure.\n${messages.join('\n\n')}`);
         }
 
         return response.results;

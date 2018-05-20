@@ -115,13 +115,13 @@ describe('ExecuteDriverRoutine', () => {
 
     it('throws an error if any failures', async () => {
       routine.synchronizeRoutines = jest.fn(() =>
-        Promise.resolve({ errors: [new Error('Failed')], results: [] }),
+        Promise.resolve({ errors: [new Error('Failed'), new Error('Oops')], results: [] }),
       );
 
       try {
         await routine.execute();
       } catch (error) {
-        expect(error).toEqual(new Error('Execution failure.'));
+        expect(error).toEqual(new Error('Execution failure.\nFailed\n\nOops'));
       }
     });
 
