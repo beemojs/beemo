@@ -23,6 +23,7 @@
 * [Tool Instance](./tool.md)
 * [Listening To Events](./events.md)
 * [Creating A Driver](./driver.md)
+* [Workspaces](./workspaces.md)
 * [Pro Tips](./tips.md)
   * [Local Beemo Setup](./tips.md#local-beemo-setup)
   * [Editor Integration](./tips.md#editor-integration)

@@ -33,6 +33,7 @@ Debug messages that will only be displayed during `--debug` can be logged with
 used to conditionally log successful and failure debug messages.
 
 ```js
+tool.debug(var);
 tool.debug.invariant(loaded, 'Has it loaded?', 'Yes', 'No');
 ```
 

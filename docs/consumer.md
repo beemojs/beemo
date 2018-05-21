@@ -48,7 +48,7 @@ accepts a string which will be used as a regex pattern.
 yarn beemo sync-dotfiles --filter="*.yml"
 ```
 
-> Filtering is done with [micromatch](https://github.com/micromatch/micromatch).
+> Filtering is powered by [micromatch](https://github.com/micromatch/micromatch).
 
 ## Using Drivers
 
@@ -117,9 +117,9 @@ That being said, consistently remembering the correct commands and arguments to 
     "eslint": "beemo eslint ./src ./tests",
     "jest": "beemo jest",
     "prettier": "beemo prettier --write \"./{src,tests}/**/*.{js,json,md}\"",
-    "posttest": "yarn run typescript --silent",
-    "pretest": "yarn run eslint --silent",
-    "test": "yarn run jest --silent",
+    "posttest": "yarn run eslint",
+    "pretest": "yarn run typescript",
+    "test": "yarn run jest",
     "typescript": "beemo typescript"
   }
 }

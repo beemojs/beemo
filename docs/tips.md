@@ -82,3 +82,9 @@ Lastly, be sure to reference your new executable in your configuration module's 
   }
 }
 ```
+
+## Output Verbosity
+
+Console output can be controlled with the `--verbose` option and a numerical value between 1 and 3
+(default). More information is logged the higher the range. To hide all output, use `--silent`
+instead.

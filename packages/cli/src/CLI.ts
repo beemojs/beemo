@@ -48,12 +48,12 @@ beemo.tool.plugins.forEach(driver => {
       ...command,
       priority: {
         default: '',
-        description: 'Workspaces with high priority to run first',
+        description: 'Workspaces to run first (supports regex)',
         string: true,
       },
       workspaces: {
         default: '',
-        description: 'Run command in workspaces using a regex pattern',
+        description: 'Run command in workspaces (supports regex)',
         string: true,
       },
     },
@@ -76,7 +76,7 @@ app.command(
     filter: {
       alias: 'f',
       default: '',
-      description: 'Filter filenames using a regex pattern',
+      description: 'Filter filenames (supports regex)',
       string: true,
     },
   },
@@ -101,7 +101,7 @@ app
   })
   .option('verbose', {
     default: 3,
-    describe: 'Increase informational output',
+    describe: 'Control output size',
     number: true,
   });
 
