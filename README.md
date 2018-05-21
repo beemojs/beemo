@@ -31,5 +31,3 @@ dependencies, continuous copy and paste, and more.
 ## Documentation
 
 [https://milesj.gitbooks.io/beemo](https://milesj.gitbooks.io/beemo)
-
-![Beemo](https://raw.githubusercontent.com/milesj/beemo/master/docs/beemo.gif)

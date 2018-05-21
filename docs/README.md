@@ -25,10 +25,3 @@ dependencies, continuous copy and paste, and more.
 
 * Node 8+
 * GitHub, Bitbucket, or another VCS
-
-## Example
-
-Quick example of running Jest. Beemo will automatically generate `jest.config.js` and `.babelrc`
-files at runtime before executing the underlying command.
-
-![Beemo](https://raw.githubusercontent.com/milesj/beemo/master/docs/beemo.gif)

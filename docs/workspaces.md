@@ -18,6 +18,8 @@ yarn beemo typescript --workspaces=driver-*
 
 > Patterns are powered by [micromatch](https://github.com/micromatch/micromatch).
 
+![Beemo](https://raw.githubusercontent.com/milesj/beemo/master/docs/img/workspaces.gif)
+
 ## Priority Packages
 
 There are situations where a specific package(s) needs to be executed before all other packages, for
