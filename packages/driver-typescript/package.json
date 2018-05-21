@@ -23,7 +23,7 @@
     "typescript": "^2.8.3"
   },
   "peerDependencies": {
-    "@beemo/core": "^0.16.0",
+    "@beemo/core": "^0.17.0",
     "typescript": "^2.0.0"
   }
 }
