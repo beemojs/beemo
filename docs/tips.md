@@ -71,7 +71,7 @@ console).
 require('@beemo/cli/lib/CLI');
 ```
 
-> Define a `MANUAL_URL` environment variable to change the manual URL in the help output.
+> Define a `BEEMO_MANUAL_URL` environment variable to change the manual URL in the help output.
 
 Lastly, be sure to reference your new executable in your configuration module's `package.json`.
 

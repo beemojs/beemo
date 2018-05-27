@@ -3,36 +3,21 @@
  * @license     https://opensource.org/licenses/MIT
  */
 
-/* eslint-disable no-console, unicorn/no-process-exit */
+/* eslint-disable no-console */
 
 import path from 'path';
 import chalk from 'chalk';
 import semver from 'semver';
 import yargs from 'yargs';
 import Beemo, { Driver } from '@beemo/core';
-// @ts-ignore
-import corePackage from '../../core/package.json';
-// @ts-ignore
-import cliPackage from '../package.json';
-
-const peerVersion = cliPackage.peerDependencies['@beemo/core'];
-const binName = path.basename(process.argv[1]);
-const manualURL = process.env.MANUAL_URL || 'https://milesj.gitbooks.io/beemo';
-
-if (!semver.satisfies(cliPackage.version, `^${corePackage.version}`)) {
-  console.error(chalk.red(`@beemo/cli version out of date; must be ^${corePackage.version}.`));
-  process.exit(1);
-} else if (peerVersion.charAt(1) !== '0' && !semver.satisfies(corePackage.version, peerVersion)) {
-  console.error(
-    chalk.red('@beemo/core mismatched version. Please keep core and cli package versions in sync.'),
-  );
-  process.exit(2);
-}
+import version from './versionCheck';
 
 // Initialize
 // 0 node, 1 beemo, 2 <driver, command>
 const beemo = new Beemo(process.argv.slice(3));
 const app = yargs(process.argv.slice(2));
+const binName = path.basename(process.argv[1]);
+const manualURL = process.env.BEEMO_MANUAL_URL || 'https://milesj.gitbooks.io/beemo';
 
 // Bootstrap the module
 beemo.bootstrapConfigModule();
@@ -111,10 +96,9 @@ app
   .usage(`${binName} <command> [args..]`)
   .epilogue(
     chalk.gray(
-      [
-        `For more information, view the manual: ${manualURL}`,
-        `Powered by Beemo v${corePackage.version}`,
-      ].join('\n'),
+      [`For more information, view the manual: ${manualURL}`, `Powered by Beemo v${version}`].join(
+        '\n',
+      ),
     ),
   )
   .demandCommand(1, chalk.red('Please select a command!'))

@@ -19,7 +19,7 @@
     "package": "yarn run clean && yarn install && yarn run setup && yarn test",
     "prerelease": "yarn run package",
     "release": "lerna publish",
-    "release:force": "yarn run release --force-publish=*",
+    "release:force": "npm run release -- --force-publish=*",
     "type": "beemo typescript --workspaces=* --noEmit"
   },
   "devDependencies": {
