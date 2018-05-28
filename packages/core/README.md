@@ -9,22 +9,22 @@ dependencies, continuous copy and paste, and more.
 
 ### Features
 
-* Manage build tools and configurations in a single repository.
-* Configure supported build tools using `.js` files.
-* Customize and alter config at runtime with CLI options.
-* Pass custom CLI options to build tool commands without failure.
-* Automatically expand glob patterns (a better alternative to bash).
-* Easily share config between build tools.
-* Avoid relative config or `extend` paths.
-* Automatic config file cleanup.
-* Custom scripts with CLI options.
-* Dotfile synchronization.
-* And much more.
+- Manage build tools and configurations in a single repository.
+- Configure supported build tools using `.js` files.
+- Customize and alter config at runtime with CLI options.
+- Pass custom CLI options to build tool commands without failure.
+- Automatically expand glob patterns (a better alternative to bash).
+- Easily share config between build tools.
+- Avoid relative config or `extend` paths.
+- Automatic config file cleanup.
+- Custom scripts with CLI options.
+- Dotfile synchronization.
+- And much more.
 
 ## Requirements
 
-* Node 6.5+
-* GitHub, Bitbucket, or another VCS
+- Node 6.5+
+- GitHub, Bitbucket, or another VCS
 
 ## Documentation
 

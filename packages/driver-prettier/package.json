@@ -21,7 +21,7 @@
     "access": "public"
   },
   "devDependencies": {
-    "prettier": "^1.12.1"
+    "prettier": "^1.13.0"
   },
   "peerDependencies": {
     "@beemo/core": "^0.17.0",
