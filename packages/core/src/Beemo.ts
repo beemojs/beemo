@@ -253,7 +253,13 @@ export default class Beemo {
   /**
    * Setup and start a fresh pipeline.
    */
-  startPipeline<T>(context: any): Pipeline<Driver<any>, T> {
+  startPipeline<T extends Context>(context: T): Pipeline<Driver<any>, T> {
+    // Make the tool available to all processes
+    process.beemo = {
+      args: context.args,
+      tool: this.tool,
+    };
+
     return new Pipeline(this.tool, context);
   }
 

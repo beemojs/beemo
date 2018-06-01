@@ -342,6 +342,23 @@ describe('RunCommandRoutine', () => {
         }),
       );
     });
+
+    it('sets new context yargs to process', async () => {
+      process.beemo = {};
+
+      await routine.gatherArgs(routine.context);
+
+      expect(process.beemo).toEqual({
+        args: expect.objectContaining({
+          _: ['baz'],
+          a: true,
+          foo: 'bar',
+          qux: true,
+        }),
+      });
+
+      delete process.beemo;
+    });
   });
 
   describe('includeConfigOption()', () => {

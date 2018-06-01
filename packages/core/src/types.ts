@@ -3,7 +3,7 @@
  * @license     https://opensource.org/licenses/MIT
  */
 
-import { ToolConfig } from 'boost';
+import { ToolConfig, ToolInterface } from 'boost';
 import { ExecaReturns } from 'execa';
 import { Struct } from 'optimal';
 import { Arguments, Options } from 'yargs';
@@ -11,6 +11,17 @@ import Driver from './Driver';
 import Script from './Script';
 
 export { Arguments };
+
+declare global {
+  namespace NodeJS {
+    interface Process {
+      beemo: {
+        args: Arguments;
+        tool: ToolInterface;
+      };
+    }
+  }
+}
 
 export type Argv = string[];
 

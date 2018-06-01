@@ -51,7 +51,7 @@ export default class RunCommandRoutine extends Routine<RunCommandOptions, Driver
     if (workspaceRoot && metadata.workspaceStrategy === STRATEGY_COPY) {
       this.task('Copying config into workspace', this.copyConfigToWorkspace);
     } else {
-      this.task('Including reference config option', this.includeConfigOption).skip(
+      this.task('Including config option', this.includeConfigOption).skip(
         !metadata.useConfigOption && !forceConfigOption,
       );
     }
@@ -239,6 +239,11 @@ export default class RunCommandRoutine extends Routine<RunCommandOptions, Driver
     // Since we combine multiple args, we need to rebuild this.
     // And we also need to set this before we filter them.
     merge(context.args, parseArgs(driverArgs));
+
+    // Update the process reference also
+    if (process.beemo) {
+      process.beemo.args = context.args;
+    }
 
     return Promise.resolve(args);
   }

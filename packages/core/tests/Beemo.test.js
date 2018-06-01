@@ -344,6 +344,25 @@ describe('Beemo', () => {
     });
   });
 
+  describe('startPipeline()', () => {
+    beforeEach(() => {
+      delete process.beemo;
+    });
+
+    it('sets beemo instance on process global', () => {
+      expect(process.beemo).toBeUndefined();
+
+      beemo.startPipeline({
+        args: { foo: 123, bar: true },
+      });
+
+      expect(process.beemo).toEqual({
+        args: { foo: 123, bar: true },
+        tool: beemo.tool,
+      });
+    });
+  });
+
   describe('syncDotfiles()', () => {
     it('sets event namespace', async () => {
       const spy = jest.spyOn(beemo.tool, 'setEventNamespace');
