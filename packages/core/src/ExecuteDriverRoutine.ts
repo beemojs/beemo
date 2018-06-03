@@ -5,7 +5,7 @@
 
 import path from 'path';
 import glob from 'glob';
-import { Routine, RoutineInterface, SynchronizedResponse } from 'boost';
+import { Routine, RoutineInterface } from 'boost';
 import RunCommandRoutine from './driver/RunCommandRoutine';
 import isPatternMatch from './utils/isPatternMatch';
 import { BeemoConfig, DriverContext } from './types';
@@ -40,7 +40,7 @@ export default class ExecuteDriverRoutine extends Routine<BeemoConfig, DriverCon
     const { other, priority } = this.groupRoutinesByPriority();
 
     return this.serializeRoutines(null, priority).then(() =>
-      this.synchronizeRoutines(null, other).then(response => {
+      this.poolRoutines(null, {}, other).then(response => {
         if (response.errors.length > 0) {
           const messages = response.errors.map(error => error.message);
 

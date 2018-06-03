@@ -105,16 +105,16 @@ describe('ExecuteDriverRoutine', () => {
       ];
     });
 
-    it('synchronizes each routine', async () => {
-      routine.synchronizeRoutines = jest.fn(() => Promise.resolve({ errors: [], results: [] }));
+    it('pools each routine', async () => {
+      routine.poolRoutines = jest.fn(() => Promise.resolve({ errors: [], results: [] }));
 
       const response = await routine.execute();
 
-      expect(routine.synchronizeRoutines).toHaveBeenCalledWith(null, routine.routines);
+      expect(routine.poolRoutines).toHaveBeenCalledWith(null, {}, routine.routines);
     });
 
     it('throws an error if any failures', async () => {
-      routine.synchronizeRoutines = jest.fn(() =>
+      routine.poolRoutines = jest.fn(() =>
         Promise.resolve({ errors: [new Error('Failed'), new Error('Oops')], results: [] }),
       );
 
@@ -126,17 +126,17 @@ describe('ExecuteDriverRoutine', () => {
     });
 
     it('returns results', async () => {
-      routine.synchronizeRoutines = jest.fn(() => Promise.resolve({ errors: [], results: [123] }));
+      routine.poolRoutines = jest.fn(() => Promise.resolve({ errors: [], results: [123] }));
 
       const response = await routine.execute();
 
       expect(response).toEqual([123]);
     });
 
-    it('serializes high-priority routines before synchronizing routines', async () => {
+    it('serializes high-priority routines before pooling routines', async () => {
       routine.context.args.priority = 'qux,foo';
       routine.serializeRoutines = jest.fn(() => Promise.resolve());
-      routine.synchronizeRoutines = jest.fn(() => Promise.resolve({ errors: [], results: [] }));
+      routine.poolRoutines = jest.fn(() => Promise.resolve({ errors: [], results: [] }));
 
       const response = await routine.execute();
 
@@ -144,7 +144,7 @@ describe('ExecuteDriverRoutine', () => {
         { key: 'qux' },
         { key: 'foo' },
       ]);
-      expect(routine.synchronizeRoutines).toHaveBeenCalledWith(null, [
+      expect(routine.poolRoutines).toHaveBeenCalledWith(null, {}, [
         { key: 'primary' },
         { key: 'bar' },
         { key: 'baz' },
