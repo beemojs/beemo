@@ -10,12 +10,15 @@ import chalk from 'chalk';
 import semver from 'semver';
 import yargs from 'yargs';
 import Beemo, { Driver } from '@beemo/core';
-import version from './versionCheck';
+import version from './checkVersion';
+import quoteSpecialOptions from './quoteSpecialOptions';
+
+// 0 node, 1 beemo, 2 <driver, command>
+const argv = quoteSpecialOptions(process.argv.slice(2));
 
 // Initialize
-// 0 node, 1 beemo, 2 <driver, command>
-const beemo = new Beemo(process.argv.slice(3));
-const app = yargs(process.argv.slice(2));
+const beemo = new Beemo(argv.slice(1));
+const app = yargs(argv);
 const binName = path.basename(process.argv[1]);
 const manualURL = process.env.BEEMO_MANUAL_URL || 'https://milesj.gitbooks.io/beemo';
 
@@ -31,6 +34,11 @@ beemo.tool.plugins.forEach(driver => {
     metadata.description || `Run ${metadata.title}`,
     {
       ...command,
+      parallel: {
+        array: true,
+        default: [],
+        description: 'Run parallel builds with additional flags or options',
+      },
       priority: {
         default: '',
         description: 'Workspaces to run first (supports regex)',
@@ -77,21 +85,21 @@ app
   .option('debug', {
     boolean: true,
     default: false,
-    describe: 'Show debug messages',
+    description: 'Show debug messages',
   })
   .option('silent', {
     boolean: true,
     default: false,
-    describe: `Hide ${binName} output`,
+    description: `Hide ${binName} output`,
   })
   .option('theme', {
     default: 'default',
-    describe: 'Output theme and colors',
+    description: 'Change output colors',
     string: true,
   })
   .option('verbose', {
     default: 3,
-    describe: 'Control output size',
+    description: 'Control output size',
     number: true,
   });
 

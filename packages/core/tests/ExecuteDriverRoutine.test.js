@@ -41,6 +41,27 @@ describe('ExecuteDriverRoutine', () => {
       );
     });
 
+    it('adds multiple routines when --parallel is used', () => {
+      routine.context.args.parallel = ['"--one --two=2"', '" --three -f "'];
+      routine.context.argv.push('--parallel="--one --two=2"', '--parallel=" --three -f "');
+      routine.pipe = jest.fn();
+      routine.bootstrap();
+
+      expect(routine.pipe).toHaveBeenCalledWith(
+        new RunCommandRoutine('primary', 'primary -a --foo bar baz'),
+      );
+      expect(routine.pipe).toHaveBeenCalledWith(
+        new RunCommandRoutine('primary', 'primary -a --foo bar baz --one --two=2', {
+          additionalArgv: ['--one', '--two=2'],
+        }),
+      );
+      expect(routine.pipe).toHaveBeenCalledWith(
+        new RunCommandRoutine('primary', 'primary -a --foo bar baz --three -f', {
+          additionalArgv: ['--three', '-f'],
+        }),
+      );
+    });
+
     describe('workspaces', () => {
       beforeEach(() => {
         routine.context.args.workspaces = '*';
@@ -71,6 +92,75 @@ describe('ExecuteDriverRoutine', () => {
         );
         expect(routine.pipe).toHaveBeenCalledWith(
           new RunCommandRoutine('baz', 'primary -a --foo bar baz', {
+            forceConfigOption: true,
+            workspaceRoot: './packages/baz',
+          }),
+        );
+      });
+
+      it('adds a routine for each when --parallel is used', () => {
+        routine.context.args.parallel = ['"--one --two=2"', '" --three -f "'];
+        routine.context.argv.push('--parallel="--one --two=2"', '--parallel=" --three -f "');
+        routine.pipe = jest.fn();
+        routine.bootstrap();
+
+        expect(routine.pipe).toHaveBeenCalledTimes(9);
+        expect(routine.pipe).toHaveBeenCalledWith(
+          new RunCommandRoutine('foo', 'primary -a --foo bar baz', {
+            forceConfigOption: true,
+            workspaceRoot: './packages/foo',
+          }),
+        );
+        expect(routine.pipe).toHaveBeenCalledWith(
+          new RunCommandRoutine('foo', 'primary -a --foo bar baz --one --two=2', {
+            additionalArgv: ['--one', '--two=2'],
+            forceConfigOption: true,
+            workspaceRoot: './packages/foo',
+          }),
+        );
+        expect(routine.pipe).toHaveBeenCalledWith(
+          new RunCommandRoutine('foo', 'primary -a --foo bar baz --three -f', {
+            additionalArgv: ['--three', '-f'],
+            forceConfigOption: true,
+            workspaceRoot: './packages/foo',
+          }),
+        );
+        expect(routine.pipe).toHaveBeenCalledWith(
+          new RunCommandRoutine('bar', 'primary -a --foo bar baz', {
+            forceConfigOption: true,
+            workspaceRoot: './packages/bar',
+          }),
+        );
+        expect(routine.pipe).toHaveBeenCalledWith(
+          new RunCommandRoutine('bar', 'primary -a --foo bar baz --one --two=2', {
+            additionalArgv: ['--one', '--two=2'],
+            forceConfigOption: true,
+            workspaceRoot: './packages/bar',
+          }),
+        );
+        expect(routine.pipe).toHaveBeenCalledWith(
+          new RunCommandRoutine('bar', 'primary -a --foo bar baz --three -f', {
+            additionalArgv: ['--three', '-f'],
+            forceConfigOption: true,
+            workspaceRoot: './packages/bar',
+          }),
+        );
+        expect(routine.pipe).toHaveBeenCalledWith(
+          new RunCommandRoutine('baz', 'primary -a --foo bar baz', {
+            forceConfigOption: true,
+            workspaceRoot: './packages/baz',
+          }),
+        );
+        expect(routine.pipe).toHaveBeenCalledWith(
+          new RunCommandRoutine('baz', 'primary -a --foo bar baz --one --two=2', {
+            additionalArgv: ['--one', '--two=2'],
+            forceConfigOption: true,
+            workspaceRoot: './packages/baz',
+          }),
+        );
+        expect(routine.pipe).toHaveBeenCalledWith(
+          new RunCommandRoutine('baz', 'primary -a --foo bar baz --three -f', {
+            additionalArgv: ['--three', '-f'],
             forceConfigOption: true,
             workspaceRoot: './packages/baz',
           }),

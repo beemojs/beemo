@@ -5,16 +5,15 @@
 
 import path from 'path';
 import glob from 'glob';
+import trim from 'lodash/trim';
 import { Routine, RoutineInterface } from 'boost';
-import RunCommandRoutine from './driver/RunCommandRoutine';
+import RunCommandRoutine, { RunCommandOptions } from './driver/RunCommandRoutine';
 import isPatternMatch from './utils/isPatternMatch';
 import { BeemoConfig, DriverContext } from './types';
 
 export default class ExecuteDriverRoutine extends Routine<BeemoConfig, DriverContext> {
   bootstrap() {
-    const { args, argv, primaryDriver, workspaces } = this.context;
-    const driverName = primaryDriver.name;
-    const command = `${primaryDriver.metadata.bin} ${argv.join(' ')}`;
+    const { args, primaryDriver, workspaces } = this.context;
 
     if (args.workspaces) {
       if (!workspaces || workspaces.length === 0) {
@@ -24,15 +23,13 @@ export default class ExecuteDriverRoutine extends Routine<BeemoConfig, DriverCon
       }
 
       this.getWorkspaceFilteredPaths().forEach(filePath => {
-        this.pipe(
-          new RunCommandRoutine(path.basename(filePath), command, {
-            forceConfigOption: true,
-            workspaceRoot: filePath,
-          }),
-        );
+        this.pipeParallelBuilds(path.basename(filePath), {
+          forceConfigOption: true,
+          workspaceRoot: filePath,
+        });
       });
     } else {
-      this.pipe(new RunCommandRoutine(driverName, command));
+      this.pipeParallelBuilds(primaryDriver.name);
     }
   }
 
@@ -95,5 +92,29 @@ export default class ExecuteDriverRoutine extends Routine<BeemoConfig, DriverCon
       other,
       priority,
     };
+  }
+
+  /**
+   * When a --parallel option is defined, we need to create an additional routine for each instance.
+   */
+  pipeParallelBuilds(key: string, options: Partial<RunCommandOptions> = {}) {
+    const { args, argv, primaryDriver } = this.context;
+    const filteredArgv = argv.filter(arg => !arg.includes('--parallel'));
+    const command = `${primaryDriver.metadata.bin} ${filteredArgv.join(' ')}`;
+
+    this.pipe(new RunCommandRoutine(key, command, options));
+
+    if (Array.isArray(args.parallel)) {
+      args.parallel.forEach(pargv => {
+        const trimmedPargv = trim(pargv, '"').trim();
+
+        this.pipe(
+          new RunCommandRoutine(key, `${command} ${trimmedPargv}`, {
+            ...options,
+            additionalArgv: trimmedPargv.split(/ /g),
+          }),
+        );
+      });
+    }
   }
 }

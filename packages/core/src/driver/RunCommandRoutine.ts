@@ -10,7 +10,7 @@ import path from 'path';
 import fs from 'fs-extra';
 import isGlob from 'is-glob';
 import merge from 'lodash/merge';
-import optimal, { bool, string, Struct } from 'optimal';
+import optimal, { array, bool, string, Struct } from 'optimal';
 import parseArgs from 'yargs-parser';
 import { STRATEGY_COPY } from '../Driver';
 import { Argv, DriverContext, Execution } from '../types';
@@ -20,6 +20,7 @@ const OPTION_PATTERN: RegExp = /-?-[-a-z0-9]+(,|\s)/gi;
 export type OptionMap = { [option: string]: true };
 
 export interface RunCommandOptions extends Struct {
+  additionalArgv: Argv;
   forceConfigOption: boolean;
   workspaceRoot: string;
 }
@@ -29,6 +30,7 @@ export default class RunCommandRoutine extends Routine<RunCommandOptions, Driver
     this.options = optimal(
       this.options,
       {
+        additionalArgv: array(string()),
         forceConfigOption: bool(),
         workspaceRoot: string().empty(),
       },
@@ -100,14 +102,10 @@ export default class RunCommandRoutine extends Routine<RunCommandOptions, Driver
           paths.length > 0 ? paths.join(', ') : chalk.gray('(no match)'),
         );
 
-        if (paths.length > 0) {
-          nextArgv.push(...paths);
-
-          return;
-        }
+        nextArgv.push(...paths);
+      } else {
+        nextArgv.push(arg);
       }
-
-      nextArgv.push(arg);
     });
 
     return Promise.resolve(nextArgv);
@@ -211,41 +209,76 @@ export default class RunCommandRoutine extends Routine<RunCommandOptions, Driver
    * Gather arguments from all sources to pass to the driver.
    */
   gatherArgs(context: DriverContext): Promise<Argv> {
-    const driverArgs = context.primaryDriver.getArgs();
-    const commandArgs = context.argv;
-    const args = [
-      // Passed by the driver
-      ...driverArgs,
-      // Passed on the command line
-      ...commandArgs,
-    ];
-
     this.debug('Gathering arguments to pass to driver');
 
-    this.debug.invariant(
-      driverArgs.length > 0,
-      'From driver "args" option',
-      driverArgs.join(' '),
-      'No arguments',
-    );
-
-    this.debug.invariant(
-      commandArgs.length > 0,
-      'From the command line',
-      commandArgs.join(' '),
-      'No arguments',
-    );
+    const argv = [
+      // Passed by the driver
+      ...this.getDriverArgs(),
+      // Passed on the command line
+      ...this.getCommandLineArgs(),
+      // Passed with --parallel
+      ...this.getAdditionalArgs(),
+    ];
 
     // Since we combine multiple args, we need to rebuild this.
     // And we also need to set this before we filter them.
-    merge(context.args, parseArgs(driverArgs));
+    // And we need to be sure not to overwrite existing args.
+    context.args = merge({}, parseArgs(argv), context.args);
 
     // Update the process reference also
     if (process.beemo) {
       process.beemo.args = context.args;
     }
 
-    return Promise.resolve(args);
+    return Promise.resolve(argv);
+  }
+
+  /**
+   * Run some validation on additional/parallel args.
+   */
+  getAdditionalArgs(): Argv {
+    const argv = this.options.additionalArgv;
+
+    argv.forEach(arg => {
+      if (!arg.startsWith('-')) {
+        throw new Error('--parallel option does not support arguments. Only flags and options.');
+      } else if (arg.includes('"')) {
+        throw new Error('--parallel option does not support quoted values.');
+      }
+    });
+
+    this.debug.invariant(argv.length > 0, 'From --parallel option', argv.join(' '), 'No arguments');
+
+    return argv;
+  }
+
+  /**
+   * Return args from the command line.
+   */
+  getCommandLineArgs(): Argv {
+    let { argv } = this.context;
+
+    argv = argv.filter(arg => !arg.startsWith('--parallel'));
+
+    this.debug.invariant(argv.length > 0, 'From the command line', argv.join(' '), 'No arguments');
+
+    return argv;
+  }
+
+  /**
+   * Return args from the primary driver.
+   */
+  getDriverArgs(): Argv {
+    const argv = this.context.primaryDriver.getArgs();
+
+    this.debug.invariant(
+      argv.length > 0,
+      'From driver "args" option',
+      argv.join(' '),
+      'No arguments',
+    );
+
+    return argv;
   }
 
   /**

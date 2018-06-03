@@ -1,0 +1,5 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`RunCommandRoutine getAdditionalArgs() errors if a quoted value is passed 1`] = `"--parallel option does not support quoted values."`;
+
+exports[`RunCommandRoutine getAdditionalArgs() errors if an argument is passed 1`] = `"--parallel option does not support arguments. Only flags and options."`;

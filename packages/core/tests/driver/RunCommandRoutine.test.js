@@ -74,6 +74,7 @@ describe('RunCommandRoutine', () => {
     routine.tool = tool;
     routine.debug = jest.fn();
     routine.debug.invariant = jest.fn();
+    routine.bootstrap();
   });
 
   describe('bootstrap()', () => {
@@ -226,6 +227,12 @@ describe('RunCommandRoutine', () => {
         'bar',
       ]);
     });
+
+    it('handles missing paths', async () => {
+      const args = await routine.expandGlobPatterns(routine.context, ['../some-fake-path/*.js']);
+
+      expect(args).toEqual([]);
+    });
   });
 
   describe('extractNativeOptions()', () => {
@@ -358,6 +365,24 @@ describe('RunCommandRoutine', () => {
       });
 
       delete process.beemo;
+    });
+  });
+
+  describe('getAdditionalArgs()', () => {
+    it('errors if an argument is passed', () => {
+      routine.options.additionalArgv = ['./foo'];
+
+      expect(() => {
+        routine.getAdditionalArgs();
+      }).toThrowErrorMatchingSnapshot();
+    });
+
+    it('errors if a quoted value is passed', () => {
+      routine.options.additionalArgv = ['--foo="abc"'];
+
+      expect(() => {
+        routine.getAdditionalArgs();
+      }).toThrowErrorMatchingSnapshot();
     });
   });
 
