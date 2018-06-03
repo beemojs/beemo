@@ -40,6 +40,7 @@ export default class Beemo {
         console: {
           footer: `\n🤖  Powered by Beemo v${version}`,
           silent: args.silent || false,
+          theme: args.theme || 'default',
           verbose: args.verbose || 3,
         },
         pluginAlias: 'driver',

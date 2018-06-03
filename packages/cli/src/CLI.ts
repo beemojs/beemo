@@ -84,6 +84,11 @@ app
     default: false,
     describe: `Hide ${binName} output`,
   })
+  .option('theme', {
+    default: 'default',
+    describe: 'Output theme and colors',
+    string: true,
+  })
   .option('verbose', {
     default: 3,
     describe: 'Control output size',
