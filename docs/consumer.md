@@ -22,7 +22,7 @@ that matches the name of your configuration module, or another third-party modul
 }
 ```
 
-### Options
+### Settings
 
 * `module` (string) - Name of your configuration module.
 * `config.cleanup` (boolean) - Remove generated config files after execution. Defaults to `false`.
@@ -30,6 +30,16 @@ that matches the name of your configuration module, or another third-party modul
 * `drivers` (string[]|object[]) - List of drivers to enable for the consumer.
 
 > Periods denote nested objects.
+
+## Global CLI Options
+
+The following options are available to all Beemo commands.
+
+* `--debug` (bool) - Print debug logs to the console.
+* `--silent` (bool) - Hide all output from the console. [More information](./tips#output-verbosity).
+* `--theme` (string) - Change output colors using a theme. [More information](./tips.md#cli-themes).
+* `--verbose` (number) - Control the output size sent to the console.
+  [More information](./tips#output-verbosity).
 
 ## Synchronizing Dotfiles
 
@@ -103,7 +113,7 @@ Furthermore, each driver can be configured with options by using an object, like
 Now for the fun part, executing the driver! It's as simple as `yarn beemo <driver>` (or
 `npx beemo <driver>`). Once entered, this will initialize Beemo's pipeline, generate a temporary
 configuration file, execute the underlying driver binary, handle stdout and stderr output, cleanup
-after itself, and lastly, leave a beautiful message in your terminal.
+after itself, and lastly, leave a beautiful message in your console.
 
 > All arguments passed to Beemo are passed to the driver's underlying binary.
 
@@ -124,6 +134,17 @@ That being said, consistently remembering the correct commands and arguments to 
   }
 }
 ```
+
+### CLI Options
+
+The following options are available when executing a driver.
+
+* `--parallel` (string) - Execute additional [commands in parallel](./tips.md#parallel-commands).
+  Accepts multiple options. _Must be quoted._
+* `--priority` (string) - List of comma separated workspace names to mark as
+  [high-priority](./workspaces.md#priority-packages).
+* `--workspaces` (string) - Execute the command in each [workspace](./workspaces.md) defined by the
+  pattern/value. Pass `*` to run in all workspaces.
 
 ## Executing Scripts
 

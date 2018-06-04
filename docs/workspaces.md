@@ -55,7 +55,7 @@ categories.
 | Babel      | Referenced using `--config`                        |
 | ESLint     | Root only (preferred), Referenced using `--config` |
 | Flow       | Root only                                          |
-| Jest       | Root only                                          |
+| Jest       | Root only (preferred), Referenced using `--config` |
 | Mocha      | Root only                                          |
 | Prettier   | Root only (preferred), Referenced using `--config` |
 | TypeScript | Copied                                             |

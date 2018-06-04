@@ -71,13 +71,13 @@ module.exports = {
 };
 ```
 
-If you return a function, you can access the options that were passed on the command line, which
-allows for runtime conditional logic. For example, if `--react` was passed, we can enable the React
-preset.
+If you return a function, you can access the args that were passed on the command line, and the
+current [tool instance](./tool.md), which allows for runtime conditional logic. For example, if
+`--react` was passed, we can enable the React preset.
 
 ```js
 // configs/babel.js
-module.exports = function(options) {
+module.exports = function(args, tool) {
   const presets = [
     [
       'babel-preset-env',
@@ -87,13 +87,37 @@ module.exports = function(options) {
     ],
   ];
 
-  if (options.react) {
+  if (args.react) {
     presets.push('babel-preset-react');
   }
 
   return {
     presets,
   };
+};
+```
+
+If for some reason you cannot return a function, but would like to still access the args and tool,
+you can reference the current Beemo instance using `process.beemo`.
+
+```js
+// configs/babel.js
+const { args, tool } = process.beemo;
+const presets = [
+  [
+    'babel-preset-env',
+    {
+      targets: { node: '6.5' },
+    },
+  ],
+];
+
+if (args.react) {
+  presets.push('babel-preset-react');
+}
+
+module.exports = {
+  presets,
 };
 ```
 

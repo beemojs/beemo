@@ -50,13 +50,51 @@ to use it!
 
 ```
 // Before
-beemo eslint ./packages/*/{src,tests}
+yarn beemo eslint ./packages/*/{src,tests}
 
 // After
-beemo eslint "./packages/*/{src,tests}"
+yarn beemo eslint "./packages/*/{src,tests}"
 ```
 
 > This approach has an additional benefit of not cluttering `stdout`.
+
+## Parallel Commands
+
+Multiple commands for the same driver can be run in parallel by passing one or many `--parallel`
+options. Each option must define a value, that is double quoted, with additional flags and options
+to pass.
+
+For example, if you'd like to run separate ESLint commands in different folders.
+
+```
+yarn beemo eslint --color --parallel="./src --ext=.ts,.tsx" --parallel="./tests --report-unused-disable-directives"
+
+// Would run 2 commands in parallel
+eslint --color ./src --ext=.ts,.tsx
+eslint --color ./tests --report-unused-disable-directives
+```
+
+That being said, this feature has a few critical caveats to work correctly.
+
+* Option values must be double quoted! Otherwise the argument parser will parse options in the wrong
+  or unintended order.
+* Option values may not contain nested quoted option values. Unintended side-effects may occur.
+* Nested option values may not contain spaces.
+
+```
+// Invalid
+--parallel=unquoted
+--parallel="--foo="value""
+--parallel="--foo='value'"
+--parallel="--foo=some value"
+
+// Valid
+--parallel="quoted"
+--parallel="--foo=value"
+```
+
+> Parallel command line arguments are not accessible within the configuration file, as the file has
+> already been created using the initially passed arguments. Parallel arguments may also collide.
 
 ## Custom Executable Name
 
@@ -88,3 +126,16 @@ Lastly, be sure to reference your new executable in your configuration module's 
 Console output can be controlled with the `--verbose` option and a numerical value between 1 and 3
 (default). More information is logged the higher the range. To hide all output, use `--silent`
 instead.
+
+## CLI Themes
+
+Beemo is built on [Boost](https://github.com/milesj/boost), a powerful build tool framework, which
+provides the ability to theme the command line output (by changing important colors). To activate a
+theme, pass a `--theme` option with the name of the theme.
+
+```
+yarn beemo babel --theme=one-dark
+```
+
+> View the list of available themes on the
+> [official Boost repo](https://github.com/milesj/boost/blob/master/src/themes.ts).

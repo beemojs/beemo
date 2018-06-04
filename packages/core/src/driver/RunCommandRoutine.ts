@@ -240,10 +240,8 @@ export default class RunCommandRoutine extends Routine<RunCommandOptions, Driver
     const argv = this.options.additionalArgv;
 
     argv.forEach(arg => {
-      if (!arg.startsWith('-')) {
-        throw new Error('--parallel option does not support arguments. Only flags and options.');
-      } else if (arg.includes('"')) {
-        throw new Error('--parallel option does not support quoted values.');
+      if (arg.includes('"') || arg.includes("'")) {
+        throw new Error('--parallel option does not support nested quoted values.');
       }
     });
 

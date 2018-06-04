@@ -369,16 +369,24 @@ describe('RunCommandRoutine', () => {
   });
 
   describe('getAdditionalArgs()', () => {
-    it('errors if an argument is passed', () => {
+    it('doesnt error if an argument is passed', () => {
       routine.options.additionalArgv = ['./foo'];
+
+      expect(() => {
+        routine.getAdditionalArgs();
+      }).not.toThrowError();
+    });
+
+    it('errors if a double quoted value is passed', () => {
+      routine.options.additionalArgv = ['--foo="abc"'];
 
       expect(() => {
         routine.getAdditionalArgs();
       }).toThrowErrorMatchingSnapshot();
     });
 
-    it('errors if a quoted value is passed', () => {
-      routine.options.additionalArgv = ['--foo="abc"'];
+    it('errors if a single quoted value is passed', () => {
+      routine.options.additionalArgv = ["--foo='abc'"];
 
       expect(() => {
         routine.getAdditionalArgs();
