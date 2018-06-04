@@ -59,6 +59,16 @@ describe('ExecuteDriverRoutine', () => {
       );
     });
 
+    it('adds a routine if parallel is empty', () => {
+      routine.context.args.parallel = [];
+      routine.pipe = jest.fn();
+      routine.bootstrap();
+
+      expect(routine.pipe).toHaveBeenCalledWith(
+        new RunCommandRoutine('primary', 'primary -a --foo bar baz'),
+      );
+    });
+
     describe('workspaces', () => {
       beforeEach(() => {
         routine.context.args.workspaces = '*';

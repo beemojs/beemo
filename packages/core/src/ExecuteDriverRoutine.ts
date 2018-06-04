@@ -102,7 +102,7 @@ export default class ExecuteDriverRoutine extends Routine<BeemoConfig, DriverCon
     const filteredArgv = argv.filter(arg => !arg.includes('--parallel'));
     const command = `${primaryDriver.metadata.bin} ${filteredArgv.join(' ')}`;
 
-    if (Array.isArray(args.parallel)) {
+    if (Array.isArray(args.parallel) && args.parallel.length > 0) {
       args.parallel.forEach(pargv => {
         const trimmedPargv = trim(pargv, '"').trim();
 
