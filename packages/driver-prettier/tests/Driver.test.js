@@ -61,7 +61,7 @@ describe('PrettierDriver', () => {
         driver.handleCreateIgnoreFile('/some/path/prettier.config.js', {
           ignore: 'foo',
         });
-      }).toThrowError('Ignore configuration must be an array of strings.');
+      }).toThrowErrorMatchingSnapshot();
     });
 
     it('creates ignore file and updates references', () => {

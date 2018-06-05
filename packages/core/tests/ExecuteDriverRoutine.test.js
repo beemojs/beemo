@@ -160,14 +160,14 @@ describe('ExecuteDriverRoutine', () => {
         expect(() => {
           routine.context.workspaces = null;
           routine.bootstrap();
-        }).toThrowError('Option --workspaces=* provided but project is not workspaces enabled.');
+        }).toThrowErrorMatchingSnapshot();
       });
 
       it('errors if workspaces config is empty', () => {
         expect(() => {
           routine.context.workspaces = [];
           routine.bootstrap();
-        }).toThrowError('Option --workspaces=* provided but project is not workspaces enabled.');
+        }).toThrowErrorMatchingSnapshot();
       });
     });
   });

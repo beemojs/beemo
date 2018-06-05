@@ -31,7 +31,7 @@ describe('SyncDotfilesRoutine', () => {
 
       expect(() => {
         routine.bootstrap();
-      }).toThrowError('Invalid SyncDotfilesRoutine field "filter". Must be a string.');
+      }).toThrowErrorMatchingSnapshot();
     });
   });
 

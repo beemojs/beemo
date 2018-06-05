@@ -1,0 +1,3 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`SyncDotfilesRoutine bootstrap() errors if filter is not a string 1`] = `"Invalid SyncDotfilesRoutine field \\"filter\\". Must be a string."`;

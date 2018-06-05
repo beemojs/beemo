@@ -1,5 +1,6 @@
 import { Tool } from 'boost';
 import fs from 'fs-extra';
+import chalk from 'chalk';
 import RunCommandRoutine from '../../src/driver/RunCommandRoutine';
 import BabelDriver from '../../../driver-babel/src/BabelDriver';
 import JestDriver from '../../../driver-jest/src/JestDriver';
@@ -83,7 +84,7 @@ describe('RunCommandRoutine', () => {
 
       expect(() => {
         routine.bootstrap();
-      }).toThrowError('Invalid RunCommandRoutine field "forceConfigOption". Must be a boolean.');
+      }).toThrowErrorMatchingSnapshot();
     });
 
     it('errors if `workspaceRoot` is not a string', () => {
@@ -91,7 +92,7 @@ describe('RunCommandRoutine', () => {
 
       expect(() => {
         routine.bootstrap();
-      }).toThrowError('Invalid RunCommandRoutine field "workspaceRoot". Must be a string.');
+      }).toThrowErrorMatchingSnapshot();
     });
   });
 
@@ -300,7 +301,10 @@ describe('RunCommandRoutine', () => {
       ]);
 
       expect(args).toEqual(['./src', '-o', './lib', '--out-dir', './dist', '--minified']);
-      expect(routine.debug).toHaveBeenCalledWith('Filtered args: %s', '--foo, -X, --bar');
+      expect(routine.debug).toHaveBeenCalledWith(
+        'Filtered args: %s',
+        chalk.gray('--foo, -X, --bar'),
+      );
     });
 
     it('skips unsupported option setters', async () => {
@@ -317,7 +321,7 @@ describe('RunCommandRoutine', () => {
       expect(args).toEqual(['-w']);
       expect(routine.debug).toHaveBeenCalledWith(
         'Filtered args: %s',
-        '--foo, 123, --bar=456, -c, 789, -c=666',
+        chalk.gray('--foo, 123, --bar=456, -c, 789, -c=666'),
       );
     });
   });

@@ -90,7 +90,7 @@ describe('ESLintDriver', () => {
         driver.handleCreateIgnoreFile('/some/path/.eslintrc.js', {
           ignore: 'foo',
         });
-      }).toThrowError('Ignore configuration must be an array of strings.');
+      }).toThrowErrorMatchingSnapshot();
     });
 
     it('creates ignore file and updates references', () => {

@@ -16,7 +16,7 @@ describe('Driver', () => {
       driver = new Driver({
         args: true,
       });
-    }).toThrowError('Invalid Driver field "args". Must be an array.');
+    }).toThrowErrorMatchingSnapshot();
   });
 
   describe('formatConfig()', () => {
@@ -216,9 +216,7 @@ describe('Driver', () => {
             alias: 123,
           },
         });
-      }).toThrowError(
-        'Invalid Driver field "foo.alias". Type must be one of: string, array<string>',
-      );
+      }).toThrowErrorMatchingSnapshot();
     });
 
     it('supports description as a string', () => {
@@ -242,7 +240,7 @@ describe('Driver', () => {
             description: 123,
           },
         });
-      }).toThrowError('Invalid Driver field "foo.description". Must be a string.');
+      }).toThrowErrorMatchingSnapshot();
     });
 
     it('doesnt support empty descriptions', () => {
@@ -252,7 +250,7 @@ describe('Driver', () => {
             description: '',
           },
         });
-      }).toThrowError('Invalid Driver field "foo.description". String cannot be empty.');
+      }).toThrowErrorMatchingSnapshot();
     });
 
     it('requires a description', () => {
@@ -260,9 +258,7 @@ describe('Driver', () => {
         driver.setCommandOptions({
           foo: {},
         });
-      }).toThrowError(
-        'Invalid Driver field "foo.description". Field is required and must be defined.',
-      );
+      }).toThrowErrorMatchingSnapshot();
     });
   });
 
@@ -277,7 +273,7 @@ describe('Driver', () => {
       it('is required', () => {
         expect(() => {
           driver.setMetadata({});
-        }).toThrowError('Invalid Driver field "bin". Field is required and must be defined.');
+        }).toThrowErrorMatchingSnapshot();
       });
 
       it('supports alpha, numeric, and dashes', () => {
@@ -295,9 +291,7 @@ describe('Driver', () => {
             ...options,
             bin: 'foo_123',
           });
-        }).toThrowError(
-          'Invalid Driver field "bin". String does not match pattern "^[-a-z0-9]+$".',
-        );
+        }).toThrowErrorMatchingSnapshot();
       });
 
       it('doesnt support uppercase', () => {
@@ -306,9 +300,7 @@ describe('Driver', () => {
             ...options,
             bin: 'Foo_123',
           });
-        }).toThrowError(
-          'Invalid Driver field "bin". String does not match pattern "^[-a-z0-9]+$".',
-        );
+        }).toThrowErrorMatchingSnapshot();
       });
     });
 
@@ -318,9 +310,7 @@ describe('Driver', () => {
           driver.setMetadata({
             bin: 'beemo',
           });
-        }).toThrowError(
-          'Invalid Driver field "configName". Field is required and must be defined.',
-        );
+        }).toThrowErrorMatchingSnapshot();
       });
 
       it('doesnt support non-strings', () => {
@@ -329,7 +319,7 @@ describe('Driver', () => {
             ...options,
             configName: 123,
           });
-        }).toThrowError('Invalid Driver field "configName". Must be a string.');
+        }).toThrowErrorMatchingSnapshot();
       });
     });
 
@@ -340,7 +330,7 @@ describe('Driver', () => {
             bin: 'beemo',
             configName: 'beemo',
           });
-        }).toThrowError('Invalid Driver field "title". Field is required and must be defined.');
+        }).toThrowErrorMatchingSnapshot();
       });
 
       it('doesnt support non-strings', () => {
@@ -349,7 +339,7 @@ describe('Driver', () => {
             ...options,
             title: 123,
           });
-        }).toThrowError('Invalid Driver field "title". Must be a string.');
+        }).toThrowErrorMatchingSnapshot();
       });
     });
   });

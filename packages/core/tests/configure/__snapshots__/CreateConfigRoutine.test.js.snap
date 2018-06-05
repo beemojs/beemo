@@ -1,0 +1,3 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`CreateConfigRoutine bootstrap() errors if no driver defined 1`] = `"Invalid CreateConfigRoutine field \\"driver\\". Field is required and must be defined."`;

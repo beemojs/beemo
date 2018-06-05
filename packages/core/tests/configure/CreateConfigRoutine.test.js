@@ -80,9 +80,7 @@ describe('CreateConfigRoutine', () => {
 
       expect(() => {
         routine.bootstrap();
-      }).toThrowError(
-        'Invalid CreateConfigRoutine field "driver". Field is required and must be defined.',
-      );
+      }).toThrowErrorMatchingSnapshot();
     });
   });
 

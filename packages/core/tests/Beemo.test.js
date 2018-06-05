@@ -104,9 +104,7 @@ describe('Beemo', () => {
 
       expect(() => {
         beemo.getConfigModuleRoot();
-      }).toThrowError(
-        'Beemo requires a "beemo.module" property within your package.json. This property is the name of a module that houses your configuration files.',
-      );
+      }).toThrowErrorMatchingSnapshot();
     });
 
     it('errors if a fake and or missing node module', () => {
@@ -114,9 +112,7 @@ describe('Beemo', () => {
 
       expect(() => {
         beemo.getConfigModuleRoot();
-      }).toThrowError(
-        'Module beemo-this-should-never-exist defined in "beemo.module" could not be found.',
-      );
+      }).toThrowErrorMatchingSnapshot();
     });
 
     it('returns cwd if using @local', () => {

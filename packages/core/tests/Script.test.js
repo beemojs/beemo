@@ -17,7 +17,7 @@ describe('Script', () => {
     it('errors if not defined', () => {
       expect(() => {
         script.run();
-      }).toThrowError('Script must define a run() method.');
+      }).toThrowErrorMatchingSnapshot();
     });
   });
 });
