@@ -8,7 +8,7 @@
 import path from 'path';
 import chalk from 'chalk';
 import semver from 'semver';
-import yargs from 'yargs';
+import yargs, { Arguments } from 'yargs';
 import Beemo, { Driver } from '@beemo/core';
 import version from './checkVersion';
 import quoteSpecialOptions from './quoteSpecialOptions';
@@ -50,7 +50,7 @@ beemo.tool.plugins.forEach(driver => {
         string: true,
       },
     },
-    args => beemo.executeDriver(driver.name, args),
+    (args: Arguments) => beemo.executeDriver(driver.name, args),
   );
 });
 
@@ -59,7 +59,7 @@ app.command(
   ['run-script <name>', 'run <name>'],
   'Run custom script from configuration module',
   {},
-  args => beemo.executeScript(args.name, args),
+  (args: Arguments) => beemo.executeScript(args.name, args),
 );
 
 app.command(
@@ -73,7 +73,7 @@ app.command(
       string: true,
     },
   },
-  args => beemo.syncDotfiles(args),
+  (args: Arguments) => beemo.syncDotfiles(args),
 );
 
 app.command('*', false, {}, () => {

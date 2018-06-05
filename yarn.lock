@@ -472,9 +472,9 @@
     npmlog "^4.1.2"
     write-file-atomic "^2.3.0"
 
-"@milesj/build-tool-config@0.99.0":
-  version "0.99.0"
-  resolved "https://registry.npmjs.org/@milesj/build-tool-config/-/build-tool-config-0.99.0.tgz#eafef72273d9a2274019731c9ece8c8e373cf647"
+"@milesj/build-tool-config@0.100.0":
+  version "0.100.0"
+  resolved "https://registry.npmjs.org/@milesj/build-tool-config/-/build-tool-config-0.100.0.tgz#bc9318fc00f97c2cc27f192048642d7723505955"
   dependencies:
     "@beemo/cli" "^0.17.1"
     "@beemo/core" "^0.17.1"
@@ -508,7 +508,7 @@
     eslint-plugin-jest "^21.17.0"
     eslint-plugin-jsx-a11y "^6.0.3"
     eslint-plugin-promise "^3.8.0"
-    eslint-plugin-react "^7.8.2"
+    eslint-plugin-react "^7.9.1"
     eslint-plugin-typescript "^0.12.0"
     eslint-plugin-unicorn "^4.0.3"
     execa "^0.10.0"
@@ -516,15 +516,15 @@
     gitbook-cli "^2.3.2"
     jest "^23.1.0"
     jest-runner-eslint "^0.6.0"
-    np "^3.0.2"
+    np "^3.0.4"
     prettier "^1.13.4"
     react "^16.4.0"
     react-dom "^16.4.0"
     react-test-renderer "^16.4.0"
     rimraf "^2.6.2"
     ts-jest "^22.4.6"
-    typescript "^2.8.3"
-    typescript-eslint-parser "^15.0.0"
+    typescript "^2.9.1"
+    typescript-eslint-parser "^16.0.0"
     uglifyjs-webpack-plugin "1.2.5"
     webpack "^4.10.2"
 
@@ -609,9 +609,9 @@
   version "8.5.2"
   resolved "https://registry.npmjs.org/@types/node/-/node-8.5.2.tgz#83b8103fa9a2c2e83d78f701a9aa7c9539739aa5"
 
-"@types/node@^10.3.0":
-  version "10.3.0"
-  resolved "https://registry.npmjs.org/@types/node/-/node-10.3.0.tgz#078516315a84d56216b5d4fed8f75d59d3b16cac"
+"@types/node@^10.3.1":
+  version "10.3.1"
+  resolved "https://registry.npmjs.org/@types/node/-/node-10.3.1.tgz#51092fbacaed768a122a293814474fbf6e5e8b6d"
 
 "@types/node@^6.0.46":
   version "6.0.90"
@@ -3256,7 +3256,7 @@ doctrine@1.5.0:
     esutils "^2.0.2"
     isarray "^1.0.0"
 
-doctrine@^2.0.2, doctrine@^2.1.0:
+doctrine@^2.1.0:
   version "2.1.0"
   resolved "https://registry.npmjs.org/doctrine/-/doctrine-2.1.0.tgz#5cd01fc101621b42c4cd7f5d1a66243716d3f39d"
   dependencies:
@@ -3606,14 +3606,14 @@ eslint-plugin-promise@^3.8.0:
   version "3.8.0"
   resolved "https://registry.npmjs.org/eslint-plugin-promise/-/eslint-plugin-promise-3.8.0.tgz#65ebf27a845e3c1e9d6f6a5622ddd3801694b621"
 
-eslint-plugin-react@^7.8.2:
-  version "7.8.2"
-  resolved "https://registry.npmjs.org/eslint-plugin-react/-/eslint-plugin-react-7.8.2.tgz#e95c9c47fece55d2303d1a67c9d01b930b88a51d"
+eslint-plugin-react@^7.9.1:
+  version "7.9.1"
+  resolved "https://registry.npmjs.org/eslint-plugin-react/-/eslint-plugin-react-7.9.1.tgz#101aadd15e7c7b431ed025303ac7b421a8e3dc15"
   dependencies:
-    doctrine "^2.0.2"
-    has "^1.0.1"
+    doctrine "^2.1.0"
+    has "^1.0.2"
     jsx-ast-utils "^2.0.1"
-    prop-types "^15.6.0"
+    prop-types "^15.6.1"
 
 eslint-plugin-typescript@^0.12.0:
   version "0.12.0"
@@ -4727,6 +4727,12 @@ has@^1.0.1:
   resolved "https://registry.yarnpkg.com/has/-/has-1.0.1.tgz#8461733f538b0837c9361e39a9ab9e9704dc2f28"
   dependencies:
     function-bind "^1.0.2"
+
+has@^1.0.2:
+  version "1.0.3"
+  resolved "https://registry.npmjs.org/has/-/has-1.0.3.tgz#722d7cbfc1f6aa8241f16dd814e011e1f41e8796"
+  dependencies:
+    function-bind "^1.1.1"
 
 hash-base@^2.0.0:
   version "2.0.2"
@@ -7037,9 +7043,9 @@ normalize-path@^2.0.0, normalize-path@^2.0.1, normalize-path@^2.1.1:
   dependencies:
     remove-trailing-separator "^1.0.1"
 
-np@^3.0.2:
-  version "3.0.2"
-  resolved "https://registry.npmjs.org/np/-/np-3.0.2.tgz#a54bb97ee9b264432cd2d7637b19d266b95fcd4c"
+np@^3.0.4:
+  version "3.0.4"
+  resolved "https://registry.npmjs.org/np/-/np-3.0.4.tgz#cccd1fd55bc1aea5b22b2ab5ee96e8273b9bbdd5"
   dependencies:
     "@samverschueren/stream-to-observable" "^0.3.0"
     any-observable "^0.3.0"
@@ -7920,6 +7926,14 @@ promzard@^0.3.0:
 prop-types@^15.6.0:
   version "15.6.0"
   resolved "https://registry.yarnpkg.com/prop-types/-/prop-types-15.6.0.tgz#ceaf083022fc46b4a35f69e13ef75aed0d639856"
+  dependencies:
+    fbjs "^0.8.16"
+    loose-envify "^1.3.1"
+    object-assign "^4.1.1"
+
+prop-types@^15.6.1:
+  version "15.6.1"
+  resolved "https://registry.npmjs.org/prop-types/-/prop-types-15.6.1.tgz#36644453564255ddda391191fb3a125cbdf654ca"
   dependencies:
     fbjs "^0.8.16"
     loose-envify "^1.3.1"
@@ -9520,16 +9534,16 @@ typedarray@^0.0.6:
   version "0.0.6"
   resolved "https://registry.yarnpkg.com/typedarray/-/typedarray-0.0.6.tgz#867ac74e3864187b1d3d47d996a78ec5c8830777"
 
-typescript-eslint-parser@^15.0.0:
-  version "15.0.0"
-  resolved "https://registry.npmjs.org/typescript-eslint-parser/-/typescript-eslint-parser-15.0.0.tgz#882fd3d7aabffbab0a7f98d2a59fb9a989c2b37f"
+typescript-eslint-parser@^16.0.0:
+  version "16.0.0"
+  resolved "https://registry.npmjs.org/typescript-eslint-parser/-/typescript-eslint-parser-16.0.0.tgz#14a9ab75932b15af919602faef553c6f0487f352"
   dependencies:
     lodash.unescape "4.0.1"
     semver "5.5.0"
 
-typescript@^2.8.3:
-  version "2.8.3"
-  resolved "https://registry.npmjs.org/typescript/-/typescript-2.8.3.tgz#5d817f9b6f31bb871835f4edf0089f21abe6c170"
+typescript@^2.9.1:
+  version "2.9.1"
+  resolved "https://registry.npmjs.org/typescript/-/typescript-2.9.1.tgz#fdb19d2c67a15d11995fd15640e373e09ab09961"
 
 ua-parser-js@^0.7.9:
   version "0.7.17"

@@ -198,7 +198,7 @@ export default class RunCommandRoutine extends Routine<RunCommandOptions, Driver
       });
 
       if (unknownArgv.length > 0) {
-        this.debug('Filtered args: %s', unknownArgv.join(', '));
+        this.debug('Filtered args: %s', chalk.gray(unknownArgv.join(', ')));
       }
 
       return filteredArgv;
