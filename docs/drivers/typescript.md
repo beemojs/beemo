@@ -9,7 +9,7 @@ yarn add @beemo/driver-typescript typescript
 
 ## Requirements
 
-* TypeScript ^2.0.0
+- TypeScript ^2.0.0
 
 ## Usage
 
@@ -29,7 +29,7 @@ In your consuming project, enable the driver by adding `typescript` to your `dri
 
 ### CLI Options
 
-* `--[no-]clean` (bool) - Clean the target `outDir` before transpiling. Defaults to `true`.
+- `--[no-]clean` (bool) - Clean the target `outDir` before transpiling. Defaults to `true`.
 
 ## Workspaces Support
 

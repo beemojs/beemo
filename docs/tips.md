@@ -76,10 +76,10 @@ eslint --color ./tests --report-unused-disable-directives
 
 That being said, this feature has a few critical caveats to work correctly.
 
-* Option values must be double quoted! Otherwise the argument parser will parse options in the wrong
+- Option values must be double quoted! Otherwise the argument parser will parse options in the wrong
   or unintended order.
-* Option values may not contain nested quoted option values. Unintended side-effects may occur.
-* Nested option values may not contain spaces.
+- Option values may not contain nested quoted option values. Unintended side-effects may occur.
+- Nested option values may not contain spaces.
 
 ```
 // Invalid

@@ -50,10 +50,10 @@ The following list of events, and their arguments, can be listened to.
 
 ### Type Declarations
 
-* `Driver` - An instance of the
+- `Driver` - An instance of the
   [Driver](https://github.com/milesj/beemo/blob/master/packages/core/src/Driver.js) class.
-* `Script` - An instance of the
+- `Script` - An instance of the
   [Script](https://github.com/milesj/beemo/blob/master/packages/core/src/Script.js) class.
-* `Context`, `DriverContext`, `ScriptContext` -
+- `Context`, `DriverContext`, `ScriptContext` -
   [Special object types](https://github.com/milesj/beemo/blob/master/packages/core/src/types.js#L53)
   passed through the entire execution process.

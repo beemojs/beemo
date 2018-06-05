@@ -9,7 +9,7 @@ yarn add @beemo/driver-eslint eslint
 
 ## Requirements
 
-* ESLint ^4.0.0
+- ESLint ^4.0.0
 
 ## Usage
 

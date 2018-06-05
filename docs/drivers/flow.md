@@ -9,7 +9,7 @@ yarn add @beemo/driver-flow flow-bin
 
 ## Requirements
 
-* Flow
+- Flow
 
 ## Usage
 
@@ -32,12 +32,12 @@ In your consuming project, enable the driver by adding `flow` to your `drivers` 
 In Beemo, Flow is configured using a JavaScript file, and not the `.flowconfig` file. To support
 this, the following conventions must be followed.
 
-* `ignore`, `include`, and `libs` are an array of strings.
-* `lints` is an object. Properties are snake case (underscored instead of dashed).
-* `options` is an object.
-  * Properties with a period must be quoted.
-  * `suppress_comment` must be double escaped or use `RegExp`.
-* `version` is a string.
+- `ignore`, `include`, and `libs` are an array of strings.
+- `lints` is an object. Properties are snake case (underscored instead of dashed).
+- `options` is an object.
+  - Properties with a period must be quoted.
+  - `suppress_comment` must be double escaped or use `RegExp`.
+- `version` is a string.
 
 An example:
 

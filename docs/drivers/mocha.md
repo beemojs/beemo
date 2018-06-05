@@ -9,7 +9,7 @@ yarn add @beemo/driver-mocha mocha
 
 ## Requirements
 
-* Mocha ^5.0.0
+- Mocha ^5.0.0
 
 ## Usage
 
@@ -32,9 +32,9 @@ In your consuming project, enable the driver by adding `mocha` to your `drivers`
 In Beemo, Mocha is configured using a JavaScript file, and not the `mocha.opts` file. To support
 this, the following conventions must be followed.
 
-* Properties are snake case (underscored instead of dashed).
-* Options with multiple values are defined as an array of strings.
-* Shorthand flags are not supported (example: use `--colors` instead of `-c`).
+- Properties are snake case (underscored instead of dashed).
+- Options with multiple values are defined as an array of strings.
+- Shorthand flags are not supported (example: use `--colors` instead of `-c`).
 
 An example:
 

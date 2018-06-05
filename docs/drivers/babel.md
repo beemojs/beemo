@@ -9,7 +9,7 @@ yarn add @beemo/driver-babel babel-core
 
 ## Requirements
 
-* Babel ^6.0.0
+- Babel ^6.0.0
 
 ## Usage
 
@@ -29,4 +29,4 @@ In your consuming project, enable the driver by adding `babel` to your `drivers`
 
 ### CLI Options
 
-* `--[no-]clean` (bool) - Clean the target `--out-dir` before transpiling. Defaults to `true`.
+- `--[no-]clean` (bool) - Clean the target `--out-dir` before transpiling. Defaults to `true`.

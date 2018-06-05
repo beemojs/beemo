@@ -24,10 +24,10 @@ that matches the name of your configuration module, or another third-party modul
 
 ### Settings
 
-* `module` (string) - Name of your configuration module.
-* `config.cleanup` (boolean) - Remove generated config files after execution. Defaults to `false`.
-* `config.parallel` (boolean) - Create configuration files in parallel. Defaults to `true`.
-* `drivers` (string[]|object[]) - List of drivers to enable for the consumer.
+- `module` (string) - Name of your configuration module.
+- `config.cleanup` (boolean) - Remove generated config files after execution. Defaults to `false`.
+- `config.parallel` (boolean) - Create configuration files in parallel. Defaults to `true`.
+- `drivers` (string[]|object[]) - List of drivers to enable for the consumer.
 
 > Periods denote nested objects.
 
@@ -35,10 +35,10 @@ that matches the name of your configuration module, or another third-party modul
 
 The following options are available to all Beemo commands.
 
-* `--debug` (bool) - Print debug logs to the console.
-* `--silent` (bool) - Hide all output from the console. [More information](./tips#output-verbosity).
-* `--theme` (string) - Change output colors using a theme. [More information](./tips.md#cli-themes).
-* `--verbose` (number) - Control the output size sent to the console.
+- `--debug` (bool) - Print debug logs to the console.
+- `--silent` (bool) - Hide all output from the console. [More information](./tips#output-verbosity).
+- `--theme` (string) - Change output colors using a theme. [More information](./tips.md#cli-themes).
+- `--verbose` (number) - Control the output size sent to the console.
   [More information](./tips#output-verbosity).
 
 ## Synchronizing Dotfiles
@@ -101,11 +101,11 @@ Furthermore, each driver can be configured with options by using an object, like
 
 ### Options
 
-* `driver` (string) - The name of the driver module. Required when using an object.
-* `args` (string[]) - Arguments to always pass when executing the driver binary, and to pass to the
+- `driver` (string) - The name of the driver module. Required when using an object.
+- `args` (string[]) - Arguments to always pass when executing the driver binary, and to pass to the
   config file.
-* `dependencies` (string[]) - Other drivers that are required for this driver to run.
-* `env` (object) - Environment variables to pass when executing the driver binary with
+- `dependencies` (string[]) - Other drivers that are required for this driver to run.
+- `env` (object) - Environment variables to pass when executing the driver binary with
   [execa](https://github.com/sindresorhus/execa).
 
 ## Executing Drivers
@@ -139,11 +139,11 @@ That being said, consistently remembering the correct commands and arguments to 
 
 The following options are available when executing a driver.
 
-* `--parallel` (string) - Execute additional [commands in parallel](./tips.md#parallel-commands).
+- `--parallel` (string) - Execute additional [commands in parallel](./tips.md#parallel-commands).
   Accepts multiple options. _Must be quoted._
-* `--priority` (string) - List of comma separated workspace names to mark as
+- `--priority` (string) - List of comma separated workspace names to mark as
   [high-priority](./workspaces.md#priority-packages).
-* `--workspaces` (string) - Execute the command in each [workspace](./workspaces.md) defined by the
+- `--workspaces` (string) - Execute the command in each [workspace](./workspaces.md) defined by the
   pattern/value. Pass `*` to run in all workspaces.
 
 ## Executing Scripts

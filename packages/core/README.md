@@ -14,16 +14,19 @@ dependencies, continuous copy and paste, and more.
 - Customize and alter config at runtime with CLI options.
 - Pass custom CLI options to build tool commands without failure.
 - Automatically expand glob patterns (a better alternative to bash).
+- Listen to and act upon events.
 - Easily share config between build tools.
 - Avoid relative config or `extend` paths.
 - Automatic config file cleanup.
 - Custom scripts with CLI options.
 - Dotfile synchronization.
+- Workspaces (monorepo) support.
+- Parallel and pooled commands.
 - And much more.
 
 ## Requirements
 
-- Node 6.5+
+- Node 8+
 - GitHub, Bitbucket, or another VCS
 
 ## Documentation

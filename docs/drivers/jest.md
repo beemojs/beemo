@@ -9,8 +9,8 @@ yarn add @beemo/driver-jest jest babel-jest
 
 ## Requirements
 
-* [Babel ^6.0.0](./babel.md)
-* Jest ^23.0.0
+- [Babel ^6.0.0](./babel.md)
+- Jest ^23.0.0
 
 ## Usage
 

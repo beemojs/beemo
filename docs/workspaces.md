@@ -42,13 +42,13 @@ Each driver is designed and built differently, so getting a consistent pattern f
 is quite difficult. Because of this, per driver usage is broken down into 1 of the following 4
 categories.
 
-* **Root only** - The driver command should only be ran in the root, with all workspace packages
+- **Root only** - The driver command should only be ran in the root, with all workspace packages
   being referenced as a whole. For example, recursive globbing.
-* **Referenced config** - The driver command is executed in each package, with the root config file
+- **Referenced config** - The driver command is executed in each package, with the root config file
   being referenced using a CLI option (like `--config`).
-* **Copied config** - The root config is copied into each package folder before the driver command
+- **Copied config** - The root config is copied into each package folder before the driver command
   is ran in each. Because of this, we suggest not using the root config for anything else.
-* **No support** - Workspaces do not work for this driver.
+- **No support** - Workspaces do not work for this driver.
 
 | Driver     | Support                                            |
 | ---------- | -------------------------------------------------- |

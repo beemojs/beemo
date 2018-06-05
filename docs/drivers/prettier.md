@@ -9,7 +9,7 @@ yarn add @beemo/driver-prettier prettier
 
 ## Requirements
 
-* Prettier ^1.0.0
+- Prettier ^1.0.0
 
 ## Usage
 

@@ -21,6 +21,7 @@ dependencies, continuous copy and paste, and more.
 - Custom scripts with CLI options.
 - Dotfile synchronization.
 - Workspaces (monorepo) support.
+- Parallel and pooled commands.
 - And much more.
 
 ## Requirements
