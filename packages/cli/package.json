@@ -24,7 +24,7 @@
     "yargs": "^11.0.0"
   },
   "peerDependencies": {
-    "@beemo/core": "^0.17.0"
+    "@beemo/core": "^0.18.0"
   },
   "devDependencies": {
     "@types/semver": "^5.5.0",
