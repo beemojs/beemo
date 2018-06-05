@@ -93,8 +93,9 @@ That being said, this feature has a few critical caveats to work correctly.
 --parallel="--foo=value"
 ```
 
-> Parallel command line arguments are not accessible within the configuration file, as the file has
-> already been created using the initially passed arguments. Parallel arguments may also collide.
+> Parallel defined arguments are not accessible within the configuration file, as the file has
+> already been created using the initially passed non-parallel arguments. However, depending on the
+> driver, some argument may be available under `process.beemo.args`.
 
 ## Custom Executable Name
 

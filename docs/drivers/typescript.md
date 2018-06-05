@@ -46,10 +46,10 @@ handle both cases. Something like the following.
 // configs/typescript.js
 module.exports = function typescript(args, tool) {
   // The --workspaces option is not passed, but the project uses workspaces.
-  const isWorkspaceRoot = !args.workspaces && tool.package.workspaces;
+  const runningInWorkspaceEnabledRoot = !args.workspaces && !!tool.package.workspaces;
 
   return {
-    include: [isWorkspaceRoot ? './packages/*/src/**/*' : './src/**/*'],
+    include: [runningInWorkspaceEnabledRoot ? './packages/*/src/**/*' : './src/**/*'],
   };
 };
 ```

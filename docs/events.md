@@ -48,7 +48,7 @@ The following list of events, and their arguments, can be listened to.
 
 > `<driver>` and `<script>` should be replaced with their names.
 
-### Type Definitions
+### Type Declarations
 
 * `Driver` - An instance of the
   [Driver](https://github.com/milesj/beemo/blob/master/packages/core/src/Driver.js) class.
