@@ -56,13 +56,6 @@ export interface DriverMetadata extends Struct {
 
 export type Execution = ExecaReturns;
 
-export interface Context extends Struct {
-  args: Arguments;
-  argv: Argv;
-  moduleRoot: string;
-  root: string;
-}
-
 export interface DriverContext extends Context {
   configPaths: string[];
   driverName: string;

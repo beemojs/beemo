@@ -11,7 +11,6 @@ yarn add @beemo/cli
 npm install @beemo/cli --save
 ```
 
-## Usage
+## Documentation
 
-More information on how to get started can be found in the
-[official documentation](https://github.com/milesj/beemo).
+[https://milesj.gitbooks.io/beemo](https://milesj.gitbooks.io/beemo)

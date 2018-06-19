@@ -10,3 +10,7 @@ yarn add @beemo/driver-eslint eslint
 // Or
 npm install @beemo/driver-eslint eslint --save
 ```
+
+## Documentation
+
+[https://milesj.gitbooks.io/beemo](https://milesj.gitbooks.io/beemo)

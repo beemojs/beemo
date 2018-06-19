@@ -10,3 +10,7 @@ yarn add @beemo/driver-flow flow-bin
 // Or
 npm install @beemo/driver-flow flow-bin --save
 ```
+
+## Documentation
+
+[https://milesj.gitbooks.io/beemo](https://milesj.gitbooks.io/beemo)

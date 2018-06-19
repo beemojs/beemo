@@ -5,8 +5,6 @@ to solve the multi-project maintenance fatigue by removing the following burdens
 projects: config and dotfile management, multiple config patterns, up-to-date development
 dependencies, continuous copy and paste, and more.
 
-### Features
-
 - Manage build tools and configurations in a single repository.
 - Configure supported build tools using `.js` files.
 - Customize and alter config at runtime with CLI options.

@@ -10,3 +10,7 @@ yarn add @beemo/driver-babel babel-core
 // Or
 npm install @beemo/driver-babel babel-core --save
 ```
+
+## Documentation
+
+[https://milesj.gitbooks.io/beemo](https://milesj.gitbooks.io/beemo)
