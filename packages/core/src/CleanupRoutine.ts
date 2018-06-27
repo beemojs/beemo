@@ -6,7 +6,8 @@
 import { Routine } from 'boost';
 import chalk from 'chalk';
 import fs from 'fs-extra';
-import { BeemoConfig, DriverContext } from './types';
+import DriverContext from './contexts/DriverContext';
+import { BeemoConfig } from './types';
 
 export default class CleanupRoutine extends Routine<BeemoConfig, DriverContext> {
   execute(): Promise<boolean[]> {

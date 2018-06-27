@@ -9,8 +9,8 @@ import fs from 'fs-extra';
 import path from 'path';
 import { Routine } from 'boost';
 import optimal, { string, Struct } from 'optimal';
+import Context from './contexts/Context';
 import isPatternMatch from './utils/isPatternMatch';
-import { Context } from './types';
 
 export interface SyncDotfilesOptions extends Struct {
   filter: string;

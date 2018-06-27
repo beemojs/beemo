@@ -15,7 +15,10 @@ import ExecuteDriverRoutine from './ExecuteDriverRoutine';
 import ExecuteScriptRoutine from './ExecuteScriptRoutine';
 import SyncDotfilesRoutine from './SyncDotfilesRoutine';
 import Driver from './Driver';
-import { Argv, Arguments, Context, DriverContext, ScriptContext, Execution } from './types';
+import Context from './contexts/Context';
+import DriverContext from './contexts/DriverContext';
+import ScriptContext from './contexts/ScriptContext';
+import { Argv, Arguments, Execution } from './types';
 
 export default class Beemo {
   argv: Argv;
@@ -80,19 +83,6 @@ export default class Beemo {
     }
 
     return this;
-  }
-
-  /**
-   * Create a re-usable context for each pipeline.
-   */
-  createContext(args: Arguments, context: Struct = {}): any {
-    return {
-      ...context,
-      args,
-      argv: this.argv,
-      moduleRoot: this.getConfigModuleRoot(),
-      root: this.tool.options.root,
-    };
   }
 
   /**
@@ -198,15 +188,8 @@ export default class Beemo {
    */
   executeDriver(driverName: string, args: Arguments): Promise<Execution[]> {
     const { tool } = this;
-    const primaryDriver = tool.getPlugin(driverName) as Driver<any>;
-    const context: DriverContext = this.createContext(args, {
-      configPaths: [],
-      driverName,
-      drivers: [],
-      primaryDriver,
-      workspaceRoot: tool.options.workspaceRoot || tool.options.root,
-      workspaces: this.getWorkspacePaths(),
-    });
+    const driver = tool.getPlugin(driverName) as Driver<any>;
+    const context = this.prepareContext(new DriverContext(args, driver));
 
     // Delete config files on failure
     if (tool.config.config.cleanup) {
@@ -216,11 +199,12 @@ export default class Beemo {
       );
     }
 
-    // Make the context available in the current driver
-    primaryDriver.context = context;
+    // Set workspace related properties
+    context.workspaceRoot = tool.options.workspaceRoot || tool.options.root;
+    context.workspaces = this.getWorkspacePaths();
 
-    tool.setEventNamespace(driverName).emit('init-driver', [driverName, context.argv, context]);
-
+    tool.setEventNamespace(driverName);
+    tool.emit('init-driver', [driverName, context.argv, context]);
     tool.debug('Running with %s driver', driverName);
 
     return this.startPipeline(context)
@@ -234,21 +218,26 @@ export default class Beemo {
    * Run a script found within the configuration module.
    */
   executeScript(scriptName: string, args: Arguments): Promise<Execution> {
-    const context: ScriptContext = this.createContext(args, {
-      script: null,
-      scriptName,
-      scriptPath: '',
-    });
+    const context = this.prepareContext(new ScriptContext(args));
 
-    this.tool
-      .setEventNamespace(scriptName)
-      .emit('init-script', [scriptName, context.argv, context]);
-
+    this.tool.setEventNamespace(scriptName);
+    this.tool.emit('init-script', [scriptName, context.argv, context]);
     this.tool.debug('Running with %s script', scriptName);
 
     return this.startPipeline(context)
       .pipe(new ExecuteScriptRoutine('script', `Executing ${scriptName} script`))
       .run(scriptName);
+  }
+
+  /**
+   * Prepare the context object by setting default values for specific properties.
+   */
+  prepareContext<T extends Context>(context: T): T {
+    context.argv = this.argv;
+    context.moduleRoot = this.getConfigModuleRoot();
+    context.root = this.tool.options.root;
+
+    return context;
   }
 
   /**
@@ -268,10 +257,10 @@ export default class Beemo {
    * Sync dotfiles from the configuration module.
    */
   syncDotfiles(args: Arguments): Promise<string[]> {
-    const context: Context = this.createContext(args);
+    const context = this.prepareContext(new Context(args));
 
-    this.tool.setEventNamespace('beemo').emit('sync-dotfiles', [context]);
-
+    this.tool.setEventNamespace('beemo');
+    this.tool.emit('sync-dotfiles', [context]);
     this.tool.debug('Running dotfiles command');
 
     return this.startPipeline(context)

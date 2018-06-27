@@ -7,7 +7,8 @@ import path from 'path';
 import { ModuleLoader, Routine } from 'boost';
 import parseArgs from 'yargs-parser';
 import Script from './Script';
-import { BeemoConfig, Execution, ScriptContext } from './types';
+import ScriptContext from './contexts/ScriptContext';
+import { BeemoConfig, Execution } from './types';
 
 export default class ExecuteScriptRoutine extends Routine<BeemoConfig, ScriptContext> {
   // @ts-ignore Debug generic value from parent

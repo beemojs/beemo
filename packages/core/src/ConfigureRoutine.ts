@@ -7,7 +7,8 @@ import { Routine } from 'boost';
 import chalk from 'chalk';
 import CreateConfigRoutine from './configure/CreateConfigRoutine';
 import Driver from './Driver';
-import { BeemoConfig, DriverContext } from './types';
+import DriverContext from './contexts/DriverContext';
+import { BeemoConfig } from './types';
 
 export default class ConfigureRoutine extends Routine<BeemoConfig, DriverContext> {
   bootstrap() {

@@ -11,7 +11,7 @@ import optimal, { instance, Struct } from 'optimal';
 import { ConfigLoader, Routine } from 'boost';
 import parseArgs from 'yargs-parser';
 import Driver from '../Driver';
-import { Arguments, DriverContext } from '../types';
+import DriverContext from '../contexts/DriverContext';
 
 export interface CreateConfigOptions extends Struct {
   driver: Driver<any>;

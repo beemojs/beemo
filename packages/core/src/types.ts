@@ -7,8 +7,6 @@ import { ToolConfig, ToolInterface } from 'boost';
 import { ExecaReturns } from 'execa';
 import { Struct } from 'optimal';
 import { Arguments, Options } from 'yargs';
-import Driver from './Driver';
-import Script from './Script';
 
 export { Arguments };
 
@@ -55,18 +53,3 @@ export interface DriverMetadata extends Struct {
 }
 
 export type Execution = ExecaReturns;
-
-export interface DriverContext extends Context {
-  configPaths: string[];
-  driverName: string;
-  drivers: Driver<any>[];
-  primaryDriver: Driver<any>;
-  workspaceRoot: string;
-  workspaces: string[];
-}
-
-export interface ScriptContext extends Context {
-  script: Script | null;
-  scriptName: string;
-  scriptPath: string;
-}

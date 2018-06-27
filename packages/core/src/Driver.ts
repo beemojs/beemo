@@ -6,11 +6,11 @@
 import { Plugin, EventListener } from 'boost';
 import merge from 'lodash/merge';
 import optimal, { array, bool, number, object, shape, string, union, Blueprint } from 'optimal';
+import DriverContext from './contexts/DriverContext';
 import {
   Argv,
   BeemoConfig,
   DriverCommandOptions,
-  DriverContext,
   DriverOptions,
   DriverMetadata,
   Execution,

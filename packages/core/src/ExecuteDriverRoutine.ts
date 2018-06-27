@@ -7,9 +7,10 @@ import path from 'path';
 import glob from 'glob';
 import trim from 'lodash/trim';
 import { Routine, RoutineInterface } from 'boost';
+import DriverContext from './contexts/DriverContext';
 import RunCommandRoutine, { RunCommandOptions } from './driver/RunCommandRoutine';
 import isPatternMatch from './utils/isPatternMatch';
-import { BeemoConfig, DriverContext } from './types';
+import { BeemoConfig } from './types';
 
 export default class ExecuteDriverRoutine extends Routine<BeemoConfig, DriverContext> {
   bootstrap() {
