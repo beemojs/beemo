@@ -99,7 +99,7 @@ describe('CreateConfigRoutine', () => {
     });
 
     it('sets config on driver', async () => {
-      const path = await routine.createConfigFile(routine.context, { foo: 'bar' });
+      await routine.createConfigFile(routine.context, { foo: 'bar' });
 
       expect(driver.config).toEqual({ foo: 'bar' });
     });

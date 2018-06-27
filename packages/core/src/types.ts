@@ -4,7 +4,7 @@
  */
 
 import { ToolConfig, ToolInterface } from 'boost';
-import { ExecaReturns } from 'execa';
+import { ExecaReturns } from 'execa'; // eslint-disable-line import/no-extraneous-dependencies
 import { Struct } from 'optimal';
 import { Arguments, Options } from 'yargs';
 

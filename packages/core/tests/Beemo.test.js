@@ -266,7 +266,8 @@ describe('Beemo', () => {
 
     it('sets primary driver with context', async () => {
       const spy = jest.spyOn(beemo, 'startPipeline');
-      const pipeline = await beemo.executeDriver('foo-bar', {});
+
+      await beemo.executeDriver('foo-bar', {});
 
       expect(spy).toHaveBeenCalledWith(
         expect.objectContaining({
@@ -382,7 +383,8 @@ describe('Beemo', () => {
 
     it('passes context to pipeline', async () => {
       const spy = jest.spyOn(beemo, 'startPipeline');
-      const pipeline = await beemo.syncDotfiles({});
+
+      await beemo.syncDotfiles({});
 
       expect(spy).toHaveBeenCalledWith(
         expect.objectContaining({

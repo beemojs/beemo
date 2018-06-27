@@ -1,4 +1,3 @@
-import mm from 'micromatch';
 import isPatternMatch from '../../src/utils/isPatternMatch';
 
 describe('isPatternMatch()', () => {

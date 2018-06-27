@@ -7,7 +7,7 @@ import chalk from 'chalk';
 import fs from 'fs-extra';
 import path from 'path';
 import { Pipeline, Tool, ToolInterface } from 'boost';
-import { bool, shape, Blueprint, Struct } from 'optimal';
+import { bool, shape, Blueprint } from 'optimal';
 import parseArgs from 'yargs-parser';
 import CleanupRoutine from './CleanupRoutine';
 import ConfigureRoutine from './ConfigureRoutine';

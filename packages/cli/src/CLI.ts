@@ -7,7 +7,6 @@
 
 import path from 'path';
 import chalk from 'chalk';
-import semver from 'semver';
 import yargs, { Arguments } from 'yargs';
 import Beemo, { Driver } from '@beemo/core';
 import version from './checkVersion';

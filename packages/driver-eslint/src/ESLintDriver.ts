@@ -5,7 +5,7 @@
 
 import fs from 'fs';
 import path from 'path';
-import { Driver, DriverContext } from '@beemo/core';
+import { Driver } from '@beemo/core';
 // @ts-ignore
 import ConfigOps from 'eslint/lib/config/config-ops';
 import { ESLintConfig } from './types';

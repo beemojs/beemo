@@ -1,14 +1,8 @@
 import path from 'path';
 import { Tool } from 'boost';
-import ModuleLoader from 'boost/lib/ModuleLoader';
 import ExecuteDriverRoutine from '../src/ExecuteDriverRoutine';
 import RunCommandRoutine from '../src/driver/RunCommandRoutine';
-import {
-  createDriver,
-  createDriverContext,
-  setupMockTool,
-  prependRoot,
-} from '../../../tests/helpers';
+import { createDriver, createDriverContext, setupMockTool } from '../../../tests/helpers';
 
 jest.mock('boost/lib/Tool');
 
@@ -187,7 +181,7 @@ describe('ExecuteDriverRoutine', () => {
     it('pools each routine', async () => {
       routine.poolRoutines = jest.fn(() => Promise.resolve({ errors: [], results: [] }));
 
-      const response = await routine.execute();
+      await routine.execute();
 
       expect(routine.poolRoutines).toHaveBeenCalledWith(null, {}, routine.routines);
     });
@@ -217,7 +211,7 @@ describe('ExecuteDriverRoutine', () => {
       routine.serializeRoutines = jest.fn(() => Promise.resolve());
       routine.poolRoutines = jest.fn(() => Promise.resolve({ errors: [], results: [] }));
 
-      const response = await routine.execute();
+      await routine.execute();
 
       expect(routine.serializeRoutines).toHaveBeenCalledWith(null, [
         { key: 'qux' },

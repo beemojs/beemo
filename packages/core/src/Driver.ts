@@ -7,14 +7,7 @@ import { Plugin, EventListener } from 'boost';
 import merge from 'lodash/merge';
 import optimal, { array, bool, number, object, shape, string, union, Blueprint } from 'optimal';
 import DriverContext from './contexts/DriverContext';
-import {
-  Argv,
-  BeemoConfig,
-  DriverCommandOptions,
-  DriverOptions,
-  DriverMetadata,
-  Execution,
-} from './types';
+import { Argv, DriverCommandOptions, DriverOptions, DriverMetadata, Execution } from './types';
 
 export const STRATEGY_REFERENCE = 'reference';
 export const STRATEGY_COPY = 'copy';
