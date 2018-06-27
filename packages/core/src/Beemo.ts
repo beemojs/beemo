@@ -218,7 +218,7 @@ export default class Beemo {
    * Run a script found within the configuration module.
    */
   executeScript(scriptName: string, args: Arguments): Promise<Execution> {
-    const context = this.prepareContext(new ScriptContext(args));
+    const context = this.prepareContext(new ScriptContext(args, scriptName));
 
     this.tool.setEventNamespace(scriptName);
     this.tool.emit('init-script', [scriptName, context.argv, context]);

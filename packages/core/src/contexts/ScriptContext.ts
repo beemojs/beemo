@@ -5,6 +5,7 @@
 
 import Context from './Context';
 import Script from '../Script';
+import { Arguments } from '../types';
 
 export default class ScriptContext extends Context {
   script: Script | null = null;
@@ -13,6 +14,15 @@ export default class ScriptContext extends Context {
 
   scriptPath: string = '';
 
+  constructor(args: Arguments, name: string) {
+    super(args);
+
+    this.scriptName = name;
+  }
+
+  /**
+   * Set the script object and associated metadata.
+   */
   setScript(script: Script, path: string) {
     this.script = script;
     this.scriptName = script.name;

@@ -73,7 +73,7 @@ export default class ExecuteDriverRoutine extends Routine<BeemoConfig, DriverCon
     priority: RoutineInterface[];
     other: RoutineInterface[];
   } {
-    const priorityNames: string[] = (this.context.args.priority || '').split(',');
+    const priorityNames: string[] = String(this.context.getArg('priority', '')).split(',');
 
     // Extract high priority in order provided
     const priority: RoutineInterface[] = [];

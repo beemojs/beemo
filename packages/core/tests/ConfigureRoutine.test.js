@@ -14,7 +14,7 @@ describe('ConfigureRoutine', () => {
     tool = setupMockTool(new Tool());
 
     routine = new ConfigureRoutine('config', 'Generating configurations');
-    routine.context = createDriverContext(createDriver('foo'), tool);
+    routine.context = createDriverContext(createDriver('foo'));
     routine.tool = tool;
     routine.tool.getPlugin.mockImplementation(name => plugins[name] || createDriver(name, tool));
     routine.debug = jest.fn();

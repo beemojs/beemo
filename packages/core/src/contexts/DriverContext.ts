@@ -25,11 +25,26 @@ export default class DriverContext<T = any> extends Context {
 
     this.primaryDriver = driver;
     this.driverName = driver.name;
-    this.drivers.push(driver);
 
     // Make the context available in the current driver
     driver.context = this;
   }
 
-  addDriver() {}
+  /**
+   * Add a driver as a dependency.
+   */
+  addDriverDependency(driver: Driver<any>): void {
+    if (driver instanceof Driver) {
+      this.drivers.unshift(driver);
+    } else {
+      throw new TypeError('Invalid driver. Must be an instance of `Driver`.');
+    }
+  }
+
+  /**
+   * Find a configuration path by file name.
+   */
+  findConfigByName(fileName: string): string | undefined {
+    return this.configPaths.find(path => path.endsWith(fileName));
+  }
 }

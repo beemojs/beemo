@@ -1,6 +1,9 @@
 import path from 'path';
 import parseArgs from 'yargs-parser';
 import Driver from '../packages/core/src/Driver';
+import Context from '../packages/core/src/contexts/Context';
+import DriverContext from '../packages/core/src/contexts/DriverContext';
+import ScriptContext from '../packages/core/src/contexts/ScriptContext';
 
 export function setupMockTool(tool) {
   tool.options = {
@@ -50,33 +53,31 @@ export function createDriver(name, tool, metadata = {}) {
   return driver;
 }
 
-export function createContext(context = {}) {
-  return {
-    args: parseArgs(['-a', '--foo', 'bar', 'baz']),
-    argv: ['-a', '--foo', 'bar', 'baz'],
-    moduleRoot: __dirname,
-    root: __dirname,
-    ...context,
-  };
+export function applyContext(context) {
+  context.args = parseArgs(['-a', '--foo', 'bar', 'baz']);
+  context.argv = ['-a', '--foo', 'bar', 'baz'];
+  context.moduleRoot = __dirname;
+  context.root = __dirname;
+
+  return context;
+}
+
+export function createContext() {
+  return applyContext(new Context({}));
 }
 
 export function createDriverContext(driver = null) {
-  return createContext({
-    configPaths: [],
-    driverName: driver ? driver.name : '',
-    drivers: [],
-    primaryDriver: driver,
-    workspaceRoot: '',
-    workspaces: [],
-  });
+  return applyContext(new DriverContext({}, driver || {}));
 }
 
 export function createScriptContext(script = null) {
-  return createContext({
-    script,
-    scriptName: script ? script.name : '',
-    scriptPath: '',
-  });
+  const context = applyContext(new ScriptContext({}));
+
+  if (script) {
+    context.setScript(script);
+  }
+
+  return context;
 }
 
 export function prependRoot(part) {

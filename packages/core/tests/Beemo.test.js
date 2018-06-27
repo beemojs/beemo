@@ -3,6 +3,7 @@ import fs from 'fs-extra';
 import Beemo from '../src/Beemo';
 import bootstrapIndex from '../../..';
 import { getFixturePath } from '../../../tests/helpers';
+import Context from '../src/contexts/Context';
 
 jest.mock('fs-extra');
 
@@ -56,45 +57,6 @@ describe('Beemo', () => {
       beemo.bootstrapConfigModule();
 
       expect(bootstrapIndex).toHaveBeenCalledWith(beemo.tool);
-    });
-  });
-
-  describe('createContext()', () => {
-    it('returns a base context object', () => {
-      expect(beemo.createContext({})).toEqual({
-        args: {},
-        argv: ['foo', 'bar'],
-        moduleRoot: process.cwd(),
-        root,
-      });
-    });
-
-    it('can pass args', () => {
-      expect(beemo.createContext({ _: ['wtf'] })).toEqual({
-        args: { _: ['wtf'] },
-        argv: ['foo', 'bar'],
-        moduleRoot: process.cwd(),
-        root,
-      });
-    });
-
-    it('can pass extra context', () => {
-      expect(
-        beemo.createContext(
-          {},
-          {
-            foo: 'bar',
-            // Cant overwrite
-            argv: ['baz'],
-          },
-        ),
-      ).toEqual({
-        foo: 'bar',
-        args: {},
-        argv: ['foo', 'bar'],
-        moduleRoot: process.cwd(),
-        root,
-      });
     });
   });
 
@@ -224,7 +186,7 @@ describe('Beemo', () => {
 
   describe('executeDriver()', () => {
     beforeEach(() => {
-      beemo.tool.getPlugin = () => ({});
+      beemo.tool.getPlugin = () => ({ name: 'foo-bar' });
     });
 
     it('sets event namespace', async () => {
@@ -274,9 +236,7 @@ describe('Beemo', () => {
           argv: ['foo', 'bar'],
           primaryDriver: expect.objectContaining({
             context: expect.objectContaining({
-              configPaths: [],
               driverName: 'foo-bar',
-              drivers: [],
             }),
           }),
         }),
@@ -338,6 +298,19 @@ describe('Beemo', () => {
       );
 
       expect(pipeline.run).toHaveBeenCalledWith('foo-bar');
+    });
+  });
+
+  describe('prepareContext()', () => {
+    it('sets extra props', () => {
+      expect(beemo.prepareContext(new Context({ _: [] }))).toEqual(
+        expect.objectContaining({
+          args: { _: [] },
+          argv: ['foo', 'bar'],
+          moduleRoot: process.cwd(),
+          root,
+        }),
+      );
     });
   });
 

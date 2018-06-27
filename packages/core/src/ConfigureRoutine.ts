@@ -59,7 +59,7 @@ export default class ConfigureRoutine extends Routine<BeemoConfig, DriverContext
         queue.push(this.tool.getPlugin(name) as Driver<any>);
       });
 
-      this.context.drivers.unshift(driver);
+      this.context.addDriverDependency(driver);
     }
 
     this.tool.emit('resolve-dependencies', [this.context.drivers]);

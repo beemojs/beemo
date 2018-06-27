@@ -22,4 +22,11 @@ export default class Context extends BaseContext {
   }
 
   addArg() {}
+
+  /**
+   * Return an arguments value by name, or a fallback value if not found.
+   */
+  getArg<T>(name: string, fallback: any = null): T {
+    return this.args[name] || fallback;
+  }
 }

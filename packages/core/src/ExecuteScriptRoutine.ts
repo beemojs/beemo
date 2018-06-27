@@ -34,9 +34,7 @@ export default class ExecuteScriptRoutine extends Routine<BeemoConfig, ScriptCon
       // Is not set by Boost, so set it here
       script.name = scriptName;
 
-      context.script = script;
-      context.scriptName = scriptName;
-      context.scriptPath = filePath;
+      context.setScript(script, filePath);
 
       this.tool.emit('load-script', [script]);
 

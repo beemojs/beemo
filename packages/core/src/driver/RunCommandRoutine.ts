@@ -224,6 +224,7 @@ export default class RunCommandRoutine extends Routine<RunCommandOptions, Driver
     // Since we combine multiple args, we need to rebuild this.
     // And we also need to set this before we filter them.
     // And we need to be sure not to overwrite existing args.
+    // TODO
     context.args = merge({}, parseArgs(argv), context.args);
 
     // Update the process reference also
@@ -284,8 +285,8 @@ export default class RunCommandRoutine extends Routine<RunCommandOptions, Driver
    * Include --config option if driver requires it (instead of auto-lookup resolution).
    */
   includeConfigOption(context: DriverContext, prevArgv: Argv): Promise<Argv> {
-    const { configPaths, primaryDriver } = context;
-    const configPath = configPaths.find(p => p.endsWith(primaryDriver.metadata.configName));
+    const { primaryDriver } = context;
+    const configPath = context.findConfigByName(primaryDriver.metadata.configName);
     const argv = [...prevArgv];
 
     if (configPath && primaryDriver.metadata.configOption) {
