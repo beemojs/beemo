@@ -25,7 +25,7 @@ export default class ConfigureRoutine extends Routine<BeemoConfig, DriverContext
    * and then run in parallel.
    */
   setupConfigFiles() {
-    const names = this.context.drivers.map(driver => {
+    const names = [...this.context.drivers].reverse().map(driver => {
       const routine = new CreateConfigRoutine(driver.name, driver.metadata.configName, { driver });
 
       this.pipe(routine);

@@ -81,5 +81,19 @@ describe('JestDriver', () => {
       expect(driver.tool.log).toHaveBeenCalledWith('Tests');
       expect(driver.tool.log).toHaveBeenCalledWith('Coverage');
     });
+
+    it('outputs nothing if empty strings when running coverage', () => {
+      driver.tool = {
+        log: jest.fn(),
+      };
+
+      driver.handleSuccess({
+        cmd: 'jest --coverage',
+        stdout: '',
+        stderr: '',
+      });
+
+      expect(driver.tool.log).not.toHaveBeenCalled();
+    });
   });
 });

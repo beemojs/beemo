@@ -69,12 +69,12 @@ describe('ConfigureRoutine', () => {
 
       expect(routine.routines).toHaveLength(3);
 
-      expect(routine.routines[0].key).toBe('foo');
-      expect(routine.routines[0].options.driver).toBe(foo);
+      expect(routine.routines[0].key).toBe('baz');
+      expect(routine.routines[0].options.driver).toBe(baz);
       expect(routine.routines[1].key).toBe('bar');
       expect(routine.routines[1].options.driver).toBe(bar);
-      expect(routine.routines[2].key).toBe('baz');
-      expect(routine.routines[2].options.driver).toBe(baz);
+      expect(routine.routines[2].key).toBe('foo');
+      expect(routine.routines[2].options.driver).toBe(foo);
     });
   });
 
@@ -91,8 +91,8 @@ describe('ConfigureRoutine', () => {
       await routine.resolveDependencies();
 
       expect(routine.context.drivers).toEqual([
-        createDriver('bar', tool),
         routine.context.primaryDriver,
+        createDriver('bar', tool),
       ]);
     });
 
@@ -107,11 +107,11 @@ describe('ConfigureRoutine', () => {
       await routine.resolveDependencies();
 
       expect(routine.context.drivers).toEqual([
-        plugins.oof,
-        plugins.qux,
-        plugins.baz,
-        plugins.bar,
         routine.context.primaryDriver,
+        plugins.bar,
+        plugins.baz,
+        plugins.qux,
+        plugins.oof,
       ]);
     });
 

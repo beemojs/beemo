@@ -1,0 +1,3 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Context addDriverDependency() errors when not a driver 1`] = `"Invalid driver. Must be an instance of \`Driver\`."`;

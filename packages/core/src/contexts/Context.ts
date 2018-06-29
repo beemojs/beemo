@@ -4,6 +4,8 @@
  */
 
 import { Context as BaseContext } from 'boost';
+import camelCase from 'lodash/camelCase';
+import trim from 'lodash/trim';
 import { Arguments, Argv } from '../types';
 
 export default class Context extends BaseContext {
@@ -21,7 +23,21 @@ export default class Context extends BaseContext {
     this.args = args;
   }
 
-  addArg() {}
+  /**
+   * Add an arg to both the args object and argv list.
+   */
+  addArg(arg: string, defaultValue: any = null) {
+    let name = trim(arg, '-');
+    let value = defaultValue;
+
+    if (name.includes('=')) {
+      [name, value] = name.split('=');
+    }
+
+    this.argv.push(arg);
+    this.args[name] = value;
+    this.args[camelCase(name)] = value;
+  }
 
   /**
    * Return an arguments value by name, or a fallback value if not found.

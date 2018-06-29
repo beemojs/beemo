@@ -35,7 +35,7 @@ export default class DriverContext<T = any> extends Context {
    */
   addDriverDependency(driver: Driver<any>): void {
     if (driver instanceof Driver) {
-      this.drivers.unshift(driver);
+      this.drivers.push(driver);
     } else {
       throw new TypeError('Invalid driver. Must be an instance of `Driver`.');
     }

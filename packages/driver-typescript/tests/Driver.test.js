@@ -50,6 +50,15 @@ describe('TypeScriptDriver', () => {
   });
 
   describe('handleCleanTarget()', () => {
+    it('doesnt run if no config', () => {
+      driver.config = {};
+      driver.handleCleanTarget(driver, [], {
+        args: {},
+      });
+
+      expect(rimraf.sync).not.toHaveBeenCalled();
+    });
+
     it('doesnt run if no clean param', () => {
       driver.config.compilerOptions = { outDir: './lib' };
       driver.handleCleanTarget(driver, [], {
