@@ -27,6 +27,15 @@ export default class Context extends BaseContext {
    * Add an arg to both the args object and argv list.
    */
   addArg(arg: string, defaultValue: any = null) {
+    this.argv.push(arg);
+
+    // Positional argument
+    if (!arg.startsWith('-')) {
+      this.args._.push(arg);
+
+      return;
+    }
+
     let name = trim(arg, '-');
     let value = defaultValue;
 
@@ -34,7 +43,6 @@ export default class Context extends BaseContext {
       [name, value] = name.split('=');
     }
 
-    this.argv.push(arg);
     this.args[name] = value;
     this.args[camelCase(name)] = value;
   }

@@ -4,7 +4,7 @@ describe('Context', () => {
   let context;
 
   beforeEach(() => {
-    context = new Context({});
+    context = new Context({ _: [], $: '' });
   });
 
   describe('constructor()', () => {
@@ -46,6 +46,19 @@ describe('Context', () => {
 
       expect(context.argv).toEqual(['--foo=123']);
       expect(context.args.foo).toBe('123');
+    });
+
+    it('can add positional args', () => {
+      context.addArg('./foo');
+
+      expect(context.argv).toEqual(['./foo']);
+      expect(context.args['./foo']).toBeUndefined();
+    });
+
+    it('adds positional arg to yargs list', () => {
+      context.addArg('./foo');
+
+      expect(context.args._).toEqual(['./foo']);
     });
   });
 });

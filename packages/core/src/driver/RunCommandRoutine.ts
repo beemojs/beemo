@@ -222,9 +222,8 @@ export default class RunCommandRoutine extends Routine<RunCommandOptions, Driver
     ];
 
     // Since we combine multiple args, we need to rebuild this.
-    // And we also need to set this before we filter them.
-    // And we need to be sure not to overwrite existing args.
-    // TODO
+    // And we need to set this before we filter them.
+    // And we need to be sure not to remove existing args.
     context.args = merge({}, parseArgs(argv), context.args);
 
     return Promise.resolve(argv);
