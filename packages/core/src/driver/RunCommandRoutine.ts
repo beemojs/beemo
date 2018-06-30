@@ -227,11 +227,6 @@ export default class RunCommandRoutine extends Routine<RunCommandOptions, Driver
     // TODO
     context.args = merge({}, parseArgs(argv), context.args);
 
-    // Update the process reference also
-    if (process.beemo) {
-      process.beemo.args = context.args;
-    }
-
     return Promise.resolve(argv);
   }
 

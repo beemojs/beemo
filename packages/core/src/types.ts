@@ -14,7 +14,7 @@ declare global {
   namespace NodeJS {
     interface Process {
       beemo: {
-        args: Arguments;
+        context: any;
         tool: ToolInterface;
       };
     }

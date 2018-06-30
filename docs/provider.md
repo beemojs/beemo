@@ -97,12 +97,12 @@ module.exports = function(args, tool) {
 };
 ```
 
-If for some reason you cannot return a function, but would like to still access the args and tool,
-you can reference the current Beemo instance using `process.beemo`.
+If for some reason you cannot return a function, but would like to still access the context and
+tool, you can reference the current Beemo instance using `process.beemo`.
 
 ```js
 // configs/babel.js
-const { args, tool } = process.beemo;
+const { context, tool } = process.beemo;
 const presets = [
   [
     'babel-preset-env',
@@ -112,7 +112,7 @@ const presets = [
   ],
 ];
 
-if (args.react) {
+if (context.args.react) {
   presets.push('babel-preset-react');
 }
 

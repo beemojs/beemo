@@ -204,7 +204,7 @@ export default class Beemo {
     context.workspaces = this.getWorkspacePaths();
 
     tool.setEventNamespace(driverName);
-    tool.emit('init-driver', [driverName, context.argv, context]);
+    tool.emit('init-driver', [driverName, context]);
     tool.debug('Running with %s driver', driverName);
 
     return this.startPipeline(context)
@@ -221,7 +221,7 @@ export default class Beemo {
     const context = this.prepareContext(new ScriptContext(args, scriptName));
 
     this.tool.setEventNamespace(scriptName);
-    this.tool.emit('init-script', [scriptName, context.argv, context]);
+    this.tool.emit('init-script', [scriptName, context]);
     this.tool.debug('Running with %s script', scriptName);
 
     return this.startPipeline(context)
@@ -246,7 +246,7 @@ export default class Beemo {
   startPipeline<T extends Context>(context: T): Pipeline<Driver<any>, T> {
     // Make the tool available to all processes
     process.beemo = {
-      args: context.args,
+      context,
       tool: this.tool,
     };
 

@@ -95,7 +95,7 @@ That being said, this feature has a few critical caveats to work correctly.
 
 > Parallel defined arguments are not accessible within the configuration file, as the file has
 > already been created using the initially passed non-parallel arguments. However, depending on the
-> driver, some argument may be available under `process.beemo.args`.
+> driver, some argument may be available under `process.beemo.context.args`.
 
 ## Custom Executable Name
 

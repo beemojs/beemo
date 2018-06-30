@@ -204,7 +204,6 @@ describe('Beemo', () => {
 
       expect(spy).toHaveBeenCalledWith('init-driver', [
         'foo-bar',
-        ['foo', 'bar'],
         expect.objectContaining({
           argv: ['foo', 'bar'],
           driverName: 'foo-bar',
@@ -278,7 +277,6 @@ describe('Beemo', () => {
 
       expect(spy).toHaveBeenCalledWith('init-script', [
         'foo-bar',
-        ['foo', 'bar'],
         expect.objectContaining({
           argv: ['foo', 'bar'],
           scriptName: 'foo-bar',
@@ -327,7 +325,7 @@ describe('Beemo', () => {
       });
 
       expect(process.beemo).toEqual({
-        args: { foo: 123, bar: true },
+        context: { args: { foo: 123, bar: true } },
         tool: beemo.tool,
       });
     });
