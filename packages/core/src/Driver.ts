@@ -4,7 +4,7 @@
  */
 
 import { Plugin, EventListener } from 'boost';
-import merge from 'lodash/merge';
+import mergeWith from 'lodash/mergeWith';
 import optimal, { array, bool, number, object, shape, string, union, Blueprint } from 'optimal';
 import DriverContext from './contexts/DriverContext';
 import { Argv, DriverCommandOptions, DriverOptions, DriverMetadata, Execution } from './types';
@@ -109,10 +109,21 @@ export default class Driver<T> extends Plugin<DriverOptions> {
   }
 
   /**
+   * Special case for merging arrays.
+   */
+  handleMerge(prevValue: any, nextValue: any): any {
+    if (Array.isArray(prevValue)) {
+      return prevValue.concat(nextValue);
+    }
+
+    return undefined;
+  }
+
+  /**
    * Merge multiple configuration objects.
    */
   mergeConfig(prev: T, next: T): T {
-    return merge(prev, next);
+    return mergeWith(prev, next, this.handleMerge);
   }
 
   /**
