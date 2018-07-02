@@ -23,20 +23,20 @@ describe('Context', () => {
     });
 
     it('adds to args', () => {
-      context.addArg('--foo', true);
+      context.addArg('--foo');
 
       expect(context.args.foo).toBe(true);
     });
 
     it('camel cases arg', () => {
-      context.addArg('--foo-bar', true);
+      context.addArg('--foo-bar');
 
       expect(context.args['foo-bar']).toBe(true);
       expect(context.args.fooBar).toBe(true);
     });
 
     it('supports single dashed', () => {
-      context.addArg('-f', true);
+      context.addArg('-f');
 
       expect(context.args.f).toBe(true);
     });
@@ -59,6 +59,22 @@ describe('Context', () => {
       context.addArg('./foo');
 
       expect(context.args._).toEqual(['./foo']);
+    });
+  });
+
+  describe('getArg()', () => {
+    it('returns null if arg doesnt exist', () => {
+      expect(context.getArg('foo')).toBeNull();
+    });
+
+    it('can customize fallback value', () => {
+      expect(context.getArg('foo', 123)).toBe(123);
+    });
+
+    it('returns value if it exists', () => {
+      context.args.foo = 'abc';
+
+      expect(context.getArg('foo', 123)).toBe('abc');
     });
   });
 });
