@@ -4,6 +4,7 @@ import fs from 'fs-extra';
 import CreateConfigRoutine from '../../src/configure/CreateConfigRoutine';
 import BabelDriver from '../../../driver-babel/src/BabelDriver';
 import { createDriverContext, setupMockTool, prependRoot } from '../../../../tests/helpers';
+import { STRATEGY_COPY } from '../../src/Driver';
 
 jest.mock('fs-extra');
 jest.mock('boost/lib/Tool');
@@ -31,19 +32,17 @@ describe('CreateConfigRoutine', () => {
 
     fs.existsSync.mockImplementation(() => true);
     fs.writeFile.mockImplementation(() => Promise.resolve());
+    fs.copy.mockImplementation(() => Promise.resolve());
+    ConfigLoader.mockImplementation(() => ({
+      parseFile: () => ({ foo: 123 }),
+    }));
+  });
+
+  afterEach(() => {
+    ConfigLoader.mockReset();
   });
 
   describe('execute()', () => {
-    beforeEach(() => {
-      ConfigLoader.mockImplementation(() => ({
-        parseFile: () => ({ foo: 123 }),
-      }));
-    });
-
-    afterEach(() => {
-      ConfigLoader.mockReset();
-    });
-
     it('executes pipeline and returns final config path', async () => {
       const loadSpy = jest.spyOn(routine, 'loadConfigFromFilesystem');
       const extractSpy = jest.spyOn(routine, 'extractConfigFromPackage');
@@ -72,6 +71,32 @@ describe('CreateConfigRoutine', () => {
         JSON.stringify({ foo: 123, bar: 'abc' }, null, 2),
       );
     });
+
+    it('copies config file if `configStrategy` metadata is copy', async () => {
+      const createSpy = jest.spyOn(routine, 'createConfigFile');
+      const copySpy = jest.spyOn(routine, 'copyConfigFile');
+
+      driver.metadata.configStrategy = STRATEGY_COPY;
+
+      const path = await routine.execute();
+
+      expect(copySpy).toHaveBeenCalledWith(routine.context, [], expect.anything());
+      expect(createSpy).not.toHaveBeenCalled();
+      expect(path).toBe(prependRoot('/.babelrc'));
+    });
+
+    it('copies config file if `copy` option is true', async () => {
+      const createSpy = jest.spyOn(routine, 'createConfigFile');
+      const copySpy = jest.spyOn(routine, 'copyConfigFile');
+
+      driver.options.copy = true;
+
+      const path = await routine.execute();
+
+      expect(copySpy).toHaveBeenCalledWith(routine.context, [], expect.anything());
+      expect(createSpy).not.toHaveBeenCalled();
+      expect(path).toBe(prependRoot('/.babelrc'));
+    });
   });
 
   describe('bootstrap()', () => {
@@ -80,6 +105,48 @@ describe('CreateConfigRoutine', () => {
 
       expect(() => {
         routine.bootstrap();
+      }).toThrowErrorMatchingSnapshot();
+    });
+  });
+
+  describe('copyConfigFile()', () => {
+    it('adds path to context', async () => {
+      await routine.copyConfigFile(routine.context);
+
+      expect(routine.context.configPaths).toEqual([prependRoot('/.babelrc')]);
+    });
+
+    it('copies file', async () => {
+      const path = await routine.copyConfigFile(routine.context);
+
+      expect(fs.copy).toHaveBeenCalledWith(
+        prependRoot('/configs/babel.js'),
+        prependRoot('/.babelrc'),
+        { overwrite: true },
+      );
+      expect(path).toBe(prependRoot('/.babelrc'));
+    });
+
+    it('sets config on driver', async () => {
+      await routine.copyConfigFile(routine.context);
+
+      expect(driver.config).toEqual({ foo: 123 });
+    });
+
+    it('triggers `copy-config-file` event', async () => {
+      await routine.copyConfigFile(routine.context);
+
+      expect(routine.tool.emit).toHaveBeenCalledWith('copy-config-file', [
+        prependRoot('/.babelrc'),
+        { foo: 123 },
+      ]);
+    });
+
+    it('errors if no source file', () => {
+      routine.getSourceConfigPath = () => '';
+
+      expect(() => {
+        routine.copyConfigFile(routine.context);
       }).toThrowErrorMatchingSnapshot();
     });
   });

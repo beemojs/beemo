@@ -26,7 +26,7 @@ export default class Context extends BaseContext {
   /**
    * Add an arg to both the args object and argv list.
    */
-  addArg(arg: string, defaultValue: any = null) {
+  addArg(arg: string, defaultValue: any = true) {
     this.argv.push(arg);
 
     // Positional argument

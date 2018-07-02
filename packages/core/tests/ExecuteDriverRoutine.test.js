@@ -1,4 +1,3 @@
-import path from 'path';
 import { Tool } from 'boost';
 import ExecuteDriverRoutine from '../src/ExecuteDriverRoutine';
 import RunCommandRoutine from '../src/driver/RunCommandRoutine';

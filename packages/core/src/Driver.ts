@@ -9,8 +9,9 @@ import optimal, { array, bool, number, object, shape, string, union, Blueprint }
 import DriverContext from './contexts/DriverContext';
 import { Argv, DriverCommandOptions, DriverOptions, DriverMetadata, Execution } from './types';
 
-export const STRATEGY_REFERENCE = 'reference';
 export const STRATEGY_COPY = 'copy';
+export const STRATEGY_CREATE = 'create';
+export const STRATEGY_REFERENCE = 'reference';
 
 export default class Driver<T> extends Plugin<DriverOptions> {
   command: DriverCommandOptions = {};
@@ -31,6 +32,7 @@ export default class Driver<T> extends Plugin<DriverOptions> {
       options,
       {
         args: array(string()),
+        copy: bool(),
         dependencies: array(string()),
         env: object(union([bool(), number(), string()])),
       },
@@ -167,6 +169,7 @@ export default class Driver<T> extends Plugin<DriverOptions> {
           .required(),
         configName: string().required(),
         configOption: string('--config').empty(),
+        configStrategy: string(STRATEGY_CREATE).oneOf([STRATEGY_CREATE, STRATEGY_COPY]),
         dependencies: array(string()),
         description: string().empty(),
         filterOptions: bool(false),

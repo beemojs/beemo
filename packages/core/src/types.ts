@@ -36,6 +36,7 @@ export interface DriverCommandOptions extends Struct {
 
 export interface DriverOptions extends Struct {
   args: string[];
+  copy: boolean;
   dependencies: string[];
   env: { [key: string]: string };
 }
@@ -44,12 +45,14 @@ export interface DriverMetadata extends Struct {
   bin: string;
   configName: string;
   configOption: string;
+  configStrategy: 'create' | 'copy';
   dependencies: string[];
   description: string;
   filterOptions: boolean;
   helpOption: string;
   title: string;
   useConfigOption: boolean;
+  workspaceStrategy: 'reference' | 'copy';
 }
 
 export type Execution = ExecaReturns;

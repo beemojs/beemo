@@ -33,6 +33,7 @@ The following list of events, and their arguments, can be listened to.
 | `<driver>.load-package-config`  | `config: object`                                         | Called after configuration has been extracted from `package.json`.                          |
 | `<driver>.merge-config`         | `config: object`                                         | Called after multiple configuration sources have been merged into 1.                        |
 | `<driver>.create-config-file`   | `path: string, config: object`                           | Called before the configuration file is written.                                            |
+| `<driver>.copy-config-file`     | `path: string, config: object, sourcePath: string`       | Called before the configuration file is copied from module.                                 |
 | `<driver>.delete-config-file`   | `path: string`                                           | Called before the configuration file is deleted. Occurs during the `cleanup` phase.         |
 | `<driver>.before-execute`       | `driver: Driver, argv: string[], context: DriverContext` | Called before the underlying `Driver` command is executed.                                  |
 | `<driver>.after-execute`        | `driver: Driver, response: any`                          | Called after the driver has successfully been executed.                                     |

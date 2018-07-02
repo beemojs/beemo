@@ -25,8 +25,8 @@ that matches the name of your configuration module, or another third-party modul
 ### Settings
 
 - `module` (string) - Name of your configuration module.
-- `config.cleanup` (boolean) - Remove generated config files after execution. Defaults to `false`.
-- `config.parallel` (boolean) - Create configuration files in parallel. Defaults to `true`.
+- `config.cleanup` (bool) - Remove generated config files after execution. Defaults to `false`.
+- `config.parallel` (bool) - Create configuration files in parallel. Defaults to `true`.
 - `drivers` (string[]|object[]) - List of drivers to enable for the consumer.
 
 > Periods denote nested objects.
@@ -104,6 +104,7 @@ Furthermore, each driver can be configured with options by using an object, like
 - `driver` (string) - The name of the driver module. Required when using an object.
 - `args` (string[]) - Arguments to always pass when executing the driver binary, and to pass to the
   config file.
+- `copy` (bool) - Copy configuration file from module instead of creating it.
 - `dependencies` (string[]) - Other drivers that are required for this driver to run.
 - `env` (object) - Environment variables to pass when executing the driver binary with
   [execa](https://github.com/sindresorhus/execa).
@@ -139,10 +140,11 @@ That being said, consistently remembering the correct commands and arguments to 
 
 The following options are available when executing a driver.
 
-- `--parallel` (string) - Execute additional [commands in parallel](./tips.md#parallel-commands).
+- `--concurrency` (number) - Number of builds to run in parallel. Defaults to the amount of CPUs.
+- `--parallel` (string[]) - Execute additional [commands in parallel](./tips.md#parallel-commands).
   Accepts multiple options. _Must be quoted._
-- `--priority` (string) - List of comma separated workspace names to mark as
-  [high-priority](./workspaces.md#priority-packages).
+- `--priority` (bool) - Prioritize workspace builds based on
+  [dependency graph](./workspaces.md#priority-packages).
 - `--workspaces` (string) - Execute the command in each [workspace](./workspaces.md) defined by the
   pattern/value. Pass `*` to run in all workspaces.
 

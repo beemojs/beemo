@@ -10,7 +10,7 @@ import merge from 'lodash/merge';
 import optimal, { instance, Struct } from 'optimal';
 import { ConfigLoader, Routine } from 'boost';
 import parseArgs from 'yargs-parser';
-import Driver from '../Driver';
+import Driver, { STRATEGY_COPY } from '../Driver';
 import DriverContext from '../contexts/DriverContext';
 
 export interface CreateConfigOptions extends Struct {
@@ -31,14 +31,50 @@ export default class CreateConfigRoutine extends Routine<CreateConfigOptions, Dr
   }
 
   execute(): Promise<string> {
-    const { name } = this.options.driver;
+    const { metadata, name, options } = this.options.driver;
 
-    this.task(`Loading external ${name} module config`, this.loadConfigFromFilesystem);
-    this.task(`Loading local ${name} Beemo config`, this.extractConfigFromPackage);
-    this.task(`Merging ${name} config objects`, this.mergeConfigs);
-    this.task(`Creating temporary ${name} config file`, this.createConfigFile);
+    if (metadata.configStrategy === STRATEGY_COPY || options.copy) {
+      this.task(`Copying ${name} config file`, this.copyConfigFile);
+    } else {
+      this.task(`Loading external ${name} module config`, this.loadConfigFromFilesystem);
+      this.task(`Loading local ${name} Beemo config`, this.extractConfigFromPackage);
+      this.task(`Merging ${name} config objects`, this.mergeConfigs);
+      this.task(`Creating temporary ${name} config file`, this.createConfigFile);
+    }
 
     return this.serializeTasks([]);
+  }
+
+  /**
+   * Copy configuration file from module.
+   */
+  copyConfigFile(context: DriverContext): Promise<string> {
+    const { metadata } = this.options.driver;
+    const configLoader = new ConfigLoader(this.tool);
+    const sourcePath = this.getSourceConfigPath(configLoader);
+    const configPath = path.join(context.root, metadata.configName);
+
+    if (!sourcePath) {
+      throw new Error(
+        'Cannot copy configuration file. Source file does not exist in configuration module.',
+      );
+    }
+
+    const config = configLoader.parseFile(sourcePath);
+
+    this.debug('Copying config file to %s', chalk.cyan(configPath));
+
+    this.options.driver.config = config;
+
+    context.configPaths.push(configPath);
+
+    this.tool.emit('copy-config-file', [configPath, config]);
+
+    return fs
+      .copy(sourcePath, configPath, {
+        overwrite: true,
+      })
+      .then(() => configPath);
   }
 
   /**
@@ -88,6 +124,34 @@ export default class CreateConfigRoutine extends Routine<CreateConfigOptions, Dr
   }
 
   /**
+   * Return absolute file path for config file within configuration module,
+   * or an empty string if it does not exist.
+   */
+  getSourceConfigPath(configLoader: ConfigLoader): string {
+    const { root, workspaceRoot } = this.context;
+    const {
+      config: { module: moduleName },
+    } = this.tool;
+    const { name } = this.options.driver;
+
+    // Allow for local development
+    const filePath =
+      moduleName === '@local'
+        ? path.join(workspaceRoot || root, `configs/${name}.js`)
+        : configLoader.resolveModuleConfigPath(name, moduleName);
+    const fileExists = fs.existsSync(filePath);
+
+    this.debug.invariant(
+      fileExists,
+      `Loading ${chalk.magenta(name)} config from configuration module ${chalk.yellow(moduleName)}`,
+      'Exists, loading',
+      'Does not exist, skipping',
+    );
+
+    return fileExists ? filePath : '';
+  }
+
+  /**
    * Merge multiple configuration sources using the current driver.
    */
   mergeConfigs(context: DriverContext, configs: Struct[]): Promise<Struct> {
@@ -111,28 +175,11 @@ export default class CreateConfigRoutine extends Routine<CreateConfigOptions, Dr
    * Load configuration from the node module (the consumer owned package).
    */
   loadConfigFromFilesystem(context: DriverContext, prevConfigs: Struct[]): Promise<Struct[]> {
-    const {
-      config: { module: moduleName },
-    } = this.tool;
-    const { name } = this.options.driver;
     const configLoader = new ConfigLoader(this.tool);
+    const filePath = this.getSourceConfigPath(configLoader);
     const configs = [...prevConfigs];
 
-    // Allow for local development
-    const filePath =
-      moduleName === '@local'
-        ? path.join(context.workspaceRoot || context.root, `configs/${name}.js`)
-        : configLoader.resolveModuleConfigPath(name, moduleName);
-    const fileExists = fs.existsSync(filePath);
-
-    this.debug.invariant(
-      fileExists,
-      `Loading ${chalk.magenta(name)} config from configuration module ${chalk.yellow(moduleName)}`,
-      'Exists, loading',
-      'Does not exist, skipping',
-    );
-
-    if (fileExists) {
+    if (filePath) {
       const args = merge({}, context.args, parseArgs(this.options.driver.getArgs()));
       const config = configLoader.parseFile(filePath, [args, this.tool]);
 
