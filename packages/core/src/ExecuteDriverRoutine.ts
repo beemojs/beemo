@@ -3,16 +3,19 @@
  * @license     https://opensource.org/licenses/MIT
  */
 
+import fs from 'fs-extra';
 import path from 'path';
 import glob from 'glob';
 import trim from 'lodash/trim';
-import { Routine, RoutineInterface } from 'boost';
+import { Routine, RoutineInterface, PackageConfig } from 'boost';
 import DriverContext from './contexts/DriverContext';
 import RunCommandRoutine, { RunCommandOptions } from './driver/RunCommandRoutine';
 import isPatternMatch from './utils/isPatternMatch';
 import { BeemoConfig } from './types';
 
 export default class ExecuteDriverRoutine extends Routine<BeemoConfig, DriverContext> {
+  workspacePackages: PackageConfig[] = [];
+
   bootstrap() {
     const { args, primaryDriver, workspaces } = this.context;
 
@@ -23,10 +26,12 @@ export default class ExecuteDriverRoutine extends Routine<BeemoConfig, DriverCon
         );
       }
 
-      this.getWorkspaceFilteredPaths().forEach(filePath => {
-        this.pipeParallelBuilds(path.basename(filePath), {
+      this.workspacePackages = this.loadWorkspacePackages();
+
+      this.getFilteredWorkspaces().forEach(pkg => {
+        this.pipeParallelBuilds(pkg.workspaceName, {
           forceConfigOption: true,
-          workspaceRoot: filePath,
+          workspaceRoot: pkg.workspacePath,
         });
       });
     } else {
@@ -35,10 +40,16 @@ export default class ExecuteDriverRoutine extends Routine<BeemoConfig, DriverCon
   }
 
   execute(context: DriverContext): Promise<string[]> {
-    const { other, priority } = this.groupRoutinesByPriority();
+    const { other, priority } = this.orderByWorkspacePriorityGraph();
 
     return this.serializeRoutines(null, priority).then(() =>
-      this.poolRoutines(null, {}, other).then(response => {
+      this.poolRoutines(
+        null,
+        {
+          concurrency: context.args.concurrency,
+        },
+        other,
+      ).then(response => {
         if (response.errors.length > 0) {
           const messages = response.errors.map(error => error.message);
 
@@ -51,43 +62,109 @@ export default class ExecuteDriverRoutine extends Routine<BeemoConfig, DriverCon
   }
 
   /**
-   * Return a list of workspace paths optionally filtered.
+   * Return a list of workspaces optionally filtered.
    */
-  getWorkspaceFilteredPaths(): string[] {
-    const { args, root, workspaces } = this.context;
-
-    return glob
-      .sync(`${workspaces}/`, {
-        absolute: true,
-        cwd: root,
-        debug: this.tool.config.debug,
-        strict: true,
-      })
-      .filter(filePath => isPatternMatch(path.basename(filePath), args.workspaces));
+  getFilteredWorkspaces(): PackageConfig[] {
+    return this.workspacePackages.filter(pkg =>
+      // @ts-ignore Contains not typed yet.
+      isPatternMatch(pkg.name, this.context.args.workspaces, { contains: true }),
+    );
   }
 
   /**
-   * Group routines in order of defined priority.
+   * Load package.json from each workspace package.
    */
-  groupRoutinesByPriority(): {
-    priority: RoutineInterface[];
+  loadWorkspacePackages(): PackageConfig[] {
+    return glob
+      .sync(`${this.context.workspaces}/package.json`, {
+        absolute: true,
+        cwd: this.context.root,
+        debug: this.tool.config.debug,
+        strict: true,
+      })
+      .map(filePath => {
+        const pkg = JSON.parse(fs.readFileSync(filePath, 'utf8'));
+
+        pkg.packagePath = filePath;
+        pkg.workspacePath = path.dirname(filePath);
+        pkg.workspaceName = path.basename(pkg.workspacePath);
+
+        return pkg;
+      });
+  }
+
+  /**
+   * Group routines in order of which they are dependend on.
+   */
+  orderByWorkspacePriorityGraph(): {
     other: RoutineInterface[];
+    priority: RoutineInterface[];
   } {
-    const priorityNames: string[] = String(this.context.getArg('priority', '')).split(',');
+    if (!this.context.args.priority) {
+      return {
+        other: this.routines,
+        priority: [],
+      };
+    }
 
-    // Extract high priority in order provided
-    const priority: RoutineInterface[] = [];
+    // Create a mapping of package names within all workspaces
+    const packages: { [name: string]: PackageConfig } = {};
 
-    priorityNames.forEach(name => {
-      this.routines.forEach(routine => {
-        if (routine.key === name) {
-          priority.push(routine);
+    this.workspacePackages.forEach(pkg => {
+      packages[pkg.name] = pkg;
+    });
+
+    // Determine dependend on packages by resolving the graph and incrementing counts
+    const depCounts: { [name: string]: { count: number; package: PackageConfig } } = {};
+
+    this.workspacePackages.forEach(pkg => {
+      const deps = {
+        ...pkg.dependencies,
+        ...pkg.peerDependencies,
+      };
+
+      Object.keys(deps).forEach(depName => {
+        if (!packages[depName]) {
+          return;
+        }
+
+        if (depCounts[depName]) {
+          depCounts[depName].count += 1;
+        } else {
+          depCounts[depName] = {
+            count: 1,
+            package: packages[depName],
+          };
         }
       });
     });
 
-    // Extract all others
-    const other = this.routines.filter(routine => !priorityNames.includes(routine.key));
+    // Order by highest count
+    const orderedDeps = Object.values(depCounts)
+      .sort((a, b) => b.count - a.count)
+      .map(dep => dep.package);
+
+    // Extract dependents in order
+    const priority: RoutineInterface[] = [];
+
+    orderedDeps.forEach(pkg => {
+      const routine = this.routines.find(route => route.key === pkg.workspaceName);
+
+      if (routine) {
+        priority.push(routine);
+      }
+    });
+
+    // Extract dependers
+    const other: RoutineInterface[] = [];
+
+    this.routines.forEach(routine => {
+      const dependency = orderedDeps.find(dep => dep.workspaceName === routine.key);
+
+      if (!dependency) {
+        other.push(routine);
+      }
+    });
 
     return {
       other,

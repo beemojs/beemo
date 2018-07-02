@@ -2,7 +2,12 @@ import path from 'path';
 import { Tool } from 'boost';
 import ExecuteDriverRoutine from '../src/ExecuteDriverRoutine';
 import RunCommandRoutine from '../src/driver/RunCommandRoutine';
-import { createDriver, createDriverContext, setupMockTool } from '../../../tests/helpers';
+import {
+  createDriver,
+  createDriverContext,
+  setupMockTool,
+  getFixturePath,
+} from '../../../tests/helpers';
 
 jest.mock('boost/lib/Tool');
 
@@ -21,6 +26,23 @@ describe('ExecuteDriverRoutine', () => {
     routine.context = createDriverContext(driver);
     routine.tool = setupMockTool(tool);
     routine.debug = jest.fn();
+
+    // RunCommandRoutine is mocked, so use plain objects
+    routine.routines = [
+      { key: 'primary' },
+      { key: 'foo' },
+      { key: 'bar' },
+      { key: 'baz' },
+      { key: 'qux' },
+    ];
+
+    routine.workspacePackages = [
+      { name: '@scope/primary', workspaceName: 'primary' },
+      { name: '@scope/foo', workspaceName: 'foo' },
+      { name: '@scope/bar', workspaceName: 'bar' },
+      { name: '@scope/baz', workspaceName: 'baz' },
+      { name: '@scope/qux', workspaceName: 'qux' },
+    ];
 
     RunCommandRoutine.mockClear();
   });
@@ -67,11 +89,7 @@ describe('ExecuteDriverRoutine', () => {
       beforeEach(() => {
         routine.context.args.workspaces = '*';
         routine.context.workspaces = ['packages/*'];
-        routine.getWorkspaceFilteredPaths = () => [
-          './packages/foo',
-          './packages/bar',
-          './packages/baz',
-        ];
+        routine.context.root = getFixturePath('workspaces-driver');
       });
 
       it('adds a routine for each', () => {
@@ -167,23 +185,20 @@ describe('ExecuteDriverRoutine', () => {
   });
 
   describe('execute()', () => {
-    beforeEach(() => {
-      // RunCommandRoutine is mocked, so use plain objects
-      routine.routines = [
-        { key: 'primary' },
-        { key: 'foo' },
-        { key: 'bar' },
-        { key: 'baz' },
-        { key: 'qux' },
-      ];
-    });
-
     it('pools each routine', async () => {
       routine.poolRoutines = jest.fn(() => Promise.resolve({ errors: [], results: [] }));
 
-      await routine.execute();
+      await routine.execute({ args: {} });
 
       expect(routine.poolRoutines).toHaveBeenCalledWith(null, {}, routine.routines);
+    });
+
+    it('passes concurrency to pooler', async () => {
+      routine.poolRoutines = jest.fn(() => Promise.resolve({ errors: [], results: [] }));
+
+      await routine.execute({ args: { concurrency: 2 } });
+
+      expect(routine.poolRoutines).toHaveBeenCalledWith(null, { concurrency: 2 }, routine.routines);
     });
 
     it('throws an error if any failures', async () => {
@@ -192,7 +207,7 @@ describe('ExecuteDriverRoutine', () => {
       );
 
       try {
-        await routine.execute();
+        await routine.execute({ args: {} });
       } catch (error) {
         expect(error).toEqual(new Error('Execution failure.\nFailed\n\nOops'));
       }
@@ -201,93 +216,156 @@ describe('ExecuteDriverRoutine', () => {
     it('returns results', async () => {
       routine.poolRoutines = jest.fn(() => Promise.resolve({ errors: [], results: [123] }));
 
-      const response = await routine.execute();
+      const response = await routine.execute({ args: {} });
 
       expect(response).toEqual([123]);
     });
 
-    it('serializes high-priority routines before pooling routines', async () => {
+    it('serializes priority routines before pooling other routines', async () => {
       routine.context.args.priority = 'qux,foo';
       routine.serializeRoutines = jest.fn(() => Promise.resolve());
       routine.poolRoutines = jest.fn(() => Promise.resolve({ errors: [], results: [] }));
+      routine.workspacePackages[1].peerDependencies = {
+        '@scope/foo': '1.0.0',
+      };
 
-      await routine.execute();
+      await routine.execute({ args: {} });
 
-      expect(routine.serializeRoutines).toHaveBeenCalledWith(null, [
-        { key: 'qux' },
-        { key: 'foo' },
-      ]);
+      expect(routine.serializeRoutines).toHaveBeenCalledWith(null, [{ key: 'foo' }]);
       expect(routine.poolRoutines).toHaveBeenCalledWith(null, {}, [
         { key: 'primary' },
         { key: 'bar' },
         { key: 'baz' },
+        { key: 'qux' },
       ]);
     });
   });
 
-  describe('getWorkspaceFilteredPaths()', () => {
+  describe('getFilteredWorkspaces()', () => {
+    it('returns none for empty string', () => {
+      routine.context.args.workspaces = '';
+
+      expect(routine.getFilteredWorkspaces()).toEqual([]);
+    });
+
+    it('returns all for wildcard `*`', () => {
+      routine.context.args.workspaces = '*';
+
+      expect(routine.getFilteredWorkspaces()).toEqual([
+        { name: '@scope/primary', workspaceName: 'primary' },
+        { name: '@scope/foo', workspaceName: 'foo' },
+        { name: '@scope/bar', workspaceName: 'bar' },
+        { name: '@scope/baz', workspaceName: 'baz' },
+        { name: '@scope/qux', workspaceName: 'qux' },
+      ]);
+    });
+
+    it('filters by package name', () => {
+      routine.context.args.workspaces = 'foo|bar';
+
+      expect(routine.getFilteredWorkspaces()).toEqual([
+        { name: '@scope/foo', workspaceName: 'foo' },
+        { name: '@scope/bar', workspaceName: 'bar' },
+      ]);
+    });
+  });
+
+  describe('loadWorkspacePackages()', () => {
     it('returns a list of paths', () => {
       routine.context.args.workspaces = '*';
       routine.context.workspaces = ['packages/*'];
-      routine.context.root = process.cwd();
+      routine.context.root = getFixturePath('workspaces-driver');
 
-      expect(routine.getWorkspaceFilteredPaths()).toEqual(
-        expect.arrayContaining([
-          path.join(process.cwd(), 'packages/cli'),
-          path.join(process.cwd(), 'packages/core'),
-          path.join(process.cwd(), 'packages/driver-babel'),
-          path.join(process.cwd(), 'packages/driver-typescript'),
-        ]),
-      );
+      expect(routine.loadWorkspacePackages()).toEqual([
+        {
+          name: 'bar',
+          workspaceName: 'bar',
+          workspacePath: getFixturePath('workspaces-driver/packages/bar'),
+          packagePath: getFixturePath('workspaces-driver/packages/bar/package.json'),
+        },
+        {
+          name: 'baz',
+          workspaceName: 'baz',
+          workspacePath: getFixturePath('workspaces-driver/packages/baz'),
+          packagePath: getFixturePath('workspaces-driver/packages/baz/package.json'),
+        },
+        {
+          name: 'foo',
+          workspaceName: 'foo',
+          workspacePath: getFixturePath('workspaces-driver/packages/foo'),
+          packagePath: getFixturePath('workspaces-driver/packages/foo/package.json'),
+        },
+      ]);
     });
 
     it('returns empty if nothing found', () => {
       routine.context.args.workspaces = '*';
       routine.context.workspaces = ['packages/*'];
-      routine.context.root = path.join(process.cwd(), '/some/fake/path');
+      routine.context.root = getFixturePath('workspaces-driver/fake-path');
 
-      expect(routine.getWorkspaceFilteredPaths()).toEqual([]);
-    });
-
-    it('filters list using --workspaces arg', () => {
-      routine.context.args.workspaces = 'driver-*';
-      routine.context.workspaces = ['packages/*'];
-      routine.context.root = process.cwd();
-
-      expect(routine.getWorkspaceFilteredPaths()).toEqual(
-        expect.arrayContaining([
-          path.join(process.cwd(), 'packages/driver-babel'),
-          path.join(process.cwd(), 'packages/driver-typescript'),
-        ]),
-      );
+      expect(routine.loadWorkspacePackages()).toEqual([]);
     });
   });
 
-  describe('groupRoutinesByPriority()', () => {
+  describe('orderByWorkspacePriorityGraph()', () => {
     beforeEach(() => {
-      // RunCommandRoutine is mocked, so use plain objects
-      routine.routines = [
-        { key: 'primary' },
-        { key: 'foo' },
-        { key: 'bar' },
-        { key: 'baz' },
-        { key: 'qux' },
-      ];
+      routine.context.args.priority = true;
     });
 
-    it('returns all routines if no priority', () => {
-      expect(routine.groupRoutinesByPriority()).toEqual({
+    it('returns all as `other` if priority is false', () => {
+      routine.context.args.priority = false;
+
+      expect(routine.orderByWorkspacePriorityGraph()).toEqual({
         other: [{ key: 'primary' }, { key: 'foo' }, { key: 'bar' }, { key: 'baz' }, { key: 'qux' }],
         priority: [],
       });
     });
 
-    it('extracts priority in order defined', () => {
-      routine.context.args.priority = 'qux,foo';
+    it('returns all as `other` if no dependents', () => {
+      expect(routine.orderByWorkspacePriorityGraph()).toEqual({
+        other: [{ key: 'primary' }, { key: 'foo' }, { key: 'bar' }, { key: 'baz' }, { key: 'qux' }],
+        priority: [],
+      });
+    });
 
-      expect(routine.groupRoutinesByPriority()).toEqual({
-        other: [{ key: 'primary' }, { key: 'bar' }, { key: 'baz' }],
-        priority: [{ key: 'qux' }, { key: 'foo' }],
+    it('prioritizes based on peerDependencies', () => {
+      routine.workspacePackages[1].peerDependencies = {
+        '@scope/bar': '1.0.0',
+      };
+
+      expect(routine.orderByWorkspacePriorityGraph()).toEqual({
+        other: [{ key: 'primary' }, { key: 'foo' }, { key: 'baz' }, { key: 'qux' }],
+        priority: [{ key: 'bar' }],
+      });
+    });
+
+    it('prioritizes based on dependencies', () => {
+      routine.workspacePackages[1].dependencies = {
+        '@scope/bar': '1.0.0',
+      };
+
+      expect(routine.orderByWorkspacePriorityGraph()).toEqual({
+        other: [{ key: 'primary' }, { key: 'foo' }, { key: 'baz' }, { key: 'qux' }],
+        priority: [{ key: 'bar' }],
+      });
+    });
+
+    it('sorts priority based on dependency count', () => {
+      routine.workspacePackages[2].peerDependencies = {
+        '@scope/primary': '2.0.0',
+      };
+
+      routine.workspacePackages[1].dependencies = {
+        '@scope/bar': '1.0.0',
+      };
+
+      routine.workspacePackages[4].peerDependencies = {
+        '@scope/bar': '1.0.0',
+      };
+
+      expect(routine.orderByWorkspacePriorityGraph()).toEqual({
+        other: [{ key: 'foo' }, { key: 'baz' }, { key: 'qux' }],
+        priority: [{ key: 'bar' }, { key: 'primary' }],
       });
     });
   });

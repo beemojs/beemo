@@ -33,19 +33,23 @@ beemo.tool.plugins.forEach(driver => {
     metadata.description || `Run ${metadata.title}`,
     {
       ...command,
+      concurrency: {
+        description: 'Number of builds to run in parallel',
+        number: true,
+      },
       parallel: {
         array: true,
         default: [],
         description: 'Run parallel builds with additional flags or options',
       },
       priority: {
-        default: '',
-        description: 'Workspaces to run first (supports regex)',
-        string: true,
+        boolean: true,
+        default: false,
+        description: 'Prioritize workspace builds based on dependency graph',
       },
       workspaces: {
         default: '',
-        description: 'Run command in workspaces (supports regex)',
+        description: 'Run command in each workspace (supports regex)',
         string: true,
       },
     },

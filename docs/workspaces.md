@@ -2,17 +2,17 @@
 
 Beemo has first class support for executing driver commands across workspaces (monorepos), using
 [Yarn workspaces](https://yarnpkg.com/lang/en/docs/workspaces/) or
-[Lerna packages](https://github.com/lerna/lerna#lernajson). Once one of these tools are configured,
-execute a driver command while passing a `--workspaces` option, which in turn signals Beemo to run
-this command in each of the workspace packages.
+[Lerna packages](https://github.com/lerna/lerna#lernajson). Once a tool is configured, execute a
+driver command with a `--workspaces` option, which signals Beemo to run this command in each of the
+workspace package folders.
 
-This option requires a pattern to match package names against (the name of the folder on the
-filesystem), or `*` to match all packages. Patterns may need to be quoted.
+This option requires a pattern to match package names against (the name in `package.json`), or `*`
+to match all packages. Patterns may need to be quoted.
 
 ```
 yarn beemo typescript --workspaces=*
 
-// Only in packages that start with "driver-"
+// Only in packages that wildcard contain "driver-"
 yarn beemo typescript --workspaces=driver-*
 ```
 
@@ -22,19 +22,17 @@ yarn beemo typescript --workspaces=driver-*
 
 ## Priority Packages
 
-There are situations where a specific package(s) needs to be executed before all other packages, for
-example, a core/common package. This is very common for typed languages like Flow or TypeScript. To
-mark a package as high priority, pass a `--priority` option with a comma separated list of package
-names.
+There are situations where a single package or multiple packages need to be executed before all
+other packages, for example, a core/common package. This is very common for typed languages like
+Flow or TypeScript. Pass a `--priority` option to automatically resolve a priority order based on
+the workspaces dependency graph.
 
 ```
-yarn beemo typescript --workspaces=* --priority=core,utils
+yarn beemo typescript --workspaces=* --priority
 ```
 
-High priority packages will be executed synchronously in order of definition, followed by all
+High priority packages will be executed synchronously in order of dependency, followed by all
 remaining packages being executed in parallel.
-
-> Patterns are also supported here.
 
 ## Driver Support
 
