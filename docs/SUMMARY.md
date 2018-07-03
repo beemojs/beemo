@@ -38,3 +38,4 @@
   - [Custom Executable Name](./tips.md#custom-executable-name)
   - [Output Verbosity](./tips.md#output-verbosity)
   - [CLI Themes](./tips.md#cli-themes)
+- [Changelog](https://github.com/milesj/beemo/blob/master/CHANGELOG.md)
