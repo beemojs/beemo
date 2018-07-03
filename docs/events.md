@@ -27,7 +27,7 @@ The following list of events, and their arguments, can be listened to.
 | Event                           | Arguments                                                | Description                                                                                 |
 | ------------------------------- | -------------------------------------------------------- | ------------------------------------------------------------------------------------------- |
 | `exit`                          | `code: number`                                           | Called when the process exits, either successfully, or with an error.                       |
-| `<driver>.init-driver`          | `driverName: string, context: DriverContext`             | Called before a driver is executed with `beemo <driver>`.                                   |
+| `<driver>.init-driver`          | `driver: Driver, context: DriverContext`                 | Called before a driver is executed with `beemo <driver>`.                                   |
 | `<driver>.resolve-dependencies` | `drivers: Driver[]`                                      | Called after a list of `Driver`s have been resolved in which to create configuration files. |
 | `<driver>.load-module-config`   | `path: string, config: object`                           | Called after configuration has been loaded from the configuration module.                   |
 | `<driver>.load-package-config`  | `config: object`                                         | Called after configuration has been extracted from `package.json`.                          |

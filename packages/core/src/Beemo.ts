@@ -204,7 +204,7 @@ export default class Beemo {
     context.workspaces = this.getWorkspacePaths();
 
     tool.setEventNamespace(driverName);
-    tool.emit('init-driver', [driverName, context]);
+    tool.emit('init-driver', [driver, context]);
     tool.debug('Running with %s driver', driverName);
 
     return this.startPipeline(context)

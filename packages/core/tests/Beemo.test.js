@@ -203,7 +203,7 @@ describe('Beemo', () => {
       await beemo.executeDriver('foo-bar', {});
 
       expect(spy).toHaveBeenCalledWith('init-driver', [
-        'foo-bar',
+        expect.objectContaining({ name: 'foo-bar' }),
         expect.objectContaining({
           argv: ['foo', 'bar'],
           driverName: 'foo-bar',
