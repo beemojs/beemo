@@ -5,9 +5,6 @@
     "setup": "bash ./scripts/build-packages.sh",
     "build": "beemo typescript --workspaces=* --priority",
     "coverage": "yarn run jest --coverage",
-    "docs": "gitbook build --debug --log=debug",
-    "docs:serve": "gitbook serve",
-    "docs:install": "gitbook install",
     "eslint": "beemo eslint",
     "jest": "beemo jest",
     "posttest": "yarn run eslint",
@@ -19,7 +16,7 @@
     "type": "beemo typescript --workspaces=* --noEmit"
   },
   "devDependencies": {
-    "@milesj/build-tool-config": "0.108.3",
+    "@milesj/build-tool-config": "0.109.0",
     "chalk": "^2.4.1",
     "fs-extra": "^6.0.1",
     "glob": "^7.1.2",

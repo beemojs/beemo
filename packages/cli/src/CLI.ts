@@ -19,7 +19,7 @@ const argv = quoteSpecialOptions(process.argv.slice(2));
 const beemo = new Beemo(argv.slice(1));
 const app = yargs(argv);
 const binName = path.basename(process.argv[1]);
-const manualURL = process.env.BEEMO_MANUAL_URL || 'https://milesj.gitbooks.io/beemo';
+const manualURL = process.env.BEEMO_MANUAL_URL || 'https://milesj.gitbook.io/beemo';
 
 // Bootstrap the module
 beemo.bootstrapConfigModule();

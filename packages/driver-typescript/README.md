@@ -13,4 +13,4 @@ npm install @beemo/driver-typescript typescript --save
 
 ## Documentation
 
-[https://milesj.gitbooks.io/beemo](https://milesj.gitbooks.io/beemo)
+[https://milesj.gitbook.io/beemo](https://milesj.gitbook.io/beemo)
