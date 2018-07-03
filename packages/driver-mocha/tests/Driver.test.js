@@ -17,6 +17,7 @@ describe('MochaDriver', () => {
 
     expect(driver.options).toEqual({
       args: ['--foo', '--bar=1'],
+      copy: false,
       dependencies: ['babel'],
       env: { DEV: true },
     });
