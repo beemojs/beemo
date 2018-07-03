@@ -478,12 +478,12 @@
     npmlog "^4.1.2"
     write-file-atomic "^2.3.0"
 
-"@milesj/build-tool-config@0.108.1":
-  version "0.108.1"
-  resolved "https://registry.npmjs.org/@milesj/build-tool-config/-/build-tool-config-0.108.1.tgz#250d1c7e6da913430679cbe8fa9e4d488b36852a"
+"@milesj/build-tool-config@0.108.3":
+  version "0.108.3"
+  resolved "https://registry.npmjs.org/@milesj/build-tool-config/-/build-tool-config-0.108.3.tgz#ee085a66e39fcd1c3aa07b7b5afde6b4db36ccb5"
   dependencies:
     "@beemo/cli" "^0.19.0"
-    "@beemo/core" "^0.19.1"
+    "@beemo/core" "^0.19.2"
     "@beemo/driver-babel" "^0.19.1"
     "@beemo/driver-eslint" "^0.19.1"
     "@beemo/driver-jest" "^0.19.1"
