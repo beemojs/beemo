@@ -3,3 +3,5 @@
 exports[`CreateConfigRoutine bootstrap() errors if no driver defined 1`] = `"Invalid CreateConfigRoutine field \\"driver\\". Field is required and must be defined."`;
 
 exports[`CreateConfigRoutine copyConfigFile() errors if no source file 1`] = `"Cannot copy configuration file. Source file does not exist in configuration module."`;
+
+exports[`CreateConfigRoutine referenceConfigFile() errors if no source file 1`] = `"Cannot reference configuration file. Source file does not exist in configuration module."`;

@@ -169,7 +169,11 @@ export default class Driver<T> extends Plugin<DriverOptions> {
           .required(),
         configName: string().required(),
         configOption: string('--config').empty(),
-        configStrategy: string(STRATEGY_CREATE).oneOf([STRATEGY_CREATE, STRATEGY_COPY]),
+        configStrategy: string(STRATEGY_CREATE).oneOf([
+          STRATEGY_CREATE,
+          STRATEGY_REFERENCE,
+          STRATEGY_COPY,
+        ]),
         dependencies: array(string()),
         description: string().empty(),
         filterOptions: bool(false),

@@ -10,7 +10,7 @@ import merge from 'lodash/merge';
 import optimal, { instance, Struct } from 'optimal';
 import { ConfigLoader, Routine } from 'boost';
 import parseArgs from 'yargs-parser';
-import Driver, { STRATEGY_COPY } from '../Driver';
+import Driver, { STRATEGY_COPY, STRATEGY_REFERENCE } from '../Driver';
 import DriverContext from '../contexts/DriverContext';
 
 export interface CreateConfigOptions extends Struct {
@@ -33,16 +33,18 @@ export default class CreateConfigRoutine extends Routine<CreateConfigOptions, Dr
   execute(): Promise<string> {
     const { metadata, name, options } = this.options.driver;
 
-    if (metadata.configStrategy === STRATEGY_COPY || options.copy) {
+    if (metadata.configStrategy === STRATEGY_REFERENCE) {
+      this.task(`Referencing ${name} config file`, this.referenceConfigFile);
+    } else if (metadata.configStrategy === STRATEGY_COPY || options.copy) {
       this.task(`Copying ${name} config file`, this.copyConfigFile);
     } else {
-      this.task(`Loading external ${name} module config`, this.loadConfigFromFilesystem);
+      this.task(`Loading source ${name} module config`, this.loadConfigFromFilesystem);
       this.task(`Loading local ${name} Beemo config`, this.extractConfigFromPackage);
       this.task(`Merging ${name} config objects`, this.mergeConfigs);
-      this.task(`Creating temporary ${name} config file`, this.createConfigFile);
+      this.task(`Creating ${name} config file`, this.createConfigFile);
     }
 
-    return this.serializeTasks([]);
+    return this.serializeTasks();
   }
 
   /**
@@ -174,10 +176,10 @@ export default class CreateConfigRoutine extends Routine<CreateConfigOptions, Dr
   /**
    * Load configuration from the node module (the consumer owned package).
    */
-  loadConfigFromFilesystem(context: DriverContext, prevConfigs: Struct[]): Promise<Struct[]> {
+  loadConfigFromFilesystem(context: DriverContext): Promise<Struct[]> {
     const configLoader = new ConfigLoader(this.tool);
     const filePath = this.getSourceConfigPath(configLoader);
-    const configs = [...prevConfigs];
+    const configs = [];
 
     if (filePath) {
       const args = merge({}, context.args, parseArgs(this.options.driver.getArgs()));
@@ -189,5 +191,38 @@ export default class CreateConfigRoutine extends Routine<CreateConfigOptions, Dr
     }
 
     return Promise.resolve(configs);
+  }
+
+  /**
+   * Reference configuration file from module using a require statement.
+   */
+  referenceConfigFile(context: DriverContext): Promise<string> {
+    const { metadata } = this.options.driver;
+    const configLoader = new ConfigLoader(this.tool);
+    const sourcePath = this.getSourceConfigPath(configLoader);
+    const configPath = path.join(context.root, metadata.configName);
+
+    if (!sourcePath) {
+      throw new Error(
+        'Cannot reference configuration file. Source file does not exist in configuration module.',
+      );
+    }
+
+    const config = configLoader.parseFile(sourcePath);
+
+    this.debug('Referencing config file to %s', chalk.cyan(configPath));
+
+    this.options.driver.config = config;
+
+    context.configPaths.push(configPath);
+
+    this.tool.emit('reference-config-file', [configPath, config]);
+
+    return fs
+      .writeFile(
+        configPath,
+        `module.exports = require('./${path.relative(context.root, sourcePath)}');`,
+      )
+      .then(() => configPath);
   }
 }

@@ -4,7 +4,7 @@ import fs from 'fs-extra';
 import CreateConfigRoutine from '../../src/configure/CreateConfigRoutine';
 import BabelDriver from '../../../driver-babel/src/BabelDriver';
 import { createDriverContext, setupMockTool, prependRoot } from '../../../../tests/helpers';
-import { STRATEGY_COPY } from '../../src/Driver';
+import { STRATEGY_COPY, STRATEGY_REFERENCE } from '../../src/Driver';
 
 jest.mock('fs-extra');
 jest.mock('boost/lib/Tool');
@@ -53,7 +53,7 @@ describe('CreateConfigRoutine', () => {
 
       const path = await routine.execute();
 
-      expect(loadSpy).toHaveBeenCalledWith(routine.context, [], expect.anything());
+      expect(loadSpy).toHaveBeenCalledWith(routine.context, undefined, expect.anything());
       expect(extractSpy).toHaveBeenCalledWith(routine.context, [{ foo: 123 }], expect.anything());
       expect(mergeSpy).toHaveBeenCalledWith(
         routine.context,
@@ -80,7 +80,7 @@ describe('CreateConfigRoutine', () => {
 
       const path = await routine.execute();
 
-      expect(copySpy).toHaveBeenCalledWith(routine.context, [], expect.anything());
+      expect(copySpy).toHaveBeenCalledWith(routine.context, undefined, expect.anything());
       expect(createSpy).not.toHaveBeenCalled();
       expect(path).toBe(prependRoot('/.babelrc'));
     });
@@ -93,7 +93,20 @@ describe('CreateConfigRoutine', () => {
 
       const path = await routine.execute();
 
-      expect(copySpy).toHaveBeenCalledWith(routine.context, [], expect.anything());
+      expect(copySpy).toHaveBeenCalledWith(routine.context, undefined, expect.anything());
+      expect(createSpy).not.toHaveBeenCalled();
+      expect(path).toBe(prependRoot('/.babelrc'));
+    });
+
+    it('references config file if `configStrategy` metadata is reference', async () => {
+      const createSpy = jest.spyOn(routine, 'createConfigFile');
+      const refSpy = jest.spyOn(routine, 'referenceConfigFile');
+
+      driver.metadata.configStrategy = STRATEGY_REFERENCE;
+
+      const path = await routine.execute();
+
+      expect(refSpy).toHaveBeenCalledWith(routine.context, undefined, expect.anything());
       expect(createSpy).not.toHaveBeenCalled();
       expect(path).toBe(prependRoot('/.babelrc'));
     });
@@ -328,6 +341,47 @@ describe('CreateConfigRoutine', () => {
         }),
         tool,
       ]);
+    });
+  });
+
+  describe('referenceConfigFile()', () => {
+    it('adds path to context', async () => {
+      await routine.referenceConfigFile(routine.context);
+
+      expect(routine.context.configPaths).toEqual([prependRoot('/.babelrc')]);
+    });
+
+    it('references file', async () => {
+      const path = await routine.referenceConfigFile(routine.context);
+
+      expect(fs.writeFile).toHaveBeenCalledWith(
+        prependRoot('/.babelrc'),
+        "module.exports = require('./configs/babel.js');",
+      );
+      expect(path).toBe(prependRoot('/.babelrc'));
+    });
+
+    it('sets config on driver', async () => {
+      await routine.referenceConfigFile(routine.context);
+
+      expect(driver.config).toEqual({ foo: 123 });
+    });
+
+    it('triggers `reference-config-file` event', async () => {
+      await routine.referenceConfigFile(routine.context);
+
+      expect(routine.tool.emit).toHaveBeenCalledWith('reference-config-file', [
+        prependRoot('/.babelrc'),
+        { foo: 123 },
+      ]);
+    });
+
+    it('errors if no source file', () => {
+      routine.getSourceConfigPath = () => '';
+
+      expect(() => {
+        routine.referenceConfigFile(routine.context);
+      }).toThrowErrorMatchingSnapshot();
     });
   });
 });

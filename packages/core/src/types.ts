@@ -45,7 +45,7 @@ export interface DriverMetadata extends Struct {
   bin: string;
   configName: string;
   configOption: string;
-  configStrategy: 'create' | 'copy';
+  configStrategy: 'create' | 'reference' | 'copy';
   dependencies: string[];
   description: string;
   filterOptions: boolean;
