@@ -1,4 +1,5 @@
 import { Tool } from 'boost';
+import Driver from '../src/Driver';
 import ExecuteDriverRoutine from '../src/ExecuteDriverRoutine';
 import RunCommandRoutine from '../src/driver/RunCommandRoutine';
 import {
@@ -6,6 +7,7 @@ import {
   createDriverContext,
   setupMockTool,
   getFixturePath,
+  createTestDebugger,
 } from '../../../tests/helpers';
 
 jest.mock('boost/lib/Tool');
@@ -13,18 +15,18 @@ jest.mock('boost/lib/Tool');
 jest.mock('../src/driver/RunCommandRoutine', () => jest.fn());
 
 describe('ExecuteDriverRoutine', () => {
-  let routine;
-  let driver;
+  let routine: ExecuteDriverRoutine;
+  let driver: Driver<any>;
 
   beforeEach(() => {
-    const tool = new Tool();
+    const tool = new Tool({});
 
     driver = createDriver('primary', tool);
 
     routine = new ExecuteDriverRoutine('driver', 'Executing driver');
     routine.context = createDriverContext(driver);
     routine.tool = setupMockTool(tool);
-    routine.debug = jest.fn();
+    routine.debug = createTestDebugger();
 
     // RunCommandRoutine is mocked, so use plain objects
     routine.routines = [
@@ -43,6 +45,7 @@ describe('ExecuteDriverRoutine', () => {
       { name: '@scope/qux', workspaceName: 'qux' },
     ];
 
+    // @ts-ignore
     RunCommandRoutine.mockClear();
   });
 
@@ -169,7 +172,7 @@ describe('ExecuteDriverRoutine', () => {
 
       it('errors if workspaces config is not set', () => {
         expect(() => {
-          routine.context.workspaces = null;
+          delete routine.context.workspaces;
           routine.bootstrap();
         }).toThrowErrorMatchingSnapshot();
       });

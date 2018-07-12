@@ -4,14 +4,14 @@ describe('Context', () => {
   let context;
 
   beforeEach(() => {
-    context = new Context({ _: [], $: '' });
+    context = new Context({ _: [], $0: '' });
   });
 
   describe('constructor()', () => {
     it('sets args', () => {
-      context = new Context({ foo: true });
+      context = new Context({ _: [], $0: '', foo: true });
 
-      expect(context.args).toEqual({ foo: true });
+      expect(context.args).toEqual({ _: [], $0: '', foo: true });
     });
   });
 

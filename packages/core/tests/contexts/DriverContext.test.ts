@@ -5,12 +5,12 @@ describe('Context', () => {
   let context;
 
   beforeEach(() => {
-    context = new DriverContext({}, new Driver());
+    context = new DriverContext({ _: [], $0: '' }, new Driver());
   });
 
   describe('constructor()', () => {
     it('sets args', () => {
-      context = new DriverContext({ foo: true }, {});
+      context = new DriverContext({ _: [], $0: '', foo: true }, new Driver());
 
       expect(context.args).toEqual({ foo: true });
     });
@@ -19,7 +19,7 @@ describe('Context', () => {
       const driver = new Driver();
       driver.name = 'bar';
 
-      context = new DriverContext({}, driver);
+      context = new DriverContext({ _: [], $0: '' }, driver);
 
       expect(context.primaryDriver).toBe(driver);
       expect(context.driverName).toBe('bar');

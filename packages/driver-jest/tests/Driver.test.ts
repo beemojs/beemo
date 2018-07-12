@@ -12,14 +12,14 @@ describe('JestDriver', () => {
     driver = new JestDriver({
       args: ['--foo', '--bar=1'],
       dependencies: ['babel'],
-      env: { DEV: true },
+      env: { DEV: 'true' },
     });
 
     expect(driver.options).toEqual({
       args: ['--foo', '--bar=1'],
       copy: false,
       dependencies: ['babel'],
-      env: { DEV: true },
+      env: { DEV: 'true' },
     });
   });
 

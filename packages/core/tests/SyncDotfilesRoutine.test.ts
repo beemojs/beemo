@@ -2,31 +2,38 @@ import { Tool } from 'boost';
 import copy from 'copy';
 import fs from 'fs-extra';
 import SyncDotfilesRoutine from '../src/SyncDotfilesRoutine';
-import { createContext, setupMockTool, prependRoot, getRoot } from '../../../tests/helpers';
+import {
+  createContext,
+  setupMockTool,
+  prependRoot,
+  getRoot,
+  createTestDebugger,
+} from '../../../tests/helpers';
 
 jest.mock('copy');
 jest.mock('fs-extra');
 jest.mock('boost/lib/Tool');
 
 describe('SyncDotfilesRoutine', () => {
-  let routine;
+  let routine: SyncDotfilesRoutine;
 
   beforeEach(() => {
     routine = new SyncDotfilesRoutine('sync', 'Syncing dotfiles');
     routine.context = createContext();
-    routine.tool = setupMockTool(new Tool());
-    routine.debug = jest.fn();
-    routine.debug.invariant = jest.fn();
+    routine.tool = setupMockTool(new Tool({}));
+    routine.debug = createTestDebugger();
 
+    // @ts-ignore
     copy.mockImplementation((filePath, root, callback) => {
       callback(null, [{ path: './foo' }, { path: './bar' }, { path: './baz' }]);
     });
 
-    fs.rename.mockImplementation(value => Promise.resolve(value));
+    (fs.rename as jest.Mock).mockImplementation(value => Promise.resolve(value));
   });
 
   describe('bootstrap()', () => {
     it('errors if filter is not a string', () => {
+      // @ts-ignore
       routine.options.filter = 123;
 
       expect(() => {
@@ -81,6 +88,7 @@ describe('SyncDotfilesRoutine', () => {
     });
 
     it('handles errors', async () => {
+      // @ts-ignore
       copy.mockImplementation((filePath, root, callback) => callback(new Error('Oops')));
 
       try {

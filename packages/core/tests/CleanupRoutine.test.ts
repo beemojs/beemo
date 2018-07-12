@@ -12,7 +12,7 @@ describe('CleanupRoutine', () => {
   beforeEach(() => {
     routine = new CleanupRoutine('cleanup', 'Cleaning up');
     routine.context = createDriverContext();
-    routine.tool = setupMockTool(new Tool());
+    routine.tool = setupMockTool(new Tool({}));
     routine.debug = jest.fn();
   });
 
@@ -29,7 +29,7 @@ describe('CleanupRoutine', () => {
 
   describe('deleteConfigFiles()', () => {
     beforeEach(() => {
-      fs.remove.mockImplementation(() => Promise.resolve());
+      (fs.remove as jest.Mock).mockImplementation(() => Promise.resolve());
     });
 
     it('does nothing when no config paths', async () => {

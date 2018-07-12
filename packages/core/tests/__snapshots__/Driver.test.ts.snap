@@ -1,0 +1,41 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Driver formatConfig() formats to JS if config ends in .js 1`] = `
+"module.exports = {
+  \\"foo\\": 123,
+  \\"bar\\": \\"abc\\",
+  \\"baz\\": true
+};"
+`;
+
+exports[`Driver formatConfig() formats to JSON if config ends in .json 1`] = `
+"{
+  \\"foo\\": 123,
+  \\"bar\\": \\"abc\\",
+  \\"baz\\": true
+}"
+`;
+
+exports[`Driver setCommandOptions() doesnt support alias as other types 1`] = `"Invalid Driver field \\"foo.alias\\". Type must be one of: string, array<string>"`;
+
+exports[`Driver setCommandOptions() doesnt support description as other types 1`] = `"Invalid Driver field \\"foo.description\\". Must be a string."`;
+
+exports[`Driver setCommandOptions() doesnt support empty descriptions 1`] = `"Invalid Driver field \\"foo.description\\". String cannot be empty."`;
+
+exports[`Driver setCommandOptions() requires a description 1`] = `"Invalid Driver field \\"foo.description\\". Field is required and must be defined."`;
+
+exports[`Driver setMetadata() bin doesnt support underscores 1`] = `"Invalid Driver field \\"bin\\". String does not match pattern \\"^[-a-z0-9]+$\\"."`;
+
+exports[`Driver setMetadata() bin doesnt support uppercase 1`] = `"Invalid Driver field \\"bin\\". String does not match pattern \\"^[-a-z0-9]+$\\"."`;
+
+exports[`Driver setMetadata() bin is required 1`] = `"Invalid Driver field \\"bin\\". Field is required and must be defined."`;
+
+exports[`Driver setMetadata() configName doesnt support non-strings 1`] = `"Invalid Driver field \\"configName\\". Must be a string."`;
+
+exports[`Driver setMetadata() configName is required 1`] = `"Invalid Driver field \\"configName\\". Field is required and must be defined."`;
+
+exports[`Driver setMetadata() title doesnt support non-strings 1`] = `"Invalid Driver field \\"title\\". Must be a string."`;
+
+exports[`Driver setMetadata() title is required 1`] = `"Invalid Driver field \\"title\\". Field is required and must be defined."`;
+
+exports[`Driver validates fields 1`] = `"Invalid Driver field \\"args\\". Must be an array."`;

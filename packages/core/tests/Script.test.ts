@@ -1,7 +1,7 @@
 import Script from '../src/Script';
 
 describe('Script', () => {
-  let script;
+  let script: Script;
 
   beforeEach(() => {
     script = new Script();
@@ -16,6 +16,7 @@ describe('Script', () => {
   describe('run()', () => {
     it('errors if not defined', () => {
       expect(() => {
+        // @ts-ignore
         script.run();
       }).toThrowErrorMatchingSnapshot();
     });

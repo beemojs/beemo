@@ -1,13 +1,13 @@
 import fs from 'fs';
-import PrettierDriver from '../src/PrettierDriver';
+import ESLintDriver from '../src/ESLintDriver';
 
 jest.mock('fs');
 
-describe('PrettierDriver', () => {
+describe('ESLintDriver', () => {
   let driver;
 
   beforeEach(() => {
-    driver = new PrettierDriver();
+    driver = new ESLintDriver();
     driver.context = {
       configPaths: [],
     };
@@ -18,48 +18,77 @@ describe('PrettierDriver', () => {
   });
 
   it('sets options from constructor', () => {
-    driver = new PrettierDriver({
+    driver = new ESLintDriver({
       args: ['--foo', '--bar=1'],
       dependencies: ['babel'],
-      env: { DEV: true },
+      env: { DEV: 'true' },
     });
 
     expect(driver.options).toEqual({
       args: ['--foo', '--bar=1'],
       copy: false,
       dependencies: ['babel'],
-      env: { DEV: true },
+      env: { DEV: 'true' },
     });
   });
 
   it('sets correct metadata', () => {
     expect(driver.metadata).toEqual(
       expect.objectContaining({
-        bin: 'prettier',
-        configName: 'prettier.config.js',
+        bin: 'eslint',
+        configName: '.eslintrc.js',
         configOption: '--config',
         dependencies: [],
-        description: 'Format code with Prettier',
+        description: 'Lint files with ESLint',
         filterOptions: true,
         helpOption: '--help',
-        title: 'Prettier',
+        title: 'ESLint',
         useConfigOption: false,
       }),
     );
+  });
+
+  describe('mergeConfig()', () => {
+    it('merges using eslint engine', () => {
+      expect(
+        driver.mergeConfig(
+          {
+            env: {
+              node: true,
+            },
+            rules: {
+              foo: 'error',
+            },
+          },
+          {
+            rules: {
+              foo: ['error', 'always'],
+            },
+          },
+        ),
+      ).toEqual({
+        env: {
+          node: true,
+        },
+        rules: {
+          foo: ['error', 'always'],
+        },
+      });
+    });
   });
 
   describe('handleCreateIgnoreFile()', () => {
     it('does nothing if no ignore field', () => {
       const config = { foo: 123 };
 
-      driver.handleCreateIgnoreFile('/some/path/prettier.config.js', config);
+      driver.handleCreateIgnoreFile('/some/path/.eslintrc.js', config);
 
       expect(config).toEqual({ foo: 123 });
     });
 
     it('errors if not an array', () => {
       expect(() => {
-        driver.handleCreateIgnoreFile('/some/path/prettier.config.js', {
+        driver.handleCreateIgnoreFile('/some/path/.eslintrc.js', {
           ignore: 'foo',
         });
       }).toThrowErrorMatchingSnapshot();
@@ -71,11 +100,11 @@ describe('PrettierDriver', () => {
         ignore: ['foo', 'bar', 'baz'],
       };
 
-      driver.handleCreateIgnoreFile('/some/path/prettier.config.js', config);
+      driver.handleCreateIgnoreFile('/some/path/.eslintrc.js', config);
 
-      expect(fs.writeFileSync).toHaveBeenCalledWith('/some/path/.prettierignore', 'foo\nbar\nbaz');
+      expect(fs.writeFileSync).toHaveBeenCalledWith('/some/path/.eslintignore', 'foo\nbar\nbaz');
 
-      expect(driver.context.configPaths).toEqual(['/some/path/.prettierignore']);
+      expect(driver.context.configPaths).toEqual(['/some/path/.eslintignore']);
 
       expect(config).toEqual({ foo: 123 });
     });

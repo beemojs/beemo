@@ -1,0 +1,21 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`MochaDriver formatConfig() handles always underscored options 1`] = `
+"--es_staging
+--use_strict"
+`;
+
+exports[`MochaDriver formatConfig() handles reporter options 1`] = `"--reporterOptions abc=123,def=456"`;
+
+exports[`MochaDriver formatConfig() supports arrays 1`] = `
+"--ext js
+--ext jsx"
+`;
+
+exports[`MochaDriver formatConfig() supports arrays with a comma 1`] = `"foo, bar"`;
+
+exports[`MochaDriver formatConfig() supports primitives 1`] = `
+"--bar abc
+--baz
+--foo 123"
+`;

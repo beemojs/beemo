@@ -16,7 +16,7 @@ describe('CreateConfigRoutine', () => {
   let tool;
 
   beforeEach(() => {
-    tool = setupMockTool(new Tool());
+    tool = setupMockTool(new Tool({}));
 
     driver = new BabelDriver({ args: ['--qux'] });
     driver.name = 'babel';
@@ -30,15 +30,18 @@ describe('CreateConfigRoutine', () => {
     routine.debug = jest.fn();
     routine.debug.invariant = jest.fn();
 
-    fs.existsSync.mockImplementation(() => true);
-    fs.writeFile.mockImplementation(() => Promise.resolve());
-    fs.copy.mockImplementation(() => Promise.resolve());
+    (fs.existsSync as jest.Mock).mockImplementation(() => true);
+    (fs.writeFile as jest.Mock).mockImplementation(() => Promise.resolve());
+    (fs.copy as jest.Mock).mockImplementation(() => Promise.resolve());
+
+    // @ts-ignore
     ConfigLoader.mockImplementation(() => ({
       parseFile: () => ({ foo: 123 }),
     }));
   });
 
   afterEach(() => {
+    // @ts-ignore
     ConfigLoader.mockReset();
   });
 
@@ -268,6 +271,7 @@ describe('CreateConfigRoutine', () => {
     beforeEach(() => {
       parseSpy = jest.fn();
 
+      // @ts-ignore
       ConfigLoader.mockImplementation(() => ({
         resolveModuleConfigPath: (name, moduleName) =>
           `/node_modules/${moduleName}/configs/${name}.js`,
@@ -276,6 +280,7 @@ describe('CreateConfigRoutine', () => {
     });
 
     afterEach(() => {
+      // @ts-ignore
       ConfigLoader.mockReset();
     });
 
@@ -286,7 +291,7 @@ describe('CreateConfigRoutine', () => {
     });
 
     it('does nothing if config does not exist', async () => {
-      fs.existsSync.mockImplementation(() => false);
+      (fs.existsSync as jest.Mock).mockImplementation(() => false);
 
       const configs = await routine.loadConfigFromFilesystem(routine.context, []);
 
@@ -317,7 +322,7 @@ describe('CreateConfigRoutine', () => {
     });
 
     it('doesnt trigger `load-module-config` event if files does not exist', async () => {
-      fs.existsSync.mockImplementation(() => false);
+      (fs.existsSync as jest.Mock).mockImplementation(() => false);
 
       await routine.loadConfigFromFilesystem(routine.context, []);
 

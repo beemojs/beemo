@@ -61,11 +61,11 @@ describe('RunCommandRoutine', () => {
   let tool;
 
   beforeEach(() => {
-    tool = setupMockTool(new Tool());
+    tool = setupMockTool(new Tool({}));
 
     driver = new BabelDriver({
       args: ['--qux'],
-      env: { DEV: true },
+      env: { DEV: 'true' },
     });
     driver.tool = tool;
     driver.bootstrap();
@@ -224,7 +224,6 @@ describe('RunCommandRoutine', () => {
         '../scripts/build-packages.sh',
         '../scripts/bump-peer-deps.js',
         '../scripts/link-packages.sh',
-        '../tests/helpers.js',
         'bar',
       ]);
     });

@@ -30,7 +30,7 @@ describe('Beemo', () => {
     beemo.tool.options.moduleRoot = root;
     beemo.tool.options.root = root;
 
-    fs.existsSync.mockReset();
+    (fs.existsSync as jest.Mock).mockReset();
   });
 
   it('sets argv', () => {
@@ -39,12 +39,12 @@ describe('Beemo', () => {
 
   describe('bootstrapConfigModule()', () => {
     beforeEach(() => {
-      bootstrapIndex.mockReset();
+      (bootstrapIndex as jest.Mock).mockReset();
       beemo.tool.config.module = '@local';
     });
 
     it('does nothing if no index file', () => {
-      fs.existsSync.mockImplementation(() => false);
+      (fs.existsSync as jest.Mock).mockImplementation(() => false);
 
       beemo.bootstrapConfigModule();
 
@@ -52,7 +52,7 @@ describe('Beemo', () => {
     });
 
     it('calls bootstrap with tool if index exists', () => {
-      fs.existsSync.mockImplementation(() => true);
+      (fs.existsSync as jest.Mock).mockImplementation(() => true);
 
       beemo.bootstrapConfigModule();
 
@@ -86,7 +86,7 @@ describe('Beemo', () => {
     });
 
     it('returns node module path', () => {
-      fs.existsSync.mockImplementation(() => true);
+      (fs.existsSync as jest.Mock).mockImplementation(() => true);
 
       beemo.tool.config.module = 'boost';
 
@@ -129,8 +129,8 @@ describe('Beemo', () => {
     });
 
     it('returns workspaces from lerna.json', () => {
-      fs.existsSync.mockImplementation(() => true);
-      fs.readJsonSync.mockImplementation(() => ({
+      (fs.existsSync as jest.Mock).mockImplementation(() => true);
+      (fs.readJsonSync as jest.Mock).mockImplementation(() => ({
         packages: ['packages/*'],
       }));
 
@@ -143,14 +143,14 @@ describe('Beemo', () => {
     });
 
     it('doesnt load lerna.json if workspaces are defined in package.json', () => {
-      fs.readJsonSync.mockImplementation(() => ({
+      (fs.readJsonSync as jest.Mock).mockImplementation(() => ({
         packages: ['packages2/*'],
       }));
 
       beemo.tool.package = { workspaces: ['packages1/*'] };
       beemo.tool.options.workspaceRoot = getFixturePath('workspaces-lerna');
 
-      expect(fs.existsSync).not.toHaveBeenCalled();
+      expect(fs.existsSync as jest.Mock).not.toHaveBeenCalled();
       expect(beemo.getWorkspacePaths()).toEqual([
         path.join(beemo.tool.options.workspaceRoot, 'packages1/*'),
       ]);
@@ -159,7 +159,7 @@ describe('Beemo', () => {
 
   describe('handleCleanupOnFailure()', () => {
     beforeEach(() => {
-      fs.removeSync.mockReset();
+      (fs.removeSync as jest.Mock).mockReset();
     });
 
     it('does nothing if exit code is 0', () => {
@@ -301,7 +301,7 @@ describe('Beemo', () => {
 
   describe('prepareContext()', () => {
     it('sets extra props', () => {
-      expect(beemo.prepareContext(new Context({ _: [] }))).toEqual(
+      expect(beemo.prepareContext(new Context({ _: [], $0: '' }))).toEqual(
         expect.objectContaining({
           args: { _: [] },
           argv: ['foo', 'bar'],

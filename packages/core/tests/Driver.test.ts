@@ -5,14 +5,25 @@ import { createDriver } from '../../../tests/helpers';
 jest.mock('boost/lib/Tool');
 
 describe('Driver', () => {
-  let driver;
+  let driver: Driver<any>;
+  const execReturn = {
+    cmd: '',
+    code: 0,
+    failed: false,
+    killed: false,
+    signal: null,
+    stderr: '',
+    stdout: '',
+    timedOut: false,
+  };
 
   beforeEach(() => {
-    driver = createDriver('foo', new Tool());
+    driver = createDriver('foo', new Tool({}));
   });
 
   it('validates fields', () => {
     expect(() => {
+      // @ts-ignore
       driver = new Driver({
         args: true,
       });
@@ -71,6 +82,7 @@ describe('Driver', () => {
   describe('handleFailure()', () => {
     it('logs stdout', () => {
       driver.handleFailure({
+        ...execReturn,
         stdout: 'out',
       });
 
@@ -79,6 +91,7 @@ describe('Driver', () => {
 
     it('logs stderr', () => {
       driver.handleFailure({
+        ...execReturn,
         stderr: 'error',
       });
 
@@ -87,6 +100,7 @@ describe('Driver', () => {
 
     it('logs stderr over stdout', () => {
       driver.handleFailure({
+        ...execReturn,
         stderr: 'error',
         stdout: 'out',
       });
@@ -96,6 +110,7 @@ describe('Driver', () => {
 
     it('doesnt log if empty', () => {
       driver.handleFailure({
+        ...execReturn,
         stderr: '',
         stdout: '',
       });
@@ -107,6 +122,7 @@ describe('Driver', () => {
   describe('handleSuccess()', () => {
     it('logs stdout', () => {
       driver.handleSuccess({
+        ...execReturn,
         stdout: 'out',
       });
 
@@ -115,6 +131,7 @@ describe('Driver', () => {
 
     it('doesnt log stdout if empty', () => {
       driver.handleSuccess({
+        ...execReturn,
         stdout: '',
       });
 
@@ -123,6 +140,7 @@ describe('Driver', () => {
 
     it('doesnt log stderr', () => {
       driver.handleFailure({
+        ...execReturn,
         stderr: 'error',
       });
 
@@ -131,6 +149,7 @@ describe('Driver', () => {
 
     it('doesnt log if empty', () => {
       driver.handleFailure({
+        ...execReturn,
         stderr: '',
         stdout: '',
       });
@@ -215,6 +234,7 @@ describe('Driver', () => {
 
     it('doesnt support alias as other types', () => {
       expect(() => {
+        // @ts-ignore
         driver.setCommandOptions({
           foo: {
             alias: 123,
@@ -239,6 +259,7 @@ describe('Driver', () => {
 
     it('doesnt support description as other types', () => {
       expect(() => {
+        // @ts-ignore
         driver.setCommandOptions({
           foo: {
             description: 123,
@@ -319,6 +340,7 @@ describe('Driver', () => {
 
       it('doesnt support non-strings', () => {
         expect(() => {
+          // @ts-ignore
           driver.setMetadata({
             ...options,
             configName: 123,
@@ -339,6 +361,7 @@ describe('Driver', () => {
 
       it('doesnt support non-strings', () => {
         expect(() => {
+          // @ts-ignore
           driver.setMetadata({
             ...options,
             title: 123,

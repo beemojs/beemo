@@ -5,19 +5,17 @@ describe('Context', () => {
   let context;
 
   beforeEach(() => {
-    context = new ScriptContext({});
+    context = new ScriptContext({ _: [], $0: '' }, 'foo');
   });
 
   describe('constructor()', () => {
     it('sets args', () => {
-      context = new ScriptContext({ foo: true });
+      context = new ScriptContext({ _: [], $0: '', foo: true }, 'foo');
 
-      expect(context.args).toEqual({ foo: true });
+      expect(context.args).toEqual({ _: [], $0: '', foo: true });
     });
 
     it('sets script name', () => {
-      context = new ScriptContext({ foo: true }, 'foo');
-
       expect(context.scriptName).toBe('foo');
     });
   });

@@ -2,7 +2,12 @@ import { Tool } from 'boost';
 import ModuleLoader from 'boost/lib/ModuleLoader';
 import ExecuteScriptRoutine from '../src/ExecuteScriptRoutine';
 import Script from '../src/Script';
-import { createScriptContext, setupMockTool, prependRoot } from '../../../tests/helpers';
+import {
+  createScriptContext,
+  setupMockTool,
+  prependRoot,
+  createTestDebugger,
+} from '../../../tests/helpers';
 
 jest.mock('boost/lib/Tool');
 
@@ -16,14 +21,15 @@ jest.mock('boost/lib/ModuleLoader', () =>
 );
 
 describe('ExecuteScriptRoutine', () => {
-  let routine;
+  let routine: ExecuteScriptRoutine;
 
   beforeEach(() => {
     routine = new ExecuteScriptRoutine('script', 'Executing script');
     routine.context = createScriptContext();
-    routine.tool = setupMockTool(new Tool());
-    routine.debug = jest.fn();
+    routine.tool = setupMockTool(new Tool({}));
+    routine.debug = createTestDebugger();
 
+    // @ts-ignore
     ModuleLoader.mockClear();
   });
 
@@ -83,15 +89,14 @@ describe('ExecuteScriptRoutine', () => {
 
   describe('runScript()', () => {
     it('calls the scripts parse() and run()', () => {
-      const script = {
-        parse: jest.fn(() => ({
-          boolean: ['foo'],
-          default: {
-            foo: false,
-          },
-        })),
-        run: jest.fn(),
-      };
+      const script = new Script();
+      script.parse = jest.fn(() => ({
+        boolean: ['foo'],
+        default: {
+          foo: false,
+        },
+      }));
+      script.run = jest.fn();
 
       routine.runScript(routine.context, script);
 
@@ -108,7 +113,9 @@ describe('ExecuteScriptRoutine', () => {
 
     it('triggers `before-execute` event', async () => {
       class MockScript extends Script {
-        run() {}
+        run() {
+          return Promise.resolve();
+        }
       }
 
       const spy = routine.tool.emit;
