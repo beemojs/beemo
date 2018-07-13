@@ -1,17 +1,17 @@
 import path from 'path';
 import rimraf from 'rimraf';
 import TypeScriptDriver from '../src/TypeScriptDriver';
+import { createDriverContext, createTool } from '../../../tests/helpers';
 
 jest.mock('rimraf');
 
 describe('TypeScriptDriver', () => {
-  let driver;
+  let driver: TypeScriptDriver;
 
   beforeEach(() => {
     driver = new TypeScriptDriver();
-    driver.tool = {
-      on: jest.fn(),
-    };
+    driver.tool = createTool();
+    driver.context = createDriverContext(driver);
     driver.bootstrap();
     driver.config = {
       compilerOptions: {},
@@ -53,36 +53,30 @@ describe('TypeScriptDriver', () => {
   describe('handleCleanTarget()', () => {
     it('doesnt run if no config', () => {
       driver.config = {};
-      driver.handleCleanTarget(driver, [], {
-        args: {},
-      });
+      driver.handleCleanTarget(driver, [], createDriverContext(driver));
 
       expect(rimraf.sync).not.toHaveBeenCalled();
     });
 
     it('doesnt run if no clean param', () => {
       driver.config.compilerOptions = { outDir: './lib' };
-      driver.handleCleanTarget(driver, [], {
-        args: {},
-      });
+      driver.handleCleanTarget(driver, [], createDriverContext(driver));
 
       expect(rimraf.sync).not.toHaveBeenCalled();
     });
 
     it('doesnt run if no outDir param', () => {
+      driver.context.args.clean = true;
       driver.config.compilerOptions = {};
-      driver.handleCleanTarget(driver, [], {
-        args: { clean: true },
-      });
+      driver.handleCleanTarget(driver, [], driver.context);
 
       expect(rimraf.sync).not.toHaveBeenCalled();
     });
 
     it('runs if both params', () => {
+      driver.context.args.clean = true;
       driver.config.compilerOptions = { outDir: './lib' };
-      driver.handleCleanTarget(driver, [], {
-        args: { clean: true },
-      });
+      driver.handleCleanTarget(driver, [], driver.context);
 
       expect(rimraf.sync).toHaveBeenCalledWith(path.resolve('./lib'));
     });

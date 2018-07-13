@@ -1,10 +1,13 @@
 import JestDriver from '../src/JestDriver';
+import { createDriverContext, createTool, EXEC_RESULT } from '../../../tests/helpers';
 
 describe('JestDriver', () => {
-  let driver;
+  let driver: JestDriver;
 
   beforeEach(() => {
     driver = new JestDriver();
+    driver.tool = createTool();
+    driver.context = createDriverContext(driver);
     driver.bootstrap();
   });
 
@@ -41,60 +44,56 @@ describe('JestDriver', () => {
 
   describe('handleSuccess()', () => {
     it('outputs stderr', () => {
-      driver.tool = {
-        log: jest.fn(),
-      };
+      const spy = jest.spyOn(driver.tool, 'log');
 
       driver.handleSuccess({
+        ...EXEC_RESULT,
         cmd: 'jest',
         stdout: 'Hello',
         stderr: ' Why??? ',
       });
 
-      expect(driver.tool.log).toHaveBeenCalledWith('Why???');
+      expect(spy).toHaveBeenCalledWith('Why???');
     });
 
     it('outputs nothing if empty strings', () => {
-      driver.tool = {
-        log: jest.fn(),
-      };
+      const spy = jest.spyOn(driver.tool, 'log');
 
       driver.handleSuccess({
+        ...EXEC_RESULT,
         cmd: 'jest',
         stdout: '',
         stderr: '',
       });
 
-      expect(driver.tool.log).not.toHaveBeenCalled();
+      expect(spy).not.toHaveBeenCalled();
     });
 
     it('outputs stdout and stderr when running coverage', () => {
-      driver.tool = {
-        log: jest.fn(),
-      };
+      const spy = jest.spyOn(driver.tool, 'log');
 
       driver.handleSuccess({
+        ...EXEC_RESULT,
         cmd: 'jest --coverage',
         stdout: 'Coverage',
         stderr: 'Tests',
       });
 
-      expect(driver.tool.log).toHaveBeenCalledWith('Tests');
-      expect(driver.tool.log).toHaveBeenCalledWith('Coverage');
+      expect(spy).toHaveBeenCalledWith('Tests');
+      expect(spy).toHaveBeenCalledWith('Coverage');
     });
 
     it('outputs nothing if empty strings when running coverage', () => {
-      driver.tool = {
-        log: jest.fn(),
-      };
+      const spy = jest.spyOn(driver.tool, 'log');
 
       driver.handleSuccess({
+        ...EXEC_RESULT,
         cmd: 'jest --coverage',
         stdout: '',
         stderr: '',
       });
 
-      expect(driver.tool.log).not.toHaveBeenCalled();
+      expect(spy).not.toHaveBeenCalled();
     });
   });
 });

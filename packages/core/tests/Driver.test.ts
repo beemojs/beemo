@@ -6,16 +6,6 @@ jest.mock('boost/lib/Tool');
 
 describe('Driver', () => {
   let driver: Driver<any>;
-  const execReturn = {
-    cmd: '',
-    code: 0,
-    failed: false,
-    killed: false,
-    signal: null,
-    stderr: '',
-    stdout: '',
-    timedOut: false,
-  };
 
   beforeEach(() => {
     driver = createDriver('foo', new Tool({}));

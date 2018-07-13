@@ -1,7 +1,7 @@
 import MochaDriver from '../src/MochaDriver';
 
 describe('MochaDriver', () => {
-  let driver;
+  let driver: MochaDriver;
 
   beforeEach(() => {
     driver = new MochaDriver();

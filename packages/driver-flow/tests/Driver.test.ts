@@ -1,10 +1,13 @@
 import FlowDriver from '../src/FlowDriver';
+import { createDriverContext, createTool, EXEC_RESULT } from '../../../tests/helpers';
 
 describe('FlowDriver', () => {
-  let driver;
+  let driver: FlowDriver;
 
   beforeEach(() => {
     driver = new FlowDriver();
+    driver.tool = createTool();
+    driver.context = createDriverContext(driver);
     driver.bootstrap();
   });
 
@@ -211,30 +214,30 @@ describe('FlowDriver', () => {
   });
 
   describe('handleFailure()', () => {
-    beforeEach(() => {
-      driver.tool = {
-        logError: jest.fn(),
-      };
-    });
-
     it('logs stdout on error code 2', () => {
+      const spy = jest.spyOn(driver.tool, 'logError');
+
       driver.handleFailure({
+        ...EXEC_RESULT,
         code: 2,
         stdout: 'Out',
         stderr: 'Err',
       });
 
-      expect(driver.tool.logError).toHaveBeenCalledWith('Out');
+      expect(spy).toHaveBeenCalledWith('Out');
     });
 
     it('logs stderr on other error codes', () => {
+      const spy = jest.spyOn(driver.tool, 'logError');
+
       driver.handleFailure({
+        ...EXEC_RESULT,
         code: 1,
         stdout: 'Out',
         stderr: 'Err',
       });
 
-      expect(driver.tool.logError).toHaveBeenCalledWith('Err');
+      expect(spy).toHaveBeenCalledWith('Err');
     });
   });
 });

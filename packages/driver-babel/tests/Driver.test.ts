@@ -1,17 +1,17 @@
 import path from 'path';
 import rimraf from 'rimraf';
 import BabelDriver from '../src/BabelDriver';
+import { createDriverContext, createTool, EXEC_RESULT } from '../../../tests/helpers';
 
 jest.mock('rimraf');
 
 describe('BabelDriver', () => {
-  let driver;
+  let driver: BabelDriver;
 
   beforeEach(() => {
     driver = new BabelDriver();
-    driver.tool = {
-      on: jest.fn(),
-    };
+    driver.tool = createTool();
+    driver.context = createDriverContext(driver);
     driver.bootstrap();
   });
 
@@ -48,28 +48,26 @@ describe('BabelDriver', () => {
 
   describe('handleCleanTarget()', () => {
     it('doesnt run if no clean param', () => {
-      driver.handleCleanTarget(driver, [], {
-        args: { outDir: './lib' },
-      });
+      driver.context.args.outDir = './lib';
+
+      driver.handleCleanTarget(driver, [], driver.context);
 
       expect(rimraf.sync).not.toHaveBeenCalled();
     });
 
     it('doesnt run if no outDir param', () => {
-      driver.handleCleanTarget(driver, [], {
-        args: { clean: true },
-      });
+      driver.context.args.clean = true;
+
+      driver.handleCleanTarget(driver, [], driver.context);
 
       expect(rimraf.sync).not.toHaveBeenCalled();
     });
 
     it('runs if both params', () => {
-      driver.handleCleanTarget(driver, [], {
-        args: {
-          clean: true,
-          outDir: './lib',
-        },
-      });
+      driver.context.args.outDir = './lib';
+      driver.context.args.clean = true;
+
+      driver.handleCleanTarget(driver, [], driver.context);
 
       expect(rimraf.sync).toHaveBeenCalledWith(path.resolve('./lib'));
     });

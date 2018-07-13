@@ -11,6 +11,17 @@ import { DriverMetadata } from '../packages/core/src/types';
 
 jest.mock('boost/lib/Console');
 
+export const EXEC_RESULT = {
+  cmd: '',
+  code: 0,
+  failed: false,
+  killed: false,
+  signal: null,
+  stderr: '',
+  stdout: '',
+  timedOut: false,
+};
+
 export function setupMockTool(tool: Tool<any>): Tool<any> {
   tool.options = {
     appName: 'Beemo',
@@ -46,9 +57,13 @@ export function setupMockTool(tool: Tool<any>): Tool<any> {
   return tool;
 }
 
+export function createTool(): Tool<any> {
+  return setupMockTool(new Tool({}));
+}
+
 export function createDriver(
   name: string,
-  tool?: Tool<any>,
+  tool: Tool<any> | null = null,
   metadata: Partial<DriverMetadata> = {},
 ): Driver<any> {
   const driver = new Driver();
