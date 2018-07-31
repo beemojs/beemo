@@ -21,7 +21,7 @@
     "access": "public"
   },
   "devDependencies": {
-    "jest": "^23.4.0"
+    "jest": "^23.4.2"
   },
   "peerDependencies": {
     "@beemo/core": "^0.19.0",

@@ -28,6 +28,6 @@
   },
   "devDependencies": {
     "@types/semver": "^5.5.0",
-    "@types/yargs": "^11.1.0"
+    "@types/yargs": "^11.1.1"
   }
 }

@@ -22,6 +22,9 @@ that matches the name of your configuration module, or another third-party modul
 }
 ```
 
+> If setting up a monorepo (workspaces), the Beemo configuration should be in the root
+> `package.json`.
+
 ### Settings
 
 - `module` (string) - Name of your configuration module.
