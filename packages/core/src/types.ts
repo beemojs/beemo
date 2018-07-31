@@ -23,6 +23,10 @@ declare global {
 
 export type Argv = string[];
 
+export type ConfigStrategy = 'create' | 'reference' | 'copy';
+
+export type WorkspaceStrategy = 'reference' | 'copy';
+
 export interface BeemoConfig extends ToolConfig {
   config: {
     cleanup: boolean;
@@ -36,23 +40,23 @@ export interface DriverCommandOptions extends Struct {
 
 export interface DriverOptions extends Struct {
   args: string[];
-  copy: boolean;
   dependencies: string[];
   env: { [key: string]: string };
+  strategy: '' | ConfigStrategy;
 }
 
 export interface DriverMetadata extends Struct {
   bin: string;
   configName: string;
   configOption: string;
-  configStrategy: 'create' | 'reference' | 'copy';
+  configStrategy: ConfigStrategy;
   dependencies: string[];
   description: string;
   filterOptions: boolean;
   helpOption: string;
   title: string;
   useConfigOption: boolean;
-  workspaceStrategy: 'reference' | 'copy';
+  workspaceStrategy: WorkspaceStrategy;
 }
 
 export type Execution = ExecaReturns;

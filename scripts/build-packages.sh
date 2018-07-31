@@ -17,5 +17,8 @@ build_pkg "./packages/core"
 cd "$root" || exit
 
 for pkg in ./packages/*; do
-  build_pkg "$pkg"
+  if [ "$pkg" != "./packages/core" ]
+  then
+    build_pkg "$pkg"
+  fi
 done

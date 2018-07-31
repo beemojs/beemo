@@ -93,11 +93,11 @@ describe('CreateConfigRoutine', () => {
       expect(path).toBe(prependRoot('/.babelrc'));
     });
 
-    it('copies config file if `copy` option is true', async () => {
+    it('copies config file if `strategy` option is copy', async () => {
       const createSpy = jest.spyOn(routine, 'createConfigFile');
       const copySpy = jest.spyOn(routine, 'copyConfigFile');
 
-      driver.options.copy = true;
+      driver.options.strategy = STRATEGY_COPY;
 
       const path = await routine.execute();
 
@@ -111,6 +111,19 @@ describe('CreateConfigRoutine', () => {
       const refSpy = jest.spyOn(routine, 'referenceConfigFile');
 
       driver.metadata.configStrategy = STRATEGY_REFERENCE;
+
+      const path = await routine.execute();
+
+      expect(refSpy).toHaveBeenCalledWith(routine.context, undefined, expect.anything());
+      expect(createSpy).not.toHaveBeenCalled();
+      expect(path).toBe(prependRoot('/.babelrc'));
+    });
+
+    it('references config file if `strategy` option is reference', async () => {
+      const createSpy = jest.spyOn(routine, 'createConfigFile');
+      const refSpy = jest.spyOn(routine, 'referenceConfigFile');
+
+      driver.options.strategy = STRATEGY_REFERENCE;
 
       const path = await routine.execute();
 

@@ -34,9 +34,9 @@ export default class CreateConfigRoutine extends Routine<CreateConfigOptions, Dr
   execute(): Promise<string> {
     const { metadata, name, options } = this.options.driver;
 
-    if (metadata.configStrategy === STRATEGY_REFERENCE) {
+    if (metadata.configStrategy === STRATEGY_REFERENCE || options.strategy === STRATEGY_REFERENCE) {
       this.task(`Referencing ${name} config file`, this.referenceConfigFile);
-    } else if (metadata.configStrategy === STRATEGY_COPY || options.copy) {
+    } else if (metadata.configStrategy === STRATEGY_COPY || options.strategy === STRATEGY_COPY) {
       this.task(`Copying ${name} config file`, this.copyConfigFile);
     } else {
       this.task(`Loading source ${name} module config`, this.loadConfigFromFilesystem);

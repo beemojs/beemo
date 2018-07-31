@@ -107,10 +107,11 @@ Furthermore, each driver can be configured with options by using an object, like
 - `driver` (string) - The name of the driver module. Required when using an object.
 - `args` (string[]) - Arguments to always pass when executing the driver binary, and to pass to the
   config file.
-- `copy` (bool) - Copy configuration file from module instead of creating it.
 - `dependencies` (string[]) - Other drivers that are required for this driver to run.
 - `env` (object) - Environment variables to pass when executing the driver binary with
   [execa](https://github.com/sindresorhus/execa).
+- `strategy` (create | copy | reference) - Type of [strategy](./driver.md#config-strategies) to use
+  when generating a config file. Default is different per driver.
 
 ## Executing Drivers
 

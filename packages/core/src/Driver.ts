@@ -29,9 +29,9 @@ export default class Driver<T> extends Plugin<DriverOptions> {
       options,
       {
         args: array(string()),
-        copy: bool(),
         dependencies: array(string()),
         env: object(union([bool(), number(), string()])),
+        strategy: string().oneOf(['', STRATEGY_CREATE, STRATEGY_REFERENCE, STRATEGY_COPY]),
       },
       {
         name: this.constructor.name,
