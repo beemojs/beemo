@@ -10,8 +10,9 @@ import merge from 'lodash/merge';
 import optimal, { instance, Struct } from 'optimal';
 import { ConfigLoader, Routine } from 'boost';
 import parseArgs from 'yargs-parser';
-import Driver, { STRATEGY_COPY, STRATEGY_REFERENCE } from '../Driver';
+import Driver from '../Driver';
 import DriverContext from '../contexts/DriverContext';
+import { STRATEGY_COPY, STRATEGY_REFERENCE } from '../constants';
 
 export interface CreateConfigOptions extends Struct {
   driver: Driver<any>;

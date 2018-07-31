@@ -9,7 +9,8 @@ import {
   prependRoot,
   createTestDebugger,
 } from '../../../../tests/helpers';
-import Driver, { STRATEGY_COPY, STRATEGY_REFERENCE } from '../../src/Driver';
+import Driver from '../../src/Driver';
+import { STRATEGY_COPY, STRATEGY_REFERENCE } from '../../src/constants';
 
 jest.mock('fs-extra');
 jest.mock('boost/lib/Tool');

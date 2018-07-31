@@ -12,6 +12,8 @@ import ScriptContext from './contexts/ScriptContext';
 
 export { Context, Driver, DriverContext, Script, ScriptContext };
 
+export * from './constants';
+
 export * from './types';
 
 export default Beemo;

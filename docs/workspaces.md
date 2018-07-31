@@ -23,9 +23,9 @@ yarn beemo typescript --workspaces=driver-*
 ## Priority Packages
 
 There are situations where a single package or multiple packages need to be executed before all
-other packages, for example, a core/common package. This is very common for typed languages like
-Flow or TypeScript. Pass a `--priority` option to automatically resolve a priority order based on
-the workspaces dependency graph.
+other packages, for example, a core/common/main package. This is very common for typed languages
+like Flow or TypeScript. Pass a `--priority` option to automatically resolve a priority order based
+on the workspaces dependency graph.
 
 ```
 yarn beemo typescript --workspaces=* --priority
@@ -57,3 +57,4 @@ categories.
 | Mocha      | Root only                                          |
 | Prettier   | Root only (preferred), Referenced using `--config` |
 | TypeScript | Copied                                             |
+| Webpack    | N/A                                                |

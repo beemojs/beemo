@@ -1,8 +1,8 @@
 # Repository Setup
 
 To begin, create and clone a new repository on GitHub (or another VCS). This repository will be
-known as your "configuration module" going forward. I suggest naming it `build-tool-config`, as it's
-straight forward, easy to understand, and defines intent.
+known as your "configuration module" going forward. I suggest naming it `build-tool-config`, or
+`dev-tools`, etc, as it's straight forward, easy to understand, and defines intent.
 
 ```
 git clone git@github.com:<username>/build-tool-config.git

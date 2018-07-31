@@ -1,0 +1,33 @@
+{
+  "name": "@beemo/driver-webpack",
+  "version": "0.0.0",
+  "description": "Webpack driver for Beemo.",
+  "keywords": [
+    "beemo",
+    "beemo-driver",
+    "driver",
+    "webpack",
+    "bundler"
+  ],
+  "main": "./lib/index.js",
+  "types": "./lib/index.d.ts",
+  "engines": {
+    "node": ">=8.0.0"
+  },
+  "repository": "https://github.com/milesj/beemo/tree/master/packages/driver-webpack",
+  "license": "MIT",
+  "publishConfig": {
+    "access": "public"
+  },
+  "devDependencies": {
+    "webpack": "^4.16.3",
+    "webpack-cli": "^3.1.0"
+  },
+  "peerDependencies": {
+    "@beemo/core": "^0.19.0",
+    "webpack": "^4.0.0"
+  },
+  "dependencies": {
+    "@types/webpack": "^4.4.8"
+  }
+}

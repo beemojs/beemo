@@ -12,8 +12,8 @@ import isGlob from 'is-glob';
 import merge from 'lodash/merge';
 import optimal, { array, bool, string, Struct } from 'optimal';
 import parseArgs from 'yargs-parser';
-import { STRATEGY_COPY } from '../Driver';
 import DriverContext from '../contexts/DriverContext';
+import { STRATEGY_COPY } from '../constants';
 import { Argv, Execution } from '../types';
 
 const OPTION_PATTERN: RegExp = /-?-[-a-z0-9]+(,|\s)/gi;

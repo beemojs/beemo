@@ -13,7 +13,9 @@
     "prettier": "beemo prettier",
     "prerelease": "yarn test && yarn run build",
     "release": "lerna publish",
-    "type": "beemo typescript --workspaces=* --noEmit"
+    "type": "beemo typescript --workspaces=* --noEmit",
+    "int:webpack:fail": "beemo webpack ./packages/driver-webpack/integration/fail.js -o ./packages/driver-webpack/integration/fail.min.js",
+    "int:webpack:pass": "beemo webpack ./packages/driver-webpack/integration/pass.js -o ./packages/driver-webpack/integration/pass.min.js"
   },
   "devDependencies": {
     "@milesj/build-tool-config": "0.114.1",
@@ -42,7 +44,8 @@
       },
       "mocha",
       "prettier",
-      "typescript"
+      "typescript",
+      "webpack"
     ],
     "eslint": {
       "rules": {
