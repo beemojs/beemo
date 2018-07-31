@@ -9,6 +9,7 @@ import {
   getFixturePath,
   createTestDebugger,
 } from '../../../tests/helpers';
+import { DriverContext } from '../../../node_modules/@beemo/core/src';
 
 jest.mock('boost/lib/Tool');
 
@@ -29,6 +30,7 @@ describe('ExecuteDriverRoutine', () => {
     routine.debug = createTestDebugger();
 
     // RunCommandRoutine is mocked, so use plain objects
+    // @ts-ignore
     routine.routines = [
       { key: 'primary' },
       { key: 'foo' },
@@ -187,18 +189,25 @@ describe('ExecuteDriverRoutine', () => {
   });
 
   describe('execute()', () => {
+    let context: DriverContext;
+
+    beforeEach(() => {
+      context = createDriverContext(driver);
+    });
+
     it('pools each routine', async () => {
       routine.poolRoutines = jest.fn(() => Promise.resolve({ errors: [], results: [] }));
 
-      await routine.execute({ args: {} });
+      await routine.execute(context);
 
       expect(routine.poolRoutines).toHaveBeenCalledWith(null, {}, routine.routines);
     });
 
     it('passes concurrency to pooler', async () => {
       routine.poolRoutines = jest.fn(() => Promise.resolve({ errors: [], results: [] }));
+      context.args.concurrency = 2;
 
-      await routine.execute({ args: { concurrency: 2 } });
+      await routine.execute(context);
 
       expect(routine.poolRoutines).toHaveBeenCalledWith(null, { concurrency: 2 }, routine.routines);
     });
@@ -209,7 +218,7 @@ describe('ExecuteDriverRoutine', () => {
       );
 
       try {
-        await routine.execute({ args: {} });
+        await routine.execute(context);
       } catch (error) {
         expect(error).toEqual(new Error('Execution failure.\nFailed\n\nOops'));
       }
@@ -218,7 +227,7 @@ describe('ExecuteDriverRoutine', () => {
     it('returns results', async () => {
       routine.poolRoutines = jest.fn(() => Promise.resolve({ errors: [], results: [123] }));
 
-      const response = await routine.execute({ args: {} });
+      const response = await routine.execute(context);
 
       expect(response).toEqual([123]);
     });
@@ -231,7 +240,7 @@ describe('ExecuteDriverRoutine', () => {
         '@scope/foo': '1.0.0',
       };
 
-      await routine.execute({ args: {} });
+      await routine.execute(context);
 
       expect(routine.serializeRoutines).toHaveBeenCalledWith(null, [{ key: 'foo' }]);
       expect(routine.poolRoutines).toHaveBeenCalledWith(null, {}, [

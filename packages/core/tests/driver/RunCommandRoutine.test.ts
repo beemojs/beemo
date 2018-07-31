@@ -1,6 +1,7 @@
 import { Tool } from 'boost';
 import fs from 'fs-extra';
 import chalk from 'chalk';
+import Driver from '../../src/Driver';
 import RunCommandRoutine from '../../src/driver/RunCommandRoutine';
 import BabelDriver from '../../../driver-babel/src/BabelDriver';
 import JestDriver from '../../../driver-jest/src/JestDriver';
@@ -9,7 +10,9 @@ import {
   setupMockTool,
   prependRoot,
   getRoot,
+  createTestDebugger,
 } from '../../../../tests/helpers';
+import Task from '../../../../node_modules/boost/lib/Task';
 
 jest.mock('fs-extra');
 
@@ -56,8 +59,8 @@ Options:
 `;
 
 describe('RunCommandRoutine', () => {
-  let routine;
-  let driver;
+  let routine: RunCommandRoutine;
+  let driver: Driver<any>;
   let tool;
 
   beforeEach(() => {
@@ -71,15 +74,15 @@ describe('RunCommandRoutine', () => {
     driver.bootstrap();
 
     routine = new RunCommandRoutine('babel', 'Run babel');
-    routine.context = createDriverContext(driver);
     routine.tool = tool;
-    routine.debug = jest.fn();
-    routine.debug.invariant = jest.fn();
+    routine.context = createDriverContext(driver);
+    routine.debug = createTestDebugger();
     routine.bootstrap();
   });
 
   describe('bootstrap()', () => {
     it('errors if `forceConfigOption` is not a boolean', () => {
+      // @ts-ignore
       routine.options.forceConfigOption = 'foo';
 
       expect(() => {
@@ -88,6 +91,7 @@ describe('RunCommandRoutine', () => {
     });
 
     it('errors if `workspaceRoot` is not a string', () => {
+      // @ts-ignore
       routine.options.workspaceRoot = 123;
 
       expect(() => {
@@ -397,6 +401,8 @@ describe('RunCommandRoutine', () => {
   });
 
   describe('runCommandWithArgs()', () => {
+    const task = new Task('Task');
+
     beforeEach(() => {
       routine.executeCommand = jest.fn(() => Promise.resolve({ success: true }));
       driver.handleSuccess = jest.fn();
@@ -404,36 +410,36 @@ describe('RunCommandRoutine', () => {
     });
 
     it('executes command with correct args', async () => {
-      const task = {};
-
       await routine.runCommandWithArgs(routine.context, ['--wtf'], task);
 
       expect(routine.executeCommand).toHaveBeenCalledWith('babel', ['--wtf'], {
         cwd: getRoot(),
-        env: { DEV: true },
+        env: { DEV: 'true' },
         task,
       });
     });
 
     it('handles success using driver', async () => {
-      const response = await routine.runCommandWithArgs(routine.context, ['--wtf']);
+      const response = await routine.runCommandWithArgs(routine.context, ['--wtf'], task);
 
       expect(response).toEqual({ success: true });
       expect(driver.handleSuccess).toHaveBeenCalledWith({ success: true });
     });
 
     it('handles failure using driver', async () => {
-      routine.executeCommand.mockImplementation(() => Promise.reject(new Error('Oops')));
+      (routine.executeCommand as jest.Mock).mockImplementation(() =>
+        Promise.reject(new Error('Oops')),
+      );
 
       try {
-        await routine.runCommandWithArgs(routine.context, ['--wtf']);
+        await routine.runCommandWithArgs(routine.context, ['--wtf'], task);
       } catch (error) {
         expect(driver.handleFailure).toHaveBeenCalledWith(error);
       }
     });
 
     it('triggers `before-execute` event', async () => {
-      await routine.runCommandWithArgs(routine.context, ['--wtf']);
+      await routine.runCommandWithArgs(routine.context, ['--wtf'], task);
 
       expect(routine.tool.emit).toHaveBeenCalledWith('before-execute', [
         driver,
@@ -443,16 +449,18 @@ describe('RunCommandRoutine', () => {
     });
 
     it('triggers `after-execute` event on success', async () => {
-      await routine.runCommandWithArgs(routine.context, ['--wtf']);
+      await routine.runCommandWithArgs(routine.context, ['--wtf'], task);
 
       expect(routine.tool.emit).toHaveBeenCalledWith('after-execute', [driver, { success: true }]);
     });
 
     it('triggers `failed-execute` event on failure', async () => {
-      routine.executeCommand.mockImplementation(() => Promise.reject(new Error('Oops')));
+      (routine.executeCommand as jest.Mock).mockImplementation(() =>
+        Promise.reject(new Error('Oops')),
+      );
 
       try {
-        await routine.runCommandWithArgs(routine.context, ['--wtf']);
+        await routine.runCommandWithArgs(routine.context, ['--wtf'], task);
       } catch (error) {
         expect(routine.tool.emit).toHaveBeenCalledWith('failed-execute', [driver, error]);
       }

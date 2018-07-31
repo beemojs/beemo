@@ -1,19 +1,19 @@
 import { Tool } from 'boost';
 import fs from 'fs-extra';
 import CleanupRoutine from '../src/CleanupRoutine';
-import { createDriverContext, setupMockTool } from '../../../tests/helpers';
+import { createDriverContext, setupMockTool, createTestDebugger } from '../../../tests/helpers';
 
 jest.mock('fs-extra');
 jest.mock('boost/lib/Tool');
 
 describe('CleanupRoutine', () => {
-  let routine;
+  let routine: CleanupRoutine;
 
   beforeEach(() => {
     routine = new CleanupRoutine('cleanup', 'Cleaning up');
     routine.context = createDriverContext();
     routine.tool = setupMockTool(new Tool({}));
-    routine.debug = jest.fn();
+    routine.debug = createTestDebugger();
   });
 
   describe('execute()', () => {

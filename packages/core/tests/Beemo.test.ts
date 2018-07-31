@@ -1,9 +1,11 @@
 import path from 'path';
 import fs from 'fs-extra';
 import Beemo from '../src/Beemo';
-import bootstrapIndex from '../../..';
-import { getFixturePath } from '../../../tests/helpers';
 import Context from '../src/contexts/Context';
+import DriverContext from '../src/contexts/DriverContext';
+// @ts-ignore
+import bootstrapIndex from '../../..';
+import { getFixturePath, createDriverContext, createContext } from '../../../tests/helpers';
 
 jest.mock('fs-extra');
 
@@ -13,7 +15,9 @@ jest.mock(
   'boost/lib/Pipeline',
   () =>
     function PipelineMock() {
+      // @ts-ignore
       this.pipe = jest.fn(() => this);
+      // @ts-ignore
       this.run = jest.fn(() => this);
     },
 );
@@ -23,7 +27,8 @@ jest.mock('../../../index', () => jest.fn());
 const root = path.join(__dirname, '../../tests');
 
 describe('Beemo', () => {
-  let beemo;
+  let beemo: Beemo;
+  const args = { _: [], $0: '' };
 
   beforeEach(() => {
     beemo = new Beemo(['foo', 'bar']);
@@ -100,25 +105,26 @@ describe('Beemo', () => {
 
   describe('getWorkspacePaths()', () => {
     it('returns empty array for no workspaces', () => {
-      beemo.tool.package = {};
+      beemo.tool.package = { name: '' };
 
       expect(beemo.getWorkspacePaths()).toEqual([]);
     });
 
     it('returns empty array for non-array workspaces', () => {
-      beemo.tool.package = { workspaces: true };
+      beemo.tool.package = { name: '', workspaces: true };
 
       expect(beemo.getWorkspacePaths()).toEqual([]);
     });
 
     it('returns workspaces from package.json', () => {
-      beemo.tool.package = { workspaces: ['packages/*'] };
+      beemo.tool.package = { name: '', workspaces: ['packages/*'] };
 
       expect(beemo.getWorkspacePaths()).toEqual([path.join(root, 'packages/*')]);
     });
 
     it('returns nohoist workspaces from package.json', () => {
       beemo.tool.package = {
+        name: '',
         workspaces: {
           nohoist: [],
           packages: ['packages/*'],
@@ -134,7 +140,7 @@ describe('Beemo', () => {
         packages: ['packages/*'],
       }));
 
-      beemo.tool.package = {};
+      beemo.tool.package = { name: '' };
       beemo.tool.options.workspaceRoot = getFixturePath('workspaces-lerna');
 
       expect(beemo.getWorkspacePaths()).toEqual([
@@ -147,7 +153,7 @@ describe('Beemo', () => {
         packages: ['packages2/*'],
       }));
 
-      beemo.tool.package = { workspaces: ['packages1/*'] };
+      beemo.tool.package = { name: '', workspaces: ['packages1/*'] };
       beemo.tool.options.workspaceRoot = getFixturePath('workspaces-lerna');
 
       expect(fs.existsSync as jest.Mock).not.toHaveBeenCalled();
@@ -158,26 +164,30 @@ describe('Beemo', () => {
   });
 
   describe('handleCleanupOnFailure()', () => {
+    let context: DriverContext;
+
     beforeEach(() => {
+      context = createDriverContext();
+
       (fs.removeSync as jest.Mock).mockReset();
     });
 
     it('does nothing if exit code is 0', () => {
-      beemo.handleCleanupOnFailure(0, {});
+      beemo.handleCleanupOnFailure(0, context);
 
       expect(fs.removeSync).not.toHaveBeenCalled();
     });
 
     it('does nothing if no config paths', () => {
-      beemo.handleCleanupOnFailure(1, {});
+      beemo.handleCleanupOnFailure(1, context);
 
       expect(fs.removeSync).not.toHaveBeenCalled();
     });
 
     it('removes file for each config path', () => {
-      beemo.handleCleanupOnFailure(1, {
-        configPaths: ['foo', 'bar'],
-      });
+      context.configPaths = ['foo', 'bar'];
+
+      beemo.handleCleanupOnFailure(1, context);
 
       expect(fs.removeSync).toHaveBeenCalledWith('foo');
       expect(fs.removeSync).toHaveBeenCalledWith('bar');
@@ -186,13 +196,14 @@ describe('Beemo', () => {
 
   describe('executeDriver()', () => {
     beforeEach(() => {
+      // @ts-ignore
       beemo.tool.getPlugin = () => ({ name: 'foo-bar' });
     });
 
     it('sets event namespace', async () => {
       const spy = jest.spyOn(beemo.tool, 'setEventNamespace');
 
-      await beemo.executeDriver('foo-bar', {});
+      await beemo.executeDriver('foo-bar', args);
 
       expect(spy).toHaveBeenCalledWith('foo-bar');
     });
@@ -200,7 +211,7 @@ describe('Beemo', () => {
     it('triggers `init-driver` event with context', async () => {
       const spy = jest.spyOn(beemo.tool, 'emit');
 
-      await beemo.executeDriver('foo-bar', {});
+      await beemo.executeDriver('foo-bar', args);
 
       expect(spy).toHaveBeenCalledWith('init-driver', [
         expect.objectContaining({ name: 'foo-bar' }),
@@ -213,7 +224,7 @@ describe('Beemo', () => {
 
     it('passes driver name and context to pipeline run', async () => {
       const spy = jest.spyOn(beemo, 'startPipeline');
-      const pipeline = await beemo.executeDriver('foo-bar', {});
+      const pipeline = await beemo.executeDriver('foo-bar', args);
 
       expect(spy).toHaveBeenCalledWith(
         expect.objectContaining({
@@ -222,13 +233,13 @@ describe('Beemo', () => {
         }),
       );
 
-      expect(pipeline.run).toHaveBeenCalledWith('foo-bar');
+      expect((pipeline as any).run).toHaveBeenCalledWith('foo-bar');
     });
 
     it('sets primary driver with context', async () => {
       const spy = jest.spyOn(beemo, 'startPipeline');
 
-      await beemo.executeDriver('foo-bar', {});
+      await beemo.executeDriver('foo-bar', args);
 
       expect(spy).toHaveBeenCalledWith(
         expect.objectContaining({
@@ -246,7 +257,7 @@ describe('Beemo', () => {
       beemo.tool.on = jest.fn();
       beemo.tool.config.config.cleanup = true;
 
-      await beemo.executeDriver('foo-bar', {});
+      await beemo.executeDriver('foo-bar', args);
 
       expect(beemo.tool.on).toHaveBeenCalledWith('exit', expect.any(Function));
     });
@@ -255,7 +266,7 @@ describe('Beemo', () => {
       beemo.tool.on = jest.fn();
       beemo.tool.config.config.cleanup = false;
 
-      await beemo.executeDriver('foo-bar', {});
+      await beemo.executeDriver('foo-bar', args);
 
       expect(beemo.tool.on).not.toHaveBeenCalled();
     });
@@ -265,7 +276,7 @@ describe('Beemo', () => {
     it('sets event namespace', async () => {
       const spy = jest.spyOn(beemo.tool, 'setEventNamespace');
 
-      await beemo.executeScript('foo-bar', {});
+      await beemo.executeScript('foo-bar', args);
 
       expect(spy).toHaveBeenCalledWith('foo-bar');
     });
@@ -273,7 +284,7 @@ describe('Beemo', () => {
     it('triggers `init-script` event with context', async () => {
       const spy = jest.spyOn(beemo.tool, 'emit');
 
-      await beemo.executeScript('foo-bar', {});
+      await beemo.executeScript('foo-bar', args);
 
       expect(spy).toHaveBeenCalledWith('init-script', [
         'foo-bar',
@@ -286,7 +297,7 @@ describe('Beemo', () => {
 
     it('passes script name and context to pipeline run', async () => {
       const spy = jest.spyOn(beemo, 'startPipeline');
-      const pipeline = await beemo.executeScript('foo-bar', {});
+      const pipeline = await beemo.executeScript('foo-bar', args);
 
       expect(spy).toHaveBeenCalledWith(
         expect.objectContaining({
@@ -295,15 +306,15 @@ describe('Beemo', () => {
         }),
       );
 
-      expect(pipeline.run).toHaveBeenCalledWith('foo-bar');
+      expect((pipeline as any).run).toHaveBeenCalledWith('foo-bar');
     });
   });
 
   describe('prepareContext()', () => {
     it('sets extra props', () => {
-      expect(beemo.prepareContext(new Context({ _: [], $0: '' }))).toEqual(
+      expect(beemo.prepareContext(new Context(args))).toEqual(
         expect.objectContaining({
-          args: { _: [] },
+          args,
           argv: ['foo', 'bar'],
           moduleRoot: process.cwd(),
           root,
@@ -320,12 +331,14 @@ describe('Beemo', () => {
     it('sets beemo instance on process global', () => {
       expect(process.beemo).toBeUndefined();
 
-      beemo.startPipeline({
-        args: { foo: 123, bar: true },
-      });
+      const context = createContext();
+      context.args.foo = 123;
+      context.args.bar = true;
+
+      beemo.startPipeline(context);
 
       expect(process.beemo).toEqual({
-        context: { args: { foo: 123, bar: true } },
+        context,
         tool: beemo.tool,
       });
     });
@@ -335,7 +348,7 @@ describe('Beemo', () => {
     it('sets event namespace', async () => {
       const spy = jest.spyOn(beemo.tool, 'setEventNamespace');
 
-      await beemo.syncDotfiles({});
+      await beemo.syncDotfiles(args);
 
       expect(spy).toHaveBeenCalledWith('beemo');
     });
@@ -343,7 +356,7 @@ describe('Beemo', () => {
     it('triggers `sync-dotfiles` event with context', async () => {
       const spy = jest.spyOn(beemo.tool, 'emit');
 
-      await beemo.syncDotfiles({});
+      await beemo.syncDotfiles(args);
 
       expect(spy).toHaveBeenCalledWith('sync-dotfiles', [
         expect.objectContaining({
@@ -355,7 +368,7 @@ describe('Beemo', () => {
     it('passes context to pipeline', async () => {
       const spy = jest.spyOn(beemo, 'startPipeline');
 
-      await beemo.syncDotfiles({});
+      await beemo.syncDotfiles(args);
 
       expect(spy).toHaveBeenCalledWith(
         expect.objectContaining({
@@ -365,9 +378,9 @@ describe('Beemo', () => {
     });
 
     it('passes filter to routine', async () => {
-      const pipeline = await beemo.syncDotfiles({ filter: 'foo' });
+      const pipeline = await beemo.syncDotfiles({ ...args, filter: 'foo' });
 
-      expect(pipeline.pipe).toHaveBeenCalledWith(
+      expect((pipeline as any).pipe).toHaveBeenCalledWith(
         expect.objectContaining({
           options: { filter: 'foo' },
         }),

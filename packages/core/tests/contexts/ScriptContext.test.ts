@@ -2,7 +2,7 @@ import ScriptContext from '../../src/contexts/ScriptContext';
 import Script from '../../src/Script';
 
 describe('Context', () => {
-  let context;
+  let context: ScriptContext;
 
   beforeEach(() => {
     context = new ScriptContext({ _: [], $0: '' }, 'foo');
@@ -21,22 +21,14 @@ describe('Context', () => {
   });
 
   describe('setScript()', () => {
-    it('sets script object and name', () => {
-      const script = new Script();
-      script.name = 'foo';
-
-      context.setScript(script);
-
-      expect(context.script).toBe(script);
-      expect(context.scriptName).toBe('foo');
-    });
-
-    it('sets file path', () => {
+    it('sets script object, name, and path', () => {
       const script = new Script();
       script.name = 'foo';
 
       context.setScript(script, './foo.js');
 
+      expect(context.script).toBe(script);
+      expect(context.scriptName).toBe('foo');
       expect(context.scriptPath).toBe('./foo.js');
     });
   });

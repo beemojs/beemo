@@ -1,7 +1,7 @@
 import Context from '../../src/contexts/Context';
 
 describe('Context', () => {
-  let context;
+  let context: Context;
 
   beforeEach(() => {
     context = new Context({ _: [], $0: '' });

@@ -1,4 +1,5 @@
 import path from 'path';
+// @ts-ignore
 import parseArgs from 'yargs-parser';
 import { Tool } from 'boost';
 import Console from 'boost/lib/Console';
@@ -58,7 +59,11 @@ export function setupMockTool(tool: Tool<any>): Tool<any> {
 }
 
 export function createTool(): Tool<any> {
-  return setupMockTool(new Tool({}));
+  return setupMockTool(
+    new Tool({
+      appName: 'beemo',
+    }),
+  );
 }
 
 export function createDriver(

@@ -1,6 +1,6 @@
 import { Tool } from 'boost';
 import Driver from '../src/Driver';
-import { createDriver } from '../../../tests/helpers';
+import { createDriver, EXEC_RESULT } from '../../../tests/helpers';
 
 jest.mock('boost/lib/Tool');
 
@@ -72,7 +72,7 @@ describe('Driver', () => {
   describe('handleFailure()', () => {
     it('logs stdout', () => {
       driver.handleFailure({
-        ...execReturn,
+        ...EXEC_RESULT,
         stdout: 'out',
       });
 
@@ -81,7 +81,7 @@ describe('Driver', () => {
 
     it('logs stderr', () => {
       driver.handleFailure({
-        ...execReturn,
+        ...EXEC_RESULT,
         stderr: 'error',
       });
 
@@ -90,7 +90,7 @@ describe('Driver', () => {
 
     it('logs stderr over stdout', () => {
       driver.handleFailure({
-        ...execReturn,
+        ...EXEC_RESULT,
         stderr: 'error',
         stdout: 'out',
       });
@@ -100,7 +100,7 @@ describe('Driver', () => {
 
     it('doesnt log if empty', () => {
       driver.handleFailure({
-        ...execReturn,
+        ...EXEC_RESULT,
         stderr: '',
         stdout: '',
       });
@@ -112,7 +112,7 @@ describe('Driver', () => {
   describe('handleSuccess()', () => {
     it('logs stdout', () => {
       driver.handleSuccess({
-        ...execReturn,
+        ...EXEC_RESULT,
         stdout: 'out',
       });
 
@@ -121,7 +121,7 @@ describe('Driver', () => {
 
     it('doesnt log stdout if empty', () => {
       driver.handleSuccess({
-        ...execReturn,
+        ...EXEC_RESULT,
         stdout: '',
       });
 
@@ -130,7 +130,7 @@ describe('Driver', () => {
 
     it('doesnt log stderr', () => {
       driver.handleFailure({
-        ...execReturn,
+        ...EXEC_RESULT,
         stderr: 'error',
       });
 
@@ -139,7 +139,7 @@ describe('Driver', () => {
 
     it('doesnt log if empty', () => {
       driver.handleFailure({
-        ...execReturn,
+        ...EXEC_RESULT,
         stderr: '',
         stdout: '',
       });

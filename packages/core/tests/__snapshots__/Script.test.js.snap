@@ -1,3 +1,0 @@
-// Jest Snapshot v1, https://goo.gl/fbAQLP
-
-exports[`Script run() errors if not defined 1`] = `"Script must define a run() method."`;

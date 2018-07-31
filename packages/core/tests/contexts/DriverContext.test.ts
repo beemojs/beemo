@@ -2,7 +2,7 @@ import DriverContext from '../../src/contexts/DriverContext';
 import Driver from '../../src/Driver';
 
 describe('Context', () => {
-  let context;
+  let context: DriverContext;
 
   beforeEach(() => {
     context = new DriverContext({ _: [], $0: '' }, new Driver());
@@ -12,7 +12,7 @@ describe('Context', () => {
     it('sets args', () => {
       context = new DriverContext({ _: [], $0: '', foo: true }, new Driver());
 
-      expect(context.args).toEqual({ foo: true });
+      expect(context.args).toEqual({ _: [], $0: '', foo: true });
     });
 
     it('sets driver', () => {
@@ -39,6 +39,7 @@ describe('Context', () => {
 
     it('errors when not a driver', () => {
       expect(() => {
+        // @ts-ignore
         context.addDriverDependency(true);
       }).toThrowErrorMatchingSnapshot();
     });

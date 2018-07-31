@@ -3,17 +3,22 @@ import ConfigLoader from 'boost/lib/ConfigLoader';
 import fs from 'fs-extra';
 import CreateConfigRoutine from '../../src/configure/CreateConfigRoutine';
 import BabelDriver from '../../../driver-babel/src/BabelDriver';
-import { createDriverContext, setupMockTool, prependRoot } from '../../../../tests/helpers';
-import { STRATEGY_COPY, STRATEGY_REFERENCE } from '../../src/Driver';
+import {
+  createDriverContext,
+  setupMockTool,
+  prependRoot,
+  createTestDebugger,
+} from '../../../../tests/helpers';
+import Driver, { STRATEGY_COPY, STRATEGY_REFERENCE } from '../../src/Driver';
 
 jest.mock('fs-extra');
 jest.mock('boost/lib/Tool');
 jest.mock('boost/lib/ConfigLoader');
 
 describe('CreateConfigRoutine', () => {
-  let routine;
-  let driver;
-  let tool;
+  let routine: CreateConfigRoutine;
+  let driver: Driver<any>;
+  let tool: Tool<any>;
 
   beforeEach(() => {
     tool = setupMockTool(new Tool({}));
@@ -27,8 +32,7 @@ describe('CreateConfigRoutine', () => {
     routine.context = createDriverContext();
     routine.tool = tool;
     routine.tool.config.module = '@local';
-    routine.debug = jest.fn();
-    routine.debug.invariant = jest.fn();
+    routine.debug = createTestDebugger();
 
     (fs.existsSync as jest.Mock).mockImplementation(() => true);
     (fs.writeFile as jest.Mock).mockImplementation(() => Promise.resolve());
@@ -266,14 +270,14 @@ describe('CreateConfigRoutine', () => {
   });
 
   describe('loadConfigFromFilesystem()', () => {
-    let parseSpy;
+    let parseSpy: jest.Mock;
 
     beforeEach(() => {
       parseSpy = jest.fn();
 
       // @ts-ignore
       ConfigLoader.mockImplementation(() => ({
-        resolveModuleConfigPath: (name, moduleName) =>
+        resolveModuleConfigPath: (name: string, moduleName: string) =>
           `/node_modules/${moduleName}/configs/${name}.js`,
         parseFile: parseSpy.mockImplementation(filePath => ({ filePath })),
       }));
@@ -285,7 +289,7 @@ describe('CreateConfigRoutine', () => {
     });
 
     it('loads config if it exists', async () => {
-      const configs = await routine.loadConfigFromFilesystem(routine.context, []);
+      const configs = await routine.loadConfigFromFilesystem(routine.context);
 
       expect(configs).toEqual([{ filePath: prependRoot('/configs/babel.js') }]);
     });
@@ -293,13 +297,13 @@ describe('CreateConfigRoutine', () => {
     it('does nothing if config does not exist', async () => {
       (fs.existsSync as jest.Mock).mockImplementation(() => false);
 
-      const configs = await routine.loadConfigFromFilesystem(routine.context, []);
+      const configs = await routine.loadConfigFromFilesystem(routine.context);
 
       expect(configs).toEqual([]);
     });
 
     it('uses local path when using @local config', async () => {
-      const configs = await routine.loadConfigFromFilesystem(routine.context, []);
+      const configs = await routine.loadConfigFromFilesystem(routine.context);
 
       expect(configs).toEqual([{ filePath: prependRoot('/configs/babel.js') }]);
     });
@@ -307,13 +311,13 @@ describe('CreateConfigRoutine', () => {
     it('uses module path when using custom config', async () => {
       routine.tool.config.module = 'foo-bar';
 
-      const configs = await routine.loadConfigFromFilesystem(routine.context, []);
+      const configs = await routine.loadConfigFromFilesystem(routine.context);
 
       expect(configs).toEqual([{ filePath: '/node_modules/foo-bar/configs/babel.js' }]);
     });
 
     it('triggers `load-module-config` event', async () => {
-      await routine.loadConfigFromFilesystem(routine.context, []);
+      await routine.loadConfigFromFilesystem(routine.context);
 
       expect(routine.tool.emit).toHaveBeenCalledWith('load-module-config', [
         prependRoot('/configs/babel.js'),
@@ -324,7 +328,7 @@ describe('CreateConfigRoutine', () => {
     it('doesnt trigger `load-module-config` event if files does not exist', async () => {
       (fs.existsSync as jest.Mock).mockImplementation(() => false);
 
-      await routine.loadConfigFromFilesystem(routine.context, []);
+      await routine.loadConfigFromFilesystem(routine.context);
 
       expect(routine.tool.emit).not.toHaveBeenCalled();
     });
@@ -333,7 +337,7 @@ describe('CreateConfigRoutine', () => {
       routine.context.args.baseArg = true;
       driver.options.args.push('--driverArg');
 
-      await routine.loadConfigFromFilesystem(routine.context, []);
+      await routine.loadConfigFromFilesystem(routine.context);
 
       expect(parseSpy).toHaveBeenCalledWith(prependRoot('/configs/babel.js'), [
         expect.objectContaining({

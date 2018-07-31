@@ -1,23 +1,32 @@
 import { Tool } from 'boost';
 import ConfigureRoutine from '../src/ConfigureRoutine';
-import { createDriver, createDriverContext, setupMockTool } from '../../../tests/helpers';
+import Driver from '../src/Driver';
+import {
+  createDriver,
+  createDriverContext,
+  setupMockTool,
+  createTestDebugger,
+} from '../../../tests/helpers';
 
 jest.mock('boost/lib/Tool');
 
 describe('ConfigureRoutine', () => {
-  let routine;
-  let plugins;
-  let tool;
+  let routine: ConfigureRoutine;
+  let plugins: { [name: string]: Driver<any> };
+  let tool: Tool<any>;
 
   beforeEach(() => {
     plugins = {};
     tool = setupMockTool(new Tool({}));
 
     routine = new ConfigureRoutine('config', 'Generating configurations');
-    routine.context = createDriverContext(createDriver('foo'));
     routine.tool = tool;
-    routine.tool.getPlugin.mockImplementation(name => plugins[name] || createDriver(name, tool));
-    routine.debug = jest.fn();
+    routine.context = createDriverContext(createDriver('foo'));
+    routine.debug = createTestDebugger();
+
+    (routine.tool.getPlugin as jest.Mock).mockImplementation(
+      name => plugins[name] || createDriver(name, tool),
+    );
   });
 
   describe('bootstrap()', () => {
@@ -70,10 +79,13 @@ describe('ConfigureRoutine', () => {
       expect(routine.routines).toHaveLength(3);
 
       expect(routine.routines[0].key).toBe('baz');
+      // @ts-ignore
       expect(routine.routines[0].options.driver).toBe(baz);
       expect(routine.routines[1].key).toBe('bar');
+      // @ts-ignore
       expect(routine.routines[1].options.driver).toBe(bar);
       expect(routine.routines[2].key).toBe('foo');
+      // @ts-ignore
       expect(routine.routines[2].options.driver).toBe(foo);
     });
   });
