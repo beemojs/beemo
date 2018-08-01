@@ -9,6 +9,10 @@
     "typescript",
     "type"
   ],
+  "scripts": {
+    "integration:fail": "tsc --noEmit ./integration/fail.ts ./integration/fail-syntax.ts",
+    "integration:pass": "tsc --noEmit ./integration/pass.ts ./integration/pass-untyped.ts"
+  },
   "main": "./lib/index.js",
   "types": "./lib/index.d.ts",
   "engines": {

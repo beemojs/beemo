@@ -228,6 +228,7 @@ describe('RunCommandRoutine', () => {
         '../scripts/build-packages.sh',
         '../scripts/bump-peer-deps.js',
         '../scripts/link-packages.sh',
+        '../scripts/run-integration-tests.js',
         'bar',
       ]);
     });

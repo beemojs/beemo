@@ -10,6 +10,10 @@
     "test",
     "runner"
   ],
+  "scripts": {
+    "integration:fail": "jest ./integration/fail.test.js",
+    "integration:pass": "jest ./integration/pass.test.js"
+  },
   "main": "./lib/index.js",
   "types": "./lib/index.d.ts",
   "engines": {

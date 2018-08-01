@@ -1,3 +1,3 @@
-function foo(value) {}
+function foo1(value) {}
 
-foo(123);
+foo1(123);

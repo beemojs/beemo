@@ -10,6 +10,10 @@
     "transpile",
     "compile"
   ],
+  "scripts": {
+    "integration:fail": "babel ./integration/fail.js && babel ./integration/fail-syntax.js",
+    "integration:pass": "babel ./integration/pass.js"
+  },
   "main": "./lib/index.js",
   "types": "./lib/index.d.ts",
   "engines": {

@@ -10,6 +10,10 @@
     "test",
     "runner"
   ],
+  "scripts": {
+    "integration:fail": "mocha ./integration/fail.js",
+    "integration:pass": "mocha ./integration/pass.js"
+  },
   "main": "./lib/index.js",
   "types": "./lib/index.d.ts",
   "engines": {

@@ -10,10 +10,12 @@
     "posttest": "yarn run eslint",
     "pretest": "yarn run type",
     "test": "yarn run jest",
-    "test:integration:pass": "lerna run integration:pass",
+    "test:int:fail": "beemo run-script run-integration-tests --fail",
+    "test:int:pass": "beemo run-script run-integration-tests --pass",
     "prettier": "beemo prettier",
     "prerelease": "yarn test && yarn run build",
     "release": "lerna publish",
+    "release:bump": "beemo run-script bump-peer-deps",
     "type": "beemo typescript --workspaces=* --noEmit"
   },
   "devDependencies": {
@@ -52,6 +54,9 @@
         "no-param-reassign": "off",
         "import/first": "off"
       }
+    },
+    "jest": {
+      "testPathIgnorePatterns": ["node_modules", "integration"]
     }
   }
 }

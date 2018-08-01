@@ -10,6 +10,10 @@
     "flowtype",
     "type"
   ],
+  "scripts": {
+    "integration:fail": "flow check-contents < ./integration/fail.js && flow check-contents < ./integration/fail-syntax.js",
+    "integration:pass": "flow check-contents < ./integration/pass.js && flow check-contents < ./integration/pass-untyped.js"
+  },
   "main": "./lib/index.js",
   "types": "./lib/index.d.ts",
   "engines": {

@@ -1,3 +1,5 @@
-function foo(value: number) {}
+// @ts-check
 
-foo('123');
+function foo3(value: number) {}
+
+foo3('123');

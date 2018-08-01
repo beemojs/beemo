@@ -48,7 +48,11 @@ module.exports = class BumpPeerDepsScript extends Script {
             const nextVersion = `^${versions[peerName]}`;
 
             tool.log(
-              `Bumping ${chalk.yellow(name)} peer ${chalk.cyan(peerName)} from ${chalk.gray(data.peerDependencies[peerName])} to ${chalk.green(nextVersion)}`,
+              `Bumping %s peer %s from %s to %s`,
+              chalk.yellow(name),
+              chalk.cyan(peerName),
+              chalk.gray(data.peerDependencies[peerName]),
+              chalk.green(nextVersion),
             );
 
             // eslint-disable-next-line no-param-reassign
@@ -57,7 +61,7 @@ module.exports = class BumpPeerDepsScript extends Script {
         }
 
         return fs.writeJson(packagePaths[name], data, { spaces: 2 });
-      })
+      }),
     );
   }
 };
