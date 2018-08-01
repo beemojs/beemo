@@ -7,7 +7,7 @@ import { Plugin, EventListener } from 'boost';
 import mergeWith from 'lodash/mergeWith';
 import optimal, { array, bool, number, object, shape, string, union, Blueprint } from 'optimal';
 import DriverContext from './contexts/DriverContext';
-import { STRATEGY_COPY, STRATEGY_CREATE, STRATEGY_REFERENCE } from './constants';
+import { STRATEGY_COPY, STRATEGY_CREATE, STRATEGY_REFERENCE, STRATEGY_NATIVE } from './constants';
 import { Argv, DriverCommandOptions, DriverOptions, DriverMetadata, Execution } from './types';
 
 export default class Driver<T> extends Plugin<DriverOptions> {
@@ -31,7 +31,12 @@ export default class Driver<T> extends Plugin<DriverOptions> {
         args: array(string()),
         dependencies: array(string()),
         env: object(union([bool(), number(), string()])),
-        strategy: string().oneOf(['', STRATEGY_CREATE, STRATEGY_REFERENCE, STRATEGY_COPY]),
+        strategy: string(STRATEGY_NATIVE).oneOf([
+          STRATEGY_NATIVE,
+          STRATEGY_CREATE,
+          STRATEGY_REFERENCE,
+          STRATEGY_COPY,
+        ]),
       },
       {
         name: this.constructor.name,

@@ -12,7 +12,7 @@ import { ConfigLoader, Routine } from 'boost';
 import parseArgs from 'yargs-parser';
 import Driver from '../Driver';
 import DriverContext from '../contexts/DriverContext';
-import { STRATEGY_COPY, STRATEGY_REFERENCE } from '../constants';
+import { STRATEGY_COPY, STRATEGY_REFERENCE, STRATEGY_CREATE, STRATEGY_NATIVE } from '../constants';
 
 export interface CreateConfigOptions extends Struct {
   driver: Driver<any>;
@@ -33,16 +33,28 @@ export default class CreateConfigRoutine extends Routine<CreateConfigOptions, Dr
 
   execute(): Promise<string> {
     const { metadata, name, options } = this.options.driver;
+    const strategy =
+      options.strategy === STRATEGY_NATIVE ? metadata.configStrategy : options.strategy;
 
-    if (metadata.configStrategy === STRATEGY_REFERENCE || options.strategy === STRATEGY_REFERENCE) {
-      this.task(`Referencing ${name} config file`, this.referenceConfigFile);
-    } else if (metadata.configStrategy === STRATEGY_COPY || options.strategy === STRATEGY_COPY) {
-      this.task(`Copying ${name} config file`, this.copyConfigFile);
-    } else {
-      this.task(`Loading source ${name} module config`, this.loadConfigFromFilesystem);
-      this.task(`Loading local ${name} Beemo config`, this.extractConfigFromPackage);
-      this.task(`Merging ${name} config objects`, this.mergeConfigs);
-      this.task(`Creating ${name} config file`, this.createConfigFile);
+    switch (strategy) {
+      case STRATEGY_REFERENCE:
+        this.task(`Referencing ${name} config file`, this.referenceConfigFile);
+        break;
+
+      case STRATEGY_COPY:
+        this.task(`Copying ${name} config file`, this.copyConfigFile);
+        break;
+
+      case STRATEGY_CREATE:
+        this.task(`Loading source ${name} module config`, this.loadConfigFromFilesystem);
+        this.task(`Loading local ${name} Beemo config`, this.extractConfigFromPackage);
+        this.task(`Merging ${name} config objects`, this.mergeConfigs);
+        this.task(`Creating ${name} config file`, this.createConfigFile);
+        break;
+
+      default:
+        this.skip(true);
+        break;
     }
 
     return this.serializeTasks();
