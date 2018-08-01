@@ -32,7 +32,7 @@
     "@types/is-glob": "^4.0.0",
     "@types/lodash": "^4.14.115",
     "@types/micromatch": "^3.1.0",
-    "@types/node": "^10.5.4",
+    "@types/node": "^10.5.5",
     "@types/yargs": "^11.1.1",
     "boost": "^0.60.6",
     "chalk": "^2.4.1",

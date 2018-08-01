@@ -620,9 +620,9 @@
   version "10.3.6"
   resolved "https://registry.npmjs.org/@types/node/-/node-10.3.6.tgz#ea8aab9439b59f40d19ec5f13b44642344872b11"
 
-"@types/node@^10.5.4":
-  version "10.5.4"
-  resolved "https://registry.npmjs.org/@types/node/-/node-10.5.4.tgz#6eccc158504357d1da91434d75e86acde94bb10b"
+"@types/node@^10.5.5":
+  version "10.5.5"
+  resolved "https://registry.npmjs.org/@types/node/-/node-10.5.5.tgz#8e84d24e896cd77b0d4f73df274027e3149ec2ba"
 
 "@types/pluralize@^0.0.29":
   version "0.0.29"
