@@ -10,12 +10,11 @@
     "posttest": "yarn run eslint",
     "pretest": "yarn run type",
     "test": "yarn run jest",
+    "test:integration:pass": "lerna run integration:pass",
     "prettier": "beemo prettier",
     "prerelease": "yarn test && yarn run build",
     "release": "lerna publish",
-    "type": "beemo typescript --workspaces=* --noEmit",
-    "int:webpack:fail": "beemo webpack ./packages/driver-webpack/integration/fail.js -o ./packages/driver-webpack/integration/fail.min.js",
-    "int:webpack:pass": "beemo webpack ./packages/driver-webpack/integration/pass.js -o ./packages/driver-webpack/integration/pass.min.js"
+    "type": "beemo typescript --workspaces=* --noEmit"
   },
   "devDependencies": {
     "@milesj/build-tool-config": "0.114.1",

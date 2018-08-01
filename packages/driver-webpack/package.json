@@ -9,6 +9,10 @@
     "webpack",
     "bundler"
   ],
+  "scripts": {
+    "integration:fail": "webpack ./integration/fail.js -o ./integration/fail.min.js",
+    "integration:pass": "webpack ./integration/pass.js -o ./integration/pass.min.js"
+  },
   "main": "./lib/index.js",
   "types": "./lib/index.d.ts",
   "engines": {
