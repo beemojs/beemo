@@ -602,10 +602,6 @@
   version "0.0.29"
   resolved "https://registry.npmjs.org/@types/json5/-/json5-0.0.29.tgz#ee28707ae94e11d2b827bcbe5270bcea7f3e71ee"
 
-"@types/lodash@^4.14.111":
-  version "4.14.111"
-  resolved "https://registry.npmjs.org/@types/lodash/-/lodash-4.14.111.tgz#d926250baa9526c0ffe85914dd10363068e7893a"
-
 "@types/lodash@^4.14.115":
   version "4.14.115"
   resolved "https://registry.npmjs.org/@types/lodash/-/lodash-4.14.115.tgz#54d171b2ce12c058742443b5f6754760f701b8f9"
@@ -628,9 +624,9 @@
   version "10.5.4"
   resolved "https://registry.npmjs.org/@types/node/-/node-10.5.4.tgz#6eccc158504357d1da91434d75e86acde94bb10b"
 
-"@types/pluralize@^0.0.28":
-  version "0.0.28"
-  resolved "https://registry.npmjs.org/@types/pluralize/-/pluralize-0.0.28.tgz#daf46f90fdaa6172600bfeac81e46065177f03ea"
+"@types/pluralize@^0.0.29":
+  version "0.0.29"
+  resolved "https://registry.npmjs.org/@types/pluralize/-/pluralize-0.0.29.tgz#6ffa33ed1fc8813c469b859681d09707eb40d03c"
 
 "@types/prettier@^1.13.2":
   version "1.13.2"
@@ -1923,16 +1919,16 @@ boom@2.x.x:
   dependencies:
     hoek "2.x.x"
 
-boost@^0.60.5:
-  version "0.60.5"
-  resolved "https://registry.npmjs.org/boost/-/boost-0.60.5.tgz#1b252c2247d337203c51bbf12478c0837abc2107"
+boost@^0.60.6:
+  version "0.60.6"
+  resolved "https://registry.npmjs.org/boost/-/boost-0.60.6.tgz#3352f71f90570e0cd620c50ca3602cc614bc975f"
   dependencies:
     "@types/debug" "^0.0.30"
     "@types/execa" "^0.9.0"
     "@types/glob" "^5.0.35"
     "@types/json5" "^0.0.29"
-    "@types/lodash" "^4.14.111"
-    "@types/pluralize" "^0.0.28"
+    "@types/lodash" "^4.14.115"
+    "@types/pluralize" "^0.0.29"
     "@types/split" "^0.3.28"
     chalk "^2.4.1"
     cli-truncate "^1.1.0"
@@ -8186,6 +8182,10 @@ typescript-eslint-parser@^16.0.1:
 typescript@^2.9.2:
   version "2.9.2"
   resolved "https://registry.npmjs.org/typescript/-/typescript-2.9.2.tgz#1cbf61d05d6b96269244eb6a3bce4bd914e0f00c"
+
+typescript@^3.0.1:
+  version "3.0.1"
+  resolved "https://registry.npmjs.org/typescript/-/typescript-3.0.1.tgz#43738f29585d3a87575520a4b93ab6026ef11fdb"
 
 ua-parser-js@^0.7.18:
   version "0.7.18"

@@ -20,11 +20,11 @@
     "access": "public"
   },
   "devDependencies": {
-    "typescript": "^2.9.2"
+    "typescript": "^3.0.1"
   },
   "peerDependencies": {
     "@beemo/core": "^0.19.0",
-    "typescript": "^2.0.0"
+    "typescript": "^3.0.0"
   },
   "dependencies": {
     "rimraf": "^2.6.2"

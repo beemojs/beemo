@@ -34,7 +34,7 @@
     "@types/micromatch": "^3.1.0",
     "@types/node": "^10.5.4",
     "@types/yargs": "^11.1.1",
-    "boost": "^0.60.5",
+    "boost": "^0.60.6",
     "chalk": "^2.4.1",
     "copy": "^0.3.2",
     "fs-extra": "^7.0.0",
