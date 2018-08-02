@@ -18,8 +18,6 @@ module.exports = function(tool) {
 };
 ```
 
-> All listeners will receive an `Event` instance as the 1st argument.
-
 ## Supported Events
 
 The following list of events, and their arguments, can be listened to.

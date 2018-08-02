@@ -1,4 +1,5 @@
 const { Script } = require('@beemo/core');
+const chalk = require('chalk');
 const fs = require('fs-extra');
 const glob = require('glob');
 const execa = require('execa');
@@ -41,7 +42,7 @@ module.exports = class RunIntegrationTestsScript extends Script {
           );
         }
 
-        tool.log('Testing %s', name);
+        tool.log('Testing %s', chalk.yellow(pkg.name));
 
         return Promise.all(
           script.split('&&').map(command =>
