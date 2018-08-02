@@ -150,7 +150,3 @@ yarn beemo babel --theme=one-dark
 
 > View the list of available themes on the
 > [official Boost repo](https://github.com/milesj/boost/blob/master/src/themes.ts).
-
-```
-
-```

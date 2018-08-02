@@ -42,11 +42,14 @@ The following list of events, and their arguments, can be listened to.
 | `<script>.before-execute`        | `script: Script, argv: string[], context: ScriptContext` | Called before the `Script#run` method is executed.                                          |
 | `<script>.after-execute`         | `script: Script, response: any`                          | Called after the script has successfully been executed.                                     |
 | `<script>.failed-execute`        | `script: Script, error: Error`                           | Called after the script has failed to execute.                                              |
-| `beemo.sync-dotfiles`            | `context: Context`                                       | Called before dotfiles are synced with `beemo sync-dotfiles`.                               |
-| `beemo.copy-dotfile`             | `path: string`                                           | Called after a dotfile has been copied.                                                     |
-| `beemo.rename-dotfile`           | `path: string`                                           | Called after a dotfile has been renamed and prefixed with ".".                              |
+| `<app>.sync-dotfiles`            | `context: Context`                                       | Called before dotfiles are synced with `beemo sync-dotfiles`.                               |
+| `<app>.copy-dotfile`             | `path: string`                                           | Called after a dotfile has been copied.                                                     |
+| `<app>.rename-dotfile`           | `path: string`                                           | Called after a dotfile has been renamed and prefixed with ".".                              |
 
 > `<driver>` and `<script>` should be replaced with their names.
+
+> `<app>` is the name of a [custom executeable](./tips.md#custom-executable--config-name), or
+> "beemo" when not defined.
 
 ### Type Declarations
 

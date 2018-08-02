@@ -259,7 +259,7 @@ export default class Beemo {
   syncDotfiles(args: Arguments): Promise<string[]> {
     const context = this.prepareContext(new Context(args));
 
-    this.tool.setEventNamespace('beemo');
+    this.tool.setEventNamespace(this.tool.options.appName);
     this.tool.emit('sync-dotfiles', [context]);
     this.tool.debug('Running dotfiles command');
 

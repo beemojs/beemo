@@ -353,6 +353,16 @@ describe('Beemo', () => {
       expect(spy).toHaveBeenCalledWith('beemo');
     });
 
+    it('sets event namespace using custom app name', async () => {
+      beemo.tool.options.appName = 'foobar';
+
+      const spy = jest.spyOn(beemo.tool, 'setEventNamespace');
+
+      await beemo.syncDotfiles(args);
+
+      expect(spy).toHaveBeenCalledWith('foobar');
+    });
+
     it('triggers `sync-dotfiles` event with context', async () => {
       const spy = jest.spyOn(beemo.tool, 'emit');
 
