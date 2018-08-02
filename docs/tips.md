@@ -97,7 +97,7 @@ That being said, this feature has a few critical caveats to work correctly.
 > already been created using the initially passed non-parallel arguments. However, depending on the
 > driver, some argument may be available under `process.beemo.context.args`.
 
-## Custom Executable Name
+## Custom Executable & Config Name
 
 The Beemo command line executable can be renamed to offer a better and more immersive branding
 experience, especially when used at a large company. To start, create a new executable in your
@@ -112,12 +112,22 @@ require('@beemo/cli/lib/CLI');
 
 > Define a `BEEMO_MANUAL_URL` environment variable to change the manual URL in the help output.
 
-Lastly, be sure to reference your new executable in your configuration module's `package.json`.
+Be sure to reference your new executable in your configuration module's `package.json`.
 
 ```json
 {
   "bin": {
     "<name>": "./bin/<name>.js"
+  }
+}
+```
+
+And to configure the consumer with the new name as well.
+
+```json
+{
+  "<name>": {
+    "module": "@<username>/build-tool-config"
   }
 }
 ```
@@ -140,3 +150,7 @@ yarn beemo babel --theme=one-dark
 
 > View the list of available themes on the
 > [official Boost repo](https://github.com/milesj/boost/blob/master/src/themes.ts).
+
+```
+
+```

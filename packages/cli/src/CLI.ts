@@ -16,9 +16,9 @@ import quoteSpecialOptions from './quoteSpecialOptions';
 const argv = quoteSpecialOptions(process.argv.slice(2));
 
 // Initialize
-const beemo = new Beemo(argv.slice(1));
-const app = yargs(argv);
 const binName = path.basename(process.argv[1]);
+const beemo = new Beemo(argv.slice(1), binName);
+const app = yargs(argv);
 const manualURL = process.env.BEEMO_MANUAL_URL || 'https://milesj.gitbook.io/beemo';
 
 // Bootstrap the module

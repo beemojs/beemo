@@ -27,7 +27,7 @@ export default class Beemo {
 
   tool: ToolInterface;
 
-  constructor(argv: Argv) {
+  constructor(argv: Argv, binName?: string) {
     this.argv = argv;
 
     // eslint-disable-next-line global-require
@@ -38,7 +38,7 @@ export default class Beemo {
 
     this.tool = new Tool(
       {
-        appName: 'beemo',
+        appName: binName || 'beemo',
         configBlueprint: this.getConfigBlueprint(),
         console: {
           footer: `\n🤖  Powered by Beemo v${version}`,
