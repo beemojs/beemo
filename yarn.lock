@@ -665,9 +665,9 @@
   dependencies:
     source-map "^0.6.1"
 
-"@types/webpack@^4.4.8":
-  version "4.4.8"
-  resolved "https://registry.npmjs.org/@types/webpack/-/webpack-4.4.8.tgz#3af86780489a355e05f3de26b553537afc026acb"
+"@types/webpack@^4.4.9":
+  version "4.4.9"
+  resolved "https://registry.npmjs.org/@types/webpack/-/webpack-4.4.9.tgz#814721fb4cfaebe553ffdf2ae2c504494ec6613b"
   dependencies:
     "@types/node" "*"
     "@types/tapable" "*"
