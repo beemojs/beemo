@@ -24,7 +24,7 @@
     "access": "public"
   },
   "devDependencies": {
-    "webpack": "^4.16.3",
+    "webpack": "^4.16.5",
     "webpack-cli": "^3.1.0"
   },
   "peerDependencies": {
@@ -32,6 +32,6 @@
     "webpack": "^4.0.0"
   },
   "dependencies": {
-    "@types/webpack": "^4.4.9"
+    "@types/webpack": "^4.4.10"
   }
 }
