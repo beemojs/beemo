@@ -1,12 +1,12 @@
 import JestDriver from '../src/JestDriver';
-import { createDriverContext, createTool, EXEC_RESULT } from '../../../tests/helpers';
+import { createDriverContext, createTestTool, EXEC_RESULT } from '../../../tests/helpers';
 
 describe('JestDriver', () => {
   let driver: JestDriver;
 
   beforeEach(() => {
     driver = new JestDriver();
-    driver.tool = createTool();
+    driver.tool = createTestTool();
     driver.context = createDriverContext(driver);
     driver.bootstrap();
   });

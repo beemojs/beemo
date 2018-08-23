@@ -1,10 +1,8 @@
-import { Tool } from 'boost';
 import fs from 'fs-extra';
 import CleanupRoutine from '../src/CleanupRoutine';
-import { createDriverContext, setupMockTool, createTestDebugger } from '../../../tests/helpers';
+import { createDriverContext, createTestDebugger, createTestTool } from '../../../tests/helpers';
 
 jest.mock('fs-extra');
-jest.mock('boost/lib/Tool');
 
 describe('CleanupRoutine', () => {
   let routine: CleanupRoutine;
@@ -12,7 +10,7 @@ describe('CleanupRoutine', () => {
   beforeEach(() => {
     routine = new CleanupRoutine('cleanup', 'Cleaning up');
     routine.context = createDriverContext();
-    routine.tool = setupMockTool(new Tool({}));
+    routine.tool = createTestTool();
     routine.debug = createTestDebugger();
   });
 
@@ -49,12 +47,14 @@ describe('CleanupRoutine', () => {
     });
 
     it('triggers `delete-config-file` event', async () => {
+      const spy = jest.spyOn(routine.tool, 'emit');
+
       routine.context.configPaths = ['./foo.json', './.barrc'];
 
       await routine.deleteConfigFiles(routine.context);
 
-      expect(routine.tool.emit).toHaveBeenCalledWith('delete-config-file', ['./foo.json']);
-      expect(routine.tool.emit).toHaveBeenCalledWith('delete-config-file', ['./.barrc']);
+      expect(spy).toHaveBeenCalledWith('delete-config-file', ['./foo.json']);
+      expect(spy).toHaveBeenCalledWith('delete-config-file', ['./.barrc']);
     });
   });
 });

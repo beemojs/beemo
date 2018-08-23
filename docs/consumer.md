@@ -39,10 +39,10 @@ that matches the name of your configuration module, or another third-party modul
 The following options are available to all Beemo commands.
 
 - `--debug` (bool) - Print debug logs to the console.
+- `--level` (number) - Control the output level sent to the console.
+  [More information](./tips#output-verbosity).
 - `--silent` (bool) - Hide all output from the console. [More information](./tips#output-verbosity).
 - `--theme` (string) - Change output colors using a theme. [More information](./tips.md#cli-themes).
-- `--verbose` (number) - Control the output size sent to the console.
-  [More information](./tips#output-verbosity).
 
 ## Synchronizing Dotfiles
 

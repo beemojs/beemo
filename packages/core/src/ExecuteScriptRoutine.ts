@@ -10,9 +10,8 @@ import Script from './Script';
 import ScriptContext from './contexts/ScriptContext';
 import { BeemoConfig, Execution } from './types';
 
-export default class ExecuteScriptRoutine extends Routine<BeemoConfig, ScriptContext> {
-  // @ts-ignore Debug generic value from parent
-  execute(context: ScriptContext, scriptName: string): Promise<Execution> {
+export default class ExecuteScriptRoutine extends Routine<ScriptContext, BeemoConfig> {
+  execute(context: ScriptContext, scriptName: any): Promise<Execution> {
     this.task('Loading script', this.loadScript);
     this.task('Running script', this.runScript);
 

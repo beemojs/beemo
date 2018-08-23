@@ -167,7 +167,7 @@ export default class Driver<T> extends Plugin<DriverOptions> {
       metadata,
       {
         bin: string()
-          .match(/^[-a-z0-9]+$/)
+          .match(/^[-a-z0-9]+$/u)
           .required(),
         configName: string().required(),
         configOption: string('--config').empty(),

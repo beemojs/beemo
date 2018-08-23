@@ -1,17 +1,14 @@
-import { Tool } from 'boost';
 import Driver from '../src/Driver';
 import ExecuteDriverRoutine from '../src/ExecuteDriverRoutine';
 import RunCommandRoutine from '../src/driver/RunCommandRoutine';
 import {
-  createDriver,
-  createDriverContext,
-  setupMockTool,
   getFixturePath,
+  createDriverContext,
   createTestDebugger,
+  createTestDriver,
+  createTestTool,
 } from '../../../tests/helpers';
 import { DriverContext } from '../../../node_modules/@beemo/core/src';
-
-jest.mock('boost/lib/Tool');
 
 jest.mock('../src/driver/RunCommandRoutine', () => jest.fn());
 
@@ -20,13 +17,13 @@ describe('ExecuteDriverRoutine', () => {
   let driver: Driver<any>;
 
   beforeEach(() => {
-    const tool = new Tool({});
+    const tool = createTestTool();
 
-    driver = createDriver('primary', tool);
+    driver = createTestDriver('primary', tool);
 
     routine = new ExecuteDriverRoutine('driver', 'Executing driver');
     routine.context = createDriverContext(driver);
-    routine.tool = setupMockTool(tool);
+    routine.tool = tool;
     routine.debug = createTestDebugger();
 
     // RunCommandRoutine is mocked, so use plain objects

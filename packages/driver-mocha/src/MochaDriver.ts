@@ -25,7 +25,7 @@ export default class MochaDriver extends Driver<MochaConfig> {
 
     Object.keys(data).forEach(key => {
       const option =
-        key === 'es_staging' || key === 'use_strict' ? `--${key}` : `--${key.replace(/_/g, '-')}`;
+        key === 'es_staging' || key === 'use_strict' ? `--${key}` : `--${key.replace(/_/gu, '-')}`;
       const value = data[key];
       const type = typeof value;
 

@@ -1,19 +1,16 @@
-import { Tool } from 'boost';
 import Driver from '../src/Driver';
-import { createDriver, EXEC_RESULT } from '../../../tests/helpers';
-
-jest.mock('boost/lib/Tool');
+import { createTestDriver, EXEC_RESULT } from '../../../tests/helpers';
 
 describe('Driver', () => {
   let driver: Driver<any>;
 
   beforeEach(() => {
-    driver = createDriver('foo', new Tool({}));
+    driver = createTestDriver('foo');
   });
 
   it('validates fields', () => {
     expect(() => {
-      // @ts-ignore
+      // @ts-ignore Test invalid type
       driver = new Driver({
         args: true,
       });
@@ -70,13 +67,19 @@ describe('Driver', () => {
   });
 
   describe('handleFailure()', () => {
+    let spy: jest.SpyInstance;
+
+    beforeEach(() => {
+      spy = jest.spyOn(driver.tool, 'logError');
+    });
+
     it('logs stdout', () => {
       driver.handleFailure({
         ...EXEC_RESULT,
         stdout: 'out',
       });
 
-      expect(driver.tool.logError).toHaveBeenCalledWith('out');
+      expect(spy).toHaveBeenCalledWith('out');
     });
 
     it('logs stderr', () => {
@@ -85,7 +88,7 @@ describe('Driver', () => {
         stderr: 'error',
       });
 
-      expect(driver.tool.logError).toHaveBeenCalledWith('error');
+      expect(spy).toHaveBeenCalledWith('error');
     });
 
     it('logs stderr over stdout', () => {
@@ -95,7 +98,7 @@ describe('Driver', () => {
         stdout: 'out',
       });
 
-      expect(driver.tool.logError).toHaveBeenCalledWith('error');
+      expect(spy).toHaveBeenCalledWith('error');
     });
 
     it('doesnt log if empty', () => {
@@ -105,18 +108,24 @@ describe('Driver', () => {
         stdout: '',
       });
 
-      expect(driver.tool.logError).not.toHaveBeenCalled();
+      expect(spy).not.toHaveBeenCalled();
     });
   });
 
   describe('handleSuccess()', () => {
+    let spy: jest.SpyInstance;
+
+    beforeEach(() => {
+      spy = jest.spyOn(driver.tool, 'log');
+    });
+
     it('logs stdout', () => {
       driver.handleSuccess({
         ...EXEC_RESULT,
         stdout: 'out',
       });
 
-      expect(driver.tool.log).toHaveBeenCalledWith('out');
+      expect(spy).toHaveBeenCalledWith('out');
     });
 
     it('doesnt log stdout if empty', () => {
@@ -125,7 +134,7 @@ describe('Driver', () => {
         stdout: '',
       });
 
-      expect(driver.tool.log).not.toHaveBeenCalledWith();
+      expect(spy).not.toHaveBeenCalledWith();
     });
 
     it('doesnt log stderr', () => {
@@ -134,7 +143,7 @@ describe('Driver', () => {
         stderr: 'error',
       });
 
-      expect(driver.tool.log).not.toHaveBeenCalled();
+      expect(spy).not.toHaveBeenCalled();
     });
 
     it('doesnt log if empty', () => {
@@ -144,7 +153,7 @@ describe('Driver', () => {
         stdout: '',
       });
 
-      expect(driver.tool.log).not.toHaveBeenCalled();
+      expect(spy).not.toHaveBeenCalled();
     });
   });
 

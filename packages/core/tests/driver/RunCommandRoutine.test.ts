@@ -1,4 +1,3 @@
-import { Tool } from 'boost';
 import fs from 'fs-extra';
 import chalk from 'chalk';
 import Driver from '../../src/Driver';
@@ -7,16 +6,14 @@ import BabelDriver from '../../../driver-babel/src/BabelDriver';
 import JestDriver from '../../../driver-jest/src/JestDriver';
 import {
   createDriverContext,
-  setupMockTool,
   prependRoot,
   getRoot,
   createTestDebugger,
+  createTestTool,
 } from '../../../../tests/helpers';
 import Task from '../../../../node_modules/boost/lib/Task';
 
 jest.mock('fs-extra');
-
-jest.mock('boost/lib/Tool');
 
 const BABEL_HELP = `
 Usage: babel [options] <files ...>
@@ -64,7 +61,7 @@ describe('RunCommandRoutine', () => {
   let tool;
 
   beforeEach(() => {
-    tool = setupMockTool(new Tool({}));
+    tool = createTestTool();
 
     driver = new BabelDriver({
       args: ['--qux'],
@@ -229,6 +226,7 @@ describe('RunCommandRoutine', () => {
         '../scripts/bump-peer-deps.js',
         '../scripts/link-packages.sh',
         '../scripts/run-integration-tests.js',
+        '../tests/index.js',
         'bar',
       ]);
     });
@@ -402,7 +400,7 @@ describe('RunCommandRoutine', () => {
   });
 
   describe('runCommandWithArgs()', () => {
-    const task = new Task('Task');
+    const task = new Task<any, any>('Task');
 
     beforeEach(() => {
       routine.executeCommand = jest.fn(() => Promise.resolve({ success: true }));
@@ -440,22 +438,24 @@ describe('RunCommandRoutine', () => {
     });
 
     it('triggers `before-execute` event', async () => {
+      const spy = jest.spyOn(routine.tool, 'emit');
+
       await routine.runCommandWithArgs(routine.context, ['--wtf'], task);
 
-      expect(routine.tool.emit).toHaveBeenCalledWith('before-execute', [
-        driver,
-        ['--wtf'],
-        routine.context,
-      ]);
+      expect(spy).toHaveBeenCalledWith('before-execute', [driver, ['--wtf'], routine.context]);
     });
 
     it('triggers `after-execute` event on success', async () => {
+      const spy = jest.spyOn(routine.tool, 'emit');
+
       await routine.runCommandWithArgs(routine.context, ['--wtf'], task);
 
-      expect(routine.tool.emit).toHaveBeenCalledWith('after-execute', [driver, { success: true }]);
+      expect(spy).toHaveBeenCalledWith('after-execute', [driver, { success: true }]);
     });
 
     it('triggers `failed-execute` event on failure', async () => {
+      const spy = jest.spyOn(routine.tool, 'emit');
+
       (routine.executeCommand as jest.Mock).mockImplementation(() =>
         Promise.reject(new Error('Oops')),
       );
@@ -463,7 +463,7 @@ describe('RunCommandRoutine', () => {
       try {
         await routine.runCommandWithArgs(routine.context, ['--wtf'], task);
       } catch (error) {
-        expect(routine.tool.emit).toHaveBeenCalledWith('failed-execute', [driver, error]);
+        expect(spy).toHaveBeenCalledWith('failed-execute', [driver, error]);
       }
     });
   });

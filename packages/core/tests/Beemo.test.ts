@@ -4,12 +4,10 @@ import Beemo from '../src/Beemo';
 import Context from '../src/contexts/Context';
 import DriverContext from '../src/contexts/DriverContext';
 // @ts-ignore
-import bootstrapIndex from '../../..';
+import bootstrapIndex from '../../../tests';
 import { getFixturePath, createDriverContext, createContext } from '../../../tests/helpers';
 
 jest.mock('fs-extra');
-
-jest.mock('boost/lib/Console');
 
 jest.mock(
   'boost/lib/Pipeline',
@@ -22,9 +20,9 @@ jest.mock(
     },
 );
 
-jest.mock('../../../index', () => jest.fn());
+jest.mock('../../../tests', () => jest.fn());
 
-const root = path.join(__dirname, '../../tests');
+const root = path.join(__dirname, '../../../tests');
 
 describe('Beemo', () => {
   let beemo: Beemo;
@@ -32,7 +30,7 @@ describe('Beemo', () => {
 
   beforeEach(() => {
     beemo = new Beemo(['foo', 'bar']);
-    beemo.tool.options.moduleRoot = root;
+    beemo.moduleRoot = root;
     beemo.tool.options.root = root;
 
     (fs.existsSync as jest.Mock).mockReset();
@@ -66,6 +64,10 @@ describe('Beemo', () => {
   });
 
   describe('getConfigModuleRoot()', () => {
+    beforeEach(() => {
+      beemo.moduleRoot = '';
+    });
+
     it('errors if no module name', () => {
       beemo.tool.config.module = '';
 
@@ -316,7 +318,7 @@ describe('Beemo', () => {
         expect.objectContaining({
           args,
           argv: ['foo', 'bar'],
-          moduleRoot: process.cwd(),
+          moduleRoot: root,
           root,
         }),
       );

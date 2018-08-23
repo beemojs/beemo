@@ -6,7 +6,7 @@
 import chalk from 'chalk';
 import fs from 'fs-extra';
 import path from 'path';
-import { Pipeline, Tool, ToolInterface } from 'boost';
+import { Pipeline, Tool } from 'boost';
 import { bool, shape, Blueprint } from 'optimal';
 import parseArgs from 'yargs-parser';
 import CleanupRoutine from './CleanupRoutine';
@@ -25,7 +25,7 @@ export default class Beemo {
 
   moduleRoot: string = '';
 
-  tool: ToolInterface;
+  tool: Tool;
 
   constructor(argv: Argv, binName?: string) {
     this.argv = argv;
@@ -42,9 +42,9 @@ export default class Beemo {
         configBlueprint: this.getConfigBlueprint(),
         console: {
           footer: `\n🤖  Powered by Beemo v${version}`,
+          level: args.level || 3,
           silent: args.silent || false,
           theme: args.theme || 'default',
-          verbose: args.verbose || 3,
         },
         pluginAlias: 'driver',
         scoped: true,
@@ -243,7 +243,7 @@ export default class Beemo {
   /**
    * Setup and start a fresh pipeline.
    */
-  startPipeline<T extends Context>(context: T): Pipeline<Driver<any>, T> {
+  startPipeline<T extends Context>(context: T): Pipeline<T> {
     // Make the tool available to all processes
     process.beemo = {
       context,

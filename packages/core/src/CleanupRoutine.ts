@@ -9,7 +9,7 @@ import fs from 'fs-extra';
 import DriverContext from './contexts/DriverContext';
 import { BeemoConfig } from './types';
 
-export default class CleanupRoutine extends Routine<BeemoConfig, DriverContext> {
+export default class CleanupRoutine extends Routine<DriverContext, BeemoConfig> {
   execute(): Promise<boolean[]> {
     this.task('Deleting config files', this.deleteConfigFiles).skip(
       !this.tool.config.config.cleanup,

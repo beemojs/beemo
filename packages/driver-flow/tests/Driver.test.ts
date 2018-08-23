@@ -1,12 +1,12 @@
 import FlowDriver from '../src/FlowDriver';
-import { createDriverContext, createTool, EXEC_RESULT } from '../../../tests/helpers';
+import { createDriverContext, createTestTool, EXEC_RESULT } from '../../../tests/helpers';
 
 describe('FlowDriver', () => {
   let driver: FlowDriver;
 
   beforeEach(() => {
     driver = new FlowDriver();
-    driver.tool = createTool();
+    driver.tool = createTestTool();
     driver.context = createDriverContext(driver);
     driver.bootstrap();
   });
@@ -177,7 +177,7 @@ describe('FlowDriver', () => {
         expect(
           driver.formatConfig({
             options: {
-              suppress_comment: /(.|\n)*\$FlowFixMe/,
+              suppress_comment: /(.|\n)*\$FlowFixMe/u,
             },
           }),
         ).toMatchSnapshot();

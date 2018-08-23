@@ -1,6 +1,6 @@
 import fs from 'fs';
 import ESLintDriver from '../src/ESLintDriver';
-import { createDriverContext, createTool } from '../../../tests/helpers';
+import { createDriverContext, createTestTool } from '../../../tests/helpers';
 
 jest.mock('fs');
 
@@ -9,7 +9,7 @@ describe('ESLintDriver', () => {
 
   beforeEach(() => {
     driver = new ESLintDriver();
-    driver.tool = createTool();
+    driver.tool = createTestTool();
     driver.context = createDriverContext(driver);
     driver.bootstrap();
   });

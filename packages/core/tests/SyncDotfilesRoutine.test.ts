@@ -1,18 +1,16 @@
-import { Tool } from 'boost';
 import copy from 'copy';
 import fs from 'fs-extra';
 import SyncDotfilesRoutine from '../src/SyncDotfilesRoutine';
 import {
   createContext,
-  setupMockTool,
   prependRoot,
   getRoot,
   createTestDebugger,
+  createTestTool,
 } from '../../../tests/helpers';
 
 jest.mock('copy');
 jest.mock('fs-extra');
-jest.mock('boost/lib/Tool');
 
 describe('SyncDotfilesRoutine', () => {
   let routine: SyncDotfilesRoutine;
@@ -20,7 +18,7 @@ describe('SyncDotfilesRoutine', () => {
   beforeEach(() => {
     routine = new SyncDotfilesRoutine('sync', 'Syncing dotfiles');
     routine.context = createContext();
-    routine.tool = setupMockTool(new Tool({}));
+    routine.tool = createTestTool();
     routine.debug = createTestDebugger();
 
     // @ts-ignore
@@ -99,7 +97,7 @@ describe('SyncDotfilesRoutine', () => {
     });
 
     it('triggers `copy-dotfile` event', async () => {
-      const spy = routine.tool.emit;
+      const spy = jest.spyOn(routine.tool, 'emit');
 
       await routine.copyFilesFromConfigModule(routine.context, './root');
 
@@ -125,7 +123,7 @@ describe('SyncDotfilesRoutine', () => {
     });
 
     it('triggers `rename-dotfile` event', async () => {
-      const spy = routine.tool.emit;
+      const spy = jest.spyOn(routine.tool, 'emit');
 
       await routine.renameFilesWithDot(routine.context, ['foo', './path/bar', '/path/baz']);
 

@@ -2,15 +2,12 @@ import path from 'path';
 // @ts-ignore
 import parseArgs from 'yargs-parser';
 import { Tool } from 'boost';
-import Console from 'boost/lib/Console';
 import Driver from '../packages/core/src/Driver';
 import Script from '../packages/core/src/Script';
 import Context from '../packages/core/src/contexts/Context';
 import DriverContext from '../packages/core/src/contexts/DriverContext';
 import ScriptContext from '../packages/core/src/contexts/ScriptContext';
 import { DriverMetadata } from '../packages/core/src/types';
-
-jest.mock('boost/lib/Console');
 
 export const EXEC_RESULT = {
   cmd: '',
@@ -23,8 +20,17 @@ export const EXEC_RESULT = {
   timedOut: false,
 };
 
-export function setupMockTool(tool: Tool<any>): Tool<any> {
-  tool.options = {
+export function createTestDebugger(): any {
+  const debug = jest.fn();
+
+  // @ts-ignore
+  debug.invariant = jest.fn();
+
+  return debug;
+}
+
+export function createTestTool(): Tool {
+  const tool = new Tool({
     appName: 'Beemo',
     configBlueprint: {},
     configFolder: './configs',
@@ -33,7 +39,7 @@ export function setupMockTool(tool: Tool<any>): Tool<any> {
     root: __dirname,
     scoped: true,
     workspaceRoot: __dirname,
-  };
+  });
 
   tool.config = {
     config: {
@@ -50,34 +56,25 @@ export function setupMockTool(tool: Tool<any>): Tool<any> {
     name: '',
   };
 
-  tool.console = new Console();
+  tool.initialized = true;
 
-  // @ts-ignore
-  tool.createDebugger = () => jest.fn();
+  // Mock
+  tool.on = jest.fn().mockReturnThis();
+  tool.debug = createTestDebugger();
+  tool.createDebugger = createTestDebugger;
 
   return tool;
 }
 
-export function createTool(): Tool<any> {
-  return setupMockTool(
-    new Tool({
-      appName: 'beemo',
-    }),
-  );
-}
-
-export function createDriver(
+export function createTestDriver(
   name: string,
-  tool: Tool<any> | null = null,
+  tool: Tool | null = null,
   metadata: Partial<DriverMetadata> = {},
 ): Driver<any> {
   const driver = new Driver();
 
   driver.name = name;
-
-  if (tool) {
-    driver.tool = setupMockTool(tool);
-  }
+  driver.tool = tool || createTestTool();
 
   driver.setMetadata({
     bin: name,
@@ -89,15 +86,6 @@ export function createDriver(
   driver.bootstrap();
 
   return driver;
-}
-
-export function createTestDebugger(): any {
-  const debug = jest.fn();
-
-  // @ts-ignore
-  debug.invariant = jest.fn();
-
-  return debug;
 }
 
 export function applyContext<T extends Context>(context: T): T {

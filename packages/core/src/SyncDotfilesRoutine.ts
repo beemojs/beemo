@@ -16,7 +16,7 @@ export interface SyncDotfilesOptions extends Struct {
   filter: string;
 }
 
-export default class SyncDotfilesRoutine extends Routine<SyncDotfilesOptions, Context> {
+export default class SyncDotfilesRoutine extends Routine<Context, SyncDotfilesOptions> {
   bootstrap() {
     this.options = optimal(
       this.options,

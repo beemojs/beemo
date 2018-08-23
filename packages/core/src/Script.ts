@@ -3,10 +3,10 @@
  * @license     https://opensource.org/licenses/MIT
  */
 
-import { Module, ToolInterface } from 'boost';
+import { Module, Tool } from 'boost';
 import { Options, Arguments } from 'yargs';
 
-export default class Script<T = {}> extends Module<T> {
+export default class Script<Opts = {}> extends Module<Opts> {
   /**
    * Define a configuration object to parse args with.
    */
@@ -17,7 +17,7 @@ export default class Script<T = {}> extends Module<T> {
   /**
    * Run the script with the options object and Beemo tool instance.
    */
-  run(args: Arguments, tool: ToolInterface): Promise<any> {
+  run(args: Arguments, tool: Tool): Promise<any> {
     throw new Error(`${this.constructor.name} must define a run() method.`);
   }
 }

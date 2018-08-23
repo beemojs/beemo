@@ -7,20 +7,20 @@ import Context from './Context';
 import Driver from '../Driver';
 import { Arguments } from '../types';
 
-export default class DriverContext<T = any> extends Context {
+export default class DriverContext extends Context {
   configPaths: string[] = [];
 
   driverName: string = '';
 
   drivers: Driver<any>[] = [];
 
-  primaryDriver: Driver<T>;
+  primaryDriver: Driver<any>;
 
   workspaceRoot: string = '';
 
   workspaces: string[] = [];
 
-  constructor(args: Arguments, driver: Driver<T>) {
+  constructor(args: Arguments, driver: Driver<any>) {
     super(args);
 
     this.primaryDriver = driver;

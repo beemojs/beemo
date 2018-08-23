@@ -90,6 +90,11 @@ app
     default: false,
     description: 'Show debug messages',
   })
+  .option('level', {
+    default: 3,
+    description: 'Control output size',
+    number: true,
+  })
   .option('silent', {
     boolean: true,
     default: false,
@@ -99,11 +104,6 @@ app
     default: 'default',
     description: 'Change output colors',
     string: true,
-  })
-  .option('verbose', {
-    default: 3,
-    description: 'Control output size',
-    number: true,
   });
 
 // Run application

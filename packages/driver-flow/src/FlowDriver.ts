@@ -67,7 +67,7 @@ export default class FlowDriver extends Driver<FlowConfig> {
         value = 'error';
       }
 
-      output.push(`${key.replace(/_/g, '-')}=${String(value)}`);
+      output.push(`${key.replace(/_/gu, '-')}=${String(value)}`);
     });
 
     return output;
@@ -79,9 +79,9 @@ export default class FlowDriver extends Driver<FlowConfig> {
     // http://caml.inria.fr/pub/docs/manual-ocaml/libref/Str.html#TYPEregexp
     if (value instanceof RegExp) {
       option = value.source
-        .replace(/\|/g, '\\|')
-        .replace(/\(/g, '\\(')
-        .replace(/\)/g, '\\)');
+        .replace(/\|/gu, '\\|')
+        .replace(/\(/gu, '\\(')
+        .replace(/\)/gu, '\\)');
     } else {
       option = String(value);
     }

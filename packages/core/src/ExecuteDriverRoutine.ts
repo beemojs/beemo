@@ -7,13 +7,13 @@ import fs from 'fs-extra';
 import path from 'path';
 import glob from 'glob';
 import trim from 'lodash/trim';
-import { Routine, RoutineInterface, PackageConfig } from 'boost';
+import { Routine, PackageConfig } from 'boost';
 import DriverContext from './contexts/DriverContext';
 import RunCommandRoutine, { RunCommandOptions } from './driver/RunCommandRoutine';
 import isPatternMatch from './utils/isPatternMatch';
 import { BeemoConfig } from './types';
 
-export default class ExecuteDriverRoutine extends Routine<BeemoConfig, DriverContext> {
+export default class ExecuteDriverRoutine extends Routine<DriverContext, BeemoConfig> {
   workspacePackages: PackageConfig[] = [];
 
   bootstrap() {
@@ -97,8 +97,8 @@ export default class ExecuteDriverRoutine extends Routine<BeemoConfig, DriverCon
    * Group routines in order of which they are dependend on.
    */
   orderByWorkspacePriorityGraph(): {
-    other: RoutineInterface[];
-    priority: RoutineInterface[];
+    other: Routine<DriverContext>[];
+    priority: Routine<DriverContext>[];
   } {
     if (!this.context.args.priority) {
       return {
@@ -145,7 +145,7 @@ export default class ExecuteDriverRoutine extends Routine<BeemoConfig, DriverCon
       .map(dep => dep.package);
 
     // Extract dependents in order
-    const priority: RoutineInterface[] = [];
+    const priority: Routine<DriverContext>[] = [];
 
     orderedDeps.forEach(pkg => {
       const routine = this.routines.find(route => route.key === pkg.workspaceName);
@@ -156,7 +156,7 @@ export default class ExecuteDriverRoutine extends Routine<BeemoConfig, DriverCon
     });
 
     // Extract dependers
-    const other: RoutineInterface[] = [];
+    const other: Routine<DriverContext>[] = [];
 
     this.routines.forEach(routine => {
       const dependency = orderedDeps.find(dep => dep.workspaceName === routine.key);
@@ -187,7 +187,7 @@ export default class ExecuteDriverRoutine extends Routine<BeemoConfig, DriverCon
         this.pipe(
           new RunCommandRoutine(key, `${command} ${trimmedPargv}`, {
             ...options,
-            additionalArgv: trimmedPargv.split(/ /g),
+            additionalArgv: trimmedPargv.split(/ /gu),
           }),
         );
       });

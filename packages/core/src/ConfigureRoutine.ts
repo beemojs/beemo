@@ -10,7 +10,7 @@ import Driver from './Driver';
 import DriverContext from './contexts/DriverContext';
 import { BeemoConfig } from './types';
 
-export default class ConfigureRoutine extends Routine<BeemoConfig, DriverContext> {
+export default class ConfigureRoutine extends Routine<DriverContext, BeemoConfig> {
   bootstrap() {
     this.resolveDependencies();
     this.setupConfigFiles();

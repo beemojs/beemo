@@ -1,15 +1,12 @@
-import { Tool } from 'boost';
 import ModuleLoader from 'boost/lib/ModuleLoader';
 import ExecuteScriptRoutine from '../src/ExecuteScriptRoutine';
 import Script from '../src/Script';
 import {
-  createScriptContext,
-  setupMockTool,
   prependRoot,
+  createScriptContext,
   createTestDebugger,
+  createTestTool,
 } from '../../../tests/helpers';
-
-jest.mock('boost/lib/Tool');
 
 jest.mock('boost/lib/ModuleLoader', () =>
   jest.fn(() => ({
@@ -26,7 +23,7 @@ describe('ExecuteScriptRoutine', () => {
   beforeEach(() => {
     routine = new ExecuteScriptRoutine('script', 'Executing script');
     routine.context = createScriptContext();
-    routine.tool = setupMockTool(new Tool({}));
+    routine.tool = createTestTool();
     routine.debug = createTestDebugger();
 
     // @ts-ignore
@@ -79,7 +76,7 @@ describe('ExecuteScriptRoutine', () => {
     });
 
     it('triggers `load-script` event', async () => {
-      const spy = routine.tool.emit;
+      const spy = jest.spyOn(routine.tool, 'emit');
 
       const script = await routine.loadScript(routine.context, 'foo-bar');
 
@@ -118,7 +115,7 @@ describe('ExecuteScriptRoutine', () => {
         }
       }
 
-      const spy = routine.tool.emit;
+      const spy = jest.spyOn(routine.tool, 'emit');
       const script = new MockScript();
 
       await routine.runScript(routine.context, script);
@@ -137,7 +134,7 @@ describe('ExecuteScriptRoutine', () => {
         }
       }
 
-      const spy = routine.tool.emit;
+      const spy = jest.spyOn(routine.tool, 'emit');
       const script = new SuccessScript();
 
       await routine.runScript(routine.context, script);
@@ -152,7 +149,7 @@ describe('ExecuteScriptRoutine', () => {
         }
       }
 
-      const spy = routine.tool.emit;
+      const spy = jest.spyOn(routine.tool, 'emit');
       const script = new FailureScript();
 
       try {

@@ -1,7 +1,7 @@
 import path from 'path';
 import rimraf from 'rimraf';
 import BabelDriver from '../src/BabelDriver';
-import { createDriverContext, createTool } from '../../../tests/helpers';
+import { createDriverContext, createTestTool } from '../../../tests/helpers';
 
 jest.mock('rimraf');
 
@@ -10,7 +10,7 @@ describe('BabelDriver', () => {
 
   beforeEach(() => {
     driver = new BabelDriver();
-    driver.tool = createTool();
+    driver.tool = createTestTool();
     driver.context = createDriverContext(driver);
     driver.bootstrap();
   });

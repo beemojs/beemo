@@ -3,7 +3,7 @@
  * @license     https://opensource.org/licenses/MIT
  */
 
-import { ToolConfig, ToolInterface } from 'boost';
+import { Tool, ToolConfig } from 'boost';
 import { ExecaReturns } from 'execa'; // eslint-disable-line import/no-extraneous-dependencies
 import { Struct } from 'optimal';
 import { Arguments, Options } from 'yargs';
@@ -15,7 +15,7 @@ declare global {
     interface Process {
       beemo: {
         context: any;
-        tool: ToolInterface;
+        tool: Tool;
       };
     }
   }

@@ -18,7 +18,7 @@ export interface CreateConfigOptions extends Struct {
   driver: Driver<any>;
 }
 
-export default class CreateConfigRoutine extends Routine<CreateConfigOptions, DriverContext> {
+export default class CreateConfigRoutine extends Routine<DriverContext, CreateConfigOptions> {
   bootstrap() {
     this.options = optimal(
       this.options,

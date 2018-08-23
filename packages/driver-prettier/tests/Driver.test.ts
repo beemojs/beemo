@@ -1,6 +1,6 @@
 import fs from 'fs';
 import PrettierDriver from '../src/PrettierDriver';
-import { createDriverContext, createTool } from '../../../tests/helpers';
+import { createDriverContext, createTestTool } from '../../../tests/helpers';
 
 jest.mock('fs');
 
@@ -9,7 +9,7 @@ describe('PrettierDriver', () => {
 
   beforeEach(() => {
     driver = new PrettierDriver();
-    driver.tool = createTool();
+    driver.tool = createTestTool();
     driver.context = createDriverContext(driver);
     driver.bootstrap();
   });

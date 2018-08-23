@@ -3,7 +3,7 @@
  * @license     https://opensource.org/licenses/MIT
  */
 
-import { Routine, TaskInterface } from 'boost';
+import { Routine, Task } from 'boost';
 import chalk from 'chalk';
 import glob from 'glob';
 import path from 'path';
@@ -16,7 +16,7 @@ import DriverContext from '../contexts/DriverContext';
 import { STRATEGY_COPY } from '../constants';
 import { Argv, Execution } from '../types';
 
-const OPTION_PATTERN: RegExp = /-?-[-a-z0-9]+(,|\s)/gi;
+const OPTION_PATTERN: RegExp = /-?-[-a-z0-9]+(,|\s)/giu;
 
 export type OptionMap = { [option: string]: true };
 
@@ -26,7 +26,7 @@ export interface RunCommandOptions extends Struct {
   workspaceRoot: string;
 }
 
-export default class RunCommandRoutine extends Routine<RunCommandOptions, DriverContext> {
+export default class RunCommandRoutine extends Routine<DriverContext, RunCommandOptions> {
   bootstrap() {
     this.options = optimal(
       this.options,
@@ -296,7 +296,11 @@ export default class RunCommandRoutine extends Routine<RunCommandOptions, Driver
    * Execute the driver's command with the filtered arguments and handle the
    * success and failures with the driver itself.
    */
-  runCommandWithArgs(context: DriverContext, argv: Argv, task: TaskInterface): Promise<Execution> {
+  runCommandWithArgs(
+    context: DriverContext,
+    argv: Argv,
+    task: Task<DriverContext>,
+  ): Promise<Execution> {
     const driver = context.primaryDriver;
     const cwd = this.options.workspaceRoot || context.root;
 
