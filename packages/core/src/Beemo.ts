@@ -52,6 +52,8 @@ export default class Beemo {
       argv,
     );
 
+    this.tool.debug('Using beemo v%s', version);
+
     // Immediately load config and plugins
     this.tool.initialize();
   }
