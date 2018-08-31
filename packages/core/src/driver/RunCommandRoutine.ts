@@ -10,7 +10,7 @@ import path from 'path';
 import fs from 'fs-extra';
 import isGlob from 'is-glob';
 import merge from 'lodash/merge';
-import optimal, { array, bool, string, Struct } from 'optimal';
+import optimal, { array, bool, string } from 'optimal';
 import parseArgs from 'yargs-parser';
 import DriverContext from '../contexts/DriverContext';
 import { STRATEGY_COPY } from '../constants';
@@ -20,7 +20,7 @@ const OPTION_PATTERN: RegExp = /-?-[-a-z0-9]+(,|\s)/giu;
 
 export type OptionMap = { [option: string]: true };
 
-export interface RunCommandOptions extends Struct {
+export interface RunCommandOptions {
   additionalArgv: Argv;
   forceConfigOption: boolean;
   workspaceRoot: string;

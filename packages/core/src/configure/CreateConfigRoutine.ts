@@ -14,7 +14,7 @@ import Driver from '../Driver';
 import DriverContext from '../contexts/DriverContext';
 import { STRATEGY_COPY, STRATEGY_REFERENCE, STRATEGY_CREATE, STRATEGY_NATIVE } from '../constants';
 
-export interface CreateConfigOptions extends Struct {
+export interface CreateConfigOptions {
   driver: Driver<any>;
 }
 

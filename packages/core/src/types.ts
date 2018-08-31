@@ -5,7 +5,6 @@
 
 import { Tool, ToolConfig } from '@boost/core';
 import { ExecaReturns } from 'execa'; // eslint-disable-line import/no-extraneous-dependencies
-import { Struct } from 'optimal';
 import { Arguments, Options } from 'yargs';
 
 export { Arguments };
@@ -30,18 +29,18 @@ export interface BeemoConfig extends ToolConfig {
   };
 }
 
-export interface DriverCommandOptions extends Struct {
+export interface DriverCommandOptions {
   [name: string]: Options;
 }
 
-export interface DriverOptions extends Struct {
+export interface DriverOptions {
   args: string[];
   dependencies: string[];
   env: { [key: string]: string };
   strategy: 'native' | 'create' | 'reference' | 'copy';
 }
 
-export interface DriverMetadata extends Struct {
+export interface DriverMetadata {
   bin: string;
   configName: string;
   configOption: string;
