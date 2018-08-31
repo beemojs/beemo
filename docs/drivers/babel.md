@@ -27,6 +27,9 @@ In your consuming project, enable the driver by adding `babel` to your `drivers`
 }
 ```
 
+> Configuration files that return a function, and expect a Babel `api` instance, are currently not
+> supported, as they conflict with Beemo's [configuration functions](../provider.md#drivers).
+
 ### CLI Options
 
 - `--[no-]clean` (bool) - Clean the target `--out-dir` before transpiling. Defaults to `true`.
