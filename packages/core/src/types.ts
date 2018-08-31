@@ -3,7 +3,7 @@
  * @license     https://opensource.org/licenses/MIT
  */
 
-import { Tool, ToolConfig } from 'boost';
+import { Tool, ToolConfig } from '@boost/core';
 import { ExecaReturns } from 'execa'; // eslint-disable-line import/no-extraneous-dependencies
 import { Struct } from 'optimal';
 import { Arguments, Options } from 'yargs';

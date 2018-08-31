@@ -7,7 +7,7 @@ import chalk from 'chalk';
 import copy from 'copy';
 import fs from 'fs-extra';
 import path from 'path';
-import { Routine } from 'boost';
+import { Routine } from '@boost/core';
 import optimal, { string, Struct } from 'optimal';
 import Context from './contexts/Context';
 import isPatternMatch from './utils/isPatternMatch';

@@ -3,7 +3,7 @@
  * @license     https://opensource.org/licenses/MIT
  */
 
-import { Module, Tool } from 'boost';
+import { Module, Tool } from '@boost/core';
 import { Options, Arguments } from 'yargs';
 
 export default class Script<Opts = {}> extends Module<Opts> {

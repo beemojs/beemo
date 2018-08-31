@@ -1,4 +1,4 @@
-import { Tool } from 'boost';
+import { Tool } from '@boost/core';
 import ConfigureRoutine from '../src/ConfigureRoutine';
 import Driver from '../src/Driver';
 import {

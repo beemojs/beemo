@@ -3,7 +3,7 @@
  * @license     https://opensource.org/licenses/MIT
  */
 
-import { Routine, Task } from 'boost';
+import { Routine, Task } from '@boost/core';
 import chalk from 'chalk';
 import glob from 'glob';
 import path from 'path';

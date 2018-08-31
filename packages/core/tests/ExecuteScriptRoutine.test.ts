@@ -1,4 +1,4 @@
-import ModuleLoader from 'boost/lib/ModuleLoader';
+import ModuleLoader from '@boost/core/lib/ModuleLoader';
 import ExecuteScriptRoutine from '../src/ExecuteScriptRoutine';
 import Script from '../src/Script';
 import {
@@ -8,7 +8,7 @@ import {
   createTestTool,
 } from '../../../tests/helpers';
 
-jest.mock('boost/lib/ModuleLoader', () =>
+jest.mock('@boost/core/lib/ModuleLoader', () =>
   jest.fn(() => ({
     importModule: jest.fn(() => ({
       parse: () => ({}),

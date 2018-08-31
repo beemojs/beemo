@@ -1,5 +1,6 @@
 import fs from 'fs-extra';
 import chalk from 'chalk';
+import { Task } from '@boost/core';
 import Driver from '../../src/Driver';
 import RunCommandRoutine from '../../src/driver/RunCommandRoutine';
 import BabelDriver from '../../../driver-babel/src/BabelDriver';
@@ -11,7 +12,6 @@ import {
   createTestDebugger,
   createTestTool,
 } from '../../../../tests/helpers';
-import Task from '../../../../node_modules/boost/lib/Task';
 
 jest.mock('fs-extra');
 

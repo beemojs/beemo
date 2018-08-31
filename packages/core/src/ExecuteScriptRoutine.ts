@@ -4,7 +4,7 @@
  */
 
 import path from 'path';
-import { ModuleLoader, Routine } from 'boost';
+import { ModuleLoader, Routine } from '@boost/core';
 import parseArgs from 'yargs-parser';
 import Script from './Script';
 import ScriptContext from './contexts/ScriptContext';

@@ -3,7 +3,7 @@
  * @license     https://opensource.org/licenses/MIT
  */
 
-import { Routine } from 'boost';
+import { Routine } from '@boost/core';
 import chalk from 'chalk';
 import CreateConfigRoutine from './configure/CreateConfigRoutine';
 import Driver from './Driver';

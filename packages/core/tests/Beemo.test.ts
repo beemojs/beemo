@@ -10,7 +10,7 @@ import { getFixturePath, createDriverContext, createContext } from '../../../tes
 jest.mock('fs-extra');
 
 jest.mock(
-  'boost/lib/Pipeline',
+  '@boost/core/lib/Pipeline',
   () =>
     function PipelineMock() {
       // @ts-ignore

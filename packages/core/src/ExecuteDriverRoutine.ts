@@ -7,7 +7,7 @@ import fs from 'fs-extra';
 import path from 'path';
 import glob from 'glob';
 import trim from 'lodash/trim';
-import { Routine, PackageConfig } from 'boost';
+import { Routine, PackageConfig } from '@boost/core';
 import DriverContext from './contexts/DriverContext';
 import RunCommandRoutine, { RunCommandOptions } from './driver/RunCommandRoutine';
 import isPatternMatch from './utils/isPatternMatch';

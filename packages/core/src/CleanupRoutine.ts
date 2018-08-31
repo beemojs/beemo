@@ -3,7 +3,7 @@
  * @license     https://opensource.org/licenses/MIT
  */
 
-import { Routine } from 'boost';
+import { Routine } from '@boost/core';
 import chalk from 'chalk';
 import fs from 'fs-extra';
 import DriverContext from './contexts/DriverContext';

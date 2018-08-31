@@ -3,7 +3,7 @@
  * @license     https://opensource.org/licenses/MIT
  */
 
-import { Plugin, EventListener } from 'boost';
+import { Plugin, EventListener } from '@boost/core';
 import mergeWith from 'lodash/mergeWith';
 import optimal, { array, bool, number, object, shape, string, union, Blueprint } from 'optimal';
 import DriverContext from './contexts/DriverContext';

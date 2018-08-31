@@ -16,6 +16,27 @@
     esutils "^2.0.2"
     js-tokens "^3.0.0"
 
+"@boost/core@^0.64.0":
+  version "0.64.0"
+  resolved "https://registry.npmjs.org/@boost/core/-/core-0.64.0.tgz#d9c0c14c680dd2c157ff6dcb02850de8b2683365"
+  dependencies:
+    "@types/debug" "^0.0.30"
+    "@types/execa" "^0.9.0"
+    "@types/glob" "^5.0.35"
+    "@types/json5" "^0.0.30"
+    "@types/lodash" "^4.14.116"
+    "@types/pluralize" "^0.0.29"
+    "@types/split" "^0.3.28"
+    chalk "^2.4.1"
+    cli-truncate "^1.1.0"
+    debug "^3.1.0"
+    execa "^1.0.0"
+    glob "^7.1.3"
+    json5 "^2.0.1"
+    lodash "^4.17.10"
+    pluralize "^7.0.0"
+    split "^1.0.1"
+
 "@lerna/add@^3.2.0":
   version "3.2.0"
   resolved "https://registry.npmjs.org/@lerna/add/-/add-3.2.0.tgz#5b0a165a9fc776b5d78226cc5ff22bef58136a61"
@@ -644,9 +665,9 @@
   version "23.3.1"
   resolved "https://registry.npmjs.org/@types/jest/-/jest-23.3.1.tgz#a4319aedb071d478e6f407d1c4578ec8156829cf"
 
-"@types/json5@^0.0.29":
-  version "0.0.29"
-  resolved "https://registry.npmjs.org/@types/json5/-/json5-0.0.29.tgz#ee28707ae94e11d2b827bcbe5270bcea7f3e71ee"
+"@types/json5@^0.0.30":
+  version "0.0.30"
+  resolved "https://registry.npmjs.org/@types/json5/-/json5-0.0.30.tgz#44cb52f32a809734ca562e685c6473b5754a7818"
 
 "@types/lodash@^4.14.116":
   version "4.14.116"
@@ -1966,27 +1987,6 @@ boom@2.x.x:
   resolved "https://registry.npmjs.org/boom/-/boom-2.10.1.tgz#39c8918ceff5799f83f9492a848f625add0c766f"
   dependencies:
     hoek "2.x.x"
-
-boost@^0.63.1:
-  version "0.63.1"
-  resolved "https://registry.npmjs.org/boost/-/boost-0.63.1.tgz#54f6438dcaabcc2292ef30d2798b7c44ecdde191"
-  dependencies:
-    "@types/debug" "^0.0.30"
-    "@types/execa" "^0.9.0"
-    "@types/glob" "^5.0.35"
-    "@types/json5" "^0.0.29"
-    "@types/lodash" "^4.14.116"
-    "@types/pluralize" "^0.0.29"
-    "@types/split" "^0.3.28"
-    chalk "^2.4.1"
-    cli-truncate "^1.1.0"
-    debug "^3.1.0"
-    execa "^0.11.0"
-    glob "^7.1.2"
-    json5 "^2.0.1"
-    lodash "^4.17.10"
-    pluralize "^7.0.0"
-    split "^1.0.1"
 
 boxen@^1.2.1:
   version "1.3.0"
@@ -3556,18 +3556,6 @@ execa@^0.10.0:
   dependencies:
     cross-spawn "^6.0.0"
     get-stream "^3.0.0"
-    is-stream "^1.1.0"
-    npm-run-path "^2.0.0"
-    p-finally "^1.0.0"
-    signal-exit "^3.0.0"
-    strip-eof "^1.0.0"
-
-execa@^0.11.0:
-  version "0.11.0"
-  resolved "https://registry.npmjs.org/execa/-/execa-0.11.0.tgz#0b3c71daf9b9159c252a863cd981af1b4410d97a"
-  dependencies:
-    cross-spawn "^6.0.0"
-    get-stream "^4.0.0"
     is-stream "^1.1.0"
     npm-run-path "^2.0.0"
     p-finally "^1.0.0"

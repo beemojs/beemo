@@ -1,7 +1,7 @@
 import path from 'path';
 // @ts-ignore
 import parseArgs from 'yargs-parser';
-import { Tool } from 'boost';
+import { Tool } from '@boost/core';
 import Driver from '../packages/core/src/Driver';
 import Script from '../packages/core/src/Script';
 import Context from '../packages/core/src/contexts/Context';

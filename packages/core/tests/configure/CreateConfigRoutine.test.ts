@@ -1,5 +1,5 @@
-import { Tool } from 'boost';
-import ConfigLoader from 'boost/lib/ConfigLoader';
+import { Tool } from '@boost/core';
+import ConfigLoader from '@boost/core/lib/ConfigLoader';
 import fs from 'fs-extra';
 import CreateConfigRoutine from '../../src/configure/CreateConfigRoutine';
 import BabelDriver from '../../../driver-babel/src/BabelDriver';
@@ -13,7 +13,7 @@ import Driver from '../../src/Driver';
 import { STRATEGY_COPY, STRATEGY_REFERENCE } from '../../src/constants';
 
 jest.mock('fs-extra');
-jest.mock('boost/lib/ConfigLoader');
+jest.mock('@boost/core/lib/ConfigLoader');
 
 describe('CreateConfigRoutine', () => {
   let routine: CreateConfigRoutine;

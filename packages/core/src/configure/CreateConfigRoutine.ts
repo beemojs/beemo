@@ -8,7 +8,7 @@ import fs from 'fs-extra';
 import path from 'path';
 import merge from 'lodash/merge';
 import optimal, { instance, Struct } from 'optimal';
-import { ConfigLoader, Routine } from 'boost';
+import { ConfigLoader, Routine } from '@boost/core';
 import parseArgs from 'yargs-parser';
 import Driver from '../Driver';
 import DriverContext from '../contexts/DriverContext';

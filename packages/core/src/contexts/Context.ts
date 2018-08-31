@@ -3,7 +3,7 @@
  * @license     https://opensource.org/licenses/MIT
  */
 
-import { Context as BaseContext } from 'boost';
+import { Context as BaseContext } from '@boost/core';
 import camelCase from 'lodash/camelCase';
 import trim from 'lodash/trim';
 import { Arguments, Argv } from '../types';
