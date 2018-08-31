@@ -16,11 +16,11 @@
     esutils "^2.0.2"
     js-tokens "^3.0.0"
 
-"@lerna/add@^3.1.4":
-  version "3.1.4"
-  resolved "https://registry.npmjs.org/@lerna/add/-/add-3.1.4.tgz#d0d20eb1ca14a43b11ae80cce77da960388529cb"
+"@lerna/add@^3.2.0":
+  version "3.2.0"
+  resolved "https://registry.npmjs.org/@lerna/add/-/add-3.2.0.tgz#5b0a165a9fc776b5d78226cc5ff22bef58136a61"
   dependencies:
-    "@lerna/bootstrap" "^3.1.4"
+    "@lerna/bootstrap" "^3.2.0"
     "@lerna/command" "^3.1.3"
     "@lerna/filter-options" "^3.1.2"
     "@lerna/npm-conf" "^3.0.0"
@@ -39,9 +39,9 @@
     "@lerna/validation-error" "^3.0.0"
     npmlog "^4.1.2"
 
-"@lerna/bootstrap@^3.1.4":
-  version "3.1.4"
-  resolved "https://registry.npmjs.org/@lerna/bootstrap/-/bootstrap-3.1.4.tgz#44954ac9271877074e0e7f5dd70957e84e322710"
+"@lerna/bootstrap@^3.2.0":
+  version "3.2.0"
+  resolved "https://registry.npmjs.org/@lerna/bootstrap/-/bootstrap-3.2.0.tgz#f6ed4e6b5eaaf4563f6f06f7b427679c910049f5"
   dependencies:
     "@lerna/batch-packages" "^3.1.2"
     "@lerna/command" "^3.1.3"
@@ -50,7 +50,7 @@
     "@lerna/npm-conf" "^3.0.0"
     "@lerna/npm-install" "^3.0.0"
     "@lerna/rimraf-dir" "^3.0.0"
-    "@lerna/run-lifecycle" "^3.0.0"
+    "@lerna/run-lifecycle" "^3.2.0"
     "@lerna/run-parallel-batches" "^3.0.0"
     "@lerna/symlink-binary" "^3.1.4"
     "@lerna/symlink-dependencies" "^3.1.4"
@@ -67,15 +67,15 @@
     read-package-tree "^5.1.6"
     semver "^5.5.0"
 
-"@lerna/changed@^3.1.3":
-  version "3.1.3"
-  resolved "https://registry.npmjs.org/@lerna/changed/-/changed-3.1.3.tgz#2ed871b11e8cd695dc00ca8c2b14e16775757e42"
+"@lerna/changed@^3.2.0":
+  version "3.2.0"
+  resolved "https://registry.npmjs.org/@lerna/changed/-/changed-3.2.0.tgz#b82e7a64012bf9920b3abb07049f46d78963dcb6"
   dependencies:
     "@lerna/collect-updates" "^3.1.0"
     "@lerna/command" "^3.1.3"
     "@lerna/listable" "^3.0.0"
     "@lerna/output" "^3.0.0"
-    "@lerna/version" "^3.1.3"
+    "@lerna/version" "^3.2.0"
 
 "@lerna/check-working-tree@^3.1.0":
   version "3.1.0"
@@ -104,25 +104,11 @@
     p-map-series "^1.0.0"
     p-waterfall "^1.0.0"
 
-"@lerna/cli@^3.1.4":
-  version "3.1.4"
-  resolved "https://registry.npmjs.org/@lerna/cli/-/cli-3.1.4.tgz#a27382574e5e3170b55a42e7bcda0df5885bc009"
+"@lerna/cli@^3.2.0":
+  version "3.2.0"
+  resolved "https://registry.npmjs.org/@lerna/cli/-/cli-3.2.0.tgz#3ed25bcbc0b8f0878bc6a102ee0296f01476cfdf"
   dependencies:
-    "@lerna/add" "^3.1.4"
-    "@lerna/bootstrap" "^3.1.4"
-    "@lerna/changed" "^3.1.3"
-    "@lerna/clean" "^3.1.3"
-    "@lerna/create" "^3.1.3"
-    "@lerna/diff" "^3.1.3"
-    "@lerna/exec" "^3.1.3"
     "@lerna/global-options" "^3.1.3"
-    "@lerna/import" "^3.1.3"
-    "@lerna/init" "^3.1.3"
-    "@lerna/link" "^3.1.4"
-    "@lerna/list" "^3.1.3"
-    "@lerna/publish" "^3.1.3"
-    "@lerna/run" "^3.1.3"
-    "@lerna/version" "^3.1.3"
     dedent "^0.7.0"
     npmlog "^4.1.2"
     yargs "^12.0.1"
@@ -340,9 +326,9 @@
     signal-exit "^3.0.2"
     write-pkg "^3.1.0"
 
-"@lerna/npm-publish@^3.0.6":
-  version "3.0.6"
-  resolved "https://registry.npmjs.org/@lerna/npm-publish/-/npm-publish-3.0.6.tgz#704e8e15ed84efd8677b5824766bb7bd2348e882"
+"@lerna/npm-publish@^3.2.0":
+  version "3.2.0"
+  resolved "https://registry.npmjs.org/@lerna/npm-publish/-/npm-publish-3.2.0.tgz#b1d577c39462992f33e7df1835e815b0b7841e3e"
   dependencies:
     "@lerna/child-process" "^3.0.0"
     "@lerna/get-npm-exec-opts" "^3.0.0"
@@ -405,9 +391,9 @@
     inquirer "^5.1.0"
     npmlog "^4.1.2"
 
-"@lerna/publish@^3.1.3":
-  version "3.1.3"
-  resolved "https://registry.npmjs.org/@lerna/publish/-/publish-3.1.3.tgz#de1a83495e15b29503dd0465ea11b5087f7673c1"
+"@lerna/publish@^3.2.1":
+  version "3.2.1"
+  resolved "https://registry.npmjs.org/@lerna/publish/-/publish-3.2.1.tgz#09b264861dd5c1cbba6338e1973aef62f616e265"
   dependencies:
     "@lerna/batch-packages" "^3.1.2"
     "@lerna/check-working-tree" "^3.1.0"
@@ -417,18 +403,19 @@
     "@lerna/describe-ref" "^3.1.0"
     "@lerna/get-npm-exec-opts" "^3.0.0"
     "@lerna/npm-dist-tag" "^3.0.0"
-    "@lerna/npm-publish" "^3.0.6"
+    "@lerna/npm-publish" "^3.2.0"
     "@lerna/output" "^3.0.0"
     "@lerna/prompt" "^3.0.0"
-    "@lerna/run-lifecycle" "^3.0.0"
+    "@lerna/run-lifecycle" "^3.2.0"
     "@lerna/run-parallel-batches" "^3.0.0"
     "@lerna/validation-error" "^3.0.0"
-    "@lerna/version" "^3.1.3"
+    "@lerna/version" "^3.2.0"
     fs-extra "^6.0.1"
     npm-package-arg "^6.0.0"
     npmlog "^4.1.2"
     p-finally "^1.0.0"
     p-map "^1.2.0"
+    p-pipe "^1.2.0"
     p-reduce "^1.0.0"
     semver "^5.5.0"
 
@@ -449,9 +436,9 @@
     path-exists "^3.0.0"
     rimraf "^2.6.2"
 
-"@lerna/run-lifecycle@^3.0.0":
-  version "3.0.0"
-  resolved "https://registry.npmjs.org/@lerna/run-lifecycle/-/run-lifecycle-3.0.0.tgz#3d9a09b390f53dd321ae4be8c7b779714d4037fe"
+"@lerna/run-lifecycle@^3.2.0":
+  version "3.2.0"
+  resolved "https://registry.npmjs.org/@lerna/run-lifecycle/-/run-lifecycle-3.2.0.tgz#0f68047faa0186d67be5b173b006f0420157def1"
   dependencies:
     "@lerna/npm-conf" "^3.0.0"
     npm-lifecycle "^2.0.0"
@@ -505,10 +492,11 @@
   dependencies:
     npmlog "^4.1.2"
 
-"@lerna/version@^3.1.3":
-  version "3.1.3"
-  resolved "https://registry.npmjs.org/@lerna/version/-/version-3.1.3.tgz#3f932943283e186ecd870a78238867c979515985"
+"@lerna/version@^3.2.0":
+  version "3.2.0"
+  resolved "https://registry.npmjs.org/@lerna/version/-/version-3.2.0.tgz#d382189910f3868b31333d0e9d8b080de31172c1"
   dependencies:
+    "@lerna/batch-packages" "^3.1.2"
     "@lerna/check-working-tree" "^3.1.0"
     "@lerna/child-process" "^3.0.0"
     "@lerna/collect-updates" "^3.1.0"
@@ -516,13 +504,14 @@
     "@lerna/conventional-commits" "^3.0.2"
     "@lerna/output" "^3.0.0"
     "@lerna/prompt" "^3.0.0"
-    "@lerna/run-lifecycle" "^3.0.0"
+    "@lerna/run-lifecycle" "^3.2.0"
     "@lerna/validation-error" "^3.0.0"
     chalk "^2.3.1"
     dedent "^0.7.0"
     minimatch "^3.0.4"
     npmlog "^4.1.2"
     p-map "^1.2.0"
+    p-pipe "^1.2.0"
     p-reduce "^1.0.0"
     p-waterfall "^1.0.0"
     semver "^5.5.0"
@@ -536,9 +525,9 @@
     npmlog "^4.1.2"
     write-file-atomic "^2.3.0"
 
-"@milesj/build-tool-config@0.118.1":
-  version "0.118.1"
-  resolved "https://registry.npmjs.org/@milesj/build-tool-config/-/build-tool-config-0.118.1.tgz#e41ec42b6eea7f57788daa5ac11231b0a7f28f98"
+"@milesj/build-tool-config@0.119.0":
+  version "0.119.0"
+  resolved "https://registry.npmjs.org/@milesj/build-tool-config/-/build-tool-config-0.119.0.tgz#88d073346fbd7d056d1e01728eb01cf9c84603c8"
   dependencies:
     "@beemo/cli" "^0.20.0"
     "@beemo/core" "^0.20.0"
@@ -560,8 +549,8 @@
     babel-preset-react "^6.24.1"
     babel-preset-stage-2 "^6.24.1"
     babel-runtime "^6.26.0"
-    enzyme "^3.4.4"
-    enzyme-adapter-react-16 "^1.2.0"
+    enzyme "^3.5.0"
+    enzyme-adapter-react-16 "^1.3.0"
     enzyme-to-json "^3.3.4"
     eslint "^5.4.0"
     eslint-config-airbnb "^17.1.0"
@@ -569,13 +558,13 @@
     eslint-plugin-babel "^5.1.0"
     eslint-plugin-compat "^2.5.1"
     eslint-plugin-import "^2.14.0"
-    eslint-plugin-jest "^21.21.0"
+    eslint-plugin-jest "^21.22.0"
     eslint-plugin-jsx-a11y "^6.1.1"
     eslint-plugin-promise "^4.0.0"
     eslint-plugin-react "^7.11.1"
     eslint-plugin-typescript "^0.12.0"
-    eslint-plugin-unicorn "^5.0.0"
-    execa "^0.11.0"
+    eslint-plugin-unicorn "^6.0.0"
+    execa "^1.0.0"
     fs-extra "^7.0.0"
     jest "^23.5.0"
     np "^3.0.4"
@@ -677,9 +666,9 @@
   version "10.3.6"
   resolved "https://registry.npmjs.org/@types/node/-/node-10.3.6.tgz#ea8aab9439b59f40d19ec5f13b44642344872b11"
 
-"@types/node@^10.7.1":
-  version "10.7.1"
-  resolved "https://registry.npmjs.org/@types/node/-/node-10.7.1.tgz#b704d7c259aa40ee052eec678758a68d07132a2e"
+"@types/node@^10.9.4":
+  version "10.9.4"
+  resolved "https://registry.npmjs.org/@types/node/-/node-10.9.4.tgz#0f4cb2dc7c1de6096055357f70179043c33e9897"
 
 "@types/pluralize@^0.0.29":
   version "0.0.29"
@@ -722,9 +711,9 @@
   dependencies:
     source-map "^0.6.1"
 
-"@types/webpack@^4.4.10":
-  version "4.4.10"
-  resolved "https://registry.npmjs.org/@types/webpack/-/webpack-4.4.10.tgz#2ecf12589142bc531549140612815b7d8b076358"
+"@types/webpack@^4.4.11":
+  version "4.4.11"
+  resolved "https://registry.npmjs.org/@types/webpack/-/webpack-4.4.11.tgz#0ca832870d55c4e92498c01d22d00d02b0f62ae9"
   dependencies:
     "@types/node" "*"
     "@types/tapable" "*"
@@ -3211,22 +3200,21 @@ entities@^1.1.1, entities@~1.1.1:
   version "1.1.1"
   resolved "https://registry.npmjs.org/entities/-/entities-1.1.1.tgz#6e5c2d0a5621b5dadaecef80b90edfb5cd7772f0"
 
-enzyme-adapter-react-16@^1.2.0:
-  version "1.2.0"
-  resolved "https://registry.npmjs.org/enzyme-adapter-react-16/-/enzyme-adapter-react-16-1.2.0.tgz#c6e80f334e0a817873262d7d01ee9e4747e3c97e"
+enzyme-adapter-react-16@^1.3.0:
+  version "1.3.1"
+  resolved "https://registry.npmjs.org/enzyme-adapter-react-16/-/enzyme-adapter-react-16-1.3.1.tgz#a0f04273aee62c47521da7a2f6c7134182bd7f73"
   dependencies:
-    enzyme-adapter-utils "^1.5.0"
+    enzyme-adapter-utils "^1.6.0"
     function.prototype.name "^1.1.0"
     object.assign "^4.1.0"
     object.values "^1.0.4"
     prop-types "^15.6.2"
     react-is "^16.4.2"
-    react-reconciler "^0.7.0"
     react-test-renderer "^16.0.0-0"
 
-enzyme-adapter-utils@^1.5.0:
-  version "1.5.0"
-  resolved "https://registry.npmjs.org/enzyme-adapter-utils/-/enzyme-adapter-utils-1.5.0.tgz#a020ab3ae79bb1c85e1d51f48f35e995e0eed810"
+enzyme-adapter-utils@^1.6.0:
+  version "1.6.1"
+  resolved "https://registry.npmjs.org/enzyme-adapter-utils/-/enzyme-adapter-utils-1.6.1.tgz#f19acb8b23ddd21b2de99506b181e46138368f2a"
   dependencies:
     function.prototype.name "^1.1.0"
     object.assign "^4.1.0"
@@ -3238,9 +3226,9 @@ enzyme-to-json@^3.3.4:
   dependencies:
     lodash "^4.17.4"
 
-enzyme@^3.4.4:
-  version "3.4.4"
-  resolved "https://registry.npmjs.org/enzyme/-/enzyme-3.4.4.tgz#92c7c6b9e59d4ef0c3d36a75dccc0e41a5c14d21"
+enzyme@^3.5.0:
+  version "3.5.0"
+  resolved "https://registry.npmjs.org/enzyme/-/enzyme-3.5.0.tgz#fd452a698fd1352c737b641dd3a64e079f42d9d5"
   dependencies:
     array.prototype.flat "^1.2.1"
     cheerio "^1.0.0-rc.2"
@@ -3251,7 +3239,8 @@ enzyme@^3.4.4:
     is-number-object "^1.0.3"
     is-string "^1.0.4"
     is-subset "^0.1.1"
-    lodash "^4.17.4"
+    lodash.escape "^4.0.1"
+    lodash.isequal "^4.5.0"
     object-inspect "^1.6.0"
     object-is "^1.0.1"
     object.assign "^4.1.0"
@@ -3393,9 +3382,9 @@ eslint-plugin-import@^2.14.0:
     read-pkg-up "^2.0.0"
     resolve "^1.6.0"
 
-eslint-plugin-jest@^21.21.0:
-  version "21.21.0"
-  resolved "https://registry.npmjs.org/eslint-plugin-jest/-/eslint-plugin-jest-21.21.0.tgz#f0afd138c4acb5f0cd7698318fb49c7d49f3bf45"
+eslint-plugin-jest@^21.22.0:
+  version "21.22.0"
+  resolved "https://registry.npmjs.org/eslint-plugin-jest/-/eslint-plugin-jest-21.22.0.tgz#1b9e49b3e5ce9a3d0a51af4579991d517f33726e"
 
 eslint-plugin-jsx-a11y@^6.1.1:
   version "6.1.1"
@@ -3430,9 +3419,9 @@ eslint-plugin-typescript@^0.12.0:
   dependencies:
     requireindex "~1.1.0"
 
-eslint-plugin-unicorn@^5.0.0:
-  version "5.0.0"
-  resolved "https://registry.npmjs.org/eslint-plugin-unicorn/-/eslint-plugin-unicorn-5.0.0.tgz#3cd37e9202892c4f819c3ce76dcbcae415c84b1d"
+eslint-plugin-unicorn@^6.0.0:
+  version "6.0.0"
+  resolved "https://registry.npmjs.org/eslint-plugin-unicorn/-/eslint-plugin-unicorn-6.0.0.tgz#af24ab13f4654865832c78d1a7fc5b0d7de6d30a"
   dependencies:
     clean-regexp "^1.0.0"
     eslint-ast-utils "^1.0.0"
@@ -3591,6 +3580,18 @@ execa@^0.7.0:
   dependencies:
     cross-spawn "^5.0.1"
     get-stream "^3.0.0"
+    is-stream "^1.1.0"
+    npm-run-path "^2.0.0"
+    p-finally "^1.0.0"
+    signal-exit "^3.0.0"
+    strip-eof "^1.0.0"
+
+execa@^1.0.0:
+  version "1.0.0"
+  resolved "https://registry.npmjs.org/execa/-/execa-1.0.0.tgz#c6236a5bb4df6d6f15e88e7f017798216749ddd8"
+  dependencies:
+    cross-spawn "^6.0.0"
+    get-stream "^4.0.0"
     is-stream "^1.1.0"
     npm-run-path "^2.0.0"
     p-finally "^1.0.0"
@@ -4144,6 +4145,17 @@ glob-to-regexp@^0.3.0:
 glob@7.1.2, glob@^7.0.3, glob@^7.0.5, glob@^7.1.1, glob@^7.1.2:
   version "7.1.2"
   resolved "https://registry.npmjs.org/glob/-/glob-7.1.2.tgz#c19c9df9a028702d678612384a6552404c636d15"
+  dependencies:
+    fs.realpath "^1.0.0"
+    inflight "^1.0.4"
+    inherits "2"
+    minimatch "^3.0.4"
+    once "^1.3.0"
+    path-is-absolute "^1.0.0"
+
+glob@^7.1.3:
+  version "7.1.3"
+  resolved "https://registry.npmjs.org/glob/-/glob-7.1.3.tgz#3960832d3f1574108342dafd3a67b332c0969df1"
   dependencies:
     fs.realpath "^1.0.0"
     inflight "^1.0.4"
@@ -5511,11 +5523,25 @@ left-pad@^1.2.0:
   version "1.3.0"
   resolved "https://registry.npmjs.org/left-pad/-/left-pad-1.3.0.tgz#5b8a3a7765dfe001261dde915589e782f8c94d1e"
 
-lerna@3.1.4:
-  version "3.1.4"
-  resolved "https://registry.npmjs.org/lerna/-/lerna-3.1.4.tgz#d449cff5c55992338664e710ef27c4d15f2d2d66"
+lerna@3.2.1:
+  version "3.2.1"
+  resolved "https://registry.npmjs.org/lerna/-/lerna-3.2.1.tgz#7ec57c1972ec3fb6b0bced3cbbacd4485ebc1c14"
   dependencies:
-    "@lerna/cli" "^3.1.4"
+    "@lerna/add" "^3.2.0"
+    "@lerna/bootstrap" "^3.2.0"
+    "@lerna/changed" "^3.2.0"
+    "@lerna/clean" "^3.1.3"
+    "@lerna/cli" "^3.2.0"
+    "@lerna/create" "^3.1.3"
+    "@lerna/diff" "^3.1.3"
+    "@lerna/exec" "^3.1.3"
+    "@lerna/import" "^3.1.3"
+    "@lerna/init" "^3.1.3"
+    "@lerna/link" "^3.1.4"
+    "@lerna/list" "^3.1.3"
+    "@lerna/publish" "^3.2.1"
+    "@lerna/run" "^3.1.3"
+    "@lerna/version" "^3.2.0"
     import-local "^1.0.0"
     npmlog "^4.1.2"
 
@@ -5651,6 +5677,10 @@ lodash.debounce@^4.0.8:
   version "4.0.8"
   resolved "https://registry.npmjs.org/lodash.debounce/-/lodash.debounce-4.0.8.tgz#82d79bff30a67c4005ffd5e2515300ad9ca4d7af"
 
+lodash.escape@^4.0.1:
+  version "4.0.1"
+  resolved "https://registry.npmjs.org/lodash.escape/-/lodash.escape-4.0.1.tgz#c9044690c21e04294beaa517712fded1fa88de98"
+
 lodash.flattendeep@^4.4.0:
   version "4.4.0"
   resolved "https://registry.npmjs.org/lodash.flattendeep/-/lodash.flattendeep-4.4.0.tgz#fb030917f86a3134e5bc9bec0d69e0013ddfedb2"
@@ -5658,6 +5688,10 @@ lodash.flattendeep@^4.4.0:
 lodash.get@^4.4.2:
   version "4.4.2"
   resolved "https://registry.npmjs.org/lodash.get/-/lodash.get-4.4.2.tgz#2d177f652fa31e939b4438d5341499dfa3825e99"
+
+lodash.isequal@^4.5.0:
+  version "4.5.0"
+  resolved "https://registry.npmjs.org/lodash.isequal/-/lodash.isequal-4.5.0.tgz#415c4478f2bcc30120c22ce10ed3226f7d3e18e0"
 
 lodash.kebabcase@^4.0.1:
   version "4.1.1"
@@ -6610,6 +6644,10 @@ p-map@^1.1.1, p-map@^1.2.0:
   version "1.2.0"
   resolved "https://registry.npmjs.org/p-map/-/p-map-1.2.0.tgz#e4e94f311eabbc8633a1e79908165fca26241b6b"
 
+p-pipe@^1.2.0:
+  version "1.2.0"
+  resolved "https://registry.npmjs.org/p-pipe/-/p-pipe-1.2.0.tgz#4b1a11399a11520a67790ee5a0c1d5881d6befe9"
+
 p-reduce@^1.0.0:
   version "1.0.0"
   resolved "https://registry.npmjs.org/p-reduce/-/p-reduce-1.0.0.tgz#18c2b0dd936a4690a529f8231f58a0fdb6a47dfa"
@@ -7084,15 +7122,6 @@ react-is@^16.4.1:
 react-is@^16.4.2:
   version "16.4.2"
   resolved "https://registry.npmjs.org/react-is/-/react-is-16.4.2.tgz#84891b56c2b6d9efdee577cc83501dfc5ecead88"
-
-react-reconciler@^0.7.0:
-  version "0.7.0"
-  resolved "https://registry.npmjs.org/react-reconciler/-/react-reconciler-0.7.0.tgz#9614894103e5f138deeeb5eabaf3ee80eb1d026d"
-  dependencies:
-    fbjs "^0.8.16"
-    loose-envify "^1.1.0"
-    object-assign "^4.1.1"
-    prop-types "^15.6.0"
 
 react-test-renderer@^16.0.0-0:
   version "16.4.1"
@@ -8297,6 +8326,10 @@ typescript-eslint-parser@^18.0.0:
 typescript@^3.0.1:
   version "3.0.1"
   resolved "https://registry.npmjs.org/typescript/-/typescript-3.0.1.tgz#43738f29585d3a87575520a4b93ab6026ef11fdb"
+
+typescript@^3.0.3:
+  version "3.0.3"
+  resolved "https://registry.npmjs.org/typescript/-/typescript-3.0.3.tgz#4853b3e275ecdaa27f78fda46dc273a7eb7fc1c8"
 
 ua-parser-js@^0.7.18:
   version "0.7.18"
