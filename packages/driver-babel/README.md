@@ -6,9 +6,9 @@ Provides [Babel](https://github.com/babel/babel) support for
 ## Installation
 
 ```
-yarn add @beemo/driver-babel babel-core
+yarn add @beemo/driver-babel @babel/core
 // Or
-npm install @beemo/driver-babel babel-core --save
+npm install @beemo/driver-babel @babel/core --save
 ```
 
 ## Documentation

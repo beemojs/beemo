@@ -25,12 +25,12 @@
     "access": "public"
   },
   "devDependencies": {
-    "@types/rimraf": "^2.0.2",
-    "babel-core": "^6.26.3"
+    "@babel/core": "^7.0.0",
+    "@types/rimraf": "^2.0.2"
   },
   "peerDependencies": {
-    "@beemo/core": "^0.20.0",
-    "babel-core": "^6.0.0"
+    "@babel/core": "^7.0.0",
+    "@beemo/core": "^0.20.0"
   },
   "dependencies": {
     "rimraf": "^2.6.2"

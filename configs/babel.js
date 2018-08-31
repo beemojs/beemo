@@ -1,9 +1,6 @@
-const baseBabel = require('@milesj/build-tool-config/configs/babel');
-
-module.exports = function babel(args) {
-  Object.assign(args, {
-    node: true,
-  });
-
-  return baseBabel(args);
+module.exports = function babel() {
+  return {
+    babelrc: false,
+    comments: false,
+  };
 };

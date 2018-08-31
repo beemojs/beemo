@@ -1,15 +1,15 @@
 # Babel Driver
 
-Provides [Babel](https://github.com/babel/babel) support by dynamically generating a `.babelrc`
-config file.
+Provides [Babel](https://github.com/babel/babel) support by dynamically generating a
+`babel.config.js` config file.
 
 ```
-yarn add @beemo/driver-babel babel-core
+yarn add @beemo/driver-babel @babel/core
 ```
 
 ## Requirements
 
-- Babel ^6.0.0
+- Babel ^7.0.0
 
 ## Usage
 

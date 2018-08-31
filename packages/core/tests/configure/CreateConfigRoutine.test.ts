@@ -72,10 +72,10 @@ describe('CreateConfigRoutine', () => {
         { foo: 123, bar: 'abc' },
         expect.anything(),
       );
-      expect(path).toBe(prependRoot('/.babelrc'));
+      expect(path).toBe(prependRoot('/babel.config.js'));
       expect(fs.writeFile).toHaveBeenCalledWith(
-        prependRoot('/.babelrc'),
-        JSON.stringify({ foo: 123, bar: 'abc' }, null, 2),
+        prependRoot('/babel.config.js'),
+        `module.exports = ${JSON.stringify({ foo: 123, bar: 'abc' }, null, 2)};`,
       );
     });
 
@@ -89,7 +89,7 @@ describe('CreateConfigRoutine', () => {
 
       expect(copySpy).toHaveBeenCalledWith(routine.context, undefined, expect.anything());
       expect(createSpy).not.toHaveBeenCalled();
-      expect(path).toBe(prependRoot('/.babelrc'));
+      expect(path).toBe(prependRoot('/babel.config.js'));
     });
 
     it('copies config file if `strategy` option is copy', async () => {
@@ -102,7 +102,7 @@ describe('CreateConfigRoutine', () => {
 
       expect(copySpy).toHaveBeenCalledWith(routine.context, undefined, expect.anything());
       expect(createSpy).not.toHaveBeenCalled();
-      expect(path).toBe(prependRoot('/.babelrc'));
+      expect(path).toBe(prependRoot('/babel.config.js'));
     });
 
     it('references config file if `configStrategy` metadata is reference', async () => {
@@ -115,7 +115,7 @@ describe('CreateConfigRoutine', () => {
 
       expect(refSpy).toHaveBeenCalledWith(routine.context, undefined, expect.anything());
       expect(createSpy).not.toHaveBeenCalled();
-      expect(path).toBe(prependRoot('/.babelrc'));
+      expect(path).toBe(prependRoot('/babel.config.js'));
     });
 
     it('references config file if `strategy` option is reference', async () => {
@@ -128,7 +128,7 @@ describe('CreateConfigRoutine', () => {
 
       expect(refSpy).toHaveBeenCalledWith(routine.context, undefined, expect.anything());
       expect(createSpy).not.toHaveBeenCalled();
-      expect(path).toBe(prependRoot('/.babelrc'));
+      expect(path).toBe(prependRoot('/babel.config.js'));
     });
   });
 
@@ -146,7 +146,7 @@ describe('CreateConfigRoutine', () => {
     it('adds path to context', async () => {
       await routine.copyConfigFile(routine.context);
 
-      expect(routine.context.configPaths).toEqual([prependRoot('/.babelrc')]);
+      expect(routine.context.configPaths).toEqual([prependRoot('/babel.config.js')]);
     });
 
     it('copies file', async () => {
@@ -154,10 +154,10 @@ describe('CreateConfigRoutine', () => {
 
       expect(fs.copy).toHaveBeenCalledWith(
         prependRoot('/configs/babel.js'),
-        prependRoot('/.babelrc'),
+        prependRoot('/babel.config.js'),
         { overwrite: true },
       );
-      expect(path).toBe(prependRoot('/.babelrc'));
+      expect(path).toBe(prependRoot('/babel.config.js'));
     });
 
     it('sets config on driver', async () => {
@@ -172,7 +172,7 @@ describe('CreateConfigRoutine', () => {
       await routine.copyConfigFile(routine.context);
 
       expect(spy).toHaveBeenCalledWith('copy-config-file', [
-        prependRoot('/.babelrc'),
+        prependRoot('/babel.config.js'),
         { foo: 123 },
       ]);
     });
@@ -190,14 +190,17 @@ describe('CreateConfigRoutine', () => {
     it('adds path to context', async () => {
       await routine.createConfigFile(routine.context, { foo: 'bar' });
 
-      expect(routine.context.configPaths).toEqual([prependRoot('/.babelrc')]);
+      expect(routine.context.configPaths).toEqual([prependRoot('/babel.config.js')]);
     });
 
     it('writes and formats file', async () => {
       const path = await routine.createConfigFile(routine.context, { foo: 'bar' });
 
-      expect(fs.writeFile).toHaveBeenCalledWith(prependRoot('/.babelrc'), '{\n  "foo": "bar"\n}');
-      expect(path).toBe(prependRoot('/.babelrc'));
+      expect(fs.writeFile).toHaveBeenCalledWith(
+        prependRoot('/babel.config.js'),
+        'module.exports = {\n  "foo": "bar"\n};',
+      );
+      expect(path).toBe(prependRoot('/babel.config.js'));
     });
 
     it('sets config on driver', async () => {
@@ -212,7 +215,7 @@ describe('CreateConfigRoutine', () => {
       await routine.createConfigFile(routine.context, { foo: 'bar' });
 
       expect(spy).toHaveBeenCalledWith('create-config-file', [
-        prependRoot('/.babelrc'),
+        prependRoot('/babel.config.js'),
         { foo: 'bar' },
       ]);
     });
@@ -384,17 +387,17 @@ describe('CreateConfigRoutine', () => {
     it('adds path to context', async () => {
       await routine.referenceConfigFile(routine.context);
 
-      expect(routine.context.configPaths).toEqual([prependRoot('/.babelrc')]);
+      expect(routine.context.configPaths).toEqual([prependRoot('/babel.config.js')]);
     });
 
     it('references file', async () => {
       const path = await routine.referenceConfigFile(routine.context);
 
       expect(fs.writeFile).toHaveBeenCalledWith(
-        prependRoot('/.babelrc'),
+        prependRoot('/babel.config.js'),
         "module.exports = require('./configs/babel.js');",
       );
-      expect(path).toBe(prependRoot('/.babelrc'));
+      expect(path).toBe(prependRoot('/babel.config.js'));
     });
 
     it('sets config on driver', async () => {
@@ -409,7 +412,7 @@ describe('CreateConfigRoutine', () => {
       await routine.referenceConfigFile(routine.context);
 
       expect(spy).toHaveBeenCalledWith('reference-config-file', [
-        prependRoot('/.babelrc'),
+        prependRoot('/babel.config.js'),
         { foo: 123 },
       ]);
     });

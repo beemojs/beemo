@@ -3,7 +3,6 @@ _book/
 coverage/
 src/
 tests/
-.babelrc
 .eslintcache
 .eslintignore
 .eslintrc.js
@@ -12,6 +11,7 @@ tests/
 .prettierignore
 .travis.yml
 .yarnclean
+babel.config.js
 jest.config.js
 lerna.json
 prettier.config.js

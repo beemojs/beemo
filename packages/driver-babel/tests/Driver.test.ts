@@ -34,7 +34,7 @@ describe('BabelDriver', () => {
     expect(driver.metadata).toEqual(
       expect.objectContaining({
         bin: 'babel',
-        configName: '.babelrc',
+        configName: 'babel.config.js',
         configOption: '--config',
         dependencies: [],
         description: 'Transpile files with Babel',

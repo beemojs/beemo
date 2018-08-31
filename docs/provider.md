@@ -32,7 +32,7 @@ and Jest, we need to install packages known as "drivers"
 ([view all available drivers](https://www.npmjs.com/search?q=beemo-driver)).
 
 ```
-yarn add @beemo/driver-babel babel-core
+yarn add @beemo/driver-babel @babel/core
 yarn add @beemo/driver-eslint eslint
 yarn add @beemo/driver-jest jest
 ```
@@ -62,7 +62,7 @@ Each configuration file should return a JavaScript object. Easy enough.
 module.exports = {
   presets: [
     [
-      'babel-preset-env',
+      '@babel/preset-env',
       {
         targets: { node: '6.5' },
       },
@@ -80,7 +80,7 @@ current [tool instance](./tool.md), which allows for runtime conditional logic. 
 module.exports = function(args, tool) {
   const presets = [
     [
-      'babel-preset-env',
+      '@babel/preset-env',
       {
         targets: { node: '6.5' },
       },
@@ -88,7 +88,7 @@ module.exports = function(args, tool) {
   ];
 
   if (args.react) {
-    presets.push('babel-preset-react');
+    presets.push('@babel/preset-react');
   }
 
   return {
@@ -105,7 +105,7 @@ tool, you can reference the current Beemo instance using `process.beemo`.
 const { context, tool } = process.beemo;
 const presets = [
   [
-    'babel-preset-env',
+    '@babel/preset-env',
     {
       targets: { node: '6.5' },
     },
@@ -113,7 +113,7 @@ const presets = [
 ];
 
 if (context.args.react) {
-  presets.push('babel-preset-react');
+  presets.push('@babel/preset-react');
 }
 
 module.exports = {
@@ -129,8 +129,8 @@ module.exports = {
 Beemo supports [synchronizing dotfiles](./consumer.md#synchronizing-dotfiles) across all projects
 that consume your configuration module (the repository you just created). This includes things like
 `.gitignore`, `.npmignore`, `.travis.yml`, and more. This _does not_ include configuration dotfiles
-like `.babelrc` and `.flowconfig`, as those are handled automatically by the drivers mentioned
-above.
+like `babel.config.js` and `.flowconfig`, as those are handled automatically by the drivers
+mentioned above.
 
 To begin, create a `dotfiles/` folder.
 

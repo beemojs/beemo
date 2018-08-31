@@ -14,7 +14,7 @@ export default class BabelDriver extends Driver<BabelConfig> {
   bootstrap() {
     this.setMetadata({
       bin: 'babel',
-      configName: '.babelrc',
+      configName: 'babel.config.js',
       description: 'Transpile files with Babel',
       title: 'Babel',
     });
