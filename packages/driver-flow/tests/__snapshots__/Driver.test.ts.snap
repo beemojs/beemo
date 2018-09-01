@@ -88,7 +88,7 @@ traces=3
 
 exports[`FlowDriver formatConfig() [options] handles regex 1`] = `
 "[options]
-suppress_comment=\\\\([\\\\0-\\\\t\\\\x0B\\\\f\\\\x0E-\\\\u2027\\\\u202A-\\\\u{10FFFF}]\\\\|\\\\n\\\\)*\\\\$FlowFixMe
+suppress_comment=\\\\(.\\\\|\\\\n\\\\)*\\\\$FlowFixMe
 "
 `;
 
