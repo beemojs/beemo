@@ -26,9 +26,6 @@
     "lerna": "3.2.1",
     "semver": "^5.5.1"
   },
-  "publishConfig": {
-    "access": "public"
-  },
   "workspaces": [
     "packages/*"
   ],
