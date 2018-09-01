@@ -10,9 +10,12 @@
     "transpile",
     "compile"
   ],
+  "bin": {
+    "babel-beemo": "./integration/bin.js"
+  },
   "scripts": {
-    "integration:fail": "babel ./integration/fail.js && babel ./integration/fail-syntax.js",
-    "integration:pass": "babel ./integration/pass.js"
+    "integration:fail": "babel-beemo ./integration/fail.js && babel-beemo ./integration/fail-syntax.js",
+    "integration:pass": "babel-beemo ./integration/pass.js"
   },
   "main": "./lib/index.js",
   "types": "./lib/index.d.ts",
@@ -25,7 +28,10 @@
     "access": "public"
   },
   "devDependencies": {
+    "@babel/cli": "^7.0.0",
     "@babel/core": "^7.0.0",
+    "@babel/plugin-proposal-class-properties": "^7.0.0",
+    "@babel/preset-env": "^7.0.0",
     "@types/rimraf": "^2.0.2"
   },
   "peerDependencies": {

@@ -64,7 +64,7 @@ module.exports = class RunIntegrationTestsScript extends Script {
     const output = response.stdout || response.stderr;
 
     // console.log(name.toUpperCase());
-    // console.log(output);
+    // console.log(response);
 
     if (options.fail && !response.failed) {
       throw new Error(`${name} should of failed when running --fail.\n\n${output}`);
