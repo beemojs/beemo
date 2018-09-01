@@ -177,7 +177,8 @@ describe('FlowDriver', () => {
         expect(
           driver.formatConfig({
             options: {
-              suppress_comment: /(.|\n)*\$FlowFixMe/u,
+              // eslint-disable-next-line require-unicode-regexp
+              suppress_comment: /(.|\n)*\$FlowFixMe/,
             },
           }),
         ).toMatchSnapshot();
