@@ -5,5 +5,5 @@
 
 import webpack from 'webpack';
 
-// eslint-disable-next-line import/prefer-default-export
-export type WebpackConfig = webpack.Configuration;
+// eslint-disable-next-line import/prefer-default-export, typescript/no-empty-interface
+export interface WebpackConfig extends webpack.Configuration {}

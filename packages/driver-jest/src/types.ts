@@ -14,6 +14,7 @@ export type ReporterConfig = [string, { [option: string]: any }];
 
 export interface CommonConfig {
   automock?: boolean;
+  bail?: boolean;
   browser?: boolean;
   cache?: boolean;
   cacheDirectory?: string;
@@ -26,6 +27,7 @@ export interface CommonConfig {
   coverageThreshold?: { [key: string]: CoverageThreshold };
   cwd?: string;
   detectLeaks?: boolean;
+  errorOnDeprecated?: boolean;
   forceCoverageMatch?: string[];
   globals?: { [global: string]: boolean };
   globalSetup?: string;
@@ -39,6 +41,7 @@ export interface CommonConfig {
   notify?: string;
   notifyMode?: 'always' | 'failure' | 'success' | 'change' | 'success-change' | 'failure-success';
   preset?: string;
+  prettierPath?: string;
   reporters?: (string | ReporterConfig)[];
   resetMocks?: boolean;
   resetModules?: boolean;

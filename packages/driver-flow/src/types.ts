@@ -13,6 +13,8 @@ export interface LintsConfig {
 
 export type OptionSetting = 'enable' | 'ignore' | 'warn';
 
+export type MatchPattern = string | RegExp;
+
 export interface OptionsConfig {
   all?: boolean;
   emoji?: boolean;
@@ -42,14 +44,14 @@ export interface OptionsConfig {
   'sharedmemory.hash_table_pow'?: number;
   'sharedmemory.log_level'?: number;
   strip_root?: boolean;
-  suppress_comment?: string | RegExp;
+  suppress_comment?: MatchPattern;
   suppress_type?: string;
   temp_dir?: string;
   traces?: number;
-  'unsafe.enable_getters_and_setters'?: boolean;
 }
 
 export interface FlowConfig {
+  declarations?: string[];
   include?: string[];
   ignore?: string[];
   libs?: string[];
