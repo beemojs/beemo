@@ -130,7 +130,9 @@ export default class Beemo {
       if (module.includes('/')) {
         const [, packageName] = module.split('/');
         const pathFound = this.getWorkspacePaths().some(workspacePath => {
-          const moduleRoot = path.join(workspacePath, packageName);
+          const moduleRoot = workspacePath.endsWith('*')
+            ? workspacePath.replace('*', packageName)
+            : path.join(workspacePath, packageName);
 
           if (fs.existsSync(moduleRoot)) {
             this.moduleRoot = moduleRoot;
