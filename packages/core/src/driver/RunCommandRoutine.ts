@@ -16,7 +16,7 @@ import DriverContext from '../contexts/DriverContext';
 import { STRATEGY_COPY } from '../constants';
 import { Argv, Execution } from '../types';
 
-const OPTION_PATTERN: RegExp = /-?-[-a-z0-9]+(,|\s)/giu;
+const OPTION_PATTERN: RegExp = /-?-[a-z0-9-]+(,|\s)/giu;
 
 export type OptionMap = { [option: string]: true };
 
