@@ -19,6 +19,17 @@ This will use the current working directory (`process.cwd()`) instead of the Nod
 }
 ```
 
+If your configuration module is using [workspaces](./workspaces.md) (monorepo), you can target a
+single package.
+
+```json
+{
+  "beemo": {
+    "module": "@local/package-name"
+  }
+}
+```
+
 ## Editor Integration
 
 By default, Beemo generates local config files at runtime before execution, and some editors utilize

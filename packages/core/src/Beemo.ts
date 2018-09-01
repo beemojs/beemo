@@ -27,6 +27,8 @@ export default class Beemo {
 
   tool: Tool;
 
+  workspacePaths: string[] = [];
+
   constructor(argv: Argv, binName?: string) {
     this.argv = argv;
 
@@ -119,14 +121,37 @@ export default class Beemo {
     }
 
     // Allow for local development
-    if (module === '@local') {
+    if (module.startsWith('@local')) {
       this.tool.debug('Using %s configuration module', chalk.yellow('@local'));
 
       this.moduleRoot = process.cwd();
 
+      // Dig into a workspace
+      if (module.includes('/')) {
+        const [, packageName] = module.split('/');
+        const pathFound = this.getWorkspacePaths().some(workspacePath => {
+          const moduleRoot = path.join(workspacePath, packageName);
+
+          if (fs.existsSync(moduleRoot)) {
+            this.moduleRoot = moduleRoot;
+
+            return true;
+          }
+
+          return false;
+        });
+
+        if (!pathFound) {
+          throw new Error(
+            `Module ${module} (using workspaces) defined in "beemo.module" could not be found.`,
+          );
+        }
+      }
+
       return this.moduleRoot;
     }
 
+    // Reference a node module
     const rootPath = path.join(process.cwd(), 'node_modules', module);
 
     if (!fs.existsSync(rootPath)) {
@@ -144,6 +169,10 @@ export default class Beemo {
    * Return a list of absolute paths for Yarn or Lerna workspaces.
    */
   getWorkspacePaths(): string[] {
+    if (this.workspacePaths.length > 0) {
+      return this.workspacePaths;
+    }
+
     const { workspaces } = this.tool.package;
     const root = this.tool.options.workspaceRoot || this.tool.options.root;
     const paths = [];
@@ -166,7 +195,9 @@ export default class Beemo {
       }
     }
 
-    return paths.map(workspace => path.join(root, workspace));
+    this.workspacePaths = paths.map(workspace => path.join(root, workspace));
+
+    return this.workspacePaths;
   }
 
   /**

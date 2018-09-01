@@ -84,12 +84,36 @@ describe('Beemo', () => {
       }).toThrowErrorMatchingSnapshot();
     });
 
+    it('errors if workspace path not found', () => {
+      (fs.existsSync as jest.Mock).mockImplementation(() => false);
+
+      beemo.workspacePaths = [path.join(process.cwd(), 'packages')];
+      beemo.tool.config.module = '@local/foo';
+
+      expect(() => {
+        beemo.getConfigModuleRoot();
+      }).toThrowErrorMatchingSnapshot();
+    });
+
     it('returns cwd if using @local', () => {
       beemo.tool.config.module = '@local';
 
       expect(beemo.getConfigModuleRoot()).toBe(process.cwd());
       expect(beemo.moduleRoot).toBe(process.cwd());
       expect(beemo.getConfigModuleRoot()).toBe(beemo.moduleRoot);
+    });
+
+    it('returns workspace path if using @local/name', () => {
+      (fs.existsSync as jest.Mock).mockImplementation(() => true);
+
+      beemo.workspacePaths = [path.join(process.cwd(), 'packages')];
+      beemo.tool.config.module = '@local/foo';
+
+      const moduleRoot = path.join(process.cwd(), 'packages', 'foo');
+
+      expect(beemo.getConfigModuleRoot()).toBe(moduleRoot);
+      expect(beemo.moduleRoot).toBe(moduleRoot);
+      expect(beemo.getConfigModuleRoot()).toBe(moduleRoot);
     });
 
     it('returns node module path', () => {
@@ -121,7 +145,10 @@ describe('Beemo', () => {
     it('returns workspaces from package.json', () => {
       beemo.tool.package = { name: '', workspaces: ['packages/*'] };
 
-      expect(beemo.getWorkspacePaths()).toEqual([path.join(root, 'packages/*')]);
+      const paths = [path.join(root, 'packages/*')];
+
+      expect(beemo.getWorkspacePaths()).toEqual(paths);
+      expect(beemo.workspacePaths).toEqual(paths);
     });
 
     it('returns nohoist workspaces from package.json', () => {
@@ -133,7 +160,10 @@ describe('Beemo', () => {
         },
       };
 
-      expect(beemo.getWorkspacePaths()).toEqual([path.join(root, 'packages/*')]);
+      const paths = [path.join(root, 'packages/*')];
+
+      expect(beemo.getWorkspacePaths()).toEqual(paths);
+      expect(beemo.workspacePaths).toEqual(paths);
     });
 
     it('returns workspaces from lerna.json', () => {
@@ -145,9 +175,10 @@ describe('Beemo', () => {
       beemo.tool.package = { name: '' };
       beemo.tool.options.workspaceRoot = getFixturePath('workspaces-lerna');
 
-      expect(beemo.getWorkspacePaths()).toEqual([
-        path.join(beemo.tool.options.workspaceRoot, 'packages/*'),
-      ]);
+      const paths = [path.join(beemo.tool.options.workspaceRoot, 'packages/*')];
+
+      expect(beemo.getWorkspacePaths()).toEqual(paths);
+      expect(beemo.workspacePaths).toEqual(paths);
     });
 
     it('doesnt load lerna.json if workspaces are defined in package.json', () => {
