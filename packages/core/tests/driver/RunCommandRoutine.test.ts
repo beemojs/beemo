@@ -146,7 +146,7 @@ describe('RunCommandRoutine', () => {
       expect(optSpy).toHaveBeenCalledWith(routine.context, ['baz'], expect.anything());
       expect(runSpy).toHaveBeenCalledWith(
         routine.context,
-        ['baz', '--config', prependRoot(driver.metadata.configName)],
+        ['baz', '--config-file', prependRoot(driver.metadata.configName)],
         expect.anything(),
       );
     });
@@ -395,7 +395,7 @@ describe('RunCommandRoutine', () => {
 
       const args = await routine.includeConfigOption(routine.context, ['--foo']);
 
-      expect(args).toEqual(['--foo', '--config', prependRoot(driver.metadata.configName)]);
+      expect(args).toEqual(['--foo', '--config-file', prependRoot(driver.metadata.configName)]);
     });
   });
 
