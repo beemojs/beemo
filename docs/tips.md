@@ -19,16 +19,8 @@ This will use the current working directory (`process.cwd()`) instead of the Nod
 }
 ```
 
-If your configuration module is using [workspaces](./workspaces.md) (monorepo), you can target a
-single package.
-
-```json
-{
-  "beemo": {
-    "module": "@local/package-name"
-  }
-}
-```
+> If your configuration module is using [workspaces](./workspaces.md) (monorepo), you can target the
+> package name directly, assuming Yarn or Lerna have symlinked Node modules.
 
 ## Editor Integration
 
