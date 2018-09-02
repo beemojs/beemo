@@ -1,4 +1,6 @@
+*.log
 dist/
 integration/
 src/
 tests/
+tsconfig.json

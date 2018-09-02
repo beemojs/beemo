@@ -42,7 +42,7 @@
     "is-glob": "^4.0.0",
     "lodash": "^4.17.10",
     "micromatch": "^3.1.10",
-    "optimal": "^1.0.0",
+    "optimal": "^1.1.1",
     "yargs": "^12.0.1",
     "yargs-parser": "^10.1.0"
   }

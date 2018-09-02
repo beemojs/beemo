@@ -1,4 +1,6 @@
+*.log
 integration/
 src/
 tests/
 .flowconfig
+tsconfig.json
