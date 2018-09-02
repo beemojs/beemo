@@ -134,19 +134,19 @@ export default class RunCommandRoutine extends Routine<DriverContext, RunCommand
 
     this.debug('Extracting native options from help output');
 
-    return this.executeCommand(driver.metadata.bin, [driver.metadata.helpOption], { env }).then(
-      ({ stdout }) => {
-        const nativeOptions: OptionMap = {};
-        const matches = stdout.match(OPTION_PATTERN) || [];
+    return this.executeCommand(driver.metadata.bin, driver.metadata.helpOption.split(' '), {
+      env,
+    }).then(({ stdout }) => {
+      const nativeOptions: OptionMap = {};
+      const matches = stdout.match(OPTION_PATTERN) || [];
 
-        matches.forEach(option => {
-          // Trim trailing comma or space
-          nativeOptions[option.slice(0, -1)] = true;
-        });
+      matches.forEach(option => {
+        // Trim trailing comma or space
+        nativeOptions[option.slice(0, -1)] = true;
+      });
 
-        return nativeOptions;
-      },
-    );
+      return nativeOptions;
+    });
   }
 
   /**

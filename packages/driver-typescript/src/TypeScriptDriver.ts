@@ -18,6 +18,7 @@ export default class TypeScriptDriver extends Driver<TypeScriptConfig> {
       configOption: '',
       description: 'Type check files with TypeScript',
       filterOptions: true,
+      helpOption: '--help --all',
       title: 'TypeScript',
       workspaceStrategy: 'copy',
     });

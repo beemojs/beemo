@@ -42,7 +42,7 @@ describe('TypeScriptDriver', () => {
         dependencies: [],
         description: 'Type check files with TypeScript',
         filterOptions: true,
-        helpOption: '--help',
+        helpOption: '--help --all',
         title: 'TypeScript',
         useConfigOption: false,
         workspaceStrategy: 'copy',

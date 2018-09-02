@@ -252,6 +252,16 @@ describe('RunCommandRoutine', () => {
       );
     });
 
+    it('supports multiple options within `helpOption`', async () => {
+      driver.metadata.helpOption = '--help --all';
+
+      const spy = jest.spyOn(routine, 'executeCommand');
+
+      await routine.extractNativeOptions();
+
+      expect(spy).toHaveBeenCalledWith('babel', ['--help', '--all'], { env: { DEV: 'true' } });
+    });
+
     it('supports uppercased options', async () => {
       driver = new JestDriver();
       driver.tool = routine.tool;
