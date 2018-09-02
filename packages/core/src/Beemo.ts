@@ -121,34 +121,10 @@ export default class Beemo {
     }
 
     // Allow for local development
-    if (module.startsWith('@local')) {
+    if (module === '@local') {
       this.tool.debug('Using %s configuration module', chalk.yellow('@local'));
 
       this.moduleRoot = process.cwd();
-
-      // Dig into a workspace
-      if (module.includes('/')) {
-        const [, packageName] = module.split('/');
-        const pathFound = this.getWorkspacePaths().some(workspacePath => {
-          const moduleRoot = workspacePath.endsWith('*')
-            ? workspacePath.replace('*', packageName)
-            : path.join(workspacePath, packageName);
-
-          if (fs.existsSync(moduleRoot)) {
-            this.moduleRoot = moduleRoot;
-
-            return true;
-          }
-
-          return false;
-        });
-
-        if (!pathFound) {
-          throw new Error(
-            `Module ${module} (using workspaces) defined in "beemo.module" could not be found.`,
-          );
-        }
-      }
 
       return this.moduleRoot;
     }

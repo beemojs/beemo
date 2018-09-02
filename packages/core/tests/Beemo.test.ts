@@ -103,32 +103,6 @@ describe('Beemo', () => {
       expect(beemo.getConfigModuleRoot()).toBe(beemo.moduleRoot);
     });
 
-    it('returns workspace path if using @local/name', () => {
-      (fs.existsSync as jest.Mock).mockImplementation(() => true);
-
-      beemo.workspacePaths = [path.join(process.cwd(), 'packages')];
-      beemo.tool.config.module = '@local/foo';
-
-      const moduleRoot = path.join(process.cwd(), 'packages', 'foo');
-
-      expect(beemo.getConfigModuleRoot()).toBe(moduleRoot);
-      expect(beemo.moduleRoot).toBe(moduleRoot);
-      expect(beemo.getConfigModuleRoot()).toBe(moduleRoot);
-    });
-
-    it('returns workspace path if using @local/name (using *)', () => {
-      (fs.existsSync as jest.Mock).mockImplementation(() => true);
-
-      beemo.workspacePaths = [path.join(process.cwd(), 'packages/*')];
-      beemo.tool.config.module = '@local/foo';
-
-      const moduleRoot = path.join(process.cwd(), 'packages', 'foo');
-
-      expect(beemo.getConfigModuleRoot()).toBe(moduleRoot);
-      expect(beemo.moduleRoot).toBe(moduleRoot);
-      expect(beemo.getConfigModuleRoot()).toBe(moduleRoot);
-    });
-
     it('returns node module path', () => {
       (fs.existsSync as jest.Mock).mockImplementation(() => true);
 
