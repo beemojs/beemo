@@ -1,6 +1,6 @@
 {
   "name": "@beemo/driver-eslint",
-  "version": "0.21.1",
+  "version": "0.21.2",
   "description": "ESLint driver for Beemo.",
   "keywords": [
     "beemo",
