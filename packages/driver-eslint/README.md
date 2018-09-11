@@ -1,7 +1,7 @@
 # ESLint Driver
 
 Provides [ESLint](https://github.com/eslint/eslint) support for
-[Beemo](https://github.com/milesj/beemo), a build tool manager.
+[Beemo](https://github.com/milesj/beemo), a dev tool manager.
 
 ## Installation
 

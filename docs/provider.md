@@ -27,7 +27,7 @@ Now that we have a repository, we can install and setup Beemo. It's as easy as..
 yarn add @beemo/core @beemo/cli
 ```
 
-This will only install the core functionality. To support different build tools like Babel, ESLint,
+This will only install the core functionality. To support different dev tools like Babel, ESLint,
 and Jest, we need to install packages known as "drivers"
 ([view all available drivers](https://www.npmjs.com/search?q=beemo-driver)).
 
@@ -52,7 +52,7 @@ configs/
   jest.js
 ```
 
-> The benefit of Beemo is that we can avoid build tool conventions and standardize on a single
+> The benefit of Beemo is that we can avoid dev tool conventions and standardize on a single
 > implementation. No more `.foorc`, `.foorc.js`, or `.foorc.json` nonsense. Just `configs/foo.js`.
 
 Each configuration file should return a JavaScript object. Easy enough.

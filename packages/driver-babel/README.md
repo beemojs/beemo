@@ -1,7 +1,7 @@
 # Babel Driver
 
 Provides [Babel](https://github.com/babel/babel) support for
-[Beemo](https://github.com/milesj/beemo), a build tool manager.
+[Beemo](https://github.com/milesj/beemo), a dev tool manager.
 
 ## Installation
 

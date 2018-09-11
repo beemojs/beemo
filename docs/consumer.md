@@ -179,5 +179,5 @@ _all_ projects. So because of that, Beemo does allow overriding of config. To do
 }
 ```
 
-> Some build tools support `package.json` overrides like this, but it's preferred to use the Beemo
+> Some dev tools support `package.json` overrides like this, but it's preferred to use the Beemo
 > approach for interoperability.

@@ -1,7 +1,7 @@
 # Flow Driver
 
 Provides [Flow](https://github.com/facebook/flow) support for
-[Beemo](https://github.com/milesj/beemo), a build tool manager.
+[Beemo](https://github.com/milesj/beemo), a dev tool manager.
 
 ## Installation
 

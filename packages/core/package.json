@@ -1,7 +1,7 @@
 {
   "name": "@beemo/core",
   "version": "0.21.4",
-  "description": "Manage all build tool configurations in a single centralized repository.",
+  "description": "Manage all dev tool configurations in a single centralized repository.",
   "keywords": [
     "beemo",
     "build",
@@ -26,7 +26,7 @@
     "access": "public"
   },
   "dependencies": {
-    "@boost/core": "^0.64.3",
+    "@boost/core": "^0.64.4",
     "@types/execa": "^0.9.0",
     "@types/fs-extra": "^5.0.4",
     "@types/glob": "^5.0.35",
@@ -43,7 +43,7 @@
     "lodash": "^4.17.10",
     "micromatch": "^3.1.10",
     "optimal": "^1.1.1",
-    "yargs": "^12.0.1",
+    "yargs": "^12.0.2",
     "yargs-parser": "^10.1.0"
   }
 }

@@ -1,7 +1,7 @@
 # TypeScript Driver
 
 Provides [TypeScript](https://github.com/microsoft/typescript) support for
-[Beemo](https://github.com/milesj/beemo), a build tool manager.
+[Beemo](https://github.com/milesj/beemo), a dev tool manager.
 
 ## Installation
 

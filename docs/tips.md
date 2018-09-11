@@ -143,7 +143,7 @@ instead.
 
 ## CLI Themes
 
-Beemo is built on [Boost](https://github.com/milesj/boost), a powerful build tool framework, which
+Beemo is built on [Boost](https://github.com/milesj/boost), a powerful dev tool framework, which
 provides the ability to theme the command line output (by changing important colors). To activate a
 theme, pass a `--theme` option with the name of the theme.
 
