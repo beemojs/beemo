@@ -26,7 +26,7 @@ export default class TypeScriptDriver extends Driver<TypeScriptConfig> {
     this.setCommandOptions({
       clean: {
         boolean: true,
-        default: true,
+        default: false,
         description: 'Clean the target folder',
       },
     });

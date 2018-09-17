@@ -16,7 +16,7 @@ describe('CleanupRoutine', () => {
 
   describe('execute()', () => {
     it('doesnt call `deleteConfigFiles` if `cleanup` is false', () => {
-      routine.tool.config.config.cleanup = true;
+      routine.tool.config.config.cleanup = false;
 
       routine.deleteConfigFiles = jest.fn();
       routine.execute();
