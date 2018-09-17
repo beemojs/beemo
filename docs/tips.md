@@ -70,7 +70,7 @@ to pass.
 For example, if you'd like to run separate ESLint commands in different folders.
 
 ```
-yarn beemo eslint --color --parallel="./src --ext=.ts,.tsx" --parallel="./tests --report-unused-disable-directives"
+yarn beemo eslint --color |> ./src --ext=.ts,.tsx |> ./tests --report-unused-disable-directives
 
 // Would run 2 commands in parallel
 eslint --color ./src --ext=.ts,.tsx

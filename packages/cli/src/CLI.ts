@@ -44,7 +44,7 @@ beemo.tool.plugins.forEach(driver => {
       },
       priority: {
         boolean: true,
-        default: false,
+        default: true,
         description: 'Prioritize workspace builds based on dependency graph',
       },
       workspaces: {
