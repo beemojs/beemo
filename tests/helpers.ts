@@ -50,6 +50,7 @@ export function createTestTool(): Tool {
     extends: [],
     plugins: [],
     reporters: [],
+    settings: {},
   };
 
   tool.package = {

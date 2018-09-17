@@ -20,7 +20,7 @@
   "main": "./lib/index.js",
   "types": "./lib/index.d.ts",
   "engines": {
-    "node": ">=8.0.0"
+    "node": ">=8.9.0"
   },
   "repository": "https://github.com/milesj/beemo/tree/master/packages/driver-babel",
   "license": "MIT",
@@ -29,7 +29,7 @@
   },
   "devDependencies": {
     "@babel/cli": "^7.0.0",
-    "@babel/core": "^7.0.0",
+    "@babel/core": "^7.0.1",
     "@babel/plugin-proposal-class-properties": "^7.0.0",
     "@babel/preset-env": "^7.0.0",
     "@types/rimraf": "^2.0.2"
