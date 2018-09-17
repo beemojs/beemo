@@ -4,7 +4,6 @@
  */
 
 import chalk from 'chalk';
-import copy from 'copy';
 import fs from 'fs-extra';
 import path from 'path';
 import { Routine } from '@boost/core';
@@ -29,7 +28,7 @@ export default class SyncDotfilesRoutine extends Routine<Context, SyncDotfilesOp
     );
   }
 
-  execute(context: Context): Promise<string[]> {
+  async execute(context: Context): Promise<string[]> {
     this.task('Copying files', this.copyFilesFromConfigModule);
     this.task('Renaming files', this.renameFilesWithDot);
 
@@ -39,40 +38,38 @@ export default class SyncDotfilesRoutine extends Routine<Context, SyncDotfilesOp
   /**
    * Copy all files from the config module's "dotfiles/" folder.
    */
-  copyFilesFromConfigModule(context: Context, moduleRoot: string): Promise<string[]> {
+  async copyFilesFromConfigModule(context: Context, moduleRoot: string): Promise<string[]> {
     const dotfilePath = path.join(moduleRoot, 'dotfiles/*');
     const { filter } = this.options;
+    const files: string[] = [];
 
-    return new Promise((resolve, reject) => {
-      copy(dotfilePath, this.tool.options.root, (error, files) => {
-        this.debug.invariant(
-          !error,
-          `Coping dotfiles from ${chalk.cyan(dotfilePath)}`,
-          'Copied',
-          'Failed',
-        );
+    this.debug('Coping dotfiles from %s', chalk.cyan(dotfilePath));
+
+    await fs.copy(dotfilePath, this.tool.options.root, {
+      filter: file => {
+        let filtered = true;
 
         if (filter) {
           this.debug('Filtering dotfiles with "%s"', filter);
 
           // @ts-ignore Contains not typed yet.
-          files = files.filter(file => isPatternMatch(file.path, filter, { contains: true }));
+          filtered = isPatternMatch(file, filter, { contains: true });
         }
 
-        if (error) {
-          reject(error);
-        } else {
-          resolve(
-            files.map(file => {
-              this.tool.emit('copy-dotfile', [file.path]);
-
-              this.debug('  %s', chalk.gray(file.path));
-
-              return file.path;
-            }),
-          );
+        if (filtered) {
+          files.push(file);
         }
-      });
+
+        return filtered;
+      },
+    });
+
+    return files.map(file => {
+      this.tool.emit('copy-dotfile', [file]);
+
+      this.debug('  %s', chalk.gray(file));
+
+      return file;
     });
   }
 
@@ -80,24 +77,24 @@ export default class SyncDotfilesRoutine extends Routine<Context, SyncDotfilesOp
    * The original files are not prefixed with ".", as it causes git/npm issues
    * in the repository. So we need to rename them after they are copied.
    */
-  renameFilesWithDot(context: Context, filePaths: string[]): Promise<string[]> {
+  async renameFilesWithDot(context: Context, filePaths: string[]): Promise<string[]> {
     this.debug('Renaming dotfiles and prefixing with a period');
 
     return Promise.all(
-      filePaths.map(filePath => {
+      filePaths.map(async filePath => {
         const dir = path.dirname(filePath);
         const newName = `.${path.basename(filePath)}`;
         const newPath = path.join(dir, newName);
 
-        return fs.rename(filePath, newPath).then(() => {
-          this.tool.emit('rename-dotfile', [newPath]);
+        await fs.rename(filePath, newPath);
 
-          this.tool.log('%s %s', chalk.gray('->'), newName);
+        this.tool.emit('rename-dotfile', [newPath]);
 
-          this.debug('  %s', chalk.gray(newPath));
+        this.tool.log('%s %s', chalk.gray('->'), newName);
 
-          return newPath;
-        });
+        this.debug('  %s', chalk.gray(newPath));
+
+        return newPath;
       }),
     );
   }

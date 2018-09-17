@@ -10,7 +10,7 @@ import DriverContext from './contexts/DriverContext';
 import { BeemoConfig } from './types';
 
 export default class CleanupRoutine extends Routine<DriverContext, BeemoConfig> {
-  execute(): Promise<boolean[]> {
+  async execute(): Promise<boolean[]> {
     this.task('Deleting config files', this.deleteConfigFiles).skip(
       !this.tool.config.config.cleanup,
     );
@@ -21,7 +21,7 @@ export default class CleanupRoutine extends Routine<DriverContext, BeemoConfig> 
   /**
    * Delete all temporary config files.
    */
-  deleteConfigFiles(context: DriverContext): Promise<boolean[]> {
+  async deleteConfigFiles(context: DriverContext): Promise<boolean[]> {
     return Promise.all(
       context.configPaths.map(configPath => {
         this.debug('Deleting config file %s', chalk.cyan(configPath));

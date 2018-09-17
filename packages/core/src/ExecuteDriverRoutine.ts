@@ -39,26 +39,26 @@ export default class ExecuteDriverRoutine extends Routine<DriverContext, BeemoCo
     }
   }
 
-  execute(context: DriverContext): Promise<string[]> {
+  async execute(context: DriverContext): Promise<string[]> {
     const { other, priority } = this.orderByWorkspacePriorityGraph();
 
-    return this.serializeRoutines(null, priority).then(() =>
-      this.poolRoutines(
-        null,
-        {
-          concurrency: context.args.concurrency,
-        },
-        other,
-      ).then(response => {
-        if (response.errors.length > 0) {
-          const messages = response.errors.map(error => error.message);
+    await this.serializeRoutines(null, priority);
 
-          throw new Error(`Execution failure.\n${messages.join('\n\n')}`);
-        }
-
-        return response.results;
-      }),
+    const response = await this.poolRoutines(
+      null,
+      {
+        concurrency: context.args.concurrency,
+      },
+      other,
     );
+
+    if (response.errors.length > 0) {
+      const messages = response.errors.map(error => error.message);
+
+      throw new Error(`Execution failure.\n${messages.join('\n\n')}`);
+    }
+
+    return response.results;
   }
 
   /**

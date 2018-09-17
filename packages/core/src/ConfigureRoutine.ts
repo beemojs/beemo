@@ -16,7 +16,7 @@ export default class ConfigureRoutine extends Routine<DriverContext, BeemoConfig
     this.setupConfigFiles();
   }
 
-  execute(): Promise<string | string[]> {
+  async execute(): Promise<string | string[]> {
     return this.tool.config.config.parallel ? this.parallelizeRoutines() : this.serializeRoutines();
   }
 

@@ -11,7 +11,7 @@ import ScriptContext from './contexts/ScriptContext';
 import { BeemoConfig, Execution } from './types';
 
 export default class ExecuteScriptRoutine extends Routine<ScriptContext, BeemoConfig> {
-  execute(context: ScriptContext, scriptName: any): Promise<Execution> {
+  async execute(context: ScriptContext, scriptName: any): Promise<Execution> {
     this.task('Loading script', this.loadScript);
     this.task('Running script', this.runScript);
 
@@ -21,30 +21,28 @@ export default class ExecuteScriptRoutine extends Routine<ScriptContext, BeemoCo
   /**
    * Attempt to load a script from the configuration module.
    */
-  loadScript(context: ScriptContext, scriptName: string): Promise<Script> {
+  async loadScript(context: ScriptContext, scriptName: string): Promise<Script> {
     const filePath = path.join(context.moduleRoot, 'scripts', `${scriptName}.js`);
     const loader = new ModuleLoader(this.tool, 'script', Script);
 
     this.debug('Loading script');
 
-    return new Promise(resolve => {
-      const script = loader.importModule(filePath);
+    const script = loader.importModule(filePath);
 
-      // Is not set by Boost, so set it here
-      script.name = scriptName;
+    // Is not set by Boost, so set it here
+    script.name = scriptName;
 
-      context.setScript(script, filePath);
+    context.setScript(script, filePath);
 
-      this.tool.emit('load-script', [script]);
+    this.tool.emit('load-script', [script]);
 
-      resolve(script);
-    });
+    return script;
   }
 
   /**
    * Run the script while also parsing arguments to use as options.
    */
-  runScript(context: ScriptContext, script: Script): Promise<Execution> {
+  async runScript(context: ScriptContext, script: Script): Promise<Execution> {
     const { argv } = this.context;
 
     this.debug('Executing script with args "%s"', argv.join(' '));
@@ -52,17 +50,18 @@ export default class ExecuteScriptRoutine extends Routine<ScriptContext, BeemoCo
     this.tool.emit('before-execute', [script, argv, context]);
 
     const args = parseArgs(argv, script.parse());
+    let result = null;
 
-    return Promise.resolve(script.run(args, this.tool))
-      .then(response => {
-        this.tool.emit('after-execute', [script, response]);
+    try {
+      result = await script.run(args, this.tool);
 
-        return response;
-      })
-      .catch(error => {
-        this.tool.emit('failed-execute', [script, error]);
+      this.tool.emit('after-execute', [script, result]);
+    } catch (error) {
+      this.tool.emit('failed-execute', [script, error]);
 
-        throw error;
-      });
+      throw error;
+    }
+
+    return result;
   }
 }

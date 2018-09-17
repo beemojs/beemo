@@ -17,7 +17,7 @@ export default class Script<Opts = {}> extends Module<Opts> {
   /**
    * Run the script with the options object and Beemo tool instance.
    */
-  run(args: Arguments, tool: Tool): Promise<any> {
-    throw new Error(`${this.constructor.name} must define a run() method.`);
+  async run(args: Arguments, tool: Tool): Promise<any> {
+    throw new Error(`${this.constructor.name} must define an async run() method.`);
   }
 }

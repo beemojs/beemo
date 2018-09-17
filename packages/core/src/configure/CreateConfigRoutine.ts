@@ -31,7 +31,7 @@ export default class CreateConfigRoutine extends Routine<DriverContext, CreateCo
     );
   }
 
-  execute(): Promise<string> {
+  async execute(): Promise<string> {
     const { metadata, name, options } = this.options.driver;
     const strategy =
       options.strategy === STRATEGY_NATIVE ? metadata.configStrategy : options.strategy;
@@ -63,7 +63,7 @@ export default class CreateConfigRoutine extends Routine<DriverContext, CreateCo
   /**
    * Copy configuration file from module.
    */
-  copyConfigFile(context: DriverContext): Promise<string> {
+  async copyConfigFile(context: DriverContext): Promise<string> {
     const { metadata } = this.options.driver;
     const configLoader = new ConfigLoader(this.tool);
     const sourcePath = this.getSourceConfigPath(configLoader);
@@ -95,7 +95,7 @@ export default class CreateConfigRoutine extends Routine<DriverContext, CreateCo
   /**
    * Create a temporary configuration file or pass as an option.
    */
-  createConfigFile(context: DriverContext, config: object): Promise<string> {
+  async createConfigFile(context: DriverContext, config: object): Promise<string> {
     const { metadata } = this.options.driver;
     const configPath = path.join(context.root, metadata.configName);
 

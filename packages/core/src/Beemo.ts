@@ -197,7 +197,7 @@ export default class Beemo {
   /**
    * Execute all routines for the chosen driver.
    */
-  executeDriver(driverName: string, args: Arguments): Promise<Execution[]> {
+  async executeDriver(driverName: string, args: Arguments): Promise<Execution[]> {
     const { tool } = this;
     const driver = tool.getPlugin(driverName) as Driver<any>;
     const context = this.prepareContext(new DriverContext(args, driver));
@@ -228,7 +228,7 @@ export default class Beemo {
   /**
    * Run a script found within the configuration module.
    */
-  executeScript(scriptName: string, args: Arguments): Promise<Execution> {
+  async executeScript(scriptName: string, args: Arguments): Promise<Execution> {
     const context = this.prepareContext(new ScriptContext(args, scriptName));
 
     this.tool.setEventNamespace(scriptName);
@@ -267,7 +267,7 @@ export default class Beemo {
   /**
    * Sync dotfiles from the configuration module.
    */
-  syncDotfiles(args: Arguments): Promise<string[]> {
+  async syncDotfiles(args: Arguments): Promise<string[]> {
     const context = this.prepareContext(new Context(args));
 
     this.tool.setEventNamespace(this.tool.options.appName);

@@ -15,10 +15,8 @@ describe('Script', () => {
 
   describe('run()', () => {
     it('errors if not defined', () => {
-      expect(() => {
-        // @ts-ignore
-        script.run();
-      }).toThrowErrorMatchingSnapshot();
+      // @ts-ignore
+      expect(script.run()).rejects.toThrowErrorMatchingSnapshot();
     });
   });
 });

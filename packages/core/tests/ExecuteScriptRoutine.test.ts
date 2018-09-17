@@ -31,9 +31,10 @@ describe('ExecuteScriptRoutine', () => {
   });
 
   describe('execute()', () => {
-    it('passes script name to tasks', () => {
+    it('passes script name to tasks', async () => {
       routine.serializeTasks = jest.fn();
-      routine.execute(routine.context, 'foo');
+
+      await routine.execute(routine.context, 'foo');
 
       expect(routine.serializeTasks).toHaveBeenCalledWith('foo');
     });
@@ -85,7 +86,7 @@ describe('ExecuteScriptRoutine', () => {
   });
 
   describe('runScript()', () => {
-    it('calls the scripts parse() and run()', () => {
+    it('calls the scripts parse() and run()', async () => {
       const script = new Script();
       script.parse = jest.fn(() => ({
         boolean: ['foo'],
@@ -95,7 +96,7 @@ describe('ExecuteScriptRoutine', () => {
       }));
       script.run = jest.fn();
 
-      routine.runScript(routine.context, script);
+      await routine.runScript(routine.context, script);
 
       expect(script.parse).toHaveBeenCalled();
       expect(script.run).toHaveBeenCalledWith(

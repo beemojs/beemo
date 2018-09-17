@@ -1,4 +1,3 @@
-import copy from 'copy';
 import fs from 'fs-extra';
 import SyncDotfilesRoutine from '../src/SyncDotfilesRoutine';
 import {
@@ -9,7 +8,6 @@ import {
   createTestTool,
 } from '../../../tests/helpers';
 
-jest.mock('copy');
 jest.mock('fs-extra');
 
 describe('SyncDotfilesRoutine', () => {
@@ -21,11 +19,9 @@ describe('SyncDotfilesRoutine', () => {
     routine.tool = createTestTool();
     routine.debug = createTestDebugger();
 
-    // @ts-ignore
-    copy.mockImplementation((filePath, root, callback) => {
-      callback(null, [{ path: './foo' }, { path: './bar' }, { path: './baz' }]);
-    });
-
+    (fs.copy as jest.Mock).mockImplementation((src, dest, options) =>
+      Promise.resolve(['./foo', './bar', './baz'].filter(options.filter)),
+    );
     (fs.rename as jest.Mock).mockImplementation(value => Promise.resolve(value));
   });
 
@@ -41,9 +37,10 @@ describe('SyncDotfilesRoutine', () => {
   });
 
   describe('execute()', () => {
-    it('passes module root to tasks', () => {
+    it('passes module root to tasks', async () => {
       routine.serializeTasks = jest.fn();
-      routine.execute(routine.context);
+
+      await routine.execute(routine.context);
 
       expect(routine.serializeTasks).toHaveBeenCalledWith(getRoot());
     });
@@ -68,7 +65,7 @@ describe('SyncDotfilesRoutine', () => {
     it('calls it with correct path arguments', async () => {
       await routine.copyFilesFromConfigModule(routine.context, getRoot());
 
-      expect(copy).toHaveBeenCalledWith(prependRoot('dotfiles/*'), getRoot(), expect.anything());
+      expect(fs.copy).toHaveBeenCalledWith(prependRoot('dotfiles/*'), getRoot(), expect.anything());
     });
 
     it('returns file paths as strings', async () => {
@@ -86,8 +83,7 @@ describe('SyncDotfilesRoutine', () => {
     });
 
     it('handles errors', async () => {
-      // @ts-ignore
-      copy.mockImplementation((filePath, root, callback) => callback(new Error('Oops')));
+      (fs.copy as jest.Mock).mockImplementation(() => Promise.reject(new Error('Oops')));
 
       try {
         await routine.copyFilesFromConfigModule(routine.context, './root');

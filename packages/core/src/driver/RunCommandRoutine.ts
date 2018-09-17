@@ -41,7 +41,7 @@ export default class RunCommandRoutine extends Routine<DriverContext, RunCommand
     );
   }
 
-  execute(context: DriverContext): Promise<Execution> {
+  async execute(context: DriverContext): Promise<Execution> {
     const { forceConfigOption, workspaceRoot } = this.options;
     const { metadata } = context.primaryDriver;
 
@@ -68,7 +68,7 @@ export default class RunCommandRoutine extends Routine<DriverContext, RunCommand
    * When workspaces are enabled, some drivers require the config to be within each workspace,
    * instead of being referenced from the root, so we need to copy it.
    */
-  copyConfigToWorkspace(context: DriverContext, argv: Argv): Promise<Argv> {
+  async copyConfigToWorkspace(context: DriverContext, argv: Argv): Promise<Argv> {
     const { workspaceRoot } = this.options;
 
     this.debug('Copying config files to workspace');
@@ -77,13 +77,13 @@ export default class RunCommandRoutine extends Routine<DriverContext, RunCommand
       fs.copyFileSync(configPath, path.join(workspaceRoot, path.basename(configPath)));
     });
 
-    return Promise.resolve(argv);
+    return argv;
   }
 
   /**
    * Expand arguments that look like globs.
    */
-  expandGlobPatterns(context: DriverContext, argv: Argv): Promise<Argv> {
+  async expandGlobPatterns(context: DriverContext, argv: Argv): Promise<Argv> {
     const nextArgv: Argv = [];
 
     this.debug('Expanding glob patterns');
@@ -109,13 +109,13 @@ export default class RunCommandRoutine extends Routine<DriverContext, RunCommand
       }
     });
 
-    return Promise.resolve(nextArgv);
+    return nextArgv;
   }
 
   /**
    * Extract native supported options and flags from driver help output.
    */
-  extractNativeOptions(): Promise<OptionMap> {
+  async extractNativeOptions(): Promise<OptionMap> {
     const driver = this.context.primaryDriver;
     const { env } = driver.options;
     const options = driver.getSupportedOptions();
@@ -134,82 +134,85 @@ export default class RunCommandRoutine extends Routine<DriverContext, RunCommand
 
     this.debug('Extracting native options from help output');
 
-    return this.executeCommand(driver.metadata.bin, driver.metadata.helpOption.split(' '), {
-      env,
-    }).then(({ stdout }) => {
-      const nativeOptions: OptionMap = {};
-      const matches = stdout.match(OPTION_PATTERN) || [];
+    const { stdout } = await this.executeCommand(
+      driver.metadata.bin,
+      driver.metadata.helpOption.split(' '),
+      {
+        env,
+      },
+    );
 
-      matches.forEach(option => {
-        // Trim trailing comma or space
-        nativeOptions[option.slice(0, -1)] = true;
-      });
+    const nativeOptions: OptionMap = {};
+    const matches = stdout.match(OPTION_PATTERN) || [];
 
-      return nativeOptions;
+    matches.forEach(option => {
+      // Trim trailing comma or space
+      nativeOptions[option.slice(0, -1)] = true;
     });
+
+    return nativeOptions;
   }
 
   /**
    * Filter unknown and or unsupported CLI options from the arguments passed to the CLI.
    * Utilize the driver's help option/command to determine accurate options.
    */
-  filterUnknownOptions(context: DriverContext, argv: Argv): Promise<Argv> {
+  async filterUnknownOptions(context: DriverContext, argv: Argv): Promise<Argv> {
     this.debug('Filtering unknown command line options');
 
-    return this.extractNativeOptions().then(nativeOptions => {
-      const filteredArgv: Argv = [];
-      const unknownArgv: Argv = [];
-      let skipNext = false;
+    const nativeOptions = await this.extractNativeOptions();
+    const filteredArgv: Argv = [];
+    const unknownArgv: Argv = [];
+    let skipNext = false;
 
-      argv.forEach((arg, i) => {
-        if (skipNext) {
-          skipNext = false;
+    argv.forEach((arg, i) => {
+      if (skipNext) {
+        skipNext = false;
 
-          return;
-        }
+        return;
+      }
 
-        if (arg.startsWith('-')) {
-          let option = arg;
-          const nextArg = argv[i + 1];
+      if (arg.startsWith('-')) {
+        let option = arg;
+        const nextArg = argv[i + 1];
 
-          // --opt=123
-          if (option.includes('=')) {
-            [option] = option.split('=');
+        // --opt=123
+        if (option.includes('=')) {
+          [option] = option.split('=');
 
-            if (!nativeOptions[option]) {
-              unknownArgv.push(arg);
-
-              return;
-            }
-
-            // --opt 123
-          } else if (!nativeOptions[option]) {
+          if (!nativeOptions[option]) {
             unknownArgv.push(arg);
-
-            if (nextArg && !nextArg.startsWith('-')) {
-              skipNext = true;
-              unknownArgv.push(nextArg);
-            }
 
             return;
           }
+
+          // --opt 123
+        } else if (!nativeOptions[option]) {
+          unknownArgv.push(arg);
+
+          if (nextArg && !nextArg.startsWith('-')) {
+            skipNext = true;
+            unknownArgv.push(nextArg);
+          }
+
+          return;
         }
-
-        filteredArgv.push(arg);
-      });
-
-      if (unknownArgv.length > 0) {
-        this.debug('Filtered args: %s', chalk.gray(unknownArgv.join(', ')));
       }
 
-      return filteredArgv;
+      filteredArgv.push(arg);
     });
+
+    if (unknownArgv.length > 0) {
+      this.debug('Filtered args: %s', chalk.gray(unknownArgv.join(', ')));
+    }
+
+    return filteredArgv;
   }
 
   /**
    * Gather arguments from all sources to pass to the driver.
    */
-  gatherArgs(context: DriverContext): Promise<Argv> {
+  async gatherArgs(context: DriverContext): Promise<Argv> {
     this.debug('Gathering arguments to pass to driver');
 
     const argv = [
@@ -226,7 +229,7 @@ export default class RunCommandRoutine extends Routine<DriverContext, RunCommand
     // And we need to be sure not to remove existing args.
     context.args = merge({}, parseArgs(argv), context.args);
 
-    return Promise.resolve(argv);
+    return argv;
   }
 
   /**
@@ -278,7 +281,7 @@ export default class RunCommandRoutine extends Routine<DriverContext, RunCommand
   /**
    * Include --config option if driver requires it (instead of auto-lookup resolution).
    */
-  includeConfigOption(context: DriverContext, prevArgv: Argv): Promise<Argv> {
+  async includeConfigOption(context: DriverContext, prevArgv: Argv): Promise<Argv> {
     const { primaryDriver } = context;
     const configPath = context.findConfigByName(primaryDriver.metadata.configName);
     const argv = [...prevArgv];
@@ -289,20 +292,21 @@ export default class RunCommandRoutine extends Routine<DriverContext, RunCommand
 
     this.debug('Including config option to args');
 
-    return Promise.resolve(argv);
+    return argv;
   }
 
   /**
    * Execute the driver's command with the filtered arguments and handle the
    * success and failures with the driver itself.
    */
-  runCommandWithArgs(
+  async runCommandWithArgs(
     context: DriverContext,
     argv: Argv,
     task: Task<DriverContext>,
   ): Promise<Execution> {
     const driver = context.primaryDriver;
     const cwd = this.options.workspaceRoot || context.root;
+    let result = null;
 
     this.debug(
       'Executing command "%s %s" in %s',
@@ -313,24 +317,24 @@ export default class RunCommandRoutine extends Routine<DriverContext, RunCommand
 
     this.tool.emit('before-execute', [driver, argv, context]);
 
-    return this.executeCommand(driver.metadata.bin, argv, {
-      cwd,
-      env: driver.options.env,
-      task,
-    })
-      .then(response => {
-        driver.handleSuccess(response);
-
-        this.tool.emit('after-execute', [driver, response]);
-
-        return response;
-      })
-      .catch(error => {
-        driver.handleFailure(error);
-
-        this.tool.emit('failed-execute', [driver, error]);
-
-        throw error;
+    try {
+      result = await this.executeCommand(driver.metadata.bin, argv, {
+        cwd,
+        env: driver.options.env,
+        task,
       });
+
+      driver.handleSuccess(result);
+
+      this.tool.emit('after-execute', [driver, result]);
+    } catch (error) {
+      driver.handleFailure(error);
+
+      this.tool.emit('failed-execute', [driver, error]);
+
+      throw error;
+    }
+
+    return result;
   }
 }

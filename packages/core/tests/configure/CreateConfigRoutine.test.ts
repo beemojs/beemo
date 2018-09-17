@@ -180,9 +180,7 @@ describe('CreateConfigRoutine', () => {
     it('errors if no source file', () => {
       routine.getSourceConfigPath = () => '';
 
-      expect(() => {
-        routine.copyConfigFile(routine.context);
-      }).toThrowErrorMatchingSnapshot();
+      expect(routine.copyConfigFile(routine.context)).rejects.toThrowErrorMatchingSnapshot();
     });
   });
 
