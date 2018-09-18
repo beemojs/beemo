@@ -58,9 +58,8 @@ describe('ExecuteDriverRoutine', () => {
       );
     });
 
-    it('adds multiple routines when --parallel is used', () => {
-      routine.context.args.parallel = ['"--one --two=2"', '" --three -f "'];
-      routine.context.argv.push('--parallel="--one --two=2"', '--parallel=" --three -f "');
+    it('adds multiple routines when parallel is used', () => {
+      routine.context.parallelArgv = [['--one', '--two=2'], ['--three', '-f']];
       routine.pipe = jest.fn();
       routine.bootstrap();
 
@@ -77,7 +76,7 @@ describe('ExecuteDriverRoutine', () => {
     });
 
     it('adds a routine if parallel is empty', () => {
-      routine.context.args.parallel = [];
+      routine.context.parallelArgv = [];
       routine.pipe = jest.fn();
       routine.bootstrap();
 
@@ -118,9 +117,8 @@ describe('ExecuteDriverRoutine', () => {
         );
       });
 
-      it('adds a routine for each when --parallel is used', () => {
-        routine.context.args.parallel = ['"--one --two=2"', '" --three -f "'];
-        routine.context.argv.push('--parallel="--one --two=2"', '--parallel=" --three -f "');
+      it('adds a routine for each when parallel is used', () => {
+        routine.context.parallelArgv = [['--one', '--two=2'], ['--three', '-f']];
         routine.pipe = jest.fn();
         routine.bootstrap();
 

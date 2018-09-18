@@ -5,7 +5,7 @@
 
 import Context from './Context';
 import Driver from '../Driver';
-import { Arguments } from '../types';
+import { Arguments, Argv } from '../types';
 
 export default class DriverContext extends Context {
   configPaths: string[] = [];
@@ -14,17 +14,20 @@ export default class DriverContext extends Context {
 
   drivers: Driver<any>[] = [];
 
+  parallelArgv: Argv[] = [];
+
   primaryDriver: Driver<any>;
 
   workspaceRoot: string = '';
 
   workspaces: string[] = [];
 
-  constructor(args: Arguments, driver: Driver<any>) {
+  constructor(args: Arguments, driver: Driver<any>, parallelArgv: Argv[] = []) {
     super(args);
 
-    this.primaryDriver = driver;
     this.driverName = driver.name;
+    this.parallelArgv = parallelArgv;
+    this.primaryDriver = driver;
 
     // Make the context available in the current driver
     driver.context = this;
@@ -39,6 +42,15 @@ export default class DriverContext extends Context {
     } else {
       throw new TypeError('Invalid driver. Must be an instance of `Driver`.');
     }
+  }
+
+  /**
+   * Add a parallel command with additional argv.
+   */
+  addParallelCommand(argv: Argv): this {
+    this.parallelArgv.push(argv);
+
+    return this;
   }
 
   /**

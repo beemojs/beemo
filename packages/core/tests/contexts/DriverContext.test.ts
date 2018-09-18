@@ -45,6 +45,17 @@ describe('Context', () => {
     });
   });
 
+  describe('addParallelCommand()', () => {
+    it('adds a new command argvs', () => {
+      expect(context.parallelArgv).toEqual([]);
+
+      context.addParallelCommand(['--foo', 'bar']);
+      context.addParallelCommand(['--baz=123']);
+
+      expect(context.parallelArgv).toEqual([['--foo', 'bar'], ['--baz=123']]);
+    });
+  });
+
   describe('findConfigByName()', () => {
     it('returns nothing if not found', () => {
       expect(context.findConfigByName('foo.js')).toBeUndefined();

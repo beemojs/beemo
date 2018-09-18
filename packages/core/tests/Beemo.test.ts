@@ -290,6 +290,18 @@ describe('Beemo', () => {
 
       expect(beemo.tool.on).not.toHaveBeenCalled();
     });
+
+    it('passes parallelArgv to context', async () => {
+      const spy = jest.spyOn(beemo, 'startPipeline');
+
+      await beemo.executeDriver('foo', args, [['--foo'], ['bar']]);
+
+      expect(spy).toHaveBeenCalledWith(
+        expect.objectContaining({
+          parallelArgv: [['--foo'], ['bar']],
+        }),
+      );
+    });
   });
 
   describe('executeScript()', () => {

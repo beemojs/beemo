@@ -197,10 +197,14 @@ export default class Beemo {
   /**
    * Execute all routines for the chosen driver.
    */
-  async executeDriver(driverName: string, args: Arguments): Promise<Execution[]> {
+  async executeDriver(
+    driverName: string,
+    args: Arguments,
+    parallelArgv: Argv[] = [],
+  ): Promise<Execution[]> {
     const { tool } = this;
     const driver = tool.getPlugin(driverName) as Driver<any>;
-    const context = this.prepareContext(new DriverContext(args, driver));
+    const context = this.prepareContext(new DriverContext(args, driver, parallelArgv));
 
     // Delete config files on failure
     if (tool.config.config.cleanup) {

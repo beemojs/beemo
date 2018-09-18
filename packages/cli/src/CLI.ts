@@ -10,15 +10,15 @@ import chalk from 'chalk';
 import yargs, { Arguments } from 'yargs';
 import Beemo, { Driver } from '@beemo/core';
 import version from './checkVersion';
-import quoteSpecialOptions from './quoteSpecialOptions';
+import parseSpecialArgv from './parseSpecialArgv';
 
 // 0 node, 1 beemo, 2 <driver, command>
-const argv = quoteSpecialOptions(process.argv.slice(2));
+const { main, parallel } = parseSpecialArgv(process.argv.slice(2));
 
 // Initialize
 const binName = path.basename(process.argv[1]);
-const beemo = new Beemo(argv.slice(1), binName);
-const app = yargs(argv);
+const beemo = new Beemo(main.slice(1), binName);
+const app = yargs(main);
 const manualURL = process.env.BEEMO_MANUAL_URL || 'https://milesj.gitbook.io/beemo';
 
 // Bootstrap the module
@@ -37,11 +37,6 @@ beemo.tool.plugins.forEach(driver => {
         description: 'Number of builds to run in parallel',
         number: true,
       },
-      parallel: {
-        array: true,
-        default: [],
-        description: 'Run parallel builds with additional flags or options',
-      },
       priority: {
         boolean: true,
         default: true,
@@ -53,7 +48,7 @@ beemo.tool.plugins.forEach(driver => {
         string: true,
       },
     },
-    (args: Arguments) => beemo.executeDriver(driver.name, args),
+    (args: Arguments) => beemo.executeDriver(driver.name, args, parallel),
   );
 });
 

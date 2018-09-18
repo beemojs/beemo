@@ -8,9 +8,9 @@ import { ModuleLoader, Routine } from '@boost/core';
 import parseArgs from 'yargs-parser';
 import Script from './Script';
 import ScriptContext from './contexts/ScriptContext';
-import { BeemoConfig, Execution } from './types';
+import { Execution } from './types';
 
-export default class ExecuteScriptRoutine extends Routine<ScriptContext, BeemoConfig> {
+export default class ExecuteScriptRoutine extends Routine<ScriptContext> {
   async execute(context: ScriptContext, scriptName: any): Promise<Execution> {
     this.task('Loading script', this.loadScript);
     this.task('Running script', this.runScript);

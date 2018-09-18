@@ -3,7 +3,7 @@
   "name": "beemo-root",
   "scripts": {
     "setup": "bash ./scripts/build-packages.sh",
-    "build": "beemo typescript --workspaces=* --priority",
+    "build": "beemo typescript --workspaces=*",
     "coverage": "yarn run jest --coverage",
     "eslint": "beemo eslint",
     "jest": "beemo jest",

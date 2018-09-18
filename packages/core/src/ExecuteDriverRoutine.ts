@@ -6,14 +6,12 @@
 import fs from 'fs-extra';
 import path from 'path';
 import glob from 'glob';
-import trim from 'lodash/trim';
 import { Routine, PackageConfig } from '@boost/core';
 import DriverContext from './contexts/DriverContext';
 import RunCommandRoutine, { RunCommandOptions } from './driver/RunCommandRoutine';
 import isPatternMatch from './utils/isPatternMatch';
-import { BeemoConfig } from './types';
 
-export default class ExecuteDriverRoutine extends Routine<DriverContext, BeemoConfig> {
+export default class ExecuteDriverRoutine extends Routine<DriverContext> {
   workspacePackages: PackageConfig[] = [];
 
   bootstrap() {
@@ -173,21 +171,19 @@ export default class ExecuteDriverRoutine extends Routine<DriverContext, BeemoCo
   }
 
   /**
-   * When a --parallel option is defined, we need to create an additional routine for each instance.
+   * When a parallel pipe "|>" is defined, we need to create an additional routine
+   * for each instance.
    */
   pipeParallelBuilds(key: string, options: Partial<RunCommandOptions> = {}) {
-    const { args, argv, primaryDriver } = this.context;
-    const filteredArgv = argv.filter(arg => !arg.includes('--parallel'));
-    const command = `${primaryDriver.metadata.bin} ${filteredArgv.join(' ')}`;
+    const { argv, parallelArgv, primaryDriver } = this.context;
+    const command = `${primaryDriver.metadata.bin} ${argv.join(' ')}`;
 
-    if (Array.isArray(args.parallel) && args.parallel.length > 0) {
-      args.parallel.forEach(pargv => {
-        const trimmedPargv = trim(pargv, '"').trim();
-
+    if (parallelArgv.length > 0) {
+      parallelArgv.forEach(pargv => {
         this.pipe(
-          new RunCommandRoutine(key, `${command} ${trimmedPargv}`, {
+          new RunCommandRoutine(key, `${command} ${pargv.join(' ')}`, {
             ...options,
-            additionalArgv: trimmedPargv.split(/ /gu),
+            additionalArgv: pargv,
           }),
         );
       });

@@ -1,29 +1,17 @@
-import quoteSpecialOptions from '../src/quoteSpecialOptions';
+import parseSpecialArgv from '../src/parseSpecialArgv';
 
-describe('quoteSpecialOptions()', () => {
+describe('parseSpecialArgv()', () => {
   it('passes args through', () => {
-    expect(quoteSpecialOptions(['--foo', '-v', '--bar=123', 'baz'])).toEqual([
-      '--foo',
-      '-v',
-      '--bar=123',
-      'baz',
-    ]);
+    expect(parseSpecialArgv(['--foo', '-v', '--bar=123', 'baz'])).toEqual({
+      main: ['--foo', '-v', '--bar=123', 'baz'],
+      parallel: [],
+    });
   });
 
-  it('quotes --parallel args', () => {
-    expect(quoteSpecialOptions(['--foo', '-v', '--parallel=--bar', 'baz'])).toEqual([
-      '--foo',
-      '-v',
-      '--parallel="--bar"',
-      'baz',
-    ]);
-  });
-
-  it('skips --parallel with no values', () => {
-    expect(quoteSpecialOptions(['--foo', '-v', '--parallel', 'baz'])).toEqual([
-      '--foo',
-      '-v',
-      'baz',
-    ]);
+  it('separates |> into multiple commands', () => {
+    expect(parseSpecialArgv(['--foo', '-v', '|>', '--bar', '|>', 'baz'])).toEqual({
+      main: ['--foo', '-v'],
+      parallel: [['--bar'], ['baz']],
+    });
   });
 });
