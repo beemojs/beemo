@@ -51,9 +51,7 @@ export default class ExecuteDriverRoutine extends Routine<DriverContext> {
     );
 
     if (response.errors.length > 0) {
-      const messages = response.errors.map(error => error.message);
-
-      throw new Error(`Execution failure.\n${messages.join('\n\n')}`);
+      throw new Error('Failed to execute driver pipeline.');
     }
 
     return response.results;
