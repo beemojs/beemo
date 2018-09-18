@@ -8,9 +8,8 @@ import chalk from 'chalk';
 import CreateConfigRoutine from './configure/CreateConfigRoutine';
 import Driver from './Driver';
 import DriverContext from './contexts/DriverContext';
-import { BeemoConfig } from './types';
 
-export default class ConfigureRoutine extends Routine<DriverContext, BeemoConfig> {
+export default class ConfigureRoutine extends Routine<DriverContext> {
   bootstrap() {
     this.resolveDependencies();
     this.setupConfigFiles();

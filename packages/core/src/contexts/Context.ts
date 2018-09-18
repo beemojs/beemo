@@ -26,24 +26,28 @@ export default class Context extends BaseContext {
   /**
    * Add a positional argument to the argv list.
    */
-  addArg(arg: string) {
+  addArg(arg: string): this {
     this.args._.push(arg);
     this.argv.push(arg);
+
+    return this;
   }
 
   /**
    * Add multiple positional arguments.
    */
-  addArgs(args: string[]) {
+  addArgs(args: string[]): this {
     args.forEach(arg => {
       this.addArg(arg);
     });
+
+    return this;
   }
 
   /**
    * Add an option argument to both the args object and argv list.
    */
-  addOption(arg: string, defaultValue: any = true, useEquals: boolean = false) {
+  addOption(arg: string, defaultValue: any = true, useEquals: boolean = false): this {
     const list = [];
     let option = arg;
     let value = defaultValue;
@@ -72,15 +76,19 @@ export default class Context extends BaseContext {
     }
 
     this.argv.push(...list);
+
+    return this;
   }
 
   /**
    * Add multiple boolean option arguments.
    */
-  addOptions(args: string[]) {
+  addOptions(args: string[]): this {
     args.forEach(arg => {
       this.addOption(arg);
     });
+
+    return this;
   }
 
   /**

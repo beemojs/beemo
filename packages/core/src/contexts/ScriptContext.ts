@@ -23,9 +23,11 @@ export default class ScriptContext extends Context {
   /**
    * Set the script object and associated metadata.
    */
-  setScript(script: Script, path: string) {
+  setScript(script: Script, path: string): this {
     this.script = script;
     this.scriptName = script.name;
     this.scriptPath = path;
+
+    return this;
   }
 }
