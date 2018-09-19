@@ -38,7 +38,10 @@ describe('CleanupRoutine', () => {
     });
 
     it('calls remove for each config path', async () => {
-      routine.context.configPaths = ['./foo.json', './.barrc'];
+      routine.context.configPaths = [
+        { driver: 'foo', path: './foo.json' },
+        { driver: 'bar', path: './.barrc' },
+      ];
 
       const result = await routine.deleteConfigFiles(routine.context);
 
@@ -50,12 +53,15 @@ describe('CleanupRoutine', () => {
     it('triggers `delete-config-file` event', async () => {
       const spy = jest.spyOn(routine.tool, 'emit');
 
-      routine.context.configPaths = ['./foo.json', './.barrc'];
+      routine.context.configPaths = [
+        { driver: 'foo', path: './foo.json' },
+        { driver: 'bar', path: './.barrc' },
+      ];
 
       await routine.deleteConfigFiles(routine.context);
 
-      expect(spy).toHaveBeenCalledWith('delete-config-file', ['./foo.json']);
-      expect(spy).toHaveBeenCalledWith('delete-config-file', ['./.barrc']);
+      expect(spy).toHaveBeenCalledWith('foo.delete-config-file', ['./foo.json']);
+      expect(spy).toHaveBeenCalledWith('bar.delete-config-file', ['./.barrc']);
     });
   });
 });

@@ -146,7 +146,9 @@ describe('CreateConfigRoutine', () => {
     it('adds path to context', async () => {
       await routine.copyConfigFile(routine.context);
 
-      expect(routine.context.configPaths).toEqual([prependRoot('/babel.config.js')]);
+      expect(routine.context.configPaths).toEqual([
+        { driver: 'babel', path: prependRoot('/babel.config.js') },
+      ]);
     });
 
     it('copies file', async () => {
@@ -188,7 +190,9 @@ describe('CreateConfigRoutine', () => {
     it('adds path to context', async () => {
       await routine.createConfigFile(routine.context, { foo: 'bar' });
 
-      expect(routine.context.configPaths).toEqual([prependRoot('/babel.config.js')]);
+      expect(routine.context.configPaths).toEqual([
+        { driver: 'babel', path: prependRoot('/babel.config.js') },
+      ]);
     });
 
     it('writes and formats file', async () => {
@@ -385,7 +389,9 @@ describe('CreateConfigRoutine', () => {
     it('adds path to context', async () => {
       await routine.referenceConfigFile(routine.context);
 
-      expect(routine.context.configPaths).toEqual([prependRoot('/babel.config.js')]);
+      expect(routine.context.configPaths).toEqual([
+        { driver: 'babel', path: prependRoot('/babel.config.js') },
+      ]);
     });
 
     it('references file', async () => {

@@ -73,8 +73,8 @@ export default class RunCommandRoutine extends Routine<DriverContext, RunCommand
 
     this.debug('Copying config files to workspace');
 
-    context.configPaths.forEach(configPath => {
-      fs.copyFileSync(configPath, path.join(workspaceRoot, path.basename(configPath)));
+    context.configPaths.forEach(config => {
+      fs.copyFileSync(config.path, path.join(workspaceRoot, path.basename(config.path)));
     });
 
     return argv;
@@ -287,7 +287,7 @@ export default class RunCommandRoutine extends Routine<DriverContext, RunCommand
     const argv = [...prevArgv];
 
     if (configPath && primaryDriver.metadata.configOption) {
-      argv.push(primaryDriver.metadata.configOption, configPath);
+      argv.push(primaryDriver.metadata.configOption, configPath.path);
     }
 
     this.debug('Including config option to args');

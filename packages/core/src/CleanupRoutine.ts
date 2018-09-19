@@ -22,12 +22,12 @@ export default class CleanupRoutine extends Routine<DriverContext> {
    */
   async deleteConfigFiles(context: DriverContext): Promise<boolean[]> {
     return Promise.all(
-      context.configPaths.map(configPath => {
-        this.debug('Deleting config file %s', chalk.cyan(configPath));
+      context.configPaths.map(config => {
+        this.debug('Deleting config file %s', chalk.cyan(config.path));
 
-        this.tool.emit(`delete-config-file`, [configPath]);
+        this.tool.emit(`${config.driver}.delete-config-file`, [config.path]);
 
-        return fs.remove(configPath).then(() => true);
+        return fs.remove(config.path).then(() => true);
       }),
     );
   }

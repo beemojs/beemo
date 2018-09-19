@@ -211,8 +211,8 @@ export default class Beemo {
 
     // Must not be async!
     if (Array.isArray(context.configPaths)) {
-      context.configPaths.forEach(configPath => {
-        fs.removeSync(configPath);
+      context.configPaths.forEach(config => {
+        fs.removeSync(config.path);
       });
     }
   }

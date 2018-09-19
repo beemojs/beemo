@@ -46,7 +46,7 @@ export default class ESLintDriver extends Driver<ESLintConfig> {
     fs.writeFileSync(ignorePath, config.ignore.join('\n'));
 
     // Add to context so that it can be automatically cleaned up
-    this.context.configPaths.push(ignorePath);
+    this.context.addConfigPath('eslint', ignorePath);
 
     // Delete the property else ESLint throws an error
     delete config.ignore;

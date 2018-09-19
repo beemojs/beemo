@@ -102,7 +102,9 @@ describe('ESLintDriver', () => {
 
       expect(fs.writeFileSync).toHaveBeenCalledWith('/some/path/.eslintignore', 'foo\nbar\nbaz');
 
-      expect(driver.context.configPaths).toEqual(['/some/path/.eslintignore']);
+      expect(driver.context.configPaths).toEqual([
+        { driver: 'eslint', path: '/some/path/.eslintignore' },
+      ]);
 
       expect(config).toEqual({ parser: 'babel' });
     });

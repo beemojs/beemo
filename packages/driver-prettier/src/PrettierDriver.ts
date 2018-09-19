@@ -40,7 +40,7 @@ export default class PrettierDriver extends Driver<PrettierConfig> {
     fs.writeFileSync(ignorePath, config.ignore.join('\n'));
 
     // Add to context so that it can be automatically cleaned up
-    this.context.configPaths.push(ignorePath);
+    this.context.addConfigPath('prettier', ignorePath);
 
     // Delete the property
     delete config.ignore;

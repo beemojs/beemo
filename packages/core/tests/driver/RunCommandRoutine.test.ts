@@ -137,7 +137,10 @@ describe('RunCommandRoutine', () => {
 
     it('includes config option if `useConfigOption` is true', async () => {
       driver.metadata.useConfigOption = true;
-      routine.context.configPaths.push(prependRoot(driver.metadata.configName));
+      routine.context.configPaths.push({
+        driver: 'babel',
+        path: prependRoot(driver.metadata.configName),
+      });
 
       const optSpy = jest.spyOn(routine, 'includeConfigOption');
       const runSpy = jest.spyOn(routine, 'runCommandWithArgs');
@@ -197,7 +200,10 @@ describe('RunCommandRoutine', () => {
   describe('copyConfigToWorkspace()', () => {
     it('copies each config into workspace root', async () => {
       routine.options.workspaceRoot = '/some/root';
-      routine.context.configPaths = ['.babelrc', 'jest.json'];
+      routine.context.configPaths = [
+        { driver: 'babel', path: '.babelrc' },
+        { driver: 'jest', path: 'jest.json' },
+      ];
 
       const args = await routine.copyConfigToWorkspace(routine.context, ['foo', '--bar']);
 
@@ -402,7 +408,10 @@ describe('RunCommandRoutine', () => {
     });
 
     it('appends config path for a match', async () => {
-      routine.context.configPaths.push(prependRoot(driver.metadata.configName));
+      routine.context.configPaths.push({
+        driver: 'babel',
+        path: prependRoot(driver.metadata.configName),
+      });
 
       const args = await routine.includeConfigOption(routine.context, ['--foo']);
 

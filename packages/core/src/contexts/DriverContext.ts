@@ -7,8 +7,13 @@ import Context from './Context';
 import Driver from '../Driver';
 import { Arguments, Argv } from '../types';
 
+export interface ConfigPath {
+  driver: string;
+  path: string;
+}
+
 export default class DriverContext extends Context {
-  configPaths: string[] = [];
+  configPaths: ConfigPath[] = [];
 
   driverName: string = '';
 
@@ -31,6 +36,18 @@ export default class DriverContext extends Context {
 
     // Make the context available in the current driver
     driver.context = this;
+  }
+
+  /**
+   * Add a config path for the defined driver.
+   */
+  addConfigPath(driverName: string, path: string): this {
+    this.configPaths.push({
+      driver: driverName,
+      path,
+    });
+
+    return this;
   }
 
   /**
@@ -58,7 +75,7 @@ export default class DriverContext extends Context {
   /**
    * Find a configuration path by file name.
    */
-  findConfigByName(fileName: string): string | undefined {
-    return this.configPaths.find(path => path.endsWith(fileName));
+  findConfigByName(name: string): ConfigPath | undefined {
+    return this.configPaths.find(config => config.path.endsWith(name) || config.driver === name);
   }
 }

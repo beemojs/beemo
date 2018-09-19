@@ -57,18 +57,26 @@ describe('Context', () => {
   });
 
   describe('findConfigByName()', () => {
+    const configFoo = { driver: 'foo', path: '/some/path/foo.js' };
+
     it('returns nothing if not found', () => {
       expect(context.findConfigByName('foo.js')).toBeUndefined();
     });
 
     it('returns path if found', () => {
-      context.configPaths.push('/some/path/foo.js');
+      context.configPaths.push(configFoo);
 
-      expect(context.findConfigByName('foo.js')).toBe('/some/path/foo.js');
+      expect(context.findConfigByName('foo.js')).toBe(configFoo);
     });
 
-    it('only checks file name', () => {
-      context.configPaths.push('/some/path/foo.js/other/file.js');
+    it('returns driver name if found', () => {
+      context.configPaths.push(configFoo);
+
+      expect(context.findConfigByName('foo')).toBe(configFoo);
+    });
+
+    it('only checks file base name', () => {
+      context.configPaths.push({ driver: 'foo', path: '/some/path/foo.js/other/file.js' });
 
       expect(context.findConfigByName('foo.js')).toBeUndefined();
     });

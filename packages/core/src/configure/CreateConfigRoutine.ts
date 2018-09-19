@@ -81,7 +81,7 @@ export default class CreateConfigRoutine extends Routine<DriverContext, CreateCo
 
     this.options.driver.config = config;
 
-    context.configPaths.push(configPath);
+    context.addConfigPath(name, configPath);
 
     this.tool.emit(`${name}.copy-config-file`, [configPath, config]);
 
@@ -103,7 +103,7 @@ export default class CreateConfigRoutine extends Routine<DriverContext, CreateCo
 
     this.options.driver.config = config as any;
 
-    context.configPaths.push(configPath);
+    context.addConfigPath(name, configPath);
 
     this.tool.emit(`${name}.create-config-file`, [configPath, config]);
 
@@ -226,7 +226,7 @@ export default class CreateConfigRoutine extends Routine<DriverContext, CreateCo
 
     this.options.driver.config = config;
 
-    context.configPaths.push(configPath);
+    context.addConfigPath(name, configPath);
 
     this.tool.emit(`${name}.reference-config-file`, [configPath, config]);
 

@@ -73,7 +73,9 @@ describe('PrettierDriver', () => {
 
       expect(fs.writeFileSync).toHaveBeenCalledWith('/some/path/.prettierignore', 'foo\nbar\nbaz');
 
-      expect(driver.context.configPaths).toEqual(['/some/path/.prettierignore']);
+      expect(driver.context.configPaths).toEqual([
+        { driver: 'prettier', path: '/some/path/.prettierignore' },
+      ]);
 
       expect(config).toEqual({ semi: true });
     });

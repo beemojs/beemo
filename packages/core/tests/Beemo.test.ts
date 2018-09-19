@@ -240,7 +240,7 @@ describe('Beemo', () => {
     });
 
     it('removes file for each config path', () => {
-      context.configPaths = ['foo', 'bar'];
+      context.configPaths = [{ driver: 'foo', path: 'foo' }, { driver: 'bar', path: 'bar' }];
 
       beemo.handleCleanupOnFailure(1, context);
 
