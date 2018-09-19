@@ -61,6 +61,6 @@ export default class ConfigureRoutine extends Routine<DriverContext> {
       this.context.addDriverDependency(driver);
     }
 
-    this.tool.emit('resolve-dependencies', [this.context.drivers]);
+    this.tool.emit('resolve-dependencies', [Array.from(this.context.drivers)]);
   }
 }

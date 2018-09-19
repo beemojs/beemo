@@ -48,16 +48,23 @@ beemo.tool.plugins.forEach(driver => {
         string: true,
       },
     },
-    (args: Arguments) => beemo.executeDriver(driver.name, args, parallel),
+    (args: Arguments) => beemo.executeDriver(args, driver.name, parallel),
   );
 });
 
 // Add Beemo commands
 app.command(
+  ['create-config <name> [names..]', 'config <name> [names..]'],
+  'Create a configuration file for the specified drivers',
+  {},
+  (args: Arguments) => beemo.createConfigFiles(args, args.name, args.names),
+);
+
+app.command(
   ['run-script <name>', 'run <name>'],
   'Run custom script from configuration module',
   {},
-  (args: Arguments) => beemo.executeScript(args.name, args),
+  (args: Arguments) => beemo.executeScript(args, args.name),
 );
 
 app.command(

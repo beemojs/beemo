@@ -90,6 +90,30 @@ export default class Beemo {
   }
 
   /**
+   * Create a configuration file for the specified driver names.
+   */
+  async createConfigFiles(
+    args: Arguments,
+    primaryDriver: string,
+    additionalDrivers: string[] = [],
+  ): Promise<any> {
+    const { tool } = this;
+    const driver = tool.getPlugin(primaryDriver) as Driver<any>;
+    const context = this.prepareContext(new DriverContext(args, driver));
+
+    additionalDrivers.forEach(driverName => {
+      context.addDriverDependency(tool.getPlugin(driverName) as Driver<any>);
+    });
+
+    tool.setEventNamespace(primaryDriver);
+    tool.debug('Running with %s driver(s)', [primaryDriver, ...additionalDrivers].join(', '));
+
+    return this.startPipeline(context)
+      .pipe(new ConfigureRoutine('config', 'Generating configurations'))
+      .run(primaryDriver);
+  }
+
+  /**
    * Define the blueprint for Beemo configuration.
    */
   getConfigBlueprint(): Blueprint {
@@ -198,8 +222,8 @@ export default class Beemo {
    * Execute all routines for the chosen driver.
    */
   async executeDriver(
-    driverName: string,
     args: Arguments,
+    driverName: string,
     parallelArgv: Argv[] = [],
   ): Promise<Execution[]> {
     const { tool } = this;
@@ -232,7 +256,7 @@ export default class Beemo {
   /**
    * Run a script found within the configuration module.
    */
-  async executeScript(scriptName: string, args: Arguments): Promise<Execution> {
+  async executeScript(args: Arguments, scriptName: string): Promise<Execution> {
     const context = this.prepareContext(new ScriptContext(args, scriptName));
 
     this.tool.setEventNamespace(scriptName);

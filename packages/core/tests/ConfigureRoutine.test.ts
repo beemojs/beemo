@@ -68,7 +68,7 @@ describe('ConfigureRoutine', () => {
 
       expect(routine.routines).toHaveLength(0);
 
-      routine.context.drivers = [foo, bar, baz];
+      routine.context.drivers = new Set([foo, bar, baz]);
 
       await routine.setupConfigFiles();
 
@@ -90,7 +90,7 @@ describe('ConfigureRoutine', () => {
     it('adds primary driver when no dependencies', async () => {
       await routine.resolveDependencies();
 
-      expect(routine.context.drivers).toEqual([routine.context.primaryDriver]);
+      expect(Array.from(routine.context.drivers)).toEqual([routine.context.primaryDriver]);
     });
 
     it('adds dependency to driver list', async () => {
@@ -98,7 +98,7 @@ describe('ConfigureRoutine', () => {
 
       await routine.resolveDependencies();
 
-      expect(routine.context.drivers).toEqual([
+      expect(Array.from(routine.context.drivers)).toEqual([
         routine.context.primaryDriver,
         createTestDriver('bar', tool),
       ]);
@@ -114,7 +114,7 @@ describe('ConfigureRoutine', () => {
 
       await routine.resolveDependencies();
 
-      expect(routine.context.drivers).toEqual([
+      expect(Array.from(routine.context.drivers)).toEqual([
         routine.context.primaryDriver,
         plugins.bar,
         plugins.baz,
@@ -130,7 +130,9 @@ describe('ConfigureRoutine', () => {
 
       await routine.resolveDependencies();
 
-      expect(spy).toHaveBeenCalledWith('resolve-dependencies', [routine.context.drivers]);
+      expect(spy).toHaveBeenCalledWith('resolve-dependencies', [
+        Array.from(routine.context.drivers),
+      ]);
     });
   });
 });

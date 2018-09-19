@@ -28,13 +28,13 @@ describe('Context', () => {
 
   describe('addDriverDependency()', () => {
     it('adds a driver', () => {
-      expect(context.drivers).toEqual([]);
+      expect(Array.from(context.drivers)).toEqual([]);
 
       const driver = new Driver();
 
       context.addDriverDependency(driver);
 
-      expect(context.drivers).toEqual([driver]);
+      expect(Array.from(context.drivers)).toEqual([driver]);
     });
 
     it('errors when not a driver', () => {

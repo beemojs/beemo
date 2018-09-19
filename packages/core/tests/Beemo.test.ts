@@ -5,7 +5,12 @@ import Context from '../src/contexts/Context';
 import DriverContext from '../src/contexts/DriverContext';
 // @ts-ignore
 import bootstrapIndex from '../../../tests';
-import { getFixturePath, createDriverContext, createContext } from '../../../tests/helpers';
+import {
+  getFixturePath,
+  createDriverContext,
+  createContext,
+  createTestDriver,
+} from '../../../tests/helpers';
 
 jest.mock('fs-extra');
 
@@ -60,6 +65,44 @@ describe('Beemo', () => {
       beemo.bootstrapConfigModule();
 
       expect(bootstrapIndex).toHaveBeenCalledWith(beemo.tool);
+    });
+  });
+
+  describe('createConfigFiles()', () => {
+    beforeEach(() => {
+      // @ts-ignore
+      beemo.tool.getPlugin = name => createTestDriver(name);
+    });
+
+    it('sets event namespace', async () => {
+      const spy = jest.spyOn(beemo.tool, 'setEventNamespace');
+
+      await beemo.createConfigFiles(args, 'foo');
+
+      expect(spy).toHaveBeenCalledWith('foo');
+    });
+
+    it('passes context to pipeline', async () => {
+      const spy = jest.spyOn(beemo, 'startPipeline');
+
+      await beemo.createConfigFiles(args, 'foo');
+
+      expect(spy).toHaveBeenCalledWith(
+        expect.objectContaining({
+          primaryDriver: expect.objectContaining({
+            name: 'foo',
+          }),
+        }),
+      );
+    });
+
+    it('passes multiple drivers', async () => {
+      const spy = jest.spyOn(beemo, 'startPipeline');
+
+      await beemo.createConfigFiles(args, 'foo', ['bar', 'baz']);
+
+      expect(spy).toHaveBeenCalled();
+      expect(spy.mock.calls[0][0].drivers.size).toBe(2);
     });
   });
 
@@ -223,7 +266,7 @@ describe('Beemo', () => {
     it('sets event namespace', async () => {
       const spy = jest.spyOn(beemo.tool, 'setEventNamespace');
 
-      await beemo.executeDriver('foo-bar', args);
+      await beemo.executeDriver(args, 'foo-bar');
 
       expect(spy).toHaveBeenCalledWith('foo-bar');
     });
@@ -231,7 +274,7 @@ describe('Beemo', () => {
     it('triggers `init-driver` event with context', async () => {
       const spy = jest.spyOn(beemo.tool, 'emit');
 
-      await beemo.executeDriver('foo-bar', args);
+      await beemo.executeDriver(args, 'foo-bar');
 
       expect(spy).toHaveBeenCalledWith('init-driver', [
         expect.objectContaining({ name: 'foo-bar' }),
@@ -244,7 +287,7 @@ describe('Beemo', () => {
 
     it('passes driver name and context to pipeline run', async () => {
       const spy = jest.spyOn(beemo, 'startPipeline');
-      const pipeline = await beemo.executeDriver('foo-bar', args);
+      const pipeline = await beemo.executeDriver(args, 'foo-bar');
 
       expect(spy).toHaveBeenCalledWith(
         expect.objectContaining({
@@ -259,7 +302,7 @@ describe('Beemo', () => {
     it('sets primary driver with context', async () => {
       const spy = jest.spyOn(beemo, 'startPipeline');
 
-      await beemo.executeDriver('foo-bar', args);
+      await beemo.executeDriver(args, 'foo-bar');
 
       expect(spy).toHaveBeenCalledWith(
         expect.objectContaining({
@@ -277,7 +320,7 @@ describe('Beemo', () => {
       beemo.tool.on = jest.fn();
       beemo.tool.config.config.cleanup = true;
 
-      await beemo.executeDriver('foo-bar', args);
+      await beemo.executeDriver(args, 'foo-bar');
 
       expect(beemo.tool.on).toHaveBeenCalledWith('exit', expect.any(Function));
     });
@@ -286,7 +329,7 @@ describe('Beemo', () => {
       beemo.tool.on = jest.fn();
       beemo.tool.config.config.cleanup = false;
 
-      await beemo.executeDriver('foo-bar', args);
+      await beemo.executeDriver(args, 'foo-bar');
 
       expect(beemo.tool.on).not.toHaveBeenCalled();
     });
@@ -294,7 +337,7 @@ describe('Beemo', () => {
     it('passes parallelArgv to context', async () => {
       const spy = jest.spyOn(beemo, 'startPipeline');
 
-      await beemo.executeDriver('foo', args, [['--foo'], ['bar']]);
+      await beemo.executeDriver(args, 'foo', [['--foo'], ['bar']]);
 
       expect(spy).toHaveBeenCalledWith(
         expect.objectContaining({
@@ -308,7 +351,7 @@ describe('Beemo', () => {
     it('sets event namespace', async () => {
       const spy = jest.spyOn(beemo.tool, 'setEventNamespace');
 
-      await beemo.executeScript('foo-bar', args);
+      await beemo.executeScript(args, 'foo-bar');
 
       expect(spy).toHaveBeenCalledWith('foo-bar');
     });
@@ -316,7 +359,7 @@ describe('Beemo', () => {
     it('triggers `init-script` event with context', async () => {
       const spy = jest.spyOn(beemo.tool, 'emit');
 
-      await beemo.executeScript('foo-bar', args);
+      await beemo.executeScript(args, 'foo-bar');
 
       expect(spy).toHaveBeenCalledWith('init-script', [
         'foo-bar',
@@ -329,7 +372,7 @@ describe('Beemo', () => {
 
     it('passes script name and context to pipeline run', async () => {
       const spy = jest.spyOn(beemo, 'startPipeline');
-      const pipeline = await beemo.executeScript('foo-bar', args);
+      const pipeline = await beemo.executeScript(args, 'foo-bar');
 
       expect(spy).toHaveBeenCalledWith(
         expect.objectContaining({

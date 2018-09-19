@@ -12,7 +12,7 @@ export default class DriverContext extends Context {
 
   driverName: string = '';
 
-  drivers: Driver<any>[] = [];
+  drivers: Set<Driver<any>> = new Set();
 
   parallelArgv: Argv[] = [];
 
@@ -38,7 +38,7 @@ export default class DriverContext extends Context {
    */
   addDriverDependency(driver: Driver<any>): this {
     if (driver instanceof Driver) {
-      this.drivers.push(driver);
+      this.drivers.add(driver);
     } else {
       throw new TypeError('Invalid driver. Must be an instance of `Driver`.');
     }

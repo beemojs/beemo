@@ -676,9 +676,9 @@
     lodash "^4.17.10"
     to-fast-properties "^2.0.0"
 
-"@boost/core@^0.65.1":
-  version "0.65.1"
-  resolved "https://registry.npmjs.org/@boost/core/-/core-0.65.1.tgz#93cf889349c31435d6a14f48359682deaab7365e"
+"@boost/core@^0.65.2":
+  version "0.65.2"
+  resolved "https://registry.npmjs.org/@boost/core/-/core-0.65.2.tgz#5f81072dc0af1e7f27bffe2b4a975ae9401ba961"
   dependencies:
     "@types/debug" "^0.0.30"
     "@types/execa" "^0.9.0"
