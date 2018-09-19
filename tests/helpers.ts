@@ -31,7 +31,7 @@ export function createTestDebugger(): any {
 
 export function createTestTool(): Tool {
   const tool = new Tool({
-    appName: 'Beemo',
+    appName: 'beemo',
     configBlueprint: {},
     configFolder: './configs',
     console: {},

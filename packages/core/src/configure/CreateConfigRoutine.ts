@@ -64,7 +64,7 @@ export default class CreateConfigRoutine extends Routine<DriverContext, CreateCo
    * Copy configuration file from module.
    */
   async copyConfigFile(context: DriverContext): Promise<string> {
-    const { metadata } = this.options.driver;
+    const { metadata, name } = this.options.driver;
     const configLoader = new ConfigLoader(this.tool);
     const sourcePath = this.getSourceConfigPath(configLoader);
     const configPath = path.join(context.root, metadata.configName);
@@ -83,7 +83,7 @@ export default class CreateConfigRoutine extends Routine<DriverContext, CreateCo
 
     context.configPaths.push(configPath);
 
-    this.tool.emit('copy-config-file', [configPath, config]);
+    this.tool.emit(`${name}.copy-config-file`, [configPath, config]);
 
     return fs
       .copy(sourcePath, configPath, {
@@ -96,7 +96,7 @@ export default class CreateConfigRoutine extends Routine<DriverContext, CreateCo
    * Create a temporary configuration file or pass as an option.
    */
   async createConfigFile(context: DriverContext, config: object): Promise<string> {
-    const { metadata } = this.options.driver;
+    const { metadata, name } = this.options.driver;
     const configPath = path.join(context.root, metadata.configName);
 
     this.debug('Creating config file %s', chalk.cyan(configPath));
@@ -105,7 +105,7 @@ export default class CreateConfigRoutine extends Routine<DriverContext, CreateCo
 
     context.configPaths.push(configPath);
 
-    this.tool.emit('create-config-file', [configPath, config]);
+    this.tool.emit(`${name}.create-config-file`, [configPath, config]);
 
     return fs
       .writeFile(configPath, this.options.driver.formatConfig(config))
@@ -132,7 +132,7 @@ export default class CreateConfigRoutine extends Routine<DriverContext, CreateCo
 
       configs.push(pkgConfig);
 
-      this.tool.emit('load-package-config', [pkgConfig]);
+      this.tool.emit(`${name}.load-package-config`, [pkgConfig]);
     }
 
     return Promise.resolve(configs);
@@ -170,18 +170,16 @@ export default class CreateConfigRoutine extends Routine<DriverContext, CreateCo
    * Merge multiple configuration sources using the current driver.
    */
   mergeConfigs(context: DriverContext, configs: Struct[]): Promise<Struct> {
-    this.debug(
-      'Merging %s config from %d sources',
-      chalk.magenta(this.options.driver.name),
-      configs.length,
-    );
+    const { name } = this.options.driver;
+
+    this.debug('Merging %s config from %d sources', chalk.magenta(name), configs.length);
 
     const config = configs.reduce(
       (masterConfig, cfg) => this.options.driver.mergeConfig(masterConfig, cfg),
       {},
     );
 
-    this.tool.emit('merge-config', [config]);
+    this.tool.emit(`${name}.merge-config`, [config]);
 
     return Promise.resolve(config);
   }
@@ -190,6 +188,7 @@ export default class CreateConfigRoutine extends Routine<DriverContext, CreateCo
    * Load configuration from the node module (the consumer owned package).
    */
   loadConfigFromFilesystem(context: DriverContext): Promise<Struct[]> {
+    const { name } = this.options.driver;
     const configLoader = new ConfigLoader(this.tool);
     const filePath = this.getSourceConfigPath(configLoader);
     const configs = [];
@@ -198,7 +197,7 @@ export default class CreateConfigRoutine extends Routine<DriverContext, CreateCo
       const args = merge({}, context.args, parseArgs(this.options.driver.getArgs()));
       const config = configLoader.parseFile(filePath, [args, this.tool]);
 
-      this.tool.emit('load-module-config', [filePath, config]);
+      this.tool.emit(`${name}.load-module-config`, [filePath, config]);
 
       configs.push(config);
     }
@@ -210,7 +209,7 @@ export default class CreateConfigRoutine extends Routine<DriverContext, CreateCo
    * Reference configuration file from module using a require statement.
    */
   referenceConfigFile(context: DriverContext): Promise<string> {
-    const { metadata } = this.options.driver;
+    const { metadata, name } = this.options.driver;
     const configLoader = new ConfigLoader(this.tool);
     const sourcePath = this.getSourceConfigPath(configLoader);
     const configPath = path.join(context.root, metadata.configName);
@@ -229,7 +228,7 @@ export default class CreateConfigRoutine extends Routine<DriverContext, CreateCo
 
     context.configPaths.push(configPath);
 
-    this.tool.emit('reference-config-file', [configPath, config]);
+    this.tool.emit(`${name}.reference-config-file`, [configPath, config]);
 
     return fs
       .writeFile(

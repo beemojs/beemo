@@ -171,7 +171,7 @@ describe('CreateConfigRoutine', () => {
 
       await routine.copyConfigFile(routine.context);
 
-      expect(spy).toHaveBeenCalledWith('copy-config-file', [
+      expect(spy).toHaveBeenCalledWith('babel.copy-config-file', [
         prependRoot('/babel.config.js'),
         { foo: 123 },
       ]);
@@ -212,7 +212,7 @@ describe('CreateConfigRoutine', () => {
 
       await routine.createConfigFile(routine.context, { foo: 'bar' });
 
-      expect(spy).toHaveBeenCalledWith('create-config-file', [
+      expect(spy).toHaveBeenCalledWith('babel.create-config-file', [
         prependRoot('/babel.config.js'),
         { foo: 'bar' },
       ]);
@@ -241,7 +241,7 @@ describe('CreateConfigRoutine', () => {
 
       await routine.extractConfigFromPackage(routine.context, []);
 
-      expect(spy).toHaveBeenCalledWith('load-package-config', [{ foo: 'bar' }]);
+      expect(spy).toHaveBeenCalledWith('babel.load-package-config', [{ foo: 'bar' }]);
     });
 
     it('doesnt trigger `load-package-config` if no config', async () => {
@@ -289,7 +289,7 @@ describe('CreateConfigRoutine', () => {
         { foo: 456 },
       ]);
 
-      expect(spy).toHaveBeenCalledWith('merge-config', [config]);
+      expect(spy).toHaveBeenCalledWith('babel.merge-config', [config]);
     });
   });
 
@@ -345,7 +345,7 @@ describe('CreateConfigRoutine', () => {
 
       await routine.loadConfigFromFilesystem(routine.context);
 
-      expect(spy).toHaveBeenCalledWith('load-module-config', [
+      expect(spy).toHaveBeenCalledWith('babel.load-module-config', [
         prependRoot('/configs/babel.js'),
         { filePath: prependRoot('/configs/babel.js') },
       ]);
@@ -409,7 +409,7 @@ describe('CreateConfigRoutine', () => {
 
       await routine.referenceConfigFile(routine.context);
 
-      expect(spy).toHaveBeenCalledWith('reference-config-file', [
+      expect(spy).toHaveBeenCalledWith('babel.reference-config-file', [
         prependRoot('/babel.config.js'),
         { foo: 123 },
       ]);

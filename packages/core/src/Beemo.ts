@@ -105,7 +105,6 @@ export default class Beemo {
       context.addDriverDependency(tool.getPlugin(driverName) as Driver<any>);
     });
 
-    tool.setEventNamespace(primaryDriver);
     tool.debug('Running with %s driver(s)', [primaryDriver, ...additionalDrivers].join(', '));
 
     return this.startPipeline(context)
@@ -242,8 +241,7 @@ export default class Beemo {
     context.workspaceRoot = tool.options.workspaceRoot || tool.options.root;
     context.workspaces = this.getWorkspacePaths();
 
-    tool.setEventNamespace(driverName);
-    tool.emit('init-driver', [driver, context]);
+    tool.emit(`${driverName}.init-driver`, [driver, context]);
     tool.debug('Running with %s driver', driverName);
 
     return this.startPipeline(context)
@@ -257,11 +255,11 @@ export default class Beemo {
    * Run a script found within the configuration module.
    */
   async executeScript(args: Arguments, scriptName: string): Promise<Execution> {
+    const { tool } = this;
     const context = this.prepareContext(new ScriptContext(args, scriptName));
 
-    this.tool.setEventNamespace(scriptName);
-    this.tool.emit('init-script', [scriptName, context]);
-    this.tool.debug('Running with %s script', scriptName);
+    tool.emit(`${scriptName}.init-script`, [scriptName, context]);
+    tool.debug('Running with %s script', scriptName);
 
     return this.startPipeline(context)
       .pipe(new ExecuteScriptRoutine('script', `Executing ${scriptName} script`))
@@ -296,11 +294,11 @@ export default class Beemo {
    * Sync dotfiles from the configuration module.
    */
   async syncDotfiles(args: Arguments): Promise<string[]> {
+    const { tool } = this;
     const context = this.prepareContext(new Context(args));
 
-    this.tool.setEventNamespace(this.tool.options.appName);
-    this.tool.emit('sync-dotfiles', [context]);
-    this.tool.debug('Running dotfiles command');
+    tool.emit(`${tool.options.appName}.sync-dotfiles`, [context]);
+    tool.debug('Running dotfiles command');
 
     return this.startPipeline(context)
       .pipe(new SyncDotfilesRoutine('dotfiles', 'Syncing dotfiles', { filter: args.filter }))

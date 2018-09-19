@@ -40,12 +40,13 @@ export default class SyncDotfilesRoutine extends Routine<Context, SyncDotfilesOp
    */
   async copyFilesFromConfigModule(context: Context, moduleRoot: string): Promise<string[]> {
     const dotfilePath = path.join(moduleRoot, 'dotfiles/*');
+    const { appName, root } = this.tool.options;
     const { filter } = this.options;
     const files: string[] = [];
 
     this.debug('Coping dotfiles from %s', chalk.cyan(dotfilePath));
 
-    await fs.copy(dotfilePath, this.tool.options.root, {
+    await fs.copy(dotfilePath, root, {
       filter: file => {
         let filtered = true;
 
@@ -65,7 +66,7 @@ export default class SyncDotfilesRoutine extends Routine<Context, SyncDotfilesOp
     });
 
     return files.map(file => {
-      this.tool.emit('copy-dotfile', [file]);
+      this.tool.emit(`${appName}.copy-dotfile`, [file]);
 
       this.debug('  %s', chalk.gray(file));
 
@@ -88,7 +89,7 @@ export default class SyncDotfilesRoutine extends Routine<Context, SyncDotfilesOp
 
         await fs.rename(filePath, newPath);
 
-        this.tool.emit('rename-dotfile', [newPath]);
+        this.tool.emit(`${this.tool.options.appName}.rename-dotfile`, [newPath]);
 
         this.tool.log('%s %s', chalk.gray('->'), newName);
 

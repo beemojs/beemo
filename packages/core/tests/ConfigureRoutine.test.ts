@@ -130,7 +130,7 @@ describe('ConfigureRoutine', () => {
 
       await routine.resolveDependencies();
 
-      expect(spy).toHaveBeenCalledWith('resolve-dependencies', [
+      expect(spy).toHaveBeenCalledWith('foo.resolve-dependencies', [
         Array.from(routine.context.drivers),
       ]);
     });

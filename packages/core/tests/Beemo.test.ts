@@ -74,14 +74,6 @@ describe('Beemo', () => {
       beemo.tool.getPlugin = name => createTestDriver(name);
     });
 
-    it('sets event namespace', async () => {
-      const spy = jest.spyOn(beemo.tool, 'setEventNamespace');
-
-      await beemo.createConfigFiles(args, 'foo');
-
-      expect(spy).toHaveBeenCalledWith('foo');
-    });
-
     it('passes context to pipeline', async () => {
       const spy = jest.spyOn(beemo, 'startPipeline');
 
@@ -263,20 +255,12 @@ describe('Beemo', () => {
       beemo.tool.getPlugin = () => ({ name: 'foo-bar' });
     });
 
-    it('sets event namespace', async () => {
-      const spy = jest.spyOn(beemo.tool, 'setEventNamespace');
-
-      await beemo.executeDriver(args, 'foo-bar');
-
-      expect(spy).toHaveBeenCalledWith('foo-bar');
-    });
-
     it('triggers `init-driver` event with context', async () => {
       const spy = jest.spyOn(beemo.tool, 'emit');
 
       await beemo.executeDriver(args, 'foo-bar');
 
-      expect(spy).toHaveBeenCalledWith('init-driver', [
+      expect(spy).toHaveBeenCalledWith('foo-bar.init-driver', [
         expect.objectContaining({ name: 'foo-bar' }),
         expect.objectContaining({
           argv: ['foo', 'bar'],
@@ -348,20 +332,12 @@ describe('Beemo', () => {
   });
 
   describe('executeScript()', () => {
-    it('sets event namespace', async () => {
-      const spy = jest.spyOn(beemo.tool, 'setEventNamespace');
-
-      await beemo.executeScript(args, 'foo-bar');
-
-      expect(spy).toHaveBeenCalledWith('foo-bar');
-    });
-
     it('triggers `init-script` event with context', async () => {
       const spy = jest.spyOn(beemo.tool, 'emit');
 
       await beemo.executeScript(args, 'foo-bar');
 
-      expect(spy).toHaveBeenCalledWith('init-script', [
+      expect(spy).toHaveBeenCalledWith('foo-bar.init-script', [
         'foo-bar',
         expect.objectContaining({
           argv: ['foo', 'bar'],
@@ -420,30 +396,12 @@ describe('Beemo', () => {
   });
 
   describe('syncDotfiles()', () => {
-    it('sets event namespace', async () => {
-      const spy = jest.spyOn(beemo.tool, 'setEventNamespace');
-
-      await beemo.syncDotfiles(args);
-
-      expect(spy).toHaveBeenCalledWith('beemo');
-    });
-
-    it('sets event namespace using custom app name', async () => {
-      beemo.tool.options.appName = 'foobar';
-
-      const spy = jest.spyOn(beemo.tool, 'setEventNamespace');
-
-      await beemo.syncDotfiles(args);
-
-      expect(spy).toHaveBeenCalledWith('foobar');
-    });
-
     it('triggers `sync-dotfiles` event with context', async () => {
       const spy = jest.spyOn(beemo.tool, 'emit');
 
       await beemo.syncDotfiles(args);
 
-      expect(spy).toHaveBeenCalledWith('sync-dotfiles', [
+      expect(spy).toHaveBeenCalledWith('beemo.sync-dotfiles', [
         expect.objectContaining({
           argv: ['foo', 'bar'],
         }),

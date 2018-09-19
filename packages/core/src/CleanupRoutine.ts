@@ -25,7 +25,7 @@ export default class CleanupRoutine extends Routine<DriverContext> {
       context.configPaths.map(configPath => {
         this.debug('Deleting config file %s', chalk.cyan(configPath));
 
-        this.tool.emit('delete-config-file', [configPath]);
+        this.tool.emit(`delete-config-file`, [configPath]);
 
         return fs.remove(configPath).then(() => true);
       }),

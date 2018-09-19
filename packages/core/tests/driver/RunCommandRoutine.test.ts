@@ -67,6 +67,7 @@ describe('RunCommandRoutine', () => {
       args: ['--qux'],
       env: { DEV: 'true' },
     });
+    driver.name = 'babel';
     driver.tool = tool;
     driver.bootstrap();
 
@@ -452,7 +453,11 @@ describe('RunCommandRoutine', () => {
 
       await routine.runCommandWithArgs(routine.context, ['--wtf'], task);
 
-      expect(spy).toHaveBeenCalledWith('before-execute', [driver, ['--wtf'], routine.context]);
+      expect(spy).toHaveBeenCalledWith('babel.before-execute', [
+        driver,
+        ['--wtf'],
+        routine.context,
+      ]);
     });
 
     it('triggers `after-execute` event on success', async () => {
@@ -460,7 +465,7 @@ describe('RunCommandRoutine', () => {
 
       await routine.runCommandWithArgs(routine.context, ['--wtf'], task);
 
-      expect(spy).toHaveBeenCalledWith('after-execute', [driver, { success: true }]);
+      expect(spy).toHaveBeenCalledWith('babel.after-execute', [driver, { success: true }]);
     });
 
     it('triggers `failed-execute` event on failure', async () => {
@@ -473,7 +478,7 @@ describe('RunCommandRoutine', () => {
       try {
         await routine.runCommandWithArgs(routine.context, ['--wtf'], task);
       } catch (error) {
-        expect(spy).toHaveBeenCalledWith('failed-execute', [driver, error]);
+        expect(spy).toHaveBeenCalledWith('babel.failed-execute', [driver, error]);
       }
     });
   });

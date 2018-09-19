@@ -97,9 +97,9 @@ describe('SyncDotfilesRoutine', () => {
 
       await routine.copyFilesFromConfigModule(routine.context, './root');
 
-      expect(spy).toHaveBeenCalledWith('copy-dotfile', ['./foo']);
-      expect(spy).toHaveBeenCalledWith('copy-dotfile', ['./bar']);
-      expect(spy).toHaveBeenCalledWith('copy-dotfile', ['./baz']);
+      expect(spy).toHaveBeenCalledWith('beemo.copy-dotfile', ['./foo']);
+      expect(spy).toHaveBeenCalledWith('beemo.copy-dotfile', ['./bar']);
+      expect(spy).toHaveBeenCalledWith('beemo.copy-dotfile', ['./baz']);
     });
   });
 
@@ -123,9 +123,9 @@ describe('SyncDotfilesRoutine', () => {
 
       await routine.renameFilesWithDot(routine.context, ['foo', './path/bar', '/path/baz']);
 
-      expect(spy).toHaveBeenCalledWith('rename-dotfile', ['.foo']);
-      expect(spy).toHaveBeenCalledWith('rename-dotfile', ['path/.bar']);
-      expect(spy).toHaveBeenCalledWith('rename-dotfile', ['/path/.baz']);
+      expect(spy).toHaveBeenCalledWith('beemo.rename-dotfile', ['.foo']);
+      expect(spy).toHaveBeenCalledWith('beemo.rename-dotfile', ['path/.bar']);
+      expect(spy).toHaveBeenCalledWith('beemo.rename-dotfile', ['/path/.baz']);
     });
   });
 });

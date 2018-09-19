@@ -34,7 +34,7 @@ export default class ExecuteScriptRoutine extends Routine<ScriptContext> {
 
     context.setScript(script, filePath);
 
-    this.tool.emit('load-script', [script]);
+    this.tool.emit(`${scriptName}.load-script`, [script]);
 
     return script;
   }
@@ -47,7 +47,7 @@ export default class ExecuteScriptRoutine extends Routine<ScriptContext> {
 
     this.debug('Executing script with args "%s"', argv.join(' '));
 
-    this.tool.emit('before-execute', [script, argv, context]);
+    this.tool.emit(`${script.name}.before-execute`, [script, argv, context]);
 
     const args = parseArgs(argv, script.parse());
     let result = null;
@@ -55,9 +55,9 @@ export default class ExecuteScriptRoutine extends Routine<ScriptContext> {
     try {
       result = await script.run(args, this.tool);
 
-      this.tool.emit('after-execute', [script, result]);
+      this.tool.emit(`${script.name}.after-execute`, [script, result]);
     } catch (error) {
-      this.tool.emit('failed-execute', [script, error]);
+      this.tool.emit(`${script.name}.failed-execute`, [script, error]);
 
       throw error;
     }

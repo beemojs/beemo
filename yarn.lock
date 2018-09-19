@@ -676,9 +676,9 @@
     lodash "^4.17.10"
     to-fast-properties "^2.0.0"
 
-"@boost/core@^0.65.2":
-  version "0.65.2"
-  resolved "https://registry.npmjs.org/@boost/core/-/core-0.65.2.tgz#5f81072dc0af1e7f27bffe2b4a975ae9401ba961"
+"@boost/core@^0.66.0":
+  version "0.66.0"
+  resolved "https://registry.npmjs.org/@boost/core/-/core-0.66.0.tgz#ae6384bc19478f030087147657973a7af378b885"
   dependencies:
     "@types/debug" "^0.0.30"
     "@types/execa" "^0.9.0"
@@ -8257,9 +8257,9 @@ webpack-sources@^1.1.0, webpack-sources@^1.2.0:
     source-list-map "^2.0.0"
     source-map "~0.6.1"
 
-webpack@^4.19.0:
-  version "4.19.0"
-  resolved "https://registry.npmjs.org/webpack/-/webpack-4.19.0.tgz#252296c8af2d21c0994911007defdb3913a7bc66"
+webpack@^4.19.1:
+  version "4.19.1"
+  resolved "https://registry.npmjs.org/webpack/-/webpack-4.19.1.tgz#096674bc3b573f8756c762754366e5b333d6576f"
   dependencies:
     "@webassemblyjs/ast" "1.7.6"
     "@webassemblyjs/helper-module-context" "1.7.6"
