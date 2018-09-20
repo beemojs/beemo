@@ -44,25 +44,6 @@ The following options are available to all Beemo commands.
 - `--silent` (bool) - Hide all output from the console. [More information](./tips#output-verbosity).
 - `--theme` (string) - Change output colors using a theme. [More information](./tips.md#cli-themes).
 
-## Synchronizing Dotfiles
-
-Once Beemo is setup in your project, and you have dotfiles within your configuration module, you can
-run `yarn beemo sync-dotfiles` (or `npx beemo sync-dotfiles`) to copy them into the project.
-
-This process is a simple copy and write, so previous files will be overwritten. Be sure to
-`git diff` and verify your changes!
-
-### Filtering Files
-
-Not all dotfiles may be required, so you can filter them using the `--filter` option. This option
-accepts a string which will be used as a regex pattern.
-
-```
-yarn beemo sync-dotfiles --filter="*.yml"
-```
-
-> Filtering is powered by [micromatch](https://github.com/micromatch/micromatch).
-
 ## Using Drivers
 
 Drivers may have been installed in your configuration module, but that does not make them available

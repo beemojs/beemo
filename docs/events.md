@@ -42,9 +42,7 @@ The following list of events, and their arguments, can be listened to.
 | `<script>.before-execute`        | `script: Script, argv: string[], context: ScriptContext` | Called before the `Script#run` method is executed.                                          |
 | `<script>.after-execute`         | `script: Script, response: any`                          | Called after the script has successfully been executed.                                     |
 | `<script>.failed-execute`        | `script: Script, error: Error`                           | Called after the script has failed to execute.                                              |
-| `<app>.sync-dotfiles`            | `context: Context`                                       | Called before dotfiles are synced with `beemo sync-dotfiles`.                               |
-| `<app>.copy-dotfile`             | `path: string`                                           | Called after a dotfile has been copied.                                                     |
-| `<app>.rename-dotfile`           | `path: string`                                           | Called after a dotfile has been renamed and prefixed with ".".                              |
+| `<app>.scaffold`                 | `context: Context, generator: string, action: string`    | Called before templates are generated when scaffolding.                                     |
 
 > `<driver>` and `<script>` should be replaced with their names.
 

@@ -6,6 +6,7 @@ import Driver from '../packages/core/src/Driver';
 import Script from '../packages/core/src/Script';
 import Context from '../packages/core/src/contexts/Context';
 import DriverContext from '../packages/core/src/contexts/DriverContext';
+import ScaffoldContext from '../packages/core/src/contexts/ScaffoldContext';
 import ScriptContext from '../packages/core/src/contexts/ScriptContext';
 import { DriverMetadata } from '../packages/core/src/types';
 
@@ -104,6 +105,13 @@ export function createContext(): Context {
 
 export function createDriverContext(driver: Driver<any> | null = null): DriverContext {
   return applyContext(new DriverContext({ _: [], $0: '' }, driver || new Driver()));
+}
+
+export function createScaffoldContext(
+  generator: string = 'generator',
+  action: string = 'action',
+): ScaffoldContext {
+  return applyContext(new ScaffoldContext({ _: [], $0: '' }, generator, action));
 }
 
 export function createScriptContext(script: Script | null = null): ScriptContext {

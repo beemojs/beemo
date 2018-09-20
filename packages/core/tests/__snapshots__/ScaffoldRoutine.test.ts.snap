@@ -1,0 +1,3 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`ScaffoldRoutine runGenerator() rewrites error message 1`] = `[Error: Failed to find scaffolding templates "generator/action" in configuration module.]`;

@@ -395,37 +395,30 @@ describe('Beemo', () => {
     });
   });
 
-  describe('syncDotfiles()', () => {
-    it('triggers `sync-dotfiles` event with context', async () => {
+  describe('scaffold()', () => {
+    it('triggers `scaffold` event with context', async () => {
       const spy = jest.spyOn(beemo.tool, 'emit');
 
-      await beemo.syncDotfiles(args);
+      await beemo.scaffold(args, 'gen', 'action');
 
-      expect(spy).toHaveBeenCalledWith('beemo.sync-dotfiles', [
+      expect(spy).toHaveBeenCalledWith('beemo.scaffold', [
         expect.objectContaining({
           argv: ['foo', 'bar'],
         }),
+        'gen',
+        'action',
       ]);
     });
 
     it('passes context to pipeline', async () => {
       const spy = jest.spyOn(beemo, 'startPipeline');
 
-      await beemo.syncDotfiles(args);
+      await beemo.scaffold(args, 'gen', 'action');
 
       expect(spy).toHaveBeenCalledWith(
         expect.objectContaining({
-          argv: ['foo', 'bar'],
-        }),
-      );
-    });
-
-    it('passes filter to routine', async () => {
-      const pipeline = await beemo.syncDotfiles({ ...args, filter: 'foo' });
-
-      expect((pipeline as any).pipe).toHaveBeenCalledWith(
-        expect.objectContaining({
-          options: { filter: 'foo' },
+          generator: 'gen',
+          action: 'action',
         }),
       );
     });
