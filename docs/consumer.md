@@ -31,7 +31,7 @@ that matches the name of your configuration module, or another third-party modul
 - `config.cleanup` (bool) - Remove generated config files after execution. Defaults to `false`.
 - `config.parallel` (bool) - Create configuration files in parallel. Defaults to `true`.
 - `drivers` (string[]|object[]) - List of drivers to enable for the consumer.
-- `settings` (object) - Custom settings specific to your project, that can easily be referenced.
+- `settings` (object) - Custom settings specific to your project that can easily be referenced.
 
 > Periods denote nested objects.
 

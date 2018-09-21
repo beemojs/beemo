@@ -69,7 +69,7 @@ app.command(
 
 app.command(
   'scaffold <generator> <action>',
-  'Generate files using templates from configuration module',
+  'Generate files with templates from configuration module',
   {
     dry: {
       boolean: true,

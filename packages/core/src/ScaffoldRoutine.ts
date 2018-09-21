@@ -51,7 +51,7 @@ export default class ScaffoldRoutine extends Routine<ScaffoldContext> {
       // Intercept hygen error to provide a better error message
       if (error.message.startsWith("I can't find action")) {
         throw new Error(
-          `Failed to find scaffolding templates "${args.join('/')}" in configuration module.`,
+          `Failed to find scaffolding templates "${args.join('/')}/*.ejs" in configuration module.`,
         );
       }
 
