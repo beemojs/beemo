@@ -31,6 +31,7 @@ that matches the name of your configuration module, or another third-party modul
 - `config.cleanup` (bool) - Remove generated config files after execution. Defaults to `false`.
 - `config.parallel` (bool) - Create configuration files in parallel. Defaults to `true`.
 - `drivers` (string[]|object[]) - List of drivers to enable for the consumer.
+- `settings` (object) - Custom settings specific to your project that can easily be referenced.
 
 > Periods denote nested objects.
 
@@ -43,25 +44,6 @@ The following options are available to all Beemo commands.
   [More information](./tips#output-verbosity).
 - `--silent` (bool) - Hide all output from the console. [More information](./tips#output-verbosity).
 - `--theme` (string) - Change output colors using a theme. [More information](./tips.md#cli-themes).
-
-## Synchronizing Dotfiles
-
-Once Beemo is setup in your project, and you have dotfiles within your configuration module, you can
-run `yarn beemo sync-dotfiles` (or `npx beemo sync-dotfiles`) to copy them into the project.
-
-This process is a simple copy and write, so previous files will be overwritten. Be sure to
-`git diff` and verify your changes!
-
-### Filtering Files
-
-Not all dotfiles may be required, so you can filter them using the `--filter` option. This option
-accepts a string which will be used as a regex pattern.
-
-```
-yarn beemo sync-dotfiles --filter="*.yml"
-```
-
-> Filtering is powered by [micromatch](https://github.com/micromatch/micromatch).
 
 ## Using Drivers
 
@@ -102,6 +84,8 @@ Furthermore, each driver can be configured with options by using an object, like
 }
 ```
 
+Options can also be set through the [bootstrap and event system](./events.md).
+
 ### Options
 
 - `driver` (string) - The name of the driver module. Required when using an object.
@@ -116,9 +100,9 @@ Furthermore, each driver can be configured with options by using an object, like
 ## Executing Drivers
 
 Now for the fun part, executing the driver! It's as simple as `yarn beemo <driver>` (or
-`npx beemo <driver>`). Once entered, this will initialize Beemo's pipeline, generate a temporary
-configuration file, execute the underlying driver binary, handle stdout and stderr output, cleanup
-after itself, and lastly, leave a beautiful message in your console.
+`npx beemo <driver>`). Once entered, this will initialize Beemo's pipeline, generate a configuration
+file, execute the underlying driver binary, handle stdout and stderr output, cleanup after itself,
+and lastly, leave a beautiful message in your console.
 
 > All arguments passed to Beemo are passed to the driver's underlying binary.
 
@@ -145,7 +129,7 @@ That being said, consistently remembering the correct commands and arguments to 
 The following options are available when executing a driver.
 
 - `--concurrency` (number) - Number of builds to run in parallel. Defaults to the amount of CPUs.
-- `--priority` (bool) - Prioritize workspace builds based on
+- `--[no-]priority` (bool) - Prioritize workspace builds based on
   [dependency graph](./workspaces.md#priority-packages).
 - `--workspaces` (string) - Execute the command in each [workspace](./workspaces.md) defined by the
   pattern/value. Pass `*` to run in all workspaces.

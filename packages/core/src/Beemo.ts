@@ -13,11 +13,12 @@ import CleanupRoutine from './CleanupRoutine';
 import ConfigureRoutine from './ConfigureRoutine';
 import ExecuteDriverRoutine from './ExecuteDriverRoutine';
 import ExecuteScriptRoutine from './ExecuteScriptRoutine';
-import SyncDotfilesRoutine from './SyncDotfilesRoutine';
+import ScaffoldRoutine from './ScaffoldRoutine';
 import Driver from './Driver';
 import Context from './contexts/Context';
 import DriverContext from './contexts/DriverContext';
 import ScriptContext from './contexts/ScriptContext';
+import ScaffoldContext from './contexts/ScaffoldContext';
 import { Argv, Arguments, Execution } from './types';
 
 export default class Beemo {
@@ -278,6 +279,21 @@ export default class Beemo {
   }
 
   /**
+   * Run the scaffold process to generate templates.
+   */
+  async scaffold(args: Arguments, generator: string, action: string): Promise<any> {
+    const { tool } = this;
+    const context = this.prepareContext(new ScaffoldContext(args, generator, action));
+
+    tool.emit(`${tool.options.appName}.scaffold`, [context, generator, action]);
+    tool.debug('Running scaffold command');
+
+    return this.startPipeline(context)
+      .pipe(new ScaffoldRoutine('scaffold', 'Generating from templates'))
+      .run();
+  }
+
+  /**
    * Setup and start a fresh pipeline.
    */
   startPipeline<T extends Context>(context: T): Pipeline<T> {
@@ -288,20 +304,5 @@ export default class Beemo {
     };
 
     return new Pipeline(this.tool, context);
-  }
-
-  /**
-   * Sync dotfiles from the configuration module.
-   */
-  async syncDotfiles(args: Arguments): Promise<string[]> {
-    const { tool } = this;
-    const context = this.prepareContext(new Context(args));
-
-    tool.emit(`${tool.options.appName}.sync-dotfiles`, [context]);
-    tool.debug('Running dotfiles command');
-
-    return this.startPipeline(context)
-      .pipe(new SyncDotfilesRoutine('dotfiles', 'Syncing dotfiles', { filter: args.filter }))
-      .run();
   }
 }

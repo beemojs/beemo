@@ -72,7 +72,7 @@ module.exports = {
 ```
 
 If you return a function, you can access the args that were passed on the command line, and the
-current [tool instance](./tool.md), which allows for runtime conditional logic. For example, if
+current [tool instance](./tool.md) (which allows for runtime conditional logic). For example, if
 `--react` was passed, we can enable the React preset.
 
 ```js
@@ -123,33 +123,6 @@ module.exports = {
 
 > Command line arguments are parsed into an object using
 > [yargs-parser](https://www.npmjs.com/package/yargs-parser).
-
-## Dotfiles
-
-Beemo supports [synchronizing dotfiles](./consumer.md#synchronizing-dotfiles) across all projects
-that consume your configuration module (the repository you just created). This includes things like
-`.gitignore`, `.npmignore`, `.travis.yml`, and more. This _does not_ include configuration dotfiles
-like `babel.config.js` and `.flowconfig`, as those are handled automatically by the drivers
-mentioned above.
-
-To begin, create a `dotfiles/` folder.
-
-```
-mkdir dotfiles/
-```
-
-Then add dotfiles you want to synchronize, without the leading `.`. For example, `.gitignore` would
-simply be `gitignore`. Why no leading period? Well, because otherwise, those dotfiles and their
-functionality would be applied to your repository (git will actually ignore files). So to get around
-this, we remove the period, and then rename the file after synchronizing. If all goes well, you
-should have a folder structure like the following.
-
-```
-dotfiles/
-  gitignore
-  npmignore
-  travis.yml
-```
 
 ## Scripts
 

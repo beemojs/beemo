@@ -2,8 +2,8 @@
 
 Beemo has first class support for executing driver commands across workspaces (monorepos), using
 [Yarn workspaces](https://yarnpkg.com/lang/en/docs/workspaces/) or
-[Lerna packages](https://github.com/lerna/lerna#lernajson). Once a tool is configured, execute a
-driver command with a `--workspaces` option, which signals Beemo to run this command in each of the
+[Lerna packages](https://github.com/lerna/lerna). Once a tool is configured, execute a driver
+command with a `--workspaces` option, which signals Beemo to run this command in each of the
 workspace package folders.
 
 This option requires a pattern to match package names against (the name in `package.json`), or `*`

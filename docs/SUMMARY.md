@@ -14,5 +14,6 @@
 - [Tool Instance](./tool.md)
   - [Listening To Events](./events.md)
 - [Workspaces](./workspaces.md)
+- [Scaffolding](./scaffolding.md)
 - [Pro Tips](./tips.md)
 - [Changelog](https://github.com/milesj/beemo/blob/master/CHANGELOG.md)

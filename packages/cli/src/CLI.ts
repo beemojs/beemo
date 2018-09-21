@@ -12,7 +12,7 @@ import Beemo, { Driver } from '@beemo/core';
 import version from './checkVersion';
 import parseSpecialArgv from './parseSpecialArgv';
 
-// 0 node, 1 beemo, 2 <driver, command>
+// 0 node, 1 beemo, 2 command
 const { main, parallel } = parseSpecialArgv(process.argv.slice(2));
 
 // Initialize
@@ -68,17 +68,16 @@ app.command(
 );
 
 app.command(
-  ['sync-dotfiles', 'sync'],
-  'Sync dotfiles from configuration module',
+  'scaffold <generator> <action>',
+  'Generate files with templates from configuration module',
   {
-    filter: {
-      alias: 'f',
-      default: '',
-      description: 'Filter filenames (supports regex)',
-      string: true,
+    dry: {
+      boolean: true,
+      default: false,
+      description: 'Execute a dry run',
     },
   },
-  (args: Arguments) => beemo.syncDotfiles(args),
+  (args: Arguments) => beemo.scaffold(args, args.generator, args.action),
 );
 
 app.command('*', false, {}, () => {
@@ -100,7 +99,7 @@ app
   .option('silent', {
     boolean: true,
     default: false,
-    description: `Hide ${binName} output`,
+    description: `Hide all output`,
   })
   .option('theme', {
     default: 'default',
