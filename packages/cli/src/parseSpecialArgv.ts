@@ -19,7 +19,7 @@ export default function parseSpecialArgv(argv: Argv): ParsedArgv {
   let index = -1;
 
   argv.forEach(arg => {
-    if (arg === '|>') {
+    if (arg === '//') {
       index += 1;
     } else if (index >= 0) {
       if (parallel[index]) {

@@ -8,8 +8,8 @@ describe('parseSpecialArgv()', () => {
     });
   });
 
-  it('separates |> into multiple commands', () => {
-    expect(parseSpecialArgv(['--foo', '-v', '|>', '--bar', '|>', 'baz'])).toEqual({
+  it('separates // into multiple commands', () => {
+    expect(parseSpecialArgv(['--foo', '-v', '//', '--bar', '//', 'baz'])).toEqual({
       main: ['--foo', '-v'],
       parallel: [['--bar'], ['baz']],
     });

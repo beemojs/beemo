@@ -63,37 +63,17 @@ yarn beemo eslint "./packages/*/{src,tests}"
 
 ## Parallel Commands
 
-Multiple commands for the same driver can be run in parallel by passing one or many `--parallel`
-options. Each option must define a value, that is double quoted, with additional flags and options
-to pass.
+Multiple commands for the same driver can be run in parallel by passing one or many `//` parallel
+operators. Each operator may include multiple arguments or options.
 
 For example, if you'd like to run separate ESLint commands in different folders.
 
 ```
-yarn beemo eslint --color |> ./src --ext=.ts,.tsx |> ./tests --report-unused-disable-directives
+yarn beemo eslint --color // ./src --ext=.ts,.tsx // ./tests --report-unused-disable-directives
 
 // Would run 2 commands in parallel
 eslint --color ./src --ext=.ts,.tsx
 eslint --color ./tests --report-unused-disable-directives
-```
-
-That being said, this feature has a few critical caveats to work correctly.
-
-- Option values must be double quoted! Otherwise the argument parser will parse options in the wrong
-  or unintended order.
-- Option values may not contain nested quoted option values. Unintended side-effects may occur.
-- Nested option values may not contain spaces.
-
-```
-// Invalid
---parallel=unquoted
---parallel="--foo="value""
---parallel="--foo='value'"
---parallel="--foo=some value"
-
-// Valid
---parallel="quoted"
---parallel="--foo=value"
 ```
 
 > Parallel defined arguments are not accessible within the configuration file, as the file has

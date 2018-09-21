@@ -145,8 +145,6 @@ That being said, consistently remembering the correct commands and arguments to 
 The following options are available when executing a driver.
 
 - `--concurrency` (number) - Number of builds to run in parallel. Defaults to the amount of CPUs.
-- `--parallel` (string[]) - Execute additional [commands in parallel](./tips.md#parallel-commands).
-  Accepts multiple options. _Must be quoted._
 - `--priority` (bool) - Prioritize workspace builds based on
   [dependency graph](./workspaces.md#priority-packages).
 - `--workspaces` (string) - Execute the command in each [workspace](./workspaces.md) defined by the

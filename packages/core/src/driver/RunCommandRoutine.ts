@@ -220,7 +220,7 @@ export default class RunCommandRoutine extends Routine<DriverContext, RunCommand
       ...this.getDriverArgs(),
       // Passed on the command line
       ...this.getCommandLineArgs(),
-      // Passed with --parallel
+      // Passed with parallel "//" operator
       ...this.getAdditionalArgs(),
     ];
 
@@ -238,13 +238,7 @@ export default class RunCommandRoutine extends Routine<DriverContext, RunCommand
   getAdditionalArgs(): Argv {
     const argv = this.options.additionalArgv;
 
-    argv.forEach(arg => {
-      if (arg.includes('"') || arg.includes("'")) {
-        throw new Error('--parallel option does not support nested quoted values.');
-      }
-    });
-
-    this.debug.invariant(argv.length > 0, 'From --parallel option', argv.join(' '), 'No arguments');
+    this.debug.invariant(argv.length > 0, 'From parallel operator', argv.join(' '), 'No arguments');
 
     return argv;
   }
@@ -253,9 +247,7 @@ export default class RunCommandRoutine extends Routine<DriverContext, RunCommand
    * Return args from the command line.
    */
   getCommandLineArgs(): Argv {
-    let { argv } = this.context;
-
-    argv = argv.filter(arg => !arg.startsWith('--parallel'));
+    const { argv } = this.context;
 
     this.debug.invariant(argv.length > 0, 'From the command line', argv.join(' '), 'No arguments');
 
