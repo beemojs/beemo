@@ -19,7 +19,7 @@ dependencies, continuous copy and paste, and more.
 - Avoid relative config or `extend` paths.
 - Automatic config file cleanup.
 - Custom scripts with CLI options.
-- Dotfile synchronization.
+- Scaffolding and template generation.
 - Workspaces (monorepo) support.
 - Parallel, pooled, and prioritized builds.
 - And much more.
