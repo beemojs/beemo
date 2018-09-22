@@ -9,12 +9,11 @@ declare module 'hygen' {
   }
 
   export interface Prompter {
-    prompt: (params: any) => Promise<any>,
+    prompt: (params: any) => Promise<{ overwrite: boolean }>,
   }
 
   export interface RunnerConfig {
-    // TODO
-    createPrompter?: () => Prompter;
+    createPrompter: () => Prompter;
     cwd: string;
     debug: boolean;
     exec: (sh: string, body: string) => void;

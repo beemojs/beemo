@@ -33,6 +33,11 @@ export default class ScaffoldRoutine extends Routine<ScaffoldContext> {
   };
 
   /**
+   * Temporary solution until boost supports prompts.
+   */
+  handlePrompt = () => Promise.resolve({ overwrite: true });
+
+  /**
    * Execute the hygen scaffolding generator.
    */
   async runGenerator(context: ScaffoldContext, moduleRoot: string) {
@@ -41,6 +46,7 @@ export default class ScaffoldRoutine extends Routine<ScaffoldContext> {
 
     try {
       return await engine(context.argv, {
+        createPrompter: () => ({ prompt: this.handlePrompt }),
         cwd: tool.options.root,
         debug: tool.config.debug,
         exec: this.handleExec,

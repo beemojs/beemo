@@ -66,6 +66,7 @@ describe('ScaffoldRoutine', () => {
       await routine.runGenerator(routine.context, './root');
 
       expect(hygen.engine).toHaveBeenCalledWith(['-a', '--foo', 'bar', 'baz'], {
+        createPrompter: expect.anything(),
         cwd: routine.tool.options.root,
         debug: false,
         exec: routine.handleExec,
