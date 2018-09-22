@@ -29,7 +29,9 @@ export default class ScaffoldRoutine extends Routine<ScaffoldContext> {
    * Pipe a message from hygen to boost.
    */
   handleLog = (message: string) => {
-    this.tool.log(message);
+    if (message && message.trim()) {
+      this.tool.log(message);
+    }
   };
 
   /**
