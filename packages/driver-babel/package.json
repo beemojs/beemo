@@ -10,12 +10,9 @@
     "transpile",
     "compile"
   ],
-  "bin": {
-    "babel-beemo": "./integration/bin.js"
-  },
   "scripts": {
-    "integration:fail": "babel-beemo ./integration/fail.js && babel-beemo ./integration/fail-syntax.js",
-    "integration:pass": "babel-beemo ./integration/pass.js"
+    "integration:fail": "babel ./integration/fail.js && babel ./integration/fail-syntax.js",
+    "integration:pass": "babel ./integration/pass.js"
   },
   "main": "./lib/index.js",
   "types": "./lib/index.d.ts",
