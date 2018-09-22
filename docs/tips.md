@@ -80,6 +80,30 @@ eslint --color ./tests --report-unused-disable-directives
 > already been created using the initially passed non-parallel arguments. However, depending on the
 > driver, some argument may be available under `process.beemo.context.args`.
 
+## Custom Settings
+
+Beemo supports custom project level configuration through the `beemo.settings` property. A property
+which accepts an object of any key-value pair. This property is not used by Beemo itself, so is free
+from any possible collisions.
+
+```json
+{
+  "beemo": {
+    "module": "@<username>/dev-tools",
+    "settings": {
+      "whateverYouWant": "here",
+      "coolRight": true
+    }
+  }
+}
+```
+
+These settings can then be access through the [tool instance](./tool.md).
+
+```js
+tool.config.settings.coolRight; // boolean
+```
+
 ## Custom Executable & Config Name
 
 The Beemo command line executable can be renamed to offer a better and more immersive branding
