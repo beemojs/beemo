@@ -1,17 +1,18 @@
 # Repository Setup
 
 To begin, create and clone a new repository on GitHub (or another VCS). This repository will be
-known as your "configuration module" going forward. I suggest naming it `build-tool-config`, or
-`dev-tools`, etc, as it's straight forward, easy to understand, and defines intent.
+known as your "configuration module" going forward. I suggest naming it `dev-tools`, or
+`dev-tool-config`, `build-tools`, etc, as it's straight forward, easy to understand, and defines
+intent.
 
 ```
-git clone git@github.com:<username>/build-tool-config.git
-cd build-tool-config/
+git clone git@github.com:<username>/dev-tools.git
+cd dev-tools/
 ```
 
-Once cloned, initialize a new NPM package, and provide the name `build-tool-config` with a username
-scope, like `@beemo/build-tool-config`. Why a scope? Because we don't want to clutter NPM with dumb
-packages. It also avoids collisions and easily announces ownership.
+Once cloned, initialize a new NPM package, and provide the name `dev-tools` with a username scope,
+like `@beemo/dev-tools`. Why a scope? Because we don't want to clutter NPM with dumb packages. It
+also avoids collisions and easily announces ownership.
 
 ```
 npm init --scope=<username>

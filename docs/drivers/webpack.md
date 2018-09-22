@@ -21,7 +21,7 @@ In your consuming project, enable the driver by adding `webpack` to your `driver
 ```json
 {
   "beemo": {
-    "module": "@<username>/build-tool-config",
+    "module": "@<username>/dev-tools",
     "drivers": ["webpack"]
   }
 }

@@ -21,7 +21,7 @@ In your consuming project, enable the driver by adding `prettier` to your `drive
 ```json
 {
   "beemo": {
-    "module": "@<username>/build-tool-config",
+    "module": "@<username>/dev-tools",
     "drivers": ["prettier"]
   }
 }
@@ -29,7 +29,7 @@ In your consuming project, enable the driver by adding `prettier` to your `drive
 
 ## Ignoring Paths
 
-Instead of using an `.prettierignore` dotfile, you can define an `ignore` property in your  
+Instead of using an `.prettierignore` dotfile, you can define an `ignore` property in your
 `configs/prettier.js` file. This property accepts an array of strings. For example:
 
 ```bash

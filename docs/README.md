@@ -22,5 +22,5 @@ dependencies, continuous copy and paste, and more.
 
 ## Requirements
 
-- Node 8+
+- Node 8.9+
 - GitHub, Bitbucket, or another VCS

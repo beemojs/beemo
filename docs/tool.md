@@ -9,7 +9,7 @@ The loaded consumer configuration can be found under the `config` property. This
 "beemo" block in `package.json`.
 
 ```js
-tool.config.module; // @<username>/build-tool-config
+tool.config.module; // @<username>/dev-tools
 ```
 
 While the `package` property is the loaded consumer `package.json`.

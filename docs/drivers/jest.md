@@ -22,7 +22,7 @@ In your consuming project, enable the driver by adding `jest` to your `drivers` 
 ```json
 {
   "beemo": {
-    "module": "@<username>/build-tool-config",
+    "module": "@<username>/dev-tools",
     "drivers": ["jest"]
   }
 }

@@ -8,7 +8,7 @@ Once you have a clean slate, install your configuration module, and BOOM, it's a
 more development dependency hell, just a single dependency.
 
 ```
-yarn add @<username>/build-tool-config --dev
+yarn add @<username>/dev-tools --dev
 ```
 
 That being said, add a `beemo` configuration block to your `package.json`, with a `module` property
@@ -17,7 +17,7 @@ that matches the name of your configuration module, or another third-party modul
 ```json
 {
   "beemo": {
-    "module": "@<username>/build-tool-config"
+    "module": "@<username>/dev-tools"
   }
 }
 ```
@@ -57,7 +57,7 @@ enable. For example, if we want to use Babel, ESLint, and Jest, we would have th
 ```json
 {
   "beemo": {
-    "module": "@<username>/build-tool-config",
+    "module": "@<username>/dev-tools",
     "drivers": ["babel", "eslint", "jest"]
   }
 }
@@ -68,7 +68,7 @@ Furthermore, each driver can be configured with options by using an object, like
 ```json
 {
   "beemo": {
-    "module": "@<username>/build-tool-config",
+    "module": "@<username>/dev-tools",
     "drivers": [
       "babel",
       {
@@ -150,7 +150,7 @@ _all_ projects. So because of that, Beemo does allow overriding of config. To do
 ```json
 {
   "beemo": {
-    "module": "@<username>/build-tool-config",
+    "module": "@<username>/dev-tools",
     "drivers": ["eslint"],
     "eslint": {
       "rules": {

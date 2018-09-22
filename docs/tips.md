@@ -110,7 +110,7 @@ And to configure the consumer with the new name as well.
 ```json
 {
   "<name>": {
-    "module": "@<username>/build-tool-config"
+    "module": "@<username>/dev-tools"
   }
 }
 ```
