@@ -28,7 +28,7 @@
   },
   "devDependencies": {
     "@types/semver": "^5.5.0",
-    "@types/yargs": "^12.0.0",
+    "@types/yargs": "^12.0.1",
     "time-require": "^0.1.2"
   }
 }

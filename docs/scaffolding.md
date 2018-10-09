@@ -27,7 +27,7 @@ logs/
 ## Generating Files
 
 Once our templates exist, we can generate files within our consumer using the
-`yarn beem scaffold <generator> <action>` (or `npx beemo scaffold`) command. This command will copy
+`yarn beemo scaffold <generator> <action>` (or `npx beemo scaffold`) command. This command will copy
 all files from the template folder to the `to` target defined in the `.ejs` front matter.
 
 You can also define template variables through command line options like `--name`!
