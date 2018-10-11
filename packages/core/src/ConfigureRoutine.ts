@@ -6,10 +6,10 @@
 import { Routine } from '@boost/core';
 import chalk from 'chalk';
 import CreateConfigRoutine from './configure/CreateConfigRoutine';
-import Driver from './Driver';
 import DriverContext from './contexts/DriverContext';
+import { BeemoTool } from './types';
 
-export default class ConfigureRoutine extends Routine<DriverContext> {
+export default class ConfigureRoutine extends Routine<DriverContext, BeemoTool> {
   bootstrap() {
     this.resolveDependencies();
     this.setupConfigFiles();
@@ -55,7 +55,7 @@ export default class ConfigureRoutine extends Routine<DriverContext> {
       deps.forEach(name => {
         this.debug('  Including dependency %s', chalk.magenta(name));
 
-        queue.push(this.tool.getPlugin(name) as Driver<any>);
+        queue.push(this.tool.getPlugin('driver', name));
       });
 
       this.context.addDriverDependency(driver);

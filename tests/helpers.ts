@@ -8,7 +8,12 @@ import Context from '../packages/core/src/contexts/Context';
 import DriverContext from '../packages/core/src/contexts/DriverContext';
 import ScaffoldContext from '../packages/core/src/contexts/ScaffoldContext';
 import ScriptContext from '../packages/core/src/contexts/ScriptContext';
-import { DriverMetadata } from '../packages/core/src/types';
+import {
+  BeemoTool,
+  BeemoConfig,
+  BeemoPluginRegistry,
+  DriverMetadata,
+} from '../packages/core/src/types';
 
 export const EXEC_RESULT = {
   cmd: '',
@@ -30,13 +35,11 @@ export function createTestDebugger(): any {
   return debug;
 }
 
-export function createTestTool(): Tool {
-  const tool = new Tool({
+export function createTestTool(): BeemoTool {
+  const tool = new Tool<BeemoPluginRegistry, BeemoConfig>({
     appName: 'beemo',
     configBlueprint: {},
     configFolder: './configs',
-    console: {},
-    pluginAlias: 'driver',
     root: __dirname,
     scoped: true,
     workspaceRoot: __dirname,
@@ -48,16 +51,22 @@ export function createTestTool(): Tool {
       parallel: true,
     },
     debug: false,
+    drivers: [],
     extends: [],
-    plugins: [],
+    locale: '',
+    module: '',
+    output: 3,
     reporters: [],
     settings: {},
+    silent: false,
+    theme: 'default',
   };
 
   tool.package = {
     name: '',
   };
 
+  // @ts-ignore
   tool.initialized = true;
 
   // Mock
@@ -70,9 +79,9 @@ export function createTestTool(): Tool {
 
 export function createTestDriver(
   name: string,
-  tool: Tool | null = null,
+  tool: BeemoTool | null = null,
   metadata: Partial<DriverMetadata> = {},
-): Driver<any> {
+): Driver {
   const driver = new Driver();
 
   driver.name = name;
@@ -103,7 +112,7 @@ export function createContext(): Context {
   return applyContext(new Context({ _: [], $0: '' }));
 }
 
-export function createDriverContext(driver: Driver<any> | null = null): DriverContext {
+export function createDriverContext(driver: Driver | null = null): DriverContext {
   return applyContext(new DriverContext({ _: [], $0: '' }, driver || new Driver()));
 }
 

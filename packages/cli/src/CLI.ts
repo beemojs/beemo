@@ -25,8 +25,8 @@ const manualURL = process.env.BEEMO_MANUAL_URL || 'https://milesj.gitbook.io/bee
 beemo.bootstrapConfigModule();
 
 // Add a command for each driver
-beemo.tool.plugins.forEach(driver => {
-  const { command = {}, metadata } = driver as Driver<any>;
+beemo.tool.getPlugins('driver').forEach(driver => {
+  const { command = {}, metadata } = driver;
 
   app.command(
     driver.name,

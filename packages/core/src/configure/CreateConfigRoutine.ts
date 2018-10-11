@@ -13,12 +13,17 @@ import parseArgs from 'yargs-parser';
 import Driver from '../Driver';
 import DriverContext from '../contexts/DriverContext';
 import { STRATEGY_COPY, STRATEGY_REFERENCE, STRATEGY_CREATE, STRATEGY_NATIVE } from '../constants';
+import { BeemoTool } from '../types';
 
 export interface CreateConfigOptions {
-  driver: Driver<any>;
+  driver: Driver;
 }
 
-export default class CreateConfigRoutine extends Routine<DriverContext, CreateConfigOptions> {
+export default class CreateConfigRoutine extends Routine<
+  DriverContext,
+  BeemoTool,
+  CreateConfigOptions
+> {
   bootstrap() {
     this.options = optimal(
       this.options,

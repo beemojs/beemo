@@ -7,8 +7,9 @@ import { Routine } from '@boost/core';
 import chalk from 'chalk';
 import fs from 'fs-extra';
 import DriverContext from './contexts/DriverContext';
+import { BeemoTool } from './types';
 
-export default class CleanupRoutine extends Routine<DriverContext> {
+export default class CleanupRoutine extends Routine<DriverContext, BeemoTool> {
   async execute(): Promise<boolean[]> {
     this.task('Deleting config files', this.deleteConfigFiles).skip(
       !this.tool.config.config.cleanup,

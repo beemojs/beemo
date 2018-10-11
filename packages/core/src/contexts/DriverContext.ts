@@ -17,17 +17,17 @@ export default class DriverContext extends Context {
 
   driverName: string = '';
 
-  drivers: Set<Driver<any>> = new Set();
+  drivers: Set<Driver> = new Set();
 
   parallelArgv: Argv[] = [];
 
-  primaryDriver: Driver<any>;
+  primaryDriver: Driver;
 
   workspaceRoot: string = '';
 
   workspaces: string[] = [];
 
-  constructor(args: Arguments, driver: Driver<any>, parallelArgv: Argv[] = []) {
+  constructor(args: Arguments, driver: Driver, parallelArgv: Argv[] = []) {
     super(args);
 
     this.driverName = driver.name;
@@ -53,7 +53,7 @@ export default class DriverContext extends Context {
   /**
    * Add a driver as a dependency.
    */
-  addDriverDependency(driver: Driver<any>): this {
+  addDriverDependency(driver: Driver): this {
     if (driver instanceof Driver) {
       this.drivers.add(driver);
     } else {

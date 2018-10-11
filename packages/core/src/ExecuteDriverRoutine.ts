@@ -10,8 +10,9 @@ import { Routine, PackageConfig } from '@boost/core';
 import DriverContext from './contexts/DriverContext';
 import RunCommandRoutine, { RunCommandOptions } from './driver/RunCommandRoutine';
 import isPatternMatch from './utils/isPatternMatch';
+import { BeemoTool } from './types';
 
-export default class ExecuteDriverRoutine extends Routine<DriverContext> {
+export default class ExecuteDriverRoutine extends Routine<DriverContext, BeemoTool> {
   workspacePackages: PackageConfig[] = [];
 
   bootstrap() {
@@ -93,8 +94,8 @@ export default class ExecuteDriverRoutine extends Routine<DriverContext> {
    * Group routines in order of which they are dependend on.
    */
   orderByWorkspacePriorityGraph(): {
-    other: Routine<DriverContext>[];
-    priority: Routine<DriverContext>[];
+    other: Routine<DriverContext, BeemoTool>[];
+    priority: Routine<DriverContext, BeemoTool>[];
   } {
     if (!this.context.args.priority) {
       return {
@@ -141,7 +142,7 @@ export default class ExecuteDriverRoutine extends Routine<DriverContext> {
       .map(dep => dep.package);
 
     // Extract dependents in order
-    const priority: Routine<DriverContext>[] = [];
+    const priority: Routine<DriverContext, BeemoTool>[] = [];
 
     orderedDeps.forEach(pkg => {
       const routine = this.routines.find(route => route.key === pkg.workspaceName);
@@ -152,7 +153,7 @@ export default class ExecuteDriverRoutine extends Routine<DriverContext> {
     });
 
     // Extract dependers
-    const other: Routine<DriverContext>[] = [];
+    const other: Routine<DriverContext, BeemoTool>[] = [];
 
     this.routines.forEach(routine => {
       const dependency = orderedDeps.find(dep => dep.workspaceName === routine.key);

@@ -14,7 +14,7 @@ jest.mock('../src/driver/RunCommandRoutine', () => jest.fn());
 
 describe('ExecuteDriverRoutine', () => {
   let routine: ExecuteDriverRoutine;
-  let driver: Driver<any>;
+  let driver: Driver;
 
   beforeEach(() => {
     const tool = createTestTool();

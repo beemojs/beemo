@@ -8,7 +8,6 @@ import fs from 'fs-extra';
 import path from 'path';
 import { Pipeline, Tool } from '@boost/core';
 import { bool, shape, Blueprint } from 'optimal';
-import parseArgs from 'yargs-parser';
 import CleanupRoutine from './CleanupRoutine';
 import ConfigureRoutine from './ConfigureRoutine';
 import ExecuteDriverRoutine from './ExecuteDriverRoutine';
@@ -19,14 +18,14 @@ import Context from './contexts/Context';
 import DriverContext from './contexts/DriverContext';
 import ScriptContext from './contexts/ScriptContext';
 import ScaffoldContext from './contexts/ScaffoldContext';
-import { Argv, Arguments, Execution } from './types';
+import { Argv, Arguments, BeemoTool, Execution, BeemoPluginRegistry, BeemoConfig } from './types';
 
 export default class Beemo {
   argv: Argv;
 
   moduleRoot: string = '';
 
-  tool: Tool;
+  tool: BeemoTool;
 
   workspacePaths: string[] = [];
 
@@ -36,24 +35,16 @@ export default class Beemo {
     // eslint-disable-next-line global-require
     const { version } = require('../package.json');
 
-    // TODO replace?
-    const args = parseArgs(argv);
-
-    this.tool = new Tool(
+    this.tool = new Tool<BeemoPluginRegistry, BeemoConfig>(
       {
         appName: binName || 'beemo',
+        appPath: path.join(__dirname, '..'),
         configBlueprint: this.getConfigBlueprint(),
-        console: {
-          footer: `\n🤖  Powered by Beemo v${version}`,
-          level: args.level || 3,
-          silent: args.silent || false,
-          theme: args.theme || 'default',
-        },
-        pluginAlias: 'driver',
+        footer: `\n🤖  Powered by Beemo v${version}`,
         scoped: true,
       },
       argv,
-    );
+    ).registerPlugin('driver', Driver);
 
     this.tool.debug('Using beemo v%s', version);
 
@@ -99,11 +90,11 @@ export default class Beemo {
     additionalDrivers: string[] = [],
   ): Promise<any> {
     const { tool } = this;
-    const driver = tool.getPlugin(primaryDriver) as Driver<any>;
+    const driver = tool.getPlugin('driver', primaryDriver);
     const context = this.prepareContext(new DriverContext(args, driver));
 
     additionalDrivers.forEach(driverName => {
-      context.addDriverDependency(tool.getPlugin(driverName) as Driver<any>);
+      context.addDriverDependency(tool.getPlugin('driver', driverName));
     });
 
     tool.debug('Running with %s driver(s)', [primaryDriver, ...additionalDrivers].join(', '));
@@ -227,7 +218,7 @@ export default class Beemo {
     parallelArgv: Argv[] = [],
   ): Promise<Execution[]> {
     const { tool } = this;
-    const driver = tool.getPlugin(driverName) as Driver<any>;
+    const driver = tool.getPlugin('driver', driverName);
     const context = this.prepareContext(new DriverContext(args, driver, parallelArgv));
 
     // Delete config files on failure
@@ -296,7 +287,7 @@ export default class Beemo {
   /**
    * Setup and start a fresh pipeline.
    */
-  startPipeline<T extends Context>(context: T): Pipeline<T> {
+  startPipeline<T extends Context>(context: T): Pipeline<T, BeemoTool> {
     // Make the tool available to all processes
     process.beemo = {
       context,

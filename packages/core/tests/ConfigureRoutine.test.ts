@@ -1,6 +1,6 @@
-import { Tool } from '@boost/core';
 import ConfigureRoutine from '../src/ConfigureRoutine';
 import Driver from '../src/Driver';
+import { BeemoTool } from '../src/types';
 import {
   createDriverContext,
   createTestDebugger,
@@ -10,8 +10,8 @@ import {
 
 describe('ConfigureRoutine', () => {
   let routine: ConfigureRoutine;
-  let plugins: { [name: string]: Driver<any> };
-  let tool: Tool;
+  let plugins: { [name: string]: Driver };
+  let tool: BeemoTool;
 
   beforeEach(() => {
     plugins = {};

@@ -8,8 +8,9 @@ import { engine } from 'hygen';
 import Logger from 'hygen/lib/logger';
 import { Routine } from '@boost/core';
 import ScaffoldContext from './contexts/ScaffoldContext';
+import { BeemoTool } from './types';
 
-export default class ScaffoldRoutine extends Routine<ScaffoldContext> {
+export default class ScaffoldRoutine extends Routine<ScaffoldContext, BeemoTool> {
   async execute(context: ScaffoldContext) {
     this.task('Running generator', this.runGenerator);
 

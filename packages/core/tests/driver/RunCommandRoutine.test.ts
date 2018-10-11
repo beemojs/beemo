@@ -57,7 +57,7 @@ Options:
 
 describe('RunCommandRoutine', () => {
   let routine: RunCommandRoutine;
-  let driver: Driver<any>;
+  let driver: Driver;
   let tool;
 
   beforeEach(() => {
@@ -394,7 +394,7 @@ describe('RunCommandRoutine', () => {
   });
 
   describe('runCommandWithArgs()', () => {
-    const task = new Task<any, any>('Task');
+    const task = new Task<any>('Task');
 
     beforeEach(() => {
       routine.executeCommand = jest.fn(() => Promise.resolve({ success: true }));

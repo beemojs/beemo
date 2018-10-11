@@ -14,7 +14,7 @@ import optimal, { array, bool, string } from 'optimal';
 import parseArgs from 'yargs-parser';
 import DriverContext from '../contexts/DriverContext';
 import { STRATEGY_COPY } from '../constants';
-import { Argv, Execution } from '../types';
+import { Argv, Execution, BeemoTool } from '../types';
 
 const OPTION_PATTERN: RegExp = /-?-[a-z0-9-]+(,|\s)/giu;
 
@@ -26,7 +26,11 @@ export interface RunCommandOptions {
   workspaceRoot: string;
 }
 
-export default class RunCommandRoutine extends Routine<DriverContext, RunCommandOptions> {
+export default class RunCommandRoutine extends Routine<
+  DriverContext,
+  BeemoTool,
+  RunCommandOptions
+> {
   bootstrap() {
     this.options = optimal(
       this.options,

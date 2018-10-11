@@ -2,7 +2,7 @@ import Driver from '../src/Driver';
 import { createTestDriver, EXEC_RESULT } from '../../../tests/helpers';
 
 describe('Driver', () => {
-  let driver: Driver<any>;
+  let driver: Driver;
 
   beforeEach(() => {
     driver = createTestDriver('foo');
@@ -10,8 +10,8 @@ describe('Driver', () => {
 
   it('validates fields', () => {
     expect(() => {
-      // @ts-ignore Test invalid type
       driver = new Driver({
+        // @ts-ignore Test invalid type
         args: true,
       });
     }).toThrowErrorMatchingSnapshot();
@@ -233,9 +233,9 @@ describe('Driver', () => {
 
     it('doesnt support alias as other types', () => {
       expect(() => {
-        // @ts-ignore
         driver.setCommandOptions({
           foo: {
+            // @ts-ignore
             alias: 123,
           },
         });
@@ -258,9 +258,9 @@ describe('Driver', () => {
 
     it('doesnt support description as other types', () => {
       expect(() => {
-        // @ts-ignore
         driver.setCommandOptions({
           foo: {
+            // @ts-ignore
             description: 123,
           },
         });
@@ -339,9 +339,9 @@ describe('Driver', () => {
 
       it('doesnt support non-strings', () => {
         expect(() => {
-          // @ts-ignore
           driver.setMetadata({
             ...options,
+            // @ts-ignore
             configName: 123,
           });
         }).toThrowErrorMatchingSnapshot();
@@ -360,9 +360,9 @@ describe('Driver', () => {
 
       it('doesnt support non-strings', () => {
         expect(() => {
-          // @ts-ignore
           driver.setMetadata({
             ...options,
+            // @ts-ignore
             title: 123,
           });
         }).toThrowErrorMatchingSnapshot();

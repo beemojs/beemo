@@ -1,24 +1,24 @@
-import { Tool } from '@boost/core';
 import ConfigLoader from '@boost/core/lib/ConfigLoader';
 import fs from 'fs-extra';
 import CreateConfigRoutine from '../../src/configure/CreateConfigRoutine';
 import BabelDriver from '../../../driver-babel/src/BabelDriver';
+import Driver from '../../src/Driver';
+import { STRATEGY_COPY, STRATEGY_REFERENCE } from '../../src/constants';
+import { BeemoTool } from '../../src/types';
 import {
   createDriverContext,
   prependRoot,
   createTestDebugger,
   createTestTool,
 } from '../../../../tests/helpers';
-import Driver from '../../src/Driver';
-import { STRATEGY_COPY, STRATEGY_REFERENCE } from '../../src/constants';
 
 jest.mock('fs-extra');
 jest.mock('@boost/core/lib/ConfigLoader');
 
 describe('CreateConfigRoutine', () => {
   let routine: CreateConfigRoutine;
-  let driver: Driver<any>;
-  let tool: Tool;
+  let driver: Driver;
+  let tool: BeemoTool;
 
   beforeEach(() => {
     tool = createTestTool();
