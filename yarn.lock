@@ -803,10 +803,10 @@
     lodash "^4.17.10"
     to-fast-properties "^2.0.0"
 
-"@boost/core@^1.0.0-alpha.1":
-  version "1.0.0-alpha.1"
-  resolved "https://registry.npmjs.org/@boost/core/-/core-1.0.0-alpha.1.tgz#74e4b50c34c83780c7e46d7b7d75a54d888fd2d2"
-  integrity sha512-OQ1U1HQyrZ+vloeHXOELpLEm1hStVgHoRqrJIRDbs24XUfK9bzSNLlqYaW82Eg5J4qDFOn4wjU9epmhy7UFS3A==
+"@boost/core@^1.0.0-alpha.2":
+  version "1.0.0-alpha.2"
+  resolved "https://registry.npmjs.org/@boost/core/-/core-1.0.0-alpha.2.tgz#dde0534b91621d16582723e63b7f2e5ef32a4ea0"
+  integrity sha512-Tw9w43Yx+UsIji0ZDJyls6Y3XYjNuyUHzG3vZpfNybCpU/jfbuzOQNSb+cSbS24Ia4pafXcIXIda/04IOCKUTQ==
   dependencies:
     "@types/cli-truncate" "^1.1.0"
     "@types/debug" "^0.0.31"
@@ -814,10 +814,11 @@
     "@types/glob" "^7.1.1"
     "@types/i18next" "^11.9.1"
     "@types/json5" "^0.0.30"
-    "@types/lodash" "^4.14.116"
+    "@types/lodash" "^4.14.117"
     "@types/os-locale" "^2.1.0"
     "@types/pluralize" "^0.0.29"
     "@types/split" "^1.0.0"
+    "@types/yargs-parser" "^11.0.0"
     chalk "^2.4.1"
     cli-truncate "^1.1.0"
     debug "^4.1.0"
@@ -1594,11 +1595,6 @@
   resolved "https://registry.npmjs.org/@types/json5/-/json5-0.0.30.tgz#44cb52f32a809734ca562e685c6473b5754a7818"
   integrity sha512-sqm9g7mHlPY/43fcSNrCYfOeX9zkTTK+euO5E6+CVijSMm5tTjkVdwdqRkY3ljjIAf8679vps5jKUoJBCLsMDA==
 
-"@types/lodash@^4.14.116":
-  version "4.14.116"
-  resolved "https://registry.npmjs.org/@types/lodash/-/lodash-4.14.116.tgz#5ccf215653e3e8c786a58390751033a9adca0eb9"
-  integrity sha512-lRnAtKnxMXcYYXqOiotTmJd74uawNWuPnsnPrrO7HiFuE3npE2iQhfABatbYDyxTNqZNuXzcKGhw37R7RjBFLg==
-
 "@types/lodash@^4.14.117":
   version "4.14.117"
   resolved "https://registry.npmjs.org/@types/lodash/-/lodash-4.14.117.tgz#695a7f514182771a1e0f4345d189052ee33c8778"
@@ -1735,7 +1731,14 @@
     "@types/webpack-dev-server" "*"
     source-map "^0.6.0"
 
-"@types/yargs@^12.0.1":
+"@types/yargs-parser@^11.0.0":
+  version "11.0.0"
+  resolved "https://registry.npmjs.org/@types/yargs-parser/-/yargs-parser-11.0.0.tgz#514933c83ec38b8e06b8c9e5ffff637f20474f2e"
+  integrity sha512-ZfKjiy9zRHQWWRiQLeushSHE2IgHJ8U/OaABsNodkuufZoWED7Plz6egREZiE8dfrTAnrD8Rw/kUh2S6Iu1W0w==
+  dependencies:
+    "@types/yargs" "*"
+
+"@types/yargs@*", "@types/yargs@^12.0.1":
   version "12.0.1"
   resolved "https://registry.npmjs.org/@types/yargs/-/yargs-12.0.1.tgz#c5ce4ad64499010ae4dc2acd9b14d49749a44233"
   integrity sha512-UVjo2oH79aRNcsDlFlnQ/iJ67Jd7j6uSg7jUJP/RZ/nUjAh5ElmnwlD5K/6eGgETJUgCHkiWn91B8JjXQ6ubAw==
@@ -4674,10 +4677,10 @@ flat-cache@^1.2.1:
     graceful-fs "^4.1.2"
     write "^0.2.1"
 
-flow-bin@^0.82.0:
-  version "0.82.0"
-  resolved "https://registry.npmjs.org/flow-bin/-/flow-bin-0.82.0.tgz#fbec84c0d6cab7877565eca8214d655f3aefb8db"
-  integrity sha512-D7ViTCVJSVv19CB6dFWS9k2iKQlavtkRXn9el0ofVTTpGuybe+EPE8DZwdyohzEt6wRhHV8gwkteWvxdcVuOzg==
+flow-bin@^0.83.0:
+  version "0.83.0"
+  resolved "https://registry.npmjs.org/flow-bin/-/flow-bin-0.83.0.tgz#fd26f5f95758d7701264b3f9a1e1a3d4cbcab1a9"
+  integrity sha512-1K83EL/U9Gh0BaXPKkZe6TRizSmNSKx9Wuws1c8gh7DJEwiburtCxYT+4o7in1+GnNEm3CZWnbnVV8n9HMpiDA==
 
 flush-write-stream@^1.0.0:
   version "1.0.3"
@@ -9687,6 +9690,11 @@ typescript@^3.1.1:
   version "3.1.2"
   resolved "https://registry.npmjs.org/typescript/-/typescript-3.1.2.tgz#c03a5d16f30bb60ad8bb6fe8e7cb212eedeec950"
   integrity sha512-gOoGJWbNnFAfP9FlrSV63LYD5DJqYJHG5ky1kOXSl3pCImn4rqWy/flyq1BRd4iChQsoCqjbQaqtmXO4yCVPCA==
+
+typescript@^3.1.3:
+  version "3.1.3"
+  resolved "https://registry.npmjs.org/typescript/-/typescript-3.1.3.tgz#01b70247a6d3c2467f70c45795ef5ea18ce191d5"
+  integrity sha512-+81MUSyX+BaSo+u2RbozuQk/UWx6hfG0a5gHu4ANEM4sU96XbuIyAB+rWBW1u70c6a5QuZfuYICn3s2UjuHUpA==
 
 uglify-es@^3.3.4:
   version "3.3.9"

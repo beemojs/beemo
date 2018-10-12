@@ -16,7 +16,7 @@ export default class TypeScriptDriver extends Driver<TypeScriptConfig> {
       bin: 'tsc',
       configName: 'tsconfig.json',
       configOption: '',
-      description: 'Type check files with TypeScript',
+      description: this.tool.msg('app:typescriptDescription'),
       filterOptions: true,
       helpOption: '--help --all',
       title: 'TypeScript',
@@ -27,7 +27,7 @@ export default class TypeScriptDriver extends Driver<TypeScriptConfig> {
       clean: {
         boolean: true,
         default: false,
-        description: 'Clean the target folder',
+        description: this.tool.msg('app:typescriptCleanOption'),
       },
     });
 

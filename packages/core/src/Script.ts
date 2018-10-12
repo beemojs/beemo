@@ -4,13 +4,13 @@
  */
 
 import { Module, Tool } from '@boost/core';
-import { Options, Arguments } from 'yargs';
+import { Arguments, Options } from 'yargs-parser';
 
 export default class Script<Opts = {}> extends Module<Opts> {
   /**
    * Define a configuration object to parse args with.
    */
-  parse(): { [option: string]: Options } {
+  parse(): Options {
     return {};
   }
 

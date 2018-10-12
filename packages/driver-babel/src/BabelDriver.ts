@@ -16,7 +16,7 @@ export default class BabelDriver extends Driver<BabelConfig> {
       bin: 'babel',
       configName: 'babel.config.js',
       configOption: '--config-file',
-      description: 'Transpile files with Babel',
+      description: this.tool.msg('app:babelDescription'),
       title: 'Babel',
     });
 
@@ -24,7 +24,7 @@ export default class BabelDriver extends Driver<BabelConfig> {
       clean: {
         boolean: true,
         default: false,
-        description: 'Clean the target folder',
+        description: this.tool.msg('app:babelCleanOption'),
       },
     });
 

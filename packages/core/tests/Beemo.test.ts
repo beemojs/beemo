@@ -25,9 +25,9 @@ jest.mock(
     },
 );
 
-jest.mock('../../../tests', () => jest.fn());
+jest.mock('../../../tests/index.js', () => jest.fn());
 
-const root = path.join(__dirname, '../../../tests');
+const root = path.join(__dirname, '../../../tests/index.js');
 
 describe('Beemo', () => {
   let beemo: Beemo;

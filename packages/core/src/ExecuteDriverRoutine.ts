@@ -21,7 +21,7 @@ export default class ExecuteDriverRoutine extends Routine<DriverContext, BeemoTo
     if (args.workspaces) {
       if (!workspaces || workspaces.length === 0) {
         throw new Error(
-          `Option --workspaces=${args.workspaces} provided but project is not workspaces enabled.`,
+          this.tool.msg('errors:driverWorkspacesNotEnabled', { arg: args.workspaces }),
         );
       }
 
@@ -52,7 +52,7 @@ export default class ExecuteDriverRoutine extends Routine<DriverContext, BeemoTo
     );
 
     if (response.errors.length > 0) {
-      throw new Error('Failed to execute driver pipeline.');
+      throw new Error(this.tool.msg('errors:driverExecuteFailed'));
     }
 
     return response.results;

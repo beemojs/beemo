@@ -17,7 +17,7 @@ export default class ESLintDriver extends Driver<ESLintConfig> {
     this.setMetadata({
       bin: 'eslint',
       configName: '.eslintrc.js',
-      description: 'Lint files with ESLint',
+      description: this.tool.msg('app:eslintDescription'),
       filterOptions: true,
       title: 'ESLint',
     });
@@ -38,7 +38,7 @@ export default class ESLintDriver extends Driver<ESLintConfig> {
     }
 
     if (!Array.isArray(config.ignore)) {
-      throw new TypeError('Ignore configuration must be an array of strings.');
+      throw new TypeError(this.tool.msg('errors:eslintIgnoreInvalid'));
     }
 
     const ignorePath = path.join(path.dirname(configPath), '.eslintignore');

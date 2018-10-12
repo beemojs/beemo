@@ -37,24 +37,25 @@ export default class CreateConfigRoutine extends Routine<
   }
 
   async execute(): Promise<string> {
+    const { tool } = this;
     const { metadata, name, options } = this.options.driver;
     const strategy =
       options.strategy === STRATEGY_NATIVE ? metadata.configStrategy : options.strategy;
 
     switch (strategy) {
       case STRATEGY_REFERENCE:
-        this.task(`Referencing ${name} config file`, this.referenceConfigFile);
+        this.task(tool.msg('app:configReference', { name }), this.referenceConfigFile);
         break;
 
       case STRATEGY_COPY:
-        this.task(`Copying ${name} config file`, this.copyConfigFile);
+        this.task(tool.msg('app:configCopy', { name }), this.copyConfigFile);
         break;
 
       case STRATEGY_CREATE:
-        this.task(`Loading source ${name} module config`, this.loadConfigFromFilesystem);
-        this.task(`Loading local ${name} Beemo config`, this.extractConfigFromPackage);
-        this.task(`Merging ${name} config objects`, this.mergeConfigs);
-        this.task(`Creating ${name} config file`, this.createConfigFile);
+        this.task(tool.msg('app:configCreateLoadSource', { name }), this.loadConfigFromFilesystem);
+        this.task(tool.msg('app:configCreateLoadLocal', { name }), this.extractConfigFromPackage);
+        this.task(tool.msg('app:configCreateMerge', { name }), this.mergeConfigs);
+        this.task(tool.msg('app:configCreate', { name }), this.createConfigFile);
         break;
 
       default:
@@ -75,9 +76,7 @@ export default class CreateConfigRoutine extends Routine<
     const configPath = path.join(context.root, metadata.configName);
 
     if (!sourcePath) {
-      throw new Error(
-        'Cannot copy configuration file. Source file does not exist in configuration module.',
-      );
+      throw new Error(this.tool.msg('errors:configCopySourceMissing'));
     }
 
     const config = configLoader.parseFile(sourcePath);
@@ -220,9 +219,7 @@ export default class CreateConfigRoutine extends Routine<
     const configPath = path.join(context.root, metadata.configName);
 
     if (!sourcePath) {
-      throw new Error(
-        'Cannot reference configuration file. Source file does not exist in configuration module.',
-      );
+      throw new Error(this.tool.msg('errors:configReferenceSourceMissing'));
     }
 
     const config = configLoader.parseFile(sourcePath);

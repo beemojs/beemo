@@ -25,7 +25,7 @@
     "access": "public"
   },
   "devDependencies": {
-    "flow-bin": "^0.82.0"
+    "flow-bin": "^0.83.0"
   },
   "peerDependencies": {
     "@beemo/core": "^0.21.0",

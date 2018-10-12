@@ -46,24 +46,27 @@ export default class RunCommandRoutine extends Routine<
   }
 
   async execute(context: DriverContext): Promise<Execution> {
+    const { tool } = this;
     const { forceConfigOption, workspaceRoot } = this.options;
     const { metadata } = context.primaryDriver;
 
-    this.task('Gathering arguments', this.gatherArgs);
+    this.task(tool.msg('app:driverRunGatherArgs'), this.gatherArgs);
 
-    this.task('Expanding glob patterns', this.expandGlobPatterns);
+    this.task(tool.msg('app:driverRunExpandGlob'), this.expandGlobPatterns);
 
-    this.task('Filtering options', this.filterUnknownOptions).skip(!metadata.filterOptions);
+    this.task(tool.msg('app:driverRunFilterOptions'), this.filterUnknownOptions).skip(
+      !metadata.filterOptions,
+    );
 
     if (workspaceRoot && metadata.workspaceStrategy === STRATEGY_COPY) {
-      this.task('Copying config into workspace', this.copyConfigToWorkspace);
+      this.task(tool.msg('app:driverRunCopyWorkspaceConfig'), this.copyConfigToWorkspace);
     } else {
-      this.task('Including config option', this.includeConfigOption).skip(
+      this.task(tool.msg('app:driverRunIncludeConfigOption'), this.includeConfigOption).skip(
         !metadata.useConfigOption && !forceConfigOption,
       );
     }
 
-    this.task('Running command', this.runCommandWithArgs);
+    this.task(tool.msg('app:driverRunCommand'), this.runCommandWithArgs);
 
     return this.serializeTasks();
   }
@@ -104,7 +107,7 @@ export default class RunCommandRoutine extends Routine<
           '  %s %s %s',
           arg,
           chalk.gray('->'),
-          paths.length > 0 ? paths.join(', ') : chalk.gray('(no match)'),
+          paths.length > 0 ? paths.join(', ') : chalk.gray(this.tool.msg('app:noMatch')),
         );
 
         nextArgv.push(...paths);

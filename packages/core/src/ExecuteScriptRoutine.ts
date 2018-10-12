@@ -12,8 +12,8 @@ import { BeemoTool, Execution } from './types';
 
 export default class ExecuteScriptRoutine extends Routine<ScriptContext, BeemoTool> {
   async execute(context: ScriptContext, scriptName: any): Promise<Execution> {
-    this.task('Loading script', this.loadScript);
-    this.task('Running script', this.runScript);
+    this.task(this.tool.msg('app:scriptLoad'), this.loadScript);
+    this.task(this.tool.msg('app:scriptRun'), this.runScript);
 
     return this.serializeTasks(scriptName);
   }

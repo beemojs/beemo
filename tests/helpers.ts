@@ -38,6 +38,7 @@ export function createTestDebugger(): any {
 export function createTestTool(): BeemoTool {
   const tool = new Tool<BeemoPluginRegistry, BeemoConfig>({
     appName: 'beemo',
+    appPath: __dirname,
     configBlueprint: {},
     configFolder: './configs',
     root: __dirname,

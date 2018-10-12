@@ -10,8 +10,8 @@ describe('Driver', () => {
 
   it('validates fields', () => {
     expect(() => {
+      // @ts-ignore Test invalid type
       driver = new Driver({
-        // @ts-ignore Test invalid type
         args: true,
       });
     }).toThrowErrorMatchingSnapshot();

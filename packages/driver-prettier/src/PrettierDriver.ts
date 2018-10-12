@@ -15,7 +15,7 @@ export default class PrettierDriver extends Driver<PrettierConfig> {
     this.setMetadata({
       bin: 'prettier',
       configName: 'prettier.config.js',
-      description: 'Format code with Prettier',
+      description: this.tool.msg('app:prettierDescription'),
       filterOptions: true,
       title: 'Prettier',
     });
@@ -32,7 +32,7 @@ export default class PrettierDriver extends Driver<PrettierConfig> {
     }
 
     if (!Array.isArray(config.ignore)) {
-      throw new TypeError('Ignore configuration must be an array of strings.');
+      throw new TypeError(this.tool.msg('errors:prettierIgnoreInvalid'));
     }
 
     const ignorePath = path.join(path.dirname(configPath), '.prettierignore');

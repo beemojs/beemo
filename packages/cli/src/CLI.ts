@@ -8,7 +8,7 @@
 import path from 'path';
 import chalk from 'chalk';
 import yargs, { Arguments } from 'yargs';
-import Beemo, { Driver } from '@beemo/core';
+import Beemo from '@beemo/core';
 import version from './checkVersion';
 import parseSpecialArgv from './parseSpecialArgv';
 
@@ -86,12 +86,22 @@ app.command('*', false, {}, () => {
 
 // Add Beemo options
 app
+  .option('config', {
+    default: '',
+    description: 'Path to a configuration file',
+    string: true,
+  })
   .option('debug', {
     boolean: true,
     default: false,
     description: 'Show debug messages',
   })
-  .option('level', {
+  .option('locale', {
+    default: '',
+    description: 'Locale to display messages in',
+    string: true,
+  })
+  .option('output', {
     default: 3,
     description: 'Control output size',
     number: true,

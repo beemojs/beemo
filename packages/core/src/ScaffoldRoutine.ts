@@ -12,7 +12,7 @@ import { BeemoTool } from './types';
 
 export default class ScaffoldRoutine extends Routine<ScaffoldContext, BeemoTool> {
   async execute(context: ScaffoldContext) {
-    this.task('Running generator', this.runGenerator);
+    this.task(this.tool.msg('app:scaffoldRunGenerator'), this.runGenerator);
 
     return this.serializeTasks(context.moduleRoot);
   }
@@ -59,9 +59,7 @@ export default class ScaffoldRoutine extends Routine<ScaffoldContext, BeemoTool>
     } catch (error) {
       // Intercept hygen error to provide a better error message
       if (error.message.startsWith("I can't find action")) {
-        throw new Error(
-          `Failed to find scaffolding templates "${args.join('/')}/*.ejs" in configuration module.`,
-        );
+        throw new Error(this.tool.msg('errors:scaffoldNoTemplates', { path: args.join('/') }));
       }
 
       throw error;

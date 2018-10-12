@@ -14,7 +14,7 @@ export default class WebpackDriver extends Driver<WebpackConfig> {
       bin: 'webpack',
       configName: 'webpack.config.js',
       configStrategy: STRATEGY_REFERENCE,
-      description: 'Bundle source files with Webpack',
+      description: this.tool.msg('app:webpackDescription'),
       title: 'Webpack',
     });
   }

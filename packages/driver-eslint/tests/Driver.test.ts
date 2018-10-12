@@ -85,8 +85,8 @@ describe('ESLintDriver', () => {
 
     it('errors if not an array', () => {
       expect(() => {
-        // @ts-ignore
         driver.handleCreateIgnoreFile('/some/path/.eslintrc.js', {
+          // @ts-ignore
           ignore: 'foo',
         });
       }).toThrowErrorMatchingSnapshot();

@@ -27,12 +27,16 @@ describe('ExecuteDriverRoutine', () => {
     routine.debug = createTestDebugger();
 
     // RunCommandRoutine is mocked, so use plain objects
-    // @ts-ignore
     routine.routines = [
+      // @ts-ignore
       { key: 'primary' },
+      // @ts-ignore
       { key: 'foo' },
+      // @ts-ignore
       { key: 'bar' },
+      // @ts-ignore
       { key: 'baz' },
+      // @ts-ignore
       { key: 'qux' },
     ];
 

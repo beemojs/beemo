@@ -7,7 +7,7 @@ import chalk from 'chalk';
 import fs from 'fs-extra';
 import path from 'path';
 import { Pipeline, Tool } from '@boost/core';
-import { bool, shape, Blueprint } from 'optimal';
+import { bool, shape, string, Blueprint } from 'optimal';
 import CleanupRoutine from './CleanupRoutine';
 import ConfigureRoutine from './ConfigureRoutine';
 import ExecuteDriverRoutine from './ExecuteDriverRoutine';
@@ -40,7 +40,6 @@ export default class Beemo {
         appName: binName || 'beemo',
         appPath: path.join(__dirname, '..'),
         configBlueprint: this.getConfigBlueprint(),
-        footer: `\n🤖  Powered by Beemo v${version}`,
         scoped: true,
       },
       argv,
@@ -50,6 +49,9 @@ export default class Beemo {
 
     // Immediately load config and plugins
     this.tool.initialize();
+
+    // Set footer after messages have been loaded
+    this.tool.options.footer = `\n🤖  ${this.tool.msg('app:poweredBy', { version })}`;
   }
 
   /**
@@ -100,7 +102,7 @@ export default class Beemo {
     tool.debug('Running with %s driver(s)', [primaryDriver, ...additionalDrivers].join(', '));
 
     return this.startPipeline(context)
-      .pipe(new ConfigureRoutine('config', 'Generating configurations'))
+      .pipe(new ConfigureRoutine('config', tool.msg('app:configGenerate')))
       .run(primaryDriver);
   }
 
@@ -113,6 +115,7 @@ export default class Beemo {
         cleanup: bool(false),
         parallel: bool(true),
       }),
+      module: string().required(),
     };
   }
 
@@ -124,20 +127,18 @@ export default class Beemo {
       return this.moduleRoot;
     }
 
-    const { module } = this.tool.config;
+    const { tool } = this;
+    const { module } = tool.config;
 
-    this.tool.debug('Locating configuration module root');
+    tool.debug('Locating configuration module root');
 
     if (!module) {
-      throw new Error(
-        'Beemo requires a "beemo.module" property within your package.json. ' +
-          'This property is the name of a module that houses your configuration files.',
-      );
+      throw new Error(tool.msg('errors:moduleConfigMissing'));
     }
 
     // Allow for local development
     if (module === '@local') {
-      this.tool.debug('Using %s configuration module', chalk.yellow('@local'));
+      tool.debug('Using %s configuration module', chalk.yellow('@local'));
 
       this.moduleRoot = process.cwd();
 
@@ -148,10 +149,10 @@ export default class Beemo {
     const rootPath = path.join(process.cwd(), 'node_modules', module);
 
     if (!fs.existsSync(rootPath)) {
-      throw new Error(`Module ${module} defined in "beemo.module" could not be found.`);
+      throw new Error(tool.msg('errors:moduleMissing', { module }));
     }
 
-    this.tool.debug('Found configuration module root path: %s', chalk.cyan(rootPath));
+    tool.debug('Found configuration module root path: %s', chalk.cyan(rootPath));
 
     this.moduleRoot = rootPath;
 
@@ -237,9 +238,9 @@ export default class Beemo {
     tool.debug('Running with %s driver', driverName);
 
     return this.startPipeline(context)
-      .pipe(new ConfigureRoutine('config', 'Generating configurations'))
-      .pipe(new ExecuteDriverRoutine('driver', 'Executing driver'))
-      .pipe(new CleanupRoutine('cleanup', 'Cleaning up'))
+      .pipe(new ConfigureRoutine('config', tool.msg('app:configGenerate')))
+      .pipe(new ExecuteDriverRoutine('driver', tool.msg('app:driverExecute')))
+      .pipe(new CleanupRoutine('cleanup', tool.msg('app:cleanup')))
       .run(driverName);
   }
 
@@ -254,7 +255,7 @@ export default class Beemo {
     tool.debug('Running with %s script', scriptName);
 
     return this.startPipeline(context)
-      .pipe(new ExecuteScriptRoutine('script', `Executing ${scriptName} script`))
+      .pipe(new ExecuteScriptRoutine('script', tool.msg('app:scriptExecute', { name: scriptName })))
       .run(scriptName);
   }
 
@@ -280,7 +281,7 @@ export default class Beemo {
     tool.debug('Running scaffold command');
 
     return this.startPipeline(context)
-      .pipe(new ScaffoldRoutine('scaffold', 'Generating from templates'))
+      .pipe(new ScaffoldRoutine('scaffold', tool.msg('app:scaffoldGenerate')))
       .run();
   }
 

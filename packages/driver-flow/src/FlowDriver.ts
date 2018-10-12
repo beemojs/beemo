@@ -13,7 +13,7 @@ export default class FlowDriver extends Driver<FlowConfig> {
     this.setMetadata({
       bin: 'flow',
       configName: '.flowconfig',
-      description: 'Type check files with Flow',
+      description: this.tool.msg('app:flowDescription'),
       filterOptions: true,
       title: 'Flow',
     });

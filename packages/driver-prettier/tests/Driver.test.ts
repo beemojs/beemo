@@ -56,8 +56,8 @@ describe('PrettierDriver', () => {
 
     it('errors if not an array', () => {
       expect(() => {
-        // @ts-ignore
         driver.handleCreateIgnoreFile('/some/path/prettier.config.js', {
+          // @ts-ignore
           ignore: 'foo',
         });
       }).toThrowErrorMatchingSnapshot();
