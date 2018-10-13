@@ -2,16 +2,21 @@ import fs from 'fs';
 import ESLintDriver from '../src/ESLintDriver';
 import { createDriverContext, createTestTool } from '../../../tests/helpers';
 
-jest.mock('fs');
-
 describe('ESLintDriver', () => {
   let driver: ESLintDriver;
+  let spy: jest.SpyInstance;
 
   beforeEach(() => {
     driver = new ESLintDriver();
     driver.tool = createTestTool();
     driver.context = createDriverContext(driver);
     driver.bootstrap();
+
+    spy = jest.spyOn(fs, 'writeFileSync').mockImplementation(() => true);
+  });
+
+  afterEach(() => {
+    spy.mockRestore();
   });
 
   it('sets options from constructor', () => {
@@ -100,7 +105,7 @@ describe('ESLintDriver', () => {
 
       driver.handleCreateIgnoreFile('/some/path/.eslintrc.js', config);
 
-      expect(fs.writeFileSync).toHaveBeenCalledWith('/some/path/.eslintignore', 'foo\nbar\nbaz');
+      expect(spy).toHaveBeenCalledWith('/some/path/.eslintignore', 'foo\nbar\nbaz');
 
       expect(driver.context.configPaths).toEqual([
         { driver: 'eslint', path: '/some/path/.eslintignore' },

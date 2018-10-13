@@ -1,10 +1,12 @@
 import WebpackDriver from '../src/WebpackDriver';
+import { createTestTool } from '../../../tests/helpers';
 
 describe('WebpackDriver', () => {
   let driver: WebpackDriver;
 
   beforeEach(() => {
     driver = new WebpackDriver();
+    driver.tool = createTestTool();
     driver.bootstrap();
   });
 

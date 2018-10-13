@@ -1,10 +1,12 @@
 import MochaDriver from '../src/MochaDriver';
+import { createTestTool } from '../../../tests/helpers';
 
 describe('MochaDriver', () => {
   let driver: MochaDriver;
 
   beforeEach(() => {
     driver = new MochaDriver();
+    driver.tool = createTestTool();
     driver.bootstrap();
   });
 

@@ -2,16 +2,21 @@ import fs from 'fs';
 import PrettierDriver from '../src/PrettierDriver';
 import { createDriverContext, createTestTool } from '../../../tests/helpers';
 
-jest.mock('fs');
-
 describe('PrettierDriver', () => {
   let driver: PrettierDriver;
+  let spy: jest.SpyInstance;
 
   beforeEach(() => {
     driver = new PrettierDriver();
     driver.tool = createTestTool();
     driver.context = createDriverContext(driver);
     driver.bootstrap();
+
+    spy = jest.spyOn(fs, 'writeFileSync').mockImplementation(() => true);
+  });
+
+  afterEach(() => {
+    spy.mockRestore();
   });
 
   it('sets options from constructor', () => {
@@ -71,7 +76,7 @@ describe('PrettierDriver', () => {
 
       driver.handleCreateIgnoreFile('/some/path/prettier.config.js', config);
 
-      expect(fs.writeFileSync).toHaveBeenCalledWith('/some/path/.prettierignore', 'foo\nbar\nbaz');
+      expect(spy).toHaveBeenCalledWith('/some/path/.prettierignore', 'foo\nbar\nbaz');
 
       expect(driver.context.configPaths).toEqual([
         { driver: 'prettier', path: '/some/path/.prettierignore' },
