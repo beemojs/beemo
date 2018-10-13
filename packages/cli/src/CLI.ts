@@ -18,6 +18,7 @@ const { main, parallel } = parseSpecialArgv(process.argv.slice(2));
 // Initialize
 const binName = path.basename(process.argv[1]);
 const beemo = new Beemo(main.slice(1), binName);
+const { tool } = beemo;
 const app = yargs(main);
 const manualURL = process.env.BEEMO_MANUAL_URL || 'https://milesj.gitbook.io/beemo';
 
@@ -25,26 +26,26 @@ const manualURL = process.env.BEEMO_MANUAL_URL || 'https://milesj.gitbook.io/bee
 beemo.bootstrapConfigModule();
 
 // Add a command for each driver
-beemo.tool.getPlugins('driver').forEach(driver => {
-  const { command = {}, metadata } = driver;
+tool.getPlugins('driver').forEach(driver => {
+  const { command, metadata } = driver;
 
   app.command(
     driver.name,
-    metadata.description || `Run ${metadata.title}`,
+    metadata.description || tool.msg('app:run', { title: metadata.title }),
     {
       ...command,
       concurrency: {
-        description: 'Number of builds to run in parallel',
+        description: tool.msg('app:cliOptionConcurrency'),
         number: true,
       },
       priority: {
         boolean: true,
         default: true,
-        description: 'Prioritize workspace builds based on dependency graph',
+        description: tool.msg('app:cliOptionPriority'),
       },
       workspaces: {
         default: '',
-        description: 'Run command in each workspace (supports regex)',
+        description: tool.msg('app:cliOptionWorkspaces'),
         string: true,
       },
     },
@@ -55,33 +56,33 @@ beemo.tool.getPlugins('driver').forEach(driver => {
 // Add Beemo commands
 app.command(
   ['create-config <name> [names..]', 'config <name> [names..]'],
-  'Create a configuration file for the specified drivers',
+  tool.msg('app:cliCommandConfig'),
   {},
   (args: Arguments) => beemo.createConfigFiles(args, args.name, args.names),
 );
 
 app.command(
   ['run-script <name>', 'run <name>'],
-  'Run custom script from configuration module',
+  tool.msg('app:cliCommandRunScript'),
   {},
   (args: Arguments) => beemo.executeScript(args, args.name),
 );
 
 app.command(
   'scaffold <generator> <action>',
-  'Generate files with templates from configuration module',
+  tool.msg('app:cliCommandScaffold'),
   {
     dry: {
       boolean: true,
       default: false,
-      description: 'Execute a dry run',
+      description: tool.msg('app:cliOptionDryRun'),
     },
   },
   (args: Arguments) => beemo.scaffold(args, args.generator, args.action),
 );
 
 app.command('*', false, {}, () => {
-  console.error(chalk.red('Please select a command!'));
+  console.error(chalk.red(tool.msg('errors:cliNoCommand')));
 });
 
 // Add Beemo options
@@ -121,13 +122,7 @@ app
 // eslint-disable-next-line no-unused-expressions
 app
   .usage(`${binName} <command> [args..]`)
-  .epilogue(
-    chalk.gray(
-      [`For more information, view the manual: ${manualURL}`, `Powered by Beemo v${version}`].join(
-        '\n',
-      ),
-    ),
-  )
-  .demandCommand(1, chalk.red('Please select a command!'))
+  .epilogue(chalk.gray(tool.msg('app:cliEpilogue', { manualURL, version })))
+  .demandCommand(1, chalk.red(tool.msg('errors:cliNoCommand')))
   .showHelpOnFail(true)
   .help().argv;

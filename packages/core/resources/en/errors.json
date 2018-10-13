@@ -1,4 +1,5 @@
 {
+  "cliNoCommand": "Please select a command!",
   "configCopySourceMissing": "Cannot copy configuration file. Source file does not exist in configuration module.",
   "configReferenceSourceMissing": "Cannot reference configuration file. Source file does not exist in configuration module.",
   "driverExecuteFailed": "Failed to execute driver pipeline.",
