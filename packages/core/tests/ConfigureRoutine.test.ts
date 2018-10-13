@@ -22,7 +22,7 @@ describe('ConfigureRoutine', () => {
     routine.context = createDriverContext(createTestDriver('foo'));
     routine.debug = createTestDebugger();
 
-    routine.tool.getPlugin = jest.fn(name => plugins[name] || createTestDriver(name, tool));
+    routine.tool.getPlugin = jest.fn((type, name) => plugins[name] || createTestDriver(name, tool));
   });
 
   describe('bootstrap()', () => {

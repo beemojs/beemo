@@ -25,9 +25,9 @@ jest.mock(
     },
 );
 
-jest.mock('../../../tests/index.js', () => jest.fn());
+jest.mock('../../../tests', () => jest.fn());
 
-const root = path.join(__dirname, '../../../tests/index.js');
+const root = path.join(__dirname, '../../../tests');
 
 describe('Beemo', () => {
   let beemo: Beemo;
@@ -71,7 +71,7 @@ describe('Beemo', () => {
   describe('createConfigFiles()', () => {
     beforeEach(() => {
       // @ts-ignore
-      beemo.tool.getPlugin = name => createTestDriver(name);
+      beemo.tool.getPlugin = (type, name) => createTestDriver(name);
     });
 
     it('passes context to pipeline', async () => {

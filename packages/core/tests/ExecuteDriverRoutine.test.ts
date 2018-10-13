@@ -1,6 +1,7 @@
 import Driver from '../src/Driver';
 import ExecuteDriverRoutine from '../src/ExecuteDriverRoutine';
 import RunCommandRoutine from '../src/driver/RunCommandRoutine';
+import DriverContext from '../src/contexts/DriverContext';
 import {
   getFixturePath,
   createDriverContext,
@@ -8,7 +9,6 @@ import {
   createTestDriver,
   createTestTool,
 } from '../../../tests/helpers';
-import { DriverContext } from '../../../node_modules/@beemo/core/src';
 
 jest.mock('../src/driver/RunCommandRoutine', () => jest.fn());
 
