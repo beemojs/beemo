@@ -6,7 +6,8 @@
 import chalk from 'chalk';
 import fs from 'fs-extra';
 import path from 'path';
-import { Pipeline, Tool } from '@boost/core';
+import { Argv as YargsApp } from 'yargs';
+import { CLI, Pipeline, Tool } from '@boost/core';
 import { bool, shape, string, Blueprint } from 'optimal';
 import CleanupRoutine from './CleanupRoutine';
 import ConfigureRoutine from './ConfigureRoutine';
@@ -52,6 +53,13 @@ export default class Beemo {
 
     // Set footer after messages have been loaded
     this.tool.options.footer = `\n🤖  ${this.tool.msg('app:poweredBy', { version })}`;
+  }
+
+  /**
+   * Register global options within our CLI application.
+   */
+  bootstrapCLI(app: YargsApp) {
+    CLI.registerGlobalOptions(app, this.tool);
   }
 
   /**

@@ -25,6 +25,9 @@ const manualURL = process.env.BEEMO_MANUAL_URL || 'https://milesj.gitbook.io/bee
 // Bootstrap the module
 beemo.bootstrapConfigModule();
 
+// Register global options
+beemo.bootstrapCLI(app as any);
+
 // Add a command for each driver
 tool.getPlugins('driver').forEach(driver => {
   const { command, metadata } = driver;
@@ -84,39 +87,6 @@ app.command(
 app.command('*', false, {}, () => {
   console.error(chalk.red(tool.msg('errors:cliNoCommand')));
 });
-
-// Add Beemo options
-app
-  .option('config', {
-    default: '',
-    description: 'Path to a configuration file',
-    string: true,
-  })
-  .option('debug', {
-    boolean: true,
-    default: false,
-    description: 'Show debug messages',
-  })
-  .option('locale', {
-    default: '',
-    description: 'Locale to display messages in',
-    string: true,
-  })
-  .option('output', {
-    default: 3,
-    description: 'Control output size',
-    number: true,
-  })
-  .option('silent', {
-    boolean: true,
-    default: false,
-    description: `Hide all output`,
-  })
-  .option('theme', {
-    default: 'default',
-    description: 'Change output colors',
-    string: true,
-  });
 
 // Run application
 // eslint-disable-next-line no-unused-expressions
