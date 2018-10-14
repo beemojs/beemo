@@ -10,6 +10,7 @@ import {
   createDriverContext,
   createContext,
   createTestDriver,
+  createTestTool,
 } from '../../../tests/helpers';
 
 jest.mock('fs-extra');
@@ -34,7 +35,7 @@ describe('Beemo', () => {
   const args = { _: [], $0: '' };
 
   beforeEach(() => {
-    beemo = new Beemo(['foo', 'bar']);
+    beemo = new Beemo(['foo', 'bar'], '', createTestTool());
     beemo.moduleRoot = root;
     beemo.tool.options.root = root;
 

@@ -30,21 +30,26 @@ export default class Beemo {
 
   workspacePaths: string[] = [];
 
-  constructor(argv: Argv, binName?: string) {
+  constructor(argv: Argv, binName?: string, tool?: BeemoTool) {
     this.argv = argv;
 
     // eslint-disable-next-line global-require
     const { version } = require('../package.json');
 
-    this.tool = new Tool<BeemoPluginRegistry, BeemoConfig>(
-      {
-        appName: binName || 'beemo',
-        appPath: path.join(__dirname, '..'),
-        configBlueprint: this.getConfigBlueprint(),
-        scoped: true,
-      },
-      argv,
-    ).registerPlugin('driver', Driver);
+    this.tool =
+      tool ||
+      new Tool<BeemoPluginRegistry, BeemoConfig>(
+        {
+          appName: 'beemo',
+          appPath: path.join(__dirname, '..'),
+          configBlueprint: this.getConfigBlueprint(),
+          configName: binName,
+          scoped: true,
+        },
+        argv,
+      );
+
+    this.tool.registerPlugin('driver', Driver);
 
     this.tool.debug('Using beemo v%s', version);
 
