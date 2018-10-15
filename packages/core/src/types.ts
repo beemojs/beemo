@@ -21,6 +21,10 @@ export interface BeemoConfig extends ToolConfig {
     cleanup: boolean;
     parallel: boolean;
   };
+  driver: {
+    concurrency: number;
+    priority: boolean;
+  };
   module: string;
   // Driver overrides
   [key: string]: any;

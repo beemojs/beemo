@@ -51,6 +51,10 @@ export function createTestTool(): BeemoTool {
       cleanup: false,
       parallel: true,
     },
+    driver: {
+      concurrency: 0,
+      priority: true,
+    },
     debug: false,
     drivers: [],
     extends: [],

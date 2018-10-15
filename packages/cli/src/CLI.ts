@@ -43,11 +43,9 @@ tool.getPlugins('driver').forEach(driver => {
       },
       priority: {
         boolean: true,
-        default: true,
         description: tool.msg('app:cliOptionPriority'),
       },
       workspaces: {
-        default: '',
         description: tool.msg('app:cliOptionWorkspaces'),
         string: true,
       },
