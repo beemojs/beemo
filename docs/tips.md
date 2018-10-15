@@ -114,10 +114,11 @@ console).
 ```
 #!/usr/bin/env node
 
-require('@beemo/cli/lib/CLI');
-```
+process.env.BEEMO_CONFIG_MODULE = '@<custom-username>/dev-tools';
+process.env.BEEMO_MANUAL_URL = 'http://custom/manual/url';
 
-> Define a `BEEMO_MANUAL_URL` environment variable to change the manual URL in the help output.
+require('@beemo/cli');
+```
 
 Be sure to reference your new executable in your configuration module's `package.json`.
 
@@ -129,19 +130,20 @@ Be sure to reference your new executable in your configuration module's `package
 }
 ```
 
-And to configure the consumer with the new name as well.
+If `BEEMO_CONFIG_MODULE` is not defined in your custom binary, you'll need to manually define the
+`module` property in the consumer config.
 
 ```json
 {
   "<name>": {
-    "module": "@<username>/dev-tools"
+    "module": "@<custom-username>/dev-tools"
   }
 }
 ```
 
 ## Output Verbosity
 
-Console output can be controlled with the `--level` option and a numerical value between 1 and 3
+Console output can be controlled with the `--output` option and a numerical value between 1 and 3
 (default). More information is logged the higher the range. To hide all output, use `--silent`
 instead.
 

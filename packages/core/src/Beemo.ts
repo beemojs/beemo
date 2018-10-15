@@ -49,12 +49,10 @@ export default class Beemo {
         argv,
       );
 
-    this.tool.registerPlugin('driver', Driver);
-
     this.tool.debug('Using beemo v%s', version);
 
     // Immediately load config and plugins
-    this.tool.initialize();
+    this.tool.registerPlugin('driver', Driver).initialize();
 
     // Set footer after messages have been loaded
     this.tool.options.footer = `\n🤖  ${this.tool.msg('app:poweredBy', { version })}`;
@@ -128,7 +126,9 @@ export default class Beemo {
         cleanup: bool(false),
         parallel: bool(true),
       }),
-      module: string().required(),
+      module: process.env.BEEMO_CONFIG_MODULE
+        ? string(process.env.BEEMO_CONFIG_MODULE)
+        : string().required(),
     };
   }
 

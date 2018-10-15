@@ -1,5 +1,6 @@
 import path from 'path';
 import fs from 'fs-extra';
+import optimal from 'optimal';
 import Beemo from '../src/Beemo';
 import Context from '../src/contexts/Context';
 import DriverContext from '../src/contexts/DriverContext';
@@ -96,6 +97,28 @@ describe('Beemo', () => {
 
       expect(spy).toHaveBeenCalled();
       expect(spy.mock.calls[0][0].drivers.size).toBe(2);
+    });
+  });
+
+  describe('getConfigBlueprint()', () => {
+    it('errors if no module', () => {
+      expect(() => {
+        optimal({}, beemo.getConfigBlueprint());
+      }).toThrowErrorMatchingSnapshot();
+    });
+
+    it('doesnt error if module is defined with env var', () => {
+      process.env.BEEMO_CONFIG_MODULE = 'test-boost';
+
+      let opts: any = {};
+
+      expect(() => {
+        opts = optimal({}, beemo.getConfigBlueprint());
+      }).not.toThrowError();
+
+      expect(opts.module).toBe('test-boost');
+
+      process.env.BEEMO_CONFIG_MODULE = '';
     });
   });
 
