@@ -2,5 +2,6 @@
 integration/
 src/
 tests/
+types/
 .flowconfig
 tsconfig.json

@@ -2,4 +2,5 @@
 integration/
 src/
 tests/
+types/
 tsconfig.json

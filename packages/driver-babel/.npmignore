@@ -1,5 +1,7 @@
 *.log
+dist/
 integration/
 src/
 tests/
+types/
 tsconfig.json
