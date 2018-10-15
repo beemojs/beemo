@@ -92,7 +92,7 @@ export default class ExecuteDriverRoutine extends Routine<DriverContext, BeemoTo
   } {
     const enabled = this.context.args.priority || this.tool.config.execute.priority;
 
-    if (!enabled) {
+    if (!enabled || !this.context.args.workspaces) {
       return {
         other: this.routines,
         priority: [],

@@ -242,6 +242,7 @@ describe('ExecuteDriverRoutine', () => {
 
     it('serializes priority routines before pooling other routines', async () => {
       routine.context.args.priority = 'qux,foo';
+      routine.context.args.workspaces = '*';
       routine.serializeRoutines = jest.fn(() => Promise.resolve());
       routine.poolRoutines = jest.fn(() => Promise.resolve({ errors: [], results: [] }));
       routine.workspacePackages[1].peerDependencies = {
@@ -329,11 +330,21 @@ describe('ExecuteDriverRoutine', () => {
   describe('orderByWorkspacePriorityGraph()', () => {
     beforeEach(() => {
       routine.context.args.priority = true;
+      routine.context.args.workspaces = '*';
     });
 
     it('returns all as `other` if priority is false', () => {
       routine.context.args.priority = false;
       routine.tool.config.execute.priority = false;
+
+      expect(routine.orderByWorkspacePriorityGraph()).toEqual({
+        other: [{ key: 'primary' }, { key: 'foo' }, { key: 'bar' }, { key: 'baz' }, { key: 'qux' }],
+        priority: [],
+      });
+    });
+
+    it('returns all as `other` if workspaces is empty', () => {
+      routine.context.args.workspaces = '';
 
       expect(routine.orderByWorkspacePriorityGraph()).toEqual({
         other: [{ key: 'primary' }, { key: 'foo' }, { key: 'bar' }, { key: 'baz' }, { key: 'qux' }],
