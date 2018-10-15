@@ -217,8 +217,9 @@ export default class CreateConfigRoutine extends Routine<
       configs.push(this.loadConfig(context, configLoader, modulePath));
     }
 
-    // Local files should override anything defined in the module
-    if (localPath) {
+    // Local files should override anything defined in the configuration module above
+    // Also don't double load files, so check against @local to avoid
+    if (localPath && localPath !== modulePath) {
       configs.push(this.loadConfig(context, configLoader, localPath));
     }
 

@@ -61,14 +61,10 @@ describe('CreateConfigRoutine', () => {
       const path = await routine.execute();
 
       expect(loadSpy).toHaveBeenCalledWith(routine.context, [], expect.anything());
-      expect(extractSpy).toHaveBeenCalledWith(
-        routine.context,
-        [{ foo: 123 }, { foo: 123 }],
-        expect.anything(),
-      );
+      expect(extractSpy).toHaveBeenCalledWith(routine.context, [{ foo: 123 }], expect.anything());
       expect(mergeSpy).toHaveBeenCalledWith(
         routine.context,
-        [{ foo: 123 }, { foo: 123 }, { bar: 'abc' }],
+        [{ foo: 123 }, { bar: 'abc' }],
         expect.anything(),
       );
       expect(createSpy).toHaveBeenCalledWith(
@@ -323,10 +319,7 @@ describe('CreateConfigRoutine', () => {
     it('loads config if it exists', async () => {
       const configs = await routine.loadConfigFromSources(routine.context, []);
 
-      expect(configs).toEqual([
-        { filePath: prependRoot('/configs/babel.js') },
-        { filePath: prependRoot('/configs/babel.js') },
-      ]);
+      expect(configs).toEqual([{ filePath: prependRoot('/configs/babel.js') }]);
     });
 
     it('does nothing if config does not exist', async () => {
@@ -340,10 +333,7 @@ describe('CreateConfigRoutine', () => {
     it('uses local path when using @local config', async () => {
       const configs = await routine.loadConfigFromSources(routine.context, []);
 
-      expect(configs).toEqual([
-        { filePath: prependRoot('/configs/babel.js') },
-        { filePath: prependRoot('/configs/babel.js') },
-      ]);
+      expect(configs).toEqual([{ filePath: prependRoot('/configs/babel.js') }]);
     });
 
     it('uses module path when using custom config', async () => {
