@@ -52,8 +52,8 @@ export default class CreateConfigRoutine extends Routine<
         break;
 
       case STRATEGY_CREATE:
-        this.task(tool.msg('app:configCreateLoadSource', { name }), this.loadConfigFromFilesystem);
-        this.task(tool.msg('app:configCreateLoadLocal', { name }), this.extractConfigFromPackage);
+        this.task(tool.msg('app:configCreateLoadFile', { name }), this.loadConfigFromSources);
+        this.task(tool.msg('app:configCreateLoadPackage', { name }), this.extractConfigFromPackage);
         this.task(tool.msg('app:configCreateMerge', { name }), this.mergeConfigs);
         this.task(tool.msg('app:configCreate', { name }), this.createConfigFile);
         break;
@@ -63,7 +63,7 @@ export default class CreateConfigRoutine extends Routine<
         break;
     }
 
-    return this.serializeTasks();
+    return this.serializeTasks([]);
   }
 
   /**
@@ -72,7 +72,7 @@ export default class CreateConfigRoutine extends Routine<
   async copyConfigFile(context: DriverContext): Promise<string> {
     const { metadata, name } = this.options.driver;
     const configLoader = new ConfigLoader(this.tool);
-    const sourcePath = this.getSourceConfigPath(configLoader);
+    const sourcePath = this.getConfigPath(configLoader);
     const configPath = path.join(context.root, metadata.configName);
 
     if (!sourcePath) {
@@ -146,23 +146,25 @@ export default class CreateConfigRoutine extends Routine<
    * Return absolute file path for config file within configuration module,
    * or an empty string if it does not exist.
    */
-  getSourceConfigPath(configLoader: ConfigLoader): string {
+  getConfigPath(configLoader: ConfigLoader, forceLocal: boolean = false): string {
     const { root, workspaceRoot } = this.context;
-    const {
-      config: { module: moduleName },
-    } = this.tool;
+    const moduleName = this.tool.config.module;
     const { name } = this.options.driver;
+    const isLocal = moduleName === '@local' || forceLocal;
 
     // Allow for local development
-    const filePath =
-      moduleName === '@local'
-        ? path.join(workspaceRoot || root, `configs/${name}.js`)
-        : configLoader.resolveModuleConfigPath(name, moduleName);
+    const filePath = isLocal
+      ? path.join(workspaceRoot || root, `configs/${name}.js`)
+      : configLoader.resolveModuleConfigPath(name, moduleName);
     const fileExists = fs.existsSync(filePath);
 
     this.debug.invariant(
       fileExists,
-      `Loading ${chalk.magenta(name)} config from configuration module ${chalk.yellow(moduleName)}`,
+      isLocal
+        ? `Loading ${chalk.magenta(name)} config from local consumer`
+        : `Loading ${chalk.magenta(name)} config from configuration module ${chalk.yellow(
+            moduleName,
+          )}`,
       'Exists, loading',
       'Does not exist, skipping',
     );
@@ -189,21 +191,35 @@ export default class CreateConfigRoutine extends Routine<
   }
 
   /**
-   * Load configuration from the node module (the consumer owned package).
+   * Load a config file with passing the args and tool to the file.
    */
-  loadConfigFromFilesystem(context: DriverContext): Promise<Struct[]> {
-    const { name } = this.options.driver;
+  loadConfig(context: DriverContext, configLoader: ConfigLoader, filePath: string): Struct {
+    const { driver } = this.options;
+    const args = merge({}, context.args, parseArgs(driver.getArgs()));
+    const config = configLoader.parseFile(filePath, [args, this.tool]);
+
+    this.tool.emit(`${driver.name}.load-module-config`, [filePath, config]);
+
+    return config;
+  }
+
+  /**
+   * Load config from the provider configuration module
+   * and from the local configs/ folder in the consumer.
+   */
+  loadConfigFromSources(context: DriverContext, prevConfigs: Struct[]): Promise<Struct[]> {
     const configLoader = new ConfigLoader(this.tool);
-    const filePath = this.getSourceConfigPath(configLoader);
-    const configs = [];
+    const modulePath = this.getConfigPath(configLoader);
+    const localPath = this.getConfigPath(configLoader, true);
+    const configs = [...prevConfigs];
 
-    if (filePath) {
-      const args = merge({}, context.args, parseArgs(this.options.driver.getArgs()));
-      const config = configLoader.parseFile(filePath, [args, this.tool]);
+    if (modulePath) {
+      configs.push(this.loadConfig(context, configLoader, modulePath));
+    }
 
-      this.tool.emit(`${name}.load-module-config`, [filePath, config]);
-
-      configs.push(config);
+    // Local files should override anything defined in the module
+    if (localPath) {
+      configs.push(this.loadConfig(context, configLoader, localPath));
     }
 
     return Promise.resolve(configs);
@@ -215,7 +231,7 @@ export default class CreateConfigRoutine extends Routine<
   referenceConfigFile(context: DriverContext): Promise<string> {
     const { metadata, name } = this.options.driver;
     const configLoader = new ConfigLoader(this.tool);
-    const sourcePath = this.getSourceConfigPath(configLoader);
+    const sourcePath = this.getConfigPath(configLoader);
     const configPath = path.join(context.root, metadata.configName);
 
     if (!sourcePath) {
