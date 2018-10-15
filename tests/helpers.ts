@@ -47,11 +47,11 @@ export function createTestTool(): BeemoTool {
   });
 
   tool.config = {
-    config: {
+    configure: {
       cleanup: false,
       parallel: true,
     },
-    driver: {
+    execute: {
       concurrency: 0,
       priority: true,
     },

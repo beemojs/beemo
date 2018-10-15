@@ -17,11 +17,11 @@ export interface BeemoPluginRegistry {
 }
 
 export interface BeemoConfig extends ToolConfig {
-  config: {
+  configure: {
     cleanup: boolean;
     parallel: boolean;
   };
-  driver: {
+  execute: {
     concurrency: number;
     priority: boolean;
   };

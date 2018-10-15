@@ -44,7 +44,7 @@ describe('ConfigureRoutine', () => {
     });
 
     it('serializes if `parallel` config is false', async () => {
-      routine.tool.config.config.parallel = false;
+      routine.tool.config.configure.parallel = false;
 
       await routine.execute();
 

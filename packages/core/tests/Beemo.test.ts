@@ -326,7 +326,7 @@ describe('Beemo', () => {
 
     it('registers an exit listener if cleanup is true', async () => {
       beemo.tool.on = jest.fn();
-      beemo.tool.config.config.cleanup = true;
+      beemo.tool.config.configure.cleanup = true;
 
       await beemo.executeDriver(args, 'foo-bar');
 
@@ -335,7 +335,7 @@ describe('Beemo', () => {
 
     it('doesnt register exit listener if cleanup is false', async () => {
       beemo.tool.on = jest.fn();
-      beemo.tool.config.config.cleanup = false;
+      beemo.tool.config.configure.cleanup = false;
 
       await beemo.executeDriver(args, 'foo-bar');
 

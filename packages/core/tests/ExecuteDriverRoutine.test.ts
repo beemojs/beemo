@@ -213,7 +213,7 @@ describe('ExecuteDriverRoutine', () => {
 
     it('passes concurrency option to pooler', async () => {
       routine.poolRoutines = jest.fn(() => Promise.resolve({ errors: [], results: [] }));
-      routine.tool.config.driver.concurrency = 3;
+      routine.tool.config.execute.concurrency = 3;
 
       await routine.execute(context);
 
@@ -333,7 +333,7 @@ describe('ExecuteDriverRoutine', () => {
 
     it('returns all as `other` if priority is false', () => {
       routine.context.args.priority = false;
-      routine.tool.config.driver.priority = false;
+      routine.tool.config.execute.priority = false;
 
       expect(routine.orderByWorkspacePriorityGraph()).toEqual({
         other: [{ key: 'primary' }, { key: 'foo' }, { key: 'bar' }, { key: 'baz' }, { key: 'qux' }],

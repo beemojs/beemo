@@ -28,11 +28,11 @@ that matches the name of your configuration module, or another third-party modul
 ### Settings
 
 - `module` (string) - Name of your configuration module.
-- `config.cleanup` (bool) - Remove generated config files after execution. Defaults to `false`.
-- `config.parallel` (bool) - Create configuration files in parallel. Defaults to `true`.
-- `driver.concurrency` (number) - Number of builds to run in parallel. Defaults to the amount of
+- `configure.cleanup` (bool) - Remove generated config files after execution. Defaults to `false`.
+- `configure.parallel` (bool) - Create configuration files in parallel. Defaults to `true`.
+- `execute.concurrency` (number) - Number of builds to run in parallel. Defaults to the amount of
   CPUs.
-- `driver.priority` (bool) - Prioritize workspace builds based on
+- `execute.priority` (bool) - Prioritize workspace builds based on
   [dependency graph](./workspaces.md#priority-packages).
 - `drivers` (string[] | object[]) - List of drivers to enable for the consumer.
 - `settings` (object) - Custom settings specific to your project that can easily be referenced.

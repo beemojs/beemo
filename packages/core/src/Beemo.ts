@@ -122,14 +122,25 @@ export default class Beemo {
    */
   getConfigBlueprint(): Blueprint {
     return {
-      config: shape({
-        cleanup: bool(false),
-        parallel: bool(true),
-      }),
-      driver: shape({
-        concurrency: number(),
-        priority: bool(true),
-      }),
+      configure: shape(
+        {
+          cleanup: bool(false),
+          parallel: bool(true),
+        },
+        {
+          cleanup: false,
+          parallel: true,
+        },
+      ),
+      execute: shape(
+        {
+          concurrency: number(),
+          priority: bool(true),
+        },
+        {
+          priority: true,
+        },
+      ),
       module: process.env.BEEMO_CONFIG_MODULE
         ? string(process.env.BEEMO_CONFIG_MODULE)
         : string().required(),
@@ -240,7 +251,7 @@ export default class Beemo {
     const context = this.prepareContext(new DriverContext(args, driver, parallelArgv));
 
     // Delete config files on failure
-    if (tool.config.config.cleanup) {
+    if (tool.config.configure.cleanup) {
       tool.on(
         'exit',
         /* istanbul ignore next */ code => this.handleCleanupOnFailure(code, context),

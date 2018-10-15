@@ -40,7 +40,7 @@ export default class ExecuteDriverRoutine extends Routine<DriverContext, BeemoTo
 
   async execute(context: DriverContext): Promise<string[]> {
     const { other, priority } = this.orderByWorkspacePriorityGraph();
-    const concurrency = context.args.concurrency || this.tool.config.driver.concurrency;
+    const concurrency = context.args.concurrency || this.tool.config.execute.concurrency;
 
     await this.serializeRoutines(null, priority);
 
@@ -90,7 +90,7 @@ export default class ExecuteDriverRoutine extends Routine<DriverContext, BeemoTo
     other: Routine<DriverContext, BeemoTool>[];
     priority: Routine<DriverContext, BeemoTool>[];
   } {
-    const enabled = this.context.args.priority || this.tool.config.driver.priority;
+    const enabled = this.context.args.priority || this.tool.config.execute.priority;
 
     if (!enabled) {
       return {
