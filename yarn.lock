@@ -762,15 +762,14 @@
     lodash "^4.17.10"
     to-fast-properties "^2.0.0"
 
-"@boost/core@^1.0.0-beta.0":
-  version "1.0.0-beta.0"
-  resolved "https://registry.npmjs.org/@boost/core/-/core-1.0.0-beta.0.tgz#c5c7a5a0378978c5035640fd866fa2250164350a"
-  integrity sha512-9QAUQAXC0Ex0BhwtaoegVHZkQwPbYE6xsznNiZACKijnY+H098utuPKEt0jzKtcIEiG4avjIxTauNB0tcJty6w==
+"@boost/core@^1.0.0-beta.1":
+  version "1.0.0-beta.1"
+  resolved "https://registry.yarnpkg.com/@boost/core/-/core-1.0.0-beta.1.tgz#1db50d0cc3a13ef27f48d6fa9911ace616ada8e4"
+  integrity sha512-kAdLI6yt993FGKAv3I8+chtZUAcByfDd4f7AuwYuQXT5f9VxdEXiEpJrdReHi7HE5oPj5UMsXnAEC+2ysIKeCw==
   dependencies:
     "@types/cli-truncate" "^1.1.0"
     "@types/debug" "^0.0.31"
     "@types/execa" "^0.9.0"
-    "@types/glob" "^7.1.1"
     "@types/i18next" "^11.9.2"
     "@types/json5" "^0.0.30"
     "@types/lodash" "^4.14.117"
@@ -785,7 +784,7 @@
     cli-truncate "^1.1.0"
     debug "^4.1.0"
     execa "^1.0.0"
-    glob "^7.1.3"
+    fast-glob "^2.2.3"
     i18next "^11.9.1"
     json5 "^2.1.0"
     lodash "^4.17.11"
@@ -1355,10 +1354,10 @@
     npmlog "^4.1.2"
     write-file-atomic "^2.3.0"
 
-"@milesj/build-tool-config@0.124.1":
-  version "0.124.1"
-  resolved "https://registry.npmjs.org/@milesj/build-tool-config/-/build-tool-config-0.124.1.tgz#294fb20df29e37b01da1acc3adab3ae20a95f3e9"
-  integrity sha512-0jLvgU2VvXx4rSkrjqXWYt3RotSNl4QCwR4Z0QkQF4dt9s63jKf5OzKR7OtPqBoeEuilZPbkSDsfcdDiCEFKGg==
+"@milesj/build-tool-config@0.125.0":
+  version "0.125.0"
+  resolved "https://registry.yarnpkg.com/@milesj/build-tool-config/-/build-tool-config-0.125.0.tgz#865b67ce531c9d8a65e04dac68b45af493dc34a2"
+  integrity sha512-otgldKqa4G6wnjq3KtzeAotN0q7YdObDylv1rKA5/N++jw36yHXARFJANn7IGEcJJUeJZKXwq1YsD/sCfT/MbA==
   dependencies:
     "@babel/cli" "^7.1.2"
     "@babel/core" "^7.1.2"
@@ -1386,7 +1385,7 @@
     eslint-plugin-babel "^5.2.1"
     eslint-plugin-compat "^2.6.2"
     eslint-plugin-import "^2.14.0"
-    eslint-plugin-jest "^21.24.1"
+    eslint-plugin-jest "^21.25.0"
     eslint-plugin-jsx-a11y "^6.1.2"
     eslint-plugin-promise "^4.0.1"
     eslint-plugin-react "^7.11.1"
@@ -4049,9 +4048,9 @@ eslint-plugin-import@^2.14.0:
     read-pkg-up "^2.0.0"
     resolve "^1.6.0"
 
-eslint-plugin-jest@^21.24.1:
+eslint-plugin-jest@^21.25.0:
   version "21.25.0"
-  resolved "https://registry.npmjs.org/eslint-plugin-jest/-/eslint-plugin-jest-21.25.0.tgz#b798c6616a2ad444ea25636d877ca3d3bc881348"
+  resolved "https://registry.yarnpkg.com/eslint-plugin-jest/-/eslint-plugin-jest-21.25.0.tgz#b798c6616a2ad444ea25636d877ca3d3bc881348"
   integrity sha512-x1B7986tOhSR6TDmW7oA7zf8bpturx5NXhv4ZY0U6HLh2BLk3Z5rRsfZxrcWT8Caq30k/NHji2K3IPC1pPa/QQ==
 
 eslint-plugin-jsx-a11y@^6.1.2:
@@ -4479,7 +4478,7 @@ fast-deep-equal@^2.0.1:
   resolved "https://registry.npmjs.org/fast-deep-equal/-/fast-deep-equal-2.0.1.tgz#7b05218ddf9667bf7f370bf7fdb2cb15fdd0aa49"
   integrity sha1-ewUhjd+WZ79/Nwv3/bLLFf3Qqkk=
 
-fast-glob@^2.0.2:
+fast-glob@^2.0.2, fast-glob@^2.2.3:
   version "2.2.3"
   resolved "https://registry.npmjs.org/fast-glob/-/fast-glob-2.2.3.tgz#d09d378e9ef6b0076a0fa1ba7519d9d4d9699c28"
   integrity sha512-NiX+JXjnx43RzvVFwRWfPKo4U+1BrK5pJPsHQdKMlLoFHrrGktXglQhHliSihWAq+m1z6fHk3uwGHrtRbS9vLA==
