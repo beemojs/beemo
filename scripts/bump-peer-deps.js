@@ -1,7 +1,7 @@
 const { Script } = require('@beemo/core');
 const chalk = require('chalk');
 const fs = require('fs-extra');
-const glob = require('glob');
+const glob = require('fast-glob');
 const semver = require('semver');
 
 const RELEASE_TYPES = ['major', 'minor', 'patch'];
@@ -30,11 +30,11 @@ module.exports = class BumpPeerDepsScript extends Script {
     tool.log('Loading packages and incrementing versions');
 
     glob.sync('./packages/*/package.json', { cwd: tool.options.root }).forEach(path => {
-      const data = fs.readJsonSync(path);
+      const data = fs.readJsonSync(String(path));
 
       versions[data.name] = semver.inc(data.version, release);
       packages[data.name] = data;
-      packagePaths[data.name] = path;
+      packagePaths[data.name] = String(path);
     });
 
     return Promise.all(

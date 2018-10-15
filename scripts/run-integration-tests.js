@@ -1,7 +1,7 @@
 const { Script } = require('@beemo/core');
 const chalk = require('chalk');
 const fs = require('fs-extra');
-const glob = require('glob');
+const glob = require('fast-glob');
 const execa = require('execa');
 const path = require('path');
 
@@ -28,8 +28,8 @@ module.exports = class RunIntegrationTestsScript extends Script {
 
     const packages = glob
       .sync('./packages/*/package.json', { cwd: tool.options.root })
-      .filter(pkgPath => pkgPath.includes('driver'))
-      .map(pkgPath => fs.readJsonSync(pkgPath));
+      .filter(pkgPath => String(pkgPath).includes('driver'))
+      .map(pkgPath => fs.readJsonSync(String(pkgPath)));
 
     return Promise.all(
       packages.map(pkg => {

@@ -5,7 +5,7 @@
 
 import fs from 'fs-extra';
 import path from 'path';
-import glob from 'glob';
+import glob from 'fast-glob';
 import { Routine, PackageConfig } from '@boost/core';
 import DriverContext from './contexts/DriverContext';
 import RunCommandRoutine, { RunCommandOptions } from './driver/RunCommandRoutine';
@@ -71,14 +71,12 @@ export default class ExecuteDriverRoutine extends Routine<DriverContext, BeemoTo
       .sync(`${this.context.workspaces}/package.json`, {
         absolute: true,
         cwd: this.context.root,
-        debug: this.tool.config.debug,
-        strict: true,
       })
       .map(filePath => {
-        const pkg = JSON.parse(fs.readFileSync(filePath, 'utf8'));
+        const pkg = JSON.parse(fs.readFileSync(String(filePath), 'utf8'));
 
         pkg.packagePath = filePath;
-        pkg.workspacePath = path.dirname(filePath);
+        pkg.workspacePath = path.dirname(String(filePath));
         pkg.workspaceName = path.basename(pkg.workspacePath);
 
         return pkg;

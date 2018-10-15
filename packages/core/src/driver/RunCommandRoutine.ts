@@ -5,7 +5,7 @@
 
 import { Routine, Task } from '@boost/core';
 import chalk from 'chalk';
-import glob from 'glob';
+import glob from 'fast-glob';
 import path from 'path';
 import fs from 'fs-extra';
 import isGlob from 'is-glob';
@@ -97,11 +97,13 @@ export default class RunCommandRoutine extends Routine<
 
     argv.forEach(arg => {
       if (arg.charAt(0) !== '-' && isGlob(arg)) {
-        const paths = glob.sync(arg, {
-          cwd: context.root,
-          debug: this.tool.config.debug,
-          strict: true,
-        });
+        const paths = glob
+          .sync(arg, {
+            cwd: context.root,
+            onlyDirectories: false,
+            onlyFiles: false,
+          })
+          .map(filePath => String(filePath));
 
         this.debug(
           '  %s %s %s',
