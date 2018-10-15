@@ -9,7 +9,7 @@ yarn add @beemo/driver-typescript typescript
 
 ## Requirements
 
-- TypeScript ^2.0.0
+- TypeScript ^2.0.0 | ^3.0.0
 
 ## Usage
 

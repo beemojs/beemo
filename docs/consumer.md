@@ -40,7 +40,8 @@ that matches the name of your configuration module, or another third-party modul
 The following options are available to all Beemo commands.
 
 - `--debug` (bool) - Print debug logs to the console.
-- `--level` (number) - Control the output level sent to the console.
+- `--locale` (string) - Localize the output messages to the defined locale.
+- `--output` (number) - Control the output level sent to the console.
   [More information](./tips#output-verbosity).
 - `--silent` (bool) - Hide all output from the console. [More information](./tips#output-verbosity).
 - `--theme` (string) - Change output colors using a theme. [More information](./tips.md#cli-themes).
@@ -94,8 +95,9 @@ Options can also be set through the [bootstrap and event system](./events.md).
 - `dependencies` (string[]) - Other drivers that are required for this driver to run.
 - `env` (object) - Environment variables to pass when executing the driver binary with
   [execa](https://github.com/sindresorhus/execa).
-- `strategy` (create | copy | reference) - Type of [strategy](./driver.md#config-strategies) to use
-  when generating a config file. Default is different per driver.
+- `strategy` (create | copy | reference | native) - Type of
+  [strategy](./driver.md#config-strategies) to use when generating a config file. Default is
+  different per driver.
 
 ## Executing Drivers
 
