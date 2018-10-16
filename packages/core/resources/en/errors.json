@@ -5,8 +5,8 @@
   "driverExecuteFailed": "Failed to execute driver pipeline.",
   "driverWorkspacesNotEnabled": "Option --workspaces={{arg}} provided but project is not workspaces enabled.",
   "eslintIgnoreInvalid": "Ignore configuration must be an array of strings.",
-  "moduleConfigMissing": "Beemo requires a \"beemo.module\" property within your package.json. This property is the name of a module that houses your configuration files.",
-  "moduleMissing": "Module {{module}} defined in \"beemo.module\" could not be found.",
+  "moduleConfigMissing": "Beemo requires a \"{{configName}}.module\" property within your package.json. This property is the name of a module that houses your configuration files.",
+  "moduleMissing": "Module {{module}} defined in \"{{configName}}.module\" could not be found.",
   "prettierIgnoreInvalid": "Ignore configuration must be an array of strings.",
   "scaffoldNoTemplates": "Failed to find scaffolding templates \"{{path}}/*.ejs\" in configuration module."
 }

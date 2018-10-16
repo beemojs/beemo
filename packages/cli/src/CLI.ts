@@ -90,7 +90,13 @@ app.command('*', false, {}, () => {
 // eslint-disable-next-line no-unused-expressions
 app
   .usage(`${binName} <command> [args..]`)
-  .epilogue(chalk.gray(tool.msg('app:cliEpilogue', { manualURL, version })))
+  .epilogue(
+    // prettier-ignore
+    chalk.gray([
+      tool.msg('app:cliEpilogue', { manualURL }),
+      tool.msg('app:poweredBy', { version })
+    ].join('\n')),
+  )
   .demandCommand(1, chalk.red(tool.msg('errors:cliNoCommand')))
   .showHelpOnFail(true)
   .help().argv;

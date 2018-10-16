@@ -145,12 +145,13 @@ export default class Beemo {
     }
 
     const { tool } = this;
+    const { configName } = tool.options;
     const { module } = tool.config;
 
     tool.debug('Locating configuration module root');
 
     if (!module) {
-      throw new Error(tool.msg('errors:moduleConfigMissing'));
+      throw new Error(tool.msg('errors:moduleConfigMissing', { configName }));
     }
 
     // Allow for local development
@@ -166,7 +167,7 @@ export default class Beemo {
     const rootPath = path.join(process.cwd(), 'node_modules', module);
 
     if (!fs.existsSync(rootPath)) {
-      throw new Error(tool.msg('errors:moduleMissing', { module }));
+      throw new Error(tool.msg('errors:moduleMissing', { configName, module }));
     }
 
     tool.debug('Found configuration module root path: %s', chalk.cyan(rootPath));

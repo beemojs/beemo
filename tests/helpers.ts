@@ -41,6 +41,7 @@ export function createTestTool(): BeemoTool {
     appPath: path.join(__dirname, '../packages/core'),
     configBlueprint: {},
     configFolder: './configs',
+    configName: 'beemo',
     root: __dirname,
     scoped: true,
     workspaceRoot: __dirname,

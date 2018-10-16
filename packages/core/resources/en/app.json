@@ -5,7 +5,7 @@
   "cliCommandConfig": "Create a configuration file for the specified drivers",
   "cliCommandRunScript": "Run custom script from configuration module",
   "cliCommandScaffold": "Generate files with templates from configuration module",
-  "cliEpilogue": "For more information, view the manual: {{manualURL}}\nPowered by Beemo v{{version}}",
+  "cliEpilogue": "For more information, view the manual: {{manualURL}}",
   "cliOptionConcurrency": "Number of builds to run in parallel",
   "cliOptionDryRun": "Execute a dry run",
   "cliOptionPriority": "Prioritize workspace builds based on dependency graph",
