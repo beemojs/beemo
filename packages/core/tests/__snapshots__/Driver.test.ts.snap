@@ -16,8 +16,6 @@ exports[`Driver formatConfig() formats to JSON if config ends in .json 1`] = `
 }"
 `;
 
-exports[`Driver setCommandOptions() doesnt support alias as other types 1`] = `"Invalid Driver field \\"foo.alias\\". Type must be one of: string, array<string>"`;
-
 exports[`Driver setCommandOptions() doesnt support description as other types 1`] = `"Invalid Driver field \\"foo.description\\". Must be a string."`;
 
 exports[`Driver setCommandOptions() doesnt support empty descriptions 1`] = `"Invalid Driver field \\"foo.description\\". String cannot be empty."`;

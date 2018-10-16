@@ -199,49 +199,6 @@ describe('Driver', () => {
   });
 
   describe('setCommandOptions()', () => {
-    it('supports alias as a string', () => {
-      driver.setCommandOptions({
-        foo: {
-          alias: 'f',
-          description: 'Foo',
-        },
-      });
-
-      expect(driver.command).toEqual({
-        foo: {
-          alias: 'f',
-          description: 'Foo',
-        },
-      });
-    });
-
-    it('supports alias as an array of strings', () => {
-      driver.setCommandOptions({
-        foo: {
-          alias: ['f', 'o'],
-          description: 'Foo',
-        },
-      });
-
-      expect(driver.command).toEqual({
-        foo: {
-          alias: ['f', 'o'],
-          description: 'Foo',
-        },
-      });
-    });
-
-    it('doesnt support alias as other types', () => {
-      expect(() => {
-        driver.setCommandOptions({
-          foo: {
-            // @ts-ignore
-            alias: 123,
-          },
-        });
-      }).toThrowErrorMatchingSnapshot();
-    });
-
     it('supports description as a string', () => {
       driver.setCommandOptions({
         foo: {

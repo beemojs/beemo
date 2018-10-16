@@ -5,7 +5,7 @@
 
 import { Plugin, EventListener } from '@boost/core';
 import mergeWith from 'lodash/mergeWith';
-import optimal, { array, bool, number, object, shape, string, union, Blueprint } from 'optimal';
+import optimal, { array, bool, number, object, string, union, Blueprint } from 'optimal';
 import DriverContext from './contexts/DriverContext';
 import { STRATEGY_COPY, STRATEGY_CREATE, STRATEGY_REFERENCE, STRATEGY_NATIVE } from './constants';
 import {
@@ -153,14 +153,14 @@ export default class Driver<Config = any> extends Plugin<BeemoTool, DriverOption
     const blueprint: Blueprint = {};
 
     Object.keys(options).forEach(key => {
-      blueprint[key] = shape({
-        alias: union([string(), array(string())], ''),
+      blueprint[key] = {
         description: string().required(),
-      });
+      };
     });
 
     this.command = optimal(options, blueprint, {
       name: this.constructor.name,
+      unknown: true,
     });
 
     return this;

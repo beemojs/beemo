@@ -3,10 +3,12 @@
  * @license     https://opensource.org/licenses/MIT
  */
 
-import { Module, Tool } from '@boost/core';
+import { Tool } from '@boost/core';
 import { Arguments, Options } from 'yargs-parser';
 
-export default class Script<Opts = {}> extends Module<Opts> {
+export default class Script {
+  name: string = '';
+
   /**
    * Define a configuration object to parse args with.
    */

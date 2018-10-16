@@ -122,25 +122,14 @@ export default class Beemo {
    */
   getConfigBlueprint(): Blueprint {
     return {
-      configure: shape(
-        {
-          cleanup: bool(false),
-          parallel: bool(true),
-        },
-        {
-          cleanup: false,
-          parallel: true,
-        },
-      ),
-      execute: shape(
-        {
-          concurrency: number(),
-          priority: bool(true),
-        },
-        {
-          priority: true,
-        },
-      ),
+      configure: {
+        cleanup: bool(false),
+        parallel: bool(true),
+      },
+      execute: {
+        concurrency: number(),
+        priority: bool(true),
+      },
       module: process.env.BEEMO_CONFIG_MODULE
         ? string(process.env.BEEMO_CONFIG_MODULE)
         : string().required(),
