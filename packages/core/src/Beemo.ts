@@ -8,7 +8,7 @@ import fs from 'fs-extra';
 import path from 'path';
 import { Argv as YargsApp } from 'yargs';
 import { CLI, Pipeline, Tool } from '@boost/core';
-import { bool, number, shape, string, Blueprint } from 'optimal';
+import { bool, number, string, Blueprint } from 'optimal';
 import CleanupRoutine from './CleanupRoutine';
 import ConfigureRoutine from './ConfigureRoutine';
 import ExecuteDriverRoutine from './ExecuteDriverRoutine';

@@ -8,16 +8,9 @@ import mergeWith from 'lodash/mergeWith';
 import optimal, { array, bool, number, object, string, union, Blueprint } from 'optimal';
 import DriverContext from './contexts/DriverContext';
 import { STRATEGY_COPY, STRATEGY_CREATE, STRATEGY_REFERENCE, STRATEGY_NATIVE } from './constants';
-import {
-  Argv,
-  BeemoTool,
-  DriverCommandOptions,
-  DriverOptions,
-  DriverMetadata,
-  Execution,
-} from './types';
+import { Argv, DriverCommandOptions, DriverOptions, DriverMetadata, Execution } from './types';
 
-export default class Driver<Config = any> extends Plugin<BeemoTool, DriverOptions> {
+export default class Driver<Config = any> extends Plugin<DriverOptions> {
   command: DriverCommandOptions = {};
 
   // @ts-ignore Set after instantiation

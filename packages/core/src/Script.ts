@@ -3,8 +3,8 @@
  * @license     https://opensource.org/licenses/MIT
  */
 
-import { Tool } from '@boost/core';
 import { Arguments, Options } from 'yargs-parser';
+import { BeemoTool } from './types';
 
 export default class Script {
   name: string = '';
@@ -19,7 +19,7 @@ export default class Script {
   /**
    * Run the script with the options object and Beemo tool instance.
    */
-  async run(args: Arguments, tool: Tool): Promise<any> {
+  async run(args: Arguments, tool: BeemoTool): Promise<any> {
     throw new Error(`${this.constructor.name} must define an async run() method.`);
   }
 }

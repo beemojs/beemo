@@ -3,7 +3,7 @@
  * @license     https://opensource.org/licenses/MIT
  */
 
-import { Tool, ToolConfig } from '@boost/core';
+import { Tool, ToolConfig, ToolPluginRegistry } from '@boost/core';
 import { ExecaReturns } from 'execa'; // eslint-disable-line import/no-extraneous-dependencies
 import { Arguments, Options } from 'yargs';
 import Driver from './Driver';
@@ -12,7 +12,7 @@ export { Arguments };
 
 export type Argv = string[];
 
-export interface BeemoPluginRegistry {
+export interface BeemoPluginRegistry extends ToolPluginRegistry {
   driver: Driver;
 }
 

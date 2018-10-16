@@ -762,15 +762,15 @@
     lodash "^4.17.10"
     to-fast-properties "^2.0.0"
 
-"@boost/core@^1.0.0-beta.1":
-  version "1.0.0-beta.1"
-  resolved "https://registry.yarnpkg.com/@boost/core/-/core-1.0.0-beta.1.tgz#1db50d0cc3a13ef27f48d6fa9911ace616ada8e4"
-  integrity sha512-kAdLI6yt993FGKAv3I8+chtZUAcByfDd4f7AuwYuQXT5f9VxdEXiEpJrdReHi7HE5oPj5UMsXnAEC+2ysIKeCw==
+"@boost/core@^1.0.0-rc.0":
+  version "1.0.0-rc.0"
+  resolved "https://registry.npmjs.org/@boost/core/-/core-1.0.0-rc.0.tgz#862aa40ce0146e6feafd8aa574aab040da946ec0"
+  integrity sha512-OJA52ITrasmwSoukLFEvVhwT+frdooSVi7SxJMyU6UOR7X2ONe1oBraVi6DjQw0qpunYIUmFr1k2M7cjXcmGZQ==
   dependencies:
     "@types/cli-truncate" "^1.1.0"
     "@types/debug" "^0.0.31"
     "@types/execa" "^0.9.0"
-    "@types/i18next" "^11.9.2"
+    "@types/i18next" "^11.9.3"
     "@types/json5" "^0.0.30"
     "@types/lodash" "^4.14.117"
     "@types/os-locale" "^2.1.0"
@@ -783,6 +783,7 @@
     chalk "^2.4.1"
     cli-truncate "^1.1.0"
     debug "^4.1.0"
+    env-ci "^3.1.0"
     execa "^1.0.0"
     fast-glob "^2.2.3"
     i18next "^11.9.1"
@@ -1478,10 +1479,10 @@
     "@types/minimatch" "*"
     "@types/node" "*"
 
-"@types/i18next@^11.9.2":
-  version "11.9.2"
-  resolved "https://registry.npmjs.org/@types/i18next/-/i18next-11.9.2.tgz#5026ce949ed895a0c94b994736f7e849600ebf84"
-  integrity sha512-kuMQfZnTgv0Cp0V4yaxUsQ/9Pd653JYR6I4kFPNsBnhy/g0ys+bsOwsYReyOM1oY4VlV3rHTRbSI4InwAxWEuw==
+"@types/i18next@^11.9.3":
+  version "11.9.3"
+  resolved "https://registry.npmjs.org/@types/i18next/-/i18next-11.9.3.tgz#04d84c6539908ad69665d26d8967f942d1638550"
+  integrity sha512-snM7bMKy6gt7UYdpjsxycqSCAy0fr2JVPY0B8tJ2vp9bN58cE7C880k20PWFM4KXxQ3KsstKM8DLCawGCIH0tg==
 
 "@types/is-glob@^4.0.0":
   version "4.0.0"
@@ -3709,6 +3710,14 @@ entities@^1.1.1, entities@~1.1.1:
   resolved "https://registry.npmjs.org/entities/-/entities-1.1.1.tgz#6e5c2d0a5621b5dadaecef80b90edfb5cd7772f0"
   integrity sha1-blwtClYhtdra7O+AuQ7ftc13cvA=
 
+env-ci@^3.1.0:
+  version "3.1.0"
+  resolved "https://registry.npmjs.org/env-ci/-/env-ci-3.1.0.tgz#8aef2340389ae17e27623988ae1002f130491185"
+  integrity sha512-+yFT8QX8W9bee0/fuzKvqt2vEhWvU3FXZ1P5xbveDq/EqcYLh4e0QNE16okUS3pawALDGXE9eCJPVeWY0/ilQA==
+  dependencies:
+    execa "^1.0.0"
+    java-properties "^0.2.9"
+
 enzyme-adapter-react-16@^1.6.0:
   version "1.6.0"
   resolved "https://registry.npmjs.org/enzyme-adapter-react-16/-/enzyme-adapter-react-16-1.6.0.tgz#3fca28d3c32f3ff427495380fe2dd51494689073"
@@ -5760,6 +5769,11 @@ istanbul-reports@^1.5.1:
   integrity sha512-+cfoZ0UXzWjhAdzosCPP3AN8vvef8XDkWtTfgaN+7L3YTpNYITnCaEkceo5SEYy644VkHka/P1FvkWvrG/rrJw==
   dependencies:
     handlebars "^4.0.3"
+
+java-properties@^0.2.9:
+  version "0.2.10"
+  resolved "https://registry.npmjs.org/java-properties/-/java-properties-0.2.10.tgz#2551560c25fa1ad94d998218178f233ad9b18f60"
+  integrity sha512-CpKJh9VRNhS+XqZtg1UMejETGEiqwCGDC/uwPEEQwc2nfdbSm73SIE29TplG2gLYuBOOTNDqxzG6A9NtEPLt0w==
 
 jest-changed-files@^23.4.2:
   version "23.4.2"
