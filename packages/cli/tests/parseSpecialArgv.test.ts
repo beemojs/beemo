@@ -9,9 +9,9 @@ describe('parseSpecialArgv()', () => {
   });
 
   it('separates // into multiple commands', () => {
-    expect(parseSpecialArgv(['--foo', '-v', '//', '--bar', '//', 'baz'])).toEqual({
+    expect(parseSpecialArgv(['--foo', '-v', '//', '--bar', 'bar', '//', 'baz'])).toEqual({
       main: ['--foo', '-v'],
-      parallel: [['--bar'], ['baz']],
+      parallel: [['--bar', 'bar'], ['baz']],
     });
   });
 });

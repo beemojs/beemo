@@ -38,7 +38,7 @@ export default class ScaffoldRoutine extends Routine<ScaffoldContext, BeemoTool>
   /**
    * Temporary solution until boost supports prompts.
    */
-  handlePrompt = () => Promise.resolve({ overwrite: true });
+  handlePrompt = /* istanbul ignore next */ () => Promise.resolve({ overwrite: true });
 
   /**
    * Execute the hygen scaffolding generator.
@@ -49,7 +49,7 @@ export default class ScaffoldRoutine extends Routine<ScaffoldContext, BeemoTool>
 
     try {
       return await engine(context.argv, {
-        createPrompter: () => ({ prompt: this.handlePrompt }),
+        createPrompter: /* istanbul ignore next */ () => ({ prompt: this.handlePrompt }),
         cwd: tool.options.root,
         debug: tool.config.debug,
         exec: this.handleExec,
