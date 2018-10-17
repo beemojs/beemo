@@ -18,6 +18,7 @@
   "configCreateMerge": "Merging {{name}} config objects",
   "configGenerate": "Generating configurations",
   "configReference": "Referencing {{name}} config file",
+  "configSetEnvVars": "Setting environment variables defined by driver",
   "driverExecute": "Executing driver",
   "driverRunCommand": "Running command",
   "driverRunCopyWorkspaceConfig": "Copying config into workspace",

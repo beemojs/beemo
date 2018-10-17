@@ -42,6 +42,8 @@ export default class CreateConfigRoutine extends Routine<
     const strategy =
       options.strategy === STRATEGY_NATIVE ? metadata.configStrategy : options.strategy;
 
+    this.task(tool.msg('app:configSetEnvVars', { name }), this.setEnvVars);
+
     switch (strategy) {
       case STRATEGY_REFERENCE:
         this.task(tool.msg('app:configReference', { name }), this.referenceConfigFile);
@@ -255,5 +257,19 @@ export default class CreateConfigRoutine extends Routine<
         `module.exports = require('./${path.relative(context.root, sourcePath)}');`,
       )
       .then(() => configPath);
+  }
+
+  /**
+   * Set environment variables defined by the driver.
+   */
+  setEnvVars(context: DriverContext, configs: Struct[]): Promise<any> {
+    const { env } = this.options.driver.options;
+
+    // TODO: This may cause collisions, isolate in a child process?
+    Object.keys(env).forEach(key => {
+      process.env[key] = env[key];
+    });
+
+    return Promise.resolve(configs);
   }
 }
