@@ -762,14 +762,15 @@
     lodash "^4.17.10"
     to-fast-properties "^2.0.0"
 
-"@boost/core@^1.0.0-rc.0":
-  version "1.0.0-rc.0"
-  resolved "https://registry.npmjs.org/@boost/core/-/core-1.0.0-rc.0.tgz#862aa40ce0146e6feafd8aa574aab040da946ec0"
-  integrity sha512-OJA52ITrasmwSoukLFEvVhwT+frdooSVi7SxJMyU6UOR7X2ONe1oBraVi6DjQw0qpunYIUmFr1k2M7cjXcmGZQ==
+"@boost/core@^1.0.0-rc.1":
+  version "1.0.0-rc.1"
+  resolved "https://registry.npmjs.org/@boost/core/-/core-1.0.0-rc.1.tgz#2d30f7225cb9094c9e78e2bbd9b250ab2858fd2e"
+  integrity sha512-R/EVR62QyLfzUYX+SxBcHiSSCLen+wD+cox0ioEPQO5QnhZF/C+li7ebEAdtAv0L//u9c1LhGKJW5aJtIFvgbA==
   dependencies:
     "@types/cli-truncate" "^1.1.0"
     "@types/debug" "^0.0.31"
     "@types/execa" "^0.9.0"
+    "@types/exit" "^0.1.30"
     "@types/i18next" "^11.9.3"
     "@types/json5" "^0.0.30"
     "@types/lodash" "^4.14.117"
@@ -785,6 +786,7 @@
     debug "^4.1.0"
     env-ci "^3.1.0"
     execa "^1.0.0"
+    exit "^0.1.2"
     fast-glob "^2.2.3"
     i18next "^11.9.1"
     json5 "^2.1.0"
@@ -1462,6 +1464,11 @@
   integrity sha512-mgfd93RhzjYBUHHV532turHC2j4l/qxsF/PbfDmprHDEUHmNZGlDn1CEsulGK3AfsPdhkWzZQT/S/k0UGhLGsA==
   dependencies:
     "@types/node" "*"
+
+"@types/exit@^0.1.30":
+  version "0.1.30"
+  resolved "http://registry.npmjs.org/@types/exit/-/exit-0.1.30.tgz#7078b736a7d166c80b6394dc0d9de1577ca76daf"
+  integrity sha1-cHi3NqfRZsgLY5TcDZ3hV3ynba8=
 
 "@types/fs-extra@^5.0.4":
   version "5.0.4"
