@@ -81,7 +81,7 @@ export default class CreateConfigRoutine extends Routine<
       throw new Error(this.tool.msg('errors:configCopySourceMissing'));
     }
 
-    const config = configLoader.parseFile(sourcePath);
+    const config = this.loadConfig(context, configLoader, sourcePath);
 
     this.debug('Copying config file to %s', chalk.cyan(configPath));
 
@@ -241,7 +241,7 @@ export default class CreateConfigRoutine extends Routine<
       throw new Error(this.tool.msg('errors:configReferenceSourceMissing'));
     }
 
-    const config = configLoader.parseFile(sourcePath);
+    const config = this.loadConfig(context, configLoader, sourcePath);
 
     this.debug('Referencing config file to %s', chalk.cyan(configPath));
 
