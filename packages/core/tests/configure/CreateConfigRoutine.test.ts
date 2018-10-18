@@ -42,11 +42,18 @@ describe('CreateConfigRoutine', () => {
     ConfigLoader.mockImplementation(() => ({
       parseFile: () => ({ foo: 123 }),
     }));
+
+    process.beemo = {
+      context: routine.context,
+      tool,
+    };
   });
 
   afterEach(() => {
     // @ts-ignore
     ConfigLoader.mockReset();
+
+    delete process.beemo;
   });
 
   describe('execute()', () => {
@@ -378,23 +385,12 @@ describe('CreateConfigRoutine', () => {
       expect(spy).not.toHaveBeenCalled();
     });
 
-    it('parses file with args (merge with driver and command options)', async () => {
-      routine.context.args.baseArg = true;
-      driver.options.args.push('--driverArg');
-
+    it('parses file', async () => {
       await routine.loadConfigFromSources(routine.context, []);
 
-      expect(parseSpy).toHaveBeenCalledWith(prependRoot('/configs/babel.js'), [
-        expect.objectContaining({
-          _: ['baz'],
-          a: true,
-          foo: 'bar',
-          qux: true,
-          baseArg: true,
-          driverArg: true,
-        }),
-        tool,
-      ]);
+      expect(parseSpy).toHaveBeenCalledWith(prependRoot('/configs/babel.js'), [], {
+        errorOnFunction: true,
+      });
     });
   });
 

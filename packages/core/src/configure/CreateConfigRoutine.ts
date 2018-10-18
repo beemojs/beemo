@@ -6,10 +6,8 @@
 import chalk from 'chalk';
 import fs from 'fs-extra';
 import path from 'path';
-import merge from 'lodash/merge';
 import optimal, { instance, Struct } from 'optimal';
 import { ConfigLoader, Routine } from '@boost/core';
-import parseArgs from 'yargs-parser';
 import Driver from '../Driver';
 import DriverContext from '../contexts/DriverContext';
 import { STRATEGY_COPY, STRATEGY_REFERENCE, STRATEGY_CREATE, STRATEGY_NATIVE } from '../constants';
@@ -81,7 +79,7 @@ export default class CreateConfigRoutine extends Routine<
       throw new Error(this.tool.msg('errors:configCopySourceMissing'));
     }
 
-    const config = this.loadConfig(context, configLoader, sourcePath);
+    const config = this.loadConfig(configLoader, sourcePath);
 
     this.debug('Copying config file to %s', chalk.cyan(configPath));
 
@@ -195,12 +193,10 @@ export default class CreateConfigRoutine extends Routine<
   /**
    * Load a config file with passing the args and tool to the file.
    */
-  loadConfig(context: DriverContext, configLoader: ConfigLoader, filePath: string): Struct {
-    const { driver } = this.options;
-    const args = merge({}, context.args, parseArgs(driver.getArgs()));
-    const config = configLoader.parseFile(filePath, [args, this.tool]);
+  loadConfig(configLoader: ConfigLoader, filePath: string): Struct {
+    const config = configLoader.parseFile(filePath, [], { errorOnFunction: true });
 
-    this.tool.emit(`${driver.name}.load-module-config`, [filePath, config]);
+    this.tool.emit(`${this.options.driver.name}.load-module-config`, [filePath, config]);
 
     return config;
   }
@@ -216,13 +212,13 @@ export default class CreateConfigRoutine extends Routine<
     const configs = [...prevConfigs];
 
     if (modulePath) {
-      configs.push(this.loadConfig(context, configLoader, modulePath));
+      configs.push(this.loadConfig(configLoader, modulePath));
     }
 
     // Local files should override anything defined in the configuration module above
     // Also don't double load files, so check against @local to avoid
     if (localPath && localPath !== modulePath) {
-      configs.push(this.loadConfig(context, configLoader, localPath));
+      configs.push(this.loadConfig(configLoader, localPath));
     }
 
     return Promise.resolve(configs);
@@ -241,7 +237,7 @@ export default class CreateConfigRoutine extends Routine<
       throw new Error(this.tool.msg('errors:configReferenceSourceMissing'));
     }
 
-    const config = this.loadConfig(context, configLoader, sourcePath);
+    const config = this.loadConfig(configLoader, sourcePath);
 
     this.debug('Referencing config file to %s', chalk.cyan(configPath));
 
