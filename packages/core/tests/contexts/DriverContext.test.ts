@@ -55,30 +55,4 @@ describe('Context', () => {
       expect(context.parallelArgv).toEqual([['--foo', 'bar'], ['--baz=123']]);
     });
   });
-
-  describe('findConfigByName()', () => {
-    const configFoo = { driver: 'foo', path: '/some/path/foo.js' };
-
-    it('returns nothing if not found', () => {
-      expect(context.findConfigByName('foo.js')).toBeUndefined();
-    });
-
-    it('returns path if found', () => {
-      context.configPaths.push(configFoo);
-
-      expect(context.findConfigByName('foo.js')).toBe(configFoo);
-    });
-
-    it('returns driver name if found', () => {
-      context.configPaths.push(configFoo);
-
-      expect(context.findConfigByName('foo')).toBe(configFoo);
-    });
-
-    it('only checks file base name', () => {
-      context.configPaths.push({ driver: 'foo', path: '/some/path/foo.js/other/file.js' });
-
-      expect(context.findConfigByName('foo.js')).toBeUndefined();
-    });
-  });
 });

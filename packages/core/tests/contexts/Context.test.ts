@@ -38,6 +38,16 @@ describe('Context', () => {
     });
   });
 
+  describe('addConfigPath()', () => {
+    it('adds a config by name', () => {
+      expect(context.configPaths).toEqual([]);
+
+      context.addConfigPath('babel', './babel.config.js');
+
+      expect(context.configPaths).toEqual([{ driver: 'babel', path: './babel.config.js' }]);
+    });
+  });
+
   describe('addOption()', () => {
     it('adds to argv and args', () => {
       context.addOption('--foo');
@@ -95,6 +105,32 @@ describe('Context', () => {
 
       expect(context.argv).toEqual(['--foo', '--bar']);
       expect(context.args).toEqual(expect.objectContaining({ foo: true, bar: true }));
+    });
+  });
+
+  describe('findConfigByName()', () => {
+    const configFoo = { driver: 'foo', path: '/some/path/foo.js' };
+
+    it('returns nothing if not found', () => {
+      expect(context.findConfigByName('foo.js')).toBeUndefined();
+    });
+
+    it('returns path if found', () => {
+      context.configPaths.push(configFoo);
+
+      expect(context.findConfigByName('foo.js')).toBe(configFoo);
+    });
+
+    it('returns driver name if found', () => {
+      context.configPaths.push(configFoo);
+
+      expect(context.findConfigByName('foo')).toBe(configFoo);
+    });
+
+    it('only checks file base name', () => {
+      context.configPaths.push({ driver: 'foo', path: '/some/path/foo.js/other/file.js' });
+
+      expect(context.findConfigByName('foo.js')).toBeUndefined();
     });
   });
 

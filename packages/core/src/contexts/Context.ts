@@ -8,10 +8,17 @@ import camelCase from 'lodash/camelCase';
 import trim from 'lodash/trim';
 import { Arguments, Argv } from '../types';
 
+export interface ConfigPath {
+  driver: string;
+  path: string;
+}
+
 export default class Context extends BaseContext {
   args: Arguments;
 
   argv: Argv = [];
+
+  configPaths: ConfigPath[] = [];
 
   moduleRoot: string = '';
 
@@ -39,6 +46,18 @@ export default class Context extends BaseContext {
   addArgs(args: string[]): this {
     args.forEach(arg => {
       this.addArg(arg);
+    });
+
+    return this;
+  }
+
+  /**
+   * Add a config path for the defined driver.
+   */
+  addConfigPath(driverName: string, path: string): this {
+    this.configPaths.push({
+      driver: driverName,
+      path,
     });
 
     return this;
@@ -89,6 +108,13 @@ export default class Context extends BaseContext {
     });
 
     return this;
+  }
+
+  /**
+   * Find a configuration path by file name.
+   */
+  findConfigByName(name: string): ConfigPath | undefined {
+    return this.configPaths.find(config => config.path.endsWith(name) || config.driver === name);
   }
 
   /**
