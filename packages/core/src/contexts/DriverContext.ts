@@ -10,10 +10,12 @@ import { Arguments, Argv } from '../types';
 export default class DriverContext extends Context {
   driverName: string = '';
 
+  // List of drivers involved in the current pipeline
   drivers: Set<Driver> = new Set();
 
   parallelArgv: Argv[] = [];
 
+  // The primary driver that initiated the pipeline
   primaryDriver: Driver;
 
   workspaceRoot: string = '';
@@ -29,6 +31,9 @@ export default class DriverContext extends Context {
 
     // Make the context available in the current driver
     driver.context = this;
+
+    // Add primary driver to driver list
+    this.drivers.add(driver);
   }
 
   /**

@@ -24,17 +24,26 @@ describe('Context', () => {
       expect(context.primaryDriver).toBe(driver);
       expect(context.driverName).toBe('bar');
     });
+
+    it('adds to driver list', () => {
+      const driver = new Driver();
+      driver.name = 'bar';
+
+      context = new DriverContext({ _: [], $0: '' }, driver);
+
+      expect(Array.from(context.drivers)).toEqual([driver]);
+    });
   });
 
   describe('addDriverDependency()', () => {
     it('adds a driver', () => {
-      expect(Array.from(context.drivers)).toEqual([]);
+      expect(Array.from(context.drivers)).toEqual([context.primaryDriver]);
 
       const driver = new Driver();
 
       context.addDriverDependency(driver);
 
-      expect(Array.from(context.drivers)).toEqual([driver]);
+      expect(Array.from(context.drivers)).toEqual([context.primaryDriver, driver]);
     });
 
     it('errors when not a driver', () => {

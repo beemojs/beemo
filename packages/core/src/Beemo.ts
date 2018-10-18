@@ -110,6 +110,7 @@ export default class Beemo {
       context.addDriverDependency(tool.getPlugin('driver', driverName));
     });
 
+    tool.emit(`${primaryDriver}.init-driver`, [driver, context]);
     tool.debug('Running with %s driver(s)', [primaryDriver, ...additionalDrivers].join(', '));
 
     return this.startPipeline(context)
@@ -215,7 +216,7 @@ export default class Beemo {
   /**
    * Delete config files if a process fails.
    */
-  handleCleanupOnFailure(code: number, context: DriverContext) {
+  handleCleanupOnFailure(code: number, context: Context) {
     if (code === 0) {
       return;
     }
@@ -239,14 +240,6 @@ export default class Beemo {
     const { tool } = this;
     const driver = tool.getPlugin('driver', driverName);
     const context = this.prepareContext(new DriverContext(args, driver, parallelArgv));
-
-    // Delete config files on failure
-    if (tool.config.configure.cleanup) {
-      tool.on(
-        'exit',
-        /* istanbul ignore next */ code => this.handleCleanupOnFailure(code, context),
-      );
-    }
 
     // Set workspace related properties
     context.workspaceRoot = tool.options.workspaceRoot || tool.options.root;
@@ -307,11 +300,21 @@ export default class Beemo {
    * Setup and start a fresh pipeline.
    */
   startPipeline<T extends Context>(context: T): Pipeline<T, BeemoTool> {
+    const { tool } = this;
+
     // Make the tool available to all processes
     process.beemo = {
       context,
-      tool: this.tool,
+      tool,
     };
+
+    // Delete config files on failure
+    if (tool.config.configure.cleanup) {
+      tool.on(
+        'exit',
+        /* istanbul ignore next */ code => this.handleCleanupOnFailure(code, context),
+      );
+    }
 
     return new Pipeline(this.tool, context);
   }

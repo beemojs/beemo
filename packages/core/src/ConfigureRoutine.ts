@@ -45,14 +45,15 @@ export default class ConfigureRoutine extends Routine<DriverContext, BeemoTool> 
    * starting from the primary driver (the command that initiated the process).
    */
   resolveDependencies() {
-    const { driverName, primaryDriver } = this.context;
-    const queue = [primaryDriver];
+    const queue = [...this.context.drivers];
 
-    this.debug('Resolving dependencies for %s', chalk.magenta(driverName));
+    this.debug('Resolving dependencies');
 
-    while (queue.length) {
+    while (queue.length > 0) {
       const driver = queue.shift()!;
       const deps = new Set(driver.getDependencies());
+
+      this.debug('Resolving %s', driver.name);
 
       deps.forEach(name => {
         this.debug('  Including dependency %s', chalk.magenta(name));
@@ -63,6 +64,8 @@ export default class ConfigureRoutine extends Routine<DriverContext, BeemoTool> 
       this.context.addDriverDependency(driver);
     }
 
-    this.tool.emit(`${driverName}.resolve-dependencies`, [Array.from(this.context.drivers)]);
+    this.tool.emit(`${this.tool.options.appName}.resolve-dependencies`, [
+      Array.from(this.context.drivers),
+    ]);
   }
 }

@@ -33,12 +33,17 @@ const root = path.join(__dirname, '../../../tests');
 
 describe('Beemo', () => {
   let beemo: Beemo;
+  let onSpy: jest.Mock;
   const args = { _: [], $0: '' };
 
   beforeEach(() => {
     beemo = new Beemo(['foo', 'bar'], '', createTestTool());
     beemo.moduleRoot = root;
     beemo.tool.options.root = root;
+
+    // Stop `exit` event from firing
+    onSpy = jest.fn();
+    beemo.tool.on = onSpy;
 
     (fs.existsSync as jest.Mock).mockReset();
   });
@@ -76,6 +81,20 @@ describe('Beemo', () => {
       beemo.tool.getPlugin = (type, name) => createTestDriver(name);
     });
 
+    it('triggers `init-driver` event with context', async () => {
+      const spy = jest.spyOn(beemo.tool, 'emit');
+
+      await beemo.createConfigFiles(args, 'foo');
+
+      expect(spy).toHaveBeenCalledWith('foo.init-driver', [
+        expect.objectContaining({ name: 'foo' }),
+        expect.objectContaining({
+          argv: ['foo', 'bar'],
+          driverName: 'foo',
+        }),
+      ]);
+    });
+
     it('passes context to pipeline', async () => {
       const spy = jest.spyOn(beemo, 'startPipeline');
 
@@ -96,7 +115,7 @@ describe('Beemo', () => {
       await beemo.createConfigFiles(args, 'foo', ['bar', 'baz']);
 
       expect(spy).toHaveBeenCalled();
-      expect(spy.mock.calls[0][0].drivers.size).toBe(2);
+      expect(spy.mock.calls[0][0].drivers.size).toBe(3);
     });
   });
 
@@ -324,24 +343,6 @@ describe('Beemo', () => {
       );
     });
 
-    it('registers an exit listener if cleanup is true', async () => {
-      beemo.tool.on = jest.fn();
-      beemo.tool.config.configure.cleanup = true;
-
-      await beemo.executeDriver(args, 'foo-bar');
-
-      expect(beemo.tool.on).toHaveBeenCalledWith('exit', expect.any(Function));
-    });
-
-    it('doesnt register exit listener if cleanup is false', async () => {
-      beemo.tool.on = jest.fn();
-      beemo.tool.config.configure.cleanup = false;
-
-      await beemo.executeDriver(args, 'foo-bar');
-
-      expect(beemo.tool.on).not.toHaveBeenCalled();
-    });
-
     it('passes parallelArgv to context', async () => {
       const spy = jest.spyOn(beemo, 'startPipeline');
 
@@ -416,6 +417,22 @@ describe('Beemo', () => {
         context,
         tool: beemo.tool,
       });
+    });
+
+    it('registers an exit listener if cleanup is true', async () => {
+      beemo.tool.config.configure.cleanup = true;
+
+      beemo.startPipeline(createContext());
+
+      expect(onSpy).toHaveBeenCalledWith('exit', expect.any(Function));
+    });
+
+    it('doesnt register exit listener if cleanup is false', async () => {
+      beemo.tool.config.configure.cleanup = false;
+
+      beemo.startPipeline(createContext());
+
+      expect(onSpy).not.toHaveBeenCalled();
     });
   });
 
