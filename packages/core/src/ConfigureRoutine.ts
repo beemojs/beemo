@@ -36,7 +36,7 @@ export default class ConfigureRoutine extends Routine<DriverContext, BeemoTool> 
 
     this.debug(
       'Creating config files for the following drivers: %s',
-      chalk.magenta(names.join(', ')),
+      chalk.green(names.join(', ')),
     );
   }
 
@@ -56,7 +56,7 @@ export default class ConfigureRoutine extends Routine<DriverContext, BeemoTool> 
       this.debug('Resolving %s', driver.name);
 
       deps.forEach(name => {
-        this.debug('  Including dependency %s', chalk.magenta(name));
+        this.debug('  Including dependency %s', chalk.green(name));
 
         queue.push(this.tool.getPlugin('driver', name));
       });

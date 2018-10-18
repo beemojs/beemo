@@ -122,11 +122,13 @@ export default class CreateConfigRoutine extends Routine<
   extractConfigFromPackage(context: DriverContext, prevConfigs: Struct[]): Promise<Struct[]> {
     const { name } = this.options.driver;
     const { config } = this.tool;
+    const { appName, configName } = this.tool.options;
     const configs = [...prevConfigs];
 
     this.debug.invariant(
       !!config[name],
-      `Extracting ${chalk.magenta(name)} config from package.json "beemo" property`,
+      `Extracting ${chalk.green(name)} config from package.json "${configName ||
+        appName}" property`,
       'Exists, extracting',
       'Does not exist, skipping',
     );
@@ -161,8 +163,8 @@ export default class CreateConfigRoutine extends Routine<
     this.debug.invariant(
       fileExists,
       isLocal
-        ? `Loading ${chalk.magenta(name)} config from local consumer`
-        : `Loading ${chalk.magenta(name)} config from configuration module ${chalk.yellow(
+        ? `Loading ${chalk.green(name)} config from local consumer`
+        : `Loading ${chalk.green(name)} config from configuration module ${chalk.yellow(
             moduleName,
           )}`,
       'Exists, loading',
@@ -178,7 +180,7 @@ export default class CreateConfigRoutine extends Routine<
   mergeConfigs(context: DriverContext, configs: Struct[]): Promise<Struct> {
     const { name } = this.options.driver;
 
-    this.debug('Merging %s config from %d sources', chalk.magenta(name), configs.length);
+    this.debug('Merging %s config from %d sources', chalk.green(name), configs.length);
 
     const config = configs.reduce(
       (masterConfig, cfg) => this.options.driver.mergeConfig(masterConfig, cfg),
