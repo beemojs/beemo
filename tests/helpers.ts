@@ -40,7 +40,6 @@ export function createTestTool(): BeemoTool {
     appName: 'beemo',
     appPath: path.join(__dirname, '../packages/core'),
     configBlueprint: {},
-    configFolder: './configs',
     configName: 'beemo',
     root: __dirname,
     scoped: true,
