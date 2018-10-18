@@ -6,6 +6,7 @@
 import chalk from 'chalk';
 import fs from 'fs-extra';
 import path from 'path';
+import camelCase from 'lodash/camelCase';
 import optimal, { instance, Struct } from 'optimal';
 import { ConfigLoader, Routine } from '@boost/core';
 import Driver from '../Driver';
@@ -122,19 +123,18 @@ export default class CreateConfigRoutine extends Routine<
   extractConfigFromPackage(context: DriverContext, prevConfigs: Struct[]): Promise<Struct[]> {
     const { name } = this.options.driver;
     const { config } = this.tool;
-    const { appName, configName } = this.tool.options;
     const configs = [...prevConfigs];
+    const configName = this.getConfigName(name);
 
     this.debug.invariant(
-      !!config[name],
-      `Extracting ${chalk.green(name)} config from package.json "${configName ||
-        appName}" property`,
+      !!config[configName],
+      `Extracting ${chalk.green(name)} config from package.json`,
       'Exists, extracting',
       'Does not exist, skipping',
     );
 
-    if (config[name]) {
-      const pkgConfig = config[name];
+    if (config[configName]) {
+      const pkgConfig = config[configName];
 
       configs.push(pkgConfig);
 
@@ -145,6 +145,13 @@ export default class CreateConfigRoutine extends Routine<
   }
 
   /**
+   * Return file name camel cased.
+   */
+  getConfigName(name: string): string {
+    return camelCase(name);
+  }
+
+  /**
    * Return absolute file path for config file within configuration module,
    * or an empty string if it does not exist.
    */
@@ -152,12 +159,13 @@ export default class CreateConfigRoutine extends Routine<
     const { root, workspaceRoot } = this.context;
     const moduleName = this.tool.config.module;
     const { name } = this.options.driver;
+    const configName = this.getConfigName(name);
     const isLocal = moduleName === '@local' || forceLocal;
 
     // Allow for local development
     const filePath = isLocal
-      ? path.join(workspaceRoot || root, `configs/${name}.js`)
-      : configLoader.resolveModuleConfigPath(name, moduleName);
+      ? path.join(workspaceRoot || root, `configs/${configName}.js`)
+      : configLoader.resolveModuleConfigPath(configName, moduleName);
     const fileExists = fs.existsSync(filePath);
 
     this.debug.invariant(
