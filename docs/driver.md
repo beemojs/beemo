@@ -11,9 +11,11 @@ this, multiple strategies are in play when generating a config file at the root.
   source config file. Typically written with `JSON.stringify()`.
 - **Referenced config** - The config file references the configuration module's source config file
   using `require()`. Typically required for complex files (contains class instances, etc), like
-  Webpack.
+  Webpack. _Note:_ When referencing, the `process.beemo` variable is not available.
 - **Copied config** - The config file is copied as is from the configuration module's source config
   file.
+- **Native config** - Does nothing. Requires the consumer to create a local config file and require
+  any module configuration manually.
 
 | Driver     | Strategy   |
 | ---------- | ---------- |
@@ -26,7 +28,8 @@ this, multiple strategies are in play when generating a config file at the root.
 | TypeScript | Created    |
 | Webpack    | Referenced |
 
-> Strategies can be overwritten with a driver's `strategy` option.
+> Strategies can be overwritten with a driver's `strategy` option, which accepts `create`,
+> `reference`, `copy`, and `native`.
 
 ## Creating A Driver
 

@@ -33,7 +33,7 @@ In your consuming project, enable the driver by adding `typescript` to your `dri
 
 ## Workspaces Support
 
-TypeScript does not support workspaces easily by default. However, with Beemo, workspaces are
+TypeScript natively does not support workspaces by default. However, with Beemo, workspaces are
 possible with only minor degradation in functionality. When [using workspaces](../workspaces.md),
 TypeScript will copy the `tsconfig.json` from the root into each package, instead of referencing
 with a `--project` option, or using `extends` (which has many issues with relative paths).

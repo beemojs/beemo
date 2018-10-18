@@ -43,8 +43,8 @@ yarn add @beemo/driver-jest jest
 ## Drivers
 
 For each driver you install, there should be an associated `.js` configuration file within a
-`configs/` folder, named after the package name (excluding "driver-"). Using the example above, we'd
-have the following:
+`configs/` folder, named after the camel-cased package name (excluding "driver-"). Using the example
+above, we'd have the following:
 
 ```
 configs/
@@ -72,34 +72,9 @@ module.exports = {
 };
 ```
 
-If you return a function, you can access the args that were passed on the command line, and the
-current [tool instance](./tool.md) (which allows for runtime conditional logic). For example, if
-`--react` was passed, we can enable the React preset.
-
-```js
-// configs/babel.js
-module.exports = function(args, tool) {
-  const presets = [
-    [
-      '@babel/preset-env',
-      {
-        targets: { node: '6.5' },
-      },
-    ],
-  ];
-
-  if (args.react) {
-    presets.push('@babel/preset-react');
-  }
-
-  return {
-    presets,
-  };
-};
-```
-
-If for some reason you cannot return a function, but would like to still access the context and
-tool, you can reference the current Beemo instance using `process.beemo`.
+You can access the command line args, the pipeline context, and the current
+[tool instance](./tool.md) on `process.beemo` (which allows for runtime conditional logic). For
+example, if `--react` was passed, we can enable the React preset.
 
 ```js
 // configs/babel.js

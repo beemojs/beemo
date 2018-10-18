@@ -94,8 +94,7 @@ Options can also be set through the [bootstrap and event system](./events.md).
 ### Options
 
 - `driver` (string) - The name of the driver module. Required when using an object.
-- `args` (string[]) - Arguments to always pass when executing the driver binary, and to pass to the
-  config file.
+- `args` (string[]) - Arguments to always pass when executing the driver binary.
 - `dependencies` (string[]) - Other drivers that are required for this driver to run.
 - `env` (object) - Environment variables to pass when executing the driver binary with
   [execa](https://github.com/sindresorhus/execa).
@@ -149,7 +148,7 @@ A script within your configuration module can be executed using `yarn beemo run-
 
 ## Overriding Config
 
-Your configuration module may house all configuration now, but that doesn't mean it's applicable to
+Your configuration module may now house all configuration, but that doesn't mean it's applicable to
 _all_ projects. So because of that, Beemo does allow overriding of config. To do so, edit your
 `package.json` to include a block under `beemo.<driver>`, like so.
 
@@ -168,4 +167,7 @@ _all_ projects. So because of that, Beemo does allow overriding of config. To do
 ```
 
 > Some dev tools support `package.json` overrides like this, but it's preferred to use the Beemo
-> approach for interoperability.
+> approach for interoperability, by nesting under `beemo`.
+
+However, if you'd like to avoid modifying `package.json`, you may define an override file in the
+consumer within a relative configs folder, for example: `./configs/eslint.js`.
