@@ -437,9 +437,9 @@ describe('RunCommandRoutine', () => {
       await routine.runCommandWithArgs(routine.context, ['--wtf'], task);
 
       expect(spy).toHaveBeenCalledWith('babel.before-execute', [
-        driver,
-        ['--wtf'],
         routine.context,
+        ['--wtf'],
+        driver,
       ]);
     });
 
@@ -448,7 +448,11 @@ describe('RunCommandRoutine', () => {
 
       await routine.runCommandWithArgs(routine.context, ['--wtf'], task);
 
-      expect(spy).toHaveBeenCalledWith('babel.after-execute', [driver, { success: true }]);
+      expect(spy).toHaveBeenCalledWith('babel.after-execute', [
+        routine.context,
+        { success: true },
+        driver,
+      ]);
     });
 
     it('triggers `failed-execute` event on failure', async () => {
@@ -461,7 +465,7 @@ describe('RunCommandRoutine', () => {
       try {
         await routine.runCommandWithArgs(routine.context, ['--wtf'], task);
       } catch (error) {
-        expect(spy).toHaveBeenCalledWith('babel.failed-execute', [driver, error]);
+        expect(spy).toHaveBeenCalledWith('babel.failed-execute', [routine.context, error, driver]);
       }
     });
   });

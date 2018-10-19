@@ -191,6 +191,7 @@ describe('CreateConfigRoutine', () => {
       await routine.copyConfigFile(routine.context);
 
       expect(spy).toHaveBeenCalledWith('babel.copy-config-file', [
+        routine.context,
         prependRoot('/babel.config.js'),
         { foo: 123 },
       ]);
@@ -234,6 +235,7 @@ describe('CreateConfigRoutine', () => {
       await routine.createConfigFile(routine.context, { foo: 'bar' });
 
       expect(spy).toHaveBeenCalledWith('babel.create-config-file', [
+        routine.context,
         prependRoot('/babel.config.js'),
         { foo: 'bar' },
       ]);
@@ -262,13 +264,16 @@ describe('CreateConfigRoutine', () => {
 
       await routine.extractConfigFromPackage(routine.context, []);
 
-      expect(spy).toHaveBeenCalledWith('babel.load-package-config', [{ foo: 'bar' }]);
+      expect(spy).toHaveBeenCalledWith('babel.load-package-config', [
+        routine.context,
+        { foo: 'bar' },
+      ]);
     });
 
     it('doesnt trigger `load-package-config` if no config', async () => {
       const spy = jest.spyOn(routine.tool, 'emit');
 
-      await routine.extractConfigFromPackage(routine.context, []);
+      await routine.extractConfigFromPackage(routine.context, [routine.context]);
 
       expect(spy).not.toHaveBeenCalled();
     });
@@ -310,7 +315,7 @@ describe('CreateConfigRoutine', () => {
         { foo: 456 },
       ]);
 
-      expect(spy).toHaveBeenCalledWith('babel.merge-config', [config]);
+      expect(spy).toHaveBeenCalledWith('babel.merge-config', [routine.context, config]);
     });
   });
 
@@ -370,6 +375,7 @@ describe('CreateConfigRoutine', () => {
       await routine.loadConfigFromSources(routine.context, []);
 
       expect(spy).toHaveBeenCalledWith('babel.load-module-config', [
+        routine.context,
         prependRoot('/configs/babel.js'),
         { filePath: prependRoot('/configs/babel.js') },
       ]);
@@ -425,6 +431,7 @@ describe('CreateConfigRoutine', () => {
       await routine.referenceConfigFile(routine.context);
 
       expect(spy).toHaveBeenCalledWith('babel.reference-config-file', [
+        routine.context,
         prependRoot('/babel.config.js'),
         { foo: 123 },
       ]);

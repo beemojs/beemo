@@ -26,7 +26,7 @@ export default class CleanupRoutine extends Routine<DriverContext, BeemoTool> {
       context.configPaths.map(config => {
         this.debug('Deleting config file %s', chalk.cyan(config.path));
 
-        this.tool.emit(`${config.driver}.delete-config-file`, [config.path]);
+        this.tool.emit(`${config.driver}.delete-config-file`, [context, config.path]);
 
         return fs.remove(config.path).then(() => true);
       }),

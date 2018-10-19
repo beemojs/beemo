@@ -1,5 +1,5 @@
 import FlowDriver from '../src/FlowDriver';
-import { createDriverContext, createTestTool, EXEC_RESULT } from '../../../tests/helpers';
+import { createTestTool, EXEC_RESULT } from '../../../tests/helpers';
 
 describe('FlowDriver', () => {
   let driver: FlowDriver;
@@ -7,7 +7,6 @@ describe('FlowDriver', () => {
   beforeEach(() => {
     driver = new FlowDriver();
     driver.tool = createTestTool();
-    driver.context = createDriverContext(driver);
     driver.bootstrap();
   });
 

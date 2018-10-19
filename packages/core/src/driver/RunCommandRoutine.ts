@@ -316,7 +316,7 @@ export default class RunCommandRoutine extends Routine<
       chalk.cyan(cwd),
     );
 
-    this.tool.emit(`${driver.name}.before-execute`, [driver, argv, context]);
+    this.tool.emit(`${driver.name}.before-execute`, [context, argv, driver]);
 
     try {
       result = await this.executeCommand(driver.metadata.bin, argv, {
@@ -327,11 +327,11 @@ export default class RunCommandRoutine extends Routine<
 
       driver.handleSuccess(result);
 
-      this.tool.emit(`${driver.name}.after-execute`, [driver, result]);
+      this.tool.emit(`${driver.name}.after-execute`, [context, result, driver]);
     } catch (error) {
       driver.handleFailure(error);
 
-      this.tool.emit(`${driver.name}.failed-execute`, [driver, error]);
+      this.tool.emit(`${driver.name}.failed-execute`, [context, error, driver]);
 
       throw error;
     }

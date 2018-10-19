@@ -5,7 +5,7 @@
 
 import fs from 'fs';
 import path from 'path';
-import { Driver } from '@beemo/core';
+import { Driver, DriverContext } from '@beemo/core';
 // @ts-ignore
 import ConfigOps from 'eslint/lib/config/config-ops';
 import { ESLintConfig } from './types';
@@ -32,7 +32,7 @@ export default class ESLintDriver extends Driver<ESLintConfig> {
   /**
    * If an "ignore" property exists in the ESLint config, create an ".eslintignore" file.
    */
-  handleCreateIgnoreFile = (configPath: string, config: ESLintConfig) => {
+  handleCreateIgnoreFile = (context: DriverContext, configPath: string, config: ESLintConfig) => {
     if (!config.ignore) {
       return;
     }
@@ -46,7 +46,7 @@ export default class ESLintDriver extends Driver<ESLintConfig> {
     fs.writeFileSync(ignorePath, config.ignore.join('\n'));
 
     // Add to context so that it can be automatically cleaned up
-    this.context.addConfigPath('eslint', ignorePath);
+    context.addConfigPath('eslint', ignorePath);
 
     // Delete the property else ESLint throws an error
     delete config.ignore;

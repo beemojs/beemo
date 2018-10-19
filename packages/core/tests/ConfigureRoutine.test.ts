@@ -131,6 +131,7 @@ describe('ConfigureRoutine', () => {
       await routine.resolveDependencies();
 
       expect(spy).toHaveBeenCalledWith('beemo.resolve-dependencies', [
+        routine.context,
         Array.from(routine.context.drivers),
       ]);
     });

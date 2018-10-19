@@ -65,6 +65,7 @@ export default class ConfigureRoutine extends Routine<DriverContext, BeemoTool> 
     }
 
     this.tool.emit(`${this.tool.options.appName}.resolve-dependencies`, [
+      this.context,
       Array.from(this.context.drivers),
     ]);
   }

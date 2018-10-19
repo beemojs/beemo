@@ -1,16 +1,19 @@
 import fs from 'fs';
+import DriverContext from '../../core/src/contexts/DriverContext';
 import PrettierDriver from '../src/PrettierDriver';
 import { createDriverContext, createTestTool } from '../../../tests/helpers';
 
 describe('PrettierDriver', () => {
   let driver: PrettierDriver;
+  let context: DriverContext;
   let spy: jest.SpyInstance;
 
   beforeEach(() => {
     driver = new PrettierDriver();
     driver.tool = createTestTool();
-    driver.context = createDriverContext(driver);
     driver.bootstrap();
+
+    context = createDriverContext(driver);
 
     spy = jest.spyOn(fs, 'writeFileSync').mockImplementation(() => true);
   });
@@ -54,14 +57,14 @@ describe('PrettierDriver', () => {
     it('does nothing if no ignore field', () => {
       const config = { semi: true };
 
-      driver.handleCreateIgnoreFile('/some/path/prettier.config.js', config);
+      driver.handleCreateIgnoreFile(context, '/some/path/prettier.config.js', config);
 
       expect(config).toEqual({ semi: true });
     });
 
     it('errors if not an array', () => {
       expect(() => {
-        driver.handleCreateIgnoreFile('/some/path/prettier.config.js', {
+        driver.handleCreateIgnoreFile(context, '/some/path/prettier.config.js', {
           // @ts-ignore
           ignore: 'foo',
         });
@@ -74,11 +77,11 @@ describe('PrettierDriver', () => {
         ignore: ['foo', 'bar', 'baz'],
       };
 
-      driver.handleCreateIgnoreFile('/some/path/prettier.config.js', config);
+      driver.handleCreateIgnoreFile(context, '/some/path/prettier.config.js', config);
 
       expect(spy).toHaveBeenCalledWith('/some/path/.prettierignore', 'foo\nbar\nbaz');
 
-      expect(driver.context.configPaths).toEqual([
+      expect(context.configPaths).toEqual([
         { driver: 'prettier', path: '/some/path/.prettierignore' },
       ]);
 

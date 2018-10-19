@@ -87,11 +87,11 @@ describe('Beemo', () => {
       await beemo.createConfigFiles(args, 'foo');
 
       expect(spy).toHaveBeenCalledWith('foo.init-driver', [
-        expect.objectContaining({ name: 'foo' }),
         expect.objectContaining({
           argv: ['foo', 'bar'],
           driverName: 'foo',
         }),
+        expect.objectContaining({ name: 'foo' }),
       ]);
     });
 
@@ -304,11 +304,11 @@ describe('Beemo', () => {
       await beemo.executeDriver(args, 'foo-bar');
 
       expect(spy).toHaveBeenCalledWith('foo-bar.init-driver', [
-        expect.objectContaining({ name: 'foo-bar' }),
         expect.objectContaining({
           argv: ['foo', 'bar'],
           driverName: 'foo-bar',
         }),
+        expect.objectContaining({ name: 'foo-bar' }),
       ]);
     });
 
@@ -324,23 +324,6 @@ describe('Beemo', () => {
       );
 
       expect((pipeline as any).run).toHaveBeenCalledWith('foo-bar');
-    });
-
-    it('sets primary driver with context', async () => {
-      const spy = jest.spyOn(beemo, 'startPipeline');
-
-      await beemo.executeDriver(args, 'foo-bar');
-
-      expect(spy).toHaveBeenCalledWith(
-        expect.objectContaining({
-          argv: ['foo', 'bar'],
-          primaryDriver: expect.objectContaining({
-            context: expect.objectContaining({
-              driverName: 'foo-bar',
-            }),
-          }),
-        }),
-      );
     });
 
     it('passes parallelArgv to context', async () => {
@@ -363,11 +346,11 @@ describe('Beemo', () => {
       await beemo.executeScript(args, 'foo-bar');
 
       expect(spy).toHaveBeenCalledWith('foo-bar.init-script', [
-        'foo-bar',
         expect.objectContaining({
           argv: ['foo', 'bar'],
           scriptName: 'foo-bar',
         }),
+        'foo-bar',
       ]);
     });
 

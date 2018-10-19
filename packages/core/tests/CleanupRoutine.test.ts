@@ -60,8 +60,8 @@ describe('CleanupRoutine', () => {
 
       await routine.deleteConfigFiles(routine.context);
 
-      expect(spy).toHaveBeenCalledWith('foo.delete-config-file', ['./foo.json']);
-      expect(spy).toHaveBeenCalledWith('bar.delete-config-file', ['./.barrc']);
+      expect(spy).toHaveBeenCalledWith('foo.delete-config-file', [routine.context, './foo.json']);
+      expect(spy).toHaveBeenCalledWith('bar.delete-config-file', [routine.context, './.barrc']);
     });
   });
 });

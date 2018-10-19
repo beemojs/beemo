@@ -29,9 +29,6 @@ export default class DriverContext extends Context {
     this.parallelArgv = parallelArgv;
     this.primaryDriver = driver;
 
-    // Make the context available in the current driver
-    driver.context = this;
-
     // Add primary driver to driver list
     this.drivers.add(driver);
   }

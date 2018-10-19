@@ -1,16 +1,19 @@
 import fs from 'fs';
+import DriverContext from '../../core/src/contexts/DriverContext';
 import ESLintDriver from '../src/ESLintDriver';
 import { createDriverContext, createTestTool } from '../../../tests/helpers';
 
 describe('ESLintDriver', () => {
   let driver: ESLintDriver;
+  let context: DriverContext;
   let spy: jest.SpyInstance;
 
   beforeEach(() => {
     driver = new ESLintDriver();
     driver.tool = createTestTool();
-    driver.context = createDriverContext(driver);
     driver.bootstrap();
+
+    context = createDriverContext(driver);
 
     spy = jest.spyOn(fs, 'writeFileSync').mockImplementation(() => true);
   });
@@ -83,14 +86,14 @@ describe('ESLintDriver', () => {
     it('does nothing if no ignore field', () => {
       const config = { parser: 'babel' };
 
-      driver.handleCreateIgnoreFile('/some/path/.eslintrc.js', config);
+      driver.handleCreateIgnoreFile(context, '/some/path/.eslintrc.js', config);
 
       expect(config).toEqual({ parser: 'babel' });
     });
 
     it('errors if not an array', () => {
       expect(() => {
-        driver.handleCreateIgnoreFile('/some/path/.eslintrc.js', {
+        driver.handleCreateIgnoreFile(context, '/some/path/.eslintrc.js', {
           // @ts-ignore
           ignore: 'foo',
         });
@@ -103,13 +106,11 @@ describe('ESLintDriver', () => {
         ignore: ['foo', 'bar', 'baz'],
       };
 
-      driver.handleCreateIgnoreFile('/some/path/.eslintrc.js', config);
+      driver.handleCreateIgnoreFile(context, '/some/path/.eslintrc.js', config);
 
       expect(spy).toHaveBeenCalledWith('/some/path/.eslintignore', 'foo\nbar\nbaz');
 
-      expect(driver.context.configPaths).toEqual([
-        { driver: 'eslint', path: '/some/path/.eslintignore' },
-      ]);
+      expect(context.configPaths).toEqual([{ driver: 'eslint', path: '/some/path/.eslintignore' }]);
 
       expect(config).toEqual({ parser: 'babel' });
     });

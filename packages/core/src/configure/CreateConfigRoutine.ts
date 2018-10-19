@@ -88,7 +88,7 @@ export default class CreateConfigRoutine extends Routine<
 
     context.addConfigPath(name, configPath);
 
-    this.tool.emit(`${name}.copy-config-file`, [configPath, config]);
+    this.tool.emit(`${name}.copy-config-file`, [context, configPath, config]);
 
     return fs
       .copy(sourcePath, configPath, {
@@ -110,7 +110,7 @@ export default class CreateConfigRoutine extends Routine<
 
     context.addConfigPath(name, configPath);
 
-    this.tool.emit(`${name}.create-config-file`, [configPath, config]);
+    this.tool.emit(`${name}.create-config-file`, [context, configPath, config]);
 
     return fs
       .writeFile(configPath, this.options.driver.formatConfig(config))
@@ -138,7 +138,7 @@ export default class CreateConfigRoutine extends Routine<
 
       configs.push(pkgConfig);
 
-      this.tool.emit(`${name}.load-package-config`, [pkgConfig]);
+      this.tool.emit(`${name}.load-package-config`, [context, pkgConfig]);
     }
 
     return Promise.resolve(configs);
@@ -195,7 +195,7 @@ export default class CreateConfigRoutine extends Routine<
       {},
     );
 
-    this.tool.emit(`${name}.merge-config`, [config]);
+    this.tool.emit(`${name}.merge-config`, [context, config]);
 
     return Promise.resolve(config);
   }
@@ -206,7 +206,11 @@ export default class CreateConfigRoutine extends Routine<
   loadConfig(configLoader: ConfigLoader, filePath: string): Struct {
     const config = configLoader.parseFile(filePath, [], { errorOnFunction: true });
 
-    this.tool.emit(`${this.options.driver.name}.load-module-config`, [filePath, config]);
+    this.tool.emit(`${this.options.driver.name}.load-module-config`, [
+      this.context,
+      filePath,
+      config,
+    ]);
 
     return config;
   }
@@ -255,7 +259,7 @@ export default class CreateConfigRoutine extends Routine<
 
     context.addConfigPath(name, configPath);
 
-    this.tool.emit(`${name}.reference-config-file`, [configPath, config]);
+    this.tool.emit(`${name}.reference-config-file`, [context, configPath, config]);
 
     return fs
       .writeFile(

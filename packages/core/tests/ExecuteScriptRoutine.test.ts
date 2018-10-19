@@ -81,7 +81,7 @@ describe('ExecuteScriptRoutine', () => {
 
       const script = await routine.loadScript(routine.context, 'foo-bar');
 
-      expect(spy).toHaveBeenCalledWith('foo-bar.load-script', [script]);
+      expect(spy).toHaveBeenCalledWith('foo-bar.load-script', [routine.context, script]);
     });
   });
 
@@ -124,9 +124,9 @@ describe('ExecuteScriptRoutine', () => {
       await routine.runScript(routine.context, script);
 
       expect(spy).toHaveBeenCalledWith('before.before-execute', [
-        script,
-        routine.context.argv,
         routine.context,
+        routine.context.argv,
+        script,
       ]);
     });
 
@@ -144,7 +144,7 @@ describe('ExecuteScriptRoutine', () => {
 
       await routine.runScript(routine.context, script);
 
-      expect(spy).toHaveBeenCalledWith('after.after-execute', [script, 123]);
+      expect(spy).toHaveBeenCalledWith('after.after-execute', [routine.context, 123, script]);
     });
 
     it('triggers `failed-execute` event on failure', async () => {
@@ -162,7 +162,7 @@ describe('ExecuteScriptRoutine', () => {
       try {
         await routine.runScript(routine.context, script);
       } catch (error) {
-        expect(spy).toHaveBeenCalledWith('fail.failed-execute', [script, error]);
+        expect(spy).toHaveBeenCalledWith('fail.failed-execute', [routine.context, error, script]);
       }
     });
   });

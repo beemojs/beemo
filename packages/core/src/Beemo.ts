@@ -110,7 +110,7 @@ export default class Beemo {
       context.addDriverDependency(tool.getPlugin('driver', driverName));
     });
 
-    tool.emit(`${primaryDriver}.init-driver`, [driver, context]);
+    tool.emit(`${primaryDriver}.init-driver`, [context, driver]);
     tool.debug('Running with %s driver(s)', [primaryDriver, ...additionalDrivers].join(', '));
 
     return this.startPipeline(context)
@@ -245,7 +245,7 @@ export default class Beemo {
     context.workspaceRoot = tool.options.workspaceRoot || tool.options.root;
     context.workspaces = this.getWorkspacePaths();
 
-    tool.emit(`${driverName}.init-driver`, [driver, context]);
+    tool.emit(`${driverName}.init-driver`, [context, driver]);
     tool.debug('Running with %s driver', driverName);
 
     return this.startPipeline(context)
@@ -262,7 +262,7 @@ export default class Beemo {
     const { tool } = this;
     const context = this.prepareContext(new ScriptContext(args, scriptName));
 
-    tool.emit(`${scriptName}.init-script`, [scriptName, context]);
+    tool.emit(`${scriptName}.init-script`, [context, scriptName]);
     tool.debug('Running with %s script', scriptName);
 
     return this.startPipeline(context)
