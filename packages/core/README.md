@@ -16,7 +16,7 @@ dependencies, continuous copy and paste, and more.
 - Automatically expand glob patterns (a better alternative to bash).
 - Listen to and act upon events.
 - Easily share config between dev tools.
-- Avoid relative config or `extend` paths.
+- Avoid relative config or `extends` paths.
 - Automatic config file cleanup.
 - Custom scripts with CLI options.
 - Scaffolding and template generation.

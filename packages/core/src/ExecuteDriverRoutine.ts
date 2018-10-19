@@ -8,7 +8,7 @@ import path from 'path';
 import glob from 'fast-glob';
 import { Routine, PackageConfig } from '@boost/core';
 import DriverContext from './contexts/DriverContext';
-import RunCommandRoutine, { RunCommandOptions } from './driver/RunCommandRoutine';
+import RunCommandRoutine, { RunCommandOptions } from './execute/RunCommandRoutine';
 import isPatternMatch from './utils/isPatternMatch';
 import { BeemoTool } from './types';
 

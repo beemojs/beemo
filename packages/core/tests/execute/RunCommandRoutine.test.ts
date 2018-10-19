@@ -2,7 +2,7 @@ import fs from 'fs-extra';
 import chalk from 'chalk';
 import { Task } from '@boost/core';
 import Driver from '../../src/Driver';
-import RunCommandRoutine from '../../src/driver/RunCommandRoutine';
+import RunCommandRoutine from '../../src/execute/RunCommandRoutine';
 import BabelDriver from '../../../driver-babel/src/BabelDriver';
 import JestDriver from '../../../driver-jest/src/JestDriver';
 import {

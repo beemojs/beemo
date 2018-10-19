@@ -1,6 +1,6 @@
 import Driver from '../src/Driver';
 import ExecuteDriverRoutine from '../src/ExecuteDriverRoutine';
-import RunCommandRoutine from '../src/driver/RunCommandRoutine';
+import RunCommandRoutine from '../src/execute/RunCommandRoutine';
 import DriverContext from '../src/contexts/DriverContext';
 import {
   getFixturePath,
@@ -10,7 +10,7 @@ import {
   createTestTool,
 } from '../../../tests/helpers';
 
-jest.mock('../src/driver/RunCommandRoutine', () => jest.fn());
+jest.mock('../src/execute/RunCommandRoutine', () => jest.fn());
 
 describe('ExecuteDriverRoutine', () => {
   let routine: ExecuteDriverRoutine;
