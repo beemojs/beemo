@@ -1,3 +1,1 @@
-const config = require('@milesj/build-tool-config/configs/eslint');
-
-module.exports = config();
+module.exports = require('@milesj/build-tool-config/configs/eslint');

@@ -1357,10 +1357,10 @@
     npmlog "^4.1.2"
     write-file-atomic "^2.3.0"
 
-"@milesj/build-tool-config@0.125.0":
-  version "0.125.0"
-  resolved "https://registry.yarnpkg.com/@milesj/build-tool-config/-/build-tool-config-0.125.0.tgz#865b67ce531c9d8a65e04dac68b45af493dc34a2"
-  integrity sha512-otgldKqa4G6wnjq3KtzeAotN0q7YdObDylv1rKA5/N++jw36yHXARFJANn7IGEcJJUeJZKXwq1YsD/sCfT/MbA==
+"@milesj/build-tool-config@0.126.1":
+  version "0.126.1"
+  resolved "https://registry.npmjs.org/@milesj/build-tool-config/-/build-tool-config-0.126.1.tgz#d59f8fff3d38e4ce51347f28b30e6bf1c1ccd449"
+  integrity sha512-Zl2Kzg7iqgk3e9czjAjgJ/xnNBeMb2kl16MckoeNK0UKDYNbyi1Xli9NbWYcVPr+6p27asI1kmOmU1DHTEB+/w==
   dependencies:
     "@babel/cli" "^7.1.2"
     "@babel/core" "^7.1.2"
@@ -1388,7 +1388,7 @@
     eslint-plugin-babel "^5.2.1"
     eslint-plugin-compat "^2.6.2"
     eslint-plugin-import "^2.14.0"
-    eslint-plugin-jest "^21.25.0"
+    eslint-plugin-jest "^21.25.1"
     eslint-plugin-jsx-a11y "^6.1.2"
     eslint-plugin-promise "^4.0.1"
     eslint-plugin-react "^7.11.1"
@@ -3929,10 +3929,10 @@ eslint-plugin-import@^2.14.0:
     read-pkg-up "^2.0.0"
     resolve "^1.6.0"
 
-eslint-plugin-jest@^21.25.0:
-  version "21.25.0"
-  resolved "https://registry.yarnpkg.com/eslint-plugin-jest/-/eslint-plugin-jest-21.25.0.tgz#b798c6616a2ad444ea25636d877ca3d3bc881348"
-  integrity sha512-x1B7986tOhSR6TDmW7oA7zf8bpturx5NXhv4ZY0U6HLh2BLk3Z5rRsfZxrcWT8Caq30k/NHji2K3IPC1pPa/QQ==
+eslint-plugin-jest@^21.25.1:
+  version "21.25.1"
+  resolved "https://registry.npmjs.org/eslint-plugin-jest/-/eslint-plugin-jest-21.25.1.tgz#166c6b9d33bd7bc5b8ece62cff878ba207600bb6"
+  integrity sha512-mmphmAD/WihjFGq1IUHLSZWQPcd8U9w/SeFCHf3p0V3Q3MBxmj1ZKnh41hID44guIACLuwos/LhVWIr4phN4yg==
 
 eslint-plugin-jsx-a11y@^6.1.2:
   version "6.1.2"

@@ -1,7 +1,5 @@
-const ignore = ['.*/node_modules/.*', '.*/tests/.*', '.*\\.test\\.js'];
-
 module.exports = {
-  ignore,
+  ignore: ['.*/node_modules/.*', '.*/tests/.*', '.*\\.test\\.js'],
   include: ['./src'],
   lints: {
     all: 'off',
