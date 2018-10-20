@@ -762,10 +762,10 @@
     lodash "^4.17.10"
     to-fast-properties "^2.0.0"
 
-"@boost/core@^1.0.0-rc.4":
-  version "1.0.0-rc.4"
-  resolved "https://registry.npmjs.org/@boost/core/-/core-1.0.0-rc.4.tgz#ac320331343a155f8130e0665b33ad1e26240caa"
-  integrity sha512-+5UpE6G/fDkMnRVJbtBa983l+o3FRTMcsuYzN+mjVee8uOe4lTU0yQ5PetK0PgWxjsiXLwSPGPeZRoFg/rRezQ==
+"@boost/core@^1.0.0":
+  version "1.0.0"
+  resolved "https://registry.npmjs.org/@boost/core/-/core-1.0.0.tgz#e73bb5c683bf8a64fc05352d172678025e32770f"
+  integrity sha512-aSo+sUX8Aesz9eLMt08bfwfiYWsmUqpaCVRx2RiafGxNn/XV7yteeOYrn5smOM5pjjoc2tXvIi5svYN0G/ddGQ==
   dependencies:
     "@types/cli-truncate" "^1.1.0"
     "@types/debug" "^0.0.31"
@@ -788,7 +788,7 @@
     execa "^1.0.0"
     exit "^0.1.2"
     fast-glob "^2.2.3"
-    i18next "^11.9.1"
+    i18next "^11.10.0"
     json5 "^2.1.0"
     lodash "^4.17.11"
     os-locale "^3.0.1"
@@ -5104,10 +5104,10 @@ hygen@^1.6.2:
     lodash "^4.17.4"
     yargs-parser "^7.0.0"
 
-i18next@^11.9.1:
-  version "11.9.1"
-  resolved "https://registry.npmjs.org/i18next/-/i18next-11.9.1.tgz#f2718b11da2460e29e2dbd3dd8dea05dfc88e2dc"
-  integrity sha512-sUAfCdKYi8EufO6B8aY5RF/hqweCpRKvbxUhlzlmlAr+LgJQ2kXe/5y02kaPu6ApFIiW5WOz8+3ehoy97LUtMw==
+i18next@^11.10.0:
+  version "11.10.0"
+  resolved "https://registry.npmjs.org/i18next/-/i18next-11.10.0.tgz#901231c840ba2bbf89b672a7f65d50fb2250626e"
+  integrity sha512-5ElF7gjvRztb7sxS9KOGQ7b8L6uJqysTuGNIwSEefVDE4yhEmIrD6SZB3Z90QtwLq9Ag7W6QJQGO/yAI8gPd1A==
 
 iconv-lite@0.4.24, iconv-lite@^0.4.17, iconv-lite@^0.4.24, iconv-lite@^0.4.4, iconv-lite@~0.4.13:
   version "0.4.24"
