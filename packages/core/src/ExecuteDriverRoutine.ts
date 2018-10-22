@@ -68,7 +68,7 @@ export default class ExecuteDriverRoutine extends Routine<DriverContext, BeemoTo
    */
   loadWorkspacePackages(): PackageConfig[] {
     return glob
-      .sync(`${this.context.workspaces}/package.json`, {
+      .sync(this.context.workspaces.map(ws => `${ws}/package.json`), {
         absolute: true,
         cwd: this.context.root,
       })
