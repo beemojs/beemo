@@ -2,7 +2,7 @@
   "cliNoCommand": "Please select a command!",
   "configCopySourceMissing": "Cannot copy configuration file. Source file does not exist in configuration module.",
   "configReferenceSourceMissing": "Cannot reference configuration file. Source file does not exist in configuration module.",
-  "driverExecuteFailed": "Failed to execute driver pipeline.",
+  "driverExecuteFailed": "Failed to execute driver pipeline. The following errors have occurred:",
   "driverWorkspacesNotEnabled": "Option --workspaces={{arg}} provided but project is not workspaces enabled.",
   "eslintIgnoreInvalid": "Ignore configuration must be an array of strings.",
   "moduleConfigMissing": "Beemo requires a \"{{configName}}.module\" property within your package.json. This property is the name of a module that houses your configuration files.",

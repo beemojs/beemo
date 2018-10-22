@@ -228,7 +228,11 @@ describe('ExecuteDriverRoutine', () => {
       try {
         await routine.execute(context);
       } catch (error) {
-        expect(error).toEqual(new Error('Failed to execute driver pipeline.'));
+        expect(error).toEqual(
+          new Error(
+            'Failed to execute driver pipeline. The following errors have occurred:\n\nFailed\n\nOops',
+          ),
+        );
       }
     });
 

@@ -47,7 +47,14 @@ export default class ExecuteDriverRoutine extends Routine<DriverContext, BeemoTo
     const response = await this.poolRoutines(null, concurrency ? { concurrency } : {}, other);
 
     if (response.errors.length > 0) {
-      throw new Error(this.tool.msg('errors:driverExecuteFailed'));
+      let message = this.tool.msg('errors:driverExecuteFailed');
+
+      response.errors.forEach(error => {
+        message += '\n\n';
+        message += error.message.split(/\s+at\s+/u)[0].trim();
+      });
+
+      throw new Error(message);
     }
 
     return response.results;
