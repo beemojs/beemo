@@ -106,16 +106,31 @@ export default class ExecuteDriverRoutine extends Routine<DriverContext, BeemoTo
       };
     }
 
-    // Create a mapping of package names within all workspaces
     const packages: { [name: string]: PackageConfig } = {};
+    const depCounts: { [name: string]: { count: number; package: PackageConfig } } = {};
 
+    function countDep(name: string) {
+      if (depCounts[name]) {
+        depCounts[name].count += 1;
+      } else {
+        depCounts[name] = {
+          count: packages[name].priority || 1,
+          package: packages[name],
+        };
+      }
+    }
+
+    // Create a mapping of package names within all workspaces
     this.workspacePackages.forEach(pkg => {
       packages[pkg.name] = pkg;
+
+      // Count it immediately, as it may not be dependend on
+      if (pkg.priority) {
+        countDep(pkg.name);
+      }
     });
 
     // Determine dependend on packages by resolving the graph and incrementing counts
-    const depCounts: { [name: string]: { count: number; package: PackageConfig } } = {};
-
     this.workspacePackages.forEach(pkg => {
       const deps = {
         ...pkg.dependencies,
@@ -123,17 +138,8 @@ export default class ExecuteDriverRoutine extends Routine<DriverContext, BeemoTo
       };
 
       Object.keys(deps).forEach(depName => {
-        if (!packages[depName]) {
-          return;
-        }
-
-        if (depCounts[depName]) {
-          depCounts[depName].count += 1;
-        } else {
-          depCounts[depName] = {
-            count: 1,
-            package: packages[depName],
-          };
+        if (packages[depName]) {
+          countDep(depName);
         }
       });
     });
@@ -172,7 +178,7 @@ export default class ExecuteDriverRoutine extends Routine<DriverContext, BeemoTo
   }
 
   /**
-   * When a parallel pipe "|>" is defined, we need to create an additional routine
+   * When a parallel pipe "//" is defined, we need to create an additional routine
    * for each instance.
    */
   pipeParallelBuilds(key: string, options: Partial<RunCommandOptions> = {}) {

@@ -403,5 +403,27 @@ describe('ExecuteDriverRoutine', () => {
         priority: [{ key: 'bar' }, { key: 'primary' }],
       });
     });
+
+    it('sorts priority by taking `priority` package option into account', () => {
+      routine.workspacePackages[2].peerDependencies = {
+        '@scope/primary': '2.0.0',
+      };
+
+      routine.workspacePackages[1].dependencies = {
+        '@scope/bar': '1.0.0',
+      };
+
+      routine.workspacePackages[4].priority = 3;
+      routine.workspacePackages[4].peerDependencies = {
+        '@scope/bar': '1.0.0',
+      };
+
+      routine.workspacePackages[0].priority = 100;
+
+      expect(routine.orderByWorkspacePriorityGraph()).toEqual({
+        other: [{ key: 'foo' }, { key: 'baz' }],
+        priority: [{ key: 'primary' }, { key: 'qux' }, { key: 'bar' }],
+      });
+    });
   });
 });
