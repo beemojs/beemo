@@ -335,7 +335,7 @@ export default class RunCommandRoutine extends Routine<
 
       this.tool.emit(`${driver.name}.failed-execute`, [context, error, driver]);
 
-      throw error;
+      throw new Error((driver.extractErrorMessage(error) || '').trim());
     }
 
     return result;

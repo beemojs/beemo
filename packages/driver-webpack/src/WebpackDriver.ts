@@ -18,4 +18,12 @@ export default class WebpackDriver extends Driver<WebpackConfig> {
       title: 'Webpack',
     });
   }
+
+  extractErrorMessage(error: Error): string {
+    if (error.message.indexOf('|') > 0) {
+      return error.message.split(/|\s+at$/u, 1)[0];
+    }
+
+    return super.extractErrorMessage(error);
+  }
 }

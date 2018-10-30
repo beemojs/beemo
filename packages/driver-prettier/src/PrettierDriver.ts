@@ -23,6 +23,14 @@ export default class PrettierDriver extends Driver<PrettierConfig> {
     this.on('prettier.create-config-file', this.handleCreateIgnoreFile);
   }
 
+  extractErrorMessage(error: Error): string {
+    if (error.message.includes('SyntaxError')) {
+      return error.message.split(/|\s+$/u, 1)[0];
+    }
+
+    return super.extractErrorMessage(error);
+  }
+
   /**
    * If an "ignore" property exists in the Prettier config, create an ".prettierconfig" file.
    */

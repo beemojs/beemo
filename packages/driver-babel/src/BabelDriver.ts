@@ -31,6 +31,14 @@ export default class BabelDriver extends Driver<BabelConfig> {
     this.on('babel.before-execute', this.handleCleanTarget);
   }
 
+  extractErrorMessage(error: Error): string {
+    if (error.message.includes('SyntaxError')) {
+      return error.message.split(/|\s+at/u, 1)[0];
+    }
+
+    return super.extractErrorMessage(error);
+  }
+
   /**
    * Automatically clean the target folder if --out-dir is used.
    */

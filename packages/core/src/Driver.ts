@@ -41,6 +41,13 @@ export default class Driver<Config = any> extends Plugin<DriverOptions> {
   }
 
   /**
+   * Extract the error message when the driver fails to execute.
+   */
+  extractErrorMessage(error: Error): string {
+    return error.message.split('\n', 1)[0] || '';
+  }
+
+  /**
    * Format the configuration file before it's written.
    */
   formatConfig(data: Config): string {
