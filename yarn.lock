@@ -762,10 +762,10 @@
     lodash "^4.17.10"
     to-fast-properties "^2.0.0"
 
-"@boost/core@^1.0.2":
-  version "1.0.2"
-  resolved "https://registry.yarnpkg.com/@boost/core/-/core-1.0.2.tgz#eab4eaf6b437a6d6d3ee1a11a1d8222cef798629"
-  integrity sha512-eBu6yhCLdTTeqRsD6Lg4ybQXMYMyPxXt0zIPpsvv/pCa6raArvZzliwg7YQQWUA4r9ldYwiBwBqfIjDsbbUMzg==
+"@boost/core@^1.0.3":
+  version "1.0.3"
+  resolved "https://registry.yarnpkg.com/@boost/core/-/core-1.0.3.tgz#9e1fdba3dd79698361a1e2c09302e12e34c49527"
+  integrity sha512-+6AG+l107P4Ubp3uICj3bAdebC5ZHzrHH2xNhvWN9sSbBkYJuQ7q+4ZgAlTGpEsPK3+02EM21I6sS6966UnQDA==
   dependencies:
     "@types/cli-truncate" "^1.1.0"
     "@types/debug" "^0.0.31"
