@@ -431,6 +431,19 @@ describe('RunCommandRoutine', () => {
       }
     });
 
+    it('doesnt handle failure using driver if MaxBufferError occured', async () => {
+      const error = new Error('Oops');
+      error.name = 'MaxBufferError';
+
+      (routine.executeCommand as jest.Mock).mockImplementation(() => Promise.reject(error));
+
+      try {
+        await routine.runCommandWithArgs(routine.context, ['--wtf'], task);
+      } catch {
+        expect(driver.handleFailure).not.toHaveBeenCalled();
+      }
+    });
+
     it('triggers `before-execute` event', async () => {
       const spy = jest.spyOn(routine.tool, 'emit');
 

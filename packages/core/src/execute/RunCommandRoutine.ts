@@ -329,7 +329,9 @@ export default class RunCommandRoutine extends Routine<
 
       this.tool.emit(`${driver.name}.after-execute`, [context, result, driver]);
     } catch (error) {
-      driver.handleFailure(error);
+      if (error.name !== 'MaxBufferError') {
+        driver.handleFailure(error);
+      }
 
       this.tool.emit(`${driver.name}.failed-execute`, [context, error, driver]);
 
