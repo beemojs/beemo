@@ -185,17 +185,15 @@ export default class ExecuteDriverRoutine extends Routine<DriverContext, BeemoTo
     const { argv, parallelArgv, primaryDriver } = this.context;
     const command = `${primaryDriver.metadata.bin} ${argv.join(' ')}`;
 
-    if (parallelArgv.length > 0) {
-      parallelArgv.forEach(pargv => {
-        this.pipe(
-          new RunCommandRoutine(key, `${command} ${pargv.join(' ')}`, {
-            ...options,
-            additionalArgv: pargv,
-          }),
-        );
-      });
-    } else {
-      this.pipe(new RunCommandRoutine(key, command, options));
-    }
+    this.pipe(new RunCommandRoutine(key, command, options));
+
+    parallelArgv.forEach(pargv => {
+      this.pipe(
+        new RunCommandRoutine(key, `${command} ${pargv.join(' ')}`, {
+          ...options,
+          additionalArgv: pargv,
+        }),
+      );
+    });
   }
 }

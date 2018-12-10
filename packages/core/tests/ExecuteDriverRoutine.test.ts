@@ -126,7 +126,7 @@ describe('ExecuteDriverRoutine', () => {
         routine.pipe = jest.fn();
         routine.bootstrap();
 
-        expect(routine.pipe).toHaveBeenCalledTimes(6);
+        expect(routine.pipe).toHaveBeenCalledTimes(9);
         expect(routine.pipe).toHaveBeenCalledWith(
           new RunCommandRoutine('foo', 'primary -a --foo bar baz --one --two=2', {
             additionalArgv: ['--one', '--two=2'],
