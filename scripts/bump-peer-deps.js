@@ -7,7 +7,7 @@ const semver = require('semver');
 const RELEASE_TYPES = ['major', 'minor', 'patch'];
 
 module.exports = class BumpPeerDepsScript extends Script {
-  parse() {
+  args() {
     return {
       default: {
         release: 'minor',
@@ -16,7 +16,7 @@ module.exports = class BumpPeerDepsScript extends Script {
     };
   }
 
-  run(options, tool) {
+  execute(context, options) {
     const { release } = options;
 
     if (!RELEASE_TYPES.includes(release)) {
@@ -27,9 +27,9 @@ module.exports = class BumpPeerDepsScript extends Script {
     const packages = {};
     const packagePaths = {};
 
-    tool.log('Loading packages and incrementing versions');
+    this.tool.log('Loading packages and incrementing versions');
 
-    glob.sync('./packages/*/package.json', { cwd: tool.options.root }).forEach(path => {
+    glob.sync('./packages/*/package.json', { cwd: this.tool.options.root }).forEach(path => {
       const data = fs.readJsonSync(String(path));
 
       versions[data.name] = semver.inc(data.version, release);
@@ -47,7 +47,7 @@ module.exports = class BumpPeerDepsScript extends Script {
 
             const nextVersion = `^${versions[peerName]}`;
 
-            tool.log(
+            this.tool.log(
               `Bumping %s peer %s from %s to %s`,
               chalk.yellow(name),
               chalk.cyan(peerName),

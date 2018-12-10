@@ -27,11 +27,15 @@ export default class ExecuteScriptRoutine extends Routine<ScriptContext, BeemoTo
 
     this.debug('Loading script');
 
-    const script = loader.importModule(filePath);
+    const script = loader.importModule(filePath, [
+      scriptName,
+      this.tool.msg('app:scriptRunNamed', { name: scriptName }),
+    ]);
 
-    // Is not set by Boost, so set it here
-    script.name = scriptName;
+    // Pass context and tool to script
+    script.configure(this);
 
+    // Set script into context
     context.setScript(script, filePath);
 
     this.tool.emit(`${scriptName}.load-script`, [context, script]);
@@ -47,17 +51,17 @@ export default class ExecuteScriptRoutine extends Routine<ScriptContext, BeemoTo
 
     this.debug('Executing script with args "%s"', argv.join(' '));
 
-    this.tool.emit(`${script.name}.before-execute`, [context, argv, script]);
+    this.tool.emit(`${script.key}.before-execute`, [context, argv, script]);
 
-    const args = parseArgs(argv, script.parse());
+    const args = parseArgs(argv, script.args());
     let result = null;
 
     try {
-      result = await script.run(args, this.tool);
+      result = await script.execute(context, args);
 
-      this.tool.emit(`${script.name}.after-execute`, [context, result, script]);
+      this.tool.emit(`${script.key}.after-execute`, [context, result, script]);
     } catch (error) {
-      this.tool.emit(`${script.name}.failed-execute`, [context, error, script]);
+      this.tool.emit(`${script.key}.failed-execute`, [context, error, script]);
 
       throw error;
     }

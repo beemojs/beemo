@@ -10,9 +10,12 @@ import {
 
 jest.mock('@boost/core/lib/ModuleLoader', () =>
   jest.fn(() => ({
-    importModule: jest.fn(() => ({
-      parse: () => ({}),
-      run: () => Promise.resolve(123),
+    importModule: jest.fn((path, args) => ({
+      key: args[0],
+      args: jest.fn(() => ({})),
+      boostrap: jest.fn(),
+      configure: jest.fn(),
+      execute: () => Promise.resolve(123),
     })),
   })),
 );
@@ -49,7 +52,7 @@ describe('ExecuteScriptRoutine', () => {
       expect(runSpy).toHaveBeenCalledWith(
         routine.context,
         expect.objectContaining({
-          name: 'foo-bar',
+          key: 'foo-bar',
         }),
         expect.anything(),
       );
@@ -67,13 +70,19 @@ describe('ExecuteScriptRoutine', () => {
     it('sets values to context', async () => {
       const script = await routine.loadScript(routine.context, 'foo-bar');
 
-      expect(script.name).toBe('foo-bar');
+      expect(script.key).toBe('foo-bar');
       expect(routine.context).toEqual(
         expect.objectContaining({
           scriptName: 'foo-bar',
           scriptPath: prependRoot('scripts/foo-bar.js'),
         }),
       );
+    });
+
+    it('calls configure on script', async () => {
+      const script = await routine.loadScript(routine.context, 'foo-bar');
+
+      expect(script.configure).toHaveBeenCalledWith(routine);
     });
 
     it('triggers `load-script` event', async () => {
@@ -86,40 +95,38 @@ describe('ExecuteScriptRoutine', () => {
   });
 
   describe('runScript()', () => {
-    it('calls the scripts parse() and run()', async () => {
-      const script = new Script();
-      script.parse = jest.fn(() => ({
+    it('calls the script args() and execute()', async () => {
+      const script = new Script('test', 'test');
+      script.args = jest.fn(() => ({
         boolean: ['foo'],
         default: {
           foo: false,
         },
       }));
-      script.run = jest.fn();
+      script.execute = jest.fn();
 
       await routine.runScript(routine.context, script);
 
-      expect(script.parse).toHaveBeenCalled();
-      expect(script.run).toHaveBeenCalledWith(
+      expect(script.args).toHaveBeenCalled();
+      expect(script.execute).toHaveBeenCalledWith(
+        routine.context,
         expect.objectContaining({
           _: ['bar', 'baz'],
           a: true,
           foo: true,
         }),
-        routine.tool,
       );
     });
 
     it('triggers `before-execute` event', async () => {
       class MockScript extends Script {
-        name = 'before';
-
-        run() {
+        execute() {
           return Promise.resolve();
         }
       }
 
       const spy = jest.spyOn(routine.tool, 'emit');
-      const script = new MockScript();
+      const script = new MockScript('before', 'before');
 
       await routine.runScript(routine.context, script);
 
@@ -132,15 +139,13 @@ describe('ExecuteScriptRoutine', () => {
 
     it('triggers `after-execute` event on success', async () => {
       class SuccessScript extends Script {
-        name = 'after';
-
-        run() {
+        execute() {
           return Promise.resolve(123);
         }
       }
 
       const spy = jest.spyOn(routine.tool, 'emit');
-      const script = new SuccessScript();
+      const script = new SuccessScript('after', 'after');
 
       await routine.runScript(routine.context, script);
 
@@ -149,15 +154,13 @@ describe('ExecuteScriptRoutine', () => {
 
     it('triggers `failed-execute` event on failure', async () => {
       class FailureScript extends Script {
-        name = 'fail';
-
-        run() {
+        execute() {
           return Promise.reject(new Error('Oops'));
         }
       }
 
       const spy = jest.spyOn(routine.tool, 'emit');
-      const script = new FailureScript();
+      const script = new FailureScript('fail', 'fail');
 
       try {
         await routine.runScript(routine.context, script);

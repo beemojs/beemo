@@ -4,19 +4,19 @@ describe('Script', () => {
   let script: Script;
 
   beforeEach(() => {
-    script = new Script();
+    script = new Script('test', 'test');
   });
 
-  describe('parse()', () => {
+  describe('args()', () => {
     it('returns an empty object', () => {
-      expect(script.parse()).toEqual({});
+      expect(script.args()).toEqual({});
     });
   });
 
-  describe('run()', () => {
+  describe('execute()', () => {
     it('errors if not defined', () => {
       // @ts-ignore
-      expect(script.run()).rejects.toThrowErrorMatchingSnapshot();
+      expect(script.execute()).rejects.toThrowErrorMatchingSnapshot();
     });
   });
 });

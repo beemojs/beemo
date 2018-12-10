@@ -22,8 +22,7 @@ describe('Context', () => {
 
   describe('setScript()', () => {
     it('sets script object, name, and path', () => {
-      const script = new Script();
-      script.name = 'foo';
+      const script = new Script('foo', 'Title');
 
       context.setScript(script, './foo.js');
 

@@ -3,23 +3,16 @@
  * @license     https://opensource.org/licenses/MIT
  */
 
-import { Arguments, Options } from 'yargs-parser';
+import { Routine } from '@boost/core';
+import { Options } from 'yargs-parser';
+import ScriptContext from './contexts/ScriptContext';
 import { BeemoTool } from './types';
 
-export default class Script {
-  name: string = '';
-
+export default class Script extends Routine<ScriptContext, BeemoTool> {
   /**
    * Define a configuration object to parse args with.
    */
-  parse(): Options {
+  args(): Options {
     return {};
-  }
-
-  /**
-   * Run the script with the options object and Beemo tool instance.
-   */
-  async run(args: Arguments, tool: BeemoTool): Promise<any> {
-    throw new Error(`${this.constructor.name} must define an async run() method.`);
   }
 }

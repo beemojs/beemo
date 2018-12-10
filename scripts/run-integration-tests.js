@@ -6,7 +6,7 @@ const execa = require('execa');
 const path = require('path');
 
 module.exports = class RunIntegrationTestsScript extends Script {
-  parse() {
+  args() {
     return {
       boolean: ['pass', 'fail'],
       default: {
@@ -16,18 +16,18 @@ module.exports = class RunIntegrationTestsScript extends Script {
     };
   }
 
-  run(options, tool) {
+  execute(context, options) {
     // eslint-disable-next-line no-nested-ternary
     const key = options.pass ? 'pass' : options.fail ? 'fail' : '';
 
     if (!key) {
-      throw new Error('Please pass one of --fail or --pass');
+      throw new Error('Please pass one of --fail or --pass.');
     }
 
-    tool.log('Loading packages');
+    this.tool.log('Loading packages');
 
     const packages = glob
-      .sync('./packages/*/package.json', { cwd: tool.options.root })
+      .sync('./packages/*/package.json', { cwd: this.tool.options.root })
       .filter(pkgPath => String(pkgPath).includes('driver'))
       .map(pkgPath => fs.readJsonSync(String(pkgPath)));
 
@@ -42,7 +42,7 @@ module.exports = class RunIntegrationTestsScript extends Script {
           );
         }
 
-        tool.log('Testing %s', chalk.yellow(pkg.name));
+        this.tool.log('Testing %s', chalk.yellow(pkg.name));
 
         return Promise.all(
           script.split('&&').map(command =>
