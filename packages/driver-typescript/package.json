@@ -27,7 +27,7 @@
     "typescript": "^3.2.2"
   },
   "peerDependencies": {
-    "@beemo/core": "^0.24.0",
+    "@beemo/core": "^0.25.0",
     "typescript": "^2.0.0 || ^3.0.0"
   },
   "dependencies": {

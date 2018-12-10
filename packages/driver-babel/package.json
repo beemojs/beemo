@@ -33,7 +33,7 @@
   },
   "peerDependencies": {
     "@babel/core": "^7.0.0",
-    "@beemo/core": "^0.24.0"
+    "@beemo/core": "^0.25.0"
   },
   "dependencies": {
     "rimraf": "^2.6.2"
