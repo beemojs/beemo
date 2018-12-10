@@ -104,20 +104,20 @@ module.exports = {
 
 Beemo supports executing custom scripts found within your configuration module. To utilize a script,
 create a JavaScript file within the `scripts/` folder, extend the `Script` class provided by Beemo,
-and define the `run()` and `parse()` methods.
+and define the `execute()` and `args()` methods.
 
 ```js
 // scripts/init.js
 const { Script } = require('@beemo/core');
 
 module.exports = class InitScript extends Script {
-  parse() {
+  args() {
     return {
       boolean: ['workspaces'],
     };
   }
 
-  run(options, tool) {
+  execute(context, options) {
     if (options.workspaces) {
       // Do something
     }
@@ -125,15 +125,15 @@ module.exports = class InitScript extends Script {
 };
 ```
 
-The `parse()` method is optional and can be used to define parsing rules for CLI options (powered by
+The `args()` method is optional and can be used to define parsing rules for CLI options (powered by
 [yargs-parser](https://www.npmjs.com/package/yargs-parser#api)). If no rules are provided, Yargs
 default parsing rules will be used.
 
-The `run()` method is required and is triggered when the `beemo run-script` command is ran. This
-method receives options (parsed with `parse()`) as the 1st argument, and the current
-[Beemo Tool instance](./tool.md) as the 2nd argument.
+The `execute()` method is required and is triggered when the `beemo run-script` command is ran. This
+method receives the current pipeline context as the 1st argument and options (parsed with `parse()`)
+as the 2nd argument. The [Beemo Tool instance](./tool.md) is available under `this.tool`.
 
-> Returning a promise in `run()` is preferred.
+> Returning a promise in `execute()` is preferred.
 
 ## Publishing
 

@@ -48,13 +48,13 @@ categories.
   is ran in each. Because of this, we suggest not using the root config for anything else.
 - **No support** - Workspaces do not work for this driver.
 
-| Driver     | Support                                            |
-| ---------- | -------------------------------------------------- |
-| Babel      | Referenced using `--config-file`                   |
-| ESLint     | Root only (preferred), Referenced using `--config` |
-| Flow       | Root only                                          |
-| Jest       | Root only (preferred), Referenced using `--config` |
-| Mocha      | Root only                                          |
-| Prettier   | Root only (preferred), Referenced using `--config` |
-| TypeScript | Copied                                             |
-| Webpack    | N/A                                                |
+| Driver     | Support                                                 |
+| ---------- | ------------------------------------------------------- |
+| Babel      | Root only (preferred), Referenced using `--config-file` |
+| ESLint     | Root only (preferred), Referenced using `--config`      |
+| Flow       | Root only                                               |
+| Jest       | Root only (preferred), Referenced using `--config`      |
+| Mocha      | Root only                                               |
+| Prettier   | Root only (preferred), Referenced using `--config`      |
+| TypeScript | Copied                                                  |
+| Webpack    | N/A                                                     |
