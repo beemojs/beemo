@@ -16,6 +16,7 @@ export default class WebpackDriver extends Driver<WebpackConfig> {
       configStrategy: STRATEGY_REFERENCE,
       description: this.tool.msg('app:webpackDescription'),
       title: 'Webpack',
+      watchOptions: ['-w', '--watch'],
     });
   }
 

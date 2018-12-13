@@ -18,6 +18,7 @@ export default class BabelDriver extends Driver<BabelConfig> {
       configOption: '--config-file',
       description: this.tool.msg('app:babelDescription'),
       title: 'Babel',
+      watchOptions: ['-w', '--watch'],
     });
 
     this.setCommandOptions({

@@ -37,6 +37,7 @@ describe('JestDriver', () => {
         helpOption: '--help',
         title: 'Jest',
         useConfigOption: false,
+        watchOptions: [],
       }),
     );
   });

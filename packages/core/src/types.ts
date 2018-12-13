@@ -54,6 +54,7 @@ export interface DriverMetadata {
   helpOption: string;
   title: string;
   useConfigOption: boolean;
+  watchOptions: string[];
   workspaceStrategy: 'reference' | 'copy';
 }
 

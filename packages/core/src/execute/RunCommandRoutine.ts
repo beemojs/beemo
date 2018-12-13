@@ -10,11 +10,13 @@ import path from 'path';
 import fs from 'fs-extra';
 import isGlob from 'is-glob';
 import merge from 'lodash/merge';
+import execa from 'execa';
 import optimal, { array, bool, string } from 'optimal';
 import parseArgs from 'yargs-parser';
 import DriverContext from '../contexts/DriverContext';
 import { STRATEGY_COPY } from '../constants';
 import { Argv, Execution, BeemoTool } from '../types';
+import BatchStream from '../streams/BatchStream';
 
 const OPTION_PATTERN: RegExp = /-?-[a-z0-9-]+(,|\s)/giu;
 
@@ -70,6 +72,36 @@ export default class RunCommandRoutine extends Routine<
 
     return this.serializeTasks();
   }
+
+  captureWatchOutput = (stream: execa.ExecaChildProcess) => {
+    const { args, primaryDriver } = this.context;
+    const { watchOptions } = primaryDriver.metadata;
+    const isWatching = watchOptions.some(option => {
+      // Option
+      if (option.startsWith('-')) {
+        return args[option.replace(/^-{1,2}/u, '')];
+      }
+
+      // Argument
+      return args._.includes(option);
+    });
+
+    if (!isWatching) {
+      return;
+    }
+
+    const handler = (chunk: Buffer) => {
+      const out = String(chunk).trim();
+
+      if (out) {
+        this.tool.console.liveLogs = [];
+        this.tool.logLive(out);
+      }
+    };
+
+    stream.stdout.pipe(new BatchStream({ wait: 1500 })).on('data', handler);
+    stream.stderr.pipe(new BatchStream({ wait: 1500 })).on('data', handler);
+  };
 
   /**
    * When workspaces are enabled, some drivers require the config to be within each workspace,
@@ -323,6 +355,7 @@ export default class RunCommandRoutine extends Routine<
         cwd,
         env: driver.options.env,
         task,
+        wrap: this.captureWatchOutput,
       });
 
       driver.handleSuccess(result);

@@ -20,6 +20,7 @@ export default class TypeScriptDriver extends Driver<TypeScriptConfig> {
       filterOptions: true,
       helpOption: '--help --all',
       title: 'TypeScript',
+      watchOptions: ['-w', '--watch'],
       workspaceStrategy: 'copy',
     });
 

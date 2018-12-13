@@ -18,6 +18,7 @@ export default class JestDriver extends Driver<JestConfig> {
       description: this.tool.msg('app:jestDescription'),
       filterOptions: true,
       title: 'Jest',
+      watchOptions: ['--watch', '--watchAll'],
     });
   }
 

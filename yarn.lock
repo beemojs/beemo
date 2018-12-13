@@ -787,16 +787,16 @@
     lodash "^4.17.10"
     to-fast-properties "^2.0.0"
 
-"@boost/core@^1.0.4":
-  version "1.0.4"
-  resolved "https://registry.npmjs.org/@boost/core/-/core-1.0.4.tgz#9a6f67bd425616d6f59ea3e2960dadbc38325da9"
-  integrity sha512-ATtMfB9L4feNtjYFQdDMaqCsmITy9L8DDA8bZJmmp7eHQbYqq0HTORZnXEk4VEDtSWei/VkRWsMp4grM0oi2sg==
+"@boost/core@^1.1.0":
+  version "1.1.0"
+  resolved "https://registry.npmjs.org/@boost/core/-/core-1.1.0.tgz#3d615409164d3c287f2e171c694be19145121d8b"
+  integrity sha512-8IFTPb3fTZd9D3giGKnWAwEbAaa0wVxxJy/h6FUv6fTAtGHb5vZF9wfb3PTM9ca116LxrCaCvfVwlGD65Tyvbw==
   dependencies:
     "@types/cli-truncate" "^1.1.0"
     "@types/debug" "^0.0.31"
     "@types/execa" "^0.9.0"
     "@types/exit" "^0.1.30"
-    "@types/i18next" "^11.9.3"
+    "@types/i18next" "^12.1.0"
     "@types/json5" "^0.0.30"
     "@types/lodash" "^4.14.118"
     "@types/os-locale" "^2.1.0"
@@ -1515,10 +1515,10 @@
     "@types/minimatch" "*"
     "@types/node" "*"
 
-"@types/i18next@^11.9.3":
-  version "11.9.3"
-  resolved "https://registry.npmjs.org/@types/i18next/-/i18next-11.9.3.tgz#04d84c6539908ad69665d26d8967f942d1638550"
-  integrity sha512-snM7bMKy6gt7UYdpjsxycqSCAy0fr2JVPY0B8tJ2vp9bN58cE7C880k20PWFM4KXxQ3KsstKM8DLCawGCIH0tg==
+"@types/i18next@^12.1.0":
+  version "12.1.0"
+  resolved "https://registry.npmjs.org/@types/i18next/-/i18next-12.1.0.tgz#7c3fd3dbe03f9531147033773bbd0ca4f474a180"
+  integrity sha512-qLyqTkp3ZKHsSoX8CNVYcTyTkxlm0aRCUpaUVetgkSlSpiNCdWryOgaYwgbO04tJIfLgBXPcy0tJ3Nl/RagllA==
 
 "@types/is-glob@^4.0.0":
   version "4.0.0"
@@ -1562,10 +1562,10 @@
   resolved "https://registry.npmjs.org/@types/node/-/node-10.12.10.tgz#4fa76e6598b7de3f0cb6ec3abacc4f59e5b3a2ce"
   integrity sha512-8xZEYckCbUVgK8Eg7lf5Iy4COKJ5uXlnIOnePN0WUwSQggy9tolM+tDJf7wMOnT/JT/W9xDYIaYggt3mRV2O5w==
 
-"@types/node@^10.12.12":
-  version "10.12.12"
-  resolved "https://registry.npmjs.org/@types/node/-/node-10.12.12.tgz#e15a9d034d9210f00320ef718a50c4a799417c47"
-  integrity sha512-Pr+6JRiKkfsFvmU/LK68oBRCQeEg36TyAbPhc2xpez24OOZZCuoIhWGTd39VZy6nGafSbxzGouFPTFD/rR1A0A==
+"@types/node@^10.12.14":
+  version "10.12.14"
+  resolved "https://registry.npmjs.org/@types/node/-/node-10.12.14.tgz#c03b6380c5c301be0499ecd143b99b76ebe45678"
+  integrity sha512-0rVcFRhM93kRGAU88ASCjX9Y3FWDCh+33G5Z5evpKOea4xcpLqDGwmo64+DjgaSezTN5j9KdnUzvxhOw7fNciQ==
 
 "@types/os-locale@^2.1.0":
   version "2.1.0"
