@@ -4,13 +4,13 @@ Provides [Jest](https://github.com/facebook/jest) support by dynamically generat
 `jest.config.js` config file.
 
 ```
-yarn add @beemo/driver-jest jest babel-jest
+yarn add @beemo/driver-jest jest
 ```
 
 ## Requirements
 
-- [Babel ^6.0.0](./babel.md)
-- Jest ^23.0.0
+- [Babel ^7.0.0](./babel.md)
+- Jest ^24.0.0
 
 ## Usage
 
