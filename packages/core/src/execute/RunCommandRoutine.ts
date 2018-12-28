@@ -79,7 +79,7 @@ export default class RunCommandRoutine extends Routine<
     const isWatching = watchOptions.some(option => {
       // Option
       if (option.startsWith('-')) {
-        return args[option.replace(/^-{1,2}/u, '')];
+        return !!args[option.replace(/^-{1,2}/u, '')];
       }
 
       // Argument
@@ -87,7 +87,7 @@ export default class RunCommandRoutine extends Routine<
     });
 
     if (!isWatching) {
-      return;
+      return false;
     }
 
     const handler = (chunk: Buffer) => {
@@ -101,6 +101,8 @@ export default class RunCommandRoutine extends Routine<
 
     stream.stdout.pipe(new BatchStream({ wait: 1500 })).on('data', handler);
     stream.stderr.pipe(new BatchStream({ wait: 1500 })).on('data', handler);
+
+    return true;
   };
 
   /**

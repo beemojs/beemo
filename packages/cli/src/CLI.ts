@@ -7,8 +7,8 @@
 
 import path from 'path';
 import chalk from 'chalk';
-import yargs, { Arguments } from 'yargs';
-import Beemo from '@beemo/core';
+import yargs from 'yargs';
+import Beemo, { DriverContext, ScriptContext, ScaffoldContext } from '@beemo/core';
 import version from './checkVersion';
 import parseSpecialArgv from './parseSpecialArgv';
 
@@ -19,7 +19,7 @@ const { main, parallel } = parseSpecialArgv(process.argv.slice(2));
 const binName = path.basename(process.argv[1]);
 const beemo = new Beemo(main.slice(1), binName);
 const { tool } = beemo;
-const app = yargs(main);
+const app = yargs(main) as any; // TEMP as yargs types are broken
 const manualURL = process.env.BEEMO_MANUAL_URL || 'https://milesj.gitbook.io/beemo';
 
 // Bootstrap the module
@@ -50,7 +50,7 @@ tool.getPlugins('driver').forEach(driver => {
         string: true,
       },
     },
-    (args: Arguments) => beemo.executeDriver(args, driver.name, parallel),
+    (args: DriverContext['args']) => beemo.executeDriver(args, driver.name, parallel),
   );
 });
 
@@ -59,14 +59,14 @@ app.command(
   ['create-config <name> [names..]', 'config <name> [names..]'],
   tool.msg('app:cliCommandConfig'),
   {},
-  (args: Arguments) => beemo.createConfigFiles(args, args.name, args.names),
+  (args: DriverContext['args']) => beemo.createConfigFiles(args, args.name, args.names),
 );
 
 app.command(
   ['run-script <name>', 'run <name>'],
   tool.msg('app:cliCommandRunScript'),
   {},
-  (args: Arguments) => beemo.executeScript(args, args.name),
+  (args: ScriptContext['args']) => beemo.executeScript(args, args.name),
 );
 
 app.command(
@@ -79,7 +79,7 @@ app.command(
       description: tool.msg('app:cliOptionDryRun'),
     },
   },
-  (args: Arguments) => beemo.scaffold(args, args.generator, args.action),
+  (args: ScaffoldContext['args']) => beemo.scaffold(args, args.generator, args.action),
 );
 
 app.command('*', false, {}, () => {

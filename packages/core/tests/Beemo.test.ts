@@ -12,6 +12,9 @@ import {
   createContext,
   createTestDriver,
   createTestTool,
+  MOCK_ARGS,
+  MOCK_DRIVER_ARGS,
+  MOCK_SCAFFOLD_ARGS,
 } from '../../../tests/helpers';
 
 jest.mock('fs-extra');
@@ -34,7 +37,6 @@ const root = path.join(__dirname, '../../../tests');
 describe('Beemo', () => {
   let beemo: Beemo;
   let onSpy: jest.Mock;
-  const args = { _: [], $0: '' };
 
   beforeEach(() => {
     beemo = new Beemo(['foo', 'bar'], '', createTestTool());
@@ -84,7 +86,7 @@ describe('Beemo', () => {
     it('triggers `init-driver` event with context', async () => {
       const spy = jest.spyOn(beemo.tool, 'emit');
 
-      await beemo.createConfigFiles(args, 'foo');
+      await beemo.createConfigFiles(MOCK_DRIVER_ARGS, 'foo');
 
       expect(spy).toHaveBeenCalledWith('foo.init-driver', [
         expect.objectContaining({
@@ -98,7 +100,7 @@ describe('Beemo', () => {
     it('passes context to pipeline', async () => {
       const spy = jest.spyOn(beemo, 'startPipeline');
 
-      await beemo.createConfigFiles(args, 'foo');
+      await beemo.createConfigFiles(MOCK_DRIVER_ARGS, 'foo');
 
       expect(spy).toHaveBeenCalledWith(
         expect.objectContaining({
@@ -112,7 +114,7 @@ describe('Beemo', () => {
     it('passes multiple drivers', async () => {
       const spy = jest.spyOn(beemo, 'startPipeline');
 
-      await beemo.createConfigFiles(args, 'foo', ['bar', 'baz']);
+      await beemo.createConfigFiles(MOCK_DRIVER_ARGS, 'foo', ['bar', 'baz']);
 
       expect(spy).toHaveBeenCalled();
       expect(spy.mock.calls[0][0].drivers.size).toBe(3);
@@ -301,7 +303,7 @@ describe('Beemo', () => {
     it('triggers `init-driver` event with context', async () => {
       const spy = jest.spyOn(beemo.tool, 'emit');
 
-      await beemo.executeDriver(args, 'foo-bar');
+      await beemo.executeDriver(MOCK_DRIVER_ARGS, 'foo-bar');
 
       expect(spy).toHaveBeenCalledWith('foo-bar.init-driver', [
         expect.objectContaining({
@@ -314,7 +316,7 @@ describe('Beemo', () => {
 
     it('passes driver name and context to pipeline run', async () => {
       const spy = jest.spyOn(beemo, 'startPipeline');
-      const pipeline = await beemo.executeDriver(args, 'foo-bar');
+      const pipeline = await beemo.executeDriver(MOCK_DRIVER_ARGS, 'foo-bar');
 
       expect(spy).toHaveBeenCalledWith(
         expect.objectContaining({
@@ -329,7 +331,7 @@ describe('Beemo', () => {
     it('passes parallelArgv to context', async () => {
       const spy = jest.spyOn(beemo, 'startPipeline');
 
-      await beemo.executeDriver(args, 'foo', [['--foo'], ['bar']]);
+      await beemo.executeDriver(MOCK_DRIVER_ARGS, 'foo', [['--foo'], ['bar']]);
 
       expect(spy).toHaveBeenCalledWith(
         expect.objectContaining({
@@ -343,7 +345,7 @@ describe('Beemo', () => {
     it('triggers `init-script` event with context', async () => {
       const spy = jest.spyOn(beemo.tool, 'emit');
 
-      await beemo.executeScript(args, 'foo-bar');
+      await beemo.executeScript(MOCK_DRIVER_ARGS, 'foo-bar');
 
       expect(spy).toHaveBeenCalledWith('foo-bar.init-script', [
         expect.objectContaining({
@@ -356,7 +358,7 @@ describe('Beemo', () => {
 
     it('passes script name and context to pipeline run', async () => {
       const spy = jest.spyOn(beemo, 'startPipeline');
-      const pipeline = await beemo.executeScript(args, 'foo-bar');
+      const pipeline = await beemo.executeScript(MOCK_DRIVER_ARGS, 'foo-bar');
 
       expect(spy).toHaveBeenCalledWith(
         expect.objectContaining({
@@ -371,9 +373,9 @@ describe('Beemo', () => {
 
   describe('prepareContext()', () => {
     it('sets extra props', () => {
-      expect(beemo.prepareContext(new Context(args))).toEqual(
+      expect(beemo.prepareContext(new Context(MOCK_ARGS))).toEqual(
         expect.objectContaining({
-          args,
+          args: MOCK_ARGS,
           argv: ['foo', 'bar'],
           moduleRoot: root,
           root,
@@ -423,7 +425,7 @@ describe('Beemo', () => {
     it('triggers `scaffold` event with context', async () => {
       const spy = jest.spyOn(beemo.tool, 'emit');
 
-      await beemo.scaffold(args, 'gen', 'action');
+      await beemo.scaffold(MOCK_SCAFFOLD_ARGS, 'gen', 'action');
 
       expect(spy).toHaveBeenCalledWith('beemo.scaffold', [
         expect.objectContaining({
@@ -437,7 +439,7 @@ describe('Beemo', () => {
     it('passes context to pipeline', async () => {
       const spy = jest.spyOn(beemo, 'startPipeline');
 
-      await beemo.scaffold(args, 'gen', 'action');
+      await beemo.scaffold(MOCK_SCAFFOLD_ARGS, 'gen', 'action');
 
       expect(spy).toHaveBeenCalledWith(
         expect.objectContaining({

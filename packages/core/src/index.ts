@@ -8,9 +8,10 @@ import Driver from './Driver';
 import Script from './Script';
 import Context from './contexts/Context';
 import DriverContext from './contexts/DriverContext';
+import ScaffoldContext from './contexts/ScaffoldContext';
 import ScriptContext from './contexts/ScriptContext';
 
-export { Context, Driver, DriverContext, Script, ScriptContext };
+export { Context, Driver, DriverContext, ScaffoldContext, Script, ScriptContext };
 
 export * from './constants';
 

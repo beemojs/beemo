@@ -6,12 +6,14 @@
 import Context from './Context';
 import { Arguments } from '../types';
 
-export default class ScaffoldContext extends Context {
+export default class ScaffoldContext<
+  T = { action: string; generator: string; dry: boolean }
+> extends Context<T> {
   action: string;
 
   generator: string;
 
-  constructor(args: Arguments, generator: string, action: string) {
+  constructor(args: Arguments<T>, generator: string, action: string) {
     super(args);
 
     this.generator = generator;

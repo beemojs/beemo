@@ -19,7 +19,7 @@ import Context from './contexts/Context';
 import DriverContext from './contexts/DriverContext';
 import ScriptContext from './contexts/ScriptContext';
 import ScaffoldContext from './contexts/ScaffoldContext';
-import { Argv, Arguments, BeemoTool, Execution, BeemoPluginRegistry, BeemoConfig } from './types';
+import { Argv, BeemoTool, Execution, BeemoPluginRegistry, BeemoConfig } from './types';
 
 export default class Beemo {
   argv: Argv;
@@ -98,7 +98,7 @@ export default class Beemo {
    * Create a configuration file for the specified driver names.
    */
   async createConfigFiles(
-    args: Arguments,
+    args: DriverContext['args'],
     primaryDriver: string,
     additionalDrivers: string[] = [],
   ): Promise<any> {
@@ -233,7 +233,7 @@ export default class Beemo {
    * Execute all routines for the chosen driver.
    */
   async executeDriver(
-    args: Arguments,
+    args: DriverContext['args'],
     driverName: string,
     parallelArgv: Argv[] = [],
   ): Promise<Execution[]> {
@@ -258,7 +258,7 @@ export default class Beemo {
   /**
    * Run a script found within the configuration module.
    */
-  async executeScript(args: Arguments, scriptName: string): Promise<Execution> {
+  async executeScript(args: ScriptContext['args'], scriptName: string): Promise<Execution> {
     const { tool } = this;
     const context = this.prepareContext(new ScriptContext(args, scriptName));
 
@@ -284,7 +284,7 @@ export default class Beemo {
   /**
    * Run the scaffold process to generate templates.
    */
-  async scaffold(args: Arguments, generator: string, action: string): Promise<any> {
+  async scaffold(args: ScaffoldContext['args'], generator: string, action: string): Promise<any> {
     const { tool } = this;
     const context = this.prepareContext(new ScaffoldContext(args, generator, action));
 

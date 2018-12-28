@@ -7,14 +7,14 @@ import Context from './Context';
 import Script from '../Script';
 import { Arguments } from '../types';
 
-export default class ScriptContext extends Context {
+export default class ScriptContext<T = { name: string }> extends Context<T> {
   script: Script | null = null;
 
   scriptName: string = '';
 
   scriptPath: string = '';
 
-  constructor(args: Arguments, name: string) {
+  constructor(args: Arguments<T>, name: string) {
     super(args);
 
     this.scriptName = name;

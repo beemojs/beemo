@@ -1,18 +1,19 @@
 import ScriptContext from '../../src/contexts/ScriptContext';
 import Script from '../../src/Script';
+import { MOCK_SCRIPT_ARGS } from '../../../../tests/helpers';
 
 describe('Context', () => {
   let context: ScriptContext;
 
   beforeEach(() => {
-    context = new ScriptContext({ _: [], $0: '' }, 'foo');
+    context = new ScriptContext(MOCK_SCRIPT_ARGS, 'foo');
   });
 
   describe('constructor()', () => {
     it('sets args', () => {
-      context = new ScriptContext({ _: [], $0: '', foo: true }, 'foo');
+      context = new ScriptContext({ ...MOCK_SCRIPT_ARGS, foo: true }, 'foo');
 
-      expect(context.args).toEqual({ _: [], $0: '', foo: true });
+      expect(context.args).toEqual({ ...MOCK_SCRIPT_ARGS, foo: true });
     });
 
     it('sets script name', () => {

@@ -7,7 +7,15 @@ import Context from './Context';
 import Driver from '../Driver';
 import { Arguments, Argv } from '../types';
 
-export default class DriverContext extends Context {
+export default class DriverContext<
+  T = {
+    concurrency: number;
+    name: string;
+    names?: string[];
+    priority: boolean;
+    workspaces: string;
+  }
+> extends Context<T> {
   driverName: string = '';
 
   // List of drivers involved in the current pipeline
@@ -22,7 +30,7 @@ export default class DriverContext extends Context {
 
   workspaces: string[] = [];
 
-  constructor(args: Arguments, driver: Driver, parallelArgv: Argv[] = []) {
+  constructor(args: Arguments<T>, driver: Driver, parallelArgv: Argv[] = []) {
     super(args);
 
     this.driverName = driver.name;

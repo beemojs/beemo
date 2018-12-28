@@ -13,8 +13,8 @@ export interface ConfigPath {
   path: string;
 }
 
-export default class Context extends BaseContext {
-  args: Arguments;
+export default class Context<T = {}> extends BaseContext {
+  args: Arguments<T>;
 
   argv: Argv = [];
 
@@ -24,7 +24,7 @@ export default class Context extends BaseContext {
 
   root: string = '';
 
-  constructor(args: Arguments) {
+  constructor(args: Arguments<T>) {
     super();
 
     this.args = args;

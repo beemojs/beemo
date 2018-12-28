@@ -26,6 +26,20 @@ export const EXEC_RESULT = {
   timedOut: false,
 };
 
+export const MOCK_ARGS = { _: [], $0: '' };
+
+export const MOCK_DRIVER_ARGS = {
+  ...MOCK_ARGS,
+  concurrency: 1,
+  name: 'foo',
+  priority: false,
+  workspaces: '',
+};
+
+export const MOCK_SCRIPT_ARGS = { ...MOCK_ARGS, name: 'foo' };
+
+export const MOCK_SCAFFOLD_ARGS = { ...MOCK_ARGS, action: '', generator: '', dry: false };
+
 export function createTestDebugger(): any {
   const debug = jest.fn();
 
@@ -114,22 +128,22 @@ export function applyContext<T extends Context>(context: T): T {
 }
 
 export function createContext(): Context {
-  return applyContext(new Context({ _: [], $0: '' }));
+  return applyContext(new Context(MOCK_ARGS));
 }
 
 export function createDriverContext(driver: Driver | null = null): DriverContext {
-  return applyContext(new DriverContext({ _: [], $0: '' }, driver || new Driver()));
+  return applyContext(new DriverContext(MOCK_DRIVER_ARGS, driver || new Driver()));
 }
 
 export function createScaffoldContext(
   generator: string = 'generator',
   action: string = 'action',
 ): ScaffoldContext {
-  return applyContext(new ScaffoldContext({ _: [], $0: '' }, generator, action));
+  return applyContext(new ScaffoldContext(MOCK_SCAFFOLD_ARGS, generator, action));
 }
 
 export function createScriptContext(script: Script | null = null): ScriptContext {
-  const context = applyContext(new ScriptContext({ _: [], $0: '' }, 'script'));
+  const context = applyContext(new ScriptContext(MOCK_SCRIPT_ARGS, 'script'));
 
   if (script) {
     context.setScript(script, './script.js');

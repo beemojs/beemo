@@ -837,10 +837,10 @@
     lodash "^4.17.10"
     to-fast-properties "^2.0.0"
 
-"@boost/core@^1.2.0":
-  version "1.2.0"
-  resolved "https://registry.npmjs.org/@boost/core/-/core-1.2.0.tgz#4f1f4e177c132e6ce0607de4838102431c0da91f"
-  integrity sha512-cdFvDqB8vTBJdgOLmrMshYIT/fk2AhIdd+M9ER6Ntu1Kex3lxxAYdBiOcrwOzZsApa/0nyLS4u69c/pDTP3cLw==
+"@boost/core@^1.2.1":
+  version "1.2.1"
+  resolved "https://registry.npmjs.org/@boost/core/-/core-1.2.1.tgz#8f4e9562288105385c7ebbb51995aeeeb3300690"
+  integrity sha512-qblGEd1hz/Vb6L7YJ7Qr2MDrVa7GMAuVb9RgOMua0OKEJK7TczxRndn2yvtgi9VDvlaOsxEFJLGrvnZ8Eo+L3Q==
   dependencies:
     "@types/ansi-escapes" "^3.0.0"
     "@types/cli-truncate" "^1.1.0"

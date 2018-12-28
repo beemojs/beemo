@@ -4,7 +4,7 @@
  */
 
 import { Tool, ToolConfig, ToolPluginRegistry } from '@boost/core';
-import { ExecaReturns } from 'execa'; // eslint-disable-line import/no-extraneous-dependencies
+import { ExecaReturns } from 'execa';
 import { Arguments, Options } from 'yargs';
 import Driver from './Driver';
 
