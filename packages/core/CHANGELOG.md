@@ -7,6 +7,11 @@
   - `parse()` was renamed to `args()`.
   - `run(options, tool)` was renamed to `execute(context, options)`.
 
+#### 🚀 New
+
+- Added `watchOptions` metadata field to `Driver`. Defines CLI watch options to intercept for the
+  defined driver.
+
 # 0.6.0
 
 #### 💥 Breaking
