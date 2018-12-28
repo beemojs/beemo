@@ -6,7 +6,7 @@ describe('Context', () => {
   let context: ScriptContext;
 
   beforeEach(() => {
-    context = new ScriptContext(MOCK_SCRIPT_ARGS, 'foo');
+    context = new ScriptContext({ ...MOCK_SCRIPT_ARGS }, 'foo');
   });
 
   describe('constructor()', () => {

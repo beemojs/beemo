@@ -6,7 +6,7 @@ describe('Context', () => {
   let context: DriverContext;
 
   beforeEach(() => {
-    context = new DriverContext(MOCK_DRIVER_ARGS, new Driver());
+    context = new DriverContext({ ...MOCK_DRIVER_ARGS }, new Driver());
   });
 
   describe('constructor()', () => {

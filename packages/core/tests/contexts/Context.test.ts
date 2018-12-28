@@ -5,7 +5,7 @@ describe('Context', () => {
   let context: Context;
 
   beforeEach(() => {
-    context = new Context(MOCK_ARGS);
+    context = new Context({ ...MOCK_ARGS, _: [] });
   });
 
   describe('constructor()', () => {
