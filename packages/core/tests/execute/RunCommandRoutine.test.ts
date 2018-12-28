@@ -409,6 +409,7 @@ describe('RunCommandRoutine', () => {
         cwd: getRoot(),
         env: { DEV: 'true' },
         task,
+        wrap: routine.captureWatchOutput,
       });
     });
 
