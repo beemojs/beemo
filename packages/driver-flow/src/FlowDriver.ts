@@ -16,6 +16,7 @@ export default class FlowDriver extends Driver<FlowConfig> {
       description: this.tool.msg('app:flowDescription'),
       filterOptions: true,
       title: 'Flow',
+      watchOptions: ['start'],
     });
   }
 

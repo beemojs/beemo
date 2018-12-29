@@ -41,8 +41,8 @@ The following list of events, and their arguments, can be listened to.
 | `<script>.before-execute`        | `context: ScriptContext, argv: string[], script: Script`                   | Called before the `Script#run` method is executed.                                                                 |
 | `<script>.after-execute`         | `context: ScriptContext, response: any, script: Script`                    | Called after the script has successfully been executed.                                                            |
 | `<script>.failed-execute`        | `context: ScriptContext, error: Error, script: Script`                     | Called after the script has failed to execute.                                                                     |
-| `<app>.resolve-dependencies`     | `context: Context, drivers: Driver[]`                                      | Called after a list of `Driver`s have been resolved in which to create configuration files.                        |
-| `<app>.scaffold`                 | `context: Context, generator: string, action: string`                      | Called before templates are generated when scaffolding.                                                            |
+| `<app>.resolve-dependencies`     | `context: DriverContext, drivers: Driver[]`                                | Called after a list of `Driver`s have been resolved in which to create configuration files.                        |
+| `<app>.scaffold`                 | `context: ScaffoldContext, generator: string, action: string`              | Called before templates are generated when scaffolding.                                                            |
 
 > `<driver>` and `<script>` should be replaced with their names.
 
@@ -52,9 +52,9 @@ The following list of events, and their arguments, can be listened to.
 ### Type Declarations
 
 - `Driver` - An instance of the
-  [Driver](https://github.com/milesj/beemo/blob/master/packages/core/src/Driver.js) class.
+  [Driver](https://github.com/milesj/beemo/blob/master/packages/core/src/Driver.ts) class.
 - `Script` - An instance of the
-  [Script](https://github.com/milesj/beemo/blob/master/packages/core/src/Script.js) class.
-- `Context`, `DriverContext`, `ScriptContext` -
-  [Special object types](https://github.com/milesj/beemo/blob/master/packages/core/src/types.js#L53)
-  passed through the entire execution process.
+  [Script](https://github.com/milesj/beemo/blob/master/packages/core/src/Script.ts) class.
+- `Context`, `DriverContext`, `ScriptContext`, `ScaffoldContext` -
+  [Special objects](https://github.com/milesj/beemo/tree/master/packages/core/src/contexts) passed
+  through the entire execution process.
