@@ -7,7 +7,11 @@ import Context from './Context';
 import { Arguments } from '../types';
 
 export default class ScaffoldContext<
-  T = { action: string; generator: string; dry: boolean }
+  T = {
+    action: string;
+    generator: string;
+    dry: boolean;
+  }
 > extends Context<T> {
   action: string;
 

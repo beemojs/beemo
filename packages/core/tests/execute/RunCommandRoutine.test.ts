@@ -98,6 +98,94 @@ describe('RunCommandRoutine', () => {
     });
   });
 
+  describe('captureWatchOutput()', () => {
+    let stream: any;
+
+    class MockStream {
+      pipe() {
+        return this;
+      }
+
+      on() {
+        return this;
+      }
+    }
+
+    beforeEach(() => {
+      stream = {
+        stdout: new MockStream(),
+        stderr: new MockStream(),
+      };
+    });
+
+    it('enables if args option matches watch option', () => {
+      driver.metadata.watchOptions = ['--watch'];
+      routine.context.args.watch = true;
+
+      expect(routine.captureWatchOutput(stream)).toBe(true);
+    });
+
+    it('enables if args option matches short watch option', () => {
+      driver.metadata.watchOptions = ['-w'];
+      routine.context.args.w = true;
+
+      expect(routine.captureWatchOutput(stream)).toBe(true);
+    });
+
+    it('enables if positional args includes watch option', () => {
+      driver.metadata.watchOptions = ['watch'];
+      routine.context.args._ = ['watch'];
+
+      expect(routine.captureWatchOutput(stream)).toBe(true);
+    });
+
+    it('disables if args option doesnt match watch option', () => {
+      driver.metadata.watchOptions = ['--watch'];
+
+      expect(routine.captureWatchOutput(stream)).toBe(false);
+    });
+
+    it('disables if positional args doesnt include watch option', () => {
+      driver.metadata.watchOptions = ['--watch'];
+      routine.context.args._ = ['--notWatch'];
+
+      expect(routine.captureWatchOutput(stream)).toBe(false);
+    });
+
+    it('disables if args option is falsy', () => {
+      driver.metadata.watchOptions = ['--watch'];
+      routine.context.args.watch = false;
+
+      expect(routine.captureWatchOutput(stream)).toBe(false);
+    });
+
+    it('pipes a batch stream when enabled', () => {
+      const outSpy = jest.spyOn(stream.stdout, 'pipe');
+      const errSpy = jest.spyOn(stream.stderr, 'pipe');
+
+      driver.metadata.watchOptions = ['--watch'];
+      routine.context.args.watch = true;
+
+      routine.captureWatchOutput(stream);
+
+      expect(outSpy).toHaveBeenCalled();
+      expect(errSpy).toHaveBeenCalled();
+    });
+
+    it('registers a data handler when enabled', () => {
+      const outSpy = jest.spyOn(stream.stdout, 'on');
+      const errSpy = jest.spyOn(stream.stderr, 'on');
+
+      driver.metadata.watchOptions = ['--watch'];
+      routine.context.args.watch = true;
+
+      routine.captureWatchOutput(stream);
+
+      expect(outSpy).toHaveBeenCalledWith('data', expect.anything());
+      expect(errSpy).toHaveBeenCalledWith('data', expect.anything());
+    });
+  });
+
   describe('execute()', () => {
     beforeEach(() => {
       routine.executeCommand = jest.fn(() => Promise.resolve({ stdout: BABEL_HELP }));
