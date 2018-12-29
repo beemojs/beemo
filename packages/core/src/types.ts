@@ -4,7 +4,7 @@
  */
 
 import { Tool, ToolConfig, ToolPluginRegistry } from '@boost/core';
-import { ExecaReturns } from 'execa'; // eslint-disable-line import/no-extraneous-dependencies
+import { ExecaReturns } from 'execa';
 import { Arguments, Options } from 'yargs';
 import Driver from './Driver';
 
@@ -54,6 +54,7 @@ export interface DriverMetadata {
   helpOption: string;
   title: string;
   useConfigOption: boolean;
+  watchOptions: string[];
   workspaceStrategy: 'reference' | 'copy';
 }
 

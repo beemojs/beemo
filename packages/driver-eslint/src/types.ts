@@ -74,3 +74,45 @@ export interface ESLintConfig extends CommonConfig {
   overrides?: OverrideConfig[];
   root?: boolean;
 }
+
+export interface ESLintArgs {
+  c?: string;
+  cache?: boolean;
+  cacheFile?: string;
+  cacheLocation?: string;
+  color?: boolean;
+  config?: string;
+  debug?: boolean;
+  disable?: string;
+  env?: string;
+  eslintrc?: boolean;
+  ext?: string;
+  f?: string;
+  fix?: boolean;
+  fixDryRun?: boolean;
+  fixType?: string;
+  format?: string;
+  global?: string;
+  h?: boolean;
+  help?: boolean;
+  ignore?: boolean;
+  ignorePath?: string;
+  ignorePattern?: string;
+  init?: boolean;
+  inlineConfig?: boolean;
+  maxWarnings?: number;
+  o?: string;
+  outputFile?: string;
+  parser?: string;
+  parserOptions?: string;
+  plugin?: string | string[];
+  printConfig?: string;
+  quiet?: boolean;
+  reportUnusedDisableDirectives?: boolean;
+  rule?: string | string[];
+  rulesdir?: string;
+  stdin?: boolean;
+  stdinFilename?: string;
+  v?: boolean;
+  version?: boolean;
+}

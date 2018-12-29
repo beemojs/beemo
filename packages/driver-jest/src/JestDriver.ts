@@ -18,6 +18,7 @@ export default class JestDriver extends Driver<JestConfig> {
       description: this.tool.msg('app:jestDescription'),
       filterOptions: true,
       title: 'Jest',
+      watchOptions: ['--watch', '--watchAll'],
     });
   }
 
@@ -66,6 +67,7 @@ export default class JestDriver extends Driver<JestConfig> {
       '-h',
       '--help',
       '-i',
+      '--init',
       '--json',
       '--lastCommit',
       '--listTests',
@@ -88,6 +90,7 @@ export default class JestDriver extends Driver<JestConfig> {
       '--outputFile',
       '--passWithNoTests',
       '--preset',
+      '--prettierPath',
       '--projects',
       '--reporters',
       '--resetMocks',
@@ -97,9 +100,10 @@ export default class JestDriver extends Driver<JestConfig> {
       '--rootDir',
       '--roots',
       '--runInBand',
+      '--runner',
       '--runTestsByPath',
       '--setupFiles',
-      '--setupTestFrameworkScriptFile',
+      '--setupFilesAfterEnv',
       '--showConfig',
       '--silent',
       '--skipFilter',

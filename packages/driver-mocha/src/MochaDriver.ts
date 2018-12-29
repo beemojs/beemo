@@ -17,6 +17,7 @@ export default class MochaDriver extends Driver<MochaConfig> {
       description: this.tool.msg('app:mochaDriver'),
       title: 'Mocha',
       useConfigOption: true,
+      watchOptions: ['-w', '--watch'],
     });
   }
 

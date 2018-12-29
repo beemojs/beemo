@@ -22,6 +22,7 @@ dependencies, continuous copy and paste, and more.
 - Scaffolding and template generation.
 - Workspaces (monorepo) support.
 - Parallel, pooled, and prioritized builds.
+- Integrated watch mode.
 - And much more.
 
 ## Requirements

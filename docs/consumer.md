@@ -139,6 +139,11 @@ The following options are available when executing a driver.
 - `--workspaces` (string) - Execute the command in each [workspace](./workspaces.md) defined by the
   pattern/value. Pass `*` to run in all workspaces.
 
+### Watch Mode
+
+If the underlying driver supports file watching, most commonly through a CLI option like `-w` or
+`--watch`, Beemo will attempt to capture and pipe this output to your terminal.
+
 ## Executing Scripts
 
 A script within your configuration module can be executed using `yarn beemo run-script <name>` (or

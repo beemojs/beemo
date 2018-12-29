@@ -185,6 +185,7 @@ export default class Driver<Config = any> extends Plugin<DriverOptions> {
         helpOption: string('--help'),
         title: string().required(),
         useConfigOption: bool(),
+        watchOptions: array(string()),
         workspaceStrategy: string(STRATEGY_REFERENCE).oneOf([STRATEGY_REFERENCE, STRATEGY_COPY]),
       },
       {

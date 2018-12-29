@@ -1,25 +1,26 @@
 import DriverContext from '../../src/contexts/DriverContext';
 import Driver from '../../src/Driver';
+import { MOCK_DRIVER_ARGS } from '../../../../tests/helpers';
 
 describe('Context', () => {
   let context: DriverContext;
 
   beforeEach(() => {
-    context = new DriverContext({ _: [], $0: '' }, new Driver());
+    context = new DriverContext({ ...MOCK_DRIVER_ARGS }, new Driver());
   });
 
   describe('constructor()', () => {
     it('sets args', () => {
-      context = new DriverContext({ _: [], $0: '', foo: true }, new Driver());
+      context = new DriverContext({ ...MOCK_DRIVER_ARGS, workspaces: '*' }, new Driver());
 
-      expect(context.args).toEqual({ _: [], $0: '', foo: true });
+      expect(context.args).toEqual({ ...MOCK_DRIVER_ARGS, workspaces: '*' });
     });
 
     it('sets driver', () => {
       const driver = new Driver();
       driver.name = 'bar';
 
-      context = new DriverContext({ _: [], $0: '' }, driver);
+      context = new DriverContext(MOCK_DRIVER_ARGS, driver);
 
       expect(context.primaryDriver).toBe(driver);
       expect(context.driverName).toBe('bar');
@@ -29,7 +30,7 @@ describe('Context', () => {
       const driver = new Driver();
       driver.name = 'bar';
 
-      context = new DriverContext({ _: [], $0: '' }, driver);
+      context = new DriverContext(MOCK_DRIVER_ARGS, driver);
 
       expect(Array.from(context.drivers)).toEqual([driver]);
     });

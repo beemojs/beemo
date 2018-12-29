@@ -5,6 +5,8 @@
 
 /* eslint-disable camelcase */
 
+export type UISetting = 'bdd' | 'tdd' | 'qunit' | 'exports';
+
 export interface ReporterOptions {
   [key: string]: any;
 }
@@ -66,4 +68,83 @@ export interface MochaConfig {
   watch_extensions?: string[];
   // Harmony flags
   [option: string]: any;
+}
+
+export interface MochaArgs {
+  A?: boolean;
+  allowUncaught?: boolean;
+  asyncOnly?: boolean;
+  b?: boolean;
+  bail?: boolean;
+  c?: boolean;
+  C?: boolean;
+  checkLeaks?: boolean;
+  colors?: boolean;
+  compilers?: string | string[];
+  d?: boolean;
+  debug?: boolean;
+  debugBrk?: boolean;
+  delay?: boolean;
+  deprecation?: boolean;
+  diff?: boolean;
+  esStaging?: boolean;
+  exclude?: string;
+  exit?: boolean;
+  exposeGc?: boolean;
+  f?: string;
+  fgrep?: string;
+  file?: string;
+  forbidOnly?: boolean;
+  forbidPending?: boolean;
+  fullTrace?: boolean;
+  G?: boolean;
+  g?: string;
+  gc?: boolean;
+  globals?: string;
+  grep?: string;
+  growl?: boolean;
+  h?: boolean;
+  help?: boolean;
+  i?: boolean;
+  icuDataDir?: boolean;
+  inlineDiffs?: boolean;
+  inspect?: boolean;
+  inspectBrk?: boolean;
+  interfaces?: boolean;
+  invert?: boolean;
+  logTimerEvents?: boolean;
+  napiModules?: boolean;
+  O?: string;
+  opts?: string;
+  perfBasicProf?: boolean;
+  preserveSymlinks?: boolean;
+  prof?: boolean;
+  r?: string;
+  R?: string;
+  recursive?: boolean;
+  reporter?: string;
+  reporterOptions?: string | string[];
+  reporters?: boolean;
+  require?: string;
+  retries?: number;
+  S?: boolean;
+  s?: number;
+  slow?: number;
+  sort?: boolean;
+  t?: number;
+  throwDeprecation?: boolean;
+  timeout?: number;
+  timeouts?: boolean;
+  trace?: boolean;
+  traceDeprecation?: boolean;
+  traceWarnings?: boolean;
+  u?: UISetting;
+  ui?: UISetting;
+  useStrict?: boolean;
+  V?: boolean;
+  version?: boolean;
+  w?: boolean;
+  warnings?: boolean;
+  watch?: boolean;
+  watchExtensions?: string | string[];
 }

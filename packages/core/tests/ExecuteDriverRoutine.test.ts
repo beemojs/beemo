@@ -245,7 +245,7 @@ describe('ExecuteDriverRoutine', () => {
     });
 
     it('serializes priority routines before pooling other routines', async () => {
-      routine.context.args.priority = 'qux,foo';
+      routine.context.args.priority = true;
       routine.context.args.workspaces = '*';
       routine.serializeRoutines = jest.fn(() => Promise.resolve());
       routine.poolRoutines = jest.fn(() => Promise.resolve({ errors: [], results: [] }));
