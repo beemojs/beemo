@@ -1,6 +1,8 @@
 # 🤖 Beemo [ALPHA]
 
 [![Build Status](https://travis-ci.org/milesj/beemo.svg?branch=master)](https://travis-ci.org/milesj/beemo)
+[![npm version](https://badge.fury.io/js/%40beemo%2Fcore.svg)](https://www.npmjs.com/package/@beemo/core)
+[![npm deps](https://david-dm.org/milesj/beemo.svg?path=packages/core)](https://www.npmjs.com/package/@beemo/core)
 
 Manage dev and build tools, their configuration, and commands in a single centralized repository.
 Beemo aims to solve the multi-project maintenance fatigue by removing the following burdens across

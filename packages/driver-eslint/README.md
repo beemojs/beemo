@@ -1,5 +1,9 @@
 # ESLint Driver
 
+[![Build Status](https://travis-ci.org/milesj/beemo.svg?branch=master)](https://travis-ci.org/milesj/beemo)
+[![npm version](https://badge.fury.io/js/%40beemo%2Fdriver-eslint.svg)](https://www.npmjs.com/package/@beemo/driver-eslint)
+[![npm deps](https://david-dm.org/milesj/beemo.svg?path=packages/driver-eslint)](https://www.npmjs.com/package/@beemo/driver-eslint)
+
 Provides [ESLint](https://github.com/eslint/eslint) support for
 [Beemo](https://github.com/milesj/beemo), a dev tool manager.
 
