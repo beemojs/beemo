@@ -39,7 +39,7 @@
     "execa": "^1.0.0",
     "fast-glob": "^2.2.4",
     "fs-extra": "^7.0.1",
-    "hygen": "^1.6.2",
+    "hygen": "^2.0.4",
     "is-glob": "^4.0.0",
     "lodash": "^4.17.11",
     "micromatch": "^3.1.10",
