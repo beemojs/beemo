@@ -2,7 +2,7 @@
 
 #### 💥 Breaking
 
-- Minimum supported Node.js version is v10.9.
+- Minimum supported Node.js version is v10.0.
 - `Script` now extends Boost `Routine`, providing more functionality.
   - `parse()` was renamed to `args()`.
   - `run(options, tool)` was renamed to `execute(context, options)`.
