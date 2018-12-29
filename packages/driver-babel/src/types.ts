@@ -58,3 +58,53 @@ export interface BabelConfig {
   test?: MatchPattern | MatchPattern[];
   wrapPluginVisitorMethod?: (key: string, nodeType: string, fn: Function) => Function;
 }
+
+export interface BabelArgs {
+  auxiliaryCommentAfter?: string;
+  auxiliaryCommentBefore?: string;
+  babelrc?: boolean;
+  comments?: boolean;
+  compact?: boolean | 'auto';
+  configFile?: string;
+  copyFiles?: boolean;
+  D?: boolean;
+  d?: string;
+  deleteDirOnStart?: boolean;
+  envName?: string;
+  extensions?: string;
+  f?: string;
+  filename?: string;
+  h?: boolean;
+  help?: boolean;
+  highlightCode?: boolean;
+  ignore?: string | string[];
+  includeDotfiles?: boolean;
+  keepFileExtension?: boolean;
+  M?: boolean;
+  minified?: string;
+  moduleId?: string;
+  moduleIds?: boolean;
+  moduleRoot?: string;
+  o?: string;
+  only?: string | string[];
+  outDir?: string;
+  outFile?: string;
+  plugins?: string | string[];
+  presets?: string | string[];
+  relative?: boolean;
+  retainLines?: boolean;
+  rootMode?: string;
+  s?: boolean | string;
+  skipInitialBuild?: boolean;
+  sourceFileName?: string;
+  sourceMaps?: SourceMapsOption;
+  sourceMapTarget?: string;
+  sourceRoot?: string;
+  sourceType?: 'script' | 'module';
+  V?: boolean;
+  verbose?: boolean;
+  version?: boolean;
+  w?: boolean;
+  watch?: boolean;
+  x?: string;
+}

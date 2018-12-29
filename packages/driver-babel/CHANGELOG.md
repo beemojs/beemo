@@ -7,3 +7,4 @@
 #### 🚀 New
 
 - Added `watchOptions` to `BabelDriver`.
+- Added `BabelArgs` interface type.

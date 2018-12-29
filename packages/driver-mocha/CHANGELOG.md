@@ -7,3 +7,4 @@
 #### 🚀 New
 
 - Added `watchOptions` to `MochaDriver`.
+- Added `MochaArgs` interface type.

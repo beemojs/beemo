@@ -319,6 +319,7 @@ describe('RunCommandRoutine', () => {
         '--foo',
         '../scripts/build-packages.sh',
         '../scripts/bump-peer-deps.js',
+        '../scripts/extract-option-list.js',
         '../scripts/link-packages.sh',
         '../scripts/run-integration-tests.js',
         '../tests/index.js',

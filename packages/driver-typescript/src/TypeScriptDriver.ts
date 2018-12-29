@@ -5,8 +5,8 @@
 
 import path from 'path';
 import rimraf from 'rimraf';
-import { Driver, DriverContext } from '@beemo/core';
-import { TypeScriptConfig } from './types';
+import { Driver, DriverArgs, DriverContext } from '@beemo/core';
+import { TypeScriptArgs, TypeScriptConfig } from './types';
 
 // Success: Writes nothing to stdout or stderr
 // Failure: Writes to stdout on syntax and type error
@@ -38,12 +38,9 @@ export default class TypeScriptDriver extends Driver<TypeScriptConfig> {
   /**
    * Automatically clean the target folder if `outDir` is used.
    */
-  handleCleanTarget = ({ args }: DriverContext) => {
-    if (!this.config.compilerOptions) {
-      return;
-    }
-
-    const { outDir } = this.config.compilerOptions;
+  handleCleanTarget = ({ args }: DriverContext<DriverArgs & TypeScriptArgs>) => {
+    const outDir =
+      args.outDir || (this.config.compilerOptions && this.config.compilerOptions.outDir);
 
     if (args.clean && outDir) {
       rimraf.sync(path.resolve(outDir));

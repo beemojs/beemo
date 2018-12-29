@@ -5,10 +5,10 @@
 
 import fs from 'fs';
 import path from 'path';
-import { Driver, DriverContext } from '@beemo/core';
+import { Driver, DriverArgs, DriverContext } from '@beemo/core';
 // @ts-ignore
 import ConfigOps from 'eslint/lib/config/config-ops';
-import { ESLintConfig } from './types';
+import { ESLintArgs, ESLintConfig } from './types';
 
 // Success: Writes nothing to stdout or stderr
 // Failure: Writes to stdout
@@ -32,7 +32,11 @@ export default class ESLintDriver extends Driver<ESLintConfig> {
   /**
    * If an "ignore" property exists in the ESLint config, create an ".eslintignore" file.
    */
-  handleCreateIgnoreFile = (context: DriverContext, configPath: string, config: ESLintConfig) => {
+  handleCreateIgnoreFile = (
+    context: DriverContext<DriverArgs & ESLintArgs>,
+    configPath: string,
+    config: ESLintConfig,
+  ) => {
     if (!config.ignore) {
       return;
     }

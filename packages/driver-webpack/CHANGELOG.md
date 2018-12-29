@@ -7,3 +7,4 @@
 #### 🚀 New
 
 - Added `watchOptions` to `WebpackDriver`.
+- Added `WebpackArgs` interface type.

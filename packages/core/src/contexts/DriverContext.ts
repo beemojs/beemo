@@ -7,15 +7,15 @@ import Context from './Context';
 import Driver from '../Driver';
 import { Arguments, Argv } from '../types';
 
-export default class DriverContext<
-  T = {
-    concurrency: number;
-    name: string;
-    names?: string[];
-    priority: boolean;
-    workspaces: string;
-  }
-> extends Context<T> {
+export interface DriverArgs {
+  concurrency: number;
+  name: string;
+  names?: string[];
+  priority: boolean;
+  workspaces: string;
+}
+
+export default class DriverContext<T = DriverArgs> extends Context<T> {
   driverName: string = '';
 
   // List of drivers involved in the current pipeline

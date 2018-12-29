@@ -7,11 +7,21 @@ import Beemo from './Beemo';
 import Driver from './Driver';
 import Script from './Script';
 import Context from './contexts/Context';
-import DriverContext from './contexts/DriverContext';
-import ScaffoldContext from './contexts/ScaffoldContext';
-import ScriptContext from './contexts/ScriptContext';
+import DriverContext, { DriverArgs } from './contexts/DriverContext';
+import ScaffoldContext, { ScaffoldArgs } from './contexts/ScaffoldContext';
+import ScriptContext, { ScriptArgs } from './contexts/ScriptContext';
 
-export { Context, Driver, DriverContext, ScaffoldContext, Script, ScriptContext };
+export {
+  Context,
+  Driver,
+  DriverArgs,
+  DriverContext,
+  ScaffoldArgs,
+  ScaffoldContext,
+  Script,
+  ScriptArgs,
+  ScriptContext,
+};
 
 export * from './constants';
 

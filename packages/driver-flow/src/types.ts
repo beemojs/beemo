@@ -11,6 +11,8 @@ export interface LintsConfig {
   [rule: string]: LintSetting;
 }
 
+export type ToggleSetting = 'never' | 'always' | 'auto';
+
 export type OptionSetting = 'enable' | 'ignore' | 'warn';
 
 export type MatchPattern = string | RegExp;
@@ -58,4 +60,36 @@ export interface FlowConfig {
   lints?: LintsConfig;
   options?: OptionsConfig;
   version?: string;
+}
+
+export interface FlowArgs {
+  autoStart?: boolean;
+  color?: ToggleSetting;
+  flowconfigName?: string;
+  from?: string;
+  help?: boolean;
+  ignoreVersion?: boolean;
+  includeWarnings?: boolean;
+  json?: boolean;
+  jsonVersion?: string | number;
+  maxWarnings?: number;
+  messageWidth?: number;
+  oneLine?: boolean;
+  pretty?: boolean;
+  print?: string;
+  quiet?: boolean;
+  retries?: number;
+  retryIfInit?: boolean;
+  sharedmemoryDepTablePow?: number;
+  sharedmemoryDirs?: string;
+  sharedmemoryHashTablePow?: number;
+  sharedmemoryLogLevel?: 0 | 1;
+  sharedmemoryMinimumAvailable?: number;
+  showAllBranches?: boolean;
+  showAllErrors?: boolean;
+  stripRoot?: boolean;
+  tempDir?: string;
+  timeout?: number;
+  unicode?: ToggleSetting;
+  version?: boolean;
 }

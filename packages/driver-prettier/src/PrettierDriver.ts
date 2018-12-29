@@ -5,8 +5,8 @@
 
 import fs from 'fs';
 import path from 'path';
-import { Driver, DriverContext } from '@beemo/core';
-import { PrettierConfig } from './types';
+import { Driver, DriverArgs, DriverContext } from '@beemo/core';
+import { PrettierArgs, PrettierConfig } from './types';
 
 // Success: Writes file list to stdout
 // Failure: Writes to stderr for no files found and syntax errors
@@ -34,7 +34,11 @@ export default class PrettierDriver extends Driver<PrettierConfig> {
   /**
    * If an "ignore" property exists in the Prettier config, create an ".prettierconfig" file.
    */
-  handleCreateIgnoreFile = (context: DriverContext, configPath: string, config: PrettierConfig) => {
+  handleCreateIgnoreFile = (
+    context: DriverContext<DriverArgs & PrettierArgs>,
+    configPath: string,
+    config: PrettierConfig,
+  ) => {
     if (!config.ignore) {
       return;
     }

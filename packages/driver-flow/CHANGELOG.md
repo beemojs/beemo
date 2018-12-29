@@ -7,3 +7,4 @@
 #### 🚀 New
 
 - Added `watchOptions` to `FlowDriver`.
+- Added `FlowArgs` interface type.

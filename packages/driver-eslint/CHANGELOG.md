@@ -3,3 +3,7 @@
 #### 💥 Breaking
 
 - Updated `@beemo/core` peer dependency requirement to v0.25.
+
+#### 🚀 New
+
+- Added `ESLintArgs` interface type.

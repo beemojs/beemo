@@ -7,7 +7,11 @@ import Context from './Context';
 import Script from '../Script';
 import { Arguments } from '../types';
 
-export default class ScriptContext<T = { name: string }> extends Context<T> {
+export interface ScriptArgs {
+  name: string;
+}
+
+export default class ScriptContext<T = ScriptArgs> extends Context<T> {
   script: Script | null = null;
 
   scriptName: string = '';

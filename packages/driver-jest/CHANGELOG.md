@@ -9,3 +9,4 @@
 
 - Added `watchOptions` to `JestDriver`.
 - Added support for `--init`, `--prettierPath`, `--runner`, and `--setupFilesAfterEnv` CLI options.
+- Added `JestArgs` interface type.
