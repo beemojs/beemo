@@ -90,12 +90,20 @@ export default class RunCommandRoutine extends Routine<
       return false;
     }
 
+    // TEMP HACK! Boost's background re-rendering causes display
+    // issues with watched output, so disable it until Boost
+    // properly supports this.
+    this.tool.console.startBackgroundTimer = () => {};
+
     const handler = (chunk: Buffer) => {
       const out = String(chunk).trim();
 
       if (out) {
         this.tool.console.liveLogs = [];
         this.tool.logLive(out);
+
+        // TEMP: Force a re-render
+        this.tool.console.render();
       }
     };
 
