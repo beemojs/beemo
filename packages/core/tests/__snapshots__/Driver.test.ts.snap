@@ -22,10 +22,6 @@ exports[`Driver setCommandOptions() doesnt support empty descriptions 1`] = `"In
 
 exports[`Driver setCommandOptions() requires a description 1`] = `"Invalid Driver field \\"foo.description\\". Field is required and must be defined."`;
 
-exports[`Driver setMetadata() bin doesnt support underscores 1`] = `"Invalid Driver field \\"bin\\". String does not match pattern \\"^[a-z0-9-]+$\\"."`;
-
-exports[`Driver setMetadata() bin doesnt support uppercase 1`] = `"Invalid Driver field \\"bin\\". String does not match pattern \\"^[a-z0-9-]+$\\"."`;
-
 exports[`Driver setMetadata() bin is required 1`] = `"Invalid Driver field \\"bin\\". Field is required and must be defined."`;
 
 exports[`Driver setMetadata() configName doesnt support non-strings 1`] = `"Invalid Driver field \\"configName\\". Must be a string."`;
