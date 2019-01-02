@@ -5,5 +5,3 @@ exports[`Beemo getConfigBlueprint() errors if no module 1`] = `"Invalid field \\
 exports[`Beemo getConfigModuleRoot() errors if a fake and or missing node module 1`] = `"Module beemo-this-should-never-exist defined in \\"beemo.module\\" could not be found."`;
 
 exports[`Beemo getConfigModuleRoot() errors if no module name 1`] = `"Beemo requires a \\"beemo.module\\" property within your package.json. This property is the name of a module that houses your configuration files."`;
-
-exports[`Beemo getConfigModuleRoot() errors if workspace path not found 1`] = `"Module @local/foo defined in \\"beemo.module\\" could not be found."`;

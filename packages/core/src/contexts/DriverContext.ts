@@ -26,10 +26,6 @@ export default class DriverContext<T = DriverArgs> extends Context<T> {
   // The primary driver that initiated the pipeline
   primaryDriver: Driver;
 
-  workspaceRoot: string = '';
-
-  workspaces: string[] = [];
-
   constructor(args: Arguments<T>, driver: Driver, parallelArgv: Argv[] = []) {
     super(args);
 

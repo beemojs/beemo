@@ -24,6 +24,10 @@ export default class Context<T = {}> extends BaseContext {
 
   root: string = '';
 
+  workspaceRoot: string = '';
+
+  workspaces: string[] = [];
+
   constructor(args: Arguments<T>) {
     super();
 

@@ -28,8 +28,6 @@ export default class Beemo {
 
   tool: BeemoTool;
 
-  workspacePaths: string[] = [];
-
   constructor(argv: Argv, binName?: string, tool?: BeemoTool) {
     this.argv = argv;
 
@@ -179,41 +177,6 @@ export default class Beemo {
   }
 
   /**
-   * Return a list of absolute paths for Yarn or Lerna workspaces.
-   */
-  getWorkspacePaths(): string[] {
-    if (this.workspacePaths.length > 0) {
-      return this.workspacePaths;
-    }
-
-    const { workspaces } = this.tool.package;
-    const root = this.tool.options.workspaceRoot || this.tool.options.root;
-    const paths = [];
-
-    if (workspaces) {
-      if (Array.isArray(workspaces)) {
-        paths.push(...workspaces);
-      } else if (Array.isArray(workspaces.packages)) {
-        paths.push(...workspaces.packages);
-      }
-    }
-
-    const lernaPath = path.join(root, 'lerna.json');
-
-    if (paths.length === 0 && fs.existsSync(lernaPath)) {
-      const lerna = fs.readJsonSync(lernaPath);
-
-      if (Array.isArray(lerna.packages)) {
-        paths.push(...lerna.packages);
-      }
-    }
-
-    this.workspacePaths = paths.map(workspace => path.join(root, workspace));
-
-    return this.workspacePaths;
-  }
-
-  /**
    * Delete config files if a process fails.
    */
   handleCleanupOnFailure(code: number, context: Context) {
@@ -240,10 +203,6 @@ export default class Beemo {
     const { tool } = this;
     const driver = tool.getPlugin('driver', driverName);
     const context = this.prepareContext(new DriverContext(args, driver, parallelArgv));
-
-    // Set workspace related properties
-    context.workspaceRoot = tool.options.workspaceRoot || tool.options.root;
-    context.workspaces = this.getWorkspacePaths();
 
     tool.emit(`${driverName}.init-driver`, [context, driver]);
     tool.debug('Running with %s driver', driverName);
@@ -274,9 +233,13 @@ export default class Beemo {
    * Prepare the context object by setting default values for specific properties.
    */
   prepareContext<T extends Context>(context: T): T {
+    const { tool } = this;
+
     context.argv = this.argv;
     context.moduleRoot = this.getConfigModuleRoot();
-    context.root = this.tool.options.root;
+    context.root = tool.options.root;
+    context.workspaceRoot = tool.options.workspaceRoot || tool.options.root;
+    context.workspaces = tool.getWorkspacePaths(context.workspaceRoot);
 
     return context;
   }
