@@ -1,5 +1,5 @@
-import ConfigLoader from '@boost/core/lib/ConfigLoader';
 import fs from 'fs-extra';
+import ConfigLoader from '@boost/core/lib/ConfigLoader';
 import CreateConfigRoutine from '../../src/configure/CreateConfigRoutine';
 import BabelDriver from '../../../driver-babel/src/BabelDriver';
 import Driver from '../../src/Driver';
@@ -12,10 +12,12 @@ import {
   createTestTool,
 } from '../../../../tests/helpers';
 
-jest.mock('fs-extra');
 jest.mock('@boost/core/lib/ConfigLoader');
 
 describe('CreateConfigRoutine', () => {
+  const oldExistsSync = fs.existsSync;
+  const oldWriteFile = fs.writeFile;
+  const oldCopy = fs.copy;
   let routine: CreateConfigRoutine;
   let driver: Driver;
   let tool: BeemoTool;
@@ -34,9 +36,9 @@ describe('CreateConfigRoutine', () => {
     routine.tool.config.module = '@local';
     routine.debug = createTestDebugger();
 
-    (fs.existsSync as jest.Mock).mockImplementation(() => true);
-    (fs.writeFile as jest.Mock).mockImplementation(() => Promise.resolve());
-    (fs.copy as jest.Mock).mockImplementation(() => Promise.resolve());
+    fs.existsSync = jest.fn(() => true);
+    fs.writeFile = jest.fn(() => Promise.resolve());
+    fs.copy = jest.fn(() => Promise.resolve());
 
     // @ts-ignore
     ConfigLoader.mockImplementation(() => ({
@@ -54,6 +56,10 @@ describe('CreateConfigRoutine', () => {
     ConfigLoader.mockReset();
 
     delete process.beemo;
+
+    fs.existsSync = oldExistsSync;
+    fs.writeFile = oldWriteFile;
+    fs.copy = oldCopy;
   });
 
   describe('execute()', () => {

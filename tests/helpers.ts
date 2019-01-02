@@ -26,6 +26,8 @@ export const EXEC_RESULT = {
   timedOut: false,
 };
 
+export const TEST_PACKAGE_JSON = { name: '', version: '0.0.0' };
+
 export const MOCK_ARGS = { _: [], $0: '' };
 
 export const MOCK_DRIVER_ARGS = {
@@ -81,9 +83,7 @@ export function createTestTool(): BeemoTool {
     theme: 'default',
   };
 
-  tool.package = {
-    name: '',
-  };
+  tool.package = { ...TEST_PACKAGE_JSON };
 
   // @ts-ignore
   tool.initialized = true;

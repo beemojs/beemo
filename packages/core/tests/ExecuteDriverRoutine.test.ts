@@ -41,11 +41,11 @@ describe('ExecuteDriverRoutine', () => {
     ];
 
     routine.workspacePackages = [
-      { name: '@scope/primary', workspaceName: 'primary' },
-      { name: '@scope/foo', workspaceName: 'foo' },
-      { name: '@scope/bar', workspaceName: 'bar' },
-      { name: '@scope/baz', workspaceName: 'baz' },
-      { name: '@scope/qux', workspaceName: 'qux' },
+      { name: '@scope/primary', version: '0.0.0', workspaceName: 'primary' },
+      { name: '@scope/foo', version: '0.0.0', workspaceName: 'foo' },
+      { name: '@scope/bar', version: '0.0.0', workspaceName: 'bar' },
+      { name: '@scope/baz', version: '0.0.0', workspaceName: 'baz' },
+      { name: '@scope/qux', version: '0.0.0', workspaceName: 'qux' },
     ];
 
     // @ts-ignore
@@ -276,11 +276,11 @@ describe('ExecuteDriverRoutine', () => {
       routine.context.args.workspaces = '*';
 
       expect(routine.getFilteredWorkspaces()).toEqual([
-        { name: '@scope/primary', workspaceName: 'primary' },
-        { name: '@scope/foo', workspaceName: 'foo' },
-        { name: '@scope/bar', workspaceName: 'bar' },
-        { name: '@scope/baz', workspaceName: 'baz' },
-        { name: '@scope/qux', workspaceName: 'qux' },
+        { name: '@scope/primary', version: '0.0.0', workspaceName: 'primary' },
+        { name: '@scope/foo', version: '0.0.0', workspaceName: 'foo' },
+        { name: '@scope/bar', version: '0.0.0', workspaceName: 'bar' },
+        { name: '@scope/baz', version: '0.0.0', workspaceName: 'baz' },
+        { name: '@scope/qux', version: '0.0.0', workspaceName: 'qux' },
       ]);
     });
 
@@ -288,8 +288,8 @@ describe('ExecuteDriverRoutine', () => {
       routine.context.args.workspaces = 'foo|bar';
 
       expect(routine.getFilteredWorkspaces()).toEqual([
-        { name: '@scope/foo', workspaceName: 'foo' },
-        { name: '@scope/bar', workspaceName: 'bar' },
+        { name: '@scope/foo', version: '0.0.0', workspaceName: 'foo' },
+        { name: '@scope/bar', version: '0.0.0', workspaceName: 'bar' },
       ]);
     });
   });

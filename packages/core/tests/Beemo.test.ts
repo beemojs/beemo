@@ -15,9 +15,8 @@ import {
   MOCK_ARGS,
   MOCK_DRIVER_ARGS,
   MOCK_SCAFFOLD_ARGS,
+  TEST_PACKAGE_JSON,
 } from '../../../tests/helpers';
-
-jest.mock('fs-extra');
 
 jest.mock(
   '@boost/core/lib/Pipeline',
@@ -35,6 +34,9 @@ jest.mock('../../../tests', () => jest.fn());
 const root = path.join(__dirname, '../../../tests');
 
 describe('Beemo', () => {
+  const oldExistsSync = fs.existsSync;
+  const oldReadJsonSync = fs.readJsonSync;
+  const oldRemoveSync = fs.removeSync;
   let beemo: Beemo;
   let onSpy: jest.Mock;
 
@@ -47,7 +49,15 @@ describe('Beemo', () => {
     onSpy = jest.fn();
     beemo.tool.on = onSpy;
 
-    (fs.existsSync as jest.Mock).mockReset();
+    fs.existsSync = jest.fn();
+    fs.readJsonSync = jest.fn();
+    fs.removeSync = jest.fn();
+  });
+
+  afterEach(() => {
+    fs.existsSync = oldExistsSync;
+    fs.readJsonSync = oldReadJsonSync;
+    fs.removeSync = oldRemoveSync;
   });
 
   it('sets argv', () => {
@@ -198,19 +208,19 @@ describe('Beemo', () => {
 
   describe('getWorkspacePaths()', () => {
     it('returns empty array for no workspaces', () => {
-      beemo.tool.package = { name: '' };
+      beemo.tool.package = { ...TEST_PACKAGE_JSON };
 
       expect(beemo.getWorkspacePaths()).toEqual([]);
     });
 
     it('returns empty array for non-array workspaces', () => {
-      beemo.tool.package = { name: '', workspaces: true };
+      beemo.tool.package = { ...TEST_PACKAGE_JSON, workspaces: true };
 
       expect(beemo.getWorkspacePaths()).toEqual([]);
     });
 
     it('returns workspaces from package.json', () => {
-      beemo.tool.package = { name: '', workspaces: ['packages/*'] };
+      beemo.tool.package = { ...TEST_PACKAGE_JSON, workspaces: ['packages/*'] };
 
       const paths = [path.join(root, 'packages/*')];
 
@@ -220,7 +230,7 @@ describe('Beemo', () => {
 
     it('returns nohoist workspaces from package.json', () => {
       beemo.tool.package = {
-        name: '',
+        ...TEST_PACKAGE_JSON,
         workspaces: {
           nohoist: [],
           packages: ['packages/*'],
@@ -239,7 +249,7 @@ describe('Beemo', () => {
         packages: ['packages/*'],
       }));
 
-      beemo.tool.package = { name: '' };
+      beemo.tool.package = { ...TEST_PACKAGE_JSON };
       beemo.tool.options.workspaceRoot = getFixturePath('workspaces-lerna');
 
       const paths = [path.join(beemo.tool.options.workspaceRoot, 'packages/*')];
@@ -253,7 +263,7 @@ describe('Beemo', () => {
         packages: ['packages2/*'],
       }));
 
-      beemo.tool.package = { name: '', workspaces: ['packages1/*'] };
+      beemo.tool.package = { ...TEST_PACKAGE_JSON, workspaces: ['packages1/*'] };
       beemo.tool.options.workspaceRoot = getFixturePath('workspaces-lerna');
 
       expect(fs.existsSync as jest.Mock).not.toHaveBeenCalled();
