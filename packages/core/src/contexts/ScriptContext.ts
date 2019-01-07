@@ -8,7 +8,9 @@ import Script from '../Script';
 import { Arguments } from '../types';
 
 export interface ScriptArgs {
+  concurrency: number;
   name: string;
+  workspaces: string;
 }
 
 export default class ScriptContext<T = ScriptArgs> extends Context<T> {

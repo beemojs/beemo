@@ -22,21 +22,6 @@ const { tool } = beemo;
 const app = yargs(main) as any; // TEMP as yargs types are broken
 const manualURL = process.env.BEEMO_MANUAL_URL || 'https://milesj.gitbook.io/beemo';
 
-const workspaceOptions = {
-  concurrency: {
-    description: tool.msg('app:cliOptionConcurrency'),
-    number: true,
-  },
-  priority: {
-    boolean: true,
-    description: tool.msg('app:cliOptionPriority'),
-  },
-  workspaces: {
-    description: tool.msg('app:cliOptionWorkspaces'),
-    string: true,
-  },
-};
-
 // Bootstrap the module
 beemo.bootstrapConfigModule();
 
@@ -52,7 +37,18 @@ tool.getPlugins('driver').forEach(driver => {
     metadata.description || tool.msg('app:run', { title: metadata.title }),
     {
       ...command,
-      ...workspaceOptions,
+      concurrency: {
+        description: tool.msg('app:cliOptionConcurrency'),
+        number: true,
+      },
+      priority: {
+        boolean: true,
+        description: tool.msg('app:cliOptionPriority'),
+      },
+      workspaces: {
+        description: tool.msg('app:cliOptionWorkspaces'),
+        string: true,
+      },
     },
     (args: DriverContext['args']) => beemo.executeDriver(args, driver.name, parallel),
   );
@@ -69,7 +65,16 @@ app.command(
 app.command(
   ['run-script <name>', 'run <name>'],
   tool.msg('app:cliCommandRunScript'),
-  { ...workspaceOptions },
+  {
+    concurrency: {
+      description: tool.msg('app:cliOptionConcurrency'),
+      number: true,
+    },
+    workspaces: {
+      description: tool.msg('app:cliOptionWorkspaces'),
+      string: true,
+    },
+  },
   (args: ScriptContext['args']) => beemo.executeScript(args, args.name),
 );
 

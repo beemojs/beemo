@@ -36,6 +36,6 @@
     "@beemo/core": "^0.25.0"
   },
   "dependencies": {
-    "rimraf": "^2.6.2"
+    "rimraf": "^2.6.3"
   }
 }

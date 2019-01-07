@@ -25,7 +25,7 @@ export type OptionMap = { [option: string]: true };
 export interface RunCommandOptions {
   additionalArgv: Argv;
   forceConfigOption: boolean;
-  workspaceRoot: string;
+  packageRoot: string;
 }
 
 export default class RunCommandRoutine extends Routine<
@@ -39,7 +39,7 @@ export default class RunCommandRoutine extends Routine<
       {
         additionalArgv: array(string()),
         forceConfigOption: bool(),
-        workspaceRoot: string().empty(),
+        packageRoot: string().empty(),
       },
       {
         name: 'RunCommandRoutine',
@@ -49,7 +49,7 @@ export default class RunCommandRoutine extends Routine<
 
   async execute(context: DriverContext): Promise<Execution> {
     const { tool } = this;
-    const { forceConfigOption, workspaceRoot } = this.options;
+    const { forceConfigOption, packageRoot } = this.options;
     const { metadata } = context.primaryDriver;
 
     this.task(tool.msg('app:driverRunGatherArgs'), this.gatherArgs);
@@ -60,8 +60,8 @@ export default class RunCommandRoutine extends Routine<
       !metadata.filterOptions,
     );
 
-    if (workspaceRoot && metadata.workspaceStrategy === STRATEGY_COPY) {
-      this.task(tool.msg('app:driverRunCopyWorkspaceConfig'), this.copyConfigToWorkspace);
+    if (packageRoot && metadata.workspaceStrategy === STRATEGY_COPY) {
+      this.task(tool.msg('app:driverRunCopyWorkspaceConfig'), this.copyConfigToWorkspacePackage);
     } else {
       this.task(tool.msg('app:driverRunIncludeConfigOption'), this.includeConfigOption).skip(
         !metadata.useConfigOption && !forceConfigOption,
@@ -90,20 +90,11 @@ export default class RunCommandRoutine extends Routine<
       return false;
     }
 
-    // TEMP HACK! Boost's background re-rendering causes display
-    // issues with watched output, so disable it until Boost
-    // properly supports this.
-    this.tool.console.startBackgroundTimer = () => {};
-
     const handler = (chunk: Buffer) => {
       const out = String(chunk).trim();
 
       if (out) {
-        this.tool.console.liveLogs = [];
         this.tool.logLive(out);
-
-        // TEMP: Force a re-render
-        this.tool.console.render();
       }
     };
 
@@ -117,13 +108,13 @@ export default class RunCommandRoutine extends Routine<
    * When workspaces are enabled, some drivers require the config to be within each workspace,
    * instead of being referenced from the root, so we need to copy it.
    */
-  async copyConfigToWorkspace(context: DriverContext, argv: Argv): Promise<Argv> {
-    const { workspaceRoot } = this.options;
+  async copyConfigToWorkspacePackage(context: DriverContext, argv: Argv): Promise<Argv> {
+    const { packageRoot } = this.options;
 
     this.debug('Copying config files to workspace');
 
     context.configPaths.forEach(config => {
-      fs.copyFileSync(config.path, path.join(workspaceRoot, path.basename(config.path)));
+      fs.copyFileSync(config.path, path.join(packageRoot, path.basename(config.path)));
     });
 
     return argv;
@@ -348,7 +339,7 @@ export default class RunCommandRoutine extends Routine<
     task: Task<DriverContext>,
   ): Promise<Execution> {
     const driver = context.primaryDriver;
-    const cwd = this.options.workspaceRoot || context.root;
+    const cwd = this.options.packageRoot || context.root;
     let result = null;
 
     this.debug(

@@ -1,0 +1,5 @@
+{
+  "name": "workspaces-driver",
+  "version": "0.0.0",
+  "workspaces": ["./packages/*"]
+}

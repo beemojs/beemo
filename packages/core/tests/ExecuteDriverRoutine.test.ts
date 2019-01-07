@@ -41,12 +41,38 @@ describe('ExecuteDriverRoutine', () => {
     ];
 
     routine.workspacePackages = [
-      { name: '@scope/primary', version: '0.0.0', workspaceName: 'primary' },
-      { name: '@scope/foo', version: '0.0.0', workspaceName: 'foo' },
-      { name: '@scope/bar', version: '0.0.0', workspaceName: 'bar' },
-      { name: '@scope/baz', version: '0.0.0', workspaceName: 'baz' },
-      { name: '@scope/qux', version: '0.0.0', workspaceName: 'qux' },
+      {
+        name: '@scope/primary',
+        version: '0.0.0',
+        workspace: tool.createWorkspaceMetadata('./packages/primary/package.json'),
+      },
+      {
+        name: '@scope/foo',
+        version: '0.0.0',
+        workspaceName: 'foo',
+        workspace: tool.createWorkspaceMetadata('./packages/foo/package.json'),
+      },
+      {
+        name: '@scope/bar',
+        version: '0.0.0',
+        workspaceName: 'bar',
+        workspace: tool.createWorkspaceMetadata('./packages/bar/package.json'),
+      },
+      {
+        name: '@scope/baz',
+        version: '0.0.0',
+        workspaceName: 'baz',
+        workspace: tool.createWorkspaceMetadata('./packages/baz/package.json'),
+      },
+      {
+        name: '@scope/qux',
+        version: '0.0.0',
+        workspaceName: 'qux',
+        workspace: tool.createWorkspaceMetadata('./packages/qux/package.json'),
+      },
     ];
+
+    // tool.loadWorkspacePackages = () => routine.workspacePackages;
 
     // @ts-ignore
     RunCommandRoutine.mockClear();
@@ -93,6 +119,7 @@ describe('ExecuteDriverRoutine', () => {
       beforeEach(() => {
         routine.context.args.workspaces = '*';
         routine.context.workspaces = ['packages/*'];
+        routine.context.workspaceRoot = getFixturePath('workspaces-driver');
         routine.context.root = getFixturePath('workspaces-driver');
       });
 
@@ -104,19 +131,19 @@ describe('ExecuteDriverRoutine', () => {
         expect(routine.pipe).toHaveBeenCalledWith(
           new RunCommandRoutine('foo', 'primary -a --foo bar baz', {
             forceConfigOption: true,
-            workspaceRoot: './packages/foo',
+            packageRoot: './packages/foo',
           }),
         );
         expect(routine.pipe).toHaveBeenCalledWith(
           new RunCommandRoutine('bar', 'primary -a --foo bar baz', {
             forceConfigOption: true,
-            workspaceRoot: './packages/bar',
+            packageRoot: './packages/bar',
           }),
         );
         expect(routine.pipe).toHaveBeenCalledWith(
           new RunCommandRoutine('baz', 'primary -a --foo bar baz', {
             forceConfigOption: true,
-            workspaceRoot: './packages/baz',
+            packageRoot: './packages/baz',
           }),
         );
       });
@@ -131,42 +158,42 @@ describe('ExecuteDriverRoutine', () => {
           new RunCommandRoutine('foo', 'primary -a --foo bar baz --one --two=2', {
             additionalArgv: ['--one', '--two=2'],
             forceConfigOption: true,
-            workspaceRoot: './packages/foo',
+            packageRoot: './packages/foo',
           }),
         );
         expect(routine.pipe).toHaveBeenCalledWith(
           new RunCommandRoutine('foo', 'primary -a --foo bar baz --three -f', {
             additionalArgv: ['--three', '-f'],
             forceConfigOption: true,
-            workspaceRoot: './packages/foo',
+            packageRoot: './packages/foo',
           }),
         );
         expect(routine.pipe).toHaveBeenCalledWith(
           new RunCommandRoutine('bar', 'primary -a --foo bar baz --one --two=2', {
             additionalArgv: ['--one', '--two=2'],
             forceConfigOption: true,
-            workspaceRoot: './packages/bar',
+            packageRoot: './packages/bar',
           }),
         );
         expect(routine.pipe).toHaveBeenCalledWith(
           new RunCommandRoutine('bar', 'primary -a --foo bar baz --three -f', {
             additionalArgv: ['--three', '-f'],
             forceConfigOption: true,
-            workspaceRoot: './packages/bar',
+            packageRoot: './packages/bar',
           }),
         );
         expect(routine.pipe).toHaveBeenCalledWith(
           new RunCommandRoutine('baz', 'primary -a --foo bar baz --one --two=2', {
             additionalArgv: ['--one', '--two=2'],
             forceConfigOption: true,
-            workspaceRoot: './packages/baz',
+            packageRoot: './packages/baz',
           }),
         );
         expect(routine.pipe).toHaveBeenCalledWith(
           new RunCommandRoutine('baz', 'primary -a --foo bar baz --three -f', {
             additionalArgv: ['--three', '-f'],
             forceConfigOption: true,
-            workspaceRoot: './packages/baz',
+            packageRoot: './packages/baz',
           }),
         );
       });
@@ -269,65 +296,62 @@ describe('ExecuteDriverRoutine', () => {
     it('returns none for empty string', () => {
       routine.context.args.workspaces = '';
 
-      expect(routine.getFilteredWorkspaces()).toEqual([]);
+      expect(routine.getFilteredWorkspacePackages()).toEqual([]);
     });
 
     it('returns all for wildcard `*`', () => {
       routine.context.args.workspaces = '*';
 
-      expect(routine.getFilteredWorkspaces()).toEqual([
-        { name: '@scope/primary', version: '0.0.0', workspaceName: 'primary' },
-        { name: '@scope/foo', version: '0.0.0', workspaceName: 'foo' },
-        { name: '@scope/bar', version: '0.0.0', workspaceName: 'bar' },
-        { name: '@scope/baz', version: '0.0.0', workspaceName: 'baz' },
-        { name: '@scope/qux', version: '0.0.0', workspaceName: 'qux' },
+      expect(routine.getFilteredWorkspacePackages()).toEqual([
+        {
+          name: '@scope/primary',
+          version: '0.0.0',
+          workspace: routine.tool.createWorkspaceMetadata('./packages/primary/package.json'),
+        },
+        {
+          name: '@scope/foo',
+          version: '0.0.0',
+          workspaceName: 'foo',
+          workspace: routine.tool.createWorkspaceMetadata('./packages/foo/package.json'),
+        },
+        {
+          name: '@scope/bar',
+          version: '0.0.0',
+          workspaceName: 'bar',
+          workspace: routine.tool.createWorkspaceMetadata('./packages/bar/package.json'),
+        },
+        {
+          name: '@scope/baz',
+          version: '0.0.0',
+          workspaceName: 'baz',
+          workspace: routine.tool.createWorkspaceMetadata('./packages/baz/package.json'),
+        },
+        {
+          name: '@scope/qux',
+          version: '0.0.0',
+          workspaceName: 'qux',
+          workspace: routine.tool.createWorkspaceMetadata('./packages/qux/package.json'),
+        },
       ]);
     });
 
     it('filters by package name', () => {
       routine.context.args.workspaces = 'foo|bar';
 
-      expect(routine.getFilteredWorkspaces()).toEqual([
-        { name: '@scope/foo', version: '0.0.0', workspaceName: 'foo' },
-        { name: '@scope/bar', version: '0.0.0', workspaceName: 'bar' },
-      ]);
-    });
-  });
-
-  describe('loadWorkspacePackages()', () => {
-    it('returns a list of paths', () => {
-      routine.context.args.workspaces = '*';
-      routine.context.workspaces = ['packages/*'];
-      routine.context.root = getFixturePath('workspaces-driver');
-
-      expect(routine.loadWorkspacePackages()).toEqual([
+      expect(routine.getFilteredWorkspacePackages()).toEqual([
         {
-          name: 'bar',
-          workspaceName: 'bar',
-          workspacePath: getFixturePath('workspaces-driver/packages/bar'),
-          packagePath: getFixturePath('workspaces-driver/packages/bar/package.json'),
-        },
-        {
-          name: 'baz',
-          workspaceName: 'baz',
-          workspacePath: getFixturePath('workspaces-driver/packages/baz'),
-          packagePath: getFixturePath('workspaces-driver/packages/baz/package.json'),
-        },
-        {
-          name: 'foo',
+          name: '@scope/foo',
+          version: '0.0.0',
           workspaceName: 'foo',
-          workspacePath: getFixturePath('workspaces-driver/packages/foo'),
-          packagePath: getFixturePath('workspaces-driver/packages/foo/package.json'),
+          workspace: routine.tool.createWorkspaceMetadata('./packages/foo/package.json'),
+        },
+        {
+          name: '@scope/bar',
+          version: '0.0.0',
+          workspaceName: 'bar',
+          workspace: routine.tool.createWorkspaceMetadata('./packages/bar/package.json'),
         },
       ]);
-    });
-
-    it('returns empty if nothing found', () => {
-      routine.context.args.workspaces = '*';
-      routine.context.workspaces = ['packages/*'];
-      routine.context.root = getFixturePath('workspaces-driver/fake-path');
-
-      expect(routine.loadWorkspacePackages()).toEqual([]);
     });
   });
 

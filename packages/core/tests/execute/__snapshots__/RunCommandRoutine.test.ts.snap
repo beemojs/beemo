@@ -2,4 +2,4 @@
 
 exports[`RunCommandRoutine bootstrap() errors if \`forceConfigOption\` is not a boolean 1`] = `"Invalid RunCommandRoutine field \\"forceConfigOption\\". Must be a boolean."`;
 
-exports[`RunCommandRoutine bootstrap() errors if \`workspaceRoot\` is not a string 1`] = `"Invalid RunCommandRoutine field \\"workspaceRoot\\". Must be a string."`;
+exports[`RunCommandRoutine bootstrap() errors if \`packageRoot\` is not a string 1`] = `"Invalid RunCommandRoutine field \\"packageRoot\\". Must be a string."`;

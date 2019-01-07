@@ -38,7 +38,12 @@ export const MOCK_DRIVER_ARGS = {
   workspaces: '',
 };
 
-export const MOCK_SCRIPT_ARGS = { ...MOCK_ARGS, name: 'foo' };
+export const MOCK_SCRIPT_ARGS = {
+  ...MOCK_ARGS,
+  concurrency: 1,
+  name: 'foo',
+  workspaces: '',
+};
 
 export const MOCK_SCAFFOLD_ARGS = { ...MOCK_ARGS, action: '', generator: '', dry: false };
 
@@ -123,6 +128,8 @@ export function applyContext<T extends Context>(context: T): T {
   context.argv = ['-a', '--foo', 'bar', 'baz'];
   context.moduleRoot = __dirname;
   context.root = __dirname;
+  context.workspaceRoot = __dirname;
+  context.workspaces = [];
 
   return context;
 }

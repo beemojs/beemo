@@ -239,7 +239,7 @@ export default class Beemo {
     context.moduleRoot = this.getConfigModuleRoot();
     context.root = tool.options.root;
     context.workspaceRoot = tool.options.workspaceRoot || tool.options.root;
-    context.workspaces = tool.getWorkspacePaths(context.workspaceRoot);
+    context.workspaces = tool.getWorkspacePaths({ root: context.workspaceRoot });
 
     return context;
   }

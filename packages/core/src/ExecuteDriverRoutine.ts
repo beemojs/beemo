@@ -3,20 +3,17 @@
  * @license     https://opensource.org/licenses/MIT
  */
 
-import fs from 'fs-extra';
-import path from 'path';
-import glob from 'fast-glob';
-import { Routine, PackageConfig } from '@boost/core';
+import { Routine, WorkspacePackageConfig } from '@boost/core';
 import DriverContext from './contexts/DriverContext';
 import RunCommandRoutine, { RunCommandOptions } from './execute/RunCommandRoutine';
 import isPatternMatch from './utils/isPatternMatch';
 import { BeemoTool } from './types';
 
 export default class ExecuteDriverRoutine extends Routine<DriverContext, BeemoTool> {
-  workspacePackages: PackageConfig[] = [];
+  workspacePackages: WorkspacePackageConfig[] = [];
 
   bootstrap() {
-    const { args, primaryDriver, workspaces } = this.context;
+    const { args, primaryDriver, workspaceRoot, workspaces } = this.context;
 
     if (args.workspaces) {
       if (!workspaces || workspaces.length === 0) {
@@ -25,12 +22,12 @@ export default class ExecuteDriverRoutine extends Routine<DriverContext, BeemoTo
         );
       }
 
-      this.workspacePackages = this.loadWorkspacePackages();
+      this.workspacePackages = this.tool.loadWorkspacePackages({ root: workspaceRoot });
 
-      this.getFilteredWorkspaces().forEach(pkg => {
-        this.pipeParallelBuilds(pkg.workspaceName, {
+      this.getFilteredWorkspacePackages().forEach(pkg => {
+        this.pipeParallelBuilds(pkg.workspace.packageName, {
           forceConfigOption: true,
-          workspaceRoot: pkg.workspacePath,
+          packageRoot: pkg.workspace.packagePath,
         });
       });
     } else {
@@ -63,31 +60,11 @@ export default class ExecuteDriverRoutine extends Routine<DriverContext, BeemoTo
   /**
    * Return a list of workspaces optionally filtered.
    */
-  getFilteredWorkspaces(): PackageConfig[] {
+  getFilteredWorkspacePackages(): WorkspacePackageConfig[] {
     return this.workspacePackages.filter(pkg =>
-      // @ts-ignore Contains not typed yet.
+      // @ts-ignore Contains not typed yet
       isPatternMatch(pkg.name, this.context.args.workspaces, { contains: true }),
     );
-  }
-
-  /**
-   * Load package.json from each workspace package.
-   */
-  loadWorkspacePackages(): PackageConfig[] {
-    return glob
-      .sync(this.context.workspaces.map(ws => `${ws}/package.json`), {
-        absolute: true,
-        cwd: this.context.root,
-      })
-      .map(filePath => {
-        const pkg = JSON.parse(fs.readFileSync(String(filePath), 'utf8'));
-
-        pkg.packagePath = filePath;
-        pkg.workspacePath = path.dirname(String(filePath));
-        pkg.workspaceName = path.basename(pkg.workspacePath);
-
-        return pkg;
-      });
   }
 
   /**
@@ -106,8 +83,8 @@ export default class ExecuteDriverRoutine extends Routine<DriverContext, BeemoTo
       };
     }
 
-    const packages: { [name: string]: PackageConfig } = {};
-    const depCounts: { [name: string]: { count: number; package: PackageConfig } } = {};
+    const packages: { [name: string]: WorkspacePackageConfig } = {};
+    const depCounts: { [name: string]: { count: number; package: WorkspacePackageConfig } } = {};
 
     function countDep(name: string) {
       if (depCounts[name]) {
@@ -153,7 +130,7 @@ export default class ExecuteDriverRoutine extends Routine<DriverContext, BeemoTo
     const priority: Routine<DriverContext, BeemoTool>[] = [];
 
     orderedDeps.forEach(pkg => {
-      const routine = this.routines.find(route => route.key === pkg.workspaceName);
+      const routine = this.routines.find(route => route.key === pkg.workspace.packageName);
 
       if (routine) {
         priority.push(routine);
@@ -164,7 +141,7 @@ export default class ExecuteDriverRoutine extends Routine<DriverContext, BeemoTo
     const other: Routine<DriverContext, BeemoTool>[] = [];
 
     this.routines.forEach(routine => {
-      const dependency = orderedDeps.find(dep => dep.workspaceName === routine.key);
+      const dependency = orderedDeps.find(dep => dep.workspace.packageName === routine.key);
 
       if (!dependency) {
         other.push(routine);

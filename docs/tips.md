@@ -143,9 +143,9 @@ If `BEEMO_CONFIG_MODULE` is not defined in your custom binary, you'll need to ma
 
 ## Output Verbosity
 
-Console output can be controlled with the `--output` option and a numerical value between 1 and 3
-(default). More information is logged the higher the range. To hide all output, use `--silent`
-instead.
+Console output can be controlled with the `--output` option and a numerical value of 1 (compact), 2
+(normal), and 3 (verbose). More information is logged the higher the range. To hide all output, use
+`--silent` instead.
 
 ## CLI Themes
 

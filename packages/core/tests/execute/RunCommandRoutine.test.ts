@@ -88,9 +88,9 @@ describe('RunCommandRoutine', () => {
       }).toThrowErrorMatchingSnapshot();
     });
 
-    it('errors if `workspaceRoot` is not a string', () => {
+    it('errors if `packageRoot` is not a string', () => {
       // @ts-ignore
-      routine.options.workspaceRoot = 123;
+      routine.options.packageRoot = 123;
 
       expect(() => {
         routine.bootstrap();
@@ -255,9 +255,9 @@ describe('RunCommandRoutine', () => {
 
     it('calls `copyConfigToWorkspace` when driver is workspaces enabled', async () => {
       driver.metadata.workspaceStrategy = 'copy';
-      routine.options.workspaceRoot = '/some/root';
+      routine.options.packageRoot = '/some/root';
 
-      const copySpy = jest.spyOn(routine, 'copyConfigToWorkspace');
+      const copySpy = jest.spyOn(routine, 'copyConfigToWorkspacePackage');
 
       await routine.execute(routine.context);
 
@@ -265,9 +265,9 @@ describe('RunCommandRoutine', () => {
     });
 
     it('doesnt call `copyConfigToWorkspace` when driver is not workspaces enabled', async () => {
-      routine.options.workspaceRoot = '/some/root';
+      routine.options.packageRoot = '/some/root';
 
-      const copySpy = jest.spyOn(routine, 'copyConfigToWorkspace');
+      const copySpy = jest.spyOn(routine, 'copyConfigToWorkspacePackage');
 
       await routine.execute(routine.context);
 
@@ -277,7 +277,7 @@ describe('RunCommandRoutine', () => {
     it('doesnt call `copyConfigToWorkspace` when no workspace root', async () => {
       driver.metadata.workspaceStrategy = 'copy';
 
-      const copySpy = jest.spyOn(routine, 'copyConfigToWorkspace');
+      const copySpy = jest.spyOn(routine, 'copyConfigToWorkspacePackage');
 
       await routine.execute(routine.context);
 
@@ -285,15 +285,15 @@ describe('RunCommandRoutine', () => {
     });
   });
 
-  describe('copyConfigToWorkspace()', () => {
+  describe('copyConfigToWorkspacePackage()', () => {
     it('copies each config into workspace root', async () => {
-      routine.options.workspaceRoot = '/some/root';
+      routine.options.packageRoot = '/some/root';
       routine.context.configPaths = [
         { driver: 'babel', path: '.babelrc' },
         { driver: 'jest', path: 'jest.json' },
       ];
 
-      const args = await routine.copyConfigToWorkspace(routine.context, ['foo', '--bar']);
+      const args = await routine.copyConfigToWorkspacePackage(routine.context, ['foo', '--bar']);
 
       expect(args).toEqual(['foo', '--bar']);
       expect(fs.copyFileSync).toHaveBeenCalledWith('.babelrc', '/some/root/.babelrc');
