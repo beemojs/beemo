@@ -2,7 +2,7 @@ import ScriptContext from '../../src/contexts/ScriptContext';
 import Script from '../../src/Script';
 import { MOCK_SCRIPT_ARGS } from '../../../../tests/helpers';
 
-describe('Context', () => {
+describe('ScriptContext', () => {
   let context: ScriptContext;
 
   beforeEach(() => {
@@ -17,7 +17,14 @@ describe('Context', () => {
     });
 
     it('sets script name', () => {
-      expect(context.scriptName).toBe('foo');
+      expect(context.scriptName).toBe('Foo');
+    });
+
+    it('converts name to pascal case', () => {
+      context = new ScriptContext({ ...MOCK_SCRIPT_ARGS, foo: true }, 'foo-bar');
+
+      expect(context.scriptName).toBe('FooBar');
+      expect(context.eventName).toBe('foo-bar');
     });
   });
 
@@ -28,8 +35,7 @@ describe('Context', () => {
       context.setScript(script, './foo.js');
 
       expect(context.script).toBe(script);
-      expect(context.scriptName).toBe('foo');
-      expect(context.scriptPath).toBe('./foo.js');
+      expect(context.path).toBe('./foo.js');
     });
   });
 });

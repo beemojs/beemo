@@ -2,7 +2,7 @@ import DriverContext from '../../src/contexts/DriverContext';
 import Driver from '../../src/Driver';
 import { MOCK_DRIVER_ARGS } from '../../../../tests/helpers';
 
-describe('Context', () => {
+describe('DriverContext', () => {
   let context: DriverContext;
 
   beforeEach(() => {
@@ -24,6 +24,7 @@ describe('Context', () => {
 
       expect(context.primaryDriver).toBe(driver);
       expect(context.driverName).toBe('bar');
+      expect(context.eventName).toBe('bar');
     });
 
     it('adds to driver list', () => {

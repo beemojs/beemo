@@ -3,6 +3,7 @@
  * @license     https://opensource.org/licenses/MIT
  */
 
+import kebabCase from 'lodash/kebabCase';
 import Context from './Context';
 import Driver from '../Driver';
 import { Arguments, Argv } from '../types';
@@ -21,6 +22,8 @@ export default class DriverContext<T = DriverArgs> extends Context<T> {
   // List of drivers involved in the current pipeline
   drivers: Set<Driver> = new Set();
 
+  eventName: string;
+
   parallelArgv: Argv[] = [];
 
   // The primary driver that initiated the pipeline
@@ -30,6 +33,7 @@ export default class DriverContext<T = DriverArgs> extends Context<T> {
     super(args);
 
     this.driverName = driver.name;
+    this.eventName = kebabCase(driver.name);
     this.parallelArgv = parallelArgv;
     this.primaryDriver = driver;
 

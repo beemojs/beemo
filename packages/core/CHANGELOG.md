@@ -1,3 +1,15 @@
+# 0.26.0
+
+#### 💥 Breaking
+
+- `Script` file names must now be pascal case: `foo-bar.js` -> `FooBar.js`.
+- `ScriptContext#scriptPath` has been renamed to `path`.
+
+#### 🚀 New
+
+- Added `DriverContext#eventName`.
+- Added `ScriptContext#eventName`.
+
 # 0.25.0 - 12/29/2018
 
 #### 💥 Breaking

@@ -11,25 +11,25 @@ import ScriptContext from './contexts/ScriptContext';
 import { BeemoTool, Execution } from './types';
 
 export default class ExecuteScriptRoutine extends Routine<ScriptContext, BeemoTool> {
-  async execute(context: ScriptContext, scriptName: any): Promise<Execution> {
+  async execute(context: ScriptContext): Promise<Execution> {
     this.task(this.tool.msg('app:scriptLoad'), this.loadScript);
     this.task(this.tool.msg('app:scriptRun'), this.runScript);
 
-    return this.serializeTasks(scriptName);
+    return this.serializeTasks();
   }
 
   /**
    * Attempt to load a script from the configuration module.
    */
-  async loadScript(context: ScriptContext, scriptName: string): Promise<Script> {
-    const filePath = path.join(context.moduleRoot, 'scripts', `${scriptName}.js`);
+  async loadScript(context: ScriptContext): Promise<Script> {
+    const filePath = path.join(context.moduleRoot, 'scripts', `${context.scriptName}.js`);
     const loader = new ModuleLoader(this.tool, 'script', Script);
 
     this.debug('Loading script');
 
     const script = loader.importModule(filePath, [
-      scriptName,
-      this.tool.msg('app:scriptRunNamed', { name: scriptName }),
+      context.scriptName,
+      this.tool.msg('app:scriptRunNamed', { name: context.scriptName }),
     ]);
 
     // Pass context and tool to script
@@ -38,7 +38,7 @@ export default class ExecuteScriptRoutine extends Routine<ScriptContext, BeemoTo
     // Set script into context
     context.setScript(script, filePath);
 
-    this.tool.emit(`${scriptName}.load-script`, [context, script]);
+    this.tool.emit(`${context.eventName}.load-script`, [context, script]);
 
     return script;
   }
@@ -51,7 +51,7 @@ export default class ExecuteScriptRoutine extends Routine<ScriptContext, BeemoTo
 
     this.debug('Executing script with args "%s"', argv.join(' '));
 
-    this.tool.emit(`${script.key}.before-execute`, [context, argv, script]);
+    this.tool.emit(`${context.eventName}.before-execute`, [context, argv, script]);
 
     const args = parseArgs(argv, script.args());
     let result = null;
@@ -59,9 +59,9 @@ export default class ExecuteScriptRoutine extends Routine<ScriptContext, BeemoTo
     try {
       result = await script.execute(context, args);
 
-      this.tool.emit(`${script.key}.after-execute`, [context, result, script]);
+      this.tool.emit(`${context.eventName}.after-execute`, [context, result, script]);
     } catch (error) {
-      this.tool.emit(`${script.key}.failed-execute`, [context, error, script]);
+      this.tool.emit(`${context.eventName}.failed-execute`, [context, error, script]);
 
       throw error;
     }

@@ -7,7 +7,6 @@ import DriverContext from '../src/contexts/DriverContext';
 // @ts-ignore
 import bootstrapIndex from '../../../tests';
 import {
-  getFixturePath,
   createDriverContext,
   createContext,
   createTestDriver,
@@ -15,7 +14,6 @@ import {
   MOCK_ARGS,
   MOCK_DRIVER_ARGS,
   MOCK_SCAFFOLD_ARGS,
-  TEST_PACKAGE_JSON,
 } from '../../../tests/helpers';
 
 jest.mock(
@@ -229,7 +227,7 @@ describe('Beemo', () => {
   describe('executeDriver()', () => {
     beforeEach(() => {
       // @ts-ignore
-      beemo.tool.getPlugin = () => ({ name: 'foo-bar' });
+      beemo.tool.getPlugin = () => ({ name: 'foo-bar', metadata: { title: 'Foo Bar' } });
     });
 
     it('triggers `init-driver` event with context', async () => {
@@ -282,24 +280,10 @@ describe('Beemo', () => {
       expect(spy).toHaveBeenCalledWith('foo-bar.init-script', [
         expect.objectContaining({
           argv: ['foo', 'bar'],
-          scriptName: 'foo-bar',
+          scriptName: 'FooBar',
         }),
         'foo-bar',
       ]);
-    });
-
-    it('passes script name and context to pipeline run', async () => {
-      const spy = jest.spyOn(beemo, 'startPipeline');
-      const pipeline = await beemo.executeScript(MOCK_DRIVER_ARGS, 'foo-bar');
-
-      expect(spy).toHaveBeenCalledWith(
-        expect.objectContaining({
-          argv: ['foo', 'bar'],
-          scriptName: 'foo-bar',
-        }),
-      );
-
-      expect((pipeline as any).run).toHaveBeenCalledWith('foo-bar');
     });
   });
 

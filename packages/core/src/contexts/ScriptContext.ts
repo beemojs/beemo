@@ -3,6 +3,9 @@
  * @license     https://opensource.org/licenses/MIT
  */
 
+import camelCase from 'lodash/camelCase';
+import kebabCase from 'lodash/kebabCase';
+import upperFirst from 'lodash/upperFirst';
 import Context from './Context';
 import Script from '../Script';
 import { Arguments } from '../types';
@@ -14,16 +17,19 @@ export interface ScriptArgs {
 }
 
 export default class ScriptContext<T = ScriptArgs> extends Context<T> {
+  eventName: string;
+
+  path: string = '';
+
   script: Script | null = null;
 
-  scriptName: string = '';
-
-  scriptPath: string = '';
+  scriptName: string;
 
   constructor(args: Arguments<T>, name: string) {
     super(args);
 
-    this.scriptName = name;
+    this.eventName = kebabCase(name);
+    this.scriptName = upperFirst(camelCase(name));
   }
 
   /**
@@ -31,8 +37,7 @@ export default class ScriptContext<T = ScriptArgs> extends Context<T> {
    */
   setScript(script: Script, path: string): this {
     this.script = script;
-    this.scriptName = script.key;
-    this.scriptPath = path;
+    this.path = path;
 
     return this;
   }
