@@ -25,7 +25,7 @@
   },
   "devDependencies": {
     "webpack": "^4.28.3",
-    "webpack-cli": "^3.2.0"
+    "webpack-cli": "^3.2.1"
   },
   "peerDependencies": {
     "@beemo/core": "^0.25.0",
