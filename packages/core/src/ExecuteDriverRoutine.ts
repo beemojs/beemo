@@ -9,8 +9,12 @@ import RunCommandRoutine, { RunCommandOptions } from './execute/RunCommandRoutin
 import isPatternMatch from './utils/isPatternMatch';
 import { BeemoTool } from './types';
 
+export interface CustomConfig {
+  priority?: number;
+}
+
 export default class ExecuteDriverRoutine extends Routine<DriverContext, BeemoTool> {
-  workspacePackages: WorkspacePackageConfig[] = [];
+  workspacePackages: (WorkspacePackageConfig & CustomConfig)[] = [];
 
   bootstrap() {
     const { args, primaryDriver, workspaceRoot, workspaces } = this.context;
@@ -22,7 +26,9 @@ export default class ExecuteDriverRoutine extends Routine<DriverContext, BeemoTo
         );
       }
 
-      this.workspacePackages = this.tool.loadWorkspacePackages({ root: workspaceRoot });
+      this.workspacePackages = this.tool.loadWorkspacePackages<CustomConfig>({
+        root: workspaceRoot,
+      });
 
       this.getFilteredWorkspacePackages().forEach(pkg => {
         this.pipeParallelBuilds(pkg.workspace.packageName, {
@@ -60,7 +66,7 @@ export default class ExecuteDriverRoutine extends Routine<DriverContext, BeemoTo
   /**
    * Return a list of workspaces optionally filtered.
    */
-  getFilteredWorkspacePackages(): WorkspacePackageConfig[] {
+  getFilteredWorkspacePackages(): (WorkspacePackageConfig & CustomConfig)[] {
     return this.workspacePackages.filter(pkg =>
       // @ts-ignore Contains not typed yet
       isPatternMatch(pkg.name, this.context.args.workspaces, { contains: true }),
@@ -83,7 +89,7 @@ export default class ExecuteDriverRoutine extends Routine<DriverContext, BeemoTo
       };
     }
 
-    const packages: { [name: string]: WorkspacePackageConfig } = {};
+    const packages: { [name: string]: WorkspacePackageConfig & CustomConfig } = {};
     const depCounts: { [name: string]: { count: number; package: WorkspacePackageConfig } } = {};
 
     function countDep(name: string) {

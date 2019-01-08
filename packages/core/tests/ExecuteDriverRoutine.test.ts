@@ -49,30 +49,24 @@ describe('ExecuteDriverRoutine', () => {
       {
         name: '@scope/foo',
         version: '0.0.0',
-        workspaceName: 'foo',
         workspace: tool.createWorkspaceMetadata('./packages/foo/package.json'),
       },
       {
         name: '@scope/bar',
         version: '0.0.0',
-        workspaceName: 'bar',
         workspace: tool.createWorkspaceMetadata('./packages/bar/package.json'),
       },
       {
         name: '@scope/baz',
         version: '0.0.0',
-        workspaceName: 'baz',
         workspace: tool.createWorkspaceMetadata('./packages/baz/package.json'),
       },
       {
         name: '@scope/qux',
         version: '0.0.0',
-        workspaceName: 'qux',
         workspace: tool.createWorkspaceMetadata('./packages/qux/package.json'),
       },
     ];
-
-    // tool.loadWorkspacePackages = () => routine.workspacePackages;
 
     // @ts-ignore
     RunCommandRoutine.mockClear();
@@ -311,25 +305,21 @@ describe('ExecuteDriverRoutine', () => {
         {
           name: '@scope/foo',
           version: '0.0.0',
-          workspaceName: 'foo',
           workspace: routine.tool.createWorkspaceMetadata('./packages/foo/package.json'),
         },
         {
           name: '@scope/bar',
           version: '0.0.0',
-          workspaceName: 'bar',
           workspace: routine.tool.createWorkspaceMetadata('./packages/bar/package.json'),
         },
         {
           name: '@scope/baz',
           version: '0.0.0',
-          workspaceName: 'baz',
           workspace: routine.tool.createWorkspaceMetadata('./packages/baz/package.json'),
         },
         {
           name: '@scope/qux',
           version: '0.0.0',
-          workspaceName: 'qux',
           workspace: routine.tool.createWorkspaceMetadata('./packages/qux/package.json'),
         },
       ]);
@@ -342,13 +332,11 @@ describe('ExecuteDriverRoutine', () => {
         {
           name: '@scope/foo',
           version: '0.0.0',
-          workspaceName: 'foo',
           workspace: routine.tool.createWorkspaceMetadata('./packages/foo/package.json'),
         },
         {
           name: '@scope/bar',
           version: '0.0.0',
-          workspaceName: 'bar',
           workspace: routine.tool.createWorkspaceMetadata('./packages/bar/package.json'),
         },
       ]);
