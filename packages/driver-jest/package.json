@@ -28,8 +28,8 @@
     "jest": "^24.0.0-alpha.9"
   },
   "peerDependencies": {
-    "@beemo/core": "^0.25.0",
-    "@beemo/driver-babel": "^0.25.0",
+    "@beemo/core": "^0.26.0",
+    "@beemo/driver-babel": "^0.26.0",
     "jest": "^24.0.0"
   }
 }
