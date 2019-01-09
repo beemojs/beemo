@@ -134,6 +134,7 @@ That being said, consistently remembering the correct commands and arguments to 
 The following options are available when executing a driver.
 
 - `--concurrency` (number) - Number of builds to run in parallel. Defaults to the amount of CPUs.
+- `--live` (bool) - Display output live while process is running instead of on success or failure.
 - `--[no-]priority` (bool) - Prioritize workspace builds based on
   [dependency graph](./workspaces.md#priority-packages).
 - `--workspaces` (string) - Execute the command in each [workspace](./workspaces.md) defined by the

@@ -73,7 +73,7 @@ export default class RunCommandRoutine extends Routine<
     return this.serializeTasks();
   }
 
-  captureWatchOutput = (stream: execa.ExecaChildProcess) => {
+  captureLiveOutput = (stream: execa.ExecaChildProcess) => {
     const { args, primaryDriver } = this.context;
     const { watchOptions } = primaryDriver.metadata;
     const isWatching = watchOptions.some(option => {
@@ -86,20 +86,25 @@ export default class RunCommandRoutine extends Routine<
       return args._.includes(option);
     });
 
-    if (!isWatching) {
+    if (!isWatching && !args.live) {
       return false;
     }
 
     const handler = (chunk: Buffer) => {
-      const out = String(chunk).trim();
+      const out = String(chunk);
 
       if (out) {
         this.tool.logLive(out);
       }
     };
 
-    stream.stdout.pipe(new BatchStream({ wait: 1500 })).on('data', handler);
-    stream.stderr.pipe(new BatchStream({ wait: 1500 })).on('data', handler);
+    if (args.live) {
+      stream.stdout.on('data', handler);
+      stream.stderr.on('data', handler);
+    } else {
+      stream.stdout.pipe(new BatchStream({ wait: 1000 })).on('data', handler);
+      stream.stderr.pipe(new BatchStream({ wait: 1000 })).on('data', handler);
+    }
 
     return true;
   };
@@ -356,7 +361,7 @@ export default class RunCommandRoutine extends Routine<
         cwd,
         env: driver.options.env,
         task,
-        wrap: this.captureWatchOutput,
+        wrap: this.captureLiveOutput,
       });
 
       driver.handleSuccess(result);

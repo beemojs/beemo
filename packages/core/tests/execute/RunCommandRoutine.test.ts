@@ -98,7 +98,7 @@ describe('RunCommandRoutine', () => {
     });
   });
 
-  describe('captureWatchOutput()', () => {
+  describe('captureLiveOutput()', () => {
     let stream: any;
 
     class MockStream {
@@ -122,41 +122,47 @@ describe('RunCommandRoutine', () => {
       driver.metadata.watchOptions = ['--watch'];
       routine.context.args.watch = true;
 
-      expect(routine.captureWatchOutput(stream)).toBe(true);
+      expect(routine.captureLiveOutput(stream)).toBe(true);
     });
 
     it('enables if args option matches short watch option', () => {
       driver.metadata.watchOptions = ['-w'];
       routine.context.args.w = true;
 
-      expect(routine.captureWatchOutput(stream)).toBe(true);
+      expect(routine.captureLiveOutput(stream)).toBe(true);
     });
 
     it('enables if positional args includes watch option', () => {
       driver.metadata.watchOptions = ['watch'];
       routine.context.args._ = ['watch'];
 
-      expect(routine.captureWatchOutput(stream)).toBe(true);
+      expect(routine.captureLiveOutput(stream)).toBe(true);
+    });
+
+    it('enables if args includes live option', () => {
+      routine.context.args.live = true;
+
+      expect(routine.captureLiveOutput(stream)).toBe(true);
     });
 
     it('disables if args option doesnt match watch option', () => {
       driver.metadata.watchOptions = ['--watch'];
 
-      expect(routine.captureWatchOutput(stream)).toBe(false);
+      expect(routine.captureLiveOutput(stream)).toBe(false);
     });
 
     it('disables if positional args doesnt include watch option', () => {
       driver.metadata.watchOptions = ['--watch'];
       routine.context.args._ = ['--notWatch'];
 
-      expect(routine.captureWatchOutput(stream)).toBe(false);
+      expect(routine.captureLiveOutput(stream)).toBe(false);
     });
 
     it('disables if args option is falsy', () => {
       driver.metadata.watchOptions = ['--watch'];
       routine.context.args.watch = false;
 
-      expect(routine.captureWatchOutput(stream)).toBe(false);
+      expect(routine.captureLiveOutput(stream)).toBe(false);
     });
 
     it('pipes a batch stream when enabled', () => {
@@ -166,20 +172,44 @@ describe('RunCommandRoutine', () => {
       driver.metadata.watchOptions = ['--watch'];
       routine.context.args.watch = true;
 
-      routine.captureWatchOutput(stream);
+      routine.captureLiveOutput(stream);
 
       expect(outSpy).toHaveBeenCalled();
       expect(errSpy).toHaveBeenCalled();
     });
 
-    it('registers a data handler when enabled', () => {
+    it('doesnt pipe a batch stream when using live', () => {
+      const outSpy = jest.spyOn(stream.stdout, 'pipe');
+      const errSpy = jest.spyOn(stream.stderr, 'pipe');
+
+      routine.context.args.live = true;
+
+      routine.captureLiveOutput(stream);
+
+      expect(outSpy).not.toHaveBeenCalled();
+      expect(errSpy).not.toHaveBeenCalled();
+    });
+
+    it('registers a data handler when using watch', () => {
       const outSpy = jest.spyOn(stream.stdout, 'on');
       const errSpy = jest.spyOn(stream.stderr, 'on');
 
       driver.metadata.watchOptions = ['--watch'];
       routine.context.args.watch = true;
 
-      routine.captureWatchOutput(stream);
+      routine.captureLiveOutput(stream);
+
+      expect(outSpy).toHaveBeenCalledWith('data', expect.anything());
+      expect(errSpy).toHaveBeenCalledWith('data', expect.anything());
+    });
+
+    it('registers a data handler when using live', () => {
+      const outSpy = jest.spyOn(stream.stdout, 'on');
+      const errSpy = jest.spyOn(stream.stderr, 'on');
+
+      routine.context.args.live = true;
+
+      routine.captureLiveOutput(stream);
 
       expect(outSpy).toHaveBeenCalledWith('data', expect.anything());
       expect(errSpy).toHaveBeenCalledWith('data', expect.anything());
@@ -498,7 +528,7 @@ describe('RunCommandRoutine', () => {
         cwd: getRoot(),
         env: { DEV: 'true' },
         task,
-        wrap: routine.captureWatchOutput,
+        wrap: routine.captureLiveOutput,
       });
     });
 

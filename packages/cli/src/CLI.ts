@@ -41,6 +41,11 @@ tool.getPlugins('driver').forEach(driver => {
         description: tool.msg('app:cliOptionConcurrency'),
         number: true,
       },
+      live: {
+        boolean: true,
+        default: false,
+        description: tool.msg('app:cliOptionLive'),
+      },
       priority: {
         boolean: true,
         description: tool.msg('app:cliOptionPriority'),

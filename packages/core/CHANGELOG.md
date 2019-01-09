@@ -8,6 +8,7 @@
 #### 🚀 New
 
 - Updated `beemo create-config` to create a config for all enabled drivers if no args are passed.
+- Added `--live` to `beemo <driver>` to view output live instead of on completion.
 - Added `DriverContext#eventName` property.
 - Added `ScriptContext#eventName` property.
 

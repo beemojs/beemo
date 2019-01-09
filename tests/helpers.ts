@@ -40,6 +40,7 @@ export const MOCK_CONFIG_ARGS = {
 export const MOCK_DRIVER_ARGS = {
   ...MOCK_ARGS,
   concurrency: 1,
+  live: false,
   name: 'foo',
   priority: false,
   workspaces: '',
