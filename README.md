@@ -1,4 +1,4 @@
-# 🤖 Beemo [ALPHA]
+# 🤖 Beemo [BETA]
 
 [![Build Status](https://travis-ci.org/milesj/beemo.svg?branch=master)](https://travis-ci.org/milesj/beemo)
 [![npm version](https://badge.fury.io/js/%40beemo%2Fcore.svg)](https://www.npmjs.com/package/@beemo/core)
@@ -24,7 +24,7 @@ dependencies, continuous copy and paste, and more.
 - Scaffolding and template generation.
 - Workspaces (monorepo) support.
 - Parallel, pooled, and prioritized builds.
-- Integrated watch mode.
+- Integrated watch/live mode.
 - And much more.
 
 ## Requirements
