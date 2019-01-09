@@ -7,8 +7,13 @@
 
 #### 🚀 New
 
-- Added `DriverContext#eventName`.
-- Added `ScriptContext#eventName`.
+- Updated `beemo create-config` to create a config for all enabled drivers if no args are passed.
+- Added `DriverContext#eventName` property.
+- Added `ScriptContext#eventName` property.
+
+#### 🛠 Internal
+
+- Updated to Boost 1.4 which includes a new CLI engine.
 
 # 0.25.0 - 12/29/2018
 

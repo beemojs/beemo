@@ -4,23 +4,19 @@
  */
 
 import kebabCase from 'lodash/kebabCase';
-import Context from './Context';
+import ConfigContext from './ConfigContext';
 import Driver from '../Driver';
 import { Arguments, Argv } from '../types';
 
 export interface DriverArgs {
   concurrency: number;
   name: string;
-  names?: string[];
   priority: boolean;
   workspaces: string;
 }
 
-export default class DriverContext<T = DriverArgs> extends Context<T> {
+export default class DriverContext<T = DriverArgs> extends ConfigContext<T> {
   driverName: string = '';
-
-  // List of drivers involved in the current pipeline
-  drivers: Set<Driver> = new Set();
 
   eventName: string;
 
@@ -39,19 +35,6 @@ export default class DriverContext<T = DriverArgs> extends Context<T> {
 
     // Add primary driver to driver list
     this.drivers.add(driver);
-  }
-
-  /**
-   * Add a driver as a dependency.
-   */
-  addDriverDependency(driver: Driver): this {
-    if (driver instanceof Driver) {
-      this.drivers.add(driver);
-    } else {
-      throw new TypeError('Invalid driver. Must be an instance of `Driver`.');
-    }
-
-    return this;
   }
 
   /**

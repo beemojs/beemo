@@ -151,6 +151,27 @@ A script within your configuration module can be executed using `yarn beemo run-
 
 > All arguments passed to Beemo are passed to the script's `run()` method.
 
+## Creating Config
+
+Executing a driver will dynamically create a configuration file at runtime. If you'd like to create
+the config manually outside of executing a driver, you can use the `yarn beemo create-config` (or
+`npx beemo create-config`).
+
+When no arguments are passed, it will create a config file for all enabled drivers (found in the
+`beemo.drivers` list). Otherwise, a config file will be created for each driver name passed as an
+argument.
+
+```
+// All drivers
+yarn beemo create-config
+
+// Only Babel and Jest
+yarn beemo create-config babel jest
+```
+
+> If a driver has a dependency on another driver, it will create a config file for the dependency as
+> well.
+
 ## Overriding Config
 
 Your configuration module may now house all configuration, but that doesn't mean it's applicable to

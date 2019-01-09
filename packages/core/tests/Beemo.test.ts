@@ -14,6 +14,7 @@ import {
   MOCK_ARGS,
   MOCK_DRIVER_ARGS,
   MOCK_SCAFFOLD_ARGS,
+  MOCK_CONFIG_ARGS,
 } from '../../../tests/helpers';
 
 jest.mock(
@@ -89,17 +90,22 @@ describe('Beemo', () => {
     beforeEach(() => {
       // @ts-ignore
       beemo.tool.getPlugin = (type, name) => createTestDriver(name);
+      beemo.tool.getPlugins = () => [
+        createTestDriver('foo'),
+        createTestDriver('bar'),
+        createTestDriver('baz'),
+      ];
     });
 
-    it('triggers `init-driver` event with context', async () => {
+    it('triggers `init-driver` event with context for the first driver (primary)', async () => {
       const spy = jest.spyOn(beemo.tool, 'emit');
 
-      await beemo.createConfigFiles(MOCK_DRIVER_ARGS, 'foo');
+      await beemo.createConfigFiles(MOCK_CONFIG_ARGS, ['foo']);
 
       expect(spy).toHaveBeenCalledWith('foo.init-driver', [
         expect.objectContaining({
           argv: ['foo', 'bar'],
-          driverName: 'foo',
+          drivers: expect.anything(),
         }),
         expect.objectContaining({ name: 'foo' }),
       ]);
@@ -108,23 +114,36 @@ describe('Beemo', () => {
     it('passes context to pipeline', async () => {
       const spy = jest.spyOn(beemo, 'startPipeline');
 
-      await beemo.createConfigFiles(MOCK_DRIVER_ARGS, 'foo');
+      await beemo.createConfigFiles(MOCK_CONFIG_ARGS, ['foo']);
 
       expect(spy).toHaveBeenCalledWith(
         expect.objectContaining({
-          primaryDriver: expect.objectContaining({
-            name: 'foo',
-          }),
+          argv: ['foo', 'bar'],
+          drivers: expect.anything(),
         }),
       );
     });
 
-    it('passes multiple drivers', async () => {
+    it('creates for multiple drivers', async () => {
       const spy = jest.spyOn(beemo, 'startPipeline');
 
-      await beemo.createConfigFiles(MOCK_DRIVER_ARGS, 'foo', ['bar', 'baz']);
+      await beemo.createConfigFiles(MOCK_CONFIG_ARGS, ['foo', 'bar', 'baz']);
 
       expect(spy).toHaveBeenCalled();
+      expect(spy.mock.calls[0][0].drivers.size).toBe(3);
+    });
+
+    it('creates for all drivers if list is empty', async () => {
+      const spy = jest.spyOn(beemo, 'startPipeline');
+
+      await beemo.createConfigFiles(MOCK_CONFIG_ARGS, []);
+
+      expect(spy).toHaveBeenCalledWith(
+        expect.objectContaining({
+          argv: ['foo', 'bar'],
+          drivers: new Set(beemo.tool.getPlugins('driver')),
+        }),
+      );
       expect(spy.mock.calls[0][0].drivers.size).toBe(3);
     });
   });

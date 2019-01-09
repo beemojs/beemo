@@ -16,6 +16,7 @@ import ExecuteScriptRoutine from './ExecuteScriptRoutine';
 import ScaffoldRoutine from './ScaffoldRoutine';
 import Driver from './Driver';
 import Context from './contexts/Context';
+import ConfigContext from './contexts/ConfigContext';
 import DriverContext from './contexts/DriverContext';
 import ScriptContext from './contexts/ScriptContext';
 import ScaffoldContext from './contexts/ScaffoldContext';
@@ -95,25 +96,35 @@ export default class Beemo {
   /**
    * Create a configuration file for the specified driver names.
    */
-  async createConfigFiles(
-    args: DriverContext['args'],
-    primaryDriver: string,
-    additionalDrivers: string[] = [],
-  ): Promise<any> {
+  async createConfigFiles(args: ConfigContext['args'], driverNames: string[] = []): Promise<any> {
     const { tool } = this;
-    const driver = tool.getPlugin('driver', primaryDriver);
-    const context = this.prepareContext(new DriverContext(args, driver));
+    const context = this.prepareContext(new ConfigContext(args));
 
-    additionalDrivers.forEach(driverName => {
-      context.addDriverDependency(tool.getPlugin('driver', driverName));
-    });
+    // Create for all enabled drivers
+    if (driverNames.length === 0) {
+      tool.getPlugins('driver').forEach(driver => {
+        context.addDriverDependency(driver);
+      });
 
-    tool.emit(`${primaryDriver}.init-driver`, [context, driver]);
-    tool.debug('Running with %s driver(s)', [primaryDriver, ...additionalDrivers].join(', '));
+      tool.debug('Running with all drivers');
+
+      // Create for one or many driver
+    } else {
+      driverNames.forEach(driverName => {
+        context.addDriverDependency(tool.getPlugin('driver', driverName));
+      });
+
+      tool.debug('Running with %s driver(s)', driverNames.join(', '));
+
+      // Emit for the primary driver so any bootstrap events can react
+      const driver = tool.getPlugin('driver', driverNames[0]);
+
+      tool.emit(`${driver.name}.init-driver`, [context, driver]);
+    }
 
     return this.startPipeline(context)
       .pipe(new ConfigureRoutine('config', tool.msg('app:configGenerate')))
-      .run(primaryDriver);
+      .run();
   }
 
   /**

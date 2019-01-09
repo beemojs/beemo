@@ -6,10 +6,10 @@ import Driver from '../../src/Driver';
 import { STRATEGY_COPY, STRATEGY_REFERENCE } from '../../src/constants';
 import { BeemoTool } from '../../src/types';
 import {
-  createDriverContext,
   prependRoot,
   createTestDebugger,
   createTestTool,
+  createConfigContext,
 } from '../../../../tests/helpers';
 
 jest.mock('@boost/core/lib/ConfigLoader');
@@ -31,7 +31,7 @@ describe('CreateConfigRoutine', () => {
     driver.bootstrap();
 
     routine = new CreateConfigRoutine('babel', 'Configure Babel', { driver });
-    routine.context = createDriverContext();
+    routine.context = createConfigContext();
     routine.tool = tool;
     routine.tool.config.module = '@local';
     routine.debug = createTestDebugger();

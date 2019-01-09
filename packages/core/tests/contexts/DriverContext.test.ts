@@ -37,25 +37,6 @@ describe('DriverContext', () => {
     });
   });
 
-  describe('addDriverDependency()', () => {
-    it('adds a driver', () => {
-      expect(Array.from(context.drivers)).toEqual([context.primaryDriver]);
-
-      const driver = new Driver();
-
-      context.addDriverDependency(driver);
-
-      expect(Array.from(context.drivers)).toEqual([context.primaryDriver, driver]);
-    });
-
-    it('errors when not a driver', () => {
-      expect(() => {
-        // @ts-ignore
-        context.addDriverDependency(true);
-      }).toThrowErrorMatchingSnapshot();
-    });
-  });
-
   describe('addParallelCommand()', () => {
     it('adds a new command argvs', () => {
       expect(context.parallelArgv).toEqual([]);

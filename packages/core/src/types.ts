@@ -3,7 +3,7 @@
  * @license     https://opensource.org/licenses/MIT
  */
 
-import { Tool, ToolConfig, ToolPluginRegistry } from '@boost/core';
+import { Tool, ToolConfig, ToolPluginRegistry, PluginSetting } from '@boost/core';
 import { ExecaReturns } from 'execa';
 import { Arguments, Options } from 'yargs';
 import Driver from './Driver';
@@ -21,6 +21,7 @@ export interface BeemoConfig extends ToolConfig {
     cleanup: boolean;
     parallel: boolean;
   };
+  drivers: PluginSetting<Driver>;
   execute: {
     concurrency: number;
     priority: boolean;

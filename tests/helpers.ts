@@ -5,6 +5,7 @@ import { Tool } from '@boost/core';
 import Driver from '../packages/core/src/Driver';
 import Script from '../packages/core/src/Script';
 import Context from '../packages/core/src/contexts/Context';
+import ConfigContext from '../packages/core/src/contexts/ConfigContext';
 import DriverContext from '../packages/core/src/contexts/DriverContext';
 import ScaffoldContext from '../packages/core/src/contexts/ScaffoldContext';
 import ScriptContext from '../packages/core/src/contexts/ScriptContext';
@@ -29,6 +30,12 @@ export const EXEC_RESULT = {
 export const TEST_PACKAGE_JSON = { name: '', version: '0.0.0' };
 
 export const MOCK_ARGS = { _: [], $0: '' };
+
+export const MOCK_CONFIG_ARGS = {
+  ...MOCK_ARGS,
+  name: 'foo',
+  names: [],
+};
 
 export const MOCK_DRIVER_ARGS = {
   ...MOCK_ARGS,
@@ -136,6 +143,10 @@ export function applyContext<T extends Context>(context: T): T {
 
 export function createContext(): Context {
   return applyContext(new Context(MOCK_ARGS));
+}
+
+export function createConfigContext(): ConfigContext {
+  return applyContext(new ConfigContext(MOCK_CONFIG_ARGS));
 }
 
 export function createDriverContext(driver: Driver | null = null): DriverContext {

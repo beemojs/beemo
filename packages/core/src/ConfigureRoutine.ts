@@ -6,10 +6,13 @@
 import { Routine } from '@boost/core';
 import chalk from 'chalk';
 import CreateConfigRoutine from './configure/CreateConfigRoutine';
-import DriverContext from './contexts/DriverContext';
+import ConfigContext from './contexts/ConfigContext';
 import { BeemoTool } from './types';
 
-export default class ConfigureRoutine extends Routine<DriverContext, BeemoTool> {
+export default class ConfigureRoutine<T extends ConfigContext = ConfigContext> extends Routine<
+  T,
+  BeemoTool
+> {
   bootstrap() {
     this.resolveDependencies();
     this.setupConfigFiles();
@@ -29,6 +32,7 @@ export default class ConfigureRoutine extends Routine<DriverContext, BeemoTool> 
     const names = [...this.context.drivers].reverse().map(driver => {
       const routine = new CreateConfigRoutine(driver.name, driver.metadata.configName, { driver });
 
+      // @ts-ignore Not sure why this errors
       this.pipe(routine);
 
       return driver.name;

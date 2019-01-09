@@ -8,7 +8,7 @@
 import path from 'path';
 import chalk from 'chalk';
 import yargs from 'yargs';
-import Beemo, { DriverContext, ScriptContext, ScaffoldContext } from '@beemo/core';
+import Beemo, { ConfigContext, DriverContext, ScriptContext, ScaffoldContext } from '@beemo/core';
 import version from './checkVersion';
 import parseSpecialArgv from './parseSpecialArgv';
 
@@ -56,10 +56,10 @@ tool.getPlugins('driver').forEach(driver => {
 
 // Add Beemo commands
 app.command(
-  ['create-config <name> [names..]', 'config <name> [names..]'],
+  ['create-config [names..]', 'config [names..]'],
   tool.msg('app:cliCommandConfig'),
   {},
-  (args: DriverContext['args']) => beemo.createConfigFiles(args, args.name, args.names),
+  (args: ConfigContext['args']) => beemo.createConfigFiles(args, args.names),
 );
 
 app.command(

@@ -10,7 +10,7 @@ import camelCase from 'lodash/camelCase';
 import optimal, { instance, Struct } from 'optimal';
 import { ConfigLoader, Routine } from '@boost/core';
 import Driver from '../Driver';
-import DriverContext from '../contexts/DriverContext';
+import ConfigContext from '../contexts/ConfigContext';
 import { STRATEGY_COPY, STRATEGY_REFERENCE, STRATEGY_CREATE, STRATEGY_NATIVE } from '../constants';
 import { BeemoTool } from '../types';
 
@@ -19,7 +19,7 @@ export interface CreateConfigOptions {
 }
 
 export default class CreateConfigRoutine extends Routine<
-  DriverContext,
+  ConfigContext,
   BeemoTool,
   CreateConfigOptions
 > {
@@ -70,7 +70,7 @@ export default class CreateConfigRoutine extends Routine<
   /**
    * Copy configuration file from module.
    */
-  async copyConfigFile(context: DriverContext): Promise<string> {
+  async copyConfigFile(context: ConfigContext): Promise<string> {
     const { metadata, name } = this.options.driver;
     const configLoader = new ConfigLoader(this.tool);
     const sourcePath = this.getConfigPath(configLoader);
@@ -100,7 +100,7 @@ export default class CreateConfigRoutine extends Routine<
   /**
    * Create a temporary configuration file or pass as an option.
    */
-  async createConfigFile(context: DriverContext, config: object): Promise<string> {
+  async createConfigFile(context: ConfigContext, config: object): Promise<string> {
     const { metadata, name } = this.options.driver;
     const configPath = path.join(context.root, metadata.configName);
 
@@ -120,7 +120,7 @@ export default class CreateConfigRoutine extends Routine<
   /**
    * Extract configuration from "beemo.<driver>" within the local project's package.json.
    */
-  extractConfigFromPackage(context: DriverContext, prevConfigs: Struct[]): Promise<Struct[]> {
+  extractConfigFromPackage(context: ConfigContext, prevConfigs: Struct[]): Promise<Struct[]> {
     const { name } = this.options.driver;
     const { config } = this.tool;
     const configs = [...prevConfigs];
@@ -185,7 +185,7 @@ export default class CreateConfigRoutine extends Routine<
   /**
    * Merge multiple configuration sources using the current driver.
    */
-  mergeConfigs(context: DriverContext, configs: Struct[]): Promise<Struct> {
+  mergeConfigs(context: ConfigContext, configs: Struct[]): Promise<Struct> {
     const { name } = this.options.driver;
 
     this.debug('Merging %s config from %d sources', chalk.green(name), configs.length);
@@ -219,7 +219,7 @@ export default class CreateConfigRoutine extends Routine<
    * Load config from the provider configuration module
    * and from the local configs/ folder in the consumer.
    */
-  loadConfigFromSources(context: DriverContext, prevConfigs: Struct[]): Promise<Struct[]> {
+  loadConfigFromSources(context: ConfigContext, prevConfigs: Struct[]): Promise<Struct[]> {
     const configLoader = new ConfigLoader(this.tool);
     const modulePath = this.getConfigPath(configLoader);
     const localPath = this.getConfigPath(configLoader, true);
@@ -241,7 +241,7 @@ export default class CreateConfigRoutine extends Routine<
   /**
    * Reference configuration file from module using a require statement.
    */
-  referenceConfigFile(context: DriverContext): Promise<string> {
+  referenceConfigFile(context: ConfigContext): Promise<string> {
     const { metadata, name } = this.options.driver;
     const configLoader = new ConfigLoader(this.tool);
     const sourcePath = this.getConfigPath(configLoader);
@@ -272,7 +272,7 @@ export default class CreateConfigRoutine extends Routine<
   /**
    * Set environment variables defined by the driver.
    */
-  setEnvVars(context: DriverContext, configs: Struct[]): Promise<any> {
+  setEnvVars(context: ConfigContext, configs: Struct[]): Promise<any> {
     const { env } = this.options.driver.options;
 
     // TODO: This may cause collisions, isolate in a child process?

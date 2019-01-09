@@ -27,6 +27,7 @@ dist/
 .prettierignore
 babel.config.js
 jest.config.js
+mocha.opts
 prettier.config.js
 tsconfig.json
 webpack.config.js

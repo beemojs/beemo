@@ -2,26 +2,29 @@ import ConfigureRoutine from '../src/ConfigureRoutine';
 import Driver from '../src/Driver';
 import { BeemoTool } from '../src/types';
 import {
-  createDriverContext,
   createTestDebugger,
   createTestDriver,
   createTestTool,
+  createConfigContext,
 } from '../../../tests/helpers';
 
 describe('ConfigureRoutine', () => {
   let routine: ConfigureRoutine;
   let plugins: { [name: string]: Driver };
   let tool: BeemoTool;
+  let driver: Driver;
 
   beforeEach(() => {
     plugins = {};
     tool = createTestTool();
+    driver = createTestDriver('foo');
 
     routine = new ConfigureRoutine('config', 'Generating configurations');
     routine.tool = tool;
-    routine.context = createDriverContext(createTestDriver('foo'));
+    routine.context = createConfigContext();
     routine.debug = createTestDebugger();
 
+    routine.context.addDriverDependency(driver);
     routine.tool.getPlugin = jest.fn((type, name) => plugins[name] || createTestDriver(name, tool));
   });
 
@@ -90,18 +93,15 @@ describe('ConfigureRoutine', () => {
     it('adds primary driver when no dependencies', async () => {
       await routine.resolveDependencies();
 
-      expect(Array.from(routine.context.drivers)).toEqual([routine.context.primaryDriver]);
+      expect(Array.from(routine.context.drivers)).toEqual([driver]);
     });
 
     it('adds dependency to driver list', async () => {
-      routine.context.primaryDriver.metadata.dependencies = ['bar'];
+      driver.metadata.dependencies = ['bar'];
 
       await routine.resolveDependencies();
 
-      expect(Array.from(routine.context.drivers)).toEqual([
-        routine.context.primaryDriver,
-        createTestDriver('bar', tool),
-      ]);
+      expect(Array.from(routine.context.drivers)).toEqual([driver, createTestDriver('bar', tool)]);
     });
 
     it('handles sub-dependencies', async () => {
@@ -110,12 +110,12 @@ describe('ConfigureRoutine', () => {
       plugins.qux = createTestDriver('qux', tool, { dependencies: ['oof'] });
       plugins.oof = createTestDriver('oof', tool);
 
-      routine.context.primaryDriver.metadata.dependencies = ['bar'];
+      driver.metadata.dependencies = ['bar'];
 
       await routine.resolveDependencies();
 
       expect(Array.from(routine.context.drivers)).toEqual([
-        routine.context.primaryDriver,
+        driver,
         plugins.bar,
         plugins.baz,
         plugins.qux,
@@ -126,7 +126,7 @@ describe('ConfigureRoutine', () => {
     it('triggers `resolve-dependencies` event', async () => {
       const spy = jest.spyOn(routine.tool, 'emit');
 
-      routine.context.primaryDriver.metadata.dependencies = ['bar'];
+      driver.metadata.dependencies = ['bar'];
 
       await routine.resolveDependencies();
 

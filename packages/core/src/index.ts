@@ -7,11 +7,14 @@ import Beemo from './Beemo';
 import Driver from './Driver';
 import Script from './Script';
 import Context from './contexts/Context';
+import ConfigContext, { ConfigArgs } from './contexts/ConfigContext';
 import DriverContext, { DriverArgs } from './contexts/DriverContext';
 import ScaffoldContext, { ScaffoldArgs } from './contexts/ScaffoldContext';
 import ScriptContext, { ScriptArgs } from './contexts/ScriptContext';
 
 export {
+  ConfigArgs,
+  ConfigContext,
   Context,
   Driver,
   DriverArgs,
