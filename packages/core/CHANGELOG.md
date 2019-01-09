@@ -1,4 +1,4 @@
-# 0.26.0
+# 0.26.0 - 2018-01-08
 
 #### 💥 Breaking
 
@@ -16,7 +16,7 @@
 
 - Updated to Boost 1.4 which includes a new CLI engine.
 
-# 0.25.0 - 12/29/2018
+# 0.25.0 - 2018-12-29
 
 #### 💥 Breaking
 
@@ -29,10 +29,3 @@
 - Added _experimental_ support for capturing watch output from drivers.
 - Added `watchOptions` metadata field to `Driver`. Defines CLI watch options to intercept for the
   defined driver.
-
-# 0.6.0
-
-#### 💥 Breaking
-
-- Added `dependencies` option to drivers.
-- Renamed `config/` folder to `configs/`.

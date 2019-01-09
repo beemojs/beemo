@@ -1,4 +1,10 @@
-# 0.6.0 - 12/29/2018
+# 0.7.0 - 2018-01-08
+
+#### 💥 Breaking
+
+- Updated `@beemo/core` peer dependency requirement to v0.26.
+
+# 0.6.0 - 2018-12-29
 
 #### 💥 Breaking
 
