@@ -1,6 +1,6 @@
 {
   "name": "@beemo/driver-webpack",
-  "version": "0.6.1",
+  "version": "0.7.0",
   "description": "Webpack driver for Beemo.",
   "keywords": [
     "beemo",
