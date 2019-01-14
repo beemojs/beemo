@@ -513,7 +513,7 @@ describe('RunCommandRoutine', () => {
   });
 
   describe('runCommandWithArgs()', () => {
-    const task = new Task<any>('Task');
+    const task = new Task<any>('Task', () => {});
 
     beforeEach(() => {
       routine.executeCommand = jest.fn(() => Promise.resolve({ success: true }));
