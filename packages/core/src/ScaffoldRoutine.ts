@@ -11,9 +11,11 @@ import ScaffoldContext from './contexts/ScaffoldContext';
 import { BeemoTool } from './types';
 
 export default class ScaffoldRoutine extends Routine<ScaffoldContext, BeemoTool> {
-  async execute(context: ScaffoldContext) {
+  bootstrap() {
     this.task(this.tool.msg('app:scaffoldRunGenerator'), this.runGenerator);
+  }
 
+  execute(context: ScaffoldContext) {
     return this.serializeTasks(context.moduleRoot);
   }
 

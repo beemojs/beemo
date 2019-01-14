@@ -7,7 +7,7 @@ import chalk from 'chalk';
 import fs from 'fs-extra';
 import path from 'path';
 import camelCase from 'lodash/camelCase';
-import optimal, { instance, Struct } from 'optimal';
+import { instance, Struct } from 'optimal';
 import { ConfigLoader, Routine } from '@boost/core';
 import Driver from '../Driver';
 import ConfigContext from '../contexts/ConfigContext';
@@ -23,19 +23,21 @@ export default class CreateConfigRoutine extends Routine<
   BeemoTool,
   CreateConfigOptions
 > {
-  bootstrap() {
-    this.options = optimal(
-      this.options,
-      {
-        driver: instance(Driver).required(),
-      },
-      {
-        name: 'CreateConfigRoutine',
-      },
-    );
+  blueprint() /* infer */ {
+    // TODO: Instance checks fail in tests
+    // because of workspace references.
+    if (process.env.NODE_ENV === 'test') {
+      return {
+        driver: instance().required(),
+      };
+    }
+
+    return {
+      driver: instance(Driver).required(),
+    };
   }
 
-  async execute(): Promise<string> {
+  bootstrap() {
     const { tool } = this;
     const { metadata, name, options } = this.options.driver;
     const strategy =
@@ -63,7 +65,9 @@ export default class CreateConfigRoutine extends Routine<
         this.skip(true);
         break;
     }
+  }
 
+  execute(): Promise<string> {
     return this.serializeTasks([]);
   }
 

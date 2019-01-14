@@ -10,11 +10,13 @@ import DriverContext from './contexts/DriverContext';
 import { BeemoTool } from './types';
 
 export default class CleanupRoutine extends Routine<DriverContext, BeemoTool> {
-  async execute(): Promise<boolean[]> {
+  bootstrap() {
     this.task(this.tool.msg('app:configCleanup'), this.deleteConfigFiles).skip(
       !this.tool.config.configure.cleanup,
     );
+  }
 
+  execute(): Promise<boolean[]> {
     return this.serializeTasks();
   }
 

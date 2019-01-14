@@ -26,7 +26,7 @@ export default class ExecuteDriverRoutine extends Routine<DriverContext, BeemoTo
         );
       }
 
-      this.workspacePackages = this.tool.loadWorkspacePackages<CustomConfig>({
+      this.workspacePackages = this.tool.getWorkspacePackages<CustomConfig>({
         root: workspaceRoot,
       });
 

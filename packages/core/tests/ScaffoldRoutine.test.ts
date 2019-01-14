@@ -47,6 +47,8 @@ describe('ScaffoldRoutine', () => {
     it('passes module root to tasks', async () => {
       routine.serializeTasks = jest.fn();
 
+      routine.bootstrap();
+
       await routine.execute(routine.context);
 
       expect(routine.serializeTasks).toHaveBeenCalledWith(getRoot());
@@ -54,6 +56,8 @@ describe('ScaffoldRoutine', () => {
 
     it('executes pipeline in order', async () => {
       const runSpy = jest.spyOn(routine, 'runGenerator');
+
+      routine.bootstrap();
 
       await routine.execute(routine.context);
 

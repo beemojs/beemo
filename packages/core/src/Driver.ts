@@ -18,26 +18,18 @@ export default class Driver<Config = any> extends Plugin<DriverOptions> {
   // @ts-ignore Set after instantiation
   metadata: DriverMetadata;
 
-  constructor(options: Partial<DriverOptions> = {}) {
-    super(options);
-
-    this.options = optimal(
-      options,
-      {
-        args: array(string()),
-        dependencies: array(string()),
-        env: object(union([bool(), number(), string()])),
-        strategy: string(STRATEGY_NATIVE).oneOf([
-          STRATEGY_NATIVE,
-          STRATEGY_CREATE,
-          STRATEGY_REFERENCE,
-          STRATEGY_COPY,
-        ]),
-      },
-      {
-        name: this.constructor.name,
-      },
-    );
+  blueprint() /* infer */ {
+    return {
+      args: array(string()),
+      dependencies: array(string()),
+      env: object(union([bool(), number(), string()])),
+      strategy: string(STRATEGY_NATIVE).oneOf([
+        STRATEGY_NATIVE,
+        STRATEGY_CREATE,
+        STRATEGY_REFERENCE,
+        STRATEGY_COPY,
+      ]),
+    };
   }
 
   /**

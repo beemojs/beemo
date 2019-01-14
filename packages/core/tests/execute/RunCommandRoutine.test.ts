@@ -78,22 +78,22 @@ describe('RunCommandRoutine', () => {
     routine.bootstrap();
   });
 
-  describe('bootstrap()', () => {
+  describe('constructor()', () => {
     it('errors if `forceConfigOption` is not a boolean', () => {
-      // @ts-ignore
-      routine.options.forceConfigOption = 'foo';
-
       expect(() => {
-        routine.bootstrap();
+        // @ts-ignore
+        routine = new RunCommandRoutine('test', 'test', {
+          forceConfigOption: 'foo',
+        });
       }).toThrowErrorMatchingSnapshot();
     });
 
     it('errors if `packageRoot` is not a string', () => {
-      // @ts-ignore
-      routine.options.packageRoot = 123;
-
       expect(() => {
-        routine.bootstrap();
+        // @ts-ignore
+        routine = new RunCommandRoutine('test', 'test', {
+          packageRoot: 123,
+        });
       }).toThrowErrorMatchingSnapshot();
     });
   });
@@ -219,6 +219,7 @@ describe('RunCommandRoutine', () => {
   describe('execute()', () => {
     beforeEach(() => {
       routine.executeCommand = jest.fn(() => Promise.resolve({ stdout: BABEL_HELP }));
+
       driver.metadata.filterOptions = true;
     });
 
@@ -231,9 +232,11 @@ describe('RunCommandRoutine', () => {
       const optSpy = jest.spyOn(routine, 'includeConfigOption');
       const runSpy = jest.spyOn(routine, 'runCommandWithArgs');
 
-      const response = await routine.execute(routine.context);
+      routine.bootstrap();
 
-      expect(argSpy).toHaveBeenCalledWith(routine.context, undefined, expect.anything());
+      const response = await routine.execute();
+
+      expect(argSpy).toHaveBeenCalledWith(routine.context, expect.anything(), expect.anything());
       expect(globSpy).toHaveBeenCalledWith(
         routine.context,
         ['--qux', '-a', '--foo', 'bar', 'baz', '--out-dir', './lib'],
@@ -263,7 +266,9 @@ describe('RunCommandRoutine', () => {
       const optSpy = jest.spyOn(routine, 'includeConfigOption');
       const runSpy = jest.spyOn(routine, 'runCommandWithArgs');
 
-      await routine.execute(routine.context);
+      routine.bootstrap();
+
+      await routine.execute();
 
       expect(optSpy).toHaveBeenCalledWith(routine.context, ['baz'], expect.anything());
       expect(runSpy).toHaveBeenCalledWith(
@@ -278,7 +283,9 @@ describe('RunCommandRoutine', () => {
 
       const filterSpy = jest.spyOn(routine, 'filterUnknownOptions');
 
-      await routine.execute(routine.context);
+      routine.bootstrap();
+
+      await routine.execute();
 
       expect(filterSpy).not.toHaveBeenCalled();
     });
@@ -289,7 +296,9 @@ describe('RunCommandRoutine', () => {
 
       const copySpy = jest.spyOn(routine, 'copyConfigToWorkspacePackage');
 
-      await routine.execute(routine.context);
+      routine.bootstrap();
+
+      await routine.execute();
 
       expect(copySpy).toHaveBeenCalledWith(routine.context, ['baz'], expect.anything());
     });
@@ -299,7 +308,9 @@ describe('RunCommandRoutine', () => {
 
       const copySpy = jest.spyOn(routine, 'copyConfigToWorkspacePackage');
 
-      await routine.execute(routine.context);
+      routine.bootstrap();
+
+      await routine.execute();
 
       expect(copySpy).not.toHaveBeenCalled();
     });
@@ -309,7 +320,9 @@ describe('RunCommandRoutine', () => {
 
       const copySpy = jest.spyOn(routine, 'copyConfigToWorkspacePackage');
 
-      await routine.execute(routine.context);
+      routine.bootstrap();
+
+      await routine.execute();
 
       expect(copySpy).not.toHaveBeenCalled();
     });

@@ -11,7 +11,7 @@ import fs from 'fs-extra';
 import isGlob from 'is-glob';
 import merge from 'lodash/merge';
 import execa from 'execa';
-import optimal, { array, bool, string } from 'optimal';
+import { array, bool, string } from 'optimal';
 import parseArgs from 'yargs-parser';
 import DriverContext from '../contexts/DriverContext';
 import { STRATEGY_COPY } from '../constants';
@@ -33,24 +33,18 @@ export default class RunCommandRoutine extends Routine<
   BeemoTool,
   RunCommandOptions
 > {
-  bootstrap() {
-    this.options = optimal(
-      this.options,
-      {
-        additionalArgv: array(string()),
-        forceConfigOption: bool(),
-        packageRoot: string().empty(),
-      },
-      {
-        name: 'RunCommandRoutine',
-      },
-    );
+  blueprint() /* infer */ {
+    return {
+      additionalArgv: array(string()),
+      forceConfigOption: bool(),
+      packageRoot: string().empty(),
+    };
   }
 
-  async execute(context: DriverContext): Promise<Execution> {
+  bootstrap() {
     const { tool } = this;
     const { forceConfigOption, packageRoot } = this.options;
-    const { metadata } = context.primaryDriver;
+    const { metadata } = this.context.primaryDriver;
 
     this.task(tool.msg('app:driverRunGatherArgs'), this.gatherArgs);
 
@@ -69,7 +63,9 @@ export default class RunCommandRoutine extends Routine<
     }
 
     this.task(tool.msg('app:driverRunCommand'), this.runCommandWithArgs);
+  }
 
+  execute(): Promise<Execution> {
     return this.serializeTasks();
   }
 

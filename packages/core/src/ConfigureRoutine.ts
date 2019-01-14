@@ -18,7 +18,7 @@ export default class ConfigureRoutine<T extends ConfigContext = ConfigContext> e
     this.setupConfigFiles();
   }
 
-  async execute(): Promise<string | string[]> {
+  execute(): Promise<string | string[]> {
     return this.tool.config.configure.parallel
       ? this.parallelizeRoutines()
       : this.serializeRoutines();

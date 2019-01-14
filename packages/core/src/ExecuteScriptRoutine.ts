@@ -11,10 +11,12 @@ import ScriptContext from './contexts/ScriptContext';
 import { BeemoTool, Execution } from './types';
 
 export default class ExecuteScriptRoutine extends Routine<ScriptContext, BeemoTool> {
-  async execute(context: ScriptContext): Promise<Execution> {
+  bootstrap() {
     this.task(this.tool.msg('app:scriptLoad'), this.loadScript);
     this.task(this.tool.msg('app:scriptRun'), this.runScript);
+  }
 
+  execute(): Promise<Execution> {
     return this.serializeTasks();
   }
 

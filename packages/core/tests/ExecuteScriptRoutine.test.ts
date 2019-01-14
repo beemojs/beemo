@@ -41,7 +41,9 @@ describe('ExecuteScriptRoutine', () => {
       const loadSpy = jest.spyOn(routine, 'loadScript');
       const runSpy = jest.spyOn(routine, 'runScript');
 
-      const response = await routine.execute(routine.context);
+      routine.bootstrap();
+
+      const response = await routine.execute();
 
       expect(loadSpy).toHaveBeenCalledWith(routine.context, undefined, expect.anything());
       expect(runSpy).toHaveBeenCalledWith(
