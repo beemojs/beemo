@@ -24,7 +24,7 @@
     "access": "public"
   },
   "devDependencies": {
-    "typescript": "^3.2.2"
+    "typescript": "^3.2.4"
   },
   "peerDependencies": {
     "@beemo/core": "^0.26.0",
