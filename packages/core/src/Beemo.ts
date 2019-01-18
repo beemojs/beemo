@@ -15,6 +15,7 @@ import ExecuteDriverRoutine from './ExecuteDriverRoutine';
 import ExecuteScriptRoutine from './ExecuteScriptRoutine';
 import ScaffoldRoutine from './ScaffoldRoutine';
 import Driver from './Driver';
+import Script from './Script';
 import Context from './contexts/Context';
 import ConfigContext from './contexts/ConfigContext';
 import DriverContext from './contexts/DriverContext';
@@ -51,7 +52,10 @@ export default class Beemo {
     this.tool.debug('Using beemo v%s', version);
 
     // Immediately load config and plugins
-    this.tool.registerPlugin('driver', Driver).initialize();
+    this.tool
+      .registerPlugin('driver', Driver)
+      .registerPlugin('script', Script)
+      .initialize();
 
     // Set footer after messages have been loaded
     const footer = this.tool.msg('app:poweredBy', { version });

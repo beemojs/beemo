@@ -3,12 +3,13 @@
  * @license     https://opensource.org/licenses/MIT
  */
 
-import { Routine } from '@boost/core';
+import { Plugin, Task } from '@boost/core';
 import { Options } from 'yargs-parser';
-import ScriptContext from './contexts/ScriptContext';
-import { BeemoTool } from './types';
+import { ScriptOptions } from './types';
 
-export default class Script extends Routine<ScriptContext, BeemoTool> {
+export default class Script extends Plugin<ScriptOptions> {
+  tasks: Task<any>[] = [];
+
   /**
    * Define a configuration object to parse args with.
    */
@@ -17,10 +18,17 @@ export default class Script extends Routine<ScriptContext, BeemoTool> {
   }
 
   /**
-   * No-op.
+   * Define an individual task that will be piped to an upstream routine.
    */
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  execute(context: ScriptContext, value: any): Promise<any> {
-    return Promise.resolve();
+  task(title: string, action: any): Task<any> {
+    if (typeof action !== 'function') {
+      throw new TypeError(this.tool.msg('errors:taskRequireAction'));
+    }
+
+    const task = new Task(title, action);
+
+    this.tasks.push(task);
+
+    return task;
   }
 }

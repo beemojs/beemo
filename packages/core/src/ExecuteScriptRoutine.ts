@@ -26,13 +26,20 @@ export default class ExecuteScriptRoutine extends Routine<ScriptContext, BeemoTo
   async loadScript(context: ScriptContext): Promise<Script> {
     const filePath = path.join(context.moduleRoot, 'scripts', `${context.scriptName}.js`);
     const loader = new ModuleLoader(this.tool, 'script', Script);
+    let script: Script;
+    let loadError: Error;
 
-    this.debug('Loading script');
+    this.debug('Loading script from configuration module');
 
-    const script = loader.importModule(filePath, [
-      context.scriptName,
-      this.tool.msg('app:scriptRunNamed', { name: context.scriptName }),
-    ]);
+    try {
+      script = loader.importModule(filePath, [
+        context.scriptName,
+        this.tool.msg('app:scriptRunNamed', { name: context.scriptName }),
+      ]);
+    } catch (error) {
+      loadError = error;
+      this.debug('Failed to load from configuration module: %s', error.message);
+    }
 
     // Pass context and tool to script
     script.configure(this);
