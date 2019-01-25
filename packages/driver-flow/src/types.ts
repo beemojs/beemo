@@ -3,8 +3,6 @@
  * @license     https://opensource.org/licenses/MIT
  */
 
-/* eslint-disable camelcase */
-
 export type LintSetting = 0 | 1 | 2 | 'off' | 'warn' | 'error';
 
 export interface LintsConfig {

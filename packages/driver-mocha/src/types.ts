@@ -3,8 +3,6 @@
  * @license     https://opensource.org/licenses/MIT
  */
 
-/* eslint-disable camelcase */
-
 export type UISetting = 'bdd' | 'tdd' | 'qunit' | 'exports';
 
 export interface ReporterOptions {

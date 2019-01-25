@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/camelcase */
+
 import FlowDriver from '../src/FlowDriver';
 import { createTestTool, EXEC_RESULT } from '../../../tests/helpers';
 

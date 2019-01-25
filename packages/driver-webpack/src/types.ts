@@ -5,7 +5,7 @@
 
 import webpack from 'webpack';
 
-// eslint-disable-next-line typescript/no-empty-interface
+// eslint-disable-next-line @typescript-eslint/no-empty-interface
 export interface WebpackConfig extends webpack.Configuration {}
 
 export interface WebpackArgs {

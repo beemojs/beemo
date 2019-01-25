@@ -62,6 +62,7 @@ export interface DriverMetadata {
 export type Execution = ExecaReturns;
 
 declare global {
+  // eslint-disable-next-line @typescript-eslint/no-namespace
   namespace NodeJS {
     interface Process {
       beemo: {

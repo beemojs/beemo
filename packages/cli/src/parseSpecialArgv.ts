@@ -5,10 +5,10 @@
 
 import { Argv } from '@beemo/core';
 
-export type ParsedArgv = {
+export interface ParsedArgv {
   main: Argv;
   parallel: Argv[];
-};
+}
 
 /**
  * Extract parallel commands and options into separate argv lists.

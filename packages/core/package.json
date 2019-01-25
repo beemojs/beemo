@@ -33,7 +33,7 @@
     "@types/lodash": "^4.14.120",
     "@types/micromatch": "^3.1.0",
     "@types/node": "^10.12.18",
-    "@types/yargs": "^12.0.5",
+    "@types/yargs": "^12.0.8",
     "@types/yargs-parser": "^11.0.2",
     "chalk": "^2.4.2",
     "execa": "^1.0.0",

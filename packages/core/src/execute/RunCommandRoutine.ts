@@ -20,7 +20,9 @@ import BatchStream from '../streams/BatchStream';
 
 const OPTION_PATTERN: RegExp = /-?-[a-z0-9-]+(,|\s)/giu;
 
-export type OptionMap = { [option: string]: true };
+export interface OptionMap {
+  [option: string]: true;
+}
 
 export interface RunCommandOptions {
   additionalArgv: Argv;

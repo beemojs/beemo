@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/camelcase */
+
 import MochaDriver from '../src/MochaDriver';
 import { createTestTool } from '../../../tests/helpers';
 
