@@ -54,7 +54,9 @@ export default class Beemo {
     this.tool.registerPlugin('driver', Driver).initialize();
 
     // Set footer after messages have been loaded
-    this.tool.options.footer = `\n🤖  ${this.tool.msg('app:poweredBy', { version })}`;
+    const footer = this.tool.msg('app:poweredBy', { version });
+
+    this.tool.options.footer = `\n${this.tool.isCI() ? '🤖  ' : ''}${footer}`;
   }
 
   /**
