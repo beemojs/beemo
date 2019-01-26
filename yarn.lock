@@ -1403,10 +1403,10 @@
     libnpm "^2.0.1"
     write-file-atomic "^2.3.0"
 
-"@milesj/build-tool-config@0.143.0":
-  version "0.143.0"
-  resolved "https://registry.npmjs.org/@milesj/build-tool-config/-/build-tool-config-0.143.0.tgz#d3a4740a859af0a7454b05cfec2146177ba3152c"
-  integrity sha512-rbM5LA2+AaoNsxoc97DeRA4MX7OwRguoj7hjr5DL6OB0+gCP3hojZ9qc1Lh5KHTYkL/4+eOGfNfFtRZunsfykw==
+"@milesj/build-tool-config@0.143.2":
+  version "0.143.2"
+  resolved "https://registry.npmjs.org/@milesj/build-tool-config/-/build-tool-config-0.143.2.tgz#34ad1da2dfccbb9e6f5b3aa9d97452cefdf239b1"
+  integrity sha512-Ib7y1FVjgF8XF1urTYGY6KhRks+BJ1VQDdmtPTt7eWxXyMsvJdyfRzvi2YNUxKZEZ9gQUxIFWZRm3yVzvf4klA==
   dependencies:
     "@babel/cli" "^7.2.3"
     "@babel/core" "^7.2.2"

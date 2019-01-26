@@ -10,11 +10,10 @@ import {
 
 jest.mock('@boost/core/lib/ModuleLoader', () =>
   jest.fn(() => ({
-    importModule: jest.fn((path, args) => ({
-      key: args[0],
+    importModule: jest.fn(path => ({
+      name: 'foo-bar',
       args: jest.fn(() => ({})),
       boostrap: jest.fn(),
-      configure: jest.fn(),
       execute: () => Promise.resolve(123),
     })),
   })),
@@ -31,6 +30,8 @@ describe('ExecuteScriptRoutine', () => {
 
     routine.context.scriptName = 'FooBar';
     routine.context.eventName = 'foo-bar';
+
+    routine.tool.addPlugin = jest.fn();
 
     // @ts-ignore
     ModuleLoader.mockClear();
@@ -49,7 +50,7 @@ describe('ExecuteScriptRoutine', () => {
       expect(runSpy).toHaveBeenCalledWith(
         routine.context,
         expect.objectContaining({
-          key: 'FooBar',
+          name: 'foo-bar',
         }),
         expect.anything(),
       );
@@ -67,7 +68,7 @@ describe('ExecuteScriptRoutine', () => {
     it('sets values to context', async () => {
       const script = await routine.loadScript(routine.context);
 
-      expect(script.key).toBe('FooBar');
+      expect(script.name).toBe('foo-bar');
       expect(routine.context).toEqual(
         expect.objectContaining({
           scriptName: 'FooBar',
@@ -76,10 +77,10 @@ describe('ExecuteScriptRoutine', () => {
       );
     });
 
-    it('calls configure on script', async () => {
+    it('adds plugin to tool', async () => {
       const script = await routine.loadScript(routine.context);
 
-      expect(script.configure).toHaveBeenCalledWith(routine);
+      expect(routine.tool.addPlugin).toHaveBeenCalledWith('script', script);
     });
 
     it('triggers `load-script` event', async () => {
@@ -93,7 +94,7 @@ describe('ExecuteScriptRoutine', () => {
 
   describe('runScript()', () => {
     it('calls the script args() and execute()', async () => {
-      const script = new Script('test', 'test');
+      const script = new Script();
       script.args = jest.fn(() => ({
         boolean: ['foo'],
         default: {
@@ -123,7 +124,7 @@ describe('ExecuteScriptRoutine', () => {
       }
 
       const spy = jest.spyOn(routine.tool, 'emit');
-      const script = new MockScript('before', 'before');
+      const script = new MockScript();
 
       routine.context.eventName = 'before';
 
@@ -144,7 +145,7 @@ describe('ExecuteScriptRoutine', () => {
       }
 
       const spy = jest.spyOn(routine.tool, 'emit');
-      const script = new SuccessScript('after', 'after');
+      const script = new SuccessScript();
 
       routine.context.eventName = 'after';
 
@@ -161,7 +162,7 @@ describe('ExecuteScriptRoutine', () => {
       }
 
       const spy = jest.spyOn(routine.tool, 'emit');
-      const script = new FailureScript('fail', 'fail');
+      const script = new FailureScript();
 
       routine.context.eventName = 'fail';
 

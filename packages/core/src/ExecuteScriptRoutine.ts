@@ -4,11 +4,11 @@
  */
 
 import path from 'path';
-import { ModuleLoader, Routine } from '@boost/core';
+import { ModuleLoader, Routine, Task } from '@boost/core';
 import parseArgs from 'yargs-parser';
 import Script from './Script';
 import ScriptContext from './contexts/ScriptContext';
-import { BeemoTool, Execution } from './types';
+import { BeemoTool, ExecuteType } from './types';
 
 export default class ExecuteScriptRoutine extends Routine<ScriptContext, BeemoTool> {
   bootstrap() {
@@ -16,7 +16,7 @@ export default class ExecuteScriptRoutine extends Routine<ScriptContext, BeemoTo
     this.task(this.tool.msg('app:scriptRun'), this.runScript);
   }
 
-  execute(): Promise<Execution> {
+  execute(): Promise<any> {
     return this.serializeTasks();
   }
 
@@ -27,24 +27,21 @@ export default class ExecuteScriptRoutine extends Routine<ScriptContext, BeemoTo
     const filePath = path.join(context.moduleRoot, 'scripts', `${context.scriptName}.js`);
     const loader = new ModuleLoader(this.tool, 'script', Script);
     let script: Script;
-    let loadError: Error;
 
+    // Try file path in configuration module
     this.debug('Loading script from configuration module');
 
-    try {
-      script = loader.importModule(filePath, [
-        context.scriptName,
-        this.tool.msg('app:scriptRunNamed', { name: context.scriptName }),
-      ]);
-    } catch (error) {
-      loadError = error;
-      this.debug('Failed to load from configuration module: %s', error.message);
+    script = loader.importModule(filePath);
+
+    // Try an NPM module
+    if (!script) {
+      this.debug('Loading script from NPM module');
+
+      script = loader.importModule(context.eventName); // Modules are kebab case
     }
 
-    // Pass context and tool to script
-    script.configure(this);
+    this.tool.addPlugin('script', script);
 
-    // Set script into context
     context.setScript(script, filePath);
 
     this.tool.emit(`${context.eventName}.load-script`, [context, script]);
@@ -55,7 +52,7 @@ export default class ExecuteScriptRoutine extends Routine<ScriptContext, BeemoTo
   /**
    * Run the script while also parsing arguments to use as options.
    */
-  async runScript(context: ScriptContext, script: Script): Promise<Execution> {
+  async runScript(context: ScriptContext, script: Script): Promise<any> {
     const { argv } = this.context;
 
     this.debug('Executing script with args "%s"', argv.join(' '));
@@ -68,6 +65,10 @@ export default class ExecuteScriptRoutine extends Routine<ScriptContext, BeemoTo
     try {
       result = await script.execute(context, args);
 
+      if (typeof result === 'object' && result && result.type && Array.isArray(result.tasks)) {
+        result = await this.runScriptTasks(args, result.type, result.tasks);
+      }
+
       this.tool.emit(`${context.eventName}.after-execute`, [context, result, script]);
     } catch (error) {
       this.tool.emit(`${context.eventName}.failed-execute`, [context, error, script]);
@@ -76,5 +77,26 @@ export default class ExecuteScriptRoutine extends Routine<ScriptContext, BeemoTo
     }
 
     return result;
+  }
+
+  /**
+   * Run the tasks the script enqueued using the defined process.
+   */
+  async runScriptTasks(args: any, type: ExecuteType, tasks: Task<any>[]): Promise<any> {
+    // Add the tasks to the routine so they show in the console
+    this.tasks.push(...tasks);
+
+    switch (type) {
+      case 'parallel':
+        return this.parallelizeTasks(args, tasks);
+      case 'pool':
+        return this.poolTasks(args, {}, tasks);
+      case 'serial':
+        return this.serializeTasks(args, tasks);
+      case 'sync':
+        return this.synchronizeTasks(args, tasks);
+      default:
+        throw new Error(`Unknown execution type "${type}"`);
+    }
   }
 }

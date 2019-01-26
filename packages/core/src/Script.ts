@@ -5,16 +5,40 @@
 
 import { Plugin, Task } from '@boost/core';
 import { Options } from 'yargs-parser';
-import { ScriptOptions } from './types';
+import ScriptContext from './contexts/ScriptContext';
+import { ExecuteType } from './types';
 
-export default class Script extends Plugin<ScriptOptions> {
-  tasks: Task<any>[] = [];
+export default class Script<Args extends object = {}, Opts extends object = {}> extends Plugin<
+  Opts
+> {
+  protected tasks: Task<any>[] = [];
+
+  blueprint() /* infer */ {
+    return {} as any;
+  }
 
   /**
    * Define a configuration object to parse args with.
    */
   args(): Options {
     return {};
+  }
+
+  /**
+   * Execute the script with the context and parsed args.
+   */
+  execute(context: ScriptContext, args: Args): Promise<any> {
+    return this.executeTasks('serial');
+  }
+
+  /**
+   * Execute the enqueued tasks using the defined process.
+   */
+  executeTasks(type: ExecuteType) {
+    return Promise.resolve({
+      tasks: this.tasks,
+      type,
+    });
   }
 
   /**

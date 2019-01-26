@@ -62,9 +62,9 @@ export interface DriverMetadata {
   workspaceStrategy: 'reference' | 'copy';
 }
 
-export interface ScriptOptions {}
-
 export type Execution = ExecaReturns;
+
+export type ExecuteType = 'parallel' | 'pool' | 'serial' | 'sync';
 
 declare global {
   // eslint-disable-next-line @typescript-eslint/no-namespace

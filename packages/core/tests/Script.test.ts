@@ -10,7 +10,7 @@ describe('Script', () => {
   }
 
   beforeEach(() => {
-    script = new TestScript('test', 'test');
+    script = new TestScript();
   });
 
   describe('args()', () => {
