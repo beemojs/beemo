@@ -4,6 +4,7 @@
  */
 
 import { Routine, WorkspacePackageConfig } from '@boost/core';
+import { DepGraph } from 'dependency-graph';
 import DriverContext from './contexts/DriverContext';
 import RunCommandRoutine, { RunCommandOptions } from './execute/RunCommandRoutine';
 import isPatternMatch from './utils/isPatternMatch';
@@ -89,28 +90,31 @@ export default class ExecuteDriverRoutine extends Routine<DriverContext, BeemoTo
       };
     }
 
-    const packages: { [name: string]: WorkspacePackageConfig & CustomConfig } = {};
-    const depCounts: { [name: string]: { count: number; package: WorkspacePackageConfig } } = {};
+    const graph = new DepGraph<WorkspacePackageConfig & CustomConfig>({ circular: true });
+    // const packages: { [name: string]: WorkspacePackageConfig & CustomConfig } = {};
+    // const depCounts: { [name: string]: { count: number; package: WorkspacePackageConfig } } = {};
 
-    function countDep(name: string) {
-      if (depCounts[name]) {
-        depCounts[name].count += 1;
-      } else {
-        depCounts[name] = {
-          count: packages[name].priority || 1,
-          package: packages[name],
-        };
-      }
-    }
+    // function countDep(name: string) {
+    //   if (depCounts[name]) {
+    //     depCounts[name].count += 1;
+    //   } else {
+    //     depCounts[name] = {
+    //       count: packages[name].priority || 1,
+    //       package: packages[name],
+    //     };
+    //   }
+    // }
 
     // Create a mapping of package names within all workspaces
     this.workspacePackages.forEach(pkg => {
-      packages[pkg.name] = pkg;
+      graph.addNode(pkg.name, pkg);
 
-      // Count it immediately, as it may not be dependend on
-      if (pkg.priority) {
-        countDep(pkg.name);
-      }
+      // packages[pkg.name] = pkg;
+
+      // // Count it immediately, as it may not be dependend on
+      // if (pkg.priority) {
+      //   countDep(pkg.name);
+      // }
     });
 
     // Determine dependend on packages by resolving the graph and incrementing counts
@@ -121,38 +125,65 @@ export default class ExecuteDriverRoutine extends Routine<DriverContext, BeemoTo
       };
 
       Object.keys(deps).forEach(depName => {
-        if (packages[depName]) {
-          countDep(depName);
+        if (!graph.hasNode(depName)) {
+          graph.addNode(depName);
         }
+
+        graph.addDependency(pkg.name, depName);
       });
+
+      // Object.keys(deps).forEach(depName => {
+      //   if (packages[depName]) {
+      //     countDep(depName);
+      //   }
+      // });
     });
 
     // Order by highest count
-    const orderedDeps = Object.values(depCounts)
-      .sort((a, b) => b.count - a.count)
-      .map(dep => dep.package);
+    // const orderedDeps = Object.values(depCounts)
+    //   .sort((a, b) => b.count - a.count)
+    //   .map(dep => dep.package);
+    const orderedDeps = graph.overallOrder();
+
+    console.log(graph, orderedDeps);
 
     // Extract dependents in order
     const priority: Routine<DriverContext, BeemoTool>[] = [];
+    const other: Routine<DriverContext, BeemoTool>[] = [];
 
-    orderedDeps.forEach(pkg => {
+    orderedDeps.forEach(pkgName => {
+      const pkg = graph.getNodeData(pkgName);
+
+      console.log(pkgName, graph.dependantsOf(pkgName), graph.dependenciesOf(pkgName));
+
+      // DepGraph returns the node name when no data is found
+      if (!pkg || typeof pkg === 'string') {
+        return;
+      }
+
       const routine = this.routines.find(route => route.key === pkg.workspace.packageName);
 
-      if (routine) {
+      if (!routine) {
+        return;
+      }
+
+      if (graph.dependantsOf(pkgName).length > 0) {
         priority.push(routine);
+      } else {
+        other.push(routine);
       }
     });
 
     // Extract dependers
-    const other: Routine<DriverContext, BeemoTool>[] = [];
+    // const other: Routine<DriverContext, BeemoTool>[] = [];
 
-    this.routines.forEach(routine => {
-      const dependency = orderedDeps.find(dep => dep.workspace.packageName === routine.key);
+    // this.routines.forEach(routine => {
+    //   const dependency = orderedDeps.find(depName => depName === routine.key);
 
-      if (!dependency) {
-        other.push(routine);
-      }
-    });
+    //   if (!dependency) {
+    //     other.push(routine);
+    //   }
+    // });
 
     return {
       other,

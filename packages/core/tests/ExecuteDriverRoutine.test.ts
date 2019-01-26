@@ -375,7 +375,7 @@ describe('ExecuteDriverRoutine', () => {
       });
     });
 
-    it('prioritizes based on peerDependencies', () => {
+    it.only('prioritizes based on peerDependencies', () => {
       routine.workspacePackages[1].peerDependencies = {
         '@scope/bar': '1.0.0',
       };
@@ -417,6 +417,8 @@ describe('ExecuteDriverRoutine', () => {
     });
 
     it('sorts priority by taking `priority` package option into account', () => {
+      routine.workspacePackages[0].priority = 100;
+
       routine.workspacePackages[2].peerDependencies = {
         '@scope/primary': '2.0.0',
       };
@@ -429,8 +431,6 @@ describe('ExecuteDriverRoutine', () => {
       routine.workspacePackages[4].peerDependencies = {
         '@scope/bar': '1.0.0',
       };
-
-      routine.workspacePackages[0].priority = 100;
 
       expect(routine.orderByWorkspacePriorityGraph()).toEqual({
         other: [{ key: 'foo' }, { key: 'baz' }],
