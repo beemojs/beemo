@@ -771,10 +771,10 @@
     lodash "^4.17.10"
     to-fast-properties "^2.0.0"
 
-"@boost/core@^1.6.0":
-  version "1.6.0"
-  resolved "https://registry.npmjs.org/@boost/core/-/core-1.6.0.tgz#da1a290a44761795f6873d8baa1ff8930e268d1c"
-  integrity sha512-J5XIS/6QB4m7yXDPxaKMc+o3q3Vg2y4qRPORxcIaX2l80x1e5U/kcp8UZ2BIAVPq3u9gi6BxYqdjB6PyzT3xyg==
+"@boost/core@^1.7.1":
+  version "1.7.1"
+  resolved "https://registry.npmjs.org/@boost/core/-/core-1.7.1.tgz#ac5e7afccb31941c52130379d587275b88450acb"
+  integrity sha512-xFATA1RtWLNRYCTui/PgIXaLu6BsYKF8Bb02MVU0dn1AdndS2EXCpnmzwqCJ4Eg3+Aj4YhxJOlPSAEfYoOh39A==
   dependencies:
     "@types/ansi-escapes" "^3.0.0"
     "@types/cli-truncate" "^1.1.0"
@@ -789,7 +789,7 @@
     "@types/split" "^1.0.0"
     "@types/strip-ansi" "^3.0.0"
     "@types/wrap-ansi" "^3.0.0"
-    "@types/yargs" "^12.0.5"
+    "@types/yargs" "^12.0.8"
     "@types/yargs-parser" "^11.0.2"
     ansi-escapes "^3.1.0"
     chalk "^2.4.2"
@@ -800,7 +800,7 @@
     exit "^0.1.2"
     fast-glob "^2.2.6"
     fs-extra "^7.0.1"
-    i18next "^13.1.4"
+    i18next "^14.0.1"
     json5 "^2.1.0"
     lodash "^4.17.11"
     os-locale "^3.1.0"
@@ -1685,7 +1685,7 @@
   resolved "https://registry.npmjs.org/@types/yargs-parser/-/yargs-parser-11.0.2.tgz#bee412b129dd04c867c33a8d00e0e3e30d602a46"
   integrity sha512-GClTGwqOZrc0xpaqgg2E6DdZ63ZxL13E3UesvgOiGKMYNrsbKiYO60FSm8a282F9V+ldA9kENGw7QnHPkWuu1A==
 
-"@types/yargs@^12.0.5", "@types/yargs@^12.0.8":
+"@types/yargs@^12.0.8":
   version "12.0.8"
   resolved "https://registry.npmjs.org/@types/yargs/-/yargs-12.0.8.tgz#0b45bf0607a5509b921335658d87489c12955176"
   integrity sha512-OMSKUmZ09gbzITzx4nxnJqhprWC7JqsmlrEsVtb+cv3GXHNpv0kktqxhboKX52FnMggkQvT5ezt8pxTWyKpJHA==
@@ -5028,10 +5028,10 @@ hygen@^2.1.1:
     lodash "^4.17.11"
     yargs-parser "^10.1.0"
 
-i18next@^13.1.4:
-  version "13.1.5"
-  resolved "https://registry.npmjs.org/i18next/-/i18next-13.1.5.tgz#b1fbc35e00047e6f580288f6774b21b5d42649e6"
-  integrity sha512-tFaX79dg5IcO02I/p8ImZubrxZrOCf06eiAUBlqCjcHXSfC8wqUgI+Yp4qH0iZZV5jBG5z0RWLAamO72NnZiyg==
+i18next@^14.0.1:
+  version "14.0.1"
+  resolved "https://registry.npmjs.org/i18next/-/i18next-14.0.1.tgz#c5f0292ea6389394b6056f597b75f1f9aa03124f"
+  integrity sha512-wsKfQuYsy4RdCaqqN71eDjWMhizhTfQSIBGttEA7vcboQrUfpQlCezrSzrtmoW9F9tmVyNs38iBgLYLMhRSeIQ==
 
 iconv-lite@0.4.24, iconv-lite@^0.4.17, iconv-lite@^0.4.24, iconv-lite@^0.4.4, iconv-lite@~0.4.13:
   version "0.4.24"

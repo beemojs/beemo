@@ -15,4 +15,12 @@ export default class Script extends Routine<ScriptContext, BeemoTool> {
   args(): Options {
     return {};
   }
+
+  /**
+   * No-op.
+   */
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  execute(context: ScriptContext, value: any): Promise<any> {
+    return Promise.resolve();
+  }
 }
