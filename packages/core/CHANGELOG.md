@@ -1,3 +1,19 @@
+# 0.27.0
+
+#### 💥 Breaking
+
+- `Script`s now extend Boost `Plugin` instead of `Routine`.
+  - Inherits `Script#bootstrap` and `Script#blueprint` functionality.
+- `Script#execute` now calls `Script#executeTasks('serial')` by default now.
+
+#### 🚀 New
+
+- Scripts can additionally be loaded from NPM modules that match the format of
+  `beemo-script-<name>`.
+- Added `Script#executeTasks` to process enqueued tasks using the defined pipeline type (`parallel`,
+  `pool`, `serial` (default), `sync`).
+- Added `Script#task` to enqueue tasks similar to previous Boost routines.
+
 # 0.26.0 - 2019-01-08
 
 #### 💥 Breaking
@@ -20,7 +36,7 @@
 
 #### 💥 Breaking
 
-- `Script` now extends Boost `Routine`, providing more functionality.
+- `Script`s now extend Boost `Routine`, providing more functionality.
   - `parse()` was renamed to `args()`.
   - `run(options, tool)` was renamed to `execute(context, options)`.
 

@@ -811,6 +811,14 @@
     wrap-ansi "^4.0.0"
     yargs-parser "^11.1.1"
 
+"@boost/test-utils@^1.0.2":
+  version "1.0.2"
+  resolved "https://registry.npmjs.org/@boost/test-utils/-/test-utils-1.0.2.tgz#0f174bb1d4c613bd7e6d1df549cf6aec093d54ca"
+  integrity sha512-2lD4mU1K+7bjSqwqhjgOjc32ycpVxQux/UC9ZkWnhpB4U+4LKofoFwR55I87Gfx7ezBunuDo/ZZjc+ZVyL/ohg==
+  dependencies:
+    "@types/fs-extra" "^5.0.4"
+    fs-extra "^7.0.1"
+
 "@lerna/add@3.10.6":
   version "3.10.6"
   resolved "https://registry.npmjs.org/@lerna/add/-/add-3.10.6.tgz#6f2c6b26eb905c40fef4180f3ffa34ad9dbb860b"
@@ -1403,10 +1411,10 @@
     libnpm "^2.0.1"
     write-file-atomic "^2.3.0"
 
-"@milesj/build-tool-config@0.143.0":
-  version "0.143.0"
-  resolved "https://registry.npmjs.org/@milesj/build-tool-config/-/build-tool-config-0.143.0.tgz#d3a4740a859af0a7454b05cfec2146177ba3152c"
-  integrity sha512-rbM5LA2+AaoNsxoc97DeRA4MX7OwRguoj7hjr5DL6OB0+gCP3hojZ9qc1Lh5KHTYkL/4+eOGfNfFtRZunsfykw==
+"@milesj/build-tool-config@0.143.2":
+  version "0.143.2"
+  resolved "https://registry.npmjs.org/@milesj/build-tool-config/-/build-tool-config-0.143.2.tgz#34ad1da2dfccbb9e6f5b3aa9d97452cefdf239b1"
+  integrity sha512-Ib7y1FVjgF8XF1urTYGY6KhRks+BJ1VQDdmtPTt7eWxXyMsvJdyfRzvi2YNUxKZEZ9gQUxIFWZRm3yVzvf4klA==
   dependencies:
     "@babel/cli" "^7.2.3"
     "@babel/core" "^7.2.2"

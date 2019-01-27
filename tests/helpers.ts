@@ -91,6 +91,7 @@ export function createTestTool(): BeemoTool {
     module: '',
     output: 3,
     reporters: [],
+    scripts: [],
     settings: {},
     silent: false,
     theme: 'default',

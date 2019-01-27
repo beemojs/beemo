@@ -7,6 +7,7 @@ import { Tool, ToolConfig, ToolPluginRegistry, PluginSetting } from '@boost/core
 import { ExecaReturns } from 'execa';
 import { Arguments, Options } from 'yargs';
 import Driver from './Driver';
+import Script from './Script';
 
 export { Arguments };
 
@@ -14,6 +15,7 @@ export type Argv = string[];
 
 export interface BeemoPluginRegistry extends ToolPluginRegistry {
   driver: Driver;
+  script: Script;
 }
 
 export interface BeemoConfig extends ToolConfig {
@@ -27,6 +29,7 @@ export interface BeemoConfig extends ToolConfig {
     priority: boolean;
   };
   module: string;
+  scripts: PluginSetting<Script>;
   // Driver overrides
   [key: string]: any;
 }
@@ -60,6 +63,8 @@ export interface DriverMetadata {
 }
 
 export type Execution = ExecaReturns;
+
+export type ExecuteType = 'parallel' | 'pool' | 'serial' | 'sync';
 
 declare global {
   // eslint-disable-next-line @typescript-eslint/no-namespace

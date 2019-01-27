@@ -9,7 +9,10 @@ import optimal, { array, bool, number, object, string, union, Blueprint } from '
 import { STRATEGY_COPY, STRATEGY_CREATE, STRATEGY_REFERENCE, STRATEGY_NATIVE } from './constants';
 import { Argv, DriverCommandOptions, DriverOptions, DriverMetadata, Execution } from './types';
 
-export default class Driver<Config = any> extends Plugin<DriverOptions> {
+export default class Driver<
+  Config extends object = {},
+  Opts extends DriverOptions = DriverOptions
+> extends Plugin<Opts> {
   command: DriverCommandOptions = {};
 
   // @ts-ignore Set after instantiation
@@ -29,7 +32,7 @@ export default class Driver<Config = any> extends Plugin<DriverOptions> {
         STRATEGY_REFERENCE,
         STRATEGY_COPY,
       ]),
-    };
+    } as any;
   }
 
   /**

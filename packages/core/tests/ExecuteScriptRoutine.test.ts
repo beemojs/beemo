@@ -10,13 +10,25 @@ import {
 
 jest.mock('@boost/core/lib/ModuleLoader', () =>
   jest.fn(() => ({
-    importModule: jest.fn((path, args) => ({
-      key: args[0],
-      args: jest.fn(() => ({})),
-      boostrap: jest.fn(),
-      configure: jest.fn(),
-      execute: () => Promise.resolve(123),
-    })),
+    importModule: jest.fn(tempName => {
+      const path = require.requireActual('path');
+      const kebabCase = require.requireActual('lodash/kebabCase');
+      let name = tempName.includes('/') ? path.basename(tempName) : tempName;
+
+      if (tempName.endsWith('Missing.js') || tempName === 'missing') {
+        throw new Error(`Script "${name}" missing!`);
+      }
+
+      name = kebabCase(name.replace('.js', ''));
+
+      return {
+        name,
+        moduleName: `beemo-script-${name}`,
+        args: jest.fn(() => ({})),
+        boostrap: jest.fn(),
+        execute: () => Promise.resolve(123),
+      };
+    }),
   })),
 );
 
@@ -31,6 +43,10 @@ describe('ExecuteScriptRoutine', () => {
 
     routine.context.scriptName = 'FooBar';
     routine.context.eventName = 'foo-bar';
+
+    // TEMP
+    routine.tool.registerPlugin('script', Script);
+    routine.tool.addPlugin = jest.fn();
 
     // @ts-ignore
     ModuleLoader.mockClear();
@@ -49,7 +65,7 @@ describe('ExecuteScriptRoutine', () => {
       expect(runSpy).toHaveBeenCalledWith(
         routine.context,
         expect.objectContaining({
-          key: 'FooBar',
+          name: 'FooBar',
         }),
         expect.anything(),
       );
@@ -58,16 +74,21 @@ describe('ExecuteScriptRoutine', () => {
   });
 
   describe('loadScript()', () => {
-    it('loads the script using ModuleLoader', async () => {
-      await routine.loadScript(routine.context);
+    it('loads as a file from configuration module', () => {
+      const script = routine.loadScript(routine.context);
 
-      expect(ModuleLoader).toHaveBeenCalledWith(routine.tool, 'script', Script);
+      expect(script).toEqual(
+        expect.objectContaining({
+          name: 'FooBar',
+          moduleName: 'beemo-script-foo-bar',
+        }),
+      );
     });
 
-    it('sets values to context', async () => {
-      const script = await routine.loadScript(routine.context);
+    it('sets file path to context', () => {
+      const script = routine.loadScript(routine.context);
 
-      expect(script.key).toBe('FooBar');
+      expect(script.name).toBe('FooBar');
       expect(routine.context).toEqual(
         expect.objectContaining({
           scriptName: 'FooBar',
@@ -76,16 +97,51 @@ describe('ExecuteScriptRoutine', () => {
       );
     });
 
-    it('calls configure on script', async () => {
-      const script = await routine.loadScript(routine.context);
+    it('loads as an NPM module if file path does not exist', () => {
+      routine.context.scriptName = 'Missing';
+      routine.context.eventName = 'legit-name';
 
-      expect(script.configure).toHaveBeenCalledWith(routine);
+      const script = routine.loadScript(routine.context);
+
+      expect(script).toEqual(
+        expect.objectContaining({
+          name: 'legit-name',
+          moduleName: 'beemo-script-legit-name',
+        }),
+      );
     });
 
-    it('triggers `load-script` event', async () => {
-      const spy = jest.spyOn(routine.tool, 'emit');
+    it('sets module path to context', () => {
+      routine.context.scriptName = 'Missing';
+      routine.context.eventName = 'legit-name';
 
-      const script = await routine.loadScript(routine.context);
+      const script = routine.loadScript(routine.context);
+
+      expect(script.name).toBe('legit-name');
+      expect(routine.context).toEqual(
+        expect.objectContaining({
+          scriptName: 'LegitName',
+          path: 'beemo-script-legit-name',
+        }),
+      );
+    });
+
+    it('errors when neither file path or module can be loaded', () => {
+      routine.context.scriptName = 'Missing';
+      routine.context.eventName = 'missing';
+
+      expect(() => routine.loadScript(routine.context)).toThrowErrorMatchingSnapshot();
+    });
+
+    it('adds plugin to tool', () => {
+      const script = routine.loadScript(routine.context);
+
+      expect(routine.tool.addPlugin).toHaveBeenCalledWith('script', script);
+    });
+
+    it('triggers `load-script` event', () => {
+      const spy = jest.spyOn(routine.tool, 'emit');
+      const script = routine.loadScript(routine.context);
 
       expect(spy).toHaveBeenCalledWith('foo-bar.load-script', [routine.context, script]);
     });
@@ -93,19 +149,27 @@ describe('ExecuteScriptRoutine', () => {
 
   describe('runScript()', () => {
     it('calls the script args() and execute()', async () => {
-      const script = new Script('test', 'test');
-      script.args = jest.fn(() => ({
-        boolean: ['foo'],
-        default: {
-          foo: false,
-        },
-      }));
-      script.execute = jest.fn();
+      class TestScript extends Script {
+        args() {
+          return {
+            boolean: ['foo'],
+            default: {
+              foo: false,
+            },
+          };
+        }
+      }
+
+      const script = new TestScript();
+      script.bootstrap();
+
+      const argsSpy = jest.spyOn(script, 'args');
+      const exSpy = jest.spyOn(script, 'execute');
 
       await routine.runScript(routine.context, script);
 
-      expect(script.args).toHaveBeenCalled();
-      expect(script.execute).toHaveBeenCalledWith(
+      expect(argsSpy).toHaveBeenCalled();
+      expect(exSpy).toHaveBeenCalledWith(
         routine.context,
         expect.objectContaining({
           _: ['bar', 'baz'],
@@ -113,6 +177,139 @@ describe('ExecuteScriptRoutine', () => {
           foo: true,
         }),
       );
+    });
+
+    it('add tasks to parent routine', async () => {
+      class TasksScript extends Script {
+        bootstrap() {
+          this.task('Task', () => 123);
+          this.task('Task', () => 456);
+          this.task('Task', () => 789);
+        }
+      }
+
+      const script = new TasksScript();
+      script.bootstrap();
+
+      // Not bootstrapped for this test so its 0 instead of 2
+      expect(routine.tasks).toHaveLength(0);
+
+      await routine.runScript(routine.context, script);
+
+      expect(routine.tasks).toHaveLength(3);
+    });
+
+    it('parallelizes tasks', async () => {
+      class ParallelTasksScript extends Script {
+        bootstrap() {
+          this.task('Task', () => 123);
+          this.task('Task', () => 456);
+          this.task('Task', () => 789);
+        }
+
+        execute() {
+          return this.executeTasks('parallel');
+        }
+      }
+
+      const script = new ParallelTasksScript();
+      script.bootstrap();
+
+      const spy = jest.spyOn(routine, 'parallelizeTasks');
+
+      await routine.runScript(routine.context, script);
+
+      expect(spy).toHaveBeenCalledWith(expect.anything(), script.tasks);
+    });
+
+    it('pools tasks', async () => {
+      class PoolTasksScript extends Script {
+        bootstrap() {
+          this.task('Task', () => 123);
+          this.task('Task', () => 456);
+          this.task('Task', () => 789);
+        }
+
+        execute() {
+          return this.executeTasks('pool');
+        }
+      }
+
+      const script = new PoolTasksScript();
+      script.bootstrap();
+
+      const spy = jest.spyOn(routine, 'poolTasks');
+
+      await routine.runScript(routine.context, script);
+
+      expect(spy).toHaveBeenCalledWith(expect.anything(), {}, script.tasks);
+    });
+
+    it('serializes tasks', async () => {
+      class SerialTasksScript extends Script {
+        bootstrap() {
+          this.task('Task', () => 123);
+          this.task('Task', () => 456);
+          this.task('Task', () => 789);
+        }
+
+        execute() {
+          return this.executeTasks('serial');
+        }
+      }
+
+      const script = new SerialTasksScript();
+      script.bootstrap();
+
+      const spy = jest.spyOn(routine, 'serializeTasks');
+
+      await routine.runScript(routine.context, script);
+
+      expect(spy).toHaveBeenCalledWith(expect.anything(), script.tasks);
+    });
+
+    it('synchronizes tasks', async () => {
+      class SyncTasksScript extends Script {
+        bootstrap() {
+          this.task('Task', () => 123);
+          this.task('Task', () => 456);
+          this.task('Task', () => 789);
+        }
+
+        execute() {
+          return this.executeTasks('sync');
+        }
+      }
+
+      const script = new SyncTasksScript();
+      script.bootstrap();
+
+      const spy = jest.spyOn(routine, 'synchronizeTasks');
+
+      await routine.runScript(routine.context, script);
+
+      expect(spy).toHaveBeenCalledWith(expect.anything(), script.tasks);
+    });
+
+    it('doesnt run script tasks if `executeTasks` is not called', async () => {
+      class NoTasksScript extends Script {
+        bootstrap() {
+          this.task('Task', () => 123);
+        }
+
+        execute() {
+          return Promise.resolve();
+        }
+      }
+
+      const script = new NoTasksScript();
+      script.bootstrap();
+
+      const exSpy = jest.spyOn(script, 'executeTasks');
+
+      await routine.runScript(routine.context, script);
+
+      expect(exSpy).not.toHaveBeenCalled();
     });
 
     it('triggers `before-execute` event', async () => {
@@ -123,7 +320,8 @@ describe('ExecuteScriptRoutine', () => {
       }
 
       const spy = jest.spyOn(routine.tool, 'emit');
-      const script = new MockScript('before', 'before');
+      const script = new MockScript();
+      script.bootstrap();
 
       routine.context.eventName = 'before';
 
@@ -144,7 +342,8 @@ describe('ExecuteScriptRoutine', () => {
       }
 
       const spy = jest.spyOn(routine.tool, 'emit');
-      const script = new SuccessScript('after', 'after');
+      const script = new SuccessScript();
+      script.bootstrap();
 
       routine.context.eventName = 'after';
 
@@ -161,7 +360,8 @@ describe('ExecuteScriptRoutine', () => {
       }
 
       const spy = jest.spyOn(routine.tool, 'emit');
-      const script = new FailureScript('fail', 'fail');
+      const script = new FailureScript();
+      script.bootstrap();
 
       routine.context.eventName = 'fail';
 
