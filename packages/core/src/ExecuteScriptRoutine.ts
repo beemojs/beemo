@@ -23,26 +23,41 @@ export default class ExecuteScriptRoutine extends Routine<ScriptContext, BeemoTo
   /**
    * Attempt to load a script from the configuration module.
    */
-  async loadScript(context: ScriptContext): Promise<Script> {
+  loadScript(context: ScriptContext): Script {
     const filePath = path.join(context.moduleRoot, 'scripts', `${context.scriptName}.js`);
     const loader = new ModuleLoader(this.tool, 'script', Script);
     let script: Script;
 
     // Try file path in configuration module
-    this.debug('Loading script from configuration module');
+    try {
+      this.debug('Loading script from configuration module');
 
-    script = loader.importModule(filePath);
+      script = loader.importModule(filePath);
 
-    // Try an NPM module
-    if (!script) {
-      this.debug('Loading script from NPM module');
+      context.setScript(script, filePath);
+    } catch (error1) {
+      // Try an NPM module
+      try {
+        this.debug('Loading script from NPM module');
 
-      script = loader.importModule(context.eventName); // Modules are kebab case
+        script = loader.importModule(context.eventName); // Module names are kebab case
+
+        context.setScript(
+          script,
+          path.resolve(context.root, 'node_modules', script.moduleName, 'index.js'),
+        );
+      } catch (error2) {
+        throw new Error(
+          [
+            'Failed to load script, the following errors occurred:',
+            error1.message,
+            error2.message,
+          ].join('\n'),
+        );
+      }
     }
 
     this.tool.addPlugin('script', script);
-
-    context.setScript(script, filePath);
 
     this.tool.emit(`${context.eventName}.load-script`, [context, script]);
 

@@ -37,6 +37,7 @@ export default class ScriptContext<T = ScriptArgs> extends Context<T> {
    */
   setScript(script: Script, path: string): this {
     this.script = script;
+    this.scriptName = upperFirst(camelCase(script.name));
     this.path = path;
 
     return this;

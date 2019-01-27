@@ -11,11 +11,7 @@ import { ExecuteType } from './types';
 export default class Script<Args extends object = {}, Opts extends object = {}> extends Plugin<
   Opts
 > {
-  protected tasks: Task<any>[] = [];
-
-  blueprint() /* infer */ {
-    return {} as any;
-  }
+  tasks: Task<any>[] = [];
 
   /**
    * Define a configuration object to parse args with.
