@@ -4,7 +4,7 @@
  */
 
 import path from 'path';
-import { ModuleLoader, Routine, Task } from '@boost/core';
+import { Routine, Task } from '@boost/core';
 import parseArgs from 'yargs-parser';
 import Script from './Script';
 import ScriptContext from './contexts/ScriptContext';
@@ -25,7 +25,7 @@ export default class ExecuteScriptRoutine extends Routine<ScriptContext, BeemoTo
    */
   loadScript(context: ScriptContext): Script {
     const filePath = path.join(context.moduleRoot, 'scripts', `${context.scriptName}.js`);
-    const loader = new ModuleLoader(this.tool, 'script', Script);
+    const { loader } = this.tool.getRegisteredPlugin('script');
     let script: Script;
 
     // Try file path in configuration module

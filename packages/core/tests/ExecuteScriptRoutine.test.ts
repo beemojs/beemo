@@ -44,6 +44,8 @@ describe('ExecuteScriptRoutine', () => {
     routine.context.scriptName = 'FooBar';
     routine.context.eventName = 'foo-bar';
 
+    // TEMP
+    routine.tool.registerPlugin('script', Script);
     routine.tool.addPlugin = jest.fn();
 
     // @ts-ignore
@@ -75,7 +77,6 @@ describe('ExecuteScriptRoutine', () => {
     it('loads as a file from configuration module', () => {
       const script = routine.loadScript(routine.context);
 
-      expect(ModuleLoader).toHaveBeenCalledWith(routine.tool, 'script', Script);
       expect(script).toEqual(
         expect.objectContaining({
           name: 'foo-bar',
@@ -102,7 +103,6 @@ describe('ExecuteScriptRoutine', () => {
 
       const script = routine.loadScript(routine.context);
 
-      expect(ModuleLoader).toHaveBeenCalledWith(routine.tool, 'script', Script);
       expect(script).toEqual(
         expect.objectContaining({
           name: 'legit-name',
