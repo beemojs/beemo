@@ -24,7 +24,6 @@ export default class ExecuteScriptRoutine extends Routine<ScriptContext, BeemoTo
    * Attempt to load a script from the configuration module.
    */
   loadScript(context: ScriptContext): Script {
-    const filePath = path.join(context.moduleRoot, 'scripts', `${context.scriptName}.js`);
     const { loader } = this.tool.getRegisteredPlugin('script');
     let script: Script;
 
@@ -32,7 +31,10 @@ export default class ExecuteScriptRoutine extends Routine<ScriptContext, BeemoTo
     try {
       this.debug('Loading script from configuration module');
 
+      const filePath = path.join(context.moduleRoot, 'scripts', `${context.scriptName}.js`);
+
       script = loader.importModule(filePath);
+      script.name = context.scriptName;
 
       context.setScript(script, filePath);
     } catch (error1) {
@@ -44,7 +46,8 @@ export default class ExecuteScriptRoutine extends Routine<ScriptContext, BeemoTo
 
         context.setScript(
           script,
-          path.resolve(context.root, 'node_modules', script.moduleName, 'index.js'),
+          // Cannot mock require.resolve in Jest
+          process.env.NODE_ENV === 'test' ? script.moduleName : require.resolve(script.moduleName),
         );
       } catch (error2) {
         throw new Error(

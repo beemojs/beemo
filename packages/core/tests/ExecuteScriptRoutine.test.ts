@@ -65,7 +65,7 @@ describe('ExecuteScriptRoutine', () => {
       expect(runSpy).toHaveBeenCalledWith(
         routine.context,
         expect.objectContaining({
-          name: 'foo-bar',
+          name: 'FooBar',
         }),
         expect.anything(),
       );
@@ -79,7 +79,7 @@ describe('ExecuteScriptRoutine', () => {
 
       expect(script).toEqual(
         expect.objectContaining({
-          name: 'foo-bar',
+          name: 'FooBar',
           moduleName: 'beemo-script-foo-bar',
         }),
       );
@@ -88,7 +88,7 @@ describe('ExecuteScriptRoutine', () => {
     it('sets file path to context', () => {
       const script = routine.loadScript(routine.context);
 
-      expect(script.name).toBe('foo-bar');
+      expect(script.name).toBe('FooBar');
       expect(routine.context).toEqual(
         expect.objectContaining({
           scriptName: 'FooBar',
@@ -121,7 +121,7 @@ describe('ExecuteScriptRoutine', () => {
       expect(routine.context).toEqual(
         expect.objectContaining({
           scriptName: 'LegitName',
-          path: prependRoot('node_modules/beemo-script-legit-name/index.js'),
+          path: 'beemo-script-legit-name',
         }),
       );
     });
