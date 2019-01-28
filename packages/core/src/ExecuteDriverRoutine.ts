@@ -6,42 +6,11 @@
 import { Routine, WorkspacePackageConfig } from '@boost/core';
 import DriverContext from './contexts/DriverContext';
 import RunCommandRoutine, { RunCommandOptions } from './execute/RunCommandRoutine';
-import isPatternMatch from './utils/isPatternMatch';
+import BaseExecuteRoutine, { CustomConfig } from './BaseExecuteRoutine';
 import { BeemoTool } from './types';
 
-export interface CustomConfig {
-  priority?: number;
-}
-
-export default class ExecuteDriverRoutine extends Routine<DriverContext, BeemoTool> {
-  workspacePackages: (WorkspacePackageConfig & CustomConfig)[] = [];
-
-  bootstrap() {
-    const { args, primaryDriver, workspaceRoot, workspaces } = this.context;
-
-    if (args.workspaces) {
-      if (!workspaces || workspaces.length === 0) {
-        throw new Error(
-          this.tool.msg('errors:driverWorkspacesNotEnabled', { arg: args.workspaces }),
-        );
-      }
-
-      this.workspacePackages = this.tool.getWorkspacePackages<CustomConfig>({
-        root: workspaceRoot,
-      });
-
-      this.getFilteredWorkspacePackages().forEach(pkg => {
-        this.pipeParallelBuilds(pkg.workspace.packageName, {
-          forceConfigOption: true,
-          packageRoot: pkg.workspace.packagePath,
-        });
-      });
-    } else {
-      this.pipeParallelBuilds(primaryDriver.name);
-    }
-  }
-
-  async execute(context: DriverContext): Promise<string[]> {
+export default class ExecuteDriverRoutine extends BaseExecuteRoutine<DriverContext> {
+  async execute(context: DriverContext): Promise<any[]> {
     const { other, priority } = this.orderByWorkspacePriorityGraph();
     const concurrency = context.args.concurrency || this.tool.config.execute.concurrency;
 
@@ -50,27 +19,10 @@ export default class ExecuteDriverRoutine extends Routine<DriverContext, BeemoTo
     const response = await this.poolRoutines(null, concurrency ? { concurrency } : {}, other);
 
     if (response.errors.length > 0) {
-      let message = this.tool.msg('errors:driverExecuteFailed');
-
-      response.errors.forEach(error => {
-        message += '\n\n';
-        message += error.message.split(/\s+at\s+/u)[0].trim();
-      });
-
-      throw new Error(message);
+      this.formatAndThrowErrors(response.errors);
     }
 
     return response.results;
-  }
-
-  /**
-   * Return a list of workspaces optionally filtered.
-   */
-  getFilteredWorkspacePackages(): (WorkspacePackageConfig & CustomConfig)[] {
-    return this.workspacePackages.filter(pkg =>
-      // @ts-ignore Contains not typed yet
-      isPatternMatch(pkg.name, this.context.args.workspaces, { contains: true }),
-    );
   }
 
   /**
@@ -158,6 +110,17 @@ export default class ExecuteDriverRoutine extends Routine<DriverContext, BeemoTo
       other,
       priority,
     };
+  }
+
+  pipeRoutine() {
+    this.pipeParallelBuilds(this.context.primaryDriver.name);
+  }
+
+  pipeWorkspaceRoutine(packageName: string, packageRoot: string) {
+    this.pipeParallelBuilds(packageName, {
+      forceConfigOption: true,
+      packageRoot,
+    });
   }
 
   /**

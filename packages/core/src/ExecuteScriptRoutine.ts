@@ -4,20 +4,20 @@
  */
 
 import path from 'path';
-import { Routine, Task } from '@boost/core';
-import parseArgs from 'yargs-parser';
 import Script from './Script';
 import ScriptContext from './contexts/ScriptContext';
-import { BeemoTool, ExecuteType } from './types';
+import RunScriptRoutine from './execute/RunScriptRoutine';
+import BaseExecuteRoutine from './BaseExecuteRoutine';
 
-export default class ExecuteScriptRoutine extends Routine<ScriptContext, BeemoTool> {
-  bootstrap() {
-    this.task(this.tool.msg('app:scriptLoad'), this.loadScript);
-    this.task(this.tool.msg('app:scriptRun'), this.runScript);
-  }
+export default class ExecuteScriptRoutine extends BaseExecuteRoutine<ScriptContext> {
+  async execute(context: ScriptContext): Promise<any[]> {
+    const response = await this.synchronizeRoutines(this.loadScript(context));
 
-  execute(): Promise<any> {
-    return this.serializeTasks();
+    if (response.errors.length > 0) {
+      this.formatAndThrowErrors(response.errors);
+    }
+
+    return response.results;
   }
 
   /**
@@ -67,54 +67,23 @@ export default class ExecuteScriptRoutine extends Routine<ScriptContext, BeemoTo
     return script;
   }
 
-  /**
-   * Run the script while also parsing arguments to use as options.
-   */
-  async runScript(context: ScriptContext, script: Script): Promise<any> {
-    const { argv } = this.context;
+  pipeRoutine() {
+    const { argv, binName, root, scriptName } = this.context;
 
-    this.debug('Executing script with args "%s"', argv.join(' '));
-
-    this.tool.emit(`${context.eventName}.before-execute`, [context, argv, script]);
-
-    const args = parseArgs(argv, script.args());
-    let result = null;
-
-    try {
-      result = await script.execute(context, args);
-
-      if (typeof result === 'object' && result && result.type && Array.isArray(result.tasks)) {
-        result = await this.runScriptTasks(args, result.type, result.tasks);
-      }
-
-      this.tool.emit(`${context.eventName}.after-execute`, [context, result, script]);
-    } catch (error) {
-      this.tool.emit(`${context.eventName}.failed-execute`, [context, error, script]);
-
-      throw error;
-    }
-
-    return result;
+    this.pipe(
+      new RunScriptRoutine(scriptName, `${binName} ${argv.join(' ')}`, {
+        packageRoot: root,
+      }),
+    );
   }
 
-  /**
-   * Run the tasks the script enqueued using the defined process.
-   */
-  async runScriptTasks(args: any, type: ExecuteType, tasks: Task<any>[]): Promise<any> {
-    // Add the tasks to the routine so they show in the console
-    this.tasks.push(...tasks);
+  pipeWorkspaceRoutine(packageName: string, packageRoot: string) {
+    const { argv, binName } = this.context;
 
-    switch (type) {
-      case 'parallel':
-        return this.parallelizeTasks(args, tasks);
-      case 'pool':
-        return this.poolTasks(args, {}, tasks);
-      case 'serial':
-        return this.serializeTasks(args, tasks);
-      case 'sync':
-        return this.synchronizeTasks(args, tasks);
-      default:
-        throw new Error(`Unknown execution type "${type}"`);
-    }
+    this.pipe(
+      new RunScriptRoutine(packageName, `${binName} ${argv.join(' ')}`, {
+        packageRoot,
+      }),
+    );
   }
 }

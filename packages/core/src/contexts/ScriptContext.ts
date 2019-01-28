@@ -17,6 +17,8 @@ export interface ScriptArgs {
 }
 
 export default class ScriptContext<T = ScriptArgs> extends Context<T> {
+  binName: string;
+
   eventName: string;
 
   path: string = '';
@@ -28,6 +30,7 @@ export default class ScriptContext<T = ScriptArgs> extends Context<T> {
   constructor(args: Arguments<T>, name: string) {
     super(args);
 
+    this.binName = kebabCase(name);
     this.eventName = kebabCase(name);
     this.scriptName = upperFirst(camelCase(name));
   }

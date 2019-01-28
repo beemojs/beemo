@@ -2,11 +2,11 @@
   "cliNoCommand": "Please select a command!",
   "configCopySourceMissing": "Cannot copy configuration file. Source file does not exist in configuration module.",
   "configReferenceSourceMissing": "Cannot reference configuration file. Source file does not exist in configuration module.",
-  "driverExecuteFailed": "Failed to execute driver pipeline. The following errors have occurred:",
-  "driverWorkspacesNotEnabled": "Option --workspaces={{arg}} provided but project is not workspaces enabled.",
+  "executeFailed": "Failed to execute pipeline. The following errors have occurred:",
   "eslintIgnoreInvalid": "Ignore configuration must be an array of strings.",
   "moduleConfigMissing": "Beemo requires a \"{{configName}}.module\" property within your package.json. This property is the name of a module that houses your configuration files.",
   "moduleMissing": "Module {{module}} defined in \"{{configName}}.module\" could not be found.",
   "prettierIgnoreInvalid": "Ignore configuration must be an array of strings.",
-  "scaffoldNoTemplates": "Failed to find scaffolding templates \"{{path}}/*.ejs\" in configuration module."
+  "scaffoldNoTemplates": "Failed to find scaffolding templates \"{{path}}/*.ejs\" in configuration module.",
+  "workspacesNotEnabled": "Option --workspaces={{arg}} provided but project is not workspaces enabled."
 }

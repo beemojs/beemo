@@ -14,9 +14,9 @@ import execa from 'execa';
 import { array, bool, string } from 'optimal';
 import parseArgs from 'yargs-parser';
 import DriverContext from '../contexts/DriverContext';
+import BatchStream from '../streams/BatchStream';
 import { STRATEGY_COPY } from '../constants';
 import { Argv, Execution, BeemoTool } from '../types';
-import BatchStream from '../streams/BatchStream';
 
 const OPTION_PATTERN: RegExp = /-?-[a-z0-9-]+(,|\s)/giu;
 
