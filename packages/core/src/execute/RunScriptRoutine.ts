@@ -52,21 +52,23 @@ export default class RunScriptRoutine extends Routine<ScriptContext, BeemoTool, 
   }
 
   /**
-   * Run the tasks the script enqueued using the defined process.
+   * Add the enqueued tasks to the routine so they show in the console,
+   * and then run using the defined process.
    */
   async runScriptTasks(args: any, type: ExecuteType, tasks: Task<any>[]): Promise<any> {
-    // Add the tasks to the routine so they show in the console
-    this.tasks.push(...tasks);
+    tasks.forEach(task => {
+      this.task(task.title, task.action);
+    });
 
     switch (type) {
       case 'parallel':
-        return this.parallelizeTasks(args, tasks);
+        return this.parallelizeTasks(args);
       case 'pool':
-        return this.poolTasks(args, {}, tasks);
+        return this.poolTasks(args);
       case 'serial':
-        return this.serializeTasks(args, tasks);
+        return this.serializeTasks(args);
       case 'sync':
-        return this.synchronizeTasks(args, tasks);
+        return this.synchronizeTasks(args);
       default:
         throw new Error(`Unknown execution type "${type}"`);
     }

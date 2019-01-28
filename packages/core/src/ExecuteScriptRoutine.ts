@@ -10,14 +10,30 @@ import RunScriptRoutine from './execute/RunScriptRoutine';
 import BaseExecuteRoutine from './BaseExecuteRoutine';
 
 export default class ExecuteScriptRoutine extends BaseExecuteRoutine<ScriptContext> {
-  async execute(context: ScriptContext): Promise<any[]> {
-    const response = await this.synchronizeRoutines(this.loadScript(context));
+  bootstrap() {
+    super.bootstrap();
 
-    if (response.errors.length > 0) {
-      this.formatAndThrowErrors(response.errors);
+    // TODO check if plugin is already loaded in tool
+    this.task(this.tool.msg('app:scriptLoad'), this.loadScript);
+  }
+
+  pipeRoutine(packageName: string, packageRoot: string) {
+    const { argv, binName, root, scriptName } = this.context;
+    const command = `${binName} ${argv.join(' ')}`;
+
+    if (packageName) {
+      this.pipe(
+        new RunScriptRoutine(packageName, command, {
+          packageRoot,
+        }),
+      );
+    } else {
+      this.pipe(
+        new RunScriptRoutine(scriptName, command, {
+          packageRoot: root,
+        }),
+      );
     }
-
-    return response.results;
   }
 
   /**
@@ -65,25 +81,5 @@ export default class ExecuteScriptRoutine extends BaseExecuteRoutine<ScriptConte
     this.tool.emit(`${context.eventName}.load-script`, [context, script]);
 
     return script;
-  }
-
-  pipeRoutine() {
-    const { argv, binName, root, scriptName } = this.context;
-
-    this.pipe(
-      new RunScriptRoutine(scriptName, `${binName} ${argv.join(' ')}`, {
-        packageRoot: root,
-      }),
-    );
-  }
-
-  pipeWorkspaceRoutine(packageName: string, packageRoot: string) {
-    const { argv, binName } = this.context;
-
-    this.pipe(
-      new RunScriptRoutine(packageName, `${binName} ${argv.join(' ')}`, {
-        packageRoot,
-      }),
-    );
   }
 }
