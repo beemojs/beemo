@@ -13,6 +13,7 @@ import { Arguments } from '../types';
 export interface ScriptArgs {
   concurrency: number;
   name: string;
+  priority: boolean;
   workspaces: string;
 }
 

@@ -75,6 +75,10 @@ app.command(
       description: tool.msg('app:cliOptionConcurrency'),
       number: true,
     },
+    priority: {
+      boolean: false,
+      description: tool.msg('app:cliOptionPriority'),
+    },
     workspaces: {
       description: tool.msg('app:cliOptionWorkspaces'),
       string: true,

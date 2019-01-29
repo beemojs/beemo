@@ -5,6 +5,7 @@
 
 import { Routine, WorkspacePackageConfig } from '@boost/core';
 import Context from './contexts/Context';
+import isPatternMatch from './utils/isPatternMatch';
 import { BeemoTool } from './types';
 
 export interface CustomConfig {

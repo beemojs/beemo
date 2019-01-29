@@ -10,11 +10,15 @@ import RunScriptRoutine from './execute/RunScriptRoutine';
 import BaseExecuteRoutine from './BaseExecuteRoutine';
 
 export default class ExecuteScriptRoutine extends BaseExecuteRoutine<ScriptContext> {
+  errors: Error[] = [];
+
   bootstrap() {
     super.bootstrap();
 
-    // TODO check if plugin is already loaded in tool
-    this.task(this.tool.msg('app:scriptLoad'), this.loadScript);
+    this.task(this.tool.msg('app:scriptLoad'), this.loadScriptFromTool);
+    this.task(this.tool.msg('app:scriptLoadConfigModule'), this.loadScriptFromConfigModule);
+    this.task(this.tool.msg('app:scriptLoadNodeModules'), this.loadScriptFromNodeModules);
+    this.task(this.tool.msg('app:scriptLoadPost'), this.handlePostLoad);
   }
 
   pipeRoutine(packageName: string, packageRoot: string) {
@@ -37,43 +41,93 @@ export default class ExecuteScriptRoutine extends BaseExecuteRoutine<ScriptConte
   }
 
   /**
-   * Attempt to load a script from the configuration module.
+   * Return node module file path for the passed script.
    */
-  loadScript(context: ScriptContext): Script {
-    const { loader } = this.tool.getRegisteredPlugin('script');
-    let script: Script;
+  getModulePath(script: Script): string {
+    // Cannot mock require.resolve in Jest
+    return process.env.NODE_ENV === 'test' ? script.moduleName : require.resolve(script.moduleName);
+  }
 
-    // Try file path in configuration module
+  /**
+   * If the script has been loaded into the tool, return that directly.
+   * Scripts can be preloaded from a configuration file or the command line.
+   */
+  loadScriptFromTool(context: ScriptContext): Script | null {
+    this.debug('Attempting to load script from tool');
+
     try {
-      this.debug('Loading script from configuration module');
+      const script = this.tool.getPlugin('script', context.binName);
 
-      const filePath = path.join(context.moduleRoot, 'scripts', `${context.scriptName}.js`);
+      context.setScript(script, this.getModulePath(script));
 
-      script = loader.importModule(filePath);
+      return script;
+    } catch (error) {
+      error.message = this.tool.msg('app:fromTool', { message: error.message });
+
+      this.errors.push(error);
+
+      return null;
+    }
+  }
+
+  /**
+   * Attempt to load a script from the configuration module's `scripts/` folder.
+   */
+  loadScriptFromConfigModule(context: ScriptContext, script: Script | null): Script | null {
+    if (script) {
+      return script;
+    }
+
+    this.debug('Attempting to load script from configuration module');
+
+    const filePath = path.join(context.moduleRoot, 'scripts', `${context.scriptName}.js`);
+
+    try {
+      script = this.tool.getRegisteredPlugin('script').loader.importModule(filePath);
       script.name = context.scriptName;
 
       context.setScript(script, filePath);
-    } catch (error1) {
-      // Try an NPM module
-      try {
-        this.debug('Loading script from NPM module');
 
-        script = loader.importModule(context.eventName); // Module names are kebab case
+      return script;
+    } catch (error) {
+      error.message = this.tool.msg('app:fromConfigModule', { message: error.message });
 
-        context.setScript(
-          script,
-          // Cannot mock require.resolve in Jest
-          process.env.NODE_ENV === 'test' ? script.moduleName : require.resolve(script.moduleName),
-        );
-      } catch (error2) {
-        throw new Error(
-          [
-            'Failed to load script, the following errors occurred:',
-            error1.message,
-            error2.message,
-          ].join('\n'),
-        );
-      }
+      this.errors.push(error);
+
+      return null;
+    }
+  }
+
+  /**
+   * Attempt to load a script from the local `node_modules/` folder.
+   */
+  loadScriptFromNodeModules(context: ScriptContext, script: Script | null): Script | null {
+    if (script) {
+      return script;
+    }
+
+    this.debug('Attempting to load script from local node modules');
+
+    try {
+      script = this.tool.getRegisteredPlugin('script').loader.importModule(context.binName);
+
+      context.setScript(script, this.getModulePath(script));
+
+      return script;
+    } catch (error) {
+      error.message = this.tool.msg('app:fromNodeModules', { message: error.message });
+
+      this.errors.push(error);
+
+      return null;
+    }
+  }
+
+  handlePostLoad(context: ScriptContext, script: Script | null): Script | null {
+    if (!script) {
+      const messages = this.errors.map(error => `  - ${error.message}`);
+
+      throw new Error(`Failed to load script from multiple sources:\n${messages.join('\n')}`);
     }
 
     this.tool.addPlugin('script', script);

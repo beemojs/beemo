@@ -5,7 +5,7 @@
 
 import { Routine, Task } from '@boost/core';
 import { string } from 'optimal';
-import parseArgs from 'yargs-parser';
+import parseArgs, { Arguments } from 'yargs-parser';
 import Script from '../Script';
 import ScriptContext from '../contexts/ScriptContext';
 import { BeemoTool, ExecuteType } from '../types';
@@ -55,7 +55,7 @@ export default class RunScriptRoutine extends Routine<ScriptContext, BeemoTool, 
    * Add the enqueued tasks to the routine so they show in the console,
    * and then run using the defined process.
    */
-  async runScriptTasks(args: any, type: ExecuteType, tasks: Task<any>[]): Promise<any> {
+  async runScriptTasks(args: Arguments, type: ExecuteType, tasks: Task<any>[]): Promise<any> {
     tasks.forEach(task => {
       this.task(task.title, task.action);
     });
