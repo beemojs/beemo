@@ -22,9 +22,36 @@ export default class RunScriptRoutine extends Routine<ScriptContext, BeemoTool, 
   }
 
   /**
+   * When a script is ran in multiple workspace packages, each context should have a different root,
+   * but we can't modify the context without changing the reference across all packages.
+   * So create a new context, copy over the old properties, and set the new root.
+   */
+  cloneContext(oldContext: ScriptContext): ScriptContext {
+    const context = new ScriptContext(oldContext.args, oldContext.scriptName);
+
+    // Copy properties and not methods
+    Object.keys(oldContext).forEach(key => {
+      const prop = key as keyof ScriptContext;
+      const value = oldContext[prop];
+
+      if (typeof value !== 'function') {
+        context[prop] = value;
+      }
+    });
+
+    // Update the root to point to the package root
+    if (this.options.packageRoot) {
+      context.root = this.options.packageRoot;
+    }
+
+    return context;
+  }
+
+  /**
    * Run the script while also parsing arguments to use as options.
    */
-  async execute(context: ScriptContext, script: Script): Promise<any> {
+  async execute(oldContext: ScriptContext, script: Script): Promise<any> {
+    const context = this.cloneContext(oldContext);
     const { argv } = context;
 
     this.debug('Executing script with args "%s"', argv.join(' '));
