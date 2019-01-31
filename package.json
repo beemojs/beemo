@@ -19,7 +19,7 @@
     "type": "beemo typescript --workspaces=* --noEmit"
   },
   "devDependencies": {
-    "@milesj/build-tool-config": "0.143.2",
+    "@milesj/build-tool-config": "0.143.3",
     "chalk": "^2.4.2",
     "fast-glob": "^2.2.6",
     "fs-extra": "^7.0.1",

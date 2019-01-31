@@ -26,13 +26,13 @@
     "access": "public"
   },
   "dependencies": {
-    "@boost/core": "^1.7.1",
+    "@boost/core": "^1.7.2",
     "@types/execa": "^0.9.0",
     "@types/fs-extra": "^5.0.4",
     "@types/is-glob": "^4.0.0",
     "@types/lodash": "^4.14.120",
     "@types/micromatch": "^3.1.0",
-    "@types/node": "^10.12.18",
+    "@types/node": "^10.12.20",
     "@types/yargs": "^12.0.8",
     "@types/yargs-parser": "^11.0.2",
     "chalk": "^2.4.2",
@@ -48,6 +48,6 @@
     "yargs-parser": "^11.1.1"
   },
   "devDependencies": {
-    "@boost/test-utils": "^1.0.2"
+    "@boost/test-utils": "^1.0.3"
   }
 }
