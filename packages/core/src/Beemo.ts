@@ -8,7 +8,7 @@ import fs from 'fs-extra';
 import path from 'path';
 import { Argv as Yargv } from 'yargs';
 import { CLI, Pipeline, Tool } from '@boost/core';
-import { bool, number, string, Blueprint } from 'optimal';
+import { bool, number, string, shape, Blueprint } from 'optimal';
 import CleanupRoutine from './CleanupRoutine';
 import ConfigureRoutine from './ConfigureRoutine';
 import ExecuteDriverRoutine from './ExecuteDriverRoutine';
@@ -138,14 +138,14 @@ export default class Beemo {
    */
   getConfigBlueprint(): Blueprint {
     return {
-      configure: {
+      configure: shape({
         cleanup: bool(false),
         parallel: bool(true),
-      },
-      execute: {
+      }),
+      execute: shape({
         concurrency: number(),
         priority: bool(true),
-      },
+      }),
       module: process.env.BEEMO_CONFIG_MODULE
         ? string(process.env.BEEMO_CONFIG_MODULE)
         : string().required(),
