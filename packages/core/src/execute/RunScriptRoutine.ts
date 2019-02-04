@@ -34,9 +34,7 @@ export default class RunScriptRoutine extends Routine<ScriptContext, BeemoTool, 
       const prop = key as keyof ScriptContext;
       const value = oldContext[prop];
 
-      if (typeof value !== 'function') {
-        context[prop] = value;
-      }
+      context[prop] = value;
     });
 
     // Update the root to point to the package root
@@ -97,7 +95,7 @@ export default class RunScriptRoutine extends Routine<ScriptContext, BeemoTool, 
       case 'sync':
         return this.synchronizeTasks(args);
       default:
-        throw new Error(`Unknown execution type "${type}"`);
+        throw new Error(this.tool.msg('errors:executeTypeUnknown', { type }));
     }
   }
 }

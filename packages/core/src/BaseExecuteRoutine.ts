@@ -52,7 +52,8 @@ export default abstract class BaseExecuteRoutine<Ctx extends Context> extends Ro
       this.formatAndThrowErrors(response.errors);
     }
 
-    return response.results;
+    // Not running in workspaces, so return value directly
+    return context.args.workspaces ? response.results : response.results[0];
   }
 
   /**

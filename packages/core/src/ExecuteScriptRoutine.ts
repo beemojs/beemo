@@ -127,7 +127,7 @@ export default class ExecuteScriptRoutine extends BaseExecuteRoutine<ScriptConte
    * If all of the loading patterns have failed, thrown an error,
    * otherwise add the script and continue.
    */
-  handlePostLoad(context: ScriptContext, script: Script | null): Script | null {
+  handlePostLoad(context: ScriptContext, script: Script | null): Script {
     if (!script) {
       const messages = this.errors.map(error => `  - ${error.message}`).join('\n');
 
