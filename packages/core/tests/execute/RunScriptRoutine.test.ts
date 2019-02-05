@@ -1,11 +1,6 @@
-import fs from 'fs-extra';
-import chalk from 'chalk';
-import { Task } from '@boost/core';
 import Script from '../../src/Script';
 import RunScriptRoutine from '../../src/execute/RunScriptRoutine';
 import { createTestDebugger, createTestTool, createScriptContext } from '../../../../tests/helpers';
-
-jest.mock('fs-extra');
 
 describe('RunScriptRoutine', () => {
   let routine: RunScriptRoutine;

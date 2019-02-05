@@ -12,6 +12,7 @@ describe('CleanupRoutine', () => {
     routine.context = createDriverContext();
     routine.tool = createTestTool();
     routine.debug = createTestDebugger();
+    routine.bootstrap();
   });
 
   describe('execute()', () => {

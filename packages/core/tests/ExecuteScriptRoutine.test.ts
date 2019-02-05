@@ -1,14 +1,22 @@
+import path from 'path';
 import ModuleLoader from '@boost/core/lib/ModuleLoader';
 import ExecuteScriptRoutine from '../src/ExecuteScriptRoutine';
+import RunScriptRoutine from '../src/execute/RunScriptRoutine';
 import Script from '../src/Script';
-import { createScriptContext, createTestDebugger, createTestTool } from '../../../tests/helpers';
+import {
+  createScriptContext,
+  createTestDebugger,
+  createTestTool,
+  getRoot,
+  getFixturePath,
+} from '../../../tests/helpers';
 
 jest.mock('@boost/core/lib/ModuleLoader', () =>
   jest.fn(() => ({
     importModule: jest.fn(tempName => {
-      const path = require.requireActual('path');
+      const { basename } = require.requireActual('path');
       const kebabCase = require.requireActual('lodash/kebabCase');
-      let name = tempName.includes('/') ? path.basename(tempName) : tempName;
+      let name = tempName.includes('/') ? basename(tempName) : tempName;
 
       if (tempName.endsWith('Missing.js') || tempName === 'missing') {
         throw new Error(`Script "${name}" missing!`);
@@ -37,6 +45,17 @@ describe('ExecuteScriptRoutine', () => {
     }
   }
 
+  function createTestRunScript(title: string, options: any = {}) {
+    const run = new RunScriptRoutine(title, 'foo-bar -a --foo bar baz', {
+      packageRoot: getRoot(),
+      ...options,
+    });
+
+    run.action = expect.anything();
+
+    return run;
+  }
+
   beforeEach(() => {
     script = new TestScript();
     script.name = 'foo-bar';
@@ -55,6 +74,48 @@ describe('ExecuteScriptRoutine', () => {
 
     // @ts-ignore
     ModuleLoader.mockClear();
+  });
+
+  describe('bootstrap()', () => {
+    it('adds a routine for the script', () => {
+      routine.pipe = jest.fn();
+      routine.bootstrap();
+
+      expect(routine.pipe).toHaveBeenCalledWith(createTestRunScript('FooBar'));
+    });
+
+    describe('workspaces', () => {
+      const fixturePath = getFixturePath('workspaces-driver');
+
+      beforeEach(() => {
+        routine.context.args.workspaces = '*';
+        routine.context.workspaces = ['packages/*'];
+        routine.context.workspaceRoot = fixturePath;
+        routine.context.root = fixturePath;
+      });
+
+      it('adds a routine for each workspace', () => {
+        routine.pipe = jest.fn();
+        routine.bootstrap();
+
+        expect(routine.pipe).toHaveBeenCalledTimes(3);
+        expect(routine.pipe).toHaveBeenCalledWith(
+          createTestRunScript('foo', {
+            packageRoot: path.join(fixturePath, './packages/foo'),
+          }),
+        );
+        expect(routine.pipe).toHaveBeenCalledWith(
+          createTestRunScript('bar', {
+            packageRoot: path.join(fixturePath, './packages/bar'),
+          }),
+        );
+        expect(routine.pipe).toHaveBeenCalledWith(
+          createTestRunScript('baz', {
+            packageRoot: path.join(fixturePath, './packages/baz'),
+          }),
+        );
+      });
+    });
   });
 
   describe('execute()', () => {
