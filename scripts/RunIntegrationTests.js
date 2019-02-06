@@ -1,7 +1,6 @@
 const { Script } = require('@beemo/core');
 const chalk = require('chalk');
 const fs = require('fs-extra');
-const glob = require('fast-glob');
 const execa = require('execa');
 const path = require('path');
 
@@ -24,39 +23,27 @@ module.exports = class RunIntegrationTestsScript extends Script {
       throw new Error('Please pass one of --fail or --pass.');
     }
 
-    this.tool.log('Loading packages');
+    const pkg = fs.readJsonSync(path.join(context.root, 'package.json'));
+    const name = pkg.name.split('/')[1];
+    const script = pkg.scripts && pkg.scripts[`integration:${key}`];
 
-    const packages = glob
-      .sync('./packages/*/package.json', { cwd: this.tool.options.root })
-      .filter(pkgPath => String(pkgPath).includes('driver'))
-      .map(pkgPath => fs.readJsonSync(String(pkgPath)));
+    if (!script) {
+      return Promise.reject(
+        new Error(`Script "integration:${key}" has not been defined for ${name}.`),
+      );
+    }
+
+    this.tool.log('Testing %s', chalk.yellow(pkg.name));
 
     return Promise.all(
-      packages.map(pkg => {
-        const name = pkg.name.split('/')[1];
-        const script = pkg.scripts && pkg.scripts[`integration:${key}`];
-
-        if (!script) {
-          return Promise.reject(
-            new Error(`Script "integration:${key}" has not been defined for ${name}.`),
-          );
-        }
-
-        this.tool.log('Testing %s', chalk.yellow(pkg.name));
-
-        return Promise.all(
-          script.split('&&').map(command =>
-            execa
-              .shell(command.trim(), {
-                cwd: path.join(process.cwd(), './packages/', name),
-              })
-              // Handles everything else
-              .then(response => this.handleResult(name, options, response))
-              // Handles syntax errors
-              .catch(error => this.handleResult(name, options, error)),
-          ),
-        );
-      }),
+      script.split('&&').map(command =>
+        execa
+          .shell(command.trim(), { cwd: context.root })
+          // Handles everything else
+          .then(response => this.handleResult(name, options, response))
+          // Handles syntax errors
+          .catch(error => this.handleResult(name, options, error)),
+      ),
     );
   }
 

@@ -4,60 +4,134 @@
  */
 
 import path from 'path';
-import { Routine, Task } from '@boost/core';
-import parseArgs from 'yargs-parser';
 import Script from './Script';
 import ScriptContext from './contexts/ScriptContext';
-import { BeemoTool, ExecuteType } from './types';
+import RunScriptRoutine from './execute/RunScriptRoutine';
+import BaseExecuteRoutine from './execute/BaseRoutine';
 
-export default class ExecuteScriptRoutine extends Routine<ScriptContext, BeemoTool> {
+export default class ExecuteScriptRoutine extends BaseExecuteRoutine<ScriptContext> {
+  errors: Error[] = [];
+
   bootstrap() {
-    this.task(this.tool.msg('app:scriptLoad'), this.loadScript);
-    this.task(this.tool.msg('app:scriptRun'), this.runScript);
+    super.bootstrap();
+
+    this.task(this.tool.msg('app:scriptLoad'), this.loadScriptFromTool);
+    this.task(this.tool.msg('app:scriptLoadConfigModule'), this.loadScriptFromConfigModule);
+    this.task(this.tool.msg('app:scriptLoadNodeModules'), this.loadScriptFromNodeModules);
+    this.task(this.tool.msg('app:scriptLoadPost'), this.handlePostLoad);
   }
 
-  execute(): Promise<any> {
-    return this.serializeTasks();
+  pipeRoutine(packageName: string, packageRoot: string) {
+    const { argv, binName, root, scriptName } = this.context;
+    const command = argv.filter(arg => arg !== binName).join(' ');
+
+    if (packageName) {
+      this.pipe(
+        new RunScriptRoutine(packageName, command, {
+          packageRoot,
+        }),
+      );
+    } else {
+      this.pipe(
+        new RunScriptRoutine(scriptName, command, {
+          packageRoot: root,
+        }),
+      );
+    }
   }
 
   /**
-   * Attempt to load a script from the configuration module.
+   * Return node module file path for the passed script.
    */
-  loadScript(context: ScriptContext): Script {
-    const { loader } = this.tool.getRegisteredPlugin('script');
-    let script: Script;
+  getModulePath(script: Script): string {
+    // Cannot mock require.resolve in Jest
+    return process.env.NODE_ENV === 'test' ? script.moduleName : require.resolve(script.moduleName);
+  }
 
-    // Try file path in configuration module
+  /**
+   * If the script has been loaded into the tool, return that directly.
+   * Scripts can be preloaded from a configuration file or the command line.
+   */
+  loadScriptFromTool(context: ScriptContext): Script | null {
+    this.debug('Attempting to load script from tool');
+
     try {
-      this.debug('Loading script from configuration module');
+      const script = this.tool.getPlugin('script', context.binName);
 
-      const filePath = path.join(context.moduleRoot, 'scripts', `${context.scriptName}.js`);
+      context.setScript(script, this.getModulePath(script));
 
-      script = loader.importModule(filePath);
+      return script;
+    } catch (error) {
+      error.message = this.tool.msg('app:fromTool', { message: error.message });
+
+      this.errors.push(error);
+
+      return null;
+    }
+  }
+
+  /**
+   * Attempt to load a script from the configuration module's `scripts/` folder.
+   */
+  loadScriptFromConfigModule(context: ScriptContext, script: Script | null): Script | null {
+    if (script) {
+      return script;
+    }
+
+    this.debug('Attempting to load script from configuration module');
+
+    const filePath = path.join(context.moduleRoot, 'scripts', `${context.scriptName}.js`);
+
+    try {
+      script = this.tool.getRegisteredPlugin('script').loader.importModule(filePath);
       script.name = context.scriptName;
 
       context.setScript(script, filePath);
-    } catch (error1) {
-      // Try an NPM module
-      try {
-        this.debug('Loading script from NPM module');
 
-        script = loader.importModule(context.eventName); // Module names are kebab case
+      return script;
+    } catch (error) {
+      error.message = this.tool.msg('app:fromConfigModule', { message: error.message });
 
-        context.setScript(
-          script,
-          // Cannot mock require.resolve in Jest
-          process.env.NODE_ENV === 'test' ? script.moduleName : require.resolve(script.moduleName),
-        );
-      } catch (error2) {
-        throw new Error(
-          [
-            'Failed to load script, the following errors occurred:',
-            error1.message,
-            error2.message,
-          ].join('\n'),
-        );
-      }
+      this.errors.push(error);
+
+      return null;
+    }
+  }
+
+  /**
+   * Attempt to load a script from the local `node_modules/` folder.
+   */
+  loadScriptFromNodeModules(context: ScriptContext, script: Script | null): Script | null {
+    if (script) {
+      return script;
+    }
+
+    this.debug('Attempting to load script from local node modules');
+
+    try {
+      script = this.tool.getRegisteredPlugin('script').loader.importModule(context.binName);
+
+      context.setScript(script, this.getModulePath(script));
+
+      return script;
+    } catch (error) {
+      error.message = this.tool.msg('app:fromNodeModules', { message: error.message });
+
+      this.errors.push(error);
+
+      return null;
+    }
+  }
+
+  /**
+   * If all of the loading patterns have failed, thrown an error,
+   * otherwise add the script and continue.
+   */
+  handlePostLoad(context: ScriptContext, script: Script | null): Script {
+    if (!script) {
+      const messages = this.errors.map(error => `  - ${error.message}`).join('\n');
+
+      throw new Error(`Failed to load script from multiple sources:\n${messages}`);
     }
 
     this.tool.addPlugin('script', script);
@@ -65,56 +139,5 @@ export default class ExecuteScriptRoutine extends Routine<ScriptContext, BeemoTo
     this.tool.emit(`${context.eventName}.load-script`, [context, script]);
 
     return script;
-  }
-
-  /**
-   * Run the script while also parsing arguments to use as options.
-   */
-  async runScript(context: ScriptContext, script: Script): Promise<any> {
-    const { argv } = this.context;
-
-    this.debug('Executing script with args "%s"', argv.join(' '));
-
-    this.tool.emit(`${context.eventName}.before-execute`, [context, argv, script]);
-
-    const args = parseArgs(argv, script.args());
-    let result = null;
-
-    try {
-      result = await script.execute(context, args);
-
-      if (typeof result === 'object' && result && result.type && Array.isArray(result.tasks)) {
-        result = await this.runScriptTasks(args, result.type, result.tasks);
-      }
-
-      this.tool.emit(`${context.eventName}.after-execute`, [context, result, script]);
-    } catch (error) {
-      this.tool.emit(`${context.eventName}.failed-execute`, [context, error, script]);
-
-      throw error;
-    }
-
-    return result;
-  }
-
-  /**
-   * Run the tasks the script enqueued using the defined process.
-   */
-  async runScriptTasks(args: any, type: ExecuteType, tasks: Task<any>[]): Promise<any> {
-    // Add the tasks to the routine so they show in the console
-    this.tasks.push(...tasks);
-
-    switch (type) {
-      case 'parallel':
-        return this.parallelizeTasks(args, tasks);
-      case 'pool':
-        return this.poolTasks(args, {}, tasks);
-      case 'serial':
-        return this.serializeTasks(args, tasks);
-      case 'sync':
-        return this.synchronizeTasks(args, tasks);
-      default:
-        throw new Error(`Unknown execution type "${type}"`);
-    }
   }
 }

@@ -20,11 +20,12 @@ describe('ScriptContext', () => {
       expect(context.scriptName).toBe('Foo');
     });
 
-    it('converts name to pascal case', () => {
+    it('converts name to correct case', () => {
       context = new ScriptContext({ ...MOCK_SCRIPT_ARGS, foo: true }, 'foo-bar');
 
       expect(context.scriptName).toBe('FooBar');
       expect(context.eventName).toBe('foo-bar');
+      expect(context.binName).toBe('foo-bar');
     });
   });
 

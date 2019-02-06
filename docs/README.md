@@ -5,6 +5,8 @@ Beemo aims to solve the multi-project maintenance fatigue by removing the follow
 all projects: config and dotfile management, multiple config patterns, up-to-date development
 dependencies, continuous copy and paste, and more.
 
+### Features
+
 - Manage dev tools and configurations in a single repository.
 - Configure supported dev tools using `.js` files.
 - Customize and alter config at runtime with CLI options.

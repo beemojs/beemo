@@ -50,6 +50,7 @@ export const MOCK_SCRIPT_ARGS = {
   ...MOCK_ARGS,
   concurrency: 1,
   name: 'foo',
+  priority: false,
   workspaces: '',
 };
 
