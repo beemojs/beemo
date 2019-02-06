@@ -1,8 +1,3 @@
-/**
- * @copyright   2017-2019, Miles Johnson
- * @license     https://opensource.org/licenses/MIT
- */
-
 import { Routine, WorkspacePackageConfig } from '@boost/core';
 import Context from '../contexts/Context';
 import isPatternMatch from '../utils/isPatternMatch';

@@ -1,8 +1,3 @@
-/**
- * @copyright   2017-2019, Miles Johnson
- * @license     https://opensource.org/licenses/MIT
- */
-
 import typescript from 'typescript';
 
 export type TargetSetting = 'ES5' | 'ES2015' | 'ES2016' | 'ES2017' | 'ES2018' | 'ESNEXT';

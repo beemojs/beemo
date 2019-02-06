@@ -1,8 +1,3 @@
-/**
- * @copyright   2017-2019, Miles Johnson
- * @license     https://opensource.org/licenses/MIT
- */
-
 import webpack from 'webpack';
 
 // eslint-disable-next-line @typescript-eslint/no-empty-interface

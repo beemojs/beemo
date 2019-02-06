@@ -1,8 +1,3 @@
-/**
- * @copyright   2017-2019, Miles Johnson
- * @license     https://opensource.org/licenses/MIT
- */
-
 import { Plugin, EventListener } from '@boost/core';
 import mergeWith from 'lodash/mergeWith';
 import optimal, { array, bool, number, object, string, union, Blueprint } from 'optimal';

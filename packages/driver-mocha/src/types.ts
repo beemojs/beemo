@@ -1,8 +1,3 @@
-/**
- * @copyright   2017-2019, Miles Johnson
- * @license     https://opensource.org/licenses/MIT
- */
-
 export type UISetting = 'bdd' | 'tdd' | 'qunit' | 'exports';
 
 export interface ReporterOptions {

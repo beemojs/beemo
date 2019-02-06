@@ -1,8 +1,3 @@
-/**
- * @copyright   2017-2019, Miles Johnson
- * @license     https://opensource.org/licenses/MIT
- */
-
 import { Context as BaseContext } from '@boost/core';
 import camelCase from 'lodash/camelCase';
 import trim from 'lodash/trim';

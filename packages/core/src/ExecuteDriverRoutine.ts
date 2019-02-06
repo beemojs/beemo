@@ -1,8 +1,3 @@
-/**
- * @copyright   2017-2019, Miles Johnson
- * @license     https://opensource.org/licenses/MIT
- */
-
 import DriverContext from './contexts/DriverContext';
 import RunCommandRoutine, { RunCommandOptions } from './execute/RunCommandRoutine';
 import BaseExecuteRoutine from './execute/BaseRoutine';

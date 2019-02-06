@@ -1,8 +1,3 @@
-/**
- * @copyright   2017-2019, Miles Johnson
- * @license     https://opensource.org/licenses/MIT
- */
-
 import camelCase from 'lodash/camelCase';
 import kebabCase from 'lodash/kebabCase';
 import upperFirst from 'lodash/upperFirst';

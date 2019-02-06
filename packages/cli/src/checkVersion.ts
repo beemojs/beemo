@@ -1,8 +1,3 @@
-/**
- * @copyright   2017-2019, Miles Johnson
- * @license     https://opensource.org/licenses/MIT
- */
-
 /* eslint-disable no-console, unicorn/no-process-exit */
 
 import chalk from 'chalk';

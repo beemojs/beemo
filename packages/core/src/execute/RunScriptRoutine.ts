@@ -1,8 +1,3 @@
-/**
- * @copyright   2017-2019, Miles Johnson
- * @license     https://opensource.org/licenses/MIT
- */
-
 import { Routine, Task } from '@boost/core';
 import { string } from 'optimal';
 import parseArgs, { Arguments } from 'yargs-parser';

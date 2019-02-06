@@ -1,8 +1,3 @@
-/**
- * @copyright   2017-2019, Miles Johnson
- * @license     https://opensource.org/licenses/MIT
- */
-
 import { Tool, ToolConfig, ToolPluginRegistry, PluginSetting } from '@boost/core';
 import { ExecaReturns } from 'execa';
 import { Arguments, Options } from 'yargs';

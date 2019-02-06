@@ -1,8 +1,3 @@
-/**
- * @copyright   2017-2019, Miles Johnson
- * @license     https://opensource.org/licenses/MIT
- */
-
 import path from 'path';
 import rimraf from 'rimraf';
 import { Driver, DriverArgs, DriverContext } from '@beemo/core';

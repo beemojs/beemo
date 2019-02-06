@@ -1,8 +1,3 @@
-/**
- * @copyright   2017-2019, Miles Johnson
- * @license     https://opensource.org/licenses/MIT
- */
-
 export type LintSetting = 0 | 1 | 2 | 'off' | 'warn' | 'error';
 
 export interface LintsConfig {
