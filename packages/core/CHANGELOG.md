@@ -10,6 +10,9 @@
 
 - Scripts can additionally be loaded from NPM modules that match the format of
   `beemo-script-<name>`.
+- Scripts now support workspaces via the `--workspaces`, `--concurrency`, and `--priority` options
+  (similar to drivers).
+  - `context.root` will be set to the workspace package root for each package.
 - Added `Script#executeTasks` to process enqueued tasks using the defined pipeline type (`parallel`,
   `pool`, `serial` (default), `sync`).
 - Added `Script#task` to enqueue tasks similar to previous Boost routines.
