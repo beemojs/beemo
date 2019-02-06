@@ -7,7 +7,7 @@ import path from 'path';
 import Script from './Script';
 import ScriptContext from './contexts/ScriptContext';
 import RunScriptRoutine from './execute/RunScriptRoutine';
-import BaseExecuteRoutine from './BaseExecuteRoutine';
+import BaseExecuteRoutine from './execute/BaseRoutine';
 
 export default class ExecuteScriptRoutine extends BaseExecuteRoutine<ScriptContext> {
   errors: Error[] = [];
@@ -23,7 +23,7 @@ export default class ExecuteScriptRoutine extends BaseExecuteRoutine<ScriptConte
 
   pipeRoutine(packageName: string, packageRoot: string) {
     const { argv, binName, root, scriptName } = this.context;
-    const command = `${binName} ${argv.join(' ')}`;
+    const command = argv.filter(arg => arg !== binName).join(' ');
 
     if (packageName) {
       this.pipe(

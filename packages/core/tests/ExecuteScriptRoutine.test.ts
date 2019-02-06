@@ -46,7 +46,7 @@ describe('ExecuteScriptRoutine', () => {
   }
 
   function createTestRunScript(title: string, options: any = {}) {
-    const run = new RunScriptRoutine(title, 'foo-bar -a --foo bar baz', {
+    const run = new RunScriptRoutine(title, '-a --foo bar baz', {
       packageRoot: getRoot(),
       ...options,
     });

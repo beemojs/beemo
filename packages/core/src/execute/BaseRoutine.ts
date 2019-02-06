@@ -4,18 +4,15 @@
  */
 
 import { Routine, WorkspacePackageConfig } from '@boost/core';
-import Context from './contexts/Context';
-import isPatternMatch from './utils/isPatternMatch';
-import { BeemoTool } from './types';
+import Context from '../contexts/Context';
+import isPatternMatch from '../utils/isPatternMatch';
+import { BeemoTool } from '../types';
 
 export interface CustomConfig {
   priority?: number;
 }
 
-export default abstract class BaseExecuteRoutine<Ctx extends Context> extends Routine<
-  Ctx,
-  BeemoTool
-> {
+export default abstract class BaseRoutine<Ctx extends Context> extends Routine<Ctx, BeemoTool> {
   workspacePackages: (WorkspacePackageConfig & CustomConfig)[] = [];
 
   bootstrap() {

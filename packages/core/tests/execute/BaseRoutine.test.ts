@@ -1,43 +1,56 @@
-import Driver from '../src/Driver';
-import ExecuteDriverRoutine from '../src/ExecuteDriverRoutine';
-import RunCommandRoutine from '../src/execute/RunCommandRoutine';
-import DriverContext from '../src/contexts/DriverContext';
+import { Routine } from '@boost/core';
+import Driver from '../../src/Driver';
+import BaseExecuteRoutine from '../../src/execute/BaseRoutine';
 import {
   createDriverContext,
   createTestDebugger,
   createTestDriver,
   createTestTool,
-} from '../../../tests/helpers';
+} from '../../../../tests/helpers';
 
-jest.mock('../src/execute/RunCommandRoutine', () => jest.fn());
+class PipedRoutine extends Routine<any, any> {
+  execute() {
+    return Promise.resolve(this.key);
+  }
+}
 
-describe.skip('ExecuteDriverRoutine', () => {
-  let routine: ExecuteDriverRoutine;
+class ExecuteRoutine extends BaseExecuteRoutine<any> {
+  pipeRoutine(packageName?: string, packageRoot?: string) {
+    this.pipe(new PipedRoutine(packageName || 'root', packageRoot || ''));
+  }
+}
+
+describe('BaseExecuteRoutine', () => {
+  let routine: BaseExecuteRoutine<any>;
   let driver: Driver;
+  let primary: PipedRoutine;
+  let foo: PipedRoutine;
+  let bar: PipedRoutine;
+  let baz: PipedRoutine;
+  let qux: PipedRoutine;
 
   beforeEach(() => {
     const tool = createTestTool();
 
     driver = createTestDriver('primary', tool);
 
-    routine = new ExecuteDriverRoutine('driver', 'Executing driver');
+    routine = new ExecuteRoutine('driver', 'Executing driver');
     routine.context = createDriverContext(driver);
     routine.tool = tool;
     routine.debug = createTestDebugger();
 
-    // RunCommandRoutine is mocked, so use plain objects
-    routine.routines = [
-      // @ts-ignore
-      { key: 'primary' },
-      // @ts-ignore
-      { key: 'foo' },
-      // @ts-ignore
-      { key: 'bar' },
-      // @ts-ignore
-      { key: 'baz' },
-      // @ts-ignore
-      { key: 'qux' },
-    ];
+    // Setup packages
+    primary = new PipedRoutine('primary', 'primary');
+    foo = new PipedRoutine('foo', 'foo');
+    bar = new PipedRoutine('bar', 'bar');
+    baz = new PipedRoutine('baz', 'baz');
+    qux = new PipedRoutine('qux', 'qux');
+
+    routine.pipe(primary);
+    routine.pipe(foo);
+    routine.pipe(bar);
+    routine.pipe(baz);
+    routine.pipe(qux);
 
     routine.workspacePackages = [
       {
@@ -66,42 +79,41 @@ describe.skip('ExecuteDriverRoutine', () => {
         workspace: tool.createWorkspaceMetadata('./packages/qux/package.json'),
       },
     ];
-
-    // @ts-ignore
-    RunCommandRoutine.mockClear();
   });
 
   describe('execute()', () => {
-    let context: DriverContext;
-
-    beforeEach(() => {
-      context = createDriverContext(driver);
-    });
-
     it('pools each routine', async () => {
       routine.poolRoutines = jest.fn(() => Promise.resolve({ errors: [], results: [] }));
 
-      await routine.execute(context);
+      await routine.execute(routine.context);
 
-      expect(routine.poolRoutines).toHaveBeenCalledWith(null, {}, routine.routines);
+      expect(routine.poolRoutines).toHaveBeenCalledWith(undefined, {}, routine.routines);
     });
 
     it('passes concurrency to pooler', async () => {
       routine.poolRoutines = jest.fn(() => Promise.resolve({ errors: [], results: [] }));
-      context.args.concurrency = 2;
+      routine.context.args.concurrency = 2;
 
-      await routine.execute(context);
+      await routine.execute(routine.context);
 
-      expect(routine.poolRoutines).toHaveBeenCalledWith(null, { concurrency: 2 }, routine.routines);
+      expect(routine.poolRoutines).toHaveBeenCalledWith(
+        undefined,
+        { concurrency: 2 },
+        routine.routines,
+      );
     });
 
     it('passes concurrency option to pooler', async () => {
       routine.poolRoutines = jest.fn(() => Promise.resolve({ errors: [], results: [] }));
       routine.tool.config.execute.concurrency = 3;
 
-      await routine.execute(context);
+      await routine.execute(routine.context);
 
-      expect(routine.poolRoutines).toHaveBeenCalledWith(null, { concurrency: 3 }, routine.routines);
+      expect(routine.poolRoutines).toHaveBeenCalledWith(
+        undefined,
+        { concurrency: 3 },
+        routine.routines,
+      );
     });
 
     it('throws an error if any failures', async () => {
@@ -110,42 +122,48 @@ describe.skip('ExecuteDriverRoutine', () => {
       );
 
       try {
-        await routine.execute(context);
+        await routine.execute(routine.context);
       } catch (error) {
         expect(error).toEqual(
           new Error(
-            'Failed to execute driver pipeline. The following errors have occurred:\n\nFailed\n\nOops',
+            'Failed to execute pipeline. The following errors have occurred:\n\nFailed\n\nOops',
           ),
         );
       }
     });
 
-    it('returns results', async () => {
+    it('returns a result for a single routine', async () => {
       routine.poolRoutines = jest.fn(() => Promise.resolve({ errors: [], results: [123] }));
 
-      const response = await routine.execute(context);
+      const response = await routine.execute(routine.context);
 
-      expect(response).toEqual([123]);
+      expect(response).toEqual(123);
     });
 
-    it('serializes priority routines before pooling other routines', async () => {
-      routine.context.args.priority = true;
-      routine.context.args.workspaces = '*';
-      routine.serializeRoutines = jest.fn(() => Promise.resolve());
-      routine.poolRoutines = jest.fn(() => Promise.resolve({ errors: [], results: [] }));
-      routine.workspacePackages[1].peerDependencies = {
-        '@scope/foo': '1.0.0',
-      };
+    describe('workspaces', () => {
+      beforeEach(() => {
+        routine.context.args.priority = true;
+        routine.context.args.workspaces = '*';
+      });
 
-      await routine.execute(context);
+      it('returns an array of results for multiple routines', async () => {
+        const response = await routine.execute(routine.context);
 
-      expect(routine.serializeRoutines).toHaveBeenCalledWith(null, [{ key: 'foo' }]);
-      expect(routine.poolRoutines).toHaveBeenCalledWith(null, {}, [
-        { key: 'primary' },
-        { key: 'bar' },
-        { key: 'baz' },
-        { key: 'qux' },
-      ]);
+        expect(response).toEqual(['primary', 'foo', 'bar', 'baz', 'qux']);
+      });
+
+      it('serializes priority routines before pooling other routines', async () => {
+        routine.serializeRoutines = jest.fn(() => Promise.resolve());
+        routine.poolRoutines = jest.fn(() => Promise.resolve({ errors: [], results: [] }));
+        routine.workspacePackages[1].peerDependencies = {
+          '@scope/foo': '1.0.0',
+        };
+
+        await routine.execute(routine.context);
+
+        expect(routine.serializeRoutines).toHaveBeenCalledWith(undefined, [foo]);
+        expect(routine.poolRoutines).toHaveBeenCalledWith(undefined, {}, [primary, bar, baz, qux]);
+      });
     });
   });
 
@@ -217,7 +235,7 @@ describe.skip('ExecuteDriverRoutine', () => {
       routine.tool.config.execute.priority = false;
 
       expect(routine.orderByWorkspacePriorityGraph()).toEqual({
-        other: [{ key: 'primary' }, { key: 'foo' }, { key: 'bar' }, { key: 'baz' }, { key: 'qux' }],
+        other: [primary, foo, bar, baz, qux],
         priority: [],
       });
     });
@@ -226,14 +244,14 @@ describe.skip('ExecuteDriverRoutine', () => {
       routine.context.args.workspaces = '';
 
       expect(routine.orderByWorkspacePriorityGraph()).toEqual({
-        other: [{ key: 'primary' }, { key: 'foo' }, { key: 'bar' }, { key: 'baz' }, { key: 'qux' }],
+        other: [primary, foo, bar, baz, qux],
         priority: [],
       });
     });
 
     it('returns all as `other` if no dependents', () => {
       expect(routine.orderByWorkspacePriorityGraph()).toEqual({
-        other: [{ key: 'primary' }, { key: 'foo' }, { key: 'bar' }, { key: 'baz' }, { key: 'qux' }],
+        other: [primary, foo, bar, baz, qux],
         priority: [],
       });
     });
@@ -244,8 +262,8 @@ describe.skip('ExecuteDriverRoutine', () => {
       };
 
       expect(routine.orderByWorkspacePriorityGraph()).toEqual({
-        other: [{ key: 'primary' }, { key: 'foo' }, { key: 'baz' }, { key: 'qux' }],
-        priority: [{ key: 'bar' }],
+        other: [primary, foo, baz, qux],
+        priority: [bar],
       });
     });
 
@@ -255,8 +273,8 @@ describe.skip('ExecuteDriverRoutine', () => {
       };
 
       expect(routine.orderByWorkspacePriorityGraph()).toEqual({
-        other: [{ key: 'primary' }, { key: 'foo' }, { key: 'baz' }, { key: 'qux' }],
-        priority: [{ key: 'bar' }],
+        other: [primary, foo, baz, qux],
+        priority: [bar],
       });
     });
 
@@ -274,8 +292,8 @@ describe.skip('ExecuteDriverRoutine', () => {
       };
 
       expect(routine.orderByWorkspacePriorityGraph()).toEqual({
-        other: [{ key: 'foo' }, { key: 'baz' }, { key: 'qux' }],
-        priority: [{ key: 'bar' }, { key: 'primary' }],
+        other: [foo, baz, qux],
+        priority: [bar, primary],
       });
     });
 
@@ -296,8 +314,8 @@ describe.skip('ExecuteDriverRoutine', () => {
       routine.workspacePackages[0].priority = 100;
 
       expect(routine.orderByWorkspacePriorityGraph()).toEqual({
-        other: [{ key: 'foo' }, { key: 'baz' }],
-        priority: [{ key: 'primary' }, { key: 'qux' }, { key: 'bar' }],
+        other: [foo, baz],
+        priority: [primary, qux, bar],
       });
     });
   });

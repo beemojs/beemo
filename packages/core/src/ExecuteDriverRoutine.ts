@@ -5,7 +5,7 @@
 
 import DriverContext from './contexts/DriverContext';
 import RunCommandRoutine, { RunCommandOptions } from './execute/RunCommandRoutine';
-import BaseExecuteRoutine from './BaseExecuteRoutine';
+import BaseExecuteRoutine from './execute/BaseRoutine';
 
 export default class ExecuteDriverRoutine extends BaseExecuteRoutine<DriverContext> {
   pipeRoutine(packageName?: string, packageRoot?: string) {
