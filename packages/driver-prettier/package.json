@@ -28,7 +28,7 @@
     "prettier": "^1.16.4"
   },
   "peerDependencies": {
-    "@beemo/core": "^0.26.0",
+    "@beemo/core": "^0.27.0",
     "prettier": "^1.0.0"
   },
   "dependencies": {
