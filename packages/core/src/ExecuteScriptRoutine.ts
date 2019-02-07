@@ -17,8 +17,8 @@ export default class ExecuteScriptRoutine extends BaseExecuteRoutine<ScriptConte
   }
 
   pipeRoutine(packageName: string, packageRoot: string) {
-    const { argv, binName, root, scriptName } = this.context;
-    const command = argv.filter(arg => arg !== binName).join(' ');
+    const { argv, root, scriptName } = this.context;
+    const command = argv.join(' ');
 
     if (packageName) {
       this.pipe(
