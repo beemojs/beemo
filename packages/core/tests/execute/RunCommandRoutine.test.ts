@@ -218,7 +218,7 @@ describe('RunCommandRoutine', () => {
 
   describe('execute()', () => {
     beforeEach(() => {
-      routine.executeCommand = jest.fn(() => Promise.resolve({ stdout: BABEL_HELP }));
+      routine.executeCommand = jest.fn(() => Promise.resolve({ stdout: BABEL_HELP } as any));
 
       driver.metadata.filterOptions = true;
     });
@@ -422,7 +422,7 @@ describe('RunCommandRoutine', () => {
 
   describe('filterUnknownOptions()', () => {
     beforeEach(() => {
-      routine.executeCommand = jest.fn(() => Promise.resolve({ stdout: BABEL_HELP }));
+      routine.executeCommand = jest.fn(() => Promise.resolve({ stdout: BABEL_HELP } as any));
     });
 
     it('returns supported options', async () => {
@@ -529,7 +529,7 @@ describe('RunCommandRoutine', () => {
     const task = new Task<any>('Task', () => {});
 
     beforeEach(() => {
-      routine.executeCommand = jest.fn(() => Promise.resolve({ success: true }));
+      routine.executeCommand = jest.fn(() => Promise.resolve({ success: true } as any));
       driver.handleSuccess = jest.fn();
       driver.handleFailure = jest.fn();
     });

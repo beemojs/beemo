@@ -130,7 +130,7 @@ describe('Beemo', () => {
       await beemo.createConfigFiles(MOCK_CONFIG_ARGS, ['foo', 'bar', 'baz']);
 
       expect(spy).toHaveBeenCalled();
-      expect(spy.mock.calls[0][0].drivers.size).toBe(3);
+      expect((spy.mock.calls[0][0] as any).drivers.size).toBe(3);
     });
 
     it('creates for all drivers if list is empty', async () => {
@@ -144,7 +144,7 @@ describe('Beemo', () => {
           drivers: new Set(beemo.tool.getPlugins('driver')),
         }),
       );
-      expect(spy.mock.calls[0][0].drivers.size).toBe(3);
+      expect((spy.mock.calls[0][0] as any).drivers.size).toBe(3);
     });
   });
 
