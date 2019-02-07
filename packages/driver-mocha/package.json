@@ -1,6 +1,6 @@
 {
   "name": "@beemo/driver-mocha",
-  "version": "0.20.1",
+  "version": "0.21.0",
   "description": "Mocha driver for Beemo.",
   "keywords": [
     "beemo",
