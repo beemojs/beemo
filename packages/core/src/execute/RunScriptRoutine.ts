@@ -68,7 +68,10 @@ export default class RunScriptRoutine extends Routine<ScriptContext, BeemoTool, 
    */
   async runScriptTasks(args: Arguments, type: ExecuteType, tasks: Task<any>[]): Promise<any> {
     tasks.forEach(task => {
-      this.task(task.title, task.action);
+      const newTask = this.task(task.title, task.action);
+
+      // TODO Remove this hack once boost allows it
+      newTask.action = newTask.action.bind(this.context.script!);
     });
 
     switch (type) {

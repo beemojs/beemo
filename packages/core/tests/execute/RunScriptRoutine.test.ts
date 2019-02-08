@@ -11,7 +11,7 @@ describe('RunScriptRoutine', () => {
 
     routine = new RunScriptRoutine('script', 'Run script');
     routine.tool = tool;
-    routine.context = createScriptContext();
+    routine.context = createScriptContext(new Script());
     routine.debug = createTestDebugger();
     routine.bootstrap();
   });
@@ -239,6 +239,34 @@ describe('RunScriptRoutine', () => {
       } catch (error) {
         expect(spy).toHaveBeenCalledWith('fail.failed-execute', [routine.context, error, script]);
       }
+    });
+  });
+
+  describe('runScriptTasks()', () => {
+    it('rebinds the task to the script', () => {
+      class TaskScript extends Script {
+        bootstrap() {
+          this.task('Test', this.boundTask);
+        }
+
+        boundTask() {
+          return this.otherMethod();
+        }
+
+        otherMethod() {
+          // eslint-disable-next-line
+          expect(this).toBe(script);
+
+          return true;
+        }
+      }
+
+      const script = new TaskScript();
+      script.bootstrap();
+
+      routine.context.script = script;
+
+      routine.runScriptTasks({} as any, 'pool', script.tasks);
     });
   });
 });

@@ -1,5 +1,9 @@
 # 0.27.1 - 2019-02-07
 
+#### 🐞 Fixed
+
+- Fixed an issue where script tasks `this` were being unbound from the parent script.
+
 #### 🛠 Internal
 
 - Updated `optimal` to v2.1 from v1.
