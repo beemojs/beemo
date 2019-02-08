@@ -1,4 +1,11 @@
-# 0.27.0
+# 0.27.1 - 2019-02-07
+
+#### 🛠 Internal
+
+- Updated `optimal` to v2.1 from v1.
+- Updated `yargs-parser` to v13.0 from v11 (this may be a breaking change depending on your usage).
+
+# 0.27.0 - 2019-02-06
 
 #### 💥 Breaking
 

@@ -26,28 +26,28 @@
     "access": "public"
   },
   "dependencies": {
-    "@boost/core": "^1.7.2",
+    "@boost/core": "^1.8.0",
     "@types/execa": "^0.9.0",
     "@types/fs-extra": "^5.0.4",
     "@types/is-glob": "^4.0.0",
     "@types/lodash": "^4.14.120",
     "@types/micromatch": "^3.1.0",
-    "@types/node": "^10.12.21",
+    "@types/node": "^10.12.23",
     "@types/yargs": "^12.0.8",
     "@types/yargs-parser": "^11.0.2",
     "chalk": "^2.4.2",
     "execa": "^1.0.0",
     "fast-glob": "^2.2.6",
     "fs-extra": "^7.0.1",
-    "hygen": "^2.1.1",
+    "hygen": "^2.1.2",
     "is-glob": "^4.0.0",
     "lodash": "^4.17.11",
     "micromatch": "^3.1.10",
-    "optimal": "^1.2.0",
+    "optimal": "^2.1.1",
     "yargs": "^12.0.5",
-    "yargs-parser": "^11.1.1"
+    "yargs-parser": "^13.0.0"
   },
   "devDependencies": {
-    "@boost/test-utils": "^1.0.3"
+    "@boost/test-utils": "^1.0.4"
   }
 }

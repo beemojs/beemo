@@ -1,4 +1,4 @@
-import { Routine, Task } from '@boost/core';
+import { Routine, Task, Predicates } from '@boost/core';
 import chalk from 'chalk';
 import glob from 'fast-glob';
 import path from 'path';
@@ -6,7 +6,6 @@ import fs from 'fs-extra';
 import isGlob from 'is-glob';
 import merge from 'lodash/merge';
 import execa from 'execa';
-import { array, bool, string } from 'optimal';
 import parseArgs from 'yargs-parser';
 import DriverContext from '../contexts/DriverContext';
 import BatchStream from '../streams/BatchStream';
@@ -30,11 +29,11 @@ export default class RunCommandRoutine extends Routine<
   BeemoTool,
   RunCommandOptions
 > {
-  blueprint() /* infer */ {
+  blueprint({ array, bool, string }: Predicates) /* infer */ {
     return {
       additionalArgv: array(string()),
       forceConfigOption: bool(),
-      packageRoot: string().empty(),
+      packageRoot: string(),
     };
   }
 

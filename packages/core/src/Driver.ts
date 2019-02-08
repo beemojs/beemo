@@ -1,6 +1,6 @@
 import { Plugin, EventListener } from '@boost/core';
 import mergeWith from 'lodash/mergeWith';
-import optimal, { array, bool, number, object, string, union, Blueprint } from 'optimal';
+import optimal, { array, bool, number, object, string, shape, union } from 'optimal';
 import { STRATEGY_COPY, STRATEGY_CREATE, STRATEGY_REFERENCE, STRATEGY_NATIVE } from './constants';
 import { Argv, DriverCommandOptions, DriverOptions, DriverMetadata, Execution } from './types';
 
@@ -20,7 +20,7 @@ export default class Driver<
     return {
       args: array(string()),
       dependencies: array(string()),
-      env: object(union([bool(), number(), string()])),
+      env: object(union([bool(), number(), string()], '')),
       strategy: string(STRATEGY_NATIVE).oneOf([
         STRATEGY_NATIVE,
         STRATEGY_CREATE,
@@ -136,12 +136,14 @@ export default class Driver<
    * Setup additional command options.
    */
   setCommandOptions(options: DriverCommandOptions): this {
-    const blueprint: Blueprint = {};
+    const blueprint: any = {};
 
     Object.keys(options).forEach(key => {
-      blueprint[key] = {
-        description: string().required(),
-      };
+      blueprint[key] = shape({
+        description: string()
+          .notEmpty()
+          .required(),
+      });
     });
 
     this.command = optimal(options, blueprint, {
@@ -163,14 +165,14 @@ export default class Driver<
           .match(/^[a-z0-9-]+$/u)
           .required(),
         configName: string().required(),
-        configOption: string('--config').empty(),
+        configOption: string('--config'),
         configStrategy: string(STRATEGY_CREATE).oneOf([
           STRATEGY_CREATE,
           STRATEGY_REFERENCE,
           STRATEGY_COPY,
         ]),
         dependencies: array(string()),
-        description: string().empty(),
+        description: string(),
         filterOptions: bool(false),
         helpOption: string('--help'),
         title: string().required(),

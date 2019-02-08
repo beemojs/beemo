@@ -131,7 +131,7 @@ export default class Beemo {
   /**
    * Define the blueprint for Beemo configuration.
    */
-  getConfigBlueprint(): Blueprint {
+  getConfigBlueprint(): Blueprint<Partial<BeemoConfig>> {
     return {
       configure: shape({
         cleanup: bool(false),

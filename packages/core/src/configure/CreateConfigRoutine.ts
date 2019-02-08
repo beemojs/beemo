@@ -2,12 +2,15 @@ import chalk from 'chalk';
 import fs from 'fs-extra';
 import path from 'path';
 import camelCase from 'lodash/camelCase';
-import { instance, Struct } from 'optimal';
-import { ConfigLoader, Routine } from '@boost/core';
+import { ConfigLoader, Routine, Predicates } from '@boost/core';
 import Driver from '../Driver';
 import ConfigContext from '../contexts/ConfigContext';
 import { STRATEGY_COPY, STRATEGY_REFERENCE, STRATEGY_CREATE, STRATEGY_NATIVE } from '../constants';
 import { BeemoTool } from '../types';
+
+export interface ConfigObject {
+  [key: string]: any;
+}
 
 export interface CreateConfigOptions {
   driver: Driver;
@@ -18,17 +21,11 @@ export default class CreateConfigRoutine extends Routine<
   BeemoTool,
   CreateConfigOptions
 > {
-  blueprint() /* infer */ {
-    // TODO: Instance checks fail in tests
-    // because of workspace references.
-    if (process.env.NODE_ENV === 'test') {
-      return {
-        driver: instance().required(),
-      };
-    }
-
+  blueprint({ instance }: Predicates) /* infer */ {
     return {
-      driver: instance(Driver).required(),
+      driver: instance(Driver, true)
+        .required()
+        .notNullable(),
     };
   }
 
@@ -119,7 +116,10 @@ export default class CreateConfigRoutine extends Routine<
   /**
    * Extract configuration from "beemo.<driver>" within the local project's package.json.
    */
-  extractConfigFromPackage(context: ConfigContext, prevConfigs: Struct[]): Promise<Struct[]> {
+  extractConfigFromPackage(
+    context: ConfigContext,
+    prevConfigs: ConfigObject[],
+  ): Promise<ConfigObject[]> {
     const { name } = this.options.driver;
     const { config } = this.tool;
     const configs = [...prevConfigs];
@@ -184,7 +184,7 @@ export default class CreateConfigRoutine extends Routine<
   /**
    * Merge multiple configuration sources using the current driver.
    */
-  mergeConfigs(context: ConfigContext, configs: Struct[]): Promise<Struct> {
+  mergeConfigs(context: ConfigContext, configs: ConfigObject[]): Promise<ConfigObject> {
     const { name } = this.options.driver;
 
     this.debug('Merging %s config from %d sources', chalk.green(name), configs.length);
@@ -202,7 +202,7 @@ export default class CreateConfigRoutine extends Routine<
   /**
    * Load a config file with passing the args and tool to the file.
    */
-  loadConfig(configLoader: ConfigLoader, filePath: string): Struct {
+  loadConfig(configLoader: ConfigLoader, filePath: string): ConfigObject {
     const config = configLoader.parseFile(filePath, [], { errorOnFunction: true });
 
     this.tool.emit(`${this.options.driver.name}.load-module-config`, [
@@ -218,7 +218,10 @@ export default class CreateConfigRoutine extends Routine<
    * Load config from the provider configuration module
    * and from the local configs/ folder in the consumer.
    */
-  loadConfigFromSources(context: ConfigContext, prevConfigs: Struct[]): Promise<Struct[]> {
+  loadConfigFromSources(
+    context: ConfigContext,
+    prevConfigs: ConfigObject[],
+  ): Promise<ConfigObject[]> {
     const configLoader = new ConfigLoader(this.tool);
     const modulePath = this.getConfigPath(configLoader);
     const localPath = this.getConfigPath(configLoader, true);
@@ -271,7 +274,7 @@ export default class CreateConfigRoutine extends Routine<
   /**
    * Set environment variables defined by the driver.
    */
-  setEnvVars(context: ConfigContext, configs: Struct[]): Promise<any> {
+  setEnvVars(context: ConfigContext, configs: ConfigObject[]): Promise<any> {
     const { env } = this.options.driver.options;
 
     // TODO: This may cause collisions, isolate in a child process?
