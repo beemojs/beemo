@@ -67,8 +67,7 @@ export default abstract class BaseRoutine<Ctx extends Context> extends Routine<C
    */
   getFilteredWorkspacePackages(): WorkspacePackageConfig[] {
     return this.workspacePackages.filter(pkg =>
-      // @ts-ignore Contains not typed yet
-      isPatternMatch(pkg.name, this.context.args.workspaces, { contains: true }),
+      isPatternMatch(pkg.name, this.context.args.workspaces as string),
     );
   }
 

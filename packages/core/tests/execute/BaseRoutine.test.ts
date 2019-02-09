@@ -207,7 +207,7 @@ describe('BaseExecuteRoutine', () => {
     });
 
     it('filters by package name', () => {
-      routine.context.args.workspaces = 'foo|bar';
+      routine.context.args.workspaces = '@scope/(foo|bar)';
 
       expect(routine.getFilteredWorkspacePackages()).toEqual([
         {
@@ -219,6 +219,28 @@ describe('BaseExecuteRoutine', () => {
           name: '@scope/bar',
           version: '0.0.0',
           workspace: routine.tool.createWorkspaceMetadata('./packages/bar/package.json'),
+        },
+      ]);
+    });
+
+    it('filters by negation', () => {
+      routine.context.args.workspaces = '@scope/!(foo|baz)';
+
+      expect(routine.getFilteredWorkspacePackages()).toEqual([
+        {
+          name: '@scope/primary',
+          version: '0.0.0',
+          workspace: routine.tool.createWorkspaceMetadata('./packages/primary/package.json'),
+        },
+        {
+          name: '@scope/bar',
+          version: '0.0.0',
+          workspace: routine.tool.createWorkspaceMetadata('./packages/bar/package.json'),
+        },
+        {
+          name: '@scope/qux',
+          version: '0.0.0',
+          workspace: routine.tool.createWorkspaceMetadata('./packages/qux/package.json'),
         },
       ]);
     });

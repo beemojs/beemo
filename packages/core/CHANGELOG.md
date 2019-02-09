@@ -1,3 +1,9 @@
+# 0.27.2 - 2019-02-08
+
+#### 🐞 Fixed
+
+- Fixed an issue where `--workspaces` was not handling negations.
+
 # 0.27.1 - 2019-02-07
 
 #### 🐞 Fixed
