@@ -1,10 +1,11 @@
+import { Tool } from '@boost/core';
 import Script from '../../src/Script';
 import RunScriptRoutine from '../../src/execute/RunScriptRoutine';
 import { createTestDebugger, createTestTool, createScriptContext } from '../../../../tests/helpers';
 
 describe('RunScriptRoutine', () => {
   let routine: RunScriptRoutine;
-  let tool;
+  let tool: Tool<any, any>;
 
   beforeEach(() => {
     tool = createTestTool();
@@ -45,6 +46,22 @@ describe('RunScriptRoutine', () => {
           a: true,
           foo: true,
         }),
+      );
+    });
+
+    it('clones the context and sets root to `packageRoot`', async () => {
+      routine.options.packageRoot = '/some/path';
+
+      const script = new Script();
+      const exSpy = jest.spyOn(script, 'execute');
+
+      await routine.execute(routine.context, script);
+
+      expect(exSpy).toHaveBeenCalledWith(
+        expect.objectContaining({
+          root: '/some/path',
+        }),
+        expect.anything(),
       );
     });
 
@@ -250,6 +267,9 @@ describe('RunScriptRoutine', () => {
         }
 
         boundTask() {
+          // eslint-disable-next-line
+          expect(this).toBe(script);
+
           return this.otherMethod();
         }
 
