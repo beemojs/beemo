@@ -32,6 +32,6 @@
     "prettier": "^1.0.0"
   },
   "dependencies": {
-    "@types/prettier": "^1.15.2"
+    "@types/prettier": "^1.16.0"
   }
 }
