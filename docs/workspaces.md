@@ -18,7 +18,7 @@ yarn beemo typescript --workspaces=driver-*
 
 > Patterns are powered by [micromatch](https://github.com/micromatch/micromatch).
 
-![Beemo](https://raw.githubusercontent.com/milesj/beemo/master/docs/img/workspaces.gif)
+![Beemo](https://raw.githubusercontent.com/beemojs/beemo/master/docs/img/workspaces.gif)
 
 ## Priority Packages
 

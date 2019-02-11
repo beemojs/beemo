@@ -52,9 +52,9 @@ The following list of events, and their arguments, can be listened to.
 ### Type Declarations
 
 - `Driver` - An instance of the
-  [Driver](https://github.com/milesj/beemo/blob/master/packages/core/src/Driver.ts) class.
+  [Driver](https://github.com/beemojs/beemo/blob/master/packages/core/src/Driver.ts) class.
 - `Script` - An instance of the
-  [Script](https://github.com/milesj/beemo/blob/master/packages/core/src/Script.ts) class.
+  [Script](https://github.com/beemojs/beemo/blob/master/packages/core/src/Script.ts) class.
 - `Context`, `DriverContext`, `ScriptContext`, `ScaffoldContext` -
-  [Special objects](https://github.com/milesj/beemo/tree/master/packages/core/src/contexts) passed
+  [Special objects](https://github.com/beemojs/beemo/tree/master/packages/core/src/contexts) passed
   through the entire execution process.

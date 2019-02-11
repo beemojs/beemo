@@ -1,8 +1,8 @@
 # Prettier Driver
 
-[![Build Status](https://travis-ci.org/milesj/beemo.svg?branch=master)](https://travis-ci.org/milesj/beemo)
+[![Build Status](https://travis-ci.org/beemojs/beemo.svg?branch=master)](https://travis-ci.org/beemojs/beemo)
 [![npm version](https://badge.fury.io/js/%40beemo%2Fdriver-prettier.svg)](https://www.npmjs.com/package/@beemo/driver-prettier)
-[![npm deps](https://david-dm.org/milesj/beemo.svg?path=packages/driver-prettier)](https://www.npmjs.com/package/@beemo/driver-prettier)
+[![npm deps](https://david-dm.org/beemojs/beemo.svg?path=packages/driver-prettier)](https://www.npmjs.com/package/@beemo/driver-prettier)
 
 Provides [Prettier](https://github.com/prettier/prettier) support.
 

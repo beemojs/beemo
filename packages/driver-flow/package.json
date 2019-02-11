@@ -19,7 +19,7 @@
   "engines": {
     "node": ">=8.9.0"
   },
-  "repository": "https://github.com/milesj/beemo/tree/master/packages/driver-flow",
+  "repository": "https://github.com/beemojs/beemo/tree/master/packages/driver-flow",
   "license": "MIT",
   "publishConfig": {
     "access": "public"
