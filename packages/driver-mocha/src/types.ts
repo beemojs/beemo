@@ -10,7 +10,6 @@ export interface MochaConfig {
   bail?: boolean;
   check_leaks?: boolean;
   colors?: boolean;
-  compilers?: string | string[];
   debug?: boolean;
   debug_brk?: boolean;
   delay?: boolean;
@@ -73,8 +72,7 @@ export interface MochaArgs {
   C?: boolean;
   checkLeaks?: boolean;
   colors?: boolean;
-  compilers?: string | string[];
-  d?: boolean;
+  config?: string;
   debug?: boolean;
   debugBrk?: boolean;
   delay?: boolean;
@@ -92,7 +90,8 @@ export interface MochaArgs {
   fullTrace?: boolean;
   G?: boolean;
   g?: string;
-  gc?: boolean;
+  gc?: boolean; // Deprecated
+  gcGlobal?: boolean;
   globals?: string;
   grep?: string;
   growl?: boolean;
@@ -108,7 +107,8 @@ export interface MochaArgs {
   logTimerEvents?: boolean;
   napiModules?: boolean;
   O?: string;
-  opts?: string;
+  opts?: string; // Deprecated
+  package?: string;
   perfBasicProf?: boolean;
   preserveSymlinks?: boolean;
   prof?: boolean;

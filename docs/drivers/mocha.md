@@ -9,7 +9,7 @@ yarn add @beemo/driver-mocha mocha
 
 ## Requirements
 
-- Mocha ^5.0.0
+- Mocha ^6.0.0
 
 ## Usage
 

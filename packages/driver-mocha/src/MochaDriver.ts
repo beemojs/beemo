@@ -7,8 +7,8 @@ export default class MochaDriver extends Driver<MochaConfig> {
   bootstrap() {
     this.setMetadata({
       bin: 'mocha',
-      configName: 'mocha.opts',
-      configOption: '--opts',
+      configName: '.mocharc.js',
+      configOption: '--config',
       description: this.tool.msg('app:mochaDriver'),
       title: 'Mocha',
       useConfigOption: true,

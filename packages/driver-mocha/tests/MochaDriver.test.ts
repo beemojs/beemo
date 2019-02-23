@@ -31,8 +31,8 @@ describe('MochaDriver', () => {
     expect(driver.metadata).toEqual(
       expect.objectContaining({
         bin: 'mocha',
-        configName: 'mocha.opts',
-        configOption: '--opts',
+        configName: '.mocharc.js',
+        configOption: '--config',
         dependencies: [],
         description: 'Unit test files with Mocha',
         filterOptions: false,
