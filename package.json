@@ -4,6 +4,7 @@
   "scripts": {
     "setup": "bash ./scripts/buildPackages.sh",
     "build": "beemo typescript --workspaces=*",
+    "build:refs": "beemo typescript --build --reference-workspaces",
     "clean": "rm -rf ./packages/*/lib",
     "coverage": "yarn run jest --coverage",
     "eslint": "beemo eslint",

@@ -1,4 +1,4 @@
-import typescript from 'typescript';
+import ts from 'typescript';
 
 export type TargetSetting = 'ES5' | 'ES2015' | 'ES2016' | 'ES2017' | 'ES2018' | 'ESNEXT';
 
@@ -46,12 +46,13 @@ export type JSXSetting = 'preserve' | 'react-native' | 'react';
 
 export interface TypeScriptConfig {
   compileOnSave?: boolean;
-  compilerOptions?: typescript.CompilerOptions;
+  compilerOptions?: ts.CompilerOptions;
   exclude?: string[];
   extends?: string;
   files?: string[];
   include?: string[];
-  typeAcquisition?: typescript.TypeAcquisition;
+  references?: ts.ProjectReference[];
+  typeAcquisition?: ts.TypeAcquisition;
 }
 
 export interface TypeScriptArgs {
