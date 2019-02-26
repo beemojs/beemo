@@ -1,4 +1,5 @@
 import ts from 'typescript';
+import { DriverOptions } from '@beemo/core';
 
 export type TargetSetting = 'ES5' | 'ES2015' | 'ES2016' | 'ES2017' | 'ES2018' | 'ESNEXT';
 
@@ -98,4 +99,10 @@ export interface TypeScriptArgs {
   version?: boolean;
   w?: boolean;
   watch?: boolean;
+}
+
+export interface TypeScriptOptions extends DriverOptions {
+  buildFolder: string;
+  srcFolder: string;
+  testFolder: string;
 }

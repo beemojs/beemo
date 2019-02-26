@@ -23,7 +23,7 @@ export default class Driver<
   // @ts-ignore Set after instantiation
   metadata: DriverMetadata;
 
-  blueprint() /* infer */ {
+  blueprint(predicates: any) /* infer */ {
     return {
       args: array(string()),
       dependencies: array(string()),

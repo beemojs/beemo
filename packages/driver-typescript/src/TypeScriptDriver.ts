@@ -3,11 +3,22 @@ import path from 'path';
 import rimraf from 'rimraf';
 import ts from 'typescript';
 import { Driver, DriverArgs, DriverContext } from '@beemo/core';
-import { TypeScriptArgs, TypeScriptConfig } from './types';
+import { TypeScriptArgs, TypeScriptConfig, TypeScriptOptions } from './types';
 
 // Success: Writes nothing to stdout or stderr
 // Failure: Writes to stdout on syntax and type error
-export default class TypeScriptDriver extends Driver<TypeScriptConfig> {
+export default class TypeScriptDriver extends Driver<TypeScriptConfig, TypeScriptOptions> {
+  blueprint(preds: any) /* infer */ {
+    const { string } = preds;
+
+    return {
+      ...super.blueprint(preds),
+      buildFolder: string('./lib'),
+      srcFolder: string('./src'),
+      testFolder: string('./tests'),
+    };
+  }
+
   bootstrap() {
     this.setMetadata({
       bin: 'tsc',
@@ -61,9 +72,17 @@ export default class TypeScriptDriver extends Driver<TypeScriptConfig> {
       return;
     }
 
+    // Always include
     config.compilerOptions!.composite = true;
     config.compilerOptions!.declaration = true;
     config.compilerOptions!.declarationMap = true;
+
+    // Disable root compilation
+    config.files = [];
+    config.include = [];
+    config.exclude = [];
+
+    // Generate references
     config.references = [];
 
     this.tool.getWorkspacePackages({ root: workspaceRoot }).forEach(wsPkg => {
@@ -91,8 +110,8 @@ export default class TypeScriptDriver extends Driver<TypeScriptConfig> {
       throw new Error('--build must be passed when using --reference-workspaces.');
     }
 
+    const { buildFolder, srcFolder, testFolder } = this.options;
     const rootConfigPath = path.join(workspaceRoot, 'tsconfig.json');
-    const rootConfig = JSON.parse(fs.readFileSync(rootConfigPath, 'utf8'));
     const namesToPaths: { [key: string]: string } = {};
     const workspacePackages = this.tool.getWorkspacePackages({
       root: workspaceRoot,
@@ -115,20 +134,29 @@ export default class TypeScriptDriver extends Driver<TypeScriptConfig> {
       });
 
       // Write the config file
-      const config: TypeScriptConfig = {
-        compilerOptions: {
-          outDir: rootConfig.compilerOptions.outDir || './lib',
-          rootDir: '.',
-        },
-        extends: path.relative(workspace.packagePath, rootConfigPath),
-        include: rootConfig.include || ['./src/**/*', './types/**/*'],
-        references,
-      };
+      function writeConfigFile(forTests: boolean = false) {
+        const config: TypeScriptConfig = {
+          compilerOptions: {
+            rootDir: forTests ? testFolder : srcFolder,
+          },
+          extends: path.relative(workspace.packagePath, rootConfigPath),
+          references,
+        };
 
-      fs.writeFileSync(
-        path.join(workspace.packagePath, 'tsconfig.json'),
-        JSON.stringify(config, null, 2),
-      );
+        if (forTests) {
+          config.compilerOptions!.noEmit = true;
+        } else {
+          config.compilerOptions!.outDir = buildFolder;
+        }
+
+        fs.writeFileSync(
+          path.join(workspace.packagePath, forTests ? 'tsconfig.test.json' : 'tsconfig.json'),
+          JSON.stringify(config, null, 2),
+        );
+      }
+
+      writeConfigFile();
+      writeConfigFile(true);
     });
   };
 }
