@@ -30,5 +30,6 @@ jest.config.js
 mocha.opts
 prettier.config.js
 tsconfig.json
+tsconfig.source.json
 tsconfig.test.json
 webpack.config.js

@@ -113,7 +113,9 @@ export default class TypeScriptDriver extends Driver<TypeScriptConfig, TypeScrip
     const { buildFolder, srcFolder, testFolder } = this.options;
     const rootConfigPath = path.join(workspaceRoot, 'tsconfig.json');
     const namesToPaths: { [key: string]: string } = {};
-    const workspacePackages = this.tool.getWorkspacePackages({
+    const workspacePackages = this.tool.getWorkspacePackages<{
+      tsconfig: Pick<TypeScriptConfig, 'exclude' | 'files' | 'include'>;
+    }>({
       root: workspaceRoot,
     });
 
@@ -123,40 +125,53 @@ export default class TypeScriptDriver extends Driver<TypeScriptConfig, TypeScrip
     });
 
     // Create a config file in each package
-    workspacePackages.forEach(({ dependencies = {}, peerDependencies = {}, workspace }) => {
-      const references: ts.ProjectReference[] = [];
+    workspacePackages.forEach(
+      ({ dependencies = {}, peerDependencies = {}, tsconfig = {}, workspace }) => {
+        const extendPath = path.relative(workspace.packagePath, rootConfigPath);
+        const references: ts.ProjectReference[] = [
+          { path: './tsconfig.source.json' },
+          { path: './tsconfig.test.json' },
+        ];
 
-      // Extract and determine references
-      Object.keys({ ...dependencies, ...peerDependencies }).forEach(depName => {
-        if (namesToPaths[depName]) {
-          references.push({ path: path.relative(workspace.packagePath, namesToPaths[depName]) });
+        // Extract and determine references
+        Object.keys({ ...dependencies, ...peerDependencies }).forEach(depName => {
+          if (namesToPaths[depName]) {
+            references.push({ path: path.relative(workspace.packagePath, namesToPaths[depName]) });
+          }
+        });
+
+        // Write the config file
+        function writeConfigFile(fileName: string, config: TypeScriptConfig) {
+          fs.writeFileSync(
+            path.join(workspace.packagePath, fileName),
+            JSON.stringify(config, null, 2),
+          );
         }
-      });
 
-      // Write the config file
-      function writeConfigFile(forTests: boolean = false) {
-        const config: TypeScriptConfig = {
+        writeConfigFile('tsconfig.json', {
+          ...tsconfig,
           compilerOptions: {
-            rootDir: forTests ? testFolder : srcFolder,
+            composite: true,
           },
-          extends: path.relative(workspace.packagePath, rootConfigPath),
           references,
-        };
+        });
 
-        if (forTests) {
-          config.compilerOptions!.noEmit = true;
-        } else {
-          config.compilerOptions!.outDir = buildFolder;
-        }
+        writeConfigFile('tsconfig.source.json', {
+          compilerOptions: {
+            outDir: buildFolder,
+            rootDir: srcFolder,
+          },
+          extends: extendPath,
+        });
 
-        fs.writeFileSync(
-          path.join(workspace.packagePath, forTests ? 'tsconfig.test.json' : 'tsconfig.json'),
-          JSON.stringify(config, null, 2),
-        );
-      }
-
-      writeConfigFile();
-      writeConfigFile(true);
-    });
+        writeConfigFile('tsconfig.test.json', {
+          compilerOptions: {
+            noEmit: true,
+            rootDir: testFolder,
+          },
+          extends: extendPath,
+        });
+      },
+    );
   };
 }
