@@ -1,7 +1,13 @@
 import { Plugin, EventListener } from '@boost/core';
 import mergeWith from 'lodash/mergeWith';
-import optimal, { array, bool, number, object, string, shape, union } from 'optimal';
-import { STRATEGY_COPY, STRATEGY_CREATE, STRATEGY_REFERENCE, STRATEGY_NATIVE } from './constants';
+import optimal, { array, bool, number, object, string, shape, union, Blueprint } from 'optimal';
+import {
+  STRATEGY_COPY,
+  STRATEGY_CREATE,
+  STRATEGY_REFERENCE,
+  STRATEGY_NATIVE,
+  STRATEGY_NONE,
+} from './constants';
 import { Argv, DriverCommandOptions, DriverOptions, DriverMetadata, Execution } from './types';
 
 export default class Driver<
@@ -26,6 +32,7 @@ export default class Driver<
         STRATEGY_CREATE,
         STRATEGY_REFERENCE,
         STRATEGY_COPY,
+        STRATEGY_NONE,
       ]),
     } as any;
   }

@@ -3,7 +3,13 @@ import ConfigLoader from '@boost/core/lib/ConfigLoader';
 import CreateConfigRoutine from '../../src/configure/CreateConfigRoutine';
 import BabelDriver from '../../../driver-babel/src/BabelDriver';
 import Driver from '../../src/Driver';
-import { STRATEGY_COPY, STRATEGY_REFERENCE } from '../../src/constants';
+import {
+  STRATEGY_COPY,
+  STRATEGY_REFERENCE,
+  STRATEGY_CREATE,
+  STRATEGY_NONE,
+  STRATEGY_NATIVE,
+} from '../../src/constants';
 import { BeemoTool } from '../../src/types';
 import {
   prependRoot,
@@ -70,13 +76,87 @@ describe('CreateConfigRoutine', () => {
     });
   });
 
-  describe('execute()', () => {
-    describe('normal strategy', () => {
+  describe('bootstrap()', () => {
+    describe('create strategy', () => {
+      beforeEach(() => {
+        driver.options.strategy = STRATEGY_CREATE;
+      });
+
+      it('sets the correct tasks', () => {
+        routine.bootstrap();
+
+        expect(routine.tasks).toHaveLength(5);
+        expect(routine.tasks[4].title).toBe('Creating Babel config file');
+      });
+    });
+
+    describe('copy strategy', () => {
+      beforeEach(() => {
+        driver.options.strategy = STRATEGY_COPY;
+      });
+
+      it('sets the correct tasks', () => {
+        routine.bootstrap();
+
+        expect(routine.tasks).toHaveLength(2);
+        expect(routine.tasks[1].title).toBe('Copying Babel config file');
+      });
+    });
+
+    describe('reference strategy', () => {
+      beforeEach(() => {
+        driver.options.strategy = STRATEGY_REFERENCE;
+      });
+
+      it('sets the correct tasks', () => {
+        routine.bootstrap();
+
+        expect(routine.tasks).toHaveLength(2);
+        expect(routine.tasks[1].title).toBe('Referencing Babel config file');
+      });
+    });
+
+    describe('native strategy', () => {
+      beforeEach(() => {
+        driver.options.strategy = STRATEGY_NATIVE;
+        driver.metadata.configStrategy = STRATEGY_COPY;
+      });
+
+      it('uses strategy defined in driver metadata', () => {
+        routine.bootstrap();
+
+        expect(routine.tasks).toHaveLength(2);
+        expect(routine.tasks[1].title).toBe('Copying Babel config file');
+      });
+    });
+
+    describe('none strategy', () => {
+      beforeEach(() => {
+        driver.options.strategy = STRATEGY_NONE;
+      });
+
+      it('sets no tasks and skips routine', () => {
+        routine.bootstrap();
+
+        expect(routine.tasks).toHaveLength(1); // Env vars
+        expect(routine.isSkipped()).toBe(true);
+      });
+    });
+  });
+
+  describe('run()', () => {
+    beforeEach(() => {
+      driver.options.strategy = STRATEGY_NATIVE;
+    });
+
+    describe('create strategy', () => {
       beforeEach(() => {
         routine.tool.config.babel = { bar: 'abc' };
       });
 
-      it('executes pipeline and returns final config path', async () => {
+      it('creates config file if `configStrategy` metadata is create', async () => {
+        driver.metadata.configStrategy = STRATEGY_CREATE;
+
         const envSpy = jest.spyOn(routine, 'setEnvVars');
         const loadSpy = jest.spyOn(routine, 'loadConfigFromSources');
         const extractSpy = jest.spyOn(routine, 'extractConfigFromPackage');
@@ -85,7 +165,40 @@ describe('CreateConfigRoutine', () => {
 
         routine.bootstrap();
 
-        const path = await routine.execute();
+        const path = await routine.run(routine.context, []);
+
+        expect(envSpy).toHaveBeenCalledWith(routine.context, [], expect.anything());
+        expect(loadSpy).toHaveBeenCalledWith(routine.context, [], expect.anything());
+        expect(extractSpy).toHaveBeenCalledWith(routine.context, [{ foo: 123 }], expect.anything());
+        expect(mergeSpy).toHaveBeenCalledWith(
+          routine.context,
+          [{ foo: 123 }, { bar: 'abc' }],
+          expect.anything(),
+        );
+        expect(createSpy).toHaveBeenCalledWith(
+          routine.context,
+          { foo: 123, bar: 'abc' },
+          expect.anything(),
+        );
+        expect(path).toBe(prependRoot('/babel.config.js'));
+        expect(fs.writeFile).toHaveBeenCalledWith(
+          prependRoot('/babel.config.js'),
+          `module.exports = ${JSON.stringify({ foo: 123, bar: 'abc' }, null, 2)};`,
+        );
+      });
+
+      it('creates config file if `strategy` option is create', async () => {
+        driver.options.strategy = STRATEGY_CREATE;
+
+        const envSpy = jest.spyOn(routine, 'setEnvVars');
+        const loadSpy = jest.spyOn(routine, 'loadConfigFromSources');
+        const extractSpy = jest.spyOn(routine, 'extractConfigFromPackage');
+        const mergeSpy = jest.spyOn(routine, 'mergeConfigs');
+        const createSpy = jest.spyOn(routine, 'createConfigFile');
+
+        routine.bootstrap();
+
+        const path = await routine.run(routine.context, []);
 
         expect(envSpy).toHaveBeenCalledWith(routine.context, [], expect.anything());
         expect(loadSpy).toHaveBeenCalledWith(routine.context, [], expect.anything());
@@ -109,18 +222,16 @@ describe('CreateConfigRoutine', () => {
     });
 
     describe('copy strategy', () => {
-      beforeEach(() => {
-        driver.metadata.configStrategy = STRATEGY_COPY;
-      });
-
       it('copies config file if `configStrategy` metadata is copy', async () => {
+        driver.metadata.configStrategy = STRATEGY_COPY;
+
         const envSpy = jest.spyOn(routine, 'setEnvVars');
         const createSpy = jest.spyOn(routine, 'createConfigFile');
         const copySpy = jest.spyOn(routine, 'copyConfigFile');
 
         routine.bootstrap();
 
-        const path = await routine.execute();
+        const path = await routine.run(routine.context, []);
 
         expect(envSpy).toHaveBeenCalledWith(routine.context, [], expect.anything());
         expect(copySpy).toHaveBeenCalledWith(routine.context, [], expect.anything());
@@ -129,13 +240,15 @@ describe('CreateConfigRoutine', () => {
       });
 
       it('copies config file if `strategy` option is copy', async () => {
+        driver.options.strategy = STRATEGY_COPY;
+
         const envSpy = jest.spyOn(routine, 'setEnvVars');
         const createSpy = jest.spyOn(routine, 'createConfigFile');
         const copySpy = jest.spyOn(routine, 'copyConfigFile');
 
         routine.bootstrap();
 
-        const path = await routine.execute();
+        const path = await routine.run(routine.context, []);
 
         expect(envSpy).toHaveBeenCalledWith(routine.context, [], expect.anything());
         expect(copySpy).toHaveBeenCalledWith(routine.context, [], expect.anything());
@@ -145,18 +258,16 @@ describe('CreateConfigRoutine', () => {
     });
 
     describe('reference strategy', () => {
-      beforeEach(() => {
-        driver.metadata.configStrategy = STRATEGY_REFERENCE;
-      });
-
       it('references config file if `configStrategy` metadata is reference', async () => {
+        driver.metadata.configStrategy = STRATEGY_REFERENCE;
+
         const envSpy = jest.spyOn(routine, 'setEnvVars');
         const createSpy = jest.spyOn(routine, 'createConfigFile');
         const refSpy = jest.spyOn(routine, 'referenceConfigFile');
 
         routine.bootstrap();
 
-        const path = await routine.execute();
+        const path = await routine.run(routine.context, []);
 
         expect(envSpy).toHaveBeenCalledWith(routine.context, [], expect.anything());
         expect(refSpy).toHaveBeenCalledWith(routine.context, [], expect.anything());
@@ -165,18 +276,54 @@ describe('CreateConfigRoutine', () => {
       });
 
       it('references config file if `strategy` option is reference', async () => {
+        driver.options.strategy = STRATEGY_REFERENCE;
+
         const envSpy = jest.spyOn(routine, 'setEnvVars');
         const createSpy = jest.spyOn(routine, 'createConfigFile');
         const refSpy = jest.spyOn(routine, 'referenceConfigFile');
 
         routine.bootstrap();
 
-        const path = await routine.execute();
+        const path = await routine.run(routine.context, []);
 
         expect(envSpy).toHaveBeenCalledWith(routine.context, [], expect.anything());
         expect(refSpy).toHaveBeenCalledWith(routine.context, [], expect.anything());
         expect(createSpy).not.toHaveBeenCalled();
         expect(path).toBe(prependRoot('/babel.config.js'));
+      });
+    });
+
+    describe('native strategy', () => {
+      it('falls back to `configStrategy` metadata when `strategy` option is native', async () => {
+        driver.options.strategy = STRATEGY_NATIVE;
+        driver.metadata.configStrategy = STRATEGY_COPY;
+
+        const envSpy = jest.spyOn(routine, 'setEnvVars');
+        const createSpy = jest.spyOn(routine, 'createConfigFile');
+        const copySpy = jest.spyOn(routine, 'copyConfigFile');
+
+        routine.bootstrap();
+
+        const path = await routine.run(routine.context, []);
+
+        expect(envSpy).toHaveBeenCalledWith(routine.context, [], expect.anything());
+        expect(copySpy).toHaveBeenCalledWith(routine.context, [], expect.anything());
+        expect(createSpy).not.toHaveBeenCalled();
+        expect(path).toBe(prependRoot('/babel.config.js'));
+      });
+    });
+
+    describe('none strategy', () => {
+      it('does nothing since routine is skipped', async () => {
+        driver.options.strategy = STRATEGY_NONE;
+
+        const envSpy = jest.spyOn(routine, 'setEnvVars');
+
+        routine.bootstrap();
+
+        await routine.run(routine.context, []);
+
+        expect(envSpy).not.toHaveBeenCalled();
       });
     });
   });

@@ -14,8 +14,8 @@ this, multiple strategies are in play when generating a config file at the root.
   Webpack. _Note:_ When referencing, the `process.beemo` variable is not available.
 - **Copied config** - The config file is copied as is from the configuration module's source config
   file.
-- **Native config** - Does nothing. Requires the consumer to create a local config file and require
-  any module configuration manually.
+- **Native config** - Uses the configuration strategy defined for the driver.
+- **No config** - Does nothing. Requires the consumer to create a local config file.
 
 | Driver     | Strategy   |
 | ---------- | ---------- |

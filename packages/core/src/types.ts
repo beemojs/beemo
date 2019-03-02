@@ -39,7 +39,7 @@ export interface DriverOptions {
   args: string[];
   dependencies: string[];
   env: { [key: string]: string };
-  strategy: 'native' | 'create' | 'reference' | 'copy';
+  strategy: 'native' | 'create' | 'reference' | 'copy' | 'none';
 }
 
 export interface DriverMetadata {

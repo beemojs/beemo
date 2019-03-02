@@ -31,7 +31,8 @@ export default class CreateConfigRoutine extends Routine<
 
   bootstrap() {
     const { tool } = this;
-    const { metadata, name, options } = this.options.driver;
+    const { metadata, options } = this.options.driver;
+    const name = metadata.title;
     const strategy =
       options.strategy === STRATEGY_NATIVE ? metadata.configStrategy : options.strategy;
 

@@ -2,6 +2,11 @@
 
 #### 🎉 Release
 
+#### 🚀 New
+
+- Added a `none` strategy option to `Driver`s. With this strategy, the consumer will need to
+  manually create a config file.
+
 #### 🛠 Internal
 
 - Updated `hygen` to v3.
