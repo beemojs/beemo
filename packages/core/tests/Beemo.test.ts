@@ -292,21 +292,17 @@ describe('Beemo', () => {
 
   describe('executeScript()', () => {
     it('errors if script name is not in kebab case', () => {
-      expect(() => {
-        beemo.executeScript(MOCK_DRIVER_ARGS, 'Foo_Bar');
-      }).toThrowErrorMatchingSnapshot();
+      expect(
+        beemo.executeScript(MOCK_DRIVER_ARGS, 'Foo_Bar'),
+      ).rejects.toThrowErrorMatchingSnapshot();
     });
 
     it('errors if script name starts with a dash', () => {
-      expect(() => {
-        beemo.executeScript(MOCK_DRIVER_ARGS, '-foo');
-      }).toThrowErrorMatchingSnapshot();
+      expect(beemo.executeScript(MOCK_DRIVER_ARGS, '-foo')).rejects.toThrowErrorMatchingSnapshot();
     });
 
     it('errors if script name ends with a dash', () => {
-      expect(() => {
-        beemo.executeScript(MOCK_DRIVER_ARGS, 'foo-');
-      }).toThrowErrorMatchingSnapshot();
+      expect(beemo.executeScript(MOCK_DRIVER_ARGS, 'bar-')).rejects.toThrowErrorMatchingSnapshot();
     });
 
     it('triggers `init-script` event with context', async () => {

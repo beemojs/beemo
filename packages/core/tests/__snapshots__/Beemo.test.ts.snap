@@ -1,5 +1,11 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
+exports[`Beemo executeScript() errors if script name ends with a dash 1`] = `"Script name must be in kebab case (alphanumeric characters and dashes)."`;
+
+exports[`Beemo executeScript() errors if script name is not in kebab case 1`] = `"Script name must be in kebab case (alphanumeric characters and dashes)."`;
+
+exports[`Beemo executeScript() errors if script name starts with a dash 1`] = `"Script name must be in kebab case (alphanumeric characters and dashes)."`;
+
 exports[`Beemo getConfigBlueprint() errors if no module 1`] = `"Invalid field \\"module\\". Field is required and must be defined."`;
 
 exports[`Beemo getConfigModuleRoot() errors if a fake and or missing node module 1`] = `"Module beemo-this-should-never-exist defined in \\"beemo.module\\" could not be found."`;

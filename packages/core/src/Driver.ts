@@ -1,6 +1,6 @@
 import { Plugin, EventListener } from '@boost/core';
 import mergeWith from 'lodash/mergeWith';
-import optimal, { array, bool, number, object, string, shape, union, Blueprint } from 'optimal';
+import optimal, { array, bool, number, object, string, shape, union } from 'optimal';
 import {
   STRATEGY_COPY,
   STRATEGY_CREATE,
