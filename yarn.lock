@@ -1682,10 +1682,10 @@
   resolved "https://registry.npmjs.org/@types/minimatch/-/minimatch-3.0.3.tgz#3dca0e3f33b200fc7d1139c0cd96c1268cadfd9d"
   integrity sha512-tHq6qdbT9U1IRSGf14CL0pUlULksvY9OZ+5eEgl1N7t+OA3tGvNpxJCzuKQlsNgCVwbAs670L1vcVQi8j9HjnA==
 
-"@types/node@*", "@types/node@^11.10.2":
-  version "11.10.2"
-  resolved "https://registry.npmjs.org/@types/node/-/node-11.10.2.tgz#164758d82b9a23bdb5e9ab0caed5daff51484225"
-  integrity sha512-k2LU5alRZjNGvfPz49t4BgJlozAo66QAXceefsS+azidLEMf3pTwo0jZ1OQdg/ncr1rDGwSuj565fFkW0FDpUg==
+"@types/node@*", "@types/node@^11.10.3":
+  version "11.10.3"
+  resolved "https://registry.npmjs.org/@types/node/-/node-11.10.3.tgz#a2dfc3c57045103ae950e313536342aa2970e537"
+  integrity sha512-71XxCHJmmTQ8B0B01TB2kahu5zIrCbWCadDB3ZwqHqnphyNnftrurFDfHtW8HbSTKuwR15m7bhbQutqrWpXlIw==
 
 "@types/os-locale@^2.1.0":
   version "2.1.0"
@@ -5111,10 +5111,10 @@ humanize-ms@^1.2.1:
   dependencies:
     ms "^2.0.0"
 
-hygen@^2.1.2:
-  version "2.1.2"
-  resolved "https://registry.npmjs.org/hygen/-/hygen-2.1.2.tgz#c20ff7e843b7db8d973fde8d12647cfe706c60b8"
-  integrity sha512-N15CHPswkYf0z2iw3/Q1mINVbLpXop64aZw0xDA4Q1ohM9wma/mky2NOzePHOt+MXLWpvc5bSWuuXRgcbYUvew==
+hygen@^3.0.0:
+  version "3.0.0"
+  resolved "https://registry.npmjs.org/hygen/-/hygen-3.0.0.tgz#c723d54569a310c486af39e533cb18e48096b16f"
+  integrity sha512-qZrCfGYb8RPN95ea04M/KWzguntrHwKxQDNesTiGKJ1nHHxB20M3NagO7QYwt8ztubESLR0xtamMZCeTMDvibg==
   dependencies:
     chalk "^2.4.1"
     change-case "^3.0.2"

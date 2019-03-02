@@ -1,3 +1,11 @@
+# 1.0.0
+
+#### 🎉 Release
+
+#### 🛠 Internal
+
+- Updated `hygen` to v3.
+
 # 0.27.2 - 2019-02-08
 
 #### 🐞 Fixed
