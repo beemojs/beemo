@@ -91,11 +91,11 @@ export default class RunCommandRoutine extends Routine<
     };
 
     if (args.live) {
-      stream.stdout.on('data', handler);
-      stream.stderr.on('data', handler);
+      stream.stdout!.on('data', handler);
+      stream.stderr!.on('data', handler);
     } else {
-      stream.stdout.pipe(new BatchStream({ wait: 1000 })).on('data', handler);
-      stream.stderr.pipe(new BatchStream({ wait: 1000 })).on('data', handler);
+      stream.stdout!.pipe(new BatchStream({ wait: 1000 })).on('data', handler);
+      stream.stderr!.pipe(new BatchStream({ wait: 1000 })).on('data', handler);
     }
 
     return true;
