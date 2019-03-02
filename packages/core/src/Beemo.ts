@@ -1,6 +1,8 @@
 import chalk from 'chalk';
 import fs from 'fs-extra';
 import path from 'path';
+import camelCase from 'lodash/camelCase';
+import upperFirst from 'lodash/upperFirst';
 import { Argv as Yargv } from 'yargs';
 import { CLI, Pipeline, Tool } from '@boost/core';
 import { bool, number, string, shape, Blueprint } from 'optimal';
@@ -16,6 +18,7 @@ import ConfigContext from './contexts/ConfigContext';
 import DriverContext from './contexts/DriverContext';
 import ScriptContext from './contexts/ScriptContext';
 import ScaffoldContext from './contexts/ScaffoldContext';
+import { KEBAB_PATTERN } from './constants';
 import { Argv, BeemoTool, Execution, BeemoPluginRegistry, BeemoConfig } from './types';
 
 export default class Beemo {
@@ -236,6 +239,11 @@ export default class Beemo {
    */
   async executeScript(args: ScriptContext['args'], scriptName: string): Promise<Execution> {
     const { tool } = this;
+
+    if (!scriptName || !scriptName.match(KEBAB_PATTERN)) {
+      throw new Error(tool.msg('errors:scriptNameInvalidFormat'));
+    }
+
     const context = this.prepareContext(new ScriptContext(args, scriptName));
 
     tool.emit(`${context.eventName}.init-script`, [context, scriptName]);
@@ -245,7 +253,8 @@ export default class Beemo {
       .pipe(
         new ExecuteScriptRoutine(
           'script',
-          tool.msg('app:scriptExecute', { name: context.scriptName }),
+          // Try and match the name of the class
+          tool.msg('app:scriptExecute', { name: upperFirst(camelCase(context.scriptName)) }),
         ),
       )
       .run();

@@ -16,4 +16,5 @@
 - [Workspaces](./workspaces.md)
 - [Scaffolding](./scaffolding.md)
 - [Pro Tips](./tips.md)
+- [Conventions](./conventions.md)
 - [Changelog](https://github.com/beemojs/beemo/blob/master/CHANGELOG.md)

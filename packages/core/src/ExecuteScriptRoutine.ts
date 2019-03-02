@@ -1,4 +1,6 @@
 import path from 'path';
+import camelCase from 'lodash/camelCase';
+import upperFirst from 'lodash/upperFirst';
 import Script from './Script';
 import ScriptContext from './contexts/ScriptContext';
 import RunScriptRoutine from './execute/RunScriptRoutine';
@@ -51,7 +53,7 @@ export default class ExecuteScriptRoutine extends BaseExecuteRoutine<ScriptConte
     this.debug('Attempting to load script from tool');
 
     try {
-      const script = this.tool.getPlugin('script', context.binName);
+      const script = this.tool.getPlugin('script', context.scriptName);
 
       context.setScript(script, this.getModulePath(script));
 
@@ -75,7 +77,8 @@ export default class ExecuteScriptRoutine extends BaseExecuteRoutine<ScriptConte
 
     this.debug('Attempting to load script from configuration module');
 
-    const filePath = path.join(context.moduleRoot, 'scripts', `${context.scriptName}.js`);
+    const fileName = upperFirst(camelCase(context.scriptName));
+    const filePath = path.join(context.moduleRoot, 'scripts', `${fileName}.js`);
 
     try {
       script = this.tool.getRegisteredPlugin('script').loader.importModule(filePath);
@@ -104,7 +107,7 @@ export default class ExecuteScriptRoutine extends BaseExecuteRoutine<ScriptConte
     this.debug('Attempting to load script from local node modules');
 
     try {
-      script = this.tool.getRegisteredPlugin('script').loader.importModule(context.binName);
+      script = this.tool.getRegisteredPlugin('script').loader.importModule(context.scriptName);
 
       context.setScript(script, this.getModulePath(script));
 

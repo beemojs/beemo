@@ -17,15 +17,14 @@ describe('ScriptContext', () => {
     });
 
     it('sets script name', () => {
-      expect(context.scriptName).toBe('Foo');
+      expect(context.scriptName).toBe('foo');
     });
 
     it('converts name to correct case', () => {
       context = new ScriptContext({ ...MOCK_SCRIPT_ARGS, foo: true }, 'foo-bar');
 
-      expect(context.scriptName).toBe('FooBar');
+      expect(context.scriptName).toBe('foo-bar');
       expect(context.eventName).toBe('foo-bar');
-      expect(context.binName).toBe('foo-bar');
     });
   });
 

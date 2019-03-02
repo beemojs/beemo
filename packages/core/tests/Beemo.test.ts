@@ -291,6 +291,24 @@ describe('Beemo', () => {
   });
 
   describe('executeScript()', () => {
+    it('errors if script name is not in kebab case', () => {
+      expect(() => {
+        beemo.executeScript(MOCK_DRIVER_ARGS, 'Foo_Bar');
+      }).toThrowErrorMatchingSnapshot();
+    });
+
+    it('errors if script name starts with a dash', () => {
+      expect(() => {
+        beemo.executeScript(MOCK_DRIVER_ARGS, '-foo');
+      }).toThrowErrorMatchingSnapshot();
+    });
+
+    it('errors if script name ends with a dash', () => {
+      expect(() => {
+        beemo.executeScript(MOCK_DRIVER_ARGS, 'foo-');
+      }).toThrowErrorMatchingSnapshot();
+    });
+
     it('triggers `init-script` event with context', async () => {
       const spy = jest.spyOn(beemo.tool, 'emit');
 
@@ -299,7 +317,7 @@ describe('Beemo', () => {
       expect(spy).toHaveBeenCalledWith('foo-bar.init-script', [
         expect.objectContaining({
           argv: ['foo', 'bar'],
-          scriptName: 'FooBar',
+          scriptName: 'foo-bar',
         }),
         'foo-bar',
       ]);

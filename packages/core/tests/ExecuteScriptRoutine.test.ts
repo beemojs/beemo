@@ -58,16 +58,15 @@ describe('ExecuteScriptRoutine', () => {
 
   beforeEach(() => {
     script = new TestScript();
-    script.name = 'foo-bar';
+    script.name = 'plugin-name';
 
     routine = new ExecuteScriptRoutine('script', 'Executing script');
     routine.context = createScriptContext();
     routine.tool = createTestTool();
     routine.debug = createTestDebugger();
 
-    routine.context.scriptName = 'FooBar';
-    routine.context.eventName = 'foo-bar';
-    routine.context.binName = 'foo-bar';
+    routine.context.scriptName = 'plugin-name';
+    routine.context.eventName = 'plugin-name';
 
     // TEMP
     routine.tool.registerPlugin('script', Script);
@@ -81,7 +80,7 @@ describe('ExecuteScriptRoutine', () => {
       routine.pipe = jest.fn();
       routine.bootstrap();
 
-      expect(routine.pipe).toHaveBeenCalledWith(createTestRunScript('FooBar'));
+      expect(routine.pipe).toHaveBeenCalledWith(createTestRunScript('plugin-name'));
     });
 
     describe('workspaces', () => {
@@ -152,36 +151,12 @@ describe('ExecuteScriptRoutine', () => {
       expect(loadModuleSpy).toHaveBeenCalledWith(routine.context, null, expect.anything());
       expect(loadNodeSpy).toHaveBeenCalledWith(
         routine.context,
-        expect.objectContaining({ name: 'FooBar' }),
+        expect.objectContaining({ name: 'plugin-name' }),
         expect.anything(),
       );
       expect(postSpy).toHaveBeenCalledWith(
         routine.context,
-        expect.objectContaining({ name: 'FooBar' }),
-        expect.anything(),
-      );
-      expect(response).toBe(123);
-    });
-
-    it('skips no tasks when script is returned from node module', async () => {
-      const loadToolSpy = jest.spyOn(routine, 'loadScriptFromTool');
-      const loadModuleSpy = jest.spyOn(routine, 'loadScriptFromConfigModule');
-      const loadNodeSpy = jest.spyOn(routine, 'loadScriptFromNodeModules');
-      const postSpy = jest.spyOn(routine, 'handlePostLoad');
-
-      routine.bootstrap();
-      routine.tool.addPlugin = jest.fn();
-      routine.context.binName = 'npm-name';
-      routine.context.scriptName = 'Missing';
-
-      const response = await routine.execute(routine.context);
-
-      expect(loadToolSpy).toHaveBeenCalledWith(routine.context, undefined, expect.anything());
-      expect(loadModuleSpy).toHaveBeenCalledWith(routine.context, null, expect.anything());
-      expect(loadNodeSpy).toHaveBeenCalledWith(routine.context, null, expect.anything());
-      expect(postSpy).toHaveBeenCalledWith(
-        routine.context,
-        expect.objectContaining({ name: 'npm-name' }),
+        expect.objectContaining({ name: 'plugin-name' }),
         expect.anything(),
       );
       expect(response).toBe(123);
@@ -209,12 +184,18 @@ describe('ExecuteScriptRoutine', () => {
 
       expect(result).toBeNull();
       expect(routine.errors).toEqual([
-        new Error('From tool instance: Failed to find script "foo-bar". Have you installed it?'),
+        new Error(
+          'From tool instance: Failed to find script "plugin-name". Have you installed it?',
+        ),
       ]);
     });
   });
 
   describe('loadScriptFromConfigModule()', () => {
+    beforeEach(() => {
+      script.name = 'from-config-module';
+    });
+
     it('returns script if passed as an argument', () => {
       const result = routine.loadScriptFromConfigModule(routine.context, script);
 
@@ -226,8 +207,8 @@ describe('ExecuteScriptRoutine', () => {
 
       expect(result).toEqual(
         expect.objectContaining({
-          name: 'FooBar',
-          moduleName: 'beemo-script-foo-bar',
+          name: 'plugin-name',
+          moduleName: 'beemo-script-plugin-name',
         }),
       );
     });
@@ -237,14 +218,14 @@ describe('ExecuteScriptRoutine', () => {
 
       expect(routine.context.script).toEqual(
         expect.objectContaining({
-          name: 'FooBar',
-          moduleName: 'beemo-script-foo-bar',
+          name: 'plugin-name',
+          moduleName: 'beemo-script-plugin-name',
         }),
       );
     });
 
     it('sets an error if script not found in tool', () => {
-      routine.context.scriptName = 'Missing';
+      routine.context.scriptName = 'missing';
 
       const result = routine.loadScriptFromConfigModule(routine.context, null);
 
@@ -257,7 +238,7 @@ describe('ExecuteScriptRoutine', () => {
 
   describe('loadScriptFromNodeModules()', () => {
     beforeEach(() => {
-      routine.context.binName = 'npm-name';
+      routine.context.scriptName = 'from-node-module';
     });
 
     it('returns script if passed as an argument', () => {
@@ -271,8 +252,8 @@ describe('ExecuteScriptRoutine', () => {
 
       expect(result).toEqual(
         expect.objectContaining({
-          name: 'npm-name',
-          moduleName: 'beemo-script-npm-name',
+          name: 'from-node-module',
+          moduleName: 'beemo-script-from-node-module',
         }),
       );
     });
@@ -282,14 +263,14 @@ describe('ExecuteScriptRoutine', () => {
 
       expect(routine.context.script).toEqual(
         expect.objectContaining({
-          name: 'npm-name',
-          moduleName: 'beemo-script-npm-name',
+          name: 'from-node-module',
+          moduleName: 'beemo-script-from-node-module',
         }),
       );
     });
 
     it('sets an error if script not found in tool', () => {
-      routine.context.binName = 'missing';
+      routine.context.scriptName = 'missing';
 
       const result = routine.loadScriptFromNodeModules(routine.context, null);
 
@@ -322,7 +303,7 @@ describe('ExecuteScriptRoutine', () => {
 
       routine.handlePostLoad(routine.context, script);
 
-      expect(spy).toHaveBeenCalledWith('foo-bar.load-script', [routine.context, script]);
+      expect(spy).toHaveBeenCalledWith('plugin-name.load-script', [routine.context, script]);
     });
   });
 });

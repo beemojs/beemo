@@ -1,6 +1,3 @@
-import camelCase from 'lodash/camelCase';
-import kebabCase from 'lodash/kebabCase';
-import upperFirst from 'lodash/upperFirst';
 import Context from './Context';
 import Script from '../Script';
 import { Arguments } from '../types';
@@ -13,22 +10,23 @@ export interface ScriptArgs {
 }
 
 export default class ScriptContext<T = ScriptArgs> extends Context<T> {
-  binName: string;
-
+  // Name used for emitting events (kebab case)
   eventName: string;
 
+  // Absolute path to the script
   path: string = '';
 
+  // Script instance
   script: Script | null = null;
 
+  // Name passed on the command line and the plugin name (kebab case)
   scriptName: string;
 
   constructor(args: Arguments<T>, name: string) {
     super(args);
 
-    this.binName = kebabCase(name);
-    this.eventName = kebabCase(name);
-    this.scriptName = upperFirst(camelCase(name));
+    this.scriptName = name;
+    this.eventName = name;
   }
 
   /**
@@ -36,7 +34,6 @@ export default class ScriptContext<T = ScriptArgs> extends Context<T> {
    */
   setScript(script: Script, path: string): this {
     this.script = script;
-    this.scriptName = upperFirst(camelCase(script.name));
     this.path = path;
 
     return this;

@@ -1,4 +1,3 @@
-import kebabCase from 'lodash/kebabCase';
 import ConfigContext from './ConfigContext';
 import Driver from '../Driver';
 import { Arguments, Argv } from '../types';
@@ -12,10 +11,13 @@ export interface DriverArgs {
 }
 
 export default class DriverContext<T = DriverArgs> extends ConfigContext<T> {
+  // Name defined on the plugin (kebab case)
   driverName: string = '';
 
+  // Name used for emitting events (kebab case)
   eventName: string;
 
+  // Nested list of argv for each parallel execution
   parallelArgv: Argv[] = [];
 
   // The primary driver that initiated the pipeline
@@ -25,7 +27,7 @@ export default class DriverContext<T = DriverArgs> extends ConfigContext<T> {
     super(args);
 
     this.driverName = driver.name;
-    this.eventName = kebabCase(driver.name);
+    this.eventName = driver.name;
     this.parallelArgv = parallelArgv;
     this.primaryDriver = driver;
 

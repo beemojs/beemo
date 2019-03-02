@@ -4,7 +4,9 @@
 
 #### 💥 Breaking
 
+- Script names (on the command line) will now error if not in kebab case.
 - Renamed `Context#root` to `cwd`.
+- Removed `ScriptContext#binName`. Use `scriptName` instead.
 
 #### 🚀 New
 
