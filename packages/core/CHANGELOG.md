@@ -2,6 +2,10 @@
 
 #### 🎉 Release
 
+#### 💥 Breaking
+
+- Renamed `Context#root` to `cwd`.
+
 #### 🚀 New
 
 - Added a `none` strategy option to `Driver`s. With this strategy, the consumer will need to

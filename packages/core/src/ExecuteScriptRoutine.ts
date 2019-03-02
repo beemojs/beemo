@@ -17,7 +17,7 @@ export default class ExecuteScriptRoutine extends BaseExecuteRoutine<ScriptConte
   }
 
   pipeRoutine(packageName: string, packageRoot: string) {
-    const { argv, root, scriptName } = this.context;
+    const { argv, cwd, scriptName } = this.context;
     const command = argv.join(' ');
 
     if (packageName) {
@@ -29,7 +29,7 @@ export default class ExecuteScriptRoutine extends BaseExecuteRoutine<ScriptConte
     } else {
       this.pipe(
         new RunScriptRoutine(scriptName, command, {
-          packageRoot: root,
+          packageRoot: cwd,
         }),
       );
     }

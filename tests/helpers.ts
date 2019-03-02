@@ -136,8 +136,8 @@ export function createTestDriver(
 export function applyContext<T extends Context>(context: T): T {
   context.args = parseArgs(['-a', '--foo', 'bar', 'baz']);
   context.argv = ['-a', '--foo', 'bar', 'baz'];
+  context.cwd = __dirname;
   context.moduleRoot = __dirname;
-  context.root = __dirname;
   context.workspaceRoot = __dirname;
   context.workspaces = [];
 

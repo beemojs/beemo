@@ -258,8 +258,8 @@ export default class Beemo {
     const { tool } = this;
 
     context.argv = this.argv;
+    context.cwd = tool.options.root;
     context.moduleRoot = this.getConfigModuleRoot();
-    context.root = tool.options.root;
     context.workspaceRoot = tool.options.workspaceRoot || tool.options.root;
     context.workspaces = tool.getWorkspacePaths({ root: context.workspaceRoot });
 

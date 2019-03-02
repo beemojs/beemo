@@ -25,9 +25,9 @@ export default class RunScriptRoutine extends Routine<ScriptContext, BeemoTool, 
   async execute(oldContext: ScriptContext, script: Script): Promise<any> {
     const context = oldContext.clone();
 
-    // Update the root to point to the package root
+    // Update the cwd to point to the package root
     if (this.options.packageRoot) {
-      context.root = this.options.packageRoot;
+      context.cwd = this.options.packageRoot;
     }
 
     // Set the context so tasks inherit it

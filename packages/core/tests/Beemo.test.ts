@@ -313,7 +313,7 @@ describe('Beemo', () => {
           args: MOCK_ARGS,
           argv: ['foo', 'bar'],
           moduleRoot: root,
-          root,
+          cwd: root,
         }),
       );
     });

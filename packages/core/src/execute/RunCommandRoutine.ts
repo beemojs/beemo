@@ -129,7 +129,7 @@ export default class RunCommandRoutine extends Routine<
       if (arg.charAt(0) !== '-' && isGlob(arg)) {
         const paths = glob
           .sync(arg, {
-            cwd: context.root,
+            cwd: context.cwd,
             onlyDirectories: false,
             onlyFiles: false,
           })
@@ -336,7 +336,7 @@ export default class RunCommandRoutine extends Routine<
     task: Task<DriverContext>,
   ): Promise<Execution> {
     const driver = context.primaryDriver;
-    const cwd = this.options.packageRoot || context.root;
+    const cwd = this.options.packageRoot || context.cwd;
     let result = null;
 
     this.debug(

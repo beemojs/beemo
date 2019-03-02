@@ -15,12 +15,16 @@ export default class Context<T = {}> extends BaseContext {
 
   configPaths: ConfigPath[] = [];
 
+  // Current working directory.
+  cwd: string = '';
+
+  // Absolute path to the configuration module
   moduleRoot: string = '';
 
-  root: string = '';
-
+  // Absolute path to package.json or lerna.json defining workspaces
   workspaceRoot: string = '';
 
+  // List of paths (with glob) for each defined workspace.
   workspaces: string[] = [];
 
   constructor(args: Arguments<T>) {

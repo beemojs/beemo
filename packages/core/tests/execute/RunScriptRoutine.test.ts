@@ -59,7 +59,7 @@ describe('RunScriptRoutine', () => {
 
       expect(exSpy).toHaveBeenCalledWith(
         expect.objectContaining({
-          root: '/some/path',
+          cwd: '/some/path',
         }),
         expect.anything(),
       );

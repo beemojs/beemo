@@ -71,7 +71,7 @@ export default class CreateConfigRoutine extends Routine<
     const { metadata, name } = this.options.driver;
     const configLoader = new ConfigLoader(this.tool);
     const sourcePath = this.getConfigPath(configLoader);
-    const configPath = path.join(context.root, metadata.configName);
+    const configPath = path.join(context.cwd, metadata.configName);
 
     if (!sourcePath) {
       throw new Error(this.tool.msg('errors:configCopySourceMissing'));
@@ -99,7 +99,7 @@ export default class CreateConfigRoutine extends Routine<
    */
   async createConfigFile(context: ConfigContext, config: object): Promise<string> {
     const { metadata, name } = this.options.driver;
-    const configPath = path.join(context.root, metadata.configName);
+    const configPath = path.join(context.cwd, metadata.configName);
 
     this.debug('Creating config file %s', chalk.cyan(configPath));
 
@@ -156,7 +156,7 @@ export default class CreateConfigRoutine extends Routine<
    * or an empty string if it does not exist.
    */
   getConfigPath(configLoader: ConfigLoader, forceLocal: boolean = false): string {
-    const { root, workspaceRoot } = this.context;
+    const { cwd, workspaceRoot } = this.context;
     const moduleName = this.tool.config.module;
     const { name } = this.options.driver;
     const configName = this.getConfigName(name);
@@ -164,7 +164,7 @@ export default class CreateConfigRoutine extends Routine<
 
     // Allow for local development
     const filePath = isLocal
-      ? path.join(workspaceRoot || root, `configs/${configName}.js`)
+      ? path.join(workspaceRoot || cwd, `configs/${configName}.js`)
       : configLoader.resolveModuleConfigPath(configName, moduleName);
     const fileExists = fs.existsSync(filePath);
 
@@ -248,7 +248,7 @@ export default class CreateConfigRoutine extends Routine<
     const { metadata, name } = this.options.driver;
     const configLoader = new ConfigLoader(this.tool);
     const sourcePath = this.getConfigPath(configLoader);
-    const configPath = path.join(context.root, metadata.configName);
+    const configPath = path.join(context.cwd, metadata.configName);
 
     if (!sourcePath) {
       throw new Error(this.tool.msg('errors:configReferenceSourceMissing'));
@@ -267,7 +267,7 @@ export default class CreateConfigRoutine extends Routine<
     return fs
       .writeFile(
         configPath,
-        `module.exports = require('./${path.relative(context.root, sourcePath)}');`,
+        `module.exports = require('./${path.relative(context.cwd, sourcePath)}');`,
       )
       .then(() => configPath);
   }

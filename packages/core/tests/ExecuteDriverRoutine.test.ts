@@ -78,7 +78,7 @@ describe('ExecuteDriverRoutine', () => {
         routine.context.args.workspaces = '*';
         routine.context.workspaces = ['packages/*'];
         routine.context.workspaceRoot = fixturePath;
-        routine.context.root = fixturePath;
+        routine.context.cwd = fixturePath;
       });
 
       it('adds a routine for each', () => {
