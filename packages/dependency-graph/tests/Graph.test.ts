@@ -21,8 +21,8 @@ describe('Graph', () => {
     const graph = new Graph(Object.values(pkgs));
 
     expect(graph.resolveInOrder()).toEqual([
-      pkgs['@beemo/core'],
       pkgs['@beemo/dependency-graph'],
+      pkgs['@beemo/core'],
       pkgs['@beemo/cli'],
       pkgs['@beemo/driver-babel'],
       pkgs['@beemo/driver-eslint'],
@@ -38,50 +38,51 @@ describe('Graph', () => {
       root: true,
       nodes: [
         {
-          package: pkgs['@beemo/core'],
+          package: pkgs['@beemo/dependency-graph'],
           nodes: [
             {
-              leaf: true,
-              package: pkgs['@beemo/cli'],
-            },
-            {
-              package: pkgs['@beemo/driver-babel'],
+              package: pkgs['@beemo/core'],
               nodes: [
                 {
                   leaf: true,
-                  package: pkgs['@beemo/driver-jest'],
+                  package: pkgs['@beemo/cli'],
+                },
+                {
+                  package: pkgs['@beemo/driver-babel'],
+                  nodes: [
+                    {
+                      leaf: true,
+                      package: pkgs['@beemo/driver-jest'],
+                    },
+                  ],
+                },
+                {
+                  leaf: true,
+                  package: pkgs['@beemo/driver-eslint'],
+                },
+                {
+                  leaf: true,
+                  package: pkgs['@beemo/driver-flow'],
+                },
+                {
+                  leaf: true,
+                  package: pkgs['@beemo/driver-mocha'],
+                },
+                {
+                  leaf: true,
+                  package: pkgs['@beemo/driver-prettier'],
+                },
+                {
+                  leaf: true,
+                  package: pkgs['@beemo/driver-typescript'],
+                },
+                {
+                  leaf: true,
+                  package: pkgs['@beemo/driver-webpack'],
                 },
               ],
             },
-            {
-              leaf: true,
-              package: pkgs['@beemo/driver-eslint'],
-            },
-            {
-              leaf: true,
-              package: pkgs['@beemo/driver-flow'],
-            },
-            {
-              leaf: true,
-              package: pkgs['@beemo/driver-mocha'],
-            },
-            {
-              leaf: true,
-              package: pkgs['@beemo/driver-prettier'],
-            },
-            {
-              leaf: true,
-              package: pkgs['@beemo/driver-typescript'],
-            },
-            {
-              leaf: true,
-              package: pkgs['@beemo/driver-webpack'],
-            },
           ],
-        },
-        {
-          leaf: true,
-          package: pkgs['@beemo/dependency-graph'],
         },
       ],
     });
@@ -242,7 +243,7 @@ describe('Graph', () => {
   });
 
   it('resets the graph when a package is added after resolution', () => {
-    const graph = new Graph([{ name: 'foo' }, { name: 'bar' }]);
+    const graph = new Graph<PackageConfig>([{ name: 'foo' }, { name: 'bar' }]);
 
     expect(graph.resolveInOrder()).toEqual([{ name: 'foo' }, { name: 'bar' }]);
 

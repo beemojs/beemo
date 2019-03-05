@@ -9,13 +9,13 @@ export interface PackageConfig {
   peerDependencies?: DependencyMap;
 }
 
-export interface TreeNode {
+export interface TreeNode<T extends PackageConfig> {
   leaf?: boolean;
-  nodes?: TreeNode[];
-  package: PackageConfig;
+  nodes?: TreeNode<T>[];
+  package: T;
 }
 
-export interface TreeRoot {
-  nodes: TreeNode[];
+export interface Tree<T extends PackageConfig> {
+  nodes: TreeNode<T>[];
   root: boolean;
 }

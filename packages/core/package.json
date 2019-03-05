@@ -26,6 +26,7 @@
     "access": "public"
   },
   "dependencies": {
+    "@beemo/dependency-graph": "^0.0.0",
     "@boost/core": "^1.9.1",
     "@types/execa": "^0.9.0",
     "@types/fs-extra": "^5.0.5",

@@ -1,16 +1,16 @@
 import Node from './Node';
-import { PackageConfig, TreeRoot, TreeNode } from './types';
+import { PackageConfig, Tree, TreeNode } from './types';
 
-export default class Graph {
-  protected cache: Map<string, Node> = new Map();
-
+export default class Graph<T extends PackageConfig = PackageConfig> {
   protected mapped: boolean = false;
 
-  protected nodes: Set<Node> = new Set();
+  protected nodes: Map<string, Node> = new Map();
 
-  protected packages: Map<string, PackageConfig> = new Map();
+  protected packages: Map<string, T> = new Map();
 
-  constructor(packages: PackageConfig[] = []) {
+  protected root: Set<Node> = new Set();
+
+  constructor(packages: T[] = []) {
     packages.forEach(pkg => {
       this.addPackage(pkg);
     });
@@ -21,7 +21,7 @@ export default class Graph {
    * Will map a dependency between the package and its dependees
    * found in `dependencies` and `peerDependencies`.
    */
-  addPackage(pkg: PackageConfig): this {
+  addPackage(pkg: T): this {
     if (this.mapped) {
       this.resetNodes();
     }
@@ -35,10 +35,10 @@ export default class Graph {
     return this;
   }
 
-  resolveInOrder(): PackageConfig[] {
+  resolveInOrder(): T[] {
     this.mapDependencies();
 
-    const order: Set<PackageConfig> = new Set();
+    const order: Set<T> = new Set();
     const resolve = (nodes: Set<Node>) => {
       // Add parent nodes first
       nodes.forEach(node => {
@@ -56,16 +56,16 @@ export default class Graph {
       });
     };
 
-    resolve(this.nodes);
+    resolve(this.root);
 
     return Array.from(order);
   }
 
-  resolveTree(): TreeRoot {
+  resolveTree(): Tree<T> {
     this.mapDependencies();
 
     const seen: Set<string> = new Set();
-    const resolve = (node: Node, tree: TreeRoot | TreeNode) => {
+    const resolve = (node: Node, tree: Tree<T> | TreeNode<T>) => {
       if (seen.has(node.name)) {
         return;
       }
@@ -76,7 +76,7 @@ export default class Graph {
         return;
       }
 
-      const branch: TreeNode = {
+      const branch: TreeNode<T> = {
         package: pkg,
       };
 
@@ -97,12 +97,12 @@ export default class Graph {
       seen.add(node.name);
     };
 
-    const trunk: TreeRoot = {
+    const trunk: Tree<T> = {
       nodes: [],
       root: true,
     };
 
-    this.nodes.forEach(node => resolve(node, trunk));
+    this.root.forEach(node => resolve(node, trunk));
 
     return trunk;
   }
@@ -114,10 +114,10 @@ export default class Graph {
     const node = new Node(name);
 
     // Cache node for constant lookups
-    this.cache.set(name, node);
+    this.nodes.set(name, node);
 
     // Add to the root as it has no parent yet
-    this.nodes.add(node);
+    this.root.add(node);
   }
 
   /**
@@ -145,8 +145,8 @@ export default class Graph {
    * from the root if it exists.
    */
   protected mapDependency(dependentName: string, requirementName: string) {
-    const requirement = this.cache.get(requirementName);
-    const dependent = this.cache.get(dependentName);
+    const requirement = this.nodes.get(requirementName);
+    const dependent = this.nodes.get(dependentName);
 
     if (!requirement || !dependent) {
       return;
@@ -159,7 +159,7 @@ export default class Graph {
     requirement.dependents.add(dependent);
 
     // Remove from the root
-    this.nodes.delete(dependent);
+    this.root.delete(dependent);
   }
 
   /**
@@ -167,8 +167,8 @@ export default class Graph {
    */
   protected resetNodes() {
     this.mapped = false;
-    this.cache = new Map();
-    this.nodes = new Set();
+    this.nodes = new Map();
+    this.root = new Set();
     this.packages.forEach(pkg => {
       this.addNode(pkg.name);
     });
