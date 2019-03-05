@@ -16,8 +16,8 @@ export interface CreateConfigOptions {
   driver: Driver;
 }
 
-export default class CreateConfigRoutine extends Routine<
-  ConfigContext,
+export default class CreateConfigRoutine<T extends ConfigContext> extends Routine<
+  T,
   BeemoTool,
   CreateConfigOptions
 > {

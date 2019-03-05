@@ -35,6 +35,10 @@ export default class Graph<T extends PackageConfig = PackageConfig> {
     return this;
   }
 
+  /**
+   * Resolve the dependency graph and return an array of all package configs
+   * in the order they are depended on.
+   */
   resolveInOrder(): T[] {
     this.mapDependencies();
 
@@ -61,6 +65,10 @@ export default class Graph<T extends PackageConfig = PackageConfig> {
     return Array.from(order);
   }
 
+  /**
+   * Resolve the dependency graph and return a tree or nodes for all
+   * package configs and their dependency mappings.
+   */
   resolveTree(): Tree<T> {
     this.mapDependencies();
 

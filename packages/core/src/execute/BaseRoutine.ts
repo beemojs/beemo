@@ -93,7 +93,6 @@ export default abstract class BaseRoutine<Ctx extends Context> extends Routine<C
     const other: Routine<Ctx, BeemoTool>[] = [];
 
     const handler = (node: TreeNode<WorkspacePackageConfig>) => {
-      // @ts-ignore
       const routine = this.routines.find(route => route.key === node.package.workspace.packageName);
 
       if (routine) {

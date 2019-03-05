@@ -25,9 +25,10 @@ export default class ConfigureRoutine<T extends ConfigContext = ConfigContext> e
    */
   setupConfigFiles() {
     const names = [...this.context.drivers].reverse().map(driver => {
-      const routine = new CreateConfigRoutine(driver.name, driver.metadata.configName, { driver });
+      const routine = new CreateConfigRoutine<T>(driver.name, driver.metadata.configName, {
+        driver,
+      });
 
-      // @ts-ignore Not sure why this errors
       this.pipe(routine);
 
       return driver.name;
