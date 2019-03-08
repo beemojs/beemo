@@ -8,8 +8,6 @@ export default class Graph<T extends PackageConfig = PackageConfig> {
 
   protected packages: Map<string, T> = new Map();
 
-  protected root: Set<Node> = new Set();
-
   constructor(packages: T[] = []) {
     packages.forEach(pkg => {
       this.addPackage(pkg);
@@ -43,7 +41,7 @@ export default class Graph<T extends PackageConfig = PackageConfig> {
     this.mapDependencies();
 
     const order: Set<T> = new Set();
-    const queue: Node[] = this.sortByDependedOn(this.root);
+    const queue: Node[] = this.sortByDependedOn(this.getRootNodes());
 
     while (queue.length > 0) {
       const node = queue.shift();
@@ -108,7 +106,7 @@ export default class Graph<T extends PackageConfig = PackageConfig> {
       root: true,
     };
 
-    this.sortByDependedOn(this.root).forEach(node => resolve(node, trunk));
+    this.sortByDependedOn(this.getRootNodes()).forEach(node => resolve(node, trunk));
 
     return trunk;
   }
@@ -121,9 +119,40 @@ export default class Graph<T extends PackageConfig = PackageConfig> {
 
     // Cache node for constant lookups
     this.nodes.set(name, node);
+  }
 
-    // Add to the root as it has no parent yet
-    this.root.add(node);
+  /**
+   * Return all nodes that can be considered "root",
+   * as determined by having no requirements.
+   */
+  protected getRootNodes(): Node[] {
+    const rootNodes: Node[] = [];
+
+    this.nodes.forEach(node => {
+      if (node.requirements.size === 0) {
+        rootNodes.push(node);
+      }
+    });
+
+    // If no root nodes are found, but nodes exist, then we have a circular cycle.
+    // Try and detect it by looping through till a path is found.
+    if (rootNodes.length === 0 && this.nodes.size !== 0) {
+      const dig = (node: Node, cycle: Set<Node>) => {
+        if (cycle.has(node)) {
+          const path = [...cycle, node].map(n => n.name).join(' -> ');
+
+          throw new Error(`Circular cycle detected: ${path}`);
+        } else {
+          cycle.add(node);
+        }
+
+        node.dependents.forEach(child => dig(child, new Set(cycle)));
+      };
+
+      this.nodes.forEach(node => dig(node, new Set()));
+    }
+
+    return rootNodes;
   }
 
   /**
@@ -163,9 +192,6 @@ export default class Graph<T extends PackageConfig = PackageConfig> {
 
     // Parent is a dependee of child
     requirement.dependents.add(dependent);
-
-    // Remove from the root
-    this.root.delete(dependent);
   }
 
   /**
@@ -174,7 +200,6 @@ export default class Graph<T extends PackageConfig = PackageConfig> {
   protected resetNodes() {
     this.mapped = false;
     this.nodes = new Map();
-    this.root = new Set();
     this.packages.forEach(pkg => {
       this.addNode(pkg.name);
     });
@@ -183,7 +208,7 @@ export default class Graph<T extends PackageConfig = PackageConfig> {
   /**
    * Sort a set of nodes by most depended on.
    */
-  protected sortByDependedOn(nodes: Set<Node>): Node[] {
+  protected sortByDependedOn(nodes: Set<Node> | Node[]): Node[] {
     return [...nodes].sort((a, b) => b.dependents.size - a.dependents.size);
   }
 }

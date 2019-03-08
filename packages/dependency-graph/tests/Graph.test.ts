@@ -80,19 +80,28 @@ describe('Graph', () => {
     });
   });
 
-  it.skip('handles circular cycles', () => {
+  it('errors for circular cycles (order)', () => {
     const graph = new Graph([
-      { name: 'foo', dependencies: { bar: '0.0.0' } },
+      { name: 'foo', dependencies: { baz: '0.0.0' } },
       { name: 'bar', dependencies: { foo: '0.0.0' } },
+      { name: 'baz', dependencies: { bar: '0.0.0' } },
     ]);
 
-    console.log(graph);
+    expect(() => {
+      graph.resolveInOrder();
+    }).toThrowError('Circular cycle detected: foo -> bar -> baz -> foo');
+  });
 
-    expect(graph.resolveInOrder()).toEqual([]);
-    expect(graph.resolveTree()).toEqual({
-      root: true,
-      nodes: [],
-    });
+  it('errors for circular cycles (tree)', () => {
+    const graph = new Graph([
+      { name: 'foo', dependencies: { baz: '0.0.0' } },
+      { name: 'bar', dependencies: { foo: '0.0.0' } },
+      { name: 'baz', dependencies: { bar: '0.0.0' } },
+    ]);
+
+    expect(() => {
+      graph.resolveTree();
+    }).toThrowError('Circular cycle detected: foo -> bar -> baz -> foo');
   });
 
   it('returns an empty array when no packages are defined', () => {
