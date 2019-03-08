@@ -10,7 +10,6 @@ export interface PackageConfig {
 }
 
 export interface TreeNode<T extends PackageConfig> {
-  leaf?: boolean;
   nodes?: TreeNode<T>[];
   package: T;
 }

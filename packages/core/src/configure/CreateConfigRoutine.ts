@@ -16,8 +16,8 @@ export interface CreateConfigOptions {
   driver: Driver;
 }
 
-export default class CreateConfigRoutine<T extends ConfigContext> extends Routine<
-  T,
+export default class CreateConfigRoutine<Ctx extends ConfigContext> extends Routine<
+  Ctx,
   BeemoTool,
   CreateConfigOptions
 > {
@@ -67,7 +67,7 @@ export default class CreateConfigRoutine<T extends ConfigContext> extends Routin
   /**
    * Copy configuration file from module.
    */
-  async copyConfigFile(context: ConfigContext): Promise<string> {
+  async copyConfigFile(context: Ctx): Promise<string> {
     const { metadata, name } = this.options.driver;
     const configLoader = new ConfigLoader(this.tool);
     const sourcePath = this.getConfigPath(configLoader);
@@ -97,7 +97,7 @@ export default class CreateConfigRoutine<T extends ConfigContext> extends Routin
   /**
    * Create a temporary configuration file or pass as an option.
    */
-  async createConfigFile(context: ConfigContext, config: object): Promise<string> {
+  async createConfigFile(context: Ctx, config: object): Promise<string> {
     const { metadata, name } = this.options.driver;
     const configPath = path.join(context.cwd, metadata.configName);
 
@@ -117,10 +117,7 @@ export default class CreateConfigRoutine<T extends ConfigContext> extends Routin
   /**
    * Extract configuration from "beemo.<driver>" within the local project's package.json.
    */
-  extractConfigFromPackage(
-    context: ConfigContext,
-    prevConfigs: ConfigObject[],
-  ): Promise<ConfigObject[]> {
+  extractConfigFromPackage(context: Ctx, prevConfigs: ConfigObject[]): Promise<ConfigObject[]> {
     const { name } = this.options.driver;
     const { config } = this.tool;
     const configs = [...prevConfigs];
@@ -185,7 +182,7 @@ export default class CreateConfigRoutine<T extends ConfigContext> extends Routin
   /**
    * Merge multiple configuration sources using the current driver.
    */
-  mergeConfigs(context: ConfigContext, configs: ConfigObject[]): Promise<ConfigObject> {
+  mergeConfigs(context: Ctx, configs: ConfigObject[]): Promise<ConfigObject> {
     const { name } = this.options.driver;
 
     this.debug('Merging %s config from %d sources', chalk.green(name), configs.length);
@@ -219,10 +216,7 @@ export default class CreateConfigRoutine<T extends ConfigContext> extends Routin
    * Load config from the provider configuration module
    * and from the local configs/ folder in the consumer.
    */
-  loadConfigFromSources(
-    context: ConfigContext,
-    prevConfigs: ConfigObject[],
-  ): Promise<ConfigObject[]> {
+  loadConfigFromSources(context: Ctx, prevConfigs: ConfigObject[]): Promise<ConfigObject[]> {
     const configLoader = new ConfigLoader(this.tool);
     const modulePath = this.getConfigPath(configLoader);
     const localPath = this.getConfigPath(configLoader, true);
@@ -244,7 +238,7 @@ export default class CreateConfigRoutine<T extends ConfigContext> extends Routin
   /**
    * Reference configuration file from module using a require statement.
    */
-  referenceConfigFile(context: ConfigContext): Promise<string> {
+  referenceConfigFile(context: Ctx): Promise<string> {
     const { metadata, name } = this.options.driver;
     const configLoader = new ConfigLoader(this.tool);
     const sourcePath = this.getConfigPath(configLoader);
@@ -275,7 +269,7 @@ export default class CreateConfigRoutine<T extends ConfigContext> extends Routin
   /**
    * Set environment variables defined by the driver.
    */
-  setEnvVars(context: ConfigContext, configs: ConfigObject[]): Promise<any> {
+  setEnvVars(context: Ctx, configs: ConfigObject[]): Promise<any> {
     const { env } = this.options.driver.options;
 
     // TODO: This may cause collisions, isolate in a child process?

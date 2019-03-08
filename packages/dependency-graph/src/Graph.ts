@@ -43,24 +43,25 @@ export default class Graph<T extends PackageConfig = PackageConfig> {
     this.mapDependencies();
 
     const order: Set<T> = new Set();
-    const resolve = (nodes: Set<Node>) => {
-      // Add parent nodes first
-      nodes.forEach(node => {
-        const pkg = this.packages.get(node.name);
+    const queue: Node[] = this.sortByDependedOn(this.root);
 
-        // Only include nodes that have package data
-        if (pkg) {
-          order.add(pkg);
-        }
-      });
+    while (queue.length > 0) {
+      const node = queue.shift();
+
+      if (!node) {
+        break;
+      }
+
+      const pkg = this.packages.get(node.name);
+
+      // Only include nodes that have package data
+      if (pkg) {
+        order.add(pkg);
+      }
 
       // Add children after parents so order is preserved
-      nodes.forEach(node => {
-        resolve(node.dependents);
-      });
-    };
-
-    resolve(this.root);
+      queue.push(...this.sortByDependedOn(node.dependents));
+    }
 
     return Array.from(order);
   }
@@ -78,6 +79,7 @@ export default class Graph<T extends PackageConfig = PackageConfig> {
         return;
       }
 
+      // Only include nodes that have package data
       const pkg = this.packages.get(node.name);
 
       if (!pkg) {
@@ -88,11 +90,7 @@ export default class Graph<T extends PackageConfig = PackageConfig> {
         package: pkg,
       };
 
-      if (node.dependents.size === 0) {
-        branch.leaf = true;
-      }
-
-      node.dependents.forEach(child => {
+      this.sortByDependedOn(node.dependents).forEach(child => {
         resolve(child, branch);
       });
 
@@ -110,7 +108,7 @@ export default class Graph<T extends PackageConfig = PackageConfig> {
       root: true,
     };
 
-    this.root.forEach(node => resolve(node, trunk));
+    this.sortByDependedOn(this.root).forEach(node => resolve(node, trunk));
 
     return trunk;
   }
@@ -180,5 +178,12 @@ export default class Graph<T extends PackageConfig = PackageConfig> {
     this.packages.forEach(pkg => {
       this.addNode(pkg.name);
     });
+  }
+
+  /**
+   * Sort a set of nodes by most depended on.
+   */
+  protected sortByDependedOn(nodes: Set<Node>): Node[] {
+    return [...nodes].sort((a, b) => b.dependents.size - a.dependents.size);
   }
 }

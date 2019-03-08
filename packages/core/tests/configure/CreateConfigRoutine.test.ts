@@ -24,7 +24,7 @@ describe('CreateConfigRoutine', () => {
   const oldExistsSync = fs.existsSync;
   const oldWriteFile = fs.writeFile;
   const oldCopy = fs.copy;
-  let routine: CreateConfigRoutine;
+  let routine: CreateConfigRoutine<any>;
   let driver: Driver;
   let tool: BeemoTool;
 

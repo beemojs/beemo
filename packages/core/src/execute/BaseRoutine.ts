@@ -96,10 +96,10 @@ export default abstract class BaseRoutine<Ctx extends Context> extends Routine<C
       const routine = this.routines.find(route => route.key === node.package.workspace.packageName);
 
       if (routine) {
-        if (node.leaf) {
-          other.push(routine);
-        } else {
+        if (node.nodes) {
           priority.push(routine);
+        } else {
+          other.push(routine);
         }
       }
 

@@ -23,8 +23,8 @@ describe('Graph', () => {
     expect(graph.resolveInOrder()).toEqual([
       pkgs['@beemo/dependency-graph'],
       pkgs['@beemo/core'],
-      pkgs['@beemo/cli'],
       pkgs['@beemo/driver-babel'],
+      pkgs['@beemo/cli'],
       pkgs['@beemo/driver-eslint'],
       pkgs['@beemo/driver-flow'],
       pkgs['@beemo/driver-jest'],
@@ -44,40 +44,32 @@ describe('Graph', () => {
               package: pkgs['@beemo/core'],
               nodes: [
                 {
-                  leaf: true,
-                  package: pkgs['@beemo/cli'],
-                },
-                {
                   package: pkgs['@beemo/driver-babel'],
                   nodes: [
                     {
-                      leaf: true,
                       package: pkgs['@beemo/driver-jest'],
                     },
                   ],
                 },
                 {
-                  leaf: true,
+                  package: pkgs['@beemo/cli'],
+                },
+                {
                   package: pkgs['@beemo/driver-eslint'],
                 },
                 {
-                  leaf: true,
                   package: pkgs['@beemo/driver-flow'],
                 },
                 {
-                  leaf: true,
                   package: pkgs['@beemo/driver-mocha'],
                 },
                 {
-                  leaf: true,
                   package: pkgs['@beemo/driver-prettier'],
                 },
                 {
-                  leaf: true,
                   package: pkgs['@beemo/driver-typescript'],
                 },
                 {
-                  leaf: true,
                   package: pkgs['@beemo/driver-webpack'],
                 },
               ],
@@ -121,15 +113,12 @@ describe('Graph', () => {
       root: true,
       nodes: [
         {
-          leaf: true,
           package: { name: 'foo' },
         },
         {
-          leaf: true,
           package: { name: 'bar' },
         },
         {
-          leaf: true,
           package: { name: 'baz' },
         },
       ],
@@ -150,7 +139,6 @@ describe('Graph', () => {
           package: { name: 'foo' },
           nodes: [
             {
-              leaf: true,
               package: { name: 'bar', dependencies: { foo: '0.0.0' } },
             },
           ],
@@ -173,7 +161,6 @@ describe('Graph', () => {
           package: { name: 'bar' },
           nodes: [
             {
-              leaf: true,
               package: { name: 'foo', peerDependencies: { bar: '0.0.0' } },
             },
           ],
@@ -190,25 +177,23 @@ describe('Graph', () => {
     ]);
 
     expect(graph.resolveInOrder()).toEqual([
-      { name: 'bar' },
       { name: 'baz' },
+      { name: 'bar' },
       { name: 'foo', dependencies: { baz: '0.0.0' } },
     ]);
     expect(graph.resolveTree()).toEqual({
       root: true,
       nodes: [
         {
-          leaf: true,
-          package: { name: 'bar' },
-        },
-        {
           package: { name: 'baz' },
           nodes: [
             {
-              leaf: true,
               package: { name: 'foo', dependencies: { baz: '0.0.0' } },
             },
           ],
+        },
+        {
+          package: { name: 'bar' },
         },
       ],
     });
@@ -234,7 +219,132 @@ describe('Graph', () => {
           nodes: [
             {
               package: { name: 'bar', dependencies: { baz: '0.0.0' } },
-              nodes: [{ leaf: true, package: { name: 'foo', dependencies: { bar: '0.0.0' } } }],
+              nodes: [{ package: { name: 'foo', dependencies: { bar: '0.0.0' } } }],
+            },
+          ],
+        },
+      ],
+    });
+  });
+
+  it('sorts each depth by most dependend on', () => {
+    const graph = new Graph([
+      { name: 'a' },
+      { name: 'b' },
+      { name: 'c' },
+      { name: 'd', dependencies: { b: '0.0.0' } },
+      { name: 'e', dependencies: { i: '0.0.0' } },
+      { name: 'f', peerDependencies: { b: '0.0.0' } },
+      { name: 'g', dependencies: { a: '0.0.0' } },
+      { name: 'h', dependencies: { b: '0.0.0' } },
+      { name: 'i', dependencies: { k: '0.0.0' } },
+      { name: 'j', peerDependencies: { c: '0.0.0' } },
+      { name: 'k', dependencies: { f: '0.0.0' } },
+    ]);
+
+    expect(graph.resolveInOrder()).toEqual([
+      { name: 'b' },
+      { name: 'a' },
+      { name: 'c' },
+      { name: 'f', peerDependencies: { b: '0.0.0' } },
+      { name: 'd', dependencies: { b: '0.0.0' } },
+      { name: 'h', dependencies: { b: '0.0.0' } },
+      { name: 'g', dependencies: { a: '0.0.0' } },
+      { name: 'j', peerDependencies: { c: '0.0.0' } },
+      { name: 'k', dependencies: { f: '0.0.0' } },
+      { name: 'i', dependencies: { k: '0.0.0' } },
+      { name: 'e', dependencies: { i: '0.0.0' } },
+    ]);
+    expect(graph.resolveTree()).toEqual({
+      root: true,
+      nodes: [
+        {
+          package: { name: 'b' },
+          nodes: [
+            {
+              package: { name: 'f', peerDependencies: { b: '0.0.0' } },
+              nodes: [
+                {
+                  package: { name: 'k', dependencies: { f: '0.0.0' } },
+                  nodes: [
+                    {
+                      package: { name: 'i', dependencies: { k: '0.0.0' } },
+                      nodes: [
+                        {
+                          package: { name: 'e', dependencies: { i: '0.0.0' } },
+                        },
+                      ],
+                    },
+                  ],
+                },
+              ],
+            },
+            {
+              package: { name: 'd', dependencies: { b: '0.0.0' } },
+            },
+            {
+              package: { name: 'h', dependencies: { b: '0.0.0' } },
+            },
+          ],
+        },
+        {
+          package: { name: 'a' },
+          nodes: [
+            {
+              package: { name: 'g', dependencies: { a: '0.0.0' } },
+            },
+          ],
+        },
+        {
+          package: { name: 'c' },
+          nodes: [
+            {
+              package: { name: 'j', peerDependencies: { c: '0.0.0' } },
+            },
+          ],
+        },
+      ],
+    });
+  });
+
+  it('orders correctly regardless of folder alpha sorting', () => {
+    const graph = new Graph([
+      { name: 'core', dependencies: { icons: '0.0.0' } },
+      { name: 'icons' },
+      { name: 'helpers', dependencies: { core: '0.0.0', utils: '0.0.0' } },
+      { name: 'forms', dependencies: { core: '0.0.0' } },
+      { name: 'utils', dependencies: { core: '0.0.0' } },
+    ]);
+
+    expect(graph.resolveInOrder()).toEqual([
+      { name: 'icons' },
+      { name: 'core', dependencies: { icons: '0.0.0' } },
+      { name: 'utils', dependencies: { core: '0.0.0' } },
+      { name: 'helpers', dependencies: { core: '0.0.0', utils: '0.0.0' } },
+      { name: 'forms', dependencies: { core: '0.0.0' } },
+    ]);
+
+    expect(graph.resolveTree()).toEqual({
+      root: true,
+      nodes: [
+        {
+          package: { name: 'icons' },
+          nodes: [
+            {
+              package: { name: 'core', dependencies: { icons: '0.0.0' } },
+              nodes: [
+                {
+                  package: { name: 'utils', dependencies: { core: '0.0.0' } },
+                  nodes: [
+                    {
+                      package: { name: 'helpers', dependencies: { core: '0.0.0', utils: '0.0.0' } },
+                    },
+                  ],
+                },
+                {
+                  package: { name: 'forms', dependencies: { core: '0.0.0' } },
+                },
+              ],
             },
           ],
         },
