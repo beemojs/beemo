@@ -4,12 +4,17 @@ import Context from '../contexts/Context';
 import isPatternMatch from '../utils/isPatternMatch';
 import { BeemoTool } from '../types';
 
-export interface CustomConfig {
-  priority?: number;
+export interface BaseContextArgs {
+  concurrency: number;
+  priority: boolean;
+  workspaces: string;
 }
 
-export default abstract class BaseRoutine<Ctx extends Context> extends Routine<Ctx, BeemoTool> {
-  workspacePackages: (WorkspacePackageConfig & CustomConfig)[] = [];
+export default abstract class BaseRoutine<Ctx extends Context<BaseContextArgs>> extends Routine<
+  Ctx,
+  BeemoTool
+> {
+  workspacePackages: WorkspacePackageConfig[] = [];
 
   bootstrap() {
     const { args, workspaceRoot, workspaces } = this.context;
@@ -37,8 +42,7 @@ export default abstract class BaseRoutine<Ctx extends Context> extends Routine<C
 
     await this.serializeRoutines(value, priority);
 
-    const concurrency = (context.args.concurrency ||
-      this.tool.config.execute.concurrency) as number;
+    const concurrency = context.args.concurrency || this.tool.config.execute.concurrency;
     const response = await this.poolRoutines(value, concurrency ? { concurrency } : {}, other);
 
     if (response.errors.length > 0) {
@@ -68,7 +72,7 @@ export default abstract class BaseRoutine<Ctx extends Context> extends Routine<C
    */
   getFilteredWorkspacePackages(): WorkspacePackageConfig[] {
     return this.workspacePackages.filter(pkg =>
-      isPatternMatch(pkg.name, this.context.args.workspaces as string),
+      isPatternMatch(pkg.name, this.context.args.workspaces),
     );
   }
 

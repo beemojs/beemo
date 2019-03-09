@@ -9,7 +9,7 @@ import { STRATEGY_COPY, STRATEGY_REFERENCE, STRATEGY_CREATE, STRATEGY_NATIVE } f
 import { BeemoTool } from '../types';
 
 export interface ConfigObject {
-  [key: string]: any;
+  [key: string]: unknown;
 }
 
 export interface CreateConfigOptions {
@@ -133,7 +133,7 @@ export default class CreateConfigRoutine<Ctx extends ConfigContext> extends Rout
     if (config[configName]) {
       const pkgConfig = config[configName];
 
-      configs.push(pkgConfig);
+      configs.push(pkgConfig as object);
 
       this.tool.emit(`${name}.load-package-config`, [context, pkgConfig]);
     }

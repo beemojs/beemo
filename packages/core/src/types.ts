@@ -3,6 +3,8 @@ import { ExecaReturns } from 'execa';
 import { Arguments, Options } from 'yargs';
 import Driver from './Driver';
 import Script from './Script';
+// eslint-disable-next-line no-unused-vars, @typescript-eslint/no-unused-vars
+import Context from './contexts/Context';
 
 export { Arguments };
 
@@ -26,7 +28,7 @@ export interface BeemoConfig extends ToolConfig {
   module: string;
   scripts: PluginSetting<Script>;
   // Driver overrides
-  [key: string]: any;
+  [key: string]: unknown;
 }
 
 export type BeemoTool = Tool<BeemoPluginRegistry, BeemoConfig>;
@@ -66,7 +68,7 @@ declare global {
   namespace NodeJS {
     interface Process {
       beemo: {
-        context: any;
+        context: Context<any>;
         tool: BeemoTool;
       };
     }

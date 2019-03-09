@@ -21,10 +21,10 @@ export default class Context<T = {}> extends BaseContext {
   // Absolute path to the configuration module
   moduleRoot: string = '';
 
-  // Absolute path to package.json or lerna.json defining workspaces
+  // Absolute path to the folder containing `package.json` (Yarn workspaces) or `lerna.json`
   workspaceRoot: string = '';
 
-  // List of paths (with glob) for each defined workspace
+  // List of paths (with trailing glob star) for each defined workspace
   workspaces: string[] = [];
 
   constructor(args: Arguments<T>) {
@@ -69,7 +69,7 @@ export default class Context<T = {}> extends BaseContext {
   /**
    * Add an option argument to both the args object and argv list.
    */
-  addOption(arg: string, defaultValue: any = true, useEquals: boolean = false): this {
+  addOption(arg: string, defaultValue: unknown = true, useEquals: boolean = false): this {
     const list = [];
     let option = arg;
     let value = defaultValue;

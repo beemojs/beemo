@@ -13,7 +13,7 @@ export default class ScriptContext<T = ScriptArgs> extends Context<T> {
   // Name used for emitting events (kebab case)
   eventName: string;
 
-  // Absolute path to the script
+  // Absolute path to the script (changes depending on source location)
   path: string = '';
 
   // Script instance
