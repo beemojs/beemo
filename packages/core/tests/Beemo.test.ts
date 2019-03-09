@@ -246,7 +246,11 @@ describe('Beemo', () => {
   describe('executeDriver()', () => {
     beforeEach(() => {
       // @ts-ignore
-      beemo.tool.getPlugin = () => ({ name: 'foo-bar', metadata: { title: 'Foo Bar' } });
+      beemo.tool.getPlugin = () => ({
+        name: 'foo-bar',
+        metadata: { title: 'Foo Bar' },
+        getVersion: () => '0.0.0',
+      });
     });
 
     it('triggers `init-driver` event with context', async () => {

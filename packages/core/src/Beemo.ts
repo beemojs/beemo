@@ -218,16 +218,20 @@ export default class Beemo {
     const { tool } = this;
     const driver = tool.getPlugin('driver', driverName);
     const context = this.prepareContext(new DriverContext(args, driver, parallelArgv));
+    const version = driver.getVersion();
 
     tool.emit(`${context.eventName}.init-driver`, [context, driver]);
-    tool.debug('Running with %s driver', driverName);
+    tool.debug('Running with %s v%s driver', driverName, version);
 
     return this.startPipeline(context)
       .pipe(new ConfigureRoutine('config', tool.msg('app:configGenerate')))
       .pipe(
         new ExecuteDriverRoutine(
           'driver',
-          tool.msg('app:driverExecute', { name: driver.metadata.title }),
+          tool.msg('app:driverExecute', {
+            name: driver.metadata.title,
+            version,
+          }),
         ),
       )
       .pipe(new CleanupRoutine('cleanup', tool.msg('app:cleanup')))

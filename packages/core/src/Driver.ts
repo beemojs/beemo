@@ -1,5 +1,6 @@
 import { Plugin, EventListener } from '@boost/core';
 import mergeWith from 'lodash/mergeWith';
+import execa from 'execa';
 import optimal, { array, bool, number, object, string, shape, union } from 'optimal';
 import {
   STRATEGY_COPY,
@@ -81,6 +82,17 @@ export default class Driver<
    */
   getSupportedOptions(): string[] {
     return [];
+  }
+
+  /**
+   * Extract the current version of the installed driver via its binary.
+   */
+  getVersion(): string {
+    const { bin, versionOption } = this.metadata;
+    const version = execa.sync(bin, [versionOption]).stdout.trim();
+    const match = version.match(/(\d+)\.(\d+)\.(\d+)/u);
+
+    return match ? match[0] : '0.0.0';
   }
 
   /**
@@ -184,6 +196,7 @@ export default class Driver<
         helpOption: string('--help'),
         title: string().required(),
         useConfigOption: bool(),
+        versionOption: string('--version'),
         watchOptions: array(string()),
         workspaceStrategy: string(STRATEGY_REFERENCE).oneOf([STRATEGY_REFERENCE, STRATEGY_COPY]),
       },
