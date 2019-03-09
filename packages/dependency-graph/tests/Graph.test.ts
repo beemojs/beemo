@@ -80,30 +80,6 @@ describe('Graph', () => {
     });
   });
 
-  it('errors for circular cycles (order)', () => {
-    const graph = new Graph([
-      { name: 'foo', dependencies: { baz: '0.0.0' } },
-      { name: 'bar', dependencies: { foo: '0.0.0' } },
-      { name: 'baz', dependencies: { bar: '0.0.0' } },
-    ]);
-
-    expect(() => {
-      graph.resolveInOrder();
-    }).toThrowError('Circular cycle detected: foo -> bar -> baz -> foo');
-  });
-
-  it('errors for circular cycles (tree)', () => {
-    const graph = new Graph([
-      { name: 'foo', dependencies: { baz: '0.0.0' } },
-      { name: 'bar', dependencies: { foo: '0.0.0' } },
-      { name: 'baz', dependencies: { bar: '0.0.0' } },
-    ]);
-
-    expect(() => {
-      graph.resolveTree();
-    }).toThrowError('Circular cycle detected: foo -> bar -> baz -> foo');
-  });
-
   it('returns an empty array when no packages are defined', () => {
     const graph = new Graph();
 
@@ -375,5 +351,59 @@ describe('Graph', () => {
       { name: 'baz', dependencies: { foo: '0.0.0' } },
       { name: 'qux', dependencies: { baz: '0.0.0' } },
     ]);
+  });
+
+  describe('circular', () => {
+    describe('list', () => {
+      it('errors when no root nodes found', () => {
+        const graph = new Graph([
+          { name: 'foo', dependencies: { baz: '0.0.0' } },
+          { name: 'bar', dependencies: { foo: '0.0.0' } },
+          { name: 'baz', dependencies: { bar: '0.0.0' } },
+        ]);
+
+        expect(() => {
+          graph.resolveInOrder();
+        }).toThrowError('Circular dependency detected: foo -> bar -> baz -> foo');
+      });
+
+      it('errors when only some of the deps are a cycle', () => {
+        const graph = new Graph([
+          { name: 'foo', dependencies: { bar: '0.0.0' } },
+          { name: 'bar', dependencies: { foo: '0.0.0' } },
+          { name: 'baz' },
+        ]);
+
+        expect(() => {
+          graph.resolveInOrder();
+        }).toThrowError('Circular dependency detected: foo -> bar -> foo');
+      });
+    });
+
+    describe('tree', () => {
+      it('errors when no root nodes found', () => {
+        const graph = new Graph([
+          { name: 'foo', dependencies: { baz: '0.0.0' } },
+          { name: 'bar', dependencies: { foo: '0.0.0' } },
+          { name: 'baz', dependencies: { bar: '0.0.0' } },
+        ]);
+
+        expect(() => {
+          graph.resolveTree();
+        }).toThrowError('Circular dependency detected: foo -> bar -> baz -> foo');
+      });
+
+      it('errors when only some of the deps are a cycle', () => {
+        const graph = new Graph([
+          { name: 'foo', dependencies: { bar: '0.0.0' } },
+          { name: 'bar', dependencies: { foo: '0.0.0' } },
+          { name: 'baz' },
+        ]);
+
+        expect(() => {
+          graph.resolveTree();
+        }).toThrowError('Circular dependency detected: foo -> bar -> foo');
+      });
+    });
   });
 });

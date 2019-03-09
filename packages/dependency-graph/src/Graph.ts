@@ -61,6 +61,11 @@ export default class Graph<T extends PackageConfig = PackageConfig> {
       queue.push(...this.sortByDependedOn(node.dependents));
     }
 
+    // Some nodes are missing, so they must be a cycle
+    if (order.size !== this.nodes.size) {
+      this.detectCycle();
+    }
+
     return Array.from(order);
   }
 
@@ -108,6 +113,11 @@ export default class Graph<T extends PackageConfig = PackageConfig> {
 
     this.sortByDependedOn(this.getRootNodes()).forEach(node => resolve(node, trunk));
 
+    // Some nodes are missing, so they must be a cycle
+    if (seen.size !== this.nodes.size) {
+      this.detectCycle();
+    }
+
     return trunk;
   }
 
@@ -119,6 +129,25 @@ export default class Graph<T extends PackageConfig = PackageConfig> {
 
     // Cache node for constant lookups
     this.nodes.set(name, node);
+  }
+
+  /**
+   * Dig through all nodes and attempt to find a circular dependency cycle.
+   */
+  protected detectCycle() {
+    const dig = (node: Node, cycle: Set<Node>) => {
+      if (cycle.has(node)) {
+        const path = [...cycle, node].map(n => n.name).join(' -> ');
+
+        throw new Error(`Circular dependency detected: ${path}`);
+      }
+
+      cycle.add(node);
+
+      node.dependents.forEach(child => dig(child, new Set(cycle)));
+    };
+
+    this.nodes.forEach(node => dig(node, new Set()));
   }
 
   /**
@@ -134,22 +163,9 @@ export default class Graph<T extends PackageConfig = PackageConfig> {
       }
     });
 
-    // If no root nodes are found, but nodes exist, then we have a circular cycle.
-    // Try and detect it by looping through till a path is found.
+    // If no root nodes are found, but nodes exist, then we have a cycle
     if (rootNodes.length === 0 && this.nodes.size !== 0) {
-      const dig = (node: Node, cycle: Set<Node>) => {
-        if (cycle.has(node)) {
-          const path = [...cycle, node].map(n => n.name).join(' -> ');
-
-          throw new Error(`Circular cycle detected: ${path}`);
-        } else {
-          cycle.add(node);
-        }
-
-        node.dependents.forEach(child => dig(child, new Set(cycle)));
-      };
-
-      this.nodes.forEach(node => dig(node, new Set()));
+      this.detectCycle();
     }
 
     return rootNodes;
