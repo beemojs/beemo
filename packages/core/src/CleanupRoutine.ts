@@ -6,9 +6,7 @@ import { BeemoTool } from './types';
 
 export default class CleanupRoutine extends Routine<DriverContext, BeemoTool> {
   bootstrap() {
-    this.task(this.tool.msg('app:configCleanup'), this.deleteConfigFiles).skip(
-      !this.tool.config.configure.cleanup,
-    );
+    this.task(this.tool.msg('app:configCleanup'), this.deleteConfigFiles);
   }
 
   execute(): Promise<boolean[]> {

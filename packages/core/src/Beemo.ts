@@ -234,7 +234,9 @@ export default class Beemo {
           }),
         ),
       )
-      .pipe(new CleanupRoutine('cleanup', tool.msg('app:cleanup')))
+      .pipe(
+        new CleanupRoutine('cleanup', tool.msg('app:cleanup')).skip(tool.config.configure.cleanup),
+      )
       .run(driverName);
   }
 

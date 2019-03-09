@@ -1,7 +1,7 @@
 import { Plugin, EventListener } from '@boost/core';
 import mergeWith from 'lodash/mergeWith';
 import execa from 'execa';
-import optimal, { array, bool, number, object, string, shape, union } from 'optimal';
+import optimal, { array, bool, object, string, shape } from 'optimal';
 import {
   STRATEGY_COPY,
   STRATEGY_CREATE,
@@ -27,7 +27,7 @@ export default class Driver<
     return {
       args: array(string()),
       dependencies: array(string()),
-      env: object(union([bool(), number(), string()], '')),
+      env: object(string()),
       strategy: string(STRATEGY_NATIVE).oneOf([
         STRATEGY_NATIVE,
         STRATEGY_CREATE,
@@ -181,7 +181,7 @@ export default class Driver<
       metadata,
       {
         bin: string()
-          .match(/^[a-z0-9-]+$/u)
+          .match(/^[a-z]{1}[a-zA-Z0-9-]+$/u)
           .required(),
         configName: string().required(),
         configOption: string('--config'),
