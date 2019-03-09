@@ -364,7 +364,6 @@ describe('RunCommandRoutine', () => {
         '../scripts/RunIntegrationTests.js',
         '../scripts/build-packages.sh',
         '../scripts/extract-option-list.js',
-        '../scripts/link-packages.sh',
         '../tests/index.js',
         'bar',
       ]);

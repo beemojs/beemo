@@ -2,7 +2,7 @@
   "private": true,
   "name": "beemo-root",
   "scripts": {
-    "setup": "bash ./scripts/build-packages.sh",
+    "setup": "bash ./scripts/buildPackages.sh",
     "build": "beemo typescript --workspaces=*",
     "coverage": "yarn run jest --coverage",
     "eslint": "beemo eslint",

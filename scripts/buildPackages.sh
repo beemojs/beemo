@@ -8,7 +8,7 @@ root=$PWD
 
 build_pkg() {
   echo "$1"
-  cp "$root/scripts/build-tsconfig.json" "$root/$1/tsconfig.json"
+  cp "$root/scripts/tsconfig.build.json" "$root/$1/tsconfig.json"
   cd "$root/$1" || exit
   node ../../node_modules/.bin/tsc
 }
