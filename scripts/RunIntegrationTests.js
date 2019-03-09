@@ -23,7 +23,7 @@ module.exports = class RunIntegrationTestsScript extends Script {
       throw new Error('Please pass one of --fail or --pass.');
     }
 
-    const pkg = fs.readJsonSync(path.join(context.root, 'package.json'));
+    const pkg = fs.readJsonSync(path.join(context.cwd, 'package.json'));
     const name = pkg.name.split('/')[1];
     const script = pkg.scripts && pkg.scripts[`integration:${key}`];
 
@@ -38,7 +38,7 @@ module.exports = class RunIntegrationTestsScript extends Script {
     return Promise.all(
       script.split('&&').map(command =>
         execa
-          .shell(command.trim(), { cwd: context.root })
+          .shell(command.trim(), { cwd: context.cwd })
           // Handles everything else
           .then(response => this.handleResult(name, options, response))
           // Handles syntax errors
