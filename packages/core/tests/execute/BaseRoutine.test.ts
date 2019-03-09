@@ -286,7 +286,7 @@ describe('BaseExecuteRoutine', () => {
       };
 
       expect(routine.orderByWorkspacePriorityGraph()).toEqual({
-        other: [primary, foo, baz, qux],
+        other: [foo, primary, baz, qux],
         priority: [bar],
       });
     });
@@ -298,7 +298,7 @@ describe('BaseExecuteRoutine', () => {
       };
 
       expect(routine.orderByWorkspacePriorityGraph()).toEqual({
-        other: [primary, foo, baz, qux],
+        other: [foo, primary, baz, qux],
         priority: [bar],
       });
     });
