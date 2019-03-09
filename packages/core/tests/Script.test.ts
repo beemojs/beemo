@@ -1,6 +1,9 @@
+import execa from 'execa';
 import { mockTool } from '@boost/test-utils';
 import Script from '../src/Script';
 import { createScriptContext } from '../../../tests/helpers';
+
+jest.mock('execa');
 
 describe('Script', () => {
   let script: Script;
@@ -23,6 +26,14 @@ describe('Script', () => {
       await script.execute(createScriptContext(), {});
 
       expect(spy).toHaveBeenCalledWith('serial');
+    });
+  });
+
+  describe('executeCommand()', () => {
+    it('calls execa internally', async () => {
+      await script.executeCommand('yarn', ['install', '--froze-lockfile'], { cwd: '.' });
+
+      expect(execa).toHaveBeenCalledWith('yarn', ['install', '--froze-lockfile'], { cwd: '.' });
     });
   });
 

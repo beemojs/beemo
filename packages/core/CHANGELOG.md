@@ -15,6 +15,7 @@
   dependency resolution.
 - Added a `none` strategy option to `Driver`s. With this strategy, the consumer will need to
   manually create a config file.
+- Added `Script#executeCommand`, so that local binaries can easily be executed.
 
 #### 🛠 Internal
 
