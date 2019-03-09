@@ -1,4 +1,5 @@
 import { Routine, WorkspacePackageConfig } from '@boost/core';
+import Graph, { TreeNode } from '@beemo/dependency-graph';
 import Context from '../contexts/Context';
 import isPatternMatch from '../utils/isPatternMatch';
 import { BeemoTool } from '../types';
@@ -87,70 +88,27 @@ export default abstract class BaseRoutine<Ctx extends Context> extends Routine<C
       };
     }
 
-    const packages: { [name: string]: WorkspacePackageConfig & CustomConfig } = {};
-    const depCounts: { [name: string]: { count: number; package: WorkspacePackageConfig } } = {};
-
-    function countDep(name: string) {
-      if (depCounts[name]) {
-        depCounts[name].count += 1;
-      } else {
-        depCounts[name] = {
-          count: packages[name].priority || 1,
-          package: packages[name],
-        };
-      }
-    }
-
-    // Create a mapping of package names within all workspaces
-    this.workspacePackages.forEach(pkg => {
-      packages[pkg.name] = pkg;
-
-      // Count it immediately, as it may not be dependend on
-      if (pkg.priority) {
-        countDep(pkg.name);
-      }
-    });
-
-    // Determine dependend on packages by resolving the graph and incrementing counts
-    this.workspacePackages.forEach(pkg => {
-      const deps = {
-        ...pkg.dependencies,
-        ...pkg.peerDependencies,
-      };
-
-      Object.keys(deps).forEach(depName => {
-        if (packages[depName]) {
-          countDep(depName);
-        }
-      });
-    });
-
-    // Order by highest count
-    const orderedDeps = Object.values(depCounts)
-      .sort((a, b) => b.count - a.count)
-      .map(dep => dep.package);
-
-    // Extract dependents in order
+    const tree = new Graph(this.workspacePackages).resolveTree();
     const priority: Routine<Ctx, BeemoTool>[] = [];
-
-    orderedDeps.forEach(pkg => {
-      const routine = this.routines.find(route => route.key === pkg.workspace.packageName);
-
-      if (routine) {
-        priority.push(routine);
-      }
-    });
-
-    // Extract dependers
     const other: Routine<Ctx, BeemoTool>[] = [];
 
-    this.routines.forEach(routine => {
-      const dependency = orderedDeps.find(dep => dep.workspace.packageName === routine.key);
+    const handler = (node: TreeNode<WorkspacePackageConfig>) => {
+      const routine = this.routines.find(route => route.key === node.package.workspace.packageName);
 
-      if (!dependency) {
-        other.push(routine);
+      if (routine) {
+        if (node.nodes) {
+          priority.push(routine);
+        } else {
+          other.push(routine);
+        }
       }
-    });
+
+      if (node.nodes) {
+        node.nodes.forEach(childNode => handler(childNode));
+      }
+    };
+
+    tree.nodes.forEach(node => handler(node));
 
     return {
       other,

@@ -155,7 +155,8 @@ describe('BaseExecuteRoutine', () => {
       it('serializes priority routines before pooling other routines', async () => {
         routine.serializeRoutines = jest.fn(() => Promise.resolve());
         routine.poolRoutines = jest.fn(() => Promise.resolve({ errors: [], results: [] }));
-        routine.workspacePackages[1].peerDependencies = {
+        // primary -> foo
+        routine.workspacePackages[0].peerDependencies = {
           '@scope/foo': '1.0.0',
         };
 
@@ -279,65 +280,48 @@ describe('BaseExecuteRoutine', () => {
     });
 
     it('prioritizes based on peerDependencies', () => {
+      // foo -> bar
       routine.workspacePackages[1].peerDependencies = {
         '@scope/bar': '1.0.0',
       };
 
       expect(routine.orderByWorkspacePriorityGraph()).toEqual({
-        other: [primary, foo, baz, qux],
+        other: [foo, primary, baz, qux],
         priority: [bar],
       });
     });
 
     it('prioritizes based on dependencies', () => {
+      // foo -> bar
       routine.workspacePackages[1].dependencies = {
         '@scope/bar': '1.0.0',
       };
 
       expect(routine.orderByWorkspacePriorityGraph()).toEqual({
-        other: [primary, foo, baz, qux],
+        other: [foo, primary, baz, qux],
         priority: [bar],
       });
     });
 
     it('sorts priority based on dependency count', () => {
+      // bar -> primary
       routine.workspacePackages[2].peerDependencies = {
         '@scope/primary': '2.0.0',
       };
 
+      // foo -> bar
       routine.workspacePackages[1].dependencies = {
         '@scope/bar': '1.0.0',
       };
 
+      // qux -> bar
       routine.workspacePackages[4].peerDependencies = {
         '@scope/bar': '1.0.0',
       };
 
       expect(routine.orderByWorkspacePriorityGraph()).toEqual({
-        other: [foo, baz, qux],
-        priority: [bar, primary],
-      });
-    });
-
-    it('sorts priority by taking `priority` package option into account', () => {
-      routine.workspacePackages[2].peerDependencies = {
-        '@scope/primary': '2.0.0',
-      };
-
-      routine.workspacePackages[1].dependencies = {
-        '@scope/bar': '1.0.0',
-      };
-
-      routine.workspacePackages[4].priority = 3;
-      routine.workspacePackages[4].peerDependencies = {
-        '@scope/bar': '1.0.0',
-      };
-
-      routine.workspacePackages[0].priority = 100;
-
-      expect(routine.orderByWorkspacePriorityGraph()).toEqual({
-        other: [foo, baz],
-        priority: [primary, qux, bar],
+        other: [foo, qux, baz],
+        priority: [primary, bar],
       });
     });
   });
