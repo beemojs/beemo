@@ -86,7 +86,7 @@ export default class RunCommandRoutine extends Routine<
       const out = String(chunk);
 
       if (out) {
-        this.tool.logLive(out);
+        process.stdout.write(out);
       }
     };
 
