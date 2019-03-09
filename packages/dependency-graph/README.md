@@ -17,8 +17,8 @@ npm install @beemo/dependency-graph --save
 
 ## Documentation
 
-To begin, instantiate an instance of `Graph`, which accepts a list of `package.json` objects as the
-first argument.
+To begin, instantiate an instance of `Graph`, which accepts a list of optional `package.json`
+objects as the first argument.
 
 ```ts
 import Graph from '@beemo/dependency-graph';
@@ -36,7 +36,8 @@ const graph = new Graph([
 ]);
 ```
 
-Alternatively, `package.json` objects can be added dynamically using `Graph#addPackage`.
+Alternatively, `package.json` objects can be added dynamically using `Graph#addPackage` or
+`Graph#addPackages`.
 
 ```ts
 graph.addPackage({
@@ -48,13 +49,13 @@ graph.addPackage({
 });
 ```
 
-Once all packages have been defined, we can generate a graph using `Graph#resolveInOrder`, which
-returns an array of packages in the order by most depended on, or with `Graph#resolveTree`, which
+Once all packages have been defined, we can generate a graph using `Graph#resolveList`, which
+returns an array of packages in order of most depended on, or with `Graph#resolveTree`, which
 returns a tree of nodes based on the graph.
 
 ```ts
 // List of packages
-graph.resolveInOrder().forEach(pkg => {
+graph.resolveList().forEach(pkg => {
   console.log(pkg.name);
 });
 

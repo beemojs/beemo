@@ -9,9 +9,7 @@ export default class Graph<T extends PackageConfig = PackageConfig> {
   protected packages: Map<string, T> = new Map();
 
   constructor(packages: T[] = []) {
-    packages.forEach(pkg => {
-      this.addPackage(pkg);
-    });
+    this.addPackages(packages);
   }
 
   /**
@@ -34,10 +32,21 @@ export default class Graph<T extends PackageConfig = PackageConfig> {
   }
 
   /**
-   * Resolve the dependency graph and return an array of all package configs
-   * in the order they are depended on.
+   * Add multiple packages.
    */
-  resolveInOrder(): T[] {
+  addPackages(packages: T[] = []): this {
+    packages.forEach(pkg => {
+      this.addPackage(pkg);
+    });
+
+    return this;
+  }
+
+  /**
+   * Resolve the dependency graph and return a list of all
+   * `package.json` objects in the order they are depended on.
+   */
+  resolveList(): T[] {
     this.mapDependencies();
 
     const order: Set<T> = new Set();
@@ -70,8 +79,8 @@ export default class Graph<T extends PackageConfig = PackageConfig> {
   }
 
   /**
-   * Resolve the dependency graph and return a tree or nodes for all
-   * package configs and their dependency mappings.
+   * Resolve the dependency graph and return a tree of nodes for all
+   * `package.json` objects and their dependency mappings.
    */
   resolveTree(): Tree<T> {
     this.mapDependencies();

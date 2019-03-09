@@ -20,7 +20,7 @@ describe('Graph', () => {
     const pkgs = getBeemoPackages();
     const graph = new Graph(Object.values(pkgs));
 
-    expect(graph.resolveInOrder()).toEqual([
+    expect(graph.resolveList()).toEqual([
       pkgs['@beemo/dependency-graph'],
       pkgs['@beemo/core'],
       pkgs['@beemo/driver-babel'],
@@ -83,7 +83,7 @@ describe('Graph', () => {
   it('returns an empty array when no packages are defined', () => {
     const graph = new Graph();
 
-    expect(graph.resolveInOrder()).toEqual([]);
+    expect(graph.resolveList()).toEqual([]);
     expect(graph.resolveTree()).toEqual({
       root: true,
       nodes: [],
@@ -93,7 +93,7 @@ describe('Graph', () => {
   it('places all nodes at the root if they do not relate to each other', () => {
     const graph = new Graph([{ name: 'foo' }, { name: 'bar' }, { name: 'baz' }]);
 
-    expect(graph.resolveInOrder()).toEqual([{ name: 'foo' }, { name: 'bar' }, { name: 'baz' }]);
+    expect(graph.resolveList()).toEqual([{ name: 'foo' }, { name: 'bar' }, { name: 'baz' }]);
     expect(graph.resolveTree()).toEqual({
       root: true,
       nodes: [
@@ -113,7 +113,7 @@ describe('Graph', () => {
   it('maps dependencies between 2 packages', () => {
     const graph = new Graph([{ name: 'foo' }, { name: 'bar', dependencies: { foo: '0.0.0' } }]);
 
-    expect(graph.resolveInOrder()).toEqual([
+    expect(graph.resolveList()).toEqual([
       { name: 'foo' },
       { name: 'bar', dependencies: { foo: '0.0.0' } },
     ]);
@@ -135,7 +135,7 @@ describe('Graph', () => {
   it('maps dependencies between 2 packages (reverse order + peer deps)', () => {
     const graph = new Graph([{ name: 'foo', peerDependencies: { bar: '0.0.0' } }, { name: 'bar' }]);
 
-    expect(graph.resolveInOrder()).toEqual([
+    expect(graph.resolveList()).toEqual([
       { name: 'bar' },
       { name: 'foo', peerDependencies: { bar: '0.0.0' } },
     ]);
@@ -161,7 +161,7 @@ describe('Graph', () => {
       { name: 'baz' },
     ]);
 
-    expect(graph.resolveInOrder()).toEqual([
+    expect(graph.resolveList()).toEqual([
       { name: 'baz' },
       { name: 'bar' },
       { name: 'foo', dependencies: { baz: '0.0.0' } },
@@ -191,7 +191,7 @@ describe('Graph', () => {
       { name: 'baz' },
     ]);
 
-    expect(graph.resolveInOrder()).toEqual([
+    expect(graph.resolveList()).toEqual([
       { name: 'baz' },
       { name: 'bar', dependencies: { baz: '0.0.0' } },
       { name: 'foo', dependencies: { bar: '0.0.0' } },
@@ -227,7 +227,7 @@ describe('Graph', () => {
       { name: 'k', dependencies: { f: '0.0.0' } },
     ]);
 
-    expect(graph.resolveInOrder()).toEqual([
+    expect(graph.resolveList()).toEqual([
       { name: 'b' },
       { name: 'a' },
       { name: 'c' },
@@ -301,7 +301,7 @@ describe('Graph', () => {
       { name: 'utils', dependencies: { core: '0.0.0' } },
     ]);
 
-    expect(graph.resolveInOrder()).toEqual([
+    expect(graph.resolveList()).toEqual([
       { name: 'icons' },
       { name: 'core', dependencies: { icons: '0.0.0' } },
       { name: 'utils', dependencies: { core: '0.0.0' } },
@@ -340,12 +340,12 @@ describe('Graph', () => {
   it('resets the graph when a package is added after resolution', () => {
     const graph = new Graph<PackageConfig>([{ name: 'foo' }, { name: 'bar' }]);
 
-    expect(graph.resolveInOrder()).toEqual([{ name: 'foo' }, { name: 'bar' }]);
+    expect(graph.resolveList()).toEqual([{ name: 'foo' }, { name: 'bar' }]);
 
     graph.addPackage({ name: 'qux', dependencies: { baz: '0.0.0' } });
     graph.addPackage({ name: 'baz', dependencies: { foo: '0.0.0' } });
 
-    expect(graph.resolveInOrder()).toEqual([
+    expect(graph.resolveList()).toEqual([
       { name: 'foo' },
       { name: 'bar' },
       { name: 'baz', dependencies: { foo: '0.0.0' } },
@@ -363,7 +363,7 @@ describe('Graph', () => {
         ]);
 
         expect(() => {
-          graph.resolveInOrder();
+          graph.resolveList();
         }).toThrowError('Circular dependency detected: foo -> bar -> baz -> foo');
       });
 
@@ -375,7 +375,7 @@ describe('Graph', () => {
         ]);
 
         expect(() => {
-          graph.resolveInOrder();
+          graph.resolveList();
         }).toThrowError('Circular dependency detected: foo -> bar -> foo');
       });
     });
