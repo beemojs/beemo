@@ -269,7 +269,8 @@ describe('Beemo', () => {
 
     it('passes driver name and context to pipeline run', async () => {
       const spy = jest.spyOn(beemo, 'startPipeline');
-      const pipeline = await beemo.executeDriver(MOCK_DRIVER_ARGS, 'foo-bar');
+
+      await beemo.executeDriver(MOCK_DRIVER_ARGS, 'foo-bar');
 
       expect(spy).toHaveBeenCalledWith(
         expect.objectContaining({
@@ -278,7 +279,7 @@ describe('Beemo', () => {
         }),
       );
 
-      expect((pipeline as any).run).toHaveBeenCalledWith('foo-bar');
+      expect(beemo.pipeline!.run).toHaveBeenCalledWith('foo-bar');
     });
 
     it('passes parallelArgv to context', async () => {
@@ -291,6 +292,22 @@ describe('Beemo', () => {
           parallelArgv: [['--foo'], ['bar']],
         }),
       );
+    });
+
+    it('doesnt pipe cleanup routine if `configure.cleanup` is false', async () => {
+      beemo.tool.config.configure.cleanup = false;
+
+      await beemo.executeDriver(MOCK_DRIVER_ARGS, 'foo-bar');
+
+      expect(beemo.pipeline!.pipe).toHaveBeenCalledTimes(2);
+    });
+
+    it('pipes cleanup routine if `configure.cleanup` is true', async () => {
+      beemo.tool.config.configure.cleanup = true;
+
+      await beemo.executeDriver(MOCK_DRIVER_ARGS, 'foo-bar');
+
+      expect(beemo.pipeline!.pipe).toHaveBeenCalledTimes(3);
     });
   });
 

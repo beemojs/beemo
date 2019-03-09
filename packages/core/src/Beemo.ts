@@ -26,6 +26,8 @@ export default class Beemo {
 
   moduleRoot: string = '';
 
+  pipeline: Pipeline<any, BeemoTool> | null = null;
+
   tool: BeemoTool;
 
   constructor(argv: Argv, binName?: string, tool?: BeemoTool) {
@@ -223,7 +225,7 @@ export default class Beemo {
     tool.emit(`${context.eventName}.init-driver`, [context, driver]);
     tool.debug('Running with %s v%s driver', driverName, version);
 
-    return this.startPipeline(context)
+    const pipeline = this.startPipeline(context)
       .pipe(new ConfigureRoutine('config', tool.msg('app:configGenerate')))
       .pipe(
         new ExecuteDriverRoutine(
@@ -233,11 +235,14 @@ export default class Beemo {
             version,
           }),
         ),
-      )
-      .pipe(
-        new CleanupRoutine('cleanup', tool.msg('app:cleanup')).skip(tool.config.configure.cleanup),
-      )
-      .run(driverName);
+      );
+
+    // Only add cleanup routine if we need it
+    if (tool.config.configure.cleanup) {
+      pipeline.pipe(new CleanupRoutine('cleanup', tool.msg('app:cleanup')));
+    }
+
+    return pipeline.run(driverName);
   }
 
   /**
@@ -316,6 +321,8 @@ export default class Beemo {
       );
     }
 
-    return new Pipeline(this.tool, context);
+    this.pipeline = new Pipeline(this.tool, context);
+
+    return this.pipeline;
   }
 }
