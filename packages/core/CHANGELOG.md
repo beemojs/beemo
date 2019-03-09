@@ -10,6 +10,9 @@
 
 #### 🚀 New
 
+- Added a new package,
+  [@beemo/dependency-graph](https://www.npmjs.com/package/@beemo/dependency-graph), to handle the
+  dependency resolution.
 - Added a `none` strategy option to `Driver`s. With this strategy, the consumer will need to
   manually create a config file.
 

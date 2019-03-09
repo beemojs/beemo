@@ -134,10 +134,8 @@ export default class Graph<T extends PackageConfig = PackageConfig> {
    * Add a node for the defined package name.
    */
   protected addNode(name: string) {
-    const node = new Node(name);
-
     // Cache node for constant lookups
-    this.nodes.set(name, node);
+    this.nodes.set(name, new Node(name));
   }
 
   /**
