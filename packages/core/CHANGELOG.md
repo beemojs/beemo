@@ -1,14 +1,12 @@
 # 1.0.0
 
-#### 🎉 Release
-
 #### 💥 Breaking
 
 - Script names (on the command line) will now error if not in kebab case.
 - Renamed `Context#root` to `cwd`.
 - Removed `ScriptContext#binName`. Use `scriptName` instead.
 
-#### 🚀 New
+#### 🚀 Updates
 
 - Added a new package,
   [@beemo/dependency-graph](https://www.npmjs.com/package/@beemo/dependency-graph), to handle the
@@ -17,7 +15,7 @@
   manually create a config file.
 - Added `Script#executeCommand`, so that local binaries can easily be executed.
 
-#### 🛠 Internal
+#### 🛠 Internals
 
 - Updated `hygen` to v3.
 - Updated dependencies.
