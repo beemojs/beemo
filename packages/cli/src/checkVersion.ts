@@ -11,7 +11,11 @@ const peerVersion = cliPackage.peerDependencies['@beemo/core'].slice(1); // No v
 const coreVersion = corePackage.version; // No v prefix
 
 // Verify that core satisfies the minimum peer version requirement.
-if (peerVersion.charAt(0) !== '0' && !semver.satisfies(coreVersion, `^${peerVersion}`)) {
+if (
+  !process.env.BEEMO_IGNORE_CLI &&
+  peerVersion.charAt(0) !== '0' &&
+  !semver.satisfies(coreVersion, `^${peerVersion}`)
+) {
   console.error(chalk.red(`@beemo/core version out of date; must be ^${peerVersion}.`));
   process.exit(1);
 }
@@ -21,7 +25,7 @@ const coreMajor = semver.major(coreVersion);
 const coreMinor = semver.minor(coreVersion);
 const coreMinReqVersion = coreMajor === 0 ? `^${coreMajor}.${coreMinor}.0` : `^${coreMajor}.0.0`;
 
-if (!semver.satisfies(cliPackage.version, coreMinReqVersion)) {
+if (!process.env.BEEMO_IGNORE_CLI && !semver.satisfies(cliPackage.version, coreMinReqVersion)) {
   console.error(chalk.red(`@beemo/cli version out of date; must be ^${coreMinReqVersion}.`));
   process.exit(2);
 }
