@@ -29,7 +29,7 @@
     "mocha": "^6.0.2"
   },
   "peerDependencies": {
-    "@beemo/core": "^1.0.0",
+    "@beemo/core": "^1.0.0-alpha.0",
     "mocha": "^6.0.0"
   }
 }
