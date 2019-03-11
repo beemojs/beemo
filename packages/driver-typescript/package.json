@@ -1,6 +1,6 @@
 {
   "name": "@beemo/driver-typescript",
-  "version": "0.16.2",
+  "version": "1.0.0-alpha.0",
   "description": "TypeScript driver for Beemo.",
   "keywords": [
     "beemo",
