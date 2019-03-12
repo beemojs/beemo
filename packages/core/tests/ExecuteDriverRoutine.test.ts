@@ -15,7 +15,10 @@ describe('ExecuteDriverRoutine', () => {
   let driver: Driver;
 
   function createTestRunCommand(title: string, command: string, options: any = {}) {
-    const run = new RunCommandRoutine(title, command, options);
+    const run = new RunCommandRoutine(title, command, {
+      argv: ['-a', '--foo', 'bar', 'baz'],
+      ...options,
+    });
 
     run.action = expect.anything();
     run.captureLiveOutput = expect.anything();

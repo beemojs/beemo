@@ -9,17 +9,15 @@ import execa from 'execa';
 import parseArgs from 'yargs-parser';
 import DriverContext from '../contexts/DriverContext';
 import BatchStream from '../streams/BatchStream';
+import filterArgs, { OptionMap } from '../utils/filterArgs';
 import { STRATEGY_COPY } from '../constants';
 import { Argv, Execution, BeemoTool } from '../types';
 
 const OPTION_PATTERN: RegExp = /-?-[a-z0-9-]+(,|\s)/giu;
 
-export interface OptionMap {
-  [option: string]: true;
-}
-
 export interface RunCommandOptions {
   additionalArgv: Argv;
+  argv: Argv;
   forceConfigOption: boolean;
   packageRoot: string;
 }
@@ -32,6 +30,7 @@ export default class RunCommandRoutine extends Routine<
   blueprint({ array, bool, string }: Predicates) /* infer */ {
     return {
       additionalArgv: array(string()),
+      argv: array(string()),
       forceConfigOption: bool(),
       packageRoot: string(),
     };
@@ -200,45 +199,8 @@ export default class RunCommandRoutine extends Routine<
     this.debug('Filtering unknown command line options');
 
     const nativeOptions = await this.extractNativeOptions();
-    const filteredArgv: Argv = [];
-    const unknownArgv: Argv = [];
-    let skipNext = false;
-
-    argv.forEach((arg, i) => {
-      if (skipNext) {
-        skipNext = false;
-
-        return;
-      }
-
-      if (arg.startsWith('-')) {
-        let option = arg;
-        const nextArg = argv[i + 1];
-
-        // --opt=123
-        if (option.includes('=')) {
-          [option] = option.split('=');
-
-          if (!nativeOptions[option]) {
-            unknownArgv.push(arg);
-
-            return;
-          }
-
-          // --opt 123
-        } else if (!nativeOptions[option]) {
-          unknownArgv.push(arg);
-
-          if (nextArg && !nextArg.startsWith('-')) {
-            skipNext = true;
-            unknownArgv.push(nextArg);
-          }
-
-          return;
-        }
-      }
-
-      filteredArgv.push(arg);
+    const { filteredArgv, unknownArgv } = filterArgs(argv, {
+      allow: nativeOptions,
     });
 
     if (unknownArgv.length > 0) {
@@ -286,7 +248,7 @@ export default class RunCommandRoutine extends Routine<
    * Return args from the command line.
    */
   getCommandLineArgs(): Argv {
-    const { argv } = this.context;
+    const { argv } = this.options;
 
     this.debug.invariant(argv.length > 0, 'From the command line', argv.join(' '), 'No arguments');
 

@@ -71,7 +71,9 @@ describe('RunCommandRoutine', () => {
     driver.tool = tool;
     driver.bootstrap();
 
-    routine = new RunCommandRoutine('babel', 'Run babel');
+    routine = new RunCommandRoutine('babel', 'Run babel', {
+      argv: ['-a', '--foo', 'bar', 'baz'],
+    });
     routine.tool = tool;
     routine.context = createDriverContext(driver);
     routine.debug = createTestDebugger();
@@ -224,7 +226,7 @@ describe('RunCommandRoutine', () => {
     });
 
     it('executes pipeline in order', async () => {
-      routine.context.argv.push('--out-dir', './lib');
+      routine.options.argv.push('--out-dir', './lib');
 
       const argSpy = jest.spyOn(routine, 'gatherArgs');
       const globSpy = jest.spyOn(routine, 'expandGlobPatterns');
