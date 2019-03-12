@@ -1,4 +1,4 @@
-# 🤖 Beemo [BETA]
+# 🤖 Beemo
 
 [![Build Status](https://travis-ci.org/beemojs/beemo.svg?branch=master)](https://travis-ci.org/beemojs/beemo)
 [![npm version](https://badge.fury.io/js/%40beemo%2Fcore.svg)](https://www.npmjs.com/package/@beemo/core)
