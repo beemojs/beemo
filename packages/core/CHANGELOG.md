@@ -17,5 +17,5 @@
 
 #### 🛠 Internals
 
-- Updated `hygen` to v3.
+- Updated `hygen` to v4.
 - Updated dependencies.

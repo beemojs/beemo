@@ -779,10 +779,10 @@
     lodash "^4.17.11"
     to-fast-properties "^2.0.0"
 
-"@boost/core@^1.9.2":
-  version "1.9.2"
-  resolved "https://registry.npmjs.org/@boost/core/-/core-1.9.2.tgz#1f4e1b07ae420d24b7cab2d69eb3edbb308208af"
-  integrity sha512-XieOtGSV+4z8utXsRftQh38x08686Xr2M7MwEL2n78jgiVVNCyWzm5saAZDoNfHRETk6I+2vzLwJGHMtiTgUlA==
+"@boost/core@^1.9.3":
+  version "1.9.3"
+  resolved "https://registry.npmjs.org/@boost/core/-/core-1.9.3.tgz#ffcf2be15a8bcf5711ceb997e2ad4e39f9c424cc"
+  integrity sha512-D/T6PzBZ3pSXl2jIaDwiowNBb6TT2avRWwGiOxP1NKSU5EqPlV1yVInBmhQLFExmU/qK47p2HaSnACTxFiGAGw==
   dependencies:
     "@types/ansi-escapes" "^3.0.1"
     "@types/cli-truncate" "^1.1.0"
@@ -1852,10 +1852,10 @@
   resolved "https://registry.npmjs.org/@types/json5/-/json5-0.0.30.tgz#44cb52f32a809734ca562e685c6473b5754a7818"
   integrity sha512-sqm9g7mHlPY/43fcSNrCYfOeX9zkTTK+euO5E6+CVijSMm5tTjkVdwdqRkY3ljjIAf8679vps5jKUoJBCLsMDA==
 
-"@types/lodash@^4.14.122":
-  version "4.14.122"
-  resolved "https://registry.npmjs.org/@types/lodash/-/lodash-4.14.122.tgz#3e31394c38cf1e5949fb54c1192cbc406f152c6c"
-  integrity sha512-9IdED8wU93ty8gP06ninox+42SBSJHp2IAamsSYMUY76mshRTeUsid/gtbl8ovnOwy8im41ib4cxTiIYMXGKew==
+"@types/lodash@^4.14.122", "@types/lodash@^4.14.123":
+  version "4.14.123"
+  resolved "https://registry.npmjs.org/@types/lodash/-/lodash-4.14.123.tgz#39be5d211478c8dd3bdae98ee75bb7efe4abfe4d"
+  integrity sha512-pQvPkc4Nltyx7G1Ww45OjVqUsJP4UsZm+GWJpigXgkikZqJgRm4c48g027o6tdgubWHwFRF15iFd+Y4Pmqv6+Q==
 
 "@types/micromatch@^3.1.0":
   version "3.1.0"
@@ -1869,10 +1869,10 @@
   resolved "https://registry.npmjs.org/@types/minimatch/-/minimatch-3.0.3.tgz#3dca0e3f33b200fc7d1139c0cd96c1268cadfd9d"
   integrity sha512-tHq6qdbT9U1IRSGf14CL0pUlULksvY9OZ+5eEgl1N7t+OA3tGvNpxJCzuKQlsNgCVwbAs670L1vcVQi8j9HjnA==
 
-"@types/node@*", "@types/node@^11.10.5", "@types/node@^11.11.0":
-  version "11.11.0"
-  resolved "https://registry.npmjs.org/@types/node/-/node-11.11.0.tgz#070e9ce7c90e727aca0e0c14e470f9a93ffe9390"
-  integrity sha512-D5Rt+HXgEywr3RQJcGlZUCTCx1qVbCZpVk3/tOOA6spLNZdGm8BU+zRgdRYDoF1pO3RuXLxADzMrF903JlQXqg==
+"@types/node@*", "@types/node@^11.10.5", "@types/node@^11.11.1":
+  version "11.11.1"
+  resolved "https://registry.npmjs.org/@types/node/-/node-11.11.1.tgz#9ee55ffce20f72e141863b0036a6e51c6fc09a1f"
+  integrity sha512-2azXFP9n4aA2QNLkKm/F9pzKxgYj1SMawZ5Eh9iC21RH3XNcFsivLVU2NhpMgQm7YobSByvIol4c42ZFusXFHQ==
 
 "@types/os-locale@^2.1.0":
   version "2.1.0"
@@ -2998,7 +2998,7 @@ chalk@^2.0.0, chalk@^2.0.1, chalk@^2.1.0, chalk@^2.3.0, chalk@^2.3.1, chalk@^2.4
     escape-string-regexp "^1.0.5"
     supports-color "^5.3.0"
 
-change-case@^3.0.2:
+change-case@^3.1.0:
   version "3.1.0"
   resolved "https://registry.npmjs.org/change-case/-/change-case-3.1.0.tgz#0e611b7edc9952df2e8513b27b42de72647dd17e"
   integrity sha512-2AZp7uJZbYEzRPsFoa+ijKdvp9zsrnnt6+yFokfwEpeJm0xuJDVoxiRCAaTzyJND8GJkofo2IcKWaUZ/OECVzw==
@@ -4011,7 +4011,7 @@ enhanced-resolve@^4.1.0:
     memory-fs "^0.4.0"
     tapable "^1.0.0"
 
-enquirer@^2.0.7:
+enquirer@^2.3.0:
   version "2.3.0"
   resolved "https://registry.npmjs.org/enquirer/-/enquirer-2.3.0.tgz#c362c9d84984ebe854def63caaf12983a16af552"
   integrity sha512-RNGUbRVlfnjmpxV+Ed+7CGu0rg3MK7MmlW+DW0v7V2zdAUBC1s4BxCRiIAozbYB2UJ+q4D+8tW9UFb11kF72/g==
@@ -5319,21 +5319,21 @@ humanize-ms@^1.2.1:
   dependencies:
     ms "^2.0.0"
 
-hygen@^3.0.0:
-  version "3.0.0"
-  resolved "https://registry.npmjs.org/hygen/-/hygen-3.0.0.tgz#c723d54569a310c486af39e533cb18e48096b16f"
-  integrity sha512-qZrCfGYb8RPN95ea04M/KWzguntrHwKxQDNesTiGKJ1nHHxB20M3NagO7QYwt8ztubESLR0xtamMZCeTMDvibg==
+hygen@^4.0.2:
+  version "4.0.2"
+  resolved "https://registry.npmjs.org/hygen/-/hygen-4.0.2.tgz#884c0e2a58a0d4194fba90cef9c3521f0224392b"
+  integrity sha512-xzPrDLf8DdGH4k/sK/K8xWciH8cxgPqKc12NMY50XJTirHWUhKF5EH5mmGMGduiecZmb2DXc1xdWNieXy93YpQ==
   dependencies:
-    chalk "^2.4.1"
-    change-case "^3.0.2"
+    chalk "^2.4.2"
+    change-case "^3.1.0"
     ejs "^2.6.1"
-    enquirer "^2.0.7"
+    enquirer "^2.3.0"
     execa "^1.0.0"
     front-matter "^2.3.0"
-    fs-extra "^7.0.0"
+    fs-extra "^7.0.1"
     inflection "^1.12.0"
     lodash "^4.17.11"
-    yargs-parser "^10.1.0"
+    yargs-parser "^13.0.0"
 
 i18next@^15.0.6:
   version "15.0.6"
@@ -10420,7 +10420,7 @@ yargs-parser@11.1.1, yargs-parser@^11.1.1:
     camelcase "^5.0.0"
     decamelize "^1.2.0"
 
-yargs-parser@^10.0.0, yargs-parser@^10.1.0:
+yargs-parser@^10.0.0:
   version "10.1.0"
   resolved "https://registry.npmjs.org/yargs-parser/-/yargs-parser-10.1.0.tgz#7202265b89f7e9e9f2e5765e0fe735a905edbaa8"
   integrity sha512-VCIyR1wJoEBZUqk5PA+oOBF6ypbwh5aNB3I50guxAL/quggdfs4TtNHQrSazFA3fYZ+tEqfs0zIGlv0c/rgjbQ==
