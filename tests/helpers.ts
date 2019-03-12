@@ -54,7 +54,13 @@ export const MOCK_SCRIPT_ARGS = {
   workspaces: '',
 };
 
-export const MOCK_SCAFFOLD_ARGS = { ...MOCK_ARGS, action: '', generator: '', dry: false };
+export const MOCK_SCAFFOLD_ARGS = {
+  ...MOCK_ARGS,
+  action: '',
+  generator: '',
+  name: '',
+  dry: false,
+};
 
 export function createTestDebugger(): any {
   const debug = jest.fn();
@@ -159,8 +165,9 @@ export function createDriverContext(driver: Driver | null = null): DriverContext
 export function createScaffoldContext(
   generator: string = 'generator',
   action: string = 'action',
+  name: string = '',
 ): ScaffoldContext {
-  return applyContext(new ScaffoldContext(MOCK_SCAFFOLD_ARGS, generator, action));
+  return applyContext(new ScaffoldContext(MOCK_SCAFFOLD_ARGS, generator, action, name));
 }
 
 export function createScriptContext(script: Script | null = null): ScriptContext {

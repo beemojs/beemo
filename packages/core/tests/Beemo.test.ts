@@ -403,6 +403,7 @@ describe('Beemo', () => {
         }),
         'gen',
         'action',
+        '',
       ]);
     });
 

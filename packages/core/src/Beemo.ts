@@ -289,11 +289,16 @@ export default class Beemo {
   /**
    * Run the scaffold process to generate templates.
    */
-  async scaffold(args: ScaffoldContext['args'], generator: string, action: string): Promise<any> {
+  async scaffold(
+    args: ScaffoldContext['args'],
+    generator: string,
+    action: string,
+    name: string = '',
+  ): Promise<any> {
     const { tool } = this;
-    const context = this.prepareContext(new ScaffoldContext(args, generator, action));
+    const context = this.prepareContext(new ScaffoldContext(args, generator, action, name));
 
-    tool.emit(`${tool.options.appName}.scaffold`, [context, generator, action]);
+    tool.emit(`${tool.options.appName}.scaffold`, [context, generator, action, name]);
     tool.debug('Running scaffold command');
 
     return this.startPipeline(context)

@@ -83,7 +83,7 @@ app.command(
 );
 
 app.command(
-  'scaffold <generator> <action>',
+  'scaffold <generator> <action> [name]',
   tool.msg('app:cliCommandScaffold'),
   {
     dry: {
@@ -92,7 +92,8 @@ app.command(
       description: tool.msg('app:cliOptionDryRun'),
     },
   },
-  (args: ScaffoldContext['args']) => beemo.scaffold(args, args.generator, args.action),
+  (args: ScaffoldContext['args']) =>
+    beemo.scaffold(args, args.generator, args.action, args.name || ''),
 );
 
 app.command('*', false, {}, () => {

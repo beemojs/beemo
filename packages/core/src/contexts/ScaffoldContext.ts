@@ -5,6 +5,7 @@ export interface ScaffoldArgs {
   action: string;
   generator: string;
   dry: boolean;
+  name?: string;
 }
 
 export default class ScaffoldContext<T = ScaffoldArgs> extends Context<T> {
@@ -12,10 +13,13 @@ export default class ScaffoldContext<T = ScaffoldArgs> extends Context<T> {
 
   generator: string;
 
-  constructor(args: Arguments<T>, generator: string, action: string) {
+  name: string;
+
+  constructor(args: Arguments<T>, generator: string, action: string, name: string = '') {
     super(args);
 
     this.generator = generator;
     this.action = action;
+    this.name = name;
   }
 }

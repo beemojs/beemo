@@ -42,7 +42,7 @@ The following list of events, and their arguments, can be listened to.
 | `<script>.after-execute`         | `context: ScriptContext, response: any, script: Script`                                    | Called after the script has successfully been executed.                                                            |
 | `<script>.failed-execute`        | `context: ScriptContext, error: Error, script: Script`                                     | Called after the script has failed to execute.                                                                     |
 | `<app>.resolve-dependencies`     | `context: DriverContext | ConfigContext, drivers: Driver[]`                                | Called after a list of `Driver`s have been resolved in which to create configuration files.                        |
-| `<app>.scaffold`                 | `context: ScaffoldContext, generator: string, action: string`                              | Called before templates are generated when scaffolding.                                                            |
+| `<app>.scaffold`                 | `context: ScaffoldContext, generator: string, action: string, name?: string`               | Called before templates are generated when scaffolding.                                                            |
 
 > `<driver>` and `<script>` should be replaced with their names.
 
