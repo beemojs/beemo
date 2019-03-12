@@ -60,7 +60,7 @@ export default class Beemo {
     // Set footer after messages have been loaded
     const footer = this.tool.msg('app:poweredBy', { version });
 
-    this.tool.options.footer = `\n${this.tool.isCI() ? '🤖  ' : ''}${footer}`;
+    this.tool.options.footer = `\n${this.tool.isCI() ? '' : '🤖  '}${footer}`;
   }
 
   /**

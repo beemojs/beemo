@@ -16,6 +16,11 @@
 - Added `Script#executeCommand`, so that local binaries can easily be executed.
 - Added optional `name` support to scaffolding.
 
+#### 🐞 Fixes
+
+- Fixed script `this` context being lost within script tasks.
+- Fixed the Beemo emoji not appearing in the console.
+
 #### 🛠 Internals
 
 - Updated `hygen` to v4.
