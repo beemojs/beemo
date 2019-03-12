@@ -5,6 +5,8 @@ import Script from './Script';
 import ScriptContext from './contexts/ScriptContext';
 import RunScriptRoutine from './execute/RunScriptRoutine';
 import BaseExecuteRoutine from './execute/BaseRoutine';
+import filterArgs from './utils/filterArgs';
+import { EXECUTE_OPTIONS } from './constants';
 
 export default class ExecuteScriptRoutine extends BaseExecuteRoutine<ScriptContext> {
   errors: Error[] = [];
@@ -20,7 +22,10 @@ export default class ExecuteScriptRoutine extends BaseExecuteRoutine<ScriptConte
 
   pipeRoutine(packageName: string, packageRoot: string) {
     const { argv, cwd, scriptName } = this.context;
-    const command = argv.join(' ');
+    const { filteredArgv } = filterArgs(argv, {
+      block: EXECUTE_OPTIONS,
+    });
+    const command = filteredArgv.join(' ');
 
     if (packageName) {
       this.pipe(

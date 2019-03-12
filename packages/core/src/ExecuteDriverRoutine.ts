@@ -2,6 +2,7 @@ import DriverContext from './contexts/DriverContext';
 import RunCommandRoutine, { RunCommandOptions } from './execute/RunCommandRoutine';
 import BaseExecuteRoutine from './execute/BaseRoutine';
 import filterArgs from './utils/filterArgs';
+import { EXECUTE_OPTIONS } from './constants';
 
 export default class ExecuteDriverRoutine extends BaseExecuteRoutine<DriverContext> {
   pipeRoutine(packageName?: string, packageRoot?: string) {
@@ -22,13 +23,7 @@ export default class ExecuteDriverRoutine extends BaseExecuteRoutine<DriverConte
   pipeParallelBuilds(key: string, options: Partial<RunCommandOptions> = {}) {
     const { argv, parallelArgv, primaryDriver } = this.context;
     const { filteredArgv } = filterArgs(argv, {
-      // Keep in sync with CLI options
-      block: {
-        '--concurrency': true,
-        '--live': true,
-        '--priority': true,
-        '--workspaces': true,
-      },
+      block: EXECUTE_OPTIONS,
     });
     const command = `${primaryDriver.metadata.bin} ${filteredArgv.join(' ')}`.trim();
 

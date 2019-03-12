@@ -5,3 +5,11 @@ export const STRATEGY_NATIVE = 'native';
 export const STRATEGY_NONE = 'none';
 
 export const KEBAB_PATTERN = /^[a-z]{1}[a-z-]+[a-z]{1}$/u;
+
+// Keep in sync with CLI options
+export const EXECUTE_OPTIONS = {
+  '--concurrency': true,
+  '--live': true,
+  '--priority': true,
+  '--workspaces': true,
+};
