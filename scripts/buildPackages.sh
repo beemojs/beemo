@@ -13,12 +13,13 @@ build_pkg() {
   node ../../node_modules/.bin/tsc
 }
 
+build_pkg "./packages/dependency-graph"
 build_pkg "./packages/core"
-cd "$root" || exit
+build_pkg "./packages/cli"
+cd "$root/$1" || exit
 
 for pkg in ./packages/*; do
-  if [ "$pkg" != "./packages/core" ]
-  then
+  if [[ $pkg == *"driver"* ]]; then
     build_pkg "$pkg"
   fi
 done
