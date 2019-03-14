@@ -5,7 +5,6 @@ import { Arguments, Argv } from '../types';
 export interface DriverArgs {
   concurrency: number;
   live: boolean;
-  name: string;
   priority: boolean;
   workspaces: string;
 }

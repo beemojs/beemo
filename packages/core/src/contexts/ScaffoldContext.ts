@@ -5,7 +5,7 @@ export interface ScaffoldArgs {
   action: string;
   generator: string;
   dry: boolean;
-  name?: string;
+  name: string;
 }
 
 export default class ScaffoldContext<T = ScaffoldArgs> extends Context<T> {
