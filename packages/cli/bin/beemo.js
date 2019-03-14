@@ -3,7 +3,7 @@
 
 const debug = require('debug');
 
-// Instrument our CLI for require performance
+// Instrument our CLI for require() performance
 if (process.env.DEBUG === 'timing') {
   require('time-require');
 

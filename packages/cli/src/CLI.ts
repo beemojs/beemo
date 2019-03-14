@@ -4,7 +4,8 @@ import path from 'path';
 import chalk from 'chalk';
 import yargs from 'yargs';
 import Beemo, { ConfigContext, DriverContext, ScriptContext, ScaffoldContext } from '@beemo/core';
-import version from './checkVersion';
+// @ts-ignore
+import corePackage from '@beemo/core/package.json';
 import parseSpecialArgv from './parseSpecialArgv';
 
 // 0 node, 1 beemo, 2 command
@@ -108,7 +109,7 @@ app
     // prettier-ignore
     chalk.gray([
       tool.msg('app:cliEpilogue', { manualURL }),
-      tool.msg('app:poweredBy', { version })
+      tool.msg('app:poweredBy', { version: corePackage.version })
     ].join('\n')),
   )
   .demandCommand(1, chalk.red(tool.msg('errors:cliNoCommand')))
