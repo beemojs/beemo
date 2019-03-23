@@ -77,27 +77,36 @@ export default class RunCommandRoutine extends Routine<
       return args._.includes(option);
     });
 
-    if (!isWatching && !args.live) {
-      return false;
-    }
+    if (isWatching) {
+      const handler = (chunk: Buffer) => {
+        process.stdout.write(String(chunk));
+      };
 
-    const handler = (chunk: Buffer) => {
-      const out = String(chunk);
-
-      if (out) {
-        process.stdout.write(out);
-      }
-    };
-
-    if (args.live) {
-      stream.stdout!.on('data', handler);
-      stream.stderr!.on('data', handler);
-    } else {
       stream.stdout!.pipe(new BatchStream({ wait: 1000 })).on('data', handler);
       stream.stderr!.pipe(new BatchStream({ wait: 1000 })).on('data', handler);
-    }
+    } else {
+      let buffer = '';
 
-    return true;
+      // When ctrl + c is pressed, write out the current buffer
+      if (!args.live) {
+        this.tool.on('error', error => {
+          if (error.signal === 'SIGINT' || error.signal === 'SIGTERM') {
+            process.stdout.write(buffer);
+          }
+        });
+      }
+
+      const handler = (chunk: Buffer) => {
+        if (args.live) {
+          process.stdout.write(String(chunk));
+        } else {
+          buffer += String(chunk);
+        }
+      };
+
+      stream.stdout!.on('data', handler);
+      stream.stderr!.on('data', handler);
+    }
   };
 
   /**

@@ -105,8 +105,9 @@ export default class Driver<
     // Integration debugging
     // this.tool.logError('STDERR', JSON.stringify(error));
 
+    // Use console to by pass silent
     if (out) {
-      this.tool.logError(out);
+      console.error(out);
     }
   }
 
@@ -119,8 +120,9 @@ export default class Driver<
     // Integration debugging
     // this.tool.log('STDOUT', JSON.stringify(response));
 
+    // Use console to by pass silent
     if (out) {
-      this.tool.log(out);
+      console.log(out);
     }
   }
 
