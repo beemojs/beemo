@@ -3,6 +3,7 @@
  * @license     https://opensource.org/licenses/MIT
  */
 
+import { Predicates } from '@boost/core';
 import Beemo from './Beemo';
 import Driver from './Driver';
 import Script from './Script';
@@ -24,6 +25,7 @@ export {
   Script,
   ScriptArgs,
   ScriptContext,
+  Predicates,
 };
 
 export * from './constants';

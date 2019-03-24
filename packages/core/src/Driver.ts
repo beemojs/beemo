@@ -1,4 +1,4 @@
-import { Plugin, EventListener } from '@boost/core';
+import { Plugin, EventListener, Predicates } from '@boost/core';
 import mergeWith from 'lodash/mergeWith';
 import execa from 'execa';
 import optimal, { array, bool, object, string, shape } from 'optimal';
@@ -23,7 +23,7 @@ export default class Driver<
   // @ts-ignore Set after instantiation
   metadata: DriverMetadata;
 
-  blueprint(predicates: any) /* infer */ {
+  blueprint(predicates: Predicates) /* infer */ {
     return {
       args: array(string()),
       dependencies: array(string()),

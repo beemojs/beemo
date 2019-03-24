@@ -2,20 +2,20 @@ import fs from 'fs';
 import path from 'path';
 import rimraf from 'rimraf';
 import ts from 'typescript';
-import { Driver, DriverArgs, DriverContext } from '@beemo/core';
+import { Driver, DriverArgs, DriverContext, Predicates } from '@beemo/core';
 import { TypeScriptArgs, TypeScriptConfig, TypeScriptOptions } from './types';
 
 // Success: Writes nothing to stdout or stderr
 // Failure: Writes to stdout on syntax and type error
 export default class TypeScriptDriver extends Driver<TypeScriptConfig, TypeScriptOptions> {
-  blueprint(preds: any) /* infer */ {
+  blueprint(preds: Predicates) /* infer */ {
     const { string } = preds;
 
     return {
       ...super.blueprint(preds),
-      buildFolder: string('./lib'),
-      srcFolder: string('./src'),
-      testFolder: string('./tests'),
+      buildFolder: string('lib'),
+      srcFolder: string('src'),
+      testsFolder: string('tests'),
     };
   }
 
@@ -110,7 +110,7 @@ export default class TypeScriptDriver extends Driver<TypeScriptConfig, TypeScrip
       throw new Error('--build must be passed when using --reference-workspaces.');
     }
 
-    const { buildFolder, srcFolder, testFolder } = this.options;
+    const { buildFolder, srcFolder, testsFolder } = this.options;
     const rootConfigPath = path.join(workspaceRoot, 'tsconfig.json');
     const namesToPaths: { [key: string]: string } = {};
     const workspacePackages = this.tool.getWorkspacePackages<{
@@ -149,27 +149,23 @@ export default class TypeScriptDriver extends Driver<TypeScriptConfig, TypeScrip
         }
 
         writeConfigFile('tsconfig.json', {
-          ...tsconfig,
-          compilerOptions: {
-            composite: true,
-          },
-          references,
-        });
-
-        writeConfigFile('tsconfig.source.json', {
           compilerOptions: {
             outDir: buildFolder,
             rootDir: srcFolder,
           },
+          exclude: [buildFolder, testsFolder],
           extends: extendPath,
+          references,
         });
 
-        writeConfigFile('tsconfig.test.json', {
+        writeConfigFile(path.join(testsFolder, 'tsconfig.json'), {
           compilerOptions: {
             noEmit: true,
-            rootDir: testFolder,
+            rootDir: '.',
           },
           extends: extendPath,
+          include: ['*'],
+          references: [{ path: '..' }],
         });
       },
     );

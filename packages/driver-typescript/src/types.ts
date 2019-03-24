@@ -104,5 +104,5 @@ export interface TypeScriptArgs {
 export interface TypeScriptOptions extends DriverOptions {
   buildFolder: string;
   srcFolder: string;
-  testFolder: string;
+  testsFolder: string;
 }
