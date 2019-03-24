@@ -1,5 +1,5 @@
 import execa from 'execa';
-import { mockTool } from '@boost/test-utils';
+import { mockTool } from '@boost/core/test-utils';
 import Script from '../src/Script';
 import { createScriptContext } from '../../../tests/helpers';
 
