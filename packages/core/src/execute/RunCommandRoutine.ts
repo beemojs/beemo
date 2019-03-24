@@ -1,4 +1,4 @@
-import { Routine, Task, Predicates } from '@boost/core';
+import { Routine, Task, Predicates, SignalError } from '@boost/core';
 import chalk from 'chalk';
 import glob from 'fast-glob';
 import path from 'path';
@@ -87,10 +87,13 @@ export default class RunCommandRoutine extends Routine<
     } else {
       let buffer = '';
 
-      // When ctrl + c is pressed, write out the current buffer
+      // When cmd/ctrl + c is pressed, write out the current buffer
       if (!args.live) {
-        this.tool.on('error', error => {
-          if (error.signal === 'SIGINT' || error.signal === 'SIGTERM') {
+        this.tool.console.on('error', error => {
+          if (
+            error instanceof SignalError &&
+            (error.signal === 'SIGINT' || error.signal === 'SIGTERM')
+          ) {
             process.stdout.write(buffer);
           }
         });
