@@ -82,12 +82,16 @@ export default class TypeScriptDriver extends Driver<TypeScriptConfig, TypeScrip
     config.include = [];
     config.exclude = [];
 
+    // Remove problematic config
+    delete config.compilerOptions!.outDir;
+    delete config.compilerOptions!.outFile;
+
     // Generate references
     config.references = [];
 
     this.tool.getWorkspacePackages({ root: workspaceRoot }).forEach(wsPkg => {
       config.references!.push({
-        path: `./${path.relative(workspaceRoot, wsPkg.workspace.packagePath)}`,
+        path: path.relative(workspaceRoot, wsPkg.workspace.packagePath),
       });
     });
   };
@@ -128,10 +132,7 @@ export default class TypeScriptDriver extends Driver<TypeScriptConfig, TypeScrip
     workspacePackages.forEach(
       ({ dependencies = {}, peerDependencies = {}, tsconfig = {}, workspace }) => {
         const extendPath = path.relative(workspace.packagePath, rootConfigPath);
-        const references: ts.ProjectReference[] = [
-          { path: './tsconfig.source.json' },
-          { path: './tsconfig.test.json' },
-        ];
+        const references: ts.ProjectReference[] = [];
 
         // Extract and determine references
         Object.keys({ ...dependencies, ...peerDependencies }).forEach(depName => {
@@ -147,6 +148,8 @@ export default class TypeScriptDriver extends Driver<TypeScriptConfig, TypeScrip
             JSON.stringify(config, null, 2),
           );
         }
+
+        console.log(workspace.packageName, references);
 
         writeConfigFile('tsconfig.json', {
           compilerOptions: {
