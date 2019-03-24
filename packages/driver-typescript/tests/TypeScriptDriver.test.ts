@@ -36,7 +36,6 @@ describe('TypeScriptDriver', () => {
       buildFolder: 'lib',
       srcFolder: 'src',
       testsFolder: 'tests',
-      typesFolder: 'types',
     });
   });
 

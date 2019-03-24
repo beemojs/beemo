@@ -16,8 +16,6 @@ export default class TypeScriptDriver extends Driver<TypeScriptConfig, TypeScrip
       buildFolder: string('lib'),
       srcFolder: string('src'),
       testsFolder: string('tests'),
-      // TODO
-      typesFolder: string('types'),
     };
   }
 
@@ -81,9 +79,11 @@ export default class TypeScriptDriver extends Driver<TypeScriptConfig, TypeScrip
       this.formatConfig({
         compilerOptions: {
           ...config.compilerOptions,
+          // Required for project references
           composite: true,
           declaration: true,
           declarationMap: true,
+          // Remove by marking as undefined
           outDir: undefined,
           outFile: undefined,
         },
@@ -92,20 +92,12 @@ export default class TypeScriptDriver extends Driver<TypeScriptConfig, TypeScrip
 
     delete config.compilerOptions;
 
-    // TODO this should be allowed, fix upstream
-    delete config.include;
-    delete config.exclude;
-
     // Generate references and update paths
     config.extends = './tsconfig.options.json';
     config.files = [];
-    config.references = [];
-
-    this.tool.getWorkspacePackages({ root: workspaceRoot }).forEach(wsPkg => {
-      config.references!.push({
-        path: path.relative(workspaceRoot, wsPkg.workspace.packagePath),
-      });
-    });
+    config.references = this.tool.getWorkspacePackages({ root: workspaceRoot }).map(wsPkg => ({
+      path: path.relative(workspaceRoot, wsPkg.workspace.packagePath),
+    }));
 
     // Add to context so that it can be automatically cleaned up
     context.addConfigPath('typescript', optionsPath);
@@ -122,8 +114,7 @@ export default class TypeScriptDriver extends Driver<TypeScriptConfig, TypeScrip
     if (!args.referenceWorkspaces) {
       return;
     } else if (args.workspaces) {
-      // TODO translate
-      throw new Error('--workspaces and --reference-workspaces cannot be used in unison.');
+      throw new Error(this.tool.msg('errors:workspacesMixedProjectRefs'));
     }
 
     const { buildFolder, srcFolder, testsFolder } = this.options;
@@ -169,12 +160,12 @@ export default class TypeScriptDriver extends Driver<TypeScriptConfig, TypeScrip
           config.exclude!.push(testsFolder);
         }
 
-        if (Array.isArray(tsconfig.include)) {
-          config.include = tsconfig.include;
-        }
-
         if (Array.isArray(tsconfig.exclude)) {
           config.exclude!.push(...tsconfig.exclude);
+        }
+
+        if (Array.isArray(tsconfig.include)) {
+          config.include = tsconfig.include;
         }
 
         fs.writeFileSync(path.join(srcPath, 'tsconfig.json'), this.formatConfig(config));
