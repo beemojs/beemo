@@ -33,6 +33,10 @@ describe('TypeScriptDriver', () => {
       dependencies: ['babel'],
       env: { DEV: 'true' },
       strategy: 'native',
+      buildFolder: 'lib',
+      srcFolder: 'src',
+      testsFolder: 'tests',
+      typesFolder: 'types',
     });
   });
 

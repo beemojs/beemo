@@ -16,6 +16,8 @@ export default class TypeScriptDriver extends Driver<TypeScriptConfig, TypeScrip
       buildFolder: string('lib'),
       srcFolder: string('src'),
       testsFolder: string('tests'),
+      // TODO
+      typesFolder: string('types'),
     };
   }
 
@@ -61,32 +63,42 @@ export default class TypeScriptDriver extends Driver<TypeScriptConfig, TypeScrip
    * Define references and compiler options when `--reference-workspaces` option is passed.
    */
   handleCreateConfig = (
-    {
-      args,
-      workspaceRoot,
-    }: DriverContext<DriverArgs & TypeScriptArgs & { referenceWorkspaces?: boolean }>,
+    context: DriverContext<DriverArgs & TypeScriptArgs & { referenceWorkspaces?: boolean }>,
     configPath: string,
     config: TypeScriptConfig,
   ) => {
+    const { args, workspaceRoot } = context;
+
     if (!args.referenceWorkspaces) {
       return;
     }
 
-    // Always include
-    config.compilerOptions!.composite = true;
-    config.compilerOptions!.declaration = true;
-    config.compilerOptions!.declarationMap = true;
+    // Extract compiler options to a new config file
+    const optionsPath = path.join(path.dirname(configPath), 'tsconfig.options.json');
 
-    // Disable root compilation
+    fs.writeFileSync(
+      optionsPath,
+      this.formatConfig({
+        compilerOptions: {
+          ...config.compilerOptions,
+          composite: true,
+          declaration: true,
+          declarationMap: true,
+          outDir: undefined,
+          outFile: undefined,
+        },
+      }),
+    );
+
+    delete config.compilerOptions;
+
+    // TODO this should be allowed, fix upstream
+    delete config.include;
+    delete config.exclude;
+
+    // Generate references and update paths
+    config.extends = './tsconfig.options.json';
     config.files = [];
-    config.include = [];
-    config.exclude = [];
-
-    // Remove problematic config
-    delete config.compilerOptions!.outDir;
-    delete config.compilerOptions!.outFile;
-
-    // Generate references
     config.references = [];
 
     this.tool.getWorkspacePackages({ root: workspaceRoot }).forEach(wsPkg => {
@@ -94,6 +106,9 @@ export default class TypeScriptDriver extends Driver<TypeScriptConfig, TypeScrip
         path: path.relative(workspaceRoot, wsPkg.workspace.packagePath),
       });
     });
+
+    // Add to context so that it can be automatically cleaned up
+    context.addConfigPath('typescript', optionsPath);
   };
 
   /**
@@ -109,16 +124,13 @@ export default class TypeScriptDriver extends Driver<TypeScriptConfig, TypeScrip
     } else if (args.workspaces) {
       // TODO translate
       throw new Error('--workspaces and --reference-workspaces cannot be used in unison.');
-    } else if (!args.build) {
-      // TODO translate
-      throw new Error('--build must be passed when using --reference-workspaces.');
     }
 
     const { buildFolder, srcFolder, testsFolder } = this.options;
-    const rootConfigPath = path.join(workspaceRoot, 'tsconfig.json');
+    const optionsConfigPath = path.join(workspaceRoot, 'tsconfig.options.json');
     const namesToPaths: { [key: string]: string } = {};
     const workspacePackages = this.tool.getWorkspacePackages<{
-      tsconfig: Pick<TypeScriptConfig, 'exclude' | 'files' | 'include'>;
+      tsconfig: Pick<TypeScriptConfig, 'exclude' | 'include'>;
     }>({
       root: workspaceRoot,
     });
@@ -131,45 +143,59 @@ export default class TypeScriptDriver extends Driver<TypeScriptConfig, TypeScrip
     // Create a config file in each package
     workspacePackages.forEach(
       ({ dependencies = {}, peerDependencies = {}, tsconfig = {}, workspace }) => {
-        const extendPath = path.relative(workspace.packagePath, rootConfigPath);
+        const srcPath = workspace.packagePath;
         const references: ts.ProjectReference[] = [];
 
         // Extract and determine references
         Object.keys({ ...dependencies, ...peerDependencies }).forEach(depName => {
           if (namesToPaths[depName]) {
-            references.push({ path: path.relative(workspace.packagePath, namesToPaths[depName]) });
+            references.push({ path: path.relative(srcPath, namesToPaths[depName]) });
           }
         });
 
-        // Write the config file
-        function writeConfigFile(fileName: string, config: TypeScriptConfig) {
-          fs.writeFileSync(
-            path.join(workspace.packagePath, fileName),
-            JSON.stringify(config, null, 2),
-          );
-        }
-
-        console.log(workspace.packageName, references);
-
-        writeConfigFile('tsconfig.json', {
+        // Build package config
+        const config: TypeScriptConfig = {
           compilerOptions: {
+            declarationDir: buildFolder,
             outDir: buildFolder,
             rootDir: srcFolder,
           },
-          exclude: [buildFolder, testsFolder],
-          extends: extendPath,
+          exclude: [buildFolder],
+          extends: path.relative(srcPath, optionsConfigPath),
           references,
-        });
+        };
 
-        writeConfigFile(path.join(testsFolder, 'tsconfig.json'), {
-          compilerOptions: {
-            noEmit: true,
-            rootDir: '.',
-          },
-          extends: extendPath,
-          include: ['*'],
-          references: [{ path: '..' }],
-        });
+        if (testsFolder) {
+          config.exclude!.push(testsFolder);
+        }
+
+        if (Array.isArray(tsconfig.include)) {
+          config.include = tsconfig.include;
+        }
+
+        if (Array.isArray(tsconfig.exclude)) {
+          config.exclude!.push(...tsconfig.exclude);
+        }
+
+        fs.writeFileSync(path.join(srcPath, 'tsconfig.json'), this.formatConfig(config));
+
+        // Build tests specific package config
+        const testsPath = path.join(workspace.packagePath, testsFolder);
+
+        if (fs.existsSync(testsPath)) {
+          fs.writeFileSync(
+            path.join(testsPath, 'tsconfig.json'),
+            this.formatConfig({
+              compilerOptions: {
+                noEmit: true,
+                rootDir: '.',
+              },
+              extends: path.relative(testsPath, optionsConfigPath),
+              include: ['*'],
+              references: [{ path: '..' }],
+            }),
+          );
+        }
       },
     );
   };

@@ -18,7 +18,7 @@
     "prerelease": "yarn test && yarn run build",
     "release": "lerna publish",
     "release:bump": "beemo run-script bump-peer-deps",
-    "type": "beemo typescript --workspaces=* --noEmit"
+    "type": "beemo typescript --noEmit --reference-workspaces"
   },
   "devDependencies": {
     "@milesj/build-tool-config": "0.156.0",
