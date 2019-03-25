@@ -1,14 +1,9 @@
 import path from 'path';
+import { getFixturePath } from '@boost/test-utils';
 import ExecuteDriverRoutine from '../src/ExecuteDriverRoutine';
 import RunCommandRoutine from '../src/execute/RunCommandRoutine';
 import Driver from '../src/Driver';
-import {
-  createDriverContext,
-  createTestDebugger,
-  createTestDriver,
-  createTestTool,
-  getFixturePath,
-} from '../../../tests/helpers';
+import { mockDebugger, mockTool, mockDriver, stubDriverContext } from '../src/testUtils';
 
 describe('ExecuteDriverRoutine', () => {
   let routine: ExecuteDriverRoutine;
@@ -27,14 +22,14 @@ describe('ExecuteDriverRoutine', () => {
   }
 
   beforeEach(() => {
-    const tool = createTestTool();
+    const tool = mockTool();
 
-    driver = createTestDriver('primary', tool);
+    driver = mockDriver('primary', tool);
 
     routine = new ExecuteDriverRoutine('driver', 'Executing driver');
-    routine.context = createDriverContext(driver);
+    routine.context = stubDriverContext(driver);
     routine.tool = tool;
-    routine.debug = createTestDebugger();
+    routine.debug = mockDebugger();
   });
 
   describe('bootstrap()', () => {

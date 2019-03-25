@@ -1,17 +1,17 @@
 import fs from 'fs-extra';
 import chalk from 'chalk';
 import { Task } from '@boost/core';
+import BabelDriver from '@beemo/driver-babel';
+import JestDriver from '@beemo/driver-jest';
 import Driver from '../../src/Driver';
 import RunCommandRoutine from '../../src/execute/RunCommandRoutine';
-import BabelDriver from '../../../driver-babel/src/BabelDriver';
-import JestDriver from '../../../driver-jest/src/JestDriver';
 import {
-  createDriverContext,
+  mockTool,
+  stubDriverContext,
+  mockDebugger,
   prependRoot,
   getRoot,
-  createTestDebugger,
-  createTestTool,
-} from '../../../../tests/helpers';
+} from '../../src/testUtils';
 
 jest.mock('fs-extra');
 
@@ -61,7 +61,7 @@ describe('RunCommandRoutine', () => {
   let tool;
 
   beforeEach(() => {
-    tool = createTestTool();
+    tool = mockTool();
 
     driver = new BabelDriver({
       args: ['--qux'],
@@ -75,8 +75,8 @@ describe('RunCommandRoutine', () => {
       argv: ['-a', '--foo', 'bar', 'baz'],
     });
     routine.tool = tool;
-    routine.context = createDriverContext(driver);
-    routine.debug = createTestDebugger();
+    routine.context = stubDriverContext(driver);
+    routine.debug = mockDebugger();
     routine.bootstrap();
   });
 

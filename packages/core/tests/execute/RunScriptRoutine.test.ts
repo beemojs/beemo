@@ -1,19 +1,19 @@
 import { Tool } from '@boost/core';
 import Script from '../../src/Script';
 import RunScriptRoutine from '../../src/execute/RunScriptRoutine';
-import { createTestDebugger, createTestTool, createScriptContext } from '../../../../tests/helpers';
+import { mockTool, stubScriptContext, mockDebugger } from '../../src/testUtils';
 
 describe('RunScriptRoutine', () => {
   let routine: RunScriptRoutine;
   let tool: Tool<any, any>;
 
   beforeEach(() => {
-    tool = createTestTool();
+    tool = mockTool();
 
     routine = new RunScriptRoutine('script', 'Run script');
     routine.tool = tool;
-    routine.context = createScriptContext(new Script());
-    routine.debug = createTestDebugger();
+    routine.context = stubScriptContext(new Script());
+    routine.debug = mockDebugger();
     routine.bootstrap();
   });
 

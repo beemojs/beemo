@@ -1,7 +1,7 @@
 import fs from 'fs';
-import DriverContext from '../../core/src/contexts/DriverContext';
+import { DriverContext } from '@beemo/core';
+import { mockTool, stubDriverContext } from '@beemo/core/lib/testUtils';
 import ESLintDriver from '../src/ESLintDriver';
-import { createDriverContext, createTestTool } from '../../../tests/helpers';
 
 describe('ESLintDriver', () => {
   let driver: ESLintDriver;
@@ -10,10 +10,10 @@ describe('ESLintDriver', () => {
 
   beforeEach(() => {
     driver = new ESLintDriver();
-    driver.tool = createTestTool();
+    driver.tool = mockTool();
     driver.bootstrap();
 
-    context = createDriverContext(driver);
+    context = stubDriverContext(driver);
 
     spy = jest.spyOn(fs, 'writeFileSync').mockImplementation(() => true);
   });

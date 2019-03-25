@@ -1,7 +1,7 @@
 import fs from 'fs-extra';
+import BabelDriver from '@beemo/driver-babel';
 import ConfigLoader from '@boost/core/lib/ConfigLoader';
 import CreateConfigRoutine from '../../src/configure/CreateConfigRoutine';
-import BabelDriver from '../../../driver-babel/src/BabelDriver';
 import Driver from '../../src/Driver';
 import {
   STRATEGY_COPY,
@@ -11,12 +11,7 @@ import {
   STRATEGY_NATIVE,
 } from '../../src/constants';
 import { BeemoTool } from '../../src/types';
-import {
-  prependRoot,
-  createTestDebugger,
-  createTestTool,
-  createConfigContext,
-} from '../../../../tests/helpers';
+import { stubConfigContext, mockDebugger, mockTool, prependRoot } from '../../src/testUtils';
 
 jest.mock('@boost/core/lib/ConfigLoader');
 
@@ -29,7 +24,7 @@ describe('CreateConfigRoutine', () => {
   let tool: BeemoTool;
 
   beforeEach(() => {
-    tool = createTestTool();
+    tool = mockTool();
 
     driver = new BabelDriver({ args: ['--qux'] });
     driver.name = 'babel';
@@ -37,10 +32,10 @@ describe('CreateConfigRoutine', () => {
     driver.bootstrap();
 
     routine = new CreateConfigRoutine('babel', 'Configure Babel', { driver });
-    routine.context = createConfigContext();
+    routine.context = stubConfigContext();
     routine.tool = tool;
     routine.tool.config.module = '@local';
-    routine.debug = createTestDebugger();
+    routine.debug = mockDebugger();
 
     fs.existsSync = jest.fn(() => true);
     fs.writeFile = jest.fn(() => Promise.resolve());

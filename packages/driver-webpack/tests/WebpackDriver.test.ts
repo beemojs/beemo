@@ -1,12 +1,12 @@
+import { mockTool } from '@beemo/core/lib/testUtils';
 import WebpackDriver from '../src/WebpackDriver';
-import { createTestTool } from '../../../tests/helpers';
 
 describe('WebpackDriver', () => {
   let driver: WebpackDriver;
 
   beforeEach(() => {
     driver = new WebpackDriver();
-    driver.tool = createTestTool();
+    driver.tool = mockTool();
     driver.bootstrap();
   });
 

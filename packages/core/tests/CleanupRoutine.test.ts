@@ -1,6 +1,6 @@
 import fs from 'fs-extra';
 import CleanupRoutine from '../src/CleanupRoutine';
-import { createDriverContext, createTestDebugger, createTestTool } from '../../../tests/helpers';
+import { mockTool, mockDebugger, stubDriverContext } from '../src/testUtils';
 
 jest.mock('fs-extra');
 
@@ -9,9 +9,9 @@ describe('CleanupRoutine', () => {
 
   beforeEach(() => {
     routine = new CleanupRoutine('cleanup', 'Cleaning up');
-    routine.context = createDriverContext();
-    routine.tool = createTestTool();
-    routine.debug = createTestDebugger();
+    routine.context = stubDriverContext();
+    routine.tool = mockTool();
+    routine.debug = mockDebugger();
     routine.bootstrap();
   });
 

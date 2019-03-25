@@ -1,12 +1,7 @@
 import ConfigureRoutine from '../src/ConfigureRoutine';
 import Driver from '../src/Driver';
 import { BeemoTool } from '../src/types';
-import {
-  createTestDebugger,
-  createTestDriver,
-  createTestTool,
-  createConfigContext,
-} from '../../../tests/helpers';
+import { mockTool, mockDebugger, mockDriver, stubConfigContext } from '../src/testUtils';
 
 describe('ConfigureRoutine', () => {
   let routine: ConfigureRoutine;
@@ -16,16 +11,16 @@ describe('ConfigureRoutine', () => {
 
   beforeEach(() => {
     plugins = {};
-    tool = createTestTool();
-    driver = createTestDriver('foo');
+    tool = mockTool();
+    driver = mockDriver('foo');
 
     routine = new ConfigureRoutine('config', 'Generating configurations');
     routine.tool = tool;
-    routine.context = createConfigContext();
-    routine.debug = createTestDebugger();
+    routine.context = stubConfigContext();
+    routine.debug = mockDebugger();
 
     routine.context.addDriverDependency(driver);
-    routine.tool.getPlugin = jest.fn((type, name) => plugins[name] || createTestDriver(name, tool));
+    routine.tool.getPlugin = jest.fn((type, name) => plugins[name] || mockDriver(name, tool));
   });
 
   describe('bootstrap()', () => {
@@ -65,9 +60,9 @@ describe('ConfigureRoutine', () => {
 
   describe('setupConfigFiles()', () => {
     it('pipes a routine for each driver', async () => {
-      const foo = createTestDriver('foo');
-      const bar = createTestDriver('bar');
-      const baz = createTestDriver('baz');
+      const foo = mockDriver('foo');
+      const bar = mockDriver('bar');
+      const baz = mockDriver('baz');
 
       expect(routine.routines).toHaveLength(0);
 
@@ -101,14 +96,14 @@ describe('ConfigureRoutine', () => {
 
       await routine.resolveDependencies();
 
-      expect(Array.from(routine.context.drivers)).toEqual([driver, createTestDriver('bar', tool)]);
+      expect(Array.from(routine.context.drivers)).toEqual([driver, mockDriver('bar', tool)]);
     });
 
     it('handles sub-dependencies', async () => {
-      plugins.bar = createTestDriver('bar', tool, { dependencies: ['baz', 'qux'] });
-      plugins.baz = createTestDriver('baz', tool);
-      plugins.qux = createTestDriver('qux', tool, { dependencies: ['oof'] });
-      plugins.oof = createTestDriver('oof', tool);
+      plugins.bar = mockDriver('bar', tool, { dependencies: ['baz', 'qux'] });
+      plugins.baz = mockDriver('baz', tool);
+      plugins.qux = mockDriver('qux', tool, { dependencies: ['oof'] });
+      plugins.oof = mockDriver('oof', tool);
 
       driver.metadata.dependencies = ['bar'];
 

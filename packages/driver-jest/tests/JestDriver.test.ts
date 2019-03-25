@@ -1,12 +1,12 @@
+import { mockTool, stubExecResult } from '@beemo/core/lib/testUtils';
 import JestDriver from '../src/JestDriver';
-import { createTestTool, EXEC_RESULT } from '../../../tests/helpers';
 
 describe('JestDriver', () => {
   let driver: JestDriver;
 
   beforeEach(() => {
     driver = new JestDriver();
-    driver.tool = createTestTool();
+    driver.tool = mockTool();
     driver.bootstrap();
   });
 
@@ -46,12 +46,13 @@ describe('JestDriver', () => {
     it('outputs stderr', () => {
       const spy = jest.spyOn(driver.tool, 'log');
 
-      driver.handleSuccess({
-        ...EXEC_RESULT,
-        cmd: 'jest',
-        stdout: 'Hello',
-        stderr: ' Why??? ',
-      });
+      driver.handleSuccess(
+        stubExecResult({
+          cmd: 'jest',
+          stdout: 'Hello',
+          stderr: ' Why??? ',
+        }),
+      );
 
       expect(spy).toHaveBeenCalledWith('Why???');
     });
@@ -59,12 +60,13 @@ describe('JestDriver', () => {
     it('outputs nothing if empty strings', () => {
       const spy = jest.spyOn(driver.tool, 'log');
 
-      driver.handleSuccess({
-        ...EXEC_RESULT,
-        cmd: 'jest',
-        stdout: '',
-        stderr: '',
-      });
+      driver.handleSuccess(
+        stubExecResult({
+          cmd: 'jest',
+          stdout: '',
+          stderr: '',
+        }),
+      );
 
       expect(spy).not.toHaveBeenCalled();
     });
@@ -72,12 +74,13 @@ describe('JestDriver', () => {
     it('outputs stdout and stderr when running coverage', () => {
       const spy = jest.spyOn(driver.tool, 'log');
 
-      driver.handleSuccess({
-        ...EXEC_RESULT,
-        cmd: 'jest --coverage',
-        stdout: 'Coverage',
-        stderr: 'Tests',
-      });
+      driver.handleSuccess(
+        stubExecResult({
+          cmd: 'jest --coverage',
+          stdout: 'Coverage',
+          stderr: 'Tests',
+        }),
+      );
 
       expect(spy).toHaveBeenCalledWith('Tests');
       expect(spy).toHaveBeenCalledWith('Coverage');
@@ -86,12 +89,13 @@ describe('JestDriver', () => {
     it('outputs nothing if empty strings when running coverage', () => {
       const spy = jest.spyOn(driver.tool, 'log');
 
-      driver.handleSuccess({
-        ...EXEC_RESULT,
-        cmd: 'jest --coverage',
-        stdout: '',
-        stderr: '',
-      });
+      driver.handleSuccess(
+        stubExecResult({
+          cmd: 'jest --coverage',
+          stdout: '',
+          stderr: '',
+        }),
+      );
 
       expect(spy).not.toHaveBeenCalled();
     });

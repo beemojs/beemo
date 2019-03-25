@@ -1,12 +1,7 @@
 import { Routine } from '@boost/core';
 import Driver from '../../src/Driver';
 import BaseExecuteRoutine from '../../src/execute/BaseRoutine';
-import {
-  createDriverContext,
-  createTestDebugger,
-  createTestDriver,
-  createTestTool,
-} from '../../../../tests/helpers';
+import { mockTool, mockDriver, stubDriverContext, mockDebugger } from '../../src/testUtils';
 
 class PipedRoutine extends Routine<any, any> {
   execute() {
@@ -30,14 +25,14 @@ describe('BaseExecuteRoutine', () => {
   let qux: PipedRoutine;
 
   beforeEach(() => {
-    const tool = createTestTool();
+    const tool = mockTool();
 
-    driver = createTestDriver('primary', tool);
+    driver = mockDriver('primary', tool);
 
     routine = new ExecuteRoutine('driver', 'Executing driver');
-    routine.context = createDriverContext(driver);
+    routine.context = stubDriverContext(driver);
     routine.tool = tool;
-    routine.debug = createTestDebugger();
+    routine.debug = mockDebugger();
 
     // Setup packages
     primary = new PipedRoutine('primary', 'primary');
