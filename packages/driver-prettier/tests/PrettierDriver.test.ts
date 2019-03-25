@@ -1,7 +1,7 @@
 import fs from 'fs';
-import DriverContext from '../../core/src/contexts/DriverContext';
+import { DriverContext } from '@beemo/core';
+import { mockTool, stubDriverContext } from '@beemo/core/lib/testUtils';
 import PrettierDriver from '../src/PrettierDriver';
-import { createDriverContext, createTestTool } from '../../../tests/helpers';
 
 describe('PrettierDriver', () => {
   let driver: PrettierDriver;
@@ -10,10 +10,10 @@ describe('PrettierDriver', () => {
 
   beforeEach(() => {
     driver = new PrettierDriver();
-    driver.tool = createTestTool();
+    driver.tool = mockTool();
     driver.bootstrap();
 
-    context = createDriverContext(driver);
+    context = stubDriverContext(driver);
 
     spy = jest.spyOn(fs, 'writeFileSync').mockImplementation(() => true);
   });

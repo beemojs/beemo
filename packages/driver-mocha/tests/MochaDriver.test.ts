@@ -1,14 +1,14 @@
 /* eslint-disable @typescript-eslint/camelcase */
 
+import { mockTool } from '@beemo/core/lib/testUtils';
 import MochaDriver from '../src/MochaDriver';
-import { createTestTool } from '../../../tests/helpers';
 
 describe('MochaDriver', () => {
   let driver: MochaDriver;
 
   beforeEach(() => {
     driver = new MochaDriver();
-    driver.tool = createTestTool();
+    driver.tool = mockTool();
     driver.bootstrap();
   });
 

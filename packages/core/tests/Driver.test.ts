@@ -1,11 +1,11 @@
 import Driver from '../src/Driver';
-import { createTestDriver, EXEC_RESULT } from '../../../tests/helpers';
+import { mockDriver, stubExecResult } from '../src/testUtils';
 
 describe('Driver', () => {
   let driver: Driver;
 
   beforeEach(() => {
-    driver = createTestDriver('foo');
+    driver = mockDriver('foo');
   });
 
   it('validates fields', () => {
@@ -74,39 +74,43 @@ describe('Driver', () => {
     });
 
     it('logs stdout', () => {
-      driver.handleFailure({
-        ...EXEC_RESULT,
-        stdout: 'out',
-      });
+      driver.handleFailure(
+        stubExecResult({
+          stdout: 'out',
+        }),
+      );
 
       expect(spy).toHaveBeenCalledWith('out');
     });
 
     it('logs stderr', () => {
-      driver.handleFailure({
-        ...EXEC_RESULT,
-        stderr: 'error',
-      });
+      driver.handleFailure(
+        stubExecResult({
+          stderr: 'error',
+        }),
+      );
 
       expect(spy).toHaveBeenCalledWith('error');
     });
 
     it('logs stderr over stdout', () => {
-      driver.handleFailure({
-        ...EXEC_RESULT,
-        stderr: 'error',
-        stdout: 'out',
-      });
+      driver.handleFailure(
+        stubExecResult({
+          stderr: 'error',
+          stdout: 'out',
+        }),
+      );
 
       expect(spy).toHaveBeenCalledWith('error');
     });
 
     it('doesnt log if empty', () => {
-      driver.handleFailure({
-        ...EXEC_RESULT,
-        stderr: '',
-        stdout: '',
-      });
+      driver.handleFailure(
+        stubExecResult({
+          stderr: '',
+          stdout: '',
+        }),
+      );
 
       expect(spy).not.toHaveBeenCalled();
     });
@@ -120,38 +124,42 @@ describe('Driver', () => {
     });
 
     it('logs stdout', () => {
-      driver.handleSuccess({
-        ...EXEC_RESULT,
-        stdout: 'out',
-      });
+      driver.handleSuccess(
+        stubExecResult({
+          stdout: 'out',
+        }),
+      );
 
       expect(spy).toHaveBeenCalledWith('out');
     });
 
     it('doesnt log stdout if empty', () => {
-      driver.handleSuccess({
-        ...EXEC_RESULT,
-        stdout: '',
-      });
+      driver.handleSuccess(
+        stubExecResult({
+          stdout: '',
+        }),
+      );
 
       expect(spy).not.toHaveBeenCalledWith();
     });
 
     it('doesnt log stderr', () => {
-      driver.handleFailure({
-        ...EXEC_RESULT,
-        stderr: 'error',
-      });
+      driver.handleFailure(
+        stubExecResult({
+          stderr: 'error',
+        }),
+      );
 
       expect(spy).not.toHaveBeenCalled();
     });
 
     it('doesnt log if empty', () => {
-      driver.handleFailure({
-        ...EXEC_RESULT,
-        stderr: '',
-        stdout: '',
-      });
+      driver.handleFailure(
+        stubExecResult({
+          stderr: '',
+          stdout: '',
+        }),
+      );
 
       expect(spy).not.toHaveBeenCalled();
     });

@@ -1,14 +1,14 @@
 /* eslint-disable @typescript-eslint/camelcase */
 
+import { mockTool, stubExecResult } from '@beemo/core/lib/testUtils';
 import FlowDriver from '../src/FlowDriver';
-import { createTestTool, EXEC_RESULT } from '../../../tests/helpers';
 
 describe('FlowDriver', () => {
   let driver: FlowDriver;
 
   beforeEach(() => {
     driver = new FlowDriver();
-    driver.tool = createTestTool();
+    driver.tool = mockTool();
     driver.bootstrap();
   });
 
@@ -219,12 +219,13 @@ describe('FlowDriver', () => {
     it('logs stdout on error code 2', () => {
       const spy = jest.spyOn(driver.tool, 'logError');
 
-      driver.handleFailure({
-        ...EXEC_RESULT,
-        code: 2,
-        stdout: 'Out',
-        stderr: 'Err',
-      });
+      driver.handleFailure(
+        stubExecResult({
+          code: 2,
+          stdout: 'Out',
+          stderr: 'Err',
+        }),
+      );
 
       expect(spy).toHaveBeenCalledWith('Out');
     });
@@ -232,12 +233,13 @@ describe('FlowDriver', () => {
     it('logs stderr on other error codes', () => {
       const spy = jest.spyOn(driver.tool, 'logError');
 
-      driver.handleFailure({
-        ...EXEC_RESULT,
-        code: 1,
-        stdout: 'Out',
-        stderr: 'Err',
-      });
+      driver.handleFailure(
+        stubExecResult({
+          code: 1,
+          stdout: 'Out',
+          stderr: 'Err',
+        }),
+      );
 
       expect(spy).toHaveBeenCalledWith('Err');
     });

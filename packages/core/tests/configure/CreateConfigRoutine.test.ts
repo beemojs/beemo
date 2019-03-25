@@ -11,8 +11,7 @@ import {
   STRATEGY_NATIVE,
 } from '../../src/constants';
 import { BeemoTool } from '../../src/types';
-import { prependRoot } from '../../../../tests/helpers';
-import { stubConfigContext, mockDebugger, mockTool } from '../../src/testUtils';
+import { stubConfigContext, mockDebugger, mockTool, prependRoot } from '../../src/testUtils';
 
 jest.mock('@boost/core/lib/ConfigLoader');
 

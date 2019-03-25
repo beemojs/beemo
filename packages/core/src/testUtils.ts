@@ -1,7 +1,7 @@
 import path from 'path';
-import { Tool } from '@boost/core';
+import execa from 'execa';
 import parseArgs from 'yargs-parser';
-import { mockDebugger, stubArgs, stubToolConfig, stubPackageJson } from '@boost/core/test-utils';
+import { mockDebugger, mockTool as baseMockTool, stubArgs } from '@boost/core/test-utils';
 import Driver from './Driver';
 import Script from './Script';
 import Context from './contexts/Context';
@@ -11,54 +11,47 @@ import ScaffoldContext, { ScaffoldArgs } from './contexts/ScaffoldContext';
 import ScriptContext, { ScriptArgs } from './contexts/ScriptContext';
 import { BeemoTool, BeemoConfig, BeemoPluginRegistry, DriverMetadata } from './types';
 
-export const TEST_FIXTURE_ROOT = path.join(__dirname, '../../../tests/fixtures/app');
+export const BEEMO_TEST_ROOT = path.join(__dirname, '../../../tests/fixtures/app');
 
 export { mockDebugger, stubArgs };
 
 export function mockTool(): BeemoTool {
-  const tool = new Tool<BeemoPluginRegistry, BeemoConfig>({
-    appName: 'beemo',
-    appPath: path.join(__dirname, '..'),
-    configBlueprint: {},
-    configName: 'beemo',
-    root: TEST_FIXTURE_ROOT,
-    scoped: true,
-    workspaceRoot: TEST_FIXTURE_ROOT,
-  });
-
-  tool.config = stubToolConfig({
-    configure: {
-      cleanup: false,
-      parallel: true,
+  const tool = baseMockTool<BeemoPluginRegistry, BeemoConfig>(
+    {
+      appName: 'beemo',
+      configBlueprint: {},
+      configName: 'beemo',
+      root: BEEMO_TEST_ROOT,
+      scoped: true,
+      workspaceRoot: BEEMO_TEST_ROOT,
     },
-    drivers: [],
-    execute: {
-      concurrency: 0,
-      priority: true,
+    {
+      configure: {
+        cleanup: false,
+        parallel: true,
+      },
+      drivers: [],
+      execute: {
+        concurrency: 0,
+        priority: true,
+      },
+      scripts: [],
     },
-    reporters: [],
-    scripts: [],
-  });
+    false,
+  );
 
-  tool.package = stubPackageJson();
-
-  // @ts-ignore
-  tool.initialized = true;
-
-  // Mock
+  // Stub out emitter
   tool.on = jest.fn().mockReturnThis();
-  tool.debug = mockDebugger();
-  tool.createDebugger = mockDebugger;
 
   return tool;
 }
 
-export function mockDriver(
+export function mockDriver<C extends object = {}>(
   name: string,
   tool: BeemoTool | null = null,
   metadata: Partial<DriverMetadata> = {},
-): Driver {
-  const driver = new Driver();
+): Driver<C> {
+  const driver = new Driver<C>();
 
   driver.name = name;
   driver.tool = tool || mockTool();
@@ -78,9 +71,9 @@ export function mockDriver(
 export function applyContext<T extends Context>(context: T): T {
   context.args = parseArgs(['-a', '--foo', 'bar', 'baz']);
   context.argv = ['-a', '--foo', 'bar', 'baz'];
-  context.cwd = TEST_FIXTURE_ROOT;
-  context.moduleRoot = TEST_FIXTURE_ROOT;
-  context.workspaceRoot = TEST_FIXTURE_ROOT;
+  context.cwd = BEEMO_TEST_ROOT;
+  context.moduleRoot = BEEMO_TEST_ROOT;
+  context.workspaceRoot = BEEMO_TEST_ROOT;
   context.workspaces = [];
 
   return context;
@@ -90,9 +83,8 @@ export function stubContext(): Context {
   return applyContext(new Context(stubArgs()));
 }
 
-export function stubConfigArgs(fields: Partial<ConfigArgs> = {}) {
+export function stubConfigArgs(fields?: Partial<ConfigArgs>) {
   return stubArgs<ConfigArgs>({
-    name: 'foo',
     names: [],
     ...fields,
   });
@@ -102,11 +94,10 @@ export function stubConfigContext(): ConfigContext {
   return applyContext(new ConfigContext(stubConfigArgs()));
 }
 
-export function stubDriverArgs(fields: Partial<DriverArgs> = {}) {
+export function stubDriverArgs(fields?: Partial<DriverArgs>) {
   return stubArgs<DriverArgs>({
     concurrency: 1,
     live: false,
-    name: 'foo',
     priority: false,
     workspaces: '',
     ...fields,
@@ -117,7 +108,7 @@ export function stubDriverContext(driver?: Driver): DriverContext {
   return applyContext(new DriverContext(stubDriverArgs(), driver || new Driver()));
 }
 
-export function stubScaffoldArgs(fields: Partial<ScaffoldArgs> = {}) {
+export function stubScaffoldArgs(fields?: Partial<ScaffoldArgs>) {
   return stubArgs<ScaffoldArgs>({
     action: '',
     dry: false,
@@ -135,7 +126,7 @@ export function stubScaffoldContext(
   return applyContext(new ScaffoldContext(stubScaffoldArgs(), generator, action, name));
 }
 
-export function stubScriptArgs(fields: Partial<ScriptArgs> = {}) {
+export function stubScriptArgs(fields?: Partial<ScriptArgs>) {
   return stubArgs<ScriptArgs>({
     concurrency: 1,
     name: 'foo',
@@ -153,4 +144,26 @@ export function stubScriptContext(script?: Script): ScriptContext {
   }
 
   return context;
+}
+
+export function stubExecResult(fields?: Partial<execa.ExecaReturns>): execa.ExecaReturns {
+  return {
+    cmd: '',
+    code: 0,
+    failed: false,
+    killed: false,
+    signal: null,
+    stderr: '',
+    stdout: '',
+    timedOut: false,
+    ...fields,
+  };
+}
+
+export function prependRoot(part: string): string {
+  return path.join(BEEMO_TEST_ROOT, part);
+}
+
+export function getRoot(): string {
+  return BEEMO_TEST_ROOT;
 }

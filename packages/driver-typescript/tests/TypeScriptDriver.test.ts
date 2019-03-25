@@ -1,8 +1,8 @@
 import path from 'path';
 import rimraf from 'rimraf';
-import DriverContext from '../../core/src/contexts/DriverContext';
+import { DriverContext } from '@beemo/core';
+import { mockTool, stubDriverContext } from '@beemo/core/lib/testUtils';
 import TypeScriptDriver from '../src/TypeScriptDriver';
-import { createDriverContext, createTestTool } from '../../../tests/helpers';
 
 jest.mock('rimraf');
 
@@ -12,13 +12,13 @@ describe('TypeScriptDriver', () => {
 
   beforeEach(() => {
     driver = new TypeScriptDriver();
-    driver.tool = createTestTool();
+    driver.tool = mockTool();
     driver.bootstrap();
     driver.config = {
       compilerOptions: {},
     };
 
-    context = createDriverContext(driver);
+    context = stubDriverContext(driver);
   });
 
   it('sets options from constructor', () => {

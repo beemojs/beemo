@@ -781,10 +781,10 @@
     lodash "^4.17.11"
     to-fast-properties "^2.0.0"
 
-"@boost/core@^1.10.0":
-  version "1.10.0"
-  resolved "https://registry.npmjs.org/@boost/core/-/core-1.10.0.tgz#0ad292f524ff94a636fcd7bfad2b7b263c8617d8"
-  integrity sha512-eMZDsz1Y1sQ8Ni/VnrlyiiH0yeWdyrnp/MDAp1QczektWlByL8SIzA3Jv+JdDVo6y7oJsF5ujnD7rvLXf3jUiA==
+"@boost/core@^1.10.1":
+  version "1.10.1"
+  resolved "https://registry.yarnpkg.com/@boost/core/-/core-1.10.1.tgz#b7daf6060d8f00fc5968303325717af61f9ee2d3"
+  integrity sha512-vjXTjG0eRVIptT6Z6GIuqTKdTkexot6Qgq6aYW5kqVsi6QHYlSDxHW+6/17vnEbo1XoivLPBibC006s3GSut/Q==
   dependencies:
     "@types/cli-truncate" "^1.1.0"
     "@types/debug" "^4.1.2"

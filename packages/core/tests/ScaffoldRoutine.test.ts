@@ -1,11 +1,7 @@
 import hygen from 'hygen';
 import ScaffoldRoutine from '../src/ScaffoldRoutine';
-import {
-  getRoot,
-  createTestDebugger,
-  createTestTool,
-  createScaffoldContext,
-} from '../../../tests/helpers';
+import { mockTool, mockDebugger, stubScaffoldContext } from '../src/testUtils';
+import { getRoot } from '../../../tests/helpers';
 
 jest.mock('hygen');
 
@@ -14,9 +10,9 @@ describe('ScaffoldRoutine', () => {
 
   beforeEach(() => {
     routine = new ScaffoldRoutine('sync', 'Syncing dotfiles');
-    routine.context = createScaffoldContext();
-    routine.tool = createTestTool();
-    routine.debug = createTestDebugger();
+    routine.context = stubScaffoldContext();
+    routine.tool = mockTool();
+    routine.debug = mockDebugger();
   });
 
   describe('handleExec()', () => {

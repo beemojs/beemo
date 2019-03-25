@@ -1,15 +1,11 @@
 import path from 'path';
+import { getFixturePath } from '@boost/test-utils';
 import ModuleLoader from '@boost/core/lib/ModuleLoader';
 import ExecuteScriptRoutine from '../src/ExecuteScriptRoutine';
 import RunScriptRoutine from '../src/execute/RunScriptRoutine';
 import Script from '../src/Script';
-import {
-  createScriptContext,
-  createTestDebugger,
-  createTestTool,
-  getRoot,
-  getFixturePath,
-} from '../../../tests/helpers';
+import { mockDebugger, mockTool, stubScriptContext } from '../src/testUtils';
+import { getRoot } from '../../../tests/helpers';
 
 jest.mock('@boost/core/lib/ModuleLoader', () =>
   jest.fn(() => ({
@@ -61,9 +57,9 @@ describe('ExecuteScriptRoutine', () => {
     script.name = 'plugin-name';
 
     routine = new ExecuteScriptRoutine('script', 'Executing script');
-    routine.context = createScriptContext();
-    routine.tool = createTestTool();
-    routine.debug = createTestDebugger();
+    routine.context = stubScriptContext();
+    routine.tool = mockTool();
+    routine.debug = mockDebugger();
 
     routine.context.scriptName = 'plugin-name';
     routine.context.eventName = 'plugin-name';

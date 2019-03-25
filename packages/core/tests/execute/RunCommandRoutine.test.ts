@@ -5,8 +5,13 @@ import Driver from '../../src/Driver';
 import RunCommandRoutine from '../../src/execute/RunCommandRoutine';
 import BabelDriver from '../../../driver-babel/src/BabelDriver';
 import JestDriver from '../../../driver-jest/src/JestDriver';
-import { prependRoot, getRoot } from '../../../../tests/helpers';
-import { mockTool, stubDriverContext, mockDebugger } from '../../src/testUtils';
+import {
+  mockTool,
+  stubDriverContext,
+  mockDebugger,
+  prependRoot,
+  getRoot,
+} from '../../src/testUtils';
 
 jest.mock('fs-extra');
 
