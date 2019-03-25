@@ -35,6 +35,6 @@
     "rimraf": "^2.6.3"
   },
   "tsconfig": {
-    "exclude": ["./integration/**/*"]
+    "exclude": ["integration/**/*"]
   }
 }
