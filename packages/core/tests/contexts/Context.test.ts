@@ -1,18 +1,18 @@
 import Context from '../../src/contexts/Context';
-import { MOCK_ARGS } from '../../../../tests/helpers';
+import { stubArgs } from '../../src/testUtils';
 
 describe('Context', () => {
   let context: Context;
 
   beforeEach(() => {
-    context = new Context({ ...MOCK_ARGS, _: [] });
+    context = new Context(stubArgs());
   });
 
   describe('constructor()', () => {
     it('sets args', () => {
-      context = new Context({ ...MOCK_ARGS, foo: true });
+      context = new Context(stubArgs({ live: true }));
 
-      expect(context.args).toEqual({ ...MOCK_ARGS, foo: true });
+      expect(context.args).toEqual(stubArgs({ live: true }));
     });
   });
 

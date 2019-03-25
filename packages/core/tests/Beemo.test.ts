@@ -6,16 +6,6 @@ import Context from '../src/contexts/Context';
 import DriverContext from '../src/contexts/DriverContext';
 // @ts-ignore
 import bootstrapIndex from '../../../tests';
-import {
-  createDriverContext,
-  createContext,
-  createTestDriver,
-  createTestTool,
-  MOCK_ARGS,
-  MOCK_DRIVER_ARGS,
-  MOCK_SCAFFOLD_ARGS,
-  MOCK_CONFIG_ARGS,
-} from '../../../tests/helpers';
 
 jest.mock(
   '@boost/core/lib/Pipeline',
@@ -40,7 +30,7 @@ describe('Beemo', () => {
   let onSpy: jest.Mock;
 
   beforeEach(() => {
-    beemo = new Beemo(['foo', 'bar'], '', createTestTool());
+    beemo = new Beemo(['foo', 'bar'], '', mockTool());
     beemo.moduleRoot = root;
     beemo.tool.options.root = root;
 

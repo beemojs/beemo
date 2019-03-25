@@ -1,7 +1,6 @@
 import execa from 'execa';
-import { mockTool } from '@boost/core/test-utils';
 import Script from '../src/Script';
-import { createScriptContext } from '../../../tests/helpers';
+import { mockTool, stubScriptContext } from '../src/testUtils';
 
 jest.mock('execa');
 
@@ -23,7 +22,7 @@ describe('Script', () => {
     it('executes tasks serially by default', async () => {
       const spy = jest.spyOn(script, 'executeTasks');
 
-      await script.execute(createScriptContext(), {});
+      await script.execute(stubScriptContext(), {});
 
       expect(spy).toHaveBeenCalledWith('serial');
     });

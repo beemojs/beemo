@@ -1,19 +1,19 @@
 import ScriptContext from '../../src/contexts/ScriptContext';
 import Script from '../../src/Script';
-import { MOCK_SCRIPT_ARGS } from '../../../../tests/helpers';
+import { stubScriptArgs } from '../../src/testUtils';
 
 describe('ScriptContext', () => {
   let context: ScriptContext;
 
   beforeEach(() => {
-    context = new ScriptContext({ ...MOCK_SCRIPT_ARGS }, 'foo');
+    context = new ScriptContext(stubScriptArgs(), 'foo');
   });
 
   describe('constructor()', () => {
     it('sets args', () => {
-      context = new ScriptContext({ ...MOCK_SCRIPT_ARGS, foo: true }, 'foo');
+      context = new ScriptContext(stubScriptArgs({ priority: true }), 'foo');
 
-      expect(context.args).toEqual({ ...MOCK_SCRIPT_ARGS, foo: true });
+      expect(context.args).toEqual(stubScriptArgs({ priority: true }));
     });
 
     it('sets script name', () => {
@@ -21,7 +21,7 @@ describe('ScriptContext', () => {
     });
 
     it('converts name to correct case', () => {
-      context = new ScriptContext({ ...MOCK_SCRIPT_ARGS, foo: true }, 'foo-bar');
+      context = new ScriptContext(stubScriptArgs(), 'foo-bar');
 
       expect(context.scriptName).toBe('foo-bar');
       expect(context.eventName).toBe('foo-bar');

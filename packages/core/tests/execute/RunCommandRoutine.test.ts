@@ -5,13 +5,8 @@ import Driver from '../../src/Driver';
 import RunCommandRoutine from '../../src/execute/RunCommandRoutine';
 import BabelDriver from '../../../driver-babel/src/BabelDriver';
 import JestDriver from '../../../driver-jest/src/JestDriver';
-import {
-  createDriverContext,
-  prependRoot,
-  getRoot,
-  createTestDebugger,
-  createTestTool,
-} from '../../../../tests/helpers';
+import { prependRoot, getRoot } from '../../../../tests/helpers';
+import { mockTool, stubDriverContext, mockDebugger } from '../../src/testUtils';
 
 jest.mock('fs-extra');
 
@@ -61,7 +56,7 @@ describe('RunCommandRoutine', () => {
   let tool;
 
   beforeEach(() => {
-    tool = createTestTool();
+    tool = mockTool();
 
     driver = new BabelDriver({
       args: ['--qux'],
@@ -75,8 +70,8 @@ describe('RunCommandRoutine', () => {
       argv: ['-a', '--foo', 'bar', 'baz'],
     });
     routine.tool = tool;
-    routine.context = createDriverContext(driver);
-    routine.debug = createTestDebugger();
+    routine.context = stubDriverContext(driver);
+    routine.debug = mockDebugger();
     routine.bootstrap();
   });
 
