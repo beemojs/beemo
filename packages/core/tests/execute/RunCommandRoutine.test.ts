@@ -1,10 +1,10 @@
 import fs from 'fs-extra';
 import chalk from 'chalk';
 import { Task } from '@boost/core';
+import BabelDriver from '@beemo/driver-babel';
+import JestDriver from '@beemo/driver-jest';
 import Driver from '../../src/Driver';
 import RunCommandRoutine from '../../src/execute/RunCommandRoutine';
-import BabelDriver from '../../../driver-babel/src/BabelDriver';
-import JestDriver from '../../../driver-jest/src/JestDriver';
 import {
   mockTool,
   stubDriverContext,

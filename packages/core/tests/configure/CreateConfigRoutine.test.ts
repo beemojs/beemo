@@ -1,7 +1,7 @@
 import fs from 'fs-extra';
+import BabelDriver from '@beemo/driver-babel';
 import ConfigLoader from '@boost/core/lib/ConfigLoader';
 import CreateConfigRoutine from '../../src/configure/CreateConfigRoutine';
-import BabelDriver from '../../../driver-babel/src/BabelDriver';
 import Driver from '../../src/Driver';
 import {
   STRATEGY_COPY,

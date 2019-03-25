@@ -11,7 +11,11 @@ import ScaffoldContext, { ScaffoldArgs } from './contexts/ScaffoldContext';
 import ScriptContext, { ScriptArgs } from './contexts/ScriptContext';
 import { BeemoTool, BeemoConfig, BeemoPluginRegistry, DriverMetadata } from './types';
 
-export const BEEMO_TEST_ROOT = path.join(__dirname, '../../../tests/fixtures/app');
+// Use core package since resources are located here
+export const BEEMO_APP_PATH = path.join(__dirname, '..');
+
+// Use a folder that should not cause issues / contain much code
+export const BEEMO_TEST_ROOT = path.join(__dirname, '../../../tests');
 
 export { mockDebugger, stubArgs };
 
@@ -19,6 +23,7 @@ export function mockTool(): BeemoTool {
   const tool = baseMockTool<BeemoPluginRegistry, BeemoConfig>(
     {
       appName: 'beemo',
+      appPath: BEEMO_APP_PATH,
       configBlueprint: {},
       configName: 'beemo',
       root: BEEMO_TEST_ROOT,

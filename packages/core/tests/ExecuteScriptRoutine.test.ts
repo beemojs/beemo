@@ -4,8 +4,7 @@ import ModuleLoader from '@boost/core/lib/ModuleLoader';
 import ExecuteScriptRoutine from '../src/ExecuteScriptRoutine';
 import RunScriptRoutine from '../src/execute/RunScriptRoutine';
 import Script from '../src/Script';
-import { mockDebugger, mockTool, stubScriptContext } from '../src/testUtils';
-import { getRoot } from '../../../tests/helpers';
+import { mockDebugger, mockTool, stubScriptContext, getRoot } from '../src/testUtils';
 
 jest.mock('@boost/core/lib/ModuleLoader', () =>
   jest.fn(() => ({
