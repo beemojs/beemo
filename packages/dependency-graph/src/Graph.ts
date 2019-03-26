@@ -146,10 +146,10 @@ export default class Graph<T extends PackageConfig = PackageConfig> {
       });
 
       if (nextBatch.length === 0) {
-        throw new Error('Could not build dependency batches, some packages are unreachable');
+        this.detectCycle();
       }
 
-      batches.push(nextBatch.map(node => this.packages.get(node.name)!));
+      batches.push(this.sortByDependedOn(nextBatch).map(node => this.packages.get(node.name)!));
       nextBatch.forEach(node => seen.add(node));
 
       if (seen.size !== this.nodes.size) {
