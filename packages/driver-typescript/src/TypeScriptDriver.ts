@@ -16,6 +16,7 @@ export default class TypeScriptDriver extends Driver<TypeScriptConfig, TypeScrip
       buildFolder: string('lib'),
       srcFolder: string('src'),
       testsFolder: string('tests'),
+      typesFolder: string('types'),
     };
   }
 
@@ -66,6 +67,7 @@ export default class TypeScriptDriver extends Driver<TypeScriptConfig, TypeScrip
     config: TypeScriptConfig,
   ) => {
     const { args, workspaceRoot } = context;
+    const { testsFolder } = this.options;
 
     if (!args.referenceWorkspaces) {
       return;
@@ -90,14 +92,30 @@ export default class TypeScriptDriver extends Driver<TypeScriptConfig, TypeScrip
       }),
     );
 
+    // Delete problematic root options
     delete config.compilerOptions;
+    delete config.include;
+    delete config.exclude;
 
     // Generate references and update paths
     config.extends = './tsconfig.options.json';
     config.files = [];
-    config.references = this.tool.getWorkspacePackages({ root: workspaceRoot }).map(wsPkg => ({
-      path: path.relative(workspaceRoot, wsPkg.workspace.packagePath),
-    }));
+    config.references = [];
+
+    this.tool.getWorkspacePackages({ root: workspaceRoot }).forEach(({ workspace }) => {
+      config.references!.push({
+        path: path.relative(workspaceRoot, workspace.packagePath),
+      });
+
+      // Reference a separate tests folder if it exists
+      const testsPath = path.join(workspace.packagePath, testsFolder);
+
+      if (testsFolder && fs.existsSync(testsPath)) {
+        config.references!.push({
+          path: path.relative(workspaceRoot, testsPath),
+        });
+      }
+    });
 
     // Add to context so that it can be automatically cleaned up
     context.addConfigPath('typescript', optionsPath);
@@ -117,11 +135,11 @@ export default class TypeScriptDriver extends Driver<TypeScriptConfig, TypeScrip
       throw new Error(this.tool.msg('errors:workspacesMixedProjectRefs'));
     }
 
-    const { buildFolder, srcFolder, testsFolder } = this.options;
+    const { buildFolder, srcFolder, testsFolder, typesFolder } = this.options;
     const optionsConfigPath = path.join(workspaceRoot, 'tsconfig.options.json');
     const namesToPaths: { [key: string]: string } = {};
     const workspacePackages = this.tool.getWorkspacePackages<{
-      tsconfig: Pick<TypeScriptConfig, 'exclude' | 'include'>;
+      tsconfig: Pick<TypeScriptConfig, 'exclude'>;
     }>({
       root: workspaceRoot,
     });
@@ -153,6 +171,7 @@ export default class TypeScriptDriver extends Driver<TypeScriptConfig, TypeScrip
           },
           exclude: [buildFolder],
           extends: path.relative(srcPath, optionsConfigPath),
+          include: [path.join(srcFolder, '**/*'), path.join(typesFolder, '**/*')],
           references,
         };
 
@@ -164,16 +183,12 @@ export default class TypeScriptDriver extends Driver<TypeScriptConfig, TypeScrip
           config.exclude!.push(...tsconfig.exclude);
         }
 
-        if (Array.isArray(tsconfig.include)) {
-          config.include = tsconfig.include;
-        }
-
         fs.writeFileSync(path.join(srcPath, 'tsconfig.json'), this.formatConfig(config));
 
         // Build tests specific package config
         const testsPath = path.join(workspace.packagePath, testsFolder);
 
-        if (fs.existsSync(testsPath)) {
+        if (testsFolder && fs.existsSync(testsPath)) {
           fs.writeFileSync(
             path.join(testsPath, 'tsconfig.json'),
             this.formatConfig({
@@ -182,7 +197,7 @@ export default class TypeScriptDriver extends Driver<TypeScriptConfig, TypeScrip
                 rootDir: '.',
               },
               extends: path.relative(testsPath, optionsConfigPath),
-              include: ['*'],
+              include: ['**/*', path.join('..', typesFolder)],
               references: [{ path: '..' }],
             }),
           );

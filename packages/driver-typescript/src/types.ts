@@ -105,4 +105,5 @@ export interface TypeScriptOptions extends DriverOptions {
   buildFolder: string;
   srcFolder: string;
   testsFolder: string;
+  typesFolder: string;
 }
