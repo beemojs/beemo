@@ -60,6 +60,15 @@ export default abstract class BaseRoutine<Ctx extends Context<BaseContextArgs>> 
       this.formatAndThrowErrors(errors);
     }
 
+    if (context.args.workspaces) {
+      const results: any[] = [];
+
+      responses.forEach(response => results.push(...response.results));
+
+      return results;
+    }
+
+    // Not running in workspaces, so return value directly
     return responses[0].results[0];
   }
 
