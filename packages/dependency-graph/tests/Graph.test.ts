@@ -27,11 +27,11 @@ describe('Graph', () => {
       pkgs['@beemo/cli'],
       pkgs['@beemo/driver-eslint'],
       pkgs['@beemo/driver-flow'],
-      pkgs['@beemo/driver-jest'],
       pkgs['@beemo/driver-mocha'],
       pkgs['@beemo/driver-prettier'],
       pkgs['@beemo/driver-typescript'],
       pkgs['@beemo/driver-webpack'],
+      pkgs['@beemo/driver-jest'],
     ]);
 
     expect(graph.resolveBatchList()).toEqual([
@@ -291,8 +291,8 @@ describe('Graph', () => {
       { name: 'c' },
       { name: 'f', peerDependencies: { b: '0.0.0' } },
       { name: 'd', dependencies: { b: '0.0.0' } },
-      { name: 'h', dependencies: { b: '0.0.0' } },
       { name: 'g', dependencies: { a: '0.0.0' } },
+      { name: 'h', dependencies: { b: '0.0.0' } },
       { name: 'j', peerDependencies: { c: '0.0.0' } },
       { name: 'k', dependencies: { f: '0.0.0' } },
       { name: 'i', dependencies: { k: '0.0.0' } },
@@ -377,8 +377,8 @@ describe('Graph', () => {
       { name: 'icons' },
       { name: 'core', dependencies: { icons: '0.0.0' } },
       { name: 'utils', dependencies: { core: '0.0.0' } },
-      { name: 'helpers', dependencies: { core: '0.0.0', utils: '0.0.0' } },
       { name: 'forms', dependencies: { core: '0.0.0' } },
+      { name: 'helpers', dependencies: { core: '0.0.0', utils: '0.0.0' } },
     ]);
 
     expect(graph.resolveBatchList()).toEqual([

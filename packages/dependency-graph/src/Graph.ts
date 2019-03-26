@@ -47,35 +47,13 @@ export default class Graph<T extends PackageConfig = PackageConfig> {
    * `package.json` objects in the order they are depended on.
    */
   resolveList(): T[] {
-    this.mapDependencies();
+    const batchList = this.resolveBatchList();
 
-    const order: Set<T> = new Set();
-    const queue: Node[] = this.sortByDependedOn(this.getRootNodes());
+    const flatList: T[] = [];
 
-    while (queue.length > 0) {
-      const node = queue.shift();
+    batchList.forEach(list => flatList.push(...list));
 
-      if (!node) {
-        break;
-      }
-
-      const pkg = this.packages.get(node.name);
-
-      // Only include nodes that have package data
-      if (pkg) {
-        order.add(pkg);
-      }
-
-      // Add children after parents so order is preserved
-      queue.push(...this.sortByDependedOn(node.dependents));
-    }
-
-    // Some nodes are missing, so they must be a cycle
-    if (order.size !== this.nodes.size) {
-      this.detectCycle();
-    }
-
-    return Array.from(order);
+    return flatList;
   }
 
   /**
@@ -145,6 +123,7 @@ export default class Graph<T extends PackageConfig = PackageConfig> {
         );
       });
 
+      // Some nodes are missing, so they must be a cycle
       if (nextBatch.length === 0) {
         this.detectCycle();
       }
