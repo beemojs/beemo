@@ -130,6 +130,38 @@ export default class Graph<T extends PackageConfig = PackageConfig> {
     return trunk;
   }
 
+  resolveBatchList(): T[][] {
+    const batches: T[][] = [];
+
+    this.mapDependencies();
+    const seen: Set<Node> = new Set();
+
+    const addBatch = () => {
+      const nextBatch = [...this.nodes.values()].filter(node => {
+        return (
+          !seen.has(node) &&
+          (node.requirements.size === 0 ||
+            [...node.requirements.values()].filter(dep => !seen.has(dep)).length === 0)
+        );
+      });
+
+      if (nextBatch.length === 0) {
+        throw new Error('Could not build dependency batches, some packages are unreachable');
+      }
+
+      batches.push(nextBatch.map(node => this.packages.get(node.name)!));
+      nextBatch.forEach(node => seen.add(node));
+
+      if (seen.size !== this.nodes.size) {
+        addBatch();
+      }
+    };
+
+    addBatch();
+
+    return batches;
+  }
+
   /**
    * Add a node for the defined package name.
    */

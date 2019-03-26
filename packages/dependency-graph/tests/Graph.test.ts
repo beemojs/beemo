@@ -351,74 +351,23 @@ describe('Graph', () => {
       { name: 'http-client', dependencies: { stats: '0.0.0' } },
     ]);
 
-    expect(graph.resolveList()).toEqual([
-      { name: 'stats', dependencies: {} },
-      { name: 'config', dependencies: {} },
-      { name: 'feature-flags', dependencies: { config: '0.0.0' } },
-      { name: 'http-client', dependencies: { stats: '0.0.0' } },
-      { name: 'auth-client', dependencies: { stats: '0.0.0', 'http-client': '0.0.0' } },
-      { name: 'service-client', dependencies: { stats: '0.0.0', 'http-client': '0.0.0' } },
-      {
-        name: 'framework',
-        dependencies: { stats: '0.0.0', 'auth-client': '0.0.0', 'feature-flags': '0.0.0' },
-      },
-    ]);
-
-    expect(graph.resolveTree()).toEqual({
-      root: true,
-      nodes: [
+    expect(graph.resolveBatchList()).toEqual([
+      [{ name: 'stats', dependencies: {} }, { name: 'config', dependencies: {} }],
+      [
+        { name: 'feature-flags', dependencies: { config: '0.0.0' } },
+        { name: 'http-client', dependencies: { stats: '0.0.0' } },
+      ],
+      [
+        { name: 'service-client', dependencies: { stats: '0.0.0', 'http-client': '0.0.0' } },
+        { name: 'auth-client', dependencies: { stats: '0.0.0', 'http-client': '0.0.0' } },
+      ],
+      [
         {
-          package: { name: 'stats', dependencies: {} },
-          nodes: [
-            {
-              package: { name: 'http-client', dependencies: { stats: '0.0.0' } },
-              nodes: [
-                {
-                  package: {
-                    name: 'auth-client',
-                    dependencies: { stats: '0.0.0', 'http-client': '0.0.0' },
-                  },
-                  nodes: [
-                    {
-                      package: {
-                        name: 'framework',
-                        dependencies: {
-                          stats: '0.0.0',
-                          'auth-client': '0.0.0',
-                          'feature-flags': '0.0.0',
-                        },
-                      },
-                    },
-                  ],
-                },
-                {
-                  package: {
-                    name: 'service-client',
-                    dependencies: { stats: '0.0.0', 'http-client': '0.0.0' },
-                  },
-                },
-              ],
-            },
-          ],
-        },
-        {
-          package: { name: 'config', dependencies: {} },
-          nodes: [
-            {
-              package: { name: 'feature-flags', dependencies: { config: '0.0.0' } },
-              nodes: [
-                {
-                  package: {
-                    name: 'service-client',
-                    dependencies: { stats: '0.0.0', 'http-client': '0.0.0' },
-                  },
-                },
-              ],
-            },
-          ],
+          name: 'framework',
+          dependencies: { stats: '0.0.0', 'auth-client': '0.0.0', 'feature-flags': '0.0.0' },
         },
       ],
-    });
+    ]);
   });
 
   it('resets the graph when a package is added after resolution', () => {
