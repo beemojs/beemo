@@ -109,19 +109,19 @@ describe('Graph', () => {
   it('places all nodes at the root if they do not relate to each other', () => {
     const graph = new Graph([{ name: 'foo' }, { name: 'bar' }, { name: 'baz' }]);
 
-    expect(graph.resolveList()).toEqual([{ name: 'foo' }, { name: 'bar' }, { name: 'baz' }]);
-    expect(graph.resolveBatchList()).toEqual([[{ name: 'foo' }, { name: 'bar' }, { name: 'baz' }]]);
+    expect(graph.resolveList()).toEqual([{ name: 'bar' }, { name: 'baz' }, { name: 'foo' }]);
+    expect(graph.resolveBatchList()).toEqual([[{ name: 'bar' }, { name: 'baz' }, { name: 'foo' }]]);
     expect(graph.resolveTree()).toEqual({
       root: true,
       nodes: [
-        {
-          package: { name: 'foo' },
-        },
         {
           package: { name: 'bar' },
         },
         {
           package: { name: 'baz' },
+        },
+        {
+          package: { name: 'foo' },
         },
       ],
     });
@@ -455,7 +455,7 @@ describe('Graph', () => {
   it('resets the graph when a package is added after resolution', () => {
     const graph = new Graph<PackageConfig>([{ name: 'foo' }, { name: 'bar' }]);
 
-    expect(graph.resolveList()).toEqual([{ name: 'foo' }, { name: 'bar' }]);
+    expect(graph.resolveList()).toEqual([{ name: 'bar' }, { name: 'foo' }]);
 
     graph.addPackage({ name: 'qux', dependencies: { baz: '0.0.0' } });
     graph.addPackage({ name: 'baz', dependencies: { foo: '0.0.0' } });

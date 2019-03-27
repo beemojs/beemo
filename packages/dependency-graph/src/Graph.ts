@@ -240,9 +240,17 @@ export default class Graph<T extends PackageConfig = PackageConfig> {
   }
 
   /**
-   * Sort a set of nodes by most depended on.
+   * Sort a set of nodes by most depended on, fall back to alpha sort as tie breaker
    */
   protected sortByDependedOn(nodes: Set<Node> | Node[]): Node[] {
-    return [...nodes].sort((a, b) => b.dependents.size - a.dependents.size);
+    return [...nodes].sort((a, b) => {
+      const diff = b.dependents.size - a.dependents.size;
+
+      if (diff === 0) {
+        return a.name > b.name ? 1 : -1;
+      }
+
+      return diff;
+    });
   }
 }
