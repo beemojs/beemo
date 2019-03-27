@@ -148,7 +148,6 @@ describe('BaseExecuteRoutine', () => {
       });
 
       it('serializes priority routines before pooling other routines', async () => {
-        routine.serializeRoutines = jest.fn(() => Promise.resolve());
         routine.poolRoutines = jest.fn(() => Promise.resolve({ errors: [], results: [] }));
         // primary -> foo
         routine.workspacePackages[0].peerDependencies = {
@@ -157,8 +156,8 @@ describe('BaseExecuteRoutine', () => {
 
         await routine.execute(routine.context);
 
-        expect(routine.serializeRoutines).toHaveBeenCalledWith(undefined, [foo]);
-        expect(routine.poolRoutines).toHaveBeenCalledWith(undefined, {}, [primary, bar, baz, qux]);
+        expect(routine.poolRoutines).toHaveBeenCalledWith(undefined, {}, [foo, bar, baz, qux]);
+        expect(routine.poolRoutines).toHaveBeenCalledWith(undefined, {}, [primary]);
       });
     });
   });
@@ -248,30 +247,21 @@ describe('BaseExecuteRoutine', () => {
       routine.context.args.workspaces = '*';
     });
 
-    it('returns all as `other` if priority is false', () => {
+    it('returns all in single batch if priority is false', () => {
       routine.context.args.priority = false;
       routine.tool.config.execute.priority = false;
 
-      expect(routine.orderByWorkspacePriorityGraph()).toEqual({
-        other: [primary, foo, bar, baz, qux],
-        priority: [],
-      });
+      expect(routine.orderByWorkspacePriorityGraph()).toEqual([[primary, foo, bar, baz, qux]]);
     });
 
-    it('returns all as `other` if workspaces is empty', () => {
+    it('returns all in single batch if workspaces is empty', () => {
       routine.context.args.workspaces = '';
 
-      expect(routine.orderByWorkspacePriorityGraph()).toEqual({
-        other: [primary, foo, bar, baz, qux],
-        priority: [],
-      });
+      expect(routine.orderByWorkspacePriorityGraph()).toEqual([[primary, foo, bar, baz, qux]]);
     });
 
-    it('returns all as `other` if no dependents', () => {
-      expect(routine.orderByWorkspacePriorityGraph()).toEqual({
-        other: [primary, foo, bar, baz, qux],
-        priority: [],
-      });
+    it('returns all in single batch if no dependents', () => {
+      expect(routine.orderByWorkspacePriorityGraph()).toEqual([[primary, foo, bar, baz, qux]]);
     });
 
     it('prioritizes based on peerDependencies', () => {
@@ -280,10 +270,7 @@ describe('BaseExecuteRoutine', () => {
         '@scope/bar': '1.0.0',
       };
 
-      expect(routine.orderByWorkspacePriorityGraph()).toEqual({
-        other: [foo, primary, baz, qux],
-        priority: [bar],
-      });
+      expect(routine.orderByWorkspacePriorityGraph()).toEqual([[primary, bar, baz, qux], [foo]]);
     });
 
     it('prioritizes based on dependencies', () => {
@@ -292,10 +279,7 @@ describe('BaseExecuteRoutine', () => {
         '@scope/bar': '1.0.0',
       };
 
-      expect(routine.orderByWorkspacePriorityGraph()).toEqual({
-        other: [foo, primary, baz, qux],
-        priority: [bar],
-      });
+      expect(routine.orderByWorkspacePriorityGraph()).toEqual([[primary, bar, baz, qux], [foo]]);
     });
 
     it('sorts priority based on dependency count', () => {
@@ -314,10 +298,7 @@ describe('BaseExecuteRoutine', () => {
         '@scope/bar': '1.0.0',
       };
 
-      expect(routine.orderByWorkspacePriorityGraph()).toEqual({
-        other: [foo, qux, baz],
-        priority: [primary, bar],
-      });
+      expect(routine.orderByWorkspacePriorityGraph()).toEqual([[primary, baz], [bar], [foo, qux]]);
     });
   });
 });
