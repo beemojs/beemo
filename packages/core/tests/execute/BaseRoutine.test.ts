@@ -144,7 +144,7 @@ describe('BaseExecuteRoutine', () => {
       it('returns an array of results for multiple routines', async () => {
         const response = await routine.execute(routine.context);
 
-        expect(response).toEqual(['primary', 'foo', 'bar', 'baz', 'qux']);
+        expect(response.sort()).toEqual(['bar', 'baz', 'foo', 'primary', 'qux']);
       });
 
       it('serializes priority routines before pooling other routines', async () => {
@@ -261,7 +261,7 @@ describe('BaseExecuteRoutine', () => {
     });
 
     it('returns all in single batch if no dependents', () => {
-      expect(routine.orderByWorkspacePriorityGraph()).toEqual([[primary, foo, bar, baz, qux]]);
+      expect(routine.orderByWorkspacePriorityGraph()).toEqual([[bar, baz, foo, primary, qux]]);
     });
 
     it('prioritizes based on peerDependencies', () => {
@@ -270,7 +270,7 @@ describe('BaseExecuteRoutine', () => {
         '@scope/bar': '1.0.0',
       };
 
-      expect(routine.orderByWorkspacePriorityGraph()).toEqual([[primary, bar, baz, qux], [foo]]);
+      expect(routine.orderByWorkspacePriorityGraph()).toEqual([[bar, baz, primary, qux], [foo]]);
     });
 
     it('prioritizes based on dependencies', () => {
@@ -279,7 +279,7 @@ describe('BaseExecuteRoutine', () => {
         '@scope/bar': '1.0.0',
       };
 
-      expect(routine.orderByWorkspacePriorityGraph()).toEqual([[primary, bar, baz, qux], [foo]]);
+      expect(routine.orderByWorkspacePriorityGraph()).toEqual([[bar, baz, primary, qux], [foo]]);
     });
 
     it('sorts priority based on dependency count', () => {
