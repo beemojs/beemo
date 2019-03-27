@@ -1,4 +1,4 @@
-import { Routine, WorkspacePackageConfig, AggregatedResponse } from '@boost/core';
+import { Routine, WorkspacePackageConfig } from '@boost/core';
 import Graph from '@beemo/dependency-graph';
 import Context from '../contexts/Context';
 import isPatternMatch from '../utils/isPatternMatch';
@@ -39,37 +39,33 @@ export default abstract class BaseRoutine<Ctx extends Context<BaseContextArgs>> 
   async execute(context: Ctx): Promise<any[]> {
     const value = await this.serializeTasks();
     const batches = this.orderByWorkspacePriorityGraph();
-    const errors: Error[] = [];
+    const allErrors: Error[] = [];
+    const allResults: any[] = [];
 
     const concurrency = context.args.concurrency || this.tool.config.execute.concurrency;
-    const responses: AggregatedResponse[] = [];
 
     // eslint-disable-next-line no-restricted-syntax
     for (const batch of batches) {
       // eslint-disable-next-line no-await-in-loop
-      const response = await this.poolRoutines(value, concurrency ? { concurrency } : {}, batch);
+      const { errors, results } = await this.poolRoutines(
+        value,
+        concurrency ? { concurrency } : {},
+        batch,
+      );
 
-      responses.push(response);
+      allResults.push(...results);
 
-      if (response.errors.length > 0) {
-        errors.push(...response.errors);
+      if (errors.length > 0) {
+        allErrors.push(...errors);
       }
     }
 
-    if (errors.length > 0) {
-      this.formatAndThrowErrors(errors);
-    }
-
-    if (context.args.workspaces) {
-      const results: any[] = [];
-
-      responses.forEach(response => results.push(...response.results));
-
-      return results;
+    if (allErrors.length > 0) {
+      this.formatAndThrowErrors(allErrors);
     }
 
     // Not running in workspaces, so return value directly
-    return responses[0].results[0];
+    return context.args.workspaces ? allResults : allResults[0];
   }
 
   /**
