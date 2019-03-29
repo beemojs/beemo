@@ -3,8 +3,7 @@
   "name": "beemo-root",
   "scripts": {
     "setup": "bash ./scripts/buildPackages.sh",
-    "build": "beemo typescript --workspaces=*",
-    "build:refs": "beemo typescript --build --reference-workspaces",
+    "build": "beemo typescript --build --reference-workspaces",
     "clean": "rm -rf ./packages/*/lib",
     "coverage": "yarn run jest --coverage",
     "eslint": "beemo eslint",
@@ -18,10 +17,9 @@
     "prerelease": "yarn test && yarn run build",
     "release": "lerna publish",
     "release:bump": "beemo run-script bump-peer-deps",
-    "type": "beemo typescript --noEmit --reference-workspaces"
+    "type": "yarn run build"
   },
   "devDependencies": {
-    "@boost/test-utils": "^1.1.0",
     "@milesj/build-tool-config": "0.156.0",
     "chalk": "^2.4.2",
     "fast-glob": "^2.2.6",
