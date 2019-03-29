@@ -1,5 +1,5 @@
 import { Routine, WorkspacePackageConfig } from '@boost/core';
-import Graph, { TreeNode } from '@beemo/dependency-graph';
+import Graph from '@beemo/dependency-graph';
 import Context from '../contexts/Context';
 import isPatternMatch from '../utils/isPatternMatch';
 import { BeemoTool } from '../types';
@@ -38,19 +38,34 @@ export default abstract class BaseRoutine<Ctx extends Context<BaseContextArgs>> 
 
   async execute(context: Ctx): Promise<any[]> {
     const value = await this.serializeTasks();
-    const { other, priority } = this.orderByWorkspacePriorityGraph();
-
-    await this.serializeRoutines(value, priority);
+    const batches = this.orderByWorkspacePriorityGraph();
+    const allErrors: Error[] = [];
+    const allResults: any[] = [];
 
     const concurrency = context.args.concurrency || this.tool.config.execute.concurrency;
-    const response = await this.poolRoutines(value, concurrency ? { concurrency } : {}, other);
 
-    if (response.errors.length > 0) {
-      this.formatAndThrowErrors(response.errors);
+    // eslint-disable-next-line no-restricted-syntax
+    for (const batch of batches) {
+      // eslint-disable-next-line no-await-in-loop
+      const { errors, results } = await this.poolRoutines(
+        value,
+        concurrency ? { concurrency } : {},
+        batch,
+      );
+
+      allResults.push(...results);
+
+      if (errors.length > 0) {
+        allErrors.push(...errors);
+      }
+    }
+
+    if (allErrors.length > 0) {
+      this.formatAndThrowErrors(allErrors);
     }
 
     // Not running in workspaces, so return value directly
-    return context.args.workspaces ? response.results : response.results[0];
+    return context.args.workspaces ? allResults : allResults[0];
   }
 
   /**
@@ -79,45 +94,25 @@ export default abstract class BaseRoutine<Ctx extends Context<BaseContextArgs>> 
   /**
    * Group routines in order of which they are dependend on.
    */
-  orderByWorkspacePriorityGraph(): {
-    other: Routine<Ctx, BeemoTool>[];
-    priority: Routine<Ctx, BeemoTool>[];
-  } {
+  orderByWorkspacePriorityGraph(): Routine<Ctx, BeemoTool>[][] {
     const enabled = this.context.args.priority || this.tool.config.execute.priority;
 
     if (!enabled || !this.context.args.workspaces) {
-      return {
-        other: this.routines,
-        priority: [],
-      };
+      return [this.routines];
     }
 
-    const tree = new Graph(this.workspacePackages).resolveTree();
-    const priority: Routine<Ctx, BeemoTool>[] = [];
-    const other: Routine<Ctx, BeemoTool>[] = [];
+    const batchList = new Graph(this.workspacePackages).resolveBatchList();
+    const batches: Routine<Ctx, BeemoTool>[][] = [];
 
-    const handler = (node: TreeNode<WorkspacePackageConfig>) => {
-      const routine = this.routines.find(route => route.key === node.package.workspace.packageName);
+    batchList.forEach(batch => {
+      const routines = batch
+        .map(pkg => this.routines.find(route => route.key === pkg.workspace.packageName))
+        .filter(Boolean) as Routine<Ctx, BeemoTool>[];
 
-      if (routine) {
-        if (node.nodes) {
-          priority.push(routine);
-        } else {
-          other.push(routine);
-        }
-      }
+      batches.push(routines);
+    });
 
-      if (node.nodes) {
-        node.nodes.forEach(childNode => handler(childNode));
-      }
-    };
-
-    tree.nodes.forEach(node => handler(node));
-
-    return {
-      other,
-      priority,
-    };
+    return batches;
   }
 
   /**

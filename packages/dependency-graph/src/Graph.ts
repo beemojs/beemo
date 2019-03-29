@@ -47,35 +47,13 @@ export default class Graph<T extends PackageConfig = PackageConfig> {
    * `package.json` objects in the order they are depended on.
    */
   resolveList(): T[] {
-    this.mapDependencies();
+    const batchList = this.resolveBatchList();
 
-    const order: Set<T> = new Set();
-    const queue: Node[] = this.sortByDependedOn(this.getRootNodes());
+    const flatList: T[] = [];
 
-    while (queue.length > 0) {
-      const node = queue.shift();
+    batchList.forEach(list => flatList.push(...list));
 
-      if (!node) {
-        break;
-      }
-
-      const pkg = this.packages.get(node.name);
-
-      // Only include nodes that have package data
-      if (pkg) {
-        order.add(pkg);
-      }
-
-      // Add children after parents so order is preserved
-      queue.push(...this.sortByDependedOn(node.dependents));
-    }
-
-    // Some nodes are missing, so they must be a cycle
-    if (order.size !== this.nodes.size) {
-      this.detectCycle();
-    }
-
-    return Array.from(order);
+    return flatList;
   }
 
   /**
@@ -128,6 +106,39 @@ export default class Graph<T extends PackageConfig = PackageConfig> {
     }
 
     return trunk;
+  }
+
+  resolveBatchList(): T[][] {
+    const batches: T[][] = [];
+
+    this.mapDependencies();
+    const seen: Set<Node> = new Set();
+
+    const addBatch = () => {
+      const nextBatch = [...this.nodes.values()].filter(node => {
+        return (
+          !seen.has(node) &&
+          (node.requirements.size === 0 ||
+            [...node.requirements.values()].filter(dep => !seen.has(dep)).length === 0)
+        );
+      });
+
+      // Some nodes are missing, so they must be a cycle
+      if (nextBatch.length === 0) {
+        this.detectCycle();
+      }
+
+      batches.push(this.sortByDependedOn(nextBatch).map(node => this.packages.get(node.name)!));
+      nextBatch.forEach(node => seen.add(node));
+
+      if (seen.size !== this.nodes.size) {
+        addBatch();
+      }
+    };
+
+    addBatch();
+
+    return batches;
   }
 
   /**
@@ -229,9 +240,17 @@ export default class Graph<T extends PackageConfig = PackageConfig> {
   }
 
   /**
-   * Sort a set of nodes by most depended on.
+   * Sort a set of nodes by most depended on, fall back to alpha sort as tie breaker
    */
   protected sortByDependedOn(nodes: Set<Node> | Node[]): Node[] {
-    return [...nodes].sort((a, b) => b.dependents.size - a.dependents.size);
+    return [...nodes].sort((a, b) => {
+      const diff = b.dependents.size - a.dependents.size;
+
+      if (diff === 0) {
+        return a.name > b.name ? 1 : -1;
+      }
+
+      return diff;
+    });
   }
 }

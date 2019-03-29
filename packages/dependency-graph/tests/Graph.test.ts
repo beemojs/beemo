@@ -27,11 +27,27 @@ describe('Graph', () => {
       pkgs['@beemo/cli'],
       pkgs['@beemo/driver-eslint'],
       pkgs['@beemo/driver-flow'],
-      pkgs['@beemo/driver-jest'],
       pkgs['@beemo/driver-mocha'],
       pkgs['@beemo/driver-prettier'],
       pkgs['@beemo/driver-typescript'],
       pkgs['@beemo/driver-webpack'],
+      pkgs['@beemo/driver-jest'],
+    ]);
+
+    expect(graph.resolveBatchList()).toEqual([
+      [pkgs['@beemo/dependency-graph']],
+      [pkgs['@beemo/core']],
+      [
+        pkgs['@beemo/driver-babel'],
+        pkgs['@beemo/cli'],
+        pkgs['@beemo/driver-eslint'],
+        pkgs['@beemo/driver-flow'],
+        pkgs['@beemo/driver-mocha'],
+        pkgs['@beemo/driver-prettier'],
+        pkgs['@beemo/driver-typescript'],
+        pkgs['@beemo/driver-webpack'],
+      ],
+      [pkgs['@beemo/driver-jest']],
     ]);
 
     expect(graph.resolveTree()).toEqual({
@@ -93,18 +109,19 @@ describe('Graph', () => {
   it('places all nodes at the root if they do not relate to each other', () => {
     const graph = new Graph([{ name: 'foo' }, { name: 'bar' }, { name: 'baz' }]);
 
-    expect(graph.resolveList()).toEqual([{ name: 'foo' }, { name: 'bar' }, { name: 'baz' }]);
+    expect(graph.resolveList()).toEqual([{ name: 'bar' }, { name: 'baz' }, { name: 'foo' }]);
+    expect(graph.resolveBatchList()).toEqual([[{ name: 'bar' }, { name: 'baz' }, { name: 'foo' }]]);
     expect(graph.resolveTree()).toEqual({
       root: true,
       nodes: [
-        {
-          package: { name: 'foo' },
-        },
         {
           package: { name: 'bar' },
         },
         {
           package: { name: 'baz' },
+        },
+        {
+          package: { name: 'foo' },
         },
       ],
     });
@@ -116,6 +133,10 @@ describe('Graph', () => {
     expect(graph.resolveList()).toEqual([
       { name: 'foo' },
       { name: 'bar', dependencies: { foo: '0.0.0' } },
+    ]);
+    expect(graph.resolveBatchList()).toEqual([
+      [{ name: 'foo' }],
+      [{ name: 'bar', dependencies: { foo: '0.0.0' } }],
     ]);
     expect(graph.resolveTree()).toEqual({
       root: true,
@@ -138,6 +159,10 @@ describe('Graph', () => {
     expect(graph.resolveList()).toEqual([
       { name: 'bar' },
       { name: 'foo', peerDependencies: { bar: '0.0.0' } },
+    ]);
+    expect(graph.resolveBatchList()).toEqual([
+      [{ name: 'bar' }],
+      [{ name: 'foo', peerDependencies: { bar: '0.0.0' } }],
     ]);
     expect(graph.resolveTree()).toEqual({
       root: true,
@@ -165,6 +190,10 @@ describe('Graph', () => {
       { name: 'baz' },
       { name: 'bar' },
       { name: 'foo', dependencies: { baz: '0.0.0' } },
+    ]);
+    expect(graph.resolveBatchList()).toEqual([
+      [{ name: 'baz' }, { name: 'bar' }],
+      [{ name: 'foo', dependencies: { baz: '0.0.0' } }],
     ]);
     expect(graph.resolveTree()).toEqual({
       root: true,
@@ -196,6 +225,13 @@ describe('Graph', () => {
       { name: 'bar', dependencies: { baz: '0.0.0' } },
       { name: 'foo', dependencies: { bar: '0.0.0' } },
     ]);
+
+    expect(graph.resolveBatchList()).toEqual([
+      [{ name: 'baz' }],
+      [{ name: 'bar', dependencies: { baz: '0.0.0' } }],
+      [{ name: 'foo', dependencies: { bar: '0.0.0' } }],
+    ]);
+
     expect(graph.resolveTree()).toEqual({
       root: true,
       nodes: [
@@ -210,6 +246,28 @@ describe('Graph', () => {
         },
       ],
     });
+  });
+
+  it('package with 2 dependencies', () => {
+    const graph = new Graph([
+      { name: 'foo' },
+      { name: 'bar', dependencies: { foo: '0.0.0' } },
+      { name: 'baz', dependencies: { foo: '0.0.0' } },
+    ]);
+
+    expect(graph.resolveList()).toEqual([
+      { name: 'foo' },
+      { name: 'bar', dependencies: { foo: '0.0.0' } },
+      { name: 'baz', dependencies: { foo: '0.0.0' } },
+    ]);
+
+    expect(graph.resolveBatchList()).toEqual([
+      [{ name: 'foo' }],
+      [
+        { name: 'bar', dependencies: { foo: '0.0.0' } },
+        { name: 'baz', dependencies: { foo: '0.0.0' } },
+      ],
+    ]);
   });
 
   it('sorts each depth by most dependend on', () => {
@@ -233,12 +291,26 @@ describe('Graph', () => {
       { name: 'c' },
       { name: 'f', peerDependencies: { b: '0.0.0' } },
       { name: 'd', dependencies: { b: '0.0.0' } },
-      { name: 'h', dependencies: { b: '0.0.0' } },
       { name: 'g', dependencies: { a: '0.0.0' } },
+      { name: 'h', dependencies: { b: '0.0.0' } },
       { name: 'j', peerDependencies: { c: '0.0.0' } },
       { name: 'k', dependencies: { f: '0.0.0' } },
       { name: 'i', dependencies: { k: '0.0.0' } },
       { name: 'e', dependencies: { i: '0.0.0' } },
+    ]);
+
+    expect(graph.resolveBatchList()).toEqual([
+      [{ name: 'b' }, { name: 'a' }, { name: 'c' }],
+      [
+        { name: 'f', peerDependencies: { b: '0.0.0' } },
+        { name: 'd', dependencies: { b: '0.0.0' } },
+        { name: 'g', dependencies: { a: '0.0.0' } },
+        { name: 'h', dependencies: { b: '0.0.0' } },
+        { name: 'j', peerDependencies: { c: '0.0.0' } },
+      ],
+      [{ name: 'k', dependencies: { f: '0.0.0' } }],
+      [{ name: 'i', dependencies: { k: '0.0.0' } }],
+      [{ name: 'e', dependencies: { i: '0.0.0' } }],
     ]);
     expect(graph.resolveTree()).toEqual({
       root: true,
@@ -305,8 +377,18 @@ describe('Graph', () => {
       { name: 'icons' },
       { name: 'core', dependencies: { icons: '0.0.0' } },
       { name: 'utils', dependencies: { core: '0.0.0' } },
-      { name: 'helpers', dependencies: { core: '0.0.0', utils: '0.0.0' } },
       { name: 'forms', dependencies: { core: '0.0.0' } },
+      { name: 'helpers', dependencies: { core: '0.0.0', utils: '0.0.0' } },
+    ]);
+
+    expect(graph.resolveBatchList()).toEqual([
+      [{ name: 'icons' }],
+      [{ name: 'core', dependencies: { icons: '0.0.0' } }],
+      [
+        { name: 'utils', dependencies: { core: '0.0.0' } },
+        { name: 'forms', dependencies: { core: '0.0.0' } },
+      ],
+      [{ name: 'helpers', dependencies: { core: '0.0.0', utils: '0.0.0' } }],
     ]);
 
     expect(graph.resolveTree()).toEqual({
@@ -337,10 +419,43 @@ describe('Graph', () => {
     });
   });
 
+  it('orders correctly with complex dependencies', () => {
+    const graph = new Graph([
+      { name: 'stats', dependencies: {} },
+      { name: 'service-client', dependencies: { stats: '0.0.0', 'http-client': '0.0.0' } },
+      { name: 'auth-client', dependencies: { stats: '0.0.0', 'http-client': '0.0.0' } },
+      { name: 'config', dependencies: {} },
+      { name: 'feature-flags', dependencies: { config: '0.0.0' } },
+      {
+        name: 'framework',
+        dependencies: { stats: '0.0.0', 'auth-client': '0.0.0', 'feature-flags': '0.0.0' },
+      },
+      { name: 'http-client', dependencies: { stats: '0.0.0' } },
+    ]);
+
+    expect(graph.resolveBatchList()).toEqual([
+      [{ name: 'stats', dependencies: {} }, { name: 'config', dependencies: {} }],
+      [
+        { name: 'http-client', dependencies: { stats: '0.0.0' } },
+        { name: 'feature-flags', dependencies: { config: '0.0.0' } },
+      ],
+      [
+        { name: 'auth-client', dependencies: { stats: '0.0.0', 'http-client': '0.0.0' } },
+        { name: 'service-client', dependencies: { stats: '0.0.0', 'http-client': '0.0.0' } },
+      ],
+      [
+        {
+          name: 'framework',
+          dependencies: { stats: '0.0.0', 'auth-client': '0.0.0', 'feature-flags': '0.0.0' },
+        },
+      ],
+    ]);
+  });
+
   it('resets the graph when a package is added after resolution', () => {
     const graph = new Graph<PackageConfig>([{ name: 'foo' }, { name: 'bar' }]);
 
-    expect(graph.resolveList()).toEqual([{ name: 'foo' }, { name: 'bar' }]);
+    expect(graph.resolveList()).toEqual([{ name: 'bar' }, { name: 'foo' }]);
 
     graph.addPackage({ name: 'qux', dependencies: { baz: '0.0.0' } });
     graph.addPackage({ name: 'baz', dependencies: { foo: '0.0.0' } });
@@ -350,6 +465,12 @@ describe('Graph', () => {
       { name: 'bar' },
       { name: 'baz', dependencies: { foo: '0.0.0' } },
       { name: 'qux', dependencies: { baz: '0.0.0' } },
+    ]);
+
+    expect(graph.resolveBatchList()).toEqual([
+      [{ name: 'foo' }, { name: 'bar' }],
+      [{ name: 'baz', dependencies: { foo: '0.0.0' } }],
+      [{ name: 'qux', dependencies: { baz: '0.0.0' } }],
     ]);
   });
 
@@ -402,6 +523,32 @@ describe('Graph', () => {
 
         expect(() => {
           graph.resolveTree();
+        }).toThrowError('Circular dependency detected: foo -> bar -> foo');
+      });
+    });
+
+    describe('batchList', () => {
+      it('errors when no root nodes found', () => {
+        const graph = new Graph([
+          { name: 'foo', dependencies: { baz: '0.0.0' } },
+          { name: 'bar', dependencies: { foo: '0.0.0' } },
+          { name: 'baz', dependencies: { bar: '0.0.0' } },
+        ]);
+
+        expect(() => {
+          graph.resolveBatchList();
+        }).toThrowError('Circular dependency detected: foo -> bar -> baz -> foo');
+      });
+
+      it('errors when only some of the deps are a cycle', () => {
+        const graph = new Graph([
+          { name: 'foo', dependencies: { bar: '0.0.0' } },
+          { name: 'bar', dependencies: { foo: '0.0.0' } },
+          { name: 'baz' },
+        ]);
+
+        expect(() => {
+          graph.resolveBatchList();
         }).toThrowError('Circular dependency detected: foo -> bar -> foo');
       });
     });
