@@ -48,8 +48,5 @@
     "optimal": "^2.1.1",
     "yargs": "^13.2.2",
     "yargs-parser": "^13.0.0"
-  },
-  "devDependencies": {
-    "@boost/test-utils": "^1.1.0"
   }
 }
