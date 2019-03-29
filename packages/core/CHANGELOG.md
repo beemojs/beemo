@@ -16,10 +16,11 @@
 - Added a `versionOption` metadata setting to `Driver`s.
 - Added `Script#executeCommand`, so that local binaries can easily be executed.
 - Added optional `name` support to scaffolding.
+- Updated the driver/script execution pipeline to process in parallel batches.
 
 #### 🐞 Fixes
 
-- Fixed script `this` context being lost within script tasks.
+- Fixed script `this` scope being lost within script tasks.
 - Fixed the Beemo emoji not appearing in the console.
 
 #### 🛠 Internals

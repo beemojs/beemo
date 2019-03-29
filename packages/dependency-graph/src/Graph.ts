@@ -47,13 +47,11 @@ export default class Graph<T extends PackageConfig = PackageConfig> {
    * `package.json` objects in the order they are depended on.
    */
   resolveList(): T[] {
-    const batchList = this.resolveBatchList();
+    return this.resolveBatchList().reduce((flatList, batchList) => {
+      flatList.push(...batchList);
 
-    const flatList: T[] = [];
-
-    batchList.forEach(list => flatList.push(...list));
-
-    return flatList;
+      return flatList;
+    }, []);
   }
 
   /**
@@ -108,18 +106,21 @@ export default class Graph<T extends PackageConfig = PackageConfig> {
     return trunk;
   }
 
+  /**
+   * Resolve the dependency graph and return a list of batched
+   * `package.json` objects in the order they are depended on.
+   */
   resolveBatchList(): T[][] {
-    const batches: T[][] = [];
-
     this.mapDependencies();
-    const seen: Set<Node> = new Set();
 
+    const batches: T[][] = [];
+    const seen: Set<Node> = new Set();
     const addBatch = () => {
-      const nextBatch = [...this.nodes.values()].filter(node => {
+      const nextBatch = Array.from(this.nodes.values()).filter(node => {
         return (
           !seen.has(node) &&
           (node.requirements.size === 0 ||
-            [...node.requirements.values()].filter(dep => !seen.has(dep)).length === 0)
+            Array.from(node.requirements.values()).filter(dep => !seen.has(dep)).length === 0)
         );
       });
 
@@ -129,6 +130,7 @@ export default class Graph<T extends PackageConfig = PackageConfig> {
       }
 
       batches.push(this.sortByDependedOn(nextBatch).map(node => this.packages.get(node.name)!));
+
       nextBatch.forEach(node => seen.add(node));
 
       if (seen.size !== this.nodes.size) {

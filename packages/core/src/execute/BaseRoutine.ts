@@ -109,7 +109,9 @@ export default abstract class BaseRoutine<Ctx extends Context<BaseContextArgs>> 
         .map(pkg => this.routines.find(route => route.key === pkg.workspace.packageName))
         .filter(Boolean) as Routine<Ctx, BeemoTool>[];
 
-      batches.push(routines);
+      if (routines.length > 0) {
+        batches.push(routines);
+      }
     });
 
     return batches;
