@@ -741,7 +741,7 @@
     "@babel/helper-plugin-utils" "^7.0.0"
     "@babel/plugin-transform-typescript" "^7.3.2"
 
-"@babel/runtime@^7.3.1", "@babel/runtime@^7.3.4":
+"@babel/runtime@^7.3.1", "@babel/runtime@^7.4.2":
   version "7.4.2"
   resolved "https://registry.npmjs.org/@babel/runtime/-/runtime-7.4.2.tgz#f5ab6897320f16decd855eed70b705908a313fe8"
   integrity sha512-7Bl2rALb7HpvXFL7TETNzKSAeBVCPHELzc0C//9FCxN8nsiueWSJBqaF+2oIJScyILStASR/Cx5WMkXGYTiJFA==
@@ -1596,10 +1596,10 @@
     npmlog "^4.1.2"
     write-file-atomic "^2.3.0"
 
-"@milesj/build-tool-config@0.156.0":
-  version "0.156.0"
-  resolved "https://registry.npmjs.org/@milesj/build-tool-config/-/build-tool-config-0.156.0.tgz#49df925a88b93fff7f9eb45e116973eec2a9f27e"
-  integrity sha512-K7mdMPmz9ZHaGvioTuRZXR3AdGj4am8copZNkcUFLVvf8naTZX5HLCWnI+oQP5rD0ThQksjIwTgTPIkbb25mjg==
+"@milesj/build-tool-config@0.157.0":
+  version "0.157.0"
+  resolved "https://registry.npmjs.org/@milesj/build-tool-config/-/build-tool-config-0.157.0.tgz#3608f32eaf33a41b66191f3b1fb16c0a71ac3f29"
+  integrity sha512-c6MpMauJvdoqu7FOALm56aURKcBbYaZVXX56Jk0mIIpG9d3obrNSbFo6ytDkcrS51pmuwRrc/jrWuQ79YDHgcA==
   dependencies:
     "@babel/cli" "^7.2.3"
     "@babel/core" "^7.4.0"
@@ -1626,23 +1626,23 @@
     eslint-config-airbnb "^17.1.0"
     eslint-config-prettier "^4.1.0"
     eslint-plugin-babel "^5.3.0"
-    eslint-plugin-compat "^3.0.1"
+    eslint-plugin-compat "^3.1.0"
     eslint-plugin-import "^2.16.0"
     eslint-plugin-jest "^22.4.1"
     eslint-plugin-jsx-a11y "^6.2.1"
     eslint-plugin-promise "^4.0.1"
     eslint-plugin-react "^7.12.4"
     eslint-plugin-react-hooks "^1.6.0"
-    eslint-plugin-unicorn "^7.1.0"
+    eslint-plugin-unicorn "^8.0.1"
     execa "^1.0.0"
     fs-extra "^7.0.1"
     jest "^24.5.0"
     np "^4.0.2"
     prettier "^1.16.4"
-    react "^16.8.5"
-    react-dom "^16.8.5"
-    react-test-renderer "^16.8.5"
-    typescript "~3.3.4000"
+    react "^16.8.6"
+    react-dom "^16.8.6"
+    react-test-renderer "^16.8.6"
+    typescript "~3.4.1"
 
 "@mrmlnc/readdir-enhanced@^2.2.1":
   version "2.2.1"
@@ -2782,6 +2782,15 @@ browserslist@^4.4.2, browserslist@^4.5.1:
     electron-to-chromium "^1.3.116"
     node-releases "^1.1.11"
 
+browserslist@^4.5.2:
+  version "4.5.3"
+  resolved "https://registry.npmjs.org/browserslist/-/browserslist-4.5.3.tgz#969495c410314bc89f14e748505e58be968080f1"
+  integrity sha512-Tx/Jtrmh6vFg24AelzLwCaCq1IUJiMDM1x/LPzqbmbktF8Zo7F9ONUpOWsFK6TtdON95mSMaQUWqi0ilc8xM6g==
+  dependencies:
+    caniuse-lite "^1.0.30000955"
+    electron-to-chromium "^1.3.122"
+    node-releases "^1.1.12"
+
 bser@^2.0.0:
   version "2.0.0"
   resolved "https://registry.npmjs.org/bser/-/bser-2.0.0.tgz#9ac78d3ed5d915804fd87acb158bc797147a1719"
@@ -2950,15 +2959,20 @@ camelcase@^5.0.0:
   resolved "https://registry.npmjs.org/camelcase/-/camelcase-5.2.0.tgz#e7522abda5ed94cc0489e1b8466610e88404cf45"
   integrity sha512-IXFsBS2pC+X0j0N/GE7Dm7j3bsEBp+oTpb7F50dwEVX7rf3IgwO9XatnegTsDtniKCUtEJH4fSU6Asw7uoVLfQ==
 
-caniuse-db@^1.0.30000947:
-  version "1.0.30000951"
-  resolved "https://registry.npmjs.org/caniuse-db/-/caniuse-db-1.0.30000951.tgz#64a5d491c8164a4f81ce9f3ab906b61df9a61b1a"
-  integrity sha512-Nb8bgexT3HDxPMFOLcT5kol/dHsXpPiiFLU079+msbSBTsq9zZaCpzqDb122+9B9woZnTG5Z8lt+3adIaxKj2A==
+caniuse-db@^1.0.30000951:
+  version "1.0.30000955"
+  resolved "https://registry.npmjs.org/caniuse-db/-/caniuse-db-1.0.30000955.tgz#d638a170f94654d77eff7821ec33b51dcd1330b0"
+  integrity sha512-VNb239mObbXMw9fWhd31idGYBG1gNBQc/qjUWa+ldoeWnjAkoeTZOowTMnVwcCiaMjbC7DNYw8YFkfdFlWLJrA==
 
 caniuse-lite@^1.0.30000951:
   version "1.0.30000951"
   resolved "https://registry.npmjs.org/caniuse-lite/-/caniuse-lite-1.0.30000951.tgz#c7c2fd4d71080284c8677dd410368df8d83688fe"
   integrity sha512-eRhP+nQ6YUkIcNQ6hnvdhMkdc7n3zadog0KXNRxAZTT2kHjUb1yGn71OrPhSn8MOvlX97g5CR97kGVj8fMsXWg==
+
+caniuse-lite@^1.0.30000955:
+  version "1.0.30000955"
+  resolved "https://registry.npmjs.org/caniuse-lite/-/caniuse-lite-1.0.30000955.tgz#360fdb9a1e41d6dd996130411334e44a39e4446d"
+  integrity sha512-6AwmIKgqCYfDWWadRkAuZSHMQP4Mmy96xAXEdRBlN/luQhlRYOKgwOlZ9plpCOsVbBuqbTmGqDK3JUM/nlr8CA==
 
 capture-exit@^2.0.0:
   version "2.0.0"
@@ -3983,6 +3997,11 @@ electron-to-chromium@^1.3.116:
   resolved "https://registry.npmjs.org/electron-to-chromium/-/electron-to-chromium-1.3.119.tgz#9a7770da667252aeb81f667853f67c2b26e00197"
   integrity sha512-3mtqcAWa4HgG+Djh/oNXlPH0cOH6MmtwxN1nHSaReb9P0Vn51qYPqYwLeoSuAX9loU1wrOBhFbiX3CkeIxPfgg==
 
+electron-to-chromium@^1.3.122:
+  version "1.3.122"
+  resolved "https://registry.npmjs.org/electron-to-chromium/-/electron-to-chromium-1.3.122.tgz#b32a0805f48557bd3c3b8104eadc7fa511b14a9a"
+  integrity sha512-3RKoIyCN4DhP2dsmleuFvpJAIDOseWH88wFYBzb22CSwoFDSWRc4UAMfrtc9h8nBdJjTNIN3rogChgOy6eFInw==
+
 elegant-spinner@^1.0.1:
   version "1.0.1"
   resolved "https://registry.npmjs.org/elegant-spinner/-/elegant-spinner-1.0.1.tgz#db043521c95d7e303fd8f345bedc3349cfb0729e"
@@ -4237,16 +4256,16 @@ eslint-plugin-babel@^5.3.0:
   dependencies:
     eslint-rule-composer "^0.3.0"
 
-eslint-plugin-compat@^3.0.1:
-  version "3.0.1"
-  resolved "https://registry.npmjs.org/eslint-plugin-compat/-/eslint-plugin-compat-3.0.1.tgz#46b5b88a27257a153255b91b41f783da7910e864"
-  integrity sha512-i0hx+Fm2A2rn35xtCpRAdg1tawe+Gsv8ydR3s6UMINGy9HzW1Yw7ojnm9E/bSznWjdIatKN/cVAWbG/uy4Munw==
+eslint-plugin-compat@^3.1.0:
+  version "3.1.0"
+  resolved "https://registry.npmjs.org/eslint-plugin-compat/-/eslint-plugin-compat-3.1.0.tgz#3a0a0490bd8cb08eb06cbbe840ad612227ccadf2"
+  integrity sha512-N+FiugxY5Y8CKp6/sk76KtIFlA2fMx8Ogb3FqbwOePND6mnnkxZL/iPMC/3QhPtuq10RVNduYOmKU9laqna5+A==
   dependencies:
-    "@babel/runtime" "^7.3.4"
+    "@babel/runtime" "^7.4.2"
     ast-metadata-inferer "^0.1.1"
-    browserslist "^4.4.2"
-    caniuse-db "^1.0.30000947"
-    mdn-browser-compat-data "^0.0.70"
+    browserslist "^4.5.2"
+    caniuse-db "^1.0.30000951"
+    mdn-browser-compat-data "^0.0.72"
     semver "^5.6.0"
 
 eslint-plugin-import@^2.16.0:
@@ -4307,18 +4326,21 @@ eslint-plugin-react@^7.12.4:
     prop-types "^15.6.2"
     resolve "^1.9.0"
 
-eslint-plugin-unicorn@^7.1.0:
-  version "7.1.0"
-  resolved "https://registry.npmjs.org/eslint-plugin-unicorn/-/eslint-plugin-unicorn-7.1.0.tgz#9efef5c68fde0ebefb0241fbcfa274f1b959c04e"
-  integrity sha512-lW/ZwGR638V0XuZgR160qVQvPtw8tw3laKT5LjJPt+W+tN7kVf2S2V7x+ZrEEwSjEb3OiEzb3cppzaKuYtgYeg==
+eslint-plugin-unicorn@^8.0.1:
+  version "8.0.1"
+  resolved "https://registry.npmjs.org/eslint-plugin-unicorn/-/eslint-plugin-unicorn-8.0.1.tgz#9212c4d8dd729785db846db920148ca97d545696"
+  integrity sha512-BIkPbCww71GZPnT1U4jzlNQyabmV7JlHu3qhCGLkZZKFp7jWkWdCQziadYdpLFLD5A+Z2nSi1LPe8/fkesvPVg==
   dependencies:
     clean-regexp "^1.0.0"
     eslint-ast-utils "^1.0.0"
     import-modules "^1.1.0"
     lodash.camelcase "^4.1.1"
+    lodash.defaultsdeep "^4.6.0"
     lodash.kebabcase "^4.0.1"
     lodash.snakecase "^4.0.1"
+    lodash.topairs "^4.3.0"
     lodash.upperfirst "^4.2.0"
+    reserved-words "^0.1.2"
     safe-regex "^2.0.1"
 
 eslint-restricted-globals@^0.1.1:
@@ -6740,6 +6762,11 @@ lodash.clonedeep@^4.5.0:
   resolved "https://registry.npmjs.org/lodash.clonedeep/-/lodash.clonedeep-4.5.0.tgz#e23f3f9c4f8fbdde872529c1071857a086e5ccef"
   integrity sha1-4j8/nE+Pvd6HJSnBBxhXoIblzO8=
 
+lodash.defaultsdeep@^4.6.0:
+  version "4.6.0"
+  resolved "https://registry.npmjs.org/lodash.defaultsdeep/-/lodash.defaultsdeep-4.6.0.tgz#bec1024f85b1bd96cbea405b23c14ad6443a6f81"
+  integrity sha1-vsECT4WxvZbL6kBbI8FK1kQ6b4E=
+
 lodash.escape@^4.0.1:
   version "4.0.1"
   resolved "https://registry.npmjs.org/lodash.escape/-/lodash.escape-4.0.1.tgz#c9044690c21e04294beaa517712fded1fa88de98"
@@ -6794,6 +6821,11 @@ lodash.templatesettings@^4.0.0:
   integrity sha1-K01OlbpEDZFf8IvImeRVNmZxMxY=
   dependencies:
     lodash._reinterpolate "~3.0.0"
+
+lodash.topairs@^4.3.0:
+  version "4.3.0"
+  resolved "https://registry.npmjs.org/lodash.topairs/-/lodash.topairs-4.3.0.tgz#3b6deaa37d60fb116713c46c5f17ea190ec48d64"
+  integrity sha1-O23qo31g+xFnE8RsXxfqGQ7EjWQ=
 
 lodash.unescape@4.0.1:
   version "4.0.1"
@@ -6977,10 +7009,10 @@ md5.js@^1.3.4:
     inherits "^2.0.1"
     safe-buffer "^5.1.2"
 
-mdn-browser-compat-data@^0.0.70:
-  version "0.0.70"
-  resolved "https://registry.npmjs.org/mdn-browser-compat-data/-/mdn-browser-compat-data-0.0.70.tgz#7eb8a7314f994538b70390e7048df1770fed9855"
-  integrity sha512-++gDpMmrHmZVIFTK9x3z7UjSAM3MYEwZe38yzNejVQe6OUHiLgRvlMW6TQznpIUGuWLesLGUGOg6iyj6JcTB2g==
+mdn-browser-compat-data@^0.0.72:
+  version "0.0.72"
+  resolved "https://registry.npmjs.org/mdn-browser-compat-data/-/mdn-browser-compat-data-0.0.72.tgz#b1d2026bfbf61c82e71c4157059b9d161c8791a9"
+  integrity sha512-vt3BxJRpV638ncYLigX91k0qP1VcpKxgExqPtX+QKFvV4/ZruZ31Sl35LsDDq5q+D7Lt7mfGWnCEuZ0d6bJW1g==
   dependencies:
     extend "3.0.2"
 
@@ -7453,6 +7485,13 @@ node-releases@^1.1.11:
   version "1.1.11"
   resolved "https://registry.npmjs.org/node-releases/-/node-releases-1.1.11.tgz#9a0841a4b0d92b7d5141ed179e764f42ad22724a"
   integrity sha512-8v1j5KfP+s5WOTa1spNUAOfreajQPN12JXbRR0oDE+YrJBQCXBnNqUDj27EKpPLOoSiU3tKi3xGPB+JaOdUEQQ==
+  dependencies:
+    semver "^5.3.0"
+
+node-releases@^1.1.12:
+  version "1.1.12"
+  resolved "https://registry.npmjs.org/node-releases/-/node-releases-1.1.12.tgz#1d6baf544316b5422fcd35efe18708370a4e7637"
+  integrity sha512-Y+AQ1xdjcgaEzpL65PBEF3fnl1FNKnDh9Zm+AUQLIlyyqtSc4u93jyMN4zrjMzdwKQ10RTr3tgY1x7qpsfF/xg==
   dependencies:
     semver "^5.3.0"
 
@@ -8520,22 +8559,27 @@ rc@^1.0.1, rc@^1.1.6, rc@^1.2.7:
     minimist "^1.2.0"
     strip-json-comments "~2.0.1"
 
-react-dom@^16.8.5:
-  version "16.8.5"
-  resolved "https://registry.npmjs.org/react-dom/-/react-dom-16.8.5.tgz#b3e37d152b49e07faaa8de41fdf562be3463335e"
-  integrity sha512-VIEIvZLpFafsfu4kgmftP5L8j7P1f0YThfVTrANMhZUFMDOsA6e0kfR6wxw/8xxKs4NB59TZYbxNdPCDW34x4w==
+react-dom@^16.8.6:
+  version "16.8.6"
+  resolved "https://registry.npmjs.org/react-dom/-/react-dom-16.8.6.tgz#71d6303f631e8b0097f56165ef608f051ff6e10f"
+  integrity sha512-1nL7PIq9LTL3fthPqwkvr2zY7phIPjYrT0jp4HjyEQrEROnw4dG41VVwi/wfoCneoleqrNX7iAD+pXebJZwrwA==
   dependencies:
     loose-envify "^1.1.0"
     object-assign "^4.1.1"
     prop-types "^15.6.2"
-    scheduler "^0.13.5"
+    scheduler "^0.13.6"
 
 react-is@^16.8.1, react-is@^16.8.4, react-is@^16.8.5:
   version "16.8.5"
   resolved "https://registry.npmjs.org/react-is/-/react-is-16.8.5.tgz#c54ac229dd66b5afe0de5acbe47647c3da692ff8"
   integrity sha512-sudt2uq5P/2TznPV4Wtdi+Lnq3yaYW8LfvPKLM9BKD8jJNBkxMVyB0C9/GmVhLw7Jbdmndk/73n7XQGeN9A3QQ==
 
-react-test-renderer@^16.0.0-0, react-test-renderer@^16.8.5:
+react-is@^16.8.6:
+  version "16.8.6"
+  resolved "https://registry.npmjs.org/react-is/-/react-is-16.8.6.tgz#5bbc1e2d29141c9fbdfed456343fe2bc430a6a16"
+  integrity sha512-aUk3bHfZ2bRSVFFbbeVS4i+lNPZr3/WM5jT2J5omUVV1zzcs1nAaf3l51ctA5FFvCRbhrH0bdAsRRQddFJZPtA==
+
+react-test-renderer@^16.0.0-0:
   version "16.8.5"
   resolved "https://registry.npmjs.org/react-test-renderer/-/react-test-renderer-16.8.5.tgz#4cba7a8aad73f7e8a0bc4379a0fe21632886a563"
   integrity sha512-/pFpHYQH4f35OqOae/DgOCXJDxBqD3K3akVfDhLgR0qYHoHjnICI/XS9QDwIhbrOFHWL7okVW9kKMaHuKvt2ng==
@@ -8545,15 +8589,25 @@ react-test-renderer@^16.0.0-0, react-test-renderer@^16.8.5:
     react-is "^16.8.5"
     scheduler "^0.13.5"
 
-react@^16.8.5:
-  version "16.8.5"
-  resolved "https://registry.npmjs.org/react/-/react-16.8.5.tgz#49be3b655489d74504ad994016407e8a0445de66"
-  integrity sha512-daCb9TD6FZGvJ3sg8da1tRAtIuw29PbKZW++NN4wqkbEvxL+bZpaaYb4xuftW/SpXmgacf1skXl/ddX6CdOlDw==
+react-test-renderer@^16.8.6:
+  version "16.8.6"
+  resolved "https://registry.npmjs.org/react-test-renderer/-/react-test-renderer-16.8.6.tgz#188d8029b8c39c786f998aa3efd3ffe7642d5ba1"
+  integrity sha512-H2srzU5IWYT6cZXof6AhUcx/wEyJddQ8l7cLM/F7gDXYyPr4oq+vCIxJYXVGhId1J706sqziAjuOEjyNkfgoEw==
+  dependencies:
+    object-assign "^4.1.1"
+    prop-types "^15.6.2"
+    react-is "^16.8.6"
+    scheduler "^0.13.6"
+
+react@^16.8.6:
+  version "16.8.6"
+  resolved "https://registry.npmjs.org/react/-/react-16.8.6.tgz#ad6c3a9614fd3a4e9ef51117f54d888da01f2bbe"
+  integrity sha512-pC0uMkhLaHm11ZSJULfOBqV4tIZkx87ZLvbbQYunNixAAvjnC+snJCg0XQXn9VIsttVsbZP/H/ewzgsd5fxKXw==
   dependencies:
     loose-envify "^1.1.0"
     object-assign "^4.1.1"
     prop-types "^15.6.2"
-    scheduler "^0.13.5"
+    scheduler "^0.13.6"
 
 read-cmd-shim@^1.0.1:
   version "1.0.1"
@@ -8887,6 +8941,11 @@ requireindex@^1.2.0:
   resolved "https://registry.npmjs.org/requireindex/-/requireindex-1.2.0.tgz#3463cdb22ee151902635aa6c9535d4de9c2ef1ef"
   integrity sha512-L9jEkOi3ASd9PYit2cwRfyppc9NoABujTP8/5gFcbERmo5jUoAKovIC3fsF17pkTnGsrByysqX+Kxd2OTNI1ww==
 
+reserved-words@^0.1.2:
+  version "0.1.2"
+  resolved "https://registry.npmjs.org/reserved-words/-/reserved-words-0.1.2.tgz#00a0940f98cd501aeaaac316411d9adc52b31ab1"
+  integrity sha1-AKCUD5jNUBrqqsMWQR2a3FKzGrE=
+
 resolve-cwd@^2.0.0:
   version "2.0.0"
   resolved "https://registry.npmjs.org/resolve-cwd/-/resolve-cwd-2.0.0.tgz#00a9f7387556e27038eae232caa372a6a59b665a"
@@ -9070,6 +9129,14 @@ scheduler@^0.13.5:
   version "0.13.5"
   resolved "https://registry.npmjs.org/scheduler/-/scheduler-0.13.5.tgz#b7226625167041298af3b98088a9dbbf6d7733a8"
   integrity sha512-K98vjkQX9OIt/riLhp6F+XtDPtMQhqNcf045vsh+pcuvHq+PHy1xCrH3pq1P40m6yR46lpVvVhKdEOtnimuUJw==
+  dependencies:
+    loose-envify "^1.1.0"
+    object-assign "^4.1.1"
+
+scheduler@^0.13.6:
+  version "0.13.6"
+  resolved "https://registry.npmjs.org/scheduler/-/scheduler-0.13.6.tgz#466a4ec332467b31a91b9bf74e5347072e4cd889"
+  integrity sha512-IWnObHt413ucAYKsD9J1QShUKkbKLQQHdxRyw73sw4FN26iWr3DY/H34xGPe4nmL1DwXyWmSWmMrA9TfQbE/XQ==
   dependencies:
     loose-envify "^1.1.0"
     object-assign "^4.1.1"
@@ -9936,10 +10003,10 @@ typedarray@^0.0.6:
   resolved "https://registry.npmjs.org/typedarray/-/typedarray-0.0.6.tgz#867ac74e3864187b1d3d47d996a78ec5c8830777"
   integrity sha1-hnrHTjhkGHsdPUfZlqeOxciDB3c=
 
-typescript@^3.3.4000, typescript@~3.3.4000:
-  version "3.3.4000"
-  resolved "https://registry.npmjs.org/typescript/-/typescript-3.3.4000.tgz#76b0f89cfdbf97827e1112d64f283f1151d6adf0"
-  integrity sha512-jjOcCZvpkl2+z7JFn0yBOoLQyLoIkNZAs/fYJkUG6VKy6zLPHJGfQJYFHzibB6GJaF/8QrcECtlQ5cpvRHSMEA==
+typescript@^3.4.1, typescript@~3.4.1:
+  version "3.4.1"
+  resolved "https://registry.npmjs.org/typescript/-/typescript-3.4.1.tgz#b6691be11a881ffa9a05765a205cb7383f3b63c6"
+  integrity sha512-3NSMb2VzDQm8oBTLH6Nj55VVtUEpe/rgkIzMir0qVoLyjDZlnMBva0U6vDiV3IH+sl/Yu6oP5QwsAQtHPmDd2Q==
 
 uglify-js@^3.1.4:
   version "3.5.2"

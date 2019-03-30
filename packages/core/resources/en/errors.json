@@ -10,5 +10,6 @@
   "prettierIgnoreInvalid": "Ignore configuration must be an array of strings.",
   "scaffoldNoTemplates": "Failed to find scaffolding templates \"{{path}}/*.ejs\" in configuration module.",
   "scriptNameInvalidFormat": "Script name must be in kebab case (alphanumeric characters and dashes).",
+  "workspacesMixedProjectRefs": "Options --workspaces and --reference-workspaces cannot be used in unison.",
   "workspacesNotEnabled": "Option --workspaces={{arg}} provided but project is not workspaces enabled."
 }

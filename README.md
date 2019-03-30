@@ -23,6 +23,7 @@ dependencies, continuous copy and paste, and more.
 - Custom scripts with CLI options.
 - Scaffolding and template generation.
 - Workspaces (monorepo) support.
+- Automated TypeScript project references.
 - Parallel, pooled, and prioritized builds.
 - Integrated watch/live mode.
 - And much more.

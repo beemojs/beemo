@@ -1,0 +1,9 @@
+{
+  "name": "baz",
+  "dependencies": {
+    "foo": "*"
+  },
+  "peerDependencies": {
+    "bar": "*"
+  }
+}

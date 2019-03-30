@@ -1,0 +1,3 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`TypeScriptDriver handleProjectReferences() errors if --reference-workspaces and --workspaces are passed 1`] = `"Options --workspaces and --reference-workspaces cannot be used in unison."`;
