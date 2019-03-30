@@ -38,7 +38,7 @@ followed by all remaining packages being executed in parallel batches as well.
 
 Each driver is designed and built differently, so getting a consistent pattern for workspace support
 is quite difficult. Because of this, per driver usage is broken down into 1 of the following 4
-categories.
+strategies.
 
 - **Root only** - The driver command should only be ran in the root, with all workspace packages
   being referenced as a whole. For example, recursive globbing.
@@ -48,13 +48,13 @@ categories.
   is ran in each. Because of this, we suggest not using the root config for anything else.
 - **No support** - Workspaces do not work for this driver.
 
-| Driver     | Support                                                 |
-| ---------- | ------------------------------------------------------- |
-| Babel      | Root only (preferred), Referenced using `--config-file` |
-| ESLint     | Root only (preferred), Referenced using `--config`      |
-| Flow       | Root only                                               |
-| Jest       | Root only (preferred), Referenced using `--config`      |
-| Mocha      | Root only                                               |
-| Prettier   | Root only (preferred), Referenced using `--config`      |
-| TypeScript | Copied, Use project references instead (preferred)      |
-| Webpack    | N/A                                                     |
+| Driver     | Support                                                      |
+| ---------- | ------------------------------------------------------------ |
+| Babel      | Referenced using `--config-file`                             |
+| ESLint     | Root only (preferred), Referenced using `--config`           |
+| Flow       | Root only                                                    |
+| Jest       | Root only (preferred), Referenced using `--config`           |
+| Mocha      | Root only                                                    |
+| Prettier   | Root only (preferred), Referenced using `--config`           |
+| TypeScript | Use project references instead with `--reference-workspaces` |
+| Webpack    | N/A                                                          |

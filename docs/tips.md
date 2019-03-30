@@ -22,24 +22,41 @@ This will use the current working directory (`process.cwd()`) instead of the Nod
 > If your configuration module is using [workspaces](./workspaces.md) (monorepo), you can target the
 > package name directly, assuming Yarn or Lerna have symlinked Node modules.
 
-## Editor Integration
+## Ignoring Configuration
 
-By default, Beemo generates local config files at runtime before execution, and some editors utilize
-those files for in-editor functionality (like ESLint and Prettier). However, these files clutter
-your repository and should not be committed, so let's hide them!
+By default, Beemo generates local config files at runtime, all of which may constantly change based
+on outside variables. These changes will clutter your commit history, so let's ignore them all
+together!
 
-Add file names to `dotfiles/gitignore` (or another VCS) for each driver you have installed in your
-configuration module (be sure to sync afterwards). Also, be sure `config.cleanup` is disabled in
-your `beemo` config (is `false` by default).
+Do so by adding file names to `.gitignore` (or another VCS) for each driver you have installed in
+your configuration module. Be sure `config.cleanup` is disabled in your `beemo` config (is `false`
+by default).
 
 ```
-// dotfiles/gitignore
+// .gitignore
 .eslintrc.js
 prettier.config.js
 ```
 
 With these changes, the local config files will persist after executing a driver, but will also be
 ignored in your VCS. Pretty nice huh?
+
+## Editor Integration
+
+Some editors utilize the config files files for in-editor functionality (like ESLint and Prettier),
+but if these config files are ignored (tip above), then the editor experience would be sub-par until
+the user generated the files.
+
+To work around this, we can define a `prepare` script to create all config files, which runs after
+every `yarn install` or `npm install`.
+
+```json
+{
+  "scripts": {
+    "prepare": "beemo create-config --silent"
+  }
+}
+```
 
 ## Glob Expansion
 
@@ -51,11 +68,11 @@ To work around this limitation, Beemo implements its own version of filename exp
 [glob package](https://www.npmjs.com/package/glob). Simply wrap your command line argument in quotes
 to use it!
 
-```
-// Before
+```bash
+# Before
 yarn beemo eslint ./packages/*/{src,tests}
 
-// After
+# After
 yarn beemo eslint "./packages/*/{src,tests}"
 ```
 
@@ -68,10 +85,10 @@ operators. Each operator may include multiple arguments or options.
 
 For example, if you'd like to run separate ESLint commands in different folders.
 
-```
+```bash
 yarn beemo eslint --color // ./src --ext=.ts,.tsx // ./tests --report-unused-disable-directives
 
-// Would run 2 commands in parallel
+# Would run 2 commands in parallel
 eslint --color ./src --ext=.ts,.tsx
 eslint --color ./tests --report-unused-disable-directives
 ```
@@ -111,7 +128,7 @@ experience, especially when used at a large company. To start, create a new exec
 configuration module at `bin/<name>.js`, with the following contents (which simply runs Beemo's
 console).
 
-```
+```js
 #!/usr/bin/env node
 
 process.env.BEEMO_CONFIG_MODULE = '@<custom-username>/dev-tools';
@@ -135,7 +152,7 @@ If `BEEMO_CONFIG_MODULE` is not defined in your custom binary, you'll need to ma
 
 ```json
 {
-  "<name>": {
+  "<custom-binary-name>": {
     "module": "@<custom-username>/dev-tools"
   }
 }
@@ -158,4 +175,4 @@ yarn beemo babel --theme=one-dark
 ```
 
 > View the list of available themes on the
-> [official Boost repo](https://github.com/milesj/boost/blob/master/src/themes.ts).
+> [official Boost repo](https://github.com/milesj/boost/tree/master/packages).

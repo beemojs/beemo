@@ -68,12 +68,12 @@ tsconfig.json # Created with refs that point to each package
 
 To customize this process, the following options are available.
 
-- `buildFolder` (string) - Name of output directory relative to package root. Defaults to "lib".
+- `buildFolder` (string) - Name of output directory relative to package root. Defaults to `lib`.
 - `globalTypes` (bool) - Include global types defined in the root (usually cwd). Defaults to
-  "false".
-- `srcFolder` (string) - Name of source directory relative to package root. Defaults to "src".
-- `testsFolder` (string) - Name of tests directory relative to package root. Defaults to "tests".
-- `typesFolder` (string) - Name of local and global types directory. Defaults to "types".
+  `false`.
+- `srcFolder` (string) - Name of source directory relative to package root. Defaults to `src`.
+- `testsFolder` (string) - Name of tests directory relative to package root. Defaults to `tests`.
+- `typesFolder` (string) - Name of local and global types directory. Defaults to `types`.
 
 ```json
 {

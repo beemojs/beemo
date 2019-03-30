@@ -12,7 +12,8 @@ yarn add @<username>/dev-tools --dev
 ```
 
 That being said, add a `beemo` configuration block to your `package.json`, with a `module` property
-that matches the name of your configuration module, or another third-party module.
+that matches the name of your configuration module, or another third-party module (if you don't want
+to manage your own provider).
 
 ```json
 {
@@ -46,17 +47,18 @@ The following options are available to all Beemo commands.
 - `--debug` (bool) - Print debug logs to the console.
 - `--locale` (string) - Localize the output messages to the defined locale.
 - `--output` (number) - Control the output level sent to the console.
-  [More information](./tips#output-verbosity).
-- `--silent` (bool) - Hide all output from the console. [More information](./tips#output-verbosity).
+  [More information](./tips.md#output-verbosity).
+- `--silent` (bool) - Hide all output from the console.
+  [More information](./tips.md#output-verbosity).
 - `--theme` (string) - Change output colors using a theme. [More information](./tips.md#cli-themes).
 
 ## Using Drivers
 
-Drivers may have been installed in your configuration module, but that does not make them available
-to the current project, as not all drivers will always be necessary. To enable drivers per project,
-a `drivers` property must be defined in your `beemo` config.
+Driver dependencies may have been installed in your configuration module, but that does not make
+them available to the current project, as not all drivers will always be necessary. To enable
+drivers per project, a `beemo.drivers` property must be defined.
 
-This property accepts an array of strings or objects, with the names of each driver you want to
+This property accepts an array of strings, or objects, with the names of each driver you want to
 enable. For example, if we want to use Babel, ESLint, and Jest, we would have the following.
 
 ```json
@@ -145,10 +147,15 @@ The following options are available when executing a driver.
 If the underlying driver supports file watching, most commonly through a CLI option like `-w` or
 `--watch`, Beemo will attempt to capture and pipe this output to your terminal.
 
+### Live Mode
+
+The Beemo console masks output of the underlying driver while it is executing. If you prefer to see
+the driver output live, simply pass `--live`.
+
 ## Executing Scripts
 
 A script within your configuration module can be executed using `yarn beemo run-script <name>` (or
-`npx beemo run-script <name>`).
+`npx beemo run-script <name>`). The name of the script should be passed in kebab-case.
 
 > All arguments passed to Beemo are passed to the script's `run()` method.
 
@@ -180,6 +187,7 @@ _all_ projects. So because of that, Beemo does allow overriding of config. To do
 `package.json` to include a block under `beemo.<driver>`, like so.
 
 ```json
+// package.json
 {
   "beemo": {
     "module": "@<username>/dev-tools",
@@ -198,3 +206,12 @@ _all_ projects. So because of that, Beemo does allow overriding of config. To do
 
 However, if you'd like to avoid modifying `package.json`, you may define an override file in the
 consumer within a relative configs folder, for example: `./configs/eslint.js`.
+
+```js
+// configs/eslint.js
+module.exports = {
+  rules: {
+    'no-param-reassign': 0,
+  },
+};
+```

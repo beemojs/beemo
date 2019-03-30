@@ -11,8 +11,8 @@ cd dev-tools/
 ```
 
 Once cloned, initialize a new NPM package, and provide the name `dev-tools` with a username scope,
-like `@beemo/dev-tools`. Why a scope? Because we don't want to clutter NPM with dumb packages. It
-also avoids collisions and easily announces ownership.
+like `@beemo/dev-tools`. Why a scope? Because we don't want to clutter NPM with common named
+packages. It also avoids collisions and easily announces ownership.
 
 ```
 npm init --scope=<username>
@@ -103,22 +103,22 @@ module.exports = {
 ## Scripts
 
 Beemo supports executing custom scripts found within your configuration module. To utilize a script,
-create a JavaScript file within the `scripts/` folder, extend the `Script` class provided by Beemo,
-and define the `execute()` and `args()` methods.
+create a JavaScript file (in PascalCase) within the `scripts/` folder, extend the `Script` class
+provided by Beemo, and define the `execute()` and `args()` methods.
 
 ```js
-// scripts/init.js
+// scripts/InitProject.js
 const { Script } = require('@beemo/core');
 
-module.exports = class InitScript extends Script {
+module.exports = class InitProjectScript extends Script {
   args() {
     return {
       boolean: ['dryRun'],
     };
   }
 
-  execute(context, options) {
-    if (options.dryRun) {
+  execute(context, args) {
+    if (args.dryRun) {
       // Do something
     }
   }

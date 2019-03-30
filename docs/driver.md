@@ -1,10 +1,11 @@
 # Drivers
 
-TODO
+A driver is a pluggable interface for an individual development or build tool. It provides a custom
+implementation for interoperability with the primary Beemo process.
 
 ## Config Strategies
 
-Each driver is designed and built differently, as is there configuration patterns. To work around
+Each driver is designed and built differently, as is their configuration patterns. To work around
 this, multiple strategies are in play when generating a config file at the root.
 
 - **Created config** - The config file is dynamically generated from the configuration module's
@@ -17,6 +18,8 @@ this, multiple strategies are in play when generating a config file at the root.
 - **Native config** - Uses the configuration strategy defined for the driver.
 - **No config** - Does nothing. Requires the consumer to create a local config file.
 
+The default strategies for each tool are as follows:
+
 | Driver     | Strategy   |
 | ---------- | ---------- |
 | Babel      | Created    |
@@ -28,9 +31,9 @@ this, multiple strategies are in play when generating a config file at the root.
 | TypeScript | Created    |
 | Webpack    | Referenced |
 
-> Strategies can be overwritten with a driver's `strategy` option, which accepts `create`,
-> `reference`, `copy`, and `native`.
+> Default strategies can be overwritten with a driver's `strategy` option, which accepts `create`,
+> `reference`, `copy`, `native`, and `none`.
 
 ## Creating A Driver
 
-Will be available post-alpha.
+Will be available after release!
