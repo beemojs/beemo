@@ -31,8 +31,8 @@ workspaces dependency graph. To disable this process, pass a `--no-priority` opt
 yarn beemo typescript --workspaces=* --no-priority
 ```
 
-High priority packages will be executed synchronously in order of dependency, followed by all
-remaining packages being executed in parallel.
+High priority packages will be executed in parallel batches, based on the order of dependency,
+followed by all remaining packages being executed in parallel batches as well.
 
 ## Driver Support
 
@@ -56,5 +56,5 @@ categories.
 | Jest       | Root only (preferred), Referenced using `--config`      |
 | Mocha      | Root only                                               |
 | Prettier   | Root only (preferred), Referenced using `--config`      |
-| TypeScript | Copied                                                  |
+| TypeScript | Copied, Use project references instead (preferred)      |
 | Webpack    | N/A                                                     |

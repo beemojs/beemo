@@ -113,12 +113,12 @@ const { Script } = require('@beemo/core');
 module.exports = class InitScript extends Script {
   args() {
     return {
-      boolean: ['workspaces'],
+      boolean: ['dryRun'],
     };
   }
 
   execute(context, options) {
-    if (options.workspaces) {
+    if (options.dryRun) {
       // Do something
     }
   }
