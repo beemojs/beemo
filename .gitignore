@@ -31,4 +31,5 @@ mocha.opts
 prettier.config.js
 tsconfig.json
 tsconfig.options.json
+tsconfig.tsbuildinfo
 webpack.config.js
