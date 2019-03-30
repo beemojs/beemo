@@ -1,4 +1,4 @@
-import { Routine, Task, Predicates } from '@boost/core';
+import { Routine, Task, Predicates, SignalError } from '@boost/core';
 import chalk from 'chalk';
 import glob from 'fast-glob';
 import path from 'path';
@@ -64,6 +64,9 @@ export default class RunCommandRoutine extends Routine<
     return this.serializeTasks();
   }
 
+  /**
+   * Capture live output via `--live` or `--watch`. Buffer the output incase ctrl+c is entered.
+   */
   captureLiveOutput = (stream: execa.ExecaChildProcess) => {
     const { args, primaryDriver } = this.context;
     const { watchOptions } = primaryDriver.metadata;
@@ -77,27 +80,44 @@ export default class RunCommandRoutine extends Routine<
       return args._.includes(option);
     });
 
-    if (!isWatching && !args.live) {
-      return false;
+    if (isWatching) {
+      const handler = (chunk: Buffer) => {
+        process.stdout.write(String(chunk));
+      };
+
+      stream.stdout!.pipe(new BatchStream({ wait: 1000 })).on('data', handler);
+      stream.stderr!.pipe(new BatchStream({ wait: 1000 })).on('data', handler);
+
+      return 'watch';
+    }
+
+    let buffer = '';
+
+    // When cmd/ctrl + c is pressed, write out the current buffer
+    if (!args.live) {
+      this.tool.console.on('error', error => {
+        if (
+          error instanceof SignalError &&
+          (error.signal === 'SIGINT' || error.signal === 'SIGTERM')
+        ) {
+          process.stdout.write(chalk.gray(this.tool.msg('app:signalBufferMessage')));
+          process.stdout.write(`\n\n${buffer}`);
+        }
+      });
     }
 
     const handler = (chunk: Buffer) => {
-      const out = String(chunk);
-
-      if (out) {
-        process.stdout.write(out);
+      if (args.live) {
+        process.stdout.write(String(chunk));
+      } else {
+        buffer += String(chunk);
       }
     };
 
-    if (args.live) {
-      stream.stdout!.on('data', handler);
-      stream.stderr!.on('data', handler);
-    } else {
-      stream.stdout!.pipe(new BatchStream({ wait: 1000 })).on('data', handler);
-      stream.stderr!.pipe(new BatchStream({ wait: 1000 })).on('data', handler);
-    }
+    stream.stdout!.on('data', handler);
+    stream.stderr!.on('data', handler);
 
-    return true;
+    return args.live ? 'live' : 'buffer';
   };
 
   /**

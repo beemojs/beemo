@@ -1,6 +1,6 @@
 import fs from 'fs-extra';
 import chalk from 'chalk';
-import { Task } from '@boost/core';
+import { Task, SignalError } from '@boost/core';
 import BabelDriver from '@beemo/driver-babel';
 import JestDriver from '@beemo/driver-jest';
 import Driver from '../../src/Driver';
@@ -101,15 +101,27 @@ describe('RunCommandRoutine', () => {
   });
 
   describe('captureLiveOutput()', () => {
+    const oldWrite = process.stdout.write;
+    let writeSpy: jest.Mock;
     let stream: any;
 
     class MockStream {
+      handler?: (chunk: Buffer) => void;
+
       pipe() {
         return this;
       }
 
-      on() {
+      on(key: string, handler: (chunk: Buffer) => void) {
+        this.handler = handler;
+
         return this;
+      }
+
+      emit() {
+        if (this.handler) {
+          this.handler(Buffer.from('buffered', 'utf8'));
+        }
       }
     }
 
@@ -118,103 +130,192 @@ describe('RunCommandRoutine', () => {
         stdout: new MockStream(),
         stderr: new MockStream(),
       };
+      writeSpy = jest.fn();
+      process.stdout.write = writeSpy;
     });
 
-    it('enables if args option matches watch option', () => {
-      driver.metadata.watchOptions = ['--watch'];
-      routine.context.args.watch = true;
-
-      expect(routine.captureLiveOutput(stream)).toBe(true);
+    afterEach(() => {
+      process.stdout.write = oldWrite;
     });
 
-    it('enables if args option matches short watch option', () => {
-      driver.metadata.watchOptions = ['-w'];
-      routine.context.args.w = true;
+    describe('watch', () => {
+      it('enables if args option matches watch option', () => {
+        driver.metadata.watchOptions = ['--watch'];
+        routine.context.args.watch = true;
 
-      expect(routine.captureLiveOutput(stream)).toBe(true);
+        expect(routine.captureLiveOutput(stream)).toBe('watch');
+      });
+
+      it('enables if args option matches short watch option', () => {
+        driver.metadata.watchOptions = ['-w'];
+        routine.context.args.w = true;
+
+        expect(routine.captureLiveOutput(stream)).toBe('watch');
+      });
+
+      it('enables if positional args includes watch option', () => {
+        driver.metadata.watchOptions = ['watch'];
+        routine.context.args._ = ['watch'];
+
+        expect(routine.captureLiveOutput(stream)).toBe('watch');
+      });
+
+      it('disables if args option doesnt match watch option', () => {
+        driver.metadata.watchOptions = ['--watch'];
+
+        expect(routine.captureLiveOutput(stream)).toBe('buffer');
+      });
+
+      it('disables if positional args doesnt include watch option', () => {
+        driver.metadata.watchOptions = ['--watch'];
+        routine.context.args._ = ['--notWatch'];
+
+        expect(routine.captureLiveOutput(stream)).toBe('buffer');
+      });
+
+      it('disables if args option is falsy', () => {
+        driver.metadata.watchOptions = ['--watch'];
+        routine.context.args.watch = false;
+
+        expect(routine.captureLiveOutput(stream)).toBe('buffer');
+      });
+
+      it('pipes a batch stream when enabled', () => {
+        const outSpy = jest.spyOn(stream.stdout, 'pipe');
+        const errSpy = jest.spyOn(stream.stderr, 'pipe');
+
+        driver.metadata.watchOptions = ['--watch'];
+        routine.context.args.watch = true;
+
+        routine.captureLiveOutput(stream);
+
+        expect(outSpy).toHaveBeenCalled();
+        expect(errSpy).toHaveBeenCalled();
+      });
+
+      it('registers a data handler when using watch', () => {
+        const outSpy = jest.spyOn(stream.stdout, 'on');
+        const errSpy = jest.spyOn(stream.stderr, 'on');
+
+        driver.metadata.watchOptions = ['--watch'];
+        routine.context.args.watch = true;
+
+        routine.captureLiveOutput(stream);
+
+        expect(outSpy).toHaveBeenCalledWith('data', expect.anything());
+        expect(errSpy).toHaveBeenCalledWith('data', expect.anything());
+      });
+
+      it('writes chunk to `process.stdout`', () => {
+        driver.metadata.watchOptions = ['--watch'];
+        routine.context.args.watch = true;
+
+        routine.captureLiveOutput(stream);
+
+        stream.stdout.emit();
+
+        expect(writeSpy).toHaveBeenCalledWith('buffered');
+      });
     });
 
-    it('enables if positional args includes watch option', () => {
-      driver.metadata.watchOptions = ['watch'];
-      routine.context.args._ = ['watch'];
+    describe('live', () => {
+      it('enables if args includes live option', () => {
+        routine.context.args.live = true;
 
-      expect(routine.captureLiveOutput(stream)).toBe(true);
+        expect(routine.captureLiveOutput(stream)).toBe('live');
+      });
+
+      it('disables if args live is wrong', () => {
+        routine.context.args.lived = true;
+
+        expect(routine.captureLiveOutput(stream)).toBe('buffer');
+      });
+
+      it('doesnt pipe a batch stream when using live', () => {
+        const outSpy = jest.spyOn(stream.stdout, 'pipe');
+        const errSpy = jest.spyOn(stream.stderr, 'pipe');
+
+        routine.context.args.live = true;
+
+        routine.captureLiveOutput(stream);
+
+        expect(outSpy).not.toHaveBeenCalled();
+        expect(errSpy).not.toHaveBeenCalled();
+      });
+
+      it('registers a data handler when using live', () => {
+        const outSpy = jest.spyOn(stream.stdout, 'on');
+        const errSpy = jest.spyOn(stream.stderr, 'on');
+
+        routine.context.args.live = true;
+
+        routine.captureLiveOutput(stream);
+
+        expect(outSpy).toHaveBeenCalledWith('data', expect.anything());
+        expect(errSpy).toHaveBeenCalledWith('data', expect.anything());
+      });
+
+      it('writes chunk to `process.stdout`', () => {
+        routine.context.args.live = true;
+
+        routine.captureLiveOutput(stream);
+
+        stream.stdout.emit();
+
+        expect(writeSpy).toHaveBeenCalledWith('buffered');
+      });
     });
 
-    it('enables if args includes live option', () => {
-      routine.context.args.live = true;
+    describe('buffer', () => {
+      it('defaults to buffer if no live or watch', () => {
+        expect(routine.captureLiveOutput(stream)).toBe('buffer');
+      });
 
-      expect(routine.captureLiveOutput(stream)).toBe(true);
-    });
+      it('registers a data handler when buffering', () => {
+        const outSpy = jest.spyOn(stream.stdout, 'on');
+        const errSpy = jest.spyOn(stream.stderr, 'on');
 
-    it('disables if args option doesnt match watch option', () => {
-      driver.metadata.watchOptions = ['--watch'];
+        routine.captureLiveOutput(stream);
 
-      expect(routine.captureLiveOutput(stream)).toBe(false);
-    });
+        expect(outSpy).toHaveBeenCalledWith('data', expect.anything());
+        expect(errSpy).toHaveBeenCalledWith('data', expect.anything());
+      });
 
-    it('disables if positional args doesnt include watch option', () => {
-      driver.metadata.watchOptions = ['--watch'];
-      routine.context.args._ = ['--notWatch'];
+      it('writes buffered chunk to `process.stdout` when a signal error occurs', () => {
+        routine.captureLiveOutput(stream);
 
-      expect(routine.captureLiveOutput(stream)).toBe(false);
-    });
+        stream.stdout.emit();
+        stream.stdout.emit();
+        stream.stdout.emit();
 
-    it('disables if args option is falsy', () => {
-      driver.metadata.watchOptions = ['--watch'];
-      routine.context.args.watch = false;
+        routine.tool.console.emit('error', [new SignalError('Error', 'SIGINT')]);
 
-      expect(routine.captureLiveOutput(stream)).toBe(false);
-    });
+        expect(writeSpy).toHaveBeenCalledWith('\n\nbufferedbufferedbuffered');
+      });
 
-    it('pipes a batch stream when enabled', () => {
-      const outSpy = jest.spyOn(stream.stdout, 'pipe');
-      const errSpy = jest.spyOn(stream.stderr, 'pipe');
+      it('doesnt write buffered chunk if a non-supported signal error occurs', () => {
+        routine.captureLiveOutput(stream);
 
-      driver.metadata.watchOptions = ['--watch'];
-      routine.context.args.watch = true;
+        stream.stdout.emit();
+        stream.stdout.emit();
+        stream.stdout.emit();
 
-      routine.captureLiveOutput(stream);
+        routine.tool.console.emit('error', [new SignalError('Error', 'SIGABRT')]);
 
-      expect(outSpy).toHaveBeenCalled();
-      expect(errSpy).toHaveBeenCalled();
-    });
+        expect(writeSpy).not.toHaveBeenCalled();
+      });
 
-    it('doesnt pipe a batch stream when using live', () => {
-      const outSpy = jest.spyOn(stream.stdout, 'pipe');
-      const errSpy = jest.spyOn(stream.stderr, 'pipe');
+      it('doesnt write buffered chunk if a non-signal error occurs', () => {
+        routine.captureLiveOutput(stream);
 
-      routine.context.args.live = true;
+        stream.stdout.emit();
+        stream.stdout.emit();
+        stream.stdout.emit();
 
-      routine.captureLiveOutput(stream);
+        routine.tool.console.emit('error', [new Error('Error')]);
 
-      expect(outSpy).not.toHaveBeenCalled();
-      expect(errSpy).not.toHaveBeenCalled();
-    });
-
-    it('registers a data handler when using watch', () => {
-      const outSpy = jest.spyOn(stream.stdout, 'on');
-      const errSpy = jest.spyOn(stream.stderr, 'on');
-
-      driver.metadata.watchOptions = ['--watch'];
-      routine.context.args.watch = true;
-
-      routine.captureLiveOutput(stream);
-
-      expect(outSpy).toHaveBeenCalledWith('data', expect.anything());
-      expect(errSpy).toHaveBeenCalledWith('data', expect.anything());
-    });
-
-    it('registers a data handler when using live', () => {
-      const outSpy = jest.spyOn(stream.stdout, 'on');
-      const errSpy = jest.spyOn(stream.stderr, 'on');
-
-      routine.context.args.live = true;
-
-      routine.captureLiveOutput(stream);
-
-      expect(outSpy).toHaveBeenCalledWith('data', expect.anything());
-      expect(errSpy).toHaveBeenCalledWith('data', expect.anything());
+        expect(writeSpy).not.toHaveBeenCalled();
+      });
     });
   });
 

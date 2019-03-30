@@ -46,7 +46,9 @@ export function mockTool(): BeemoTool {
   );
 
   // Stub out emitter
-  tool.on = jest.fn().mockReturnThis();
+  const baseOn = tool.on.bind(tool);
+
+  tool.on = jest.fn((...args) => baseOn(...args));
 
   return tool;
 }

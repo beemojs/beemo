@@ -73,6 +73,10 @@ describe('Driver', () => {
       spy = jest.spyOn(driver.tool, 'logError');
     });
 
+    afterEach(() => {
+      spy.mockRestore();
+    });
+
     it('logs stdout', () => {
       driver.handleFailure(
         stubExecResult({
@@ -121,6 +125,10 @@ describe('Driver', () => {
 
     beforeEach(() => {
       spy = jest.spyOn(driver.tool, 'log');
+    });
+
+    afterEach(() => {
+      spy.mockRestore();
     });
 
     it('logs stdout', () => {

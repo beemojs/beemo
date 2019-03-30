@@ -52,6 +52,7 @@
   "scriptLoadNodeModules": "Loading script from local node modules",
   "scriptRun": "Running script",
   "scriptRunNamed": "Running script {{name}}",
+  "signalBufferMessage": "The following output was buffered before being interrupted:",
   "typescriptCleanOption": "Clean the target folder",
   "typescriptDescription": "Type check files with TypeScript",
   "webpackDescription": "Bundle source files with Webpack"
