@@ -107,7 +107,7 @@ export default class Driver<
 
     // Use console to by pass silent
     if (out) {
-      console.error(out);
+      this.tool.logError(out);
     }
   }
 
@@ -122,7 +122,7 @@ export default class Driver<
 
     // Use console to by pass silent
     if (out) {
-      console.log(out);
+      this.tool.log(out);
     }
   }
 

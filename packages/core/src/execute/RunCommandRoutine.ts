@@ -64,6 +64,9 @@ export default class RunCommandRoutine extends Routine<
     return this.serializeTasks();
   }
 
+  /**
+   * Capture live output via `--live` or `--watch`. Buffer the output incase ctrl+c is entered.
+   */
   captureLiveOutput = (stream: execa.ExecaChildProcess) => {
     const { args, primaryDriver } = this.context;
     const { watchOptions } = primaryDriver.metadata;
@@ -84,32 +87,37 @@ export default class RunCommandRoutine extends Routine<
 
       stream.stdout!.pipe(new BatchStream({ wait: 1000 })).on('data', handler);
       stream.stderr!.pipe(new BatchStream({ wait: 1000 })).on('data', handler);
-    } else {
-      let buffer = '';
 
-      // When cmd/ctrl + c is pressed, write out the current buffer
-      if (!args.live) {
-        this.tool.console.on('error', error => {
-          if (
-            error instanceof SignalError &&
-            (error.signal === 'SIGINT' || error.signal === 'SIGTERM')
-          ) {
-            process.stdout.write(buffer);
-          }
-        });
-      }
-
-      const handler = (chunk: Buffer) => {
-        if (args.live) {
-          process.stdout.write(String(chunk));
-        } else {
-          buffer += String(chunk);
-        }
-      };
-
-      stream.stdout!.on('data', handler);
-      stream.stderr!.on('data', handler);
+      return 'watch';
     }
+
+    let buffer = '';
+
+    // When cmd/ctrl + c is pressed, write out the current buffer
+    if (!args.live) {
+      this.tool.console.on('error', error => {
+        if (
+          error instanceof SignalError &&
+          (error.signal === 'SIGINT' || error.signal === 'SIGTERM')
+        ) {
+          process.stdout.write(chalk.gray(this.tool.msg('app:signalBufferMessage')));
+          process.stdout.write(`\n\n${buffer}`);
+        }
+      });
+    }
+
+    const handler = (chunk: Buffer) => {
+      if (args.live) {
+        process.stdout.write(String(chunk));
+      } else {
+        buffer += String(chunk);
+      }
+    };
+
+    stream.stdout!.on('data', handler);
+    stream.stderr!.on('data', handler);
+
+    return args.live ? 'live' : 'buffer';
   };
 
   /**
