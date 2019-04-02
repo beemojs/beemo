@@ -11,5 +11,6 @@ export const EXECUTE_OPTIONS = {
   '--concurrency': true,
   '--live': true,
   '--priority': true,
+  '--reference-workspaces': true,
   '--workspaces': true,
 };
