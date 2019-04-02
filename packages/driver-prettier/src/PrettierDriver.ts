@@ -43,8 +43,11 @@ export default class PrettierDriver extends Driver<PrettierConfig> {
     }
 
     const ignorePath = path.join(path.dirname(configPath), '.prettierignore');
+    const { ignore } = config;
 
-    fs.writeFileSync(ignorePath, config.ignore.join('\n'));
+    this.tool.emit('prettier.create-ignore-file', [context, ignorePath, { ignore }]);
+
+    fs.writeFileSync(ignorePath, ignore.join('\n'));
 
     // Add to context so that it can be automatically cleaned up
     context.addConfigPath('prettier', ignorePath);

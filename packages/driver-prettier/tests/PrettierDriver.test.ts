@@ -87,5 +87,26 @@ describe('PrettierDriver', () => {
 
       expect(config).toEqual({ semi: true });
     });
+
+    it('emits `create-ignore-file` event', () => {
+      const createSpy = jest.fn((ctx, path, config) => {
+        config.ignore.push('qux');
+      });
+
+      driver.tool.on('prettier.create-ignore-file', createSpy);
+
+      const config = {
+        semi: true,
+        ignore: ['foo', 'bar', 'baz'],
+      };
+
+      driver.handleCreateIgnoreFile(context, '/some/path/prettier.config.js', config);
+
+      expect(createSpy).toHaveBeenCalledWith(context, '/some/path/.prettierignore', {
+        ignore: ['foo', 'bar', 'baz', 'qux'],
+      });
+
+      expect(spy).toHaveBeenCalledWith('/some/path/.prettierignore', 'foo\nbar\nbaz\nqux');
+    });
   });
 });
