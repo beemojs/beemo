@@ -75,7 +75,7 @@ describe('TypeScriptDriver', () => {
 
   describe('createProjectRefConfigsInWorkspaces()', () => {
     it('creates a source and optional test config in each package root', () => {
-      driver.createProjectRefConfigsInWorkspaces(PROJECT_REFS_FIXTURE_PATH);
+      driver.createProjectRefConfigsInWorkspaces(context, PROJECT_REFS_FIXTURE_PATH);
 
       expect(writeSpy).toHaveBeenCalledWith(
         path.join(PROJECT_REFS_FIXTURE_PATH, 'packages/bar/tsconfig.json'),
@@ -140,7 +140,7 @@ describe('TypeScriptDriver', () => {
     it('supports custom `srcFolder` and `buildFolder`', () => {
       driver.options.buildFolder = 'build';
       driver.options.srcFolder = 'source';
-      driver.createProjectRefConfigsInWorkspaces(PROJECT_REFS_FIXTURE_PATH);
+      driver.createProjectRefConfigsInWorkspaces(context, PROJECT_REFS_FIXTURE_PATH);
 
       expect(writeSpy).toHaveBeenCalledWith(
         path.join(PROJECT_REFS_FIXTURE_PATH, 'packages/bar/tsconfig.json'),
@@ -161,7 +161,7 @@ describe('TypeScriptDriver', () => {
     it('supports custom `typesFolder` and `testsFolder`', () => {
       driver.options.typesFolder = 'typings';
       driver.options.testsFolder = 'custom-tests';
-      driver.createProjectRefConfigsInWorkspaces(PROJECT_REFS_FIXTURE_PATH);
+      driver.createProjectRefConfigsInWorkspaces(context, PROJECT_REFS_FIXTURE_PATH);
 
       expect(writeSpy).toHaveBeenCalledWith(
         path.join(PROJECT_REFS_FIXTURE_PATH, 'packages/foo/custom-tests/tsconfig.json'),
@@ -195,7 +195,7 @@ describe('TypeScriptDriver', () => {
 
     it('includes global types when `globalTypes` is true', () => {
       driver.options.globalTypes = true;
-      driver.createProjectRefConfigsInWorkspaces(PROJECT_REFS_FIXTURE_PATH);
+      driver.createProjectRefConfigsInWorkspaces(context, PROJECT_REFS_FIXTURE_PATH);
 
       expect(writeSpy).toHaveBeenCalledWith(
         path.join(PROJECT_REFS_FIXTURE_PATH, 'packages/baz/tsconfig.json'),
@@ -223,6 +223,53 @@ describe('TypeScriptDriver', () => {
           extends: '../../../tsconfig.options.json',
           include: ['**/*', '../types/**/*', '../../../types/**/*'],
           references: [{ path: '..' }],
+        }),
+      );
+    });
+
+    it('emits `create-project-config-file` event', () => {
+      const spy = jest.fn((ctx, filePath, config, isTests) => {
+        if (isTests) {
+          config.compilerOptions.testsOnly = true;
+        } else {
+          config.compilerOptions.srcOnly = true;
+        }
+      });
+
+      driver.tool.on('typescript.create-project-config-file', spy);
+
+      driver.createProjectRefConfigsInWorkspaces(context, PROJECT_REFS_FIXTURE_PATH);
+
+      expect(spy).toHaveBeenCalledTimes(4);
+
+      expect(writeSpy).toHaveBeenCalledWith(
+        path.join(PROJECT_REFS_FIXTURE_PATH, 'packages/baz/tests/tsconfig.json'),
+        driver.formatConfig({
+          compilerOptions: {
+            emitDeclarationOnly: false,
+            noEmit: true,
+            rootDir: '.',
+            testsOnly: true,
+          },
+          extends: '../../../tsconfig.options.json',
+          include: ['**/*', '../types/**/*'],
+          references: [{ path: '..' }],
+        }),
+      );
+
+      expect(writeSpy).toHaveBeenCalledWith(
+        path.join(PROJECT_REFS_FIXTURE_PATH, 'packages/baz/tsconfig.json'),
+        driver.formatConfig({
+          compilerOptions: {
+            declarationDir: 'lib',
+            outDir: 'lib',
+            rootDir: 'src',
+            srcOnly: true,
+          },
+          exclude: ['lib', 'tests'],
+          extends: '../../tsconfig.options.json',
+          include: ['src/**/*', 'types/**/*'],
+          references: [{ path: '../foo' }, { path: '../bar' }],
         }),
       );
     });
@@ -440,7 +487,7 @@ describe('TypeScriptDriver', () => {
       // @ts-ignore Allow private access
       driver.handleProjectReferences(context);
 
-      expect(spy).toHaveBeenCalledWith(PROJECT_REFS_FIXTURE_PATH);
+      expect(spy).toHaveBeenCalledWith(context, PROJECT_REFS_FIXTURE_PATH);
     });
   });
 });

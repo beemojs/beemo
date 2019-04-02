@@ -31,6 +31,12 @@ In your consuming project, enable the driver by adding `typescript` to your `dri
 
 - `--[no-]clean` (bool) - Clean the target `outDir` before transpiling. Defaults to `true`.
 
+## Events
+
+| Event                                   | Arguments                                                                | Description                                                                             |
+| --------------------------------------- | ------------------------------------------------------------------------ | --------------------------------------------------------------------------------------- |
+| `typescript.create-project-config-file` | `context: DriverContext, path: string, config: object, isTests: boolean` | Called before a workspace package config file is written when using project references. |
+
 ## Workspaces Support
 
 TypeScript supports 2 forms of workspaces, the 1st with native
