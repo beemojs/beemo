@@ -27,6 +27,12 @@ In your consuming project, enable the driver by adding `eslint` to your `drivers
 }
 ```
 
+## Events
+
+| Event                       | Arguments                                                                            | Description                               |
+| --------------------------- | ------------------------------------------------------------------------------------ | ----------------------------------------- |
+| `eslint.create-ignore-file` | `context: DriverContext | ConfigContext, path: string, config: { ignore: string[] }` | Called before the ignore file is written. |
+
 ## Ignoring Paths
 
 Instead of using an `.eslintignore` dotfile, you can define an `ignore` property in your

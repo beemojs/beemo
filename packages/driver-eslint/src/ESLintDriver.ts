@@ -41,8 +41,11 @@ export default class ESLintDriver extends Driver<ESLintConfig> {
     }
 
     const ignorePath = path.join(path.dirname(configPath), '.eslintignore');
+    const { ignore } = config;
 
-    fs.writeFileSync(ignorePath, config.ignore.join('\n'));
+    this.tool.emit('eslint.create-ignore-file', [context, ignorePath, { ignore }]);
+
+    fs.writeFileSync(ignorePath, ignore.join('\n'));
 
     // Add to context so that it can be automatically cleaned up
     context.addConfigPath('eslint', ignorePath);
