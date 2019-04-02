@@ -111,6 +111,7 @@ describe('TypeScriptDriver', () => {
         path.join(PROJECT_REFS_FIXTURE_PATH, 'packages/baz/tests/tsconfig.json'),
         driver.formatConfig({
           compilerOptions: {
+            emitDeclarationOnly: false,
             noEmit: true,
             rootDir: '.',
           },
@@ -166,6 +167,7 @@ describe('TypeScriptDriver', () => {
         path.join(PROJECT_REFS_FIXTURE_PATH, 'packages/foo/custom-tests/tsconfig.json'),
         driver.formatConfig({
           compilerOptions: {
+            emitDeclarationOnly: false,
             noEmit: true,
             rootDir: '.',
           },
@@ -214,6 +216,7 @@ describe('TypeScriptDriver', () => {
         path.join(PROJECT_REFS_FIXTURE_PATH, 'packages/baz/tests/tsconfig.json'),
         driver.formatConfig({
           compilerOptions: {
+            emitDeclarationOnly: false,
             noEmit: true,
             rootDir: '.',
           },
