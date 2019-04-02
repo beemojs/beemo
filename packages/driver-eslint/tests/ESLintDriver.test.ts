@@ -114,5 +114,26 @@ describe('ESLintDriver', () => {
 
       expect(config).toEqual({ parser: 'babel' });
     });
+
+    it('emits `create-ignore-file` event', () => {
+      const createSpy = jest.fn((ctx, path, config) => {
+        config.ignore.push('qux');
+      });
+
+      driver.tool.on('eslint.create-ignore-file', createSpy);
+
+      const config = {
+        parser: 'babel',
+        ignore: ['foo', 'bar', 'baz'],
+      };
+
+      driver.handleCreateIgnoreFile(context, '/some/path/.eslintrc.js', config);
+
+      expect(createSpy).toHaveBeenCalledWith(context, '/some/path/.eslintignore', {
+        ignore: ['foo', 'bar', 'baz', 'qux'],
+      });
+
+      expect(spy).toHaveBeenCalledWith('/some/path/.eslintignore', 'foo\nbar\nbaz\nqux');
+    });
   });
 });

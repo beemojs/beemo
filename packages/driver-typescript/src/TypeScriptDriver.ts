@@ -51,13 +51,16 @@ export default class TypeScriptDriver extends Driver<TypeScriptConfig, TypeScrip
    * Create a `tsconfig.json` in each workspace package. Automatically link packages
    * together using project references. Attempt to handle source and test folders.
    */
-  createProjectRefConfigsInWorkspaces(workspaceRoot: string) {
+  createProjectRefConfigsInWorkspaces(
+    context: DriverContext<DriverArgs & TypeScriptArgs>,
+    workspaceRoot: string,
+  ) {
     const { buildFolder, srcFolder, testsFolder, typesFolder, globalTypes } = this.options;
     const optionsConfigPath = path.join(workspaceRoot, 'tsconfig.options.json');
     const globalTypesPath = path.join(workspaceRoot, typesFolder, '**/*');
     const namesToPaths: { [key: string]: string } = {};
     const workspacePackages = this.tool.getWorkspacePackages<{
-      tsconfig: Pick<TypeScriptConfig, 'exclude'>;
+      tsconfig: Pick<TypeScriptConfig, 'compilerOptions' | 'exclude'>;
     }>({
       root: workspaceRoot,
     });
@@ -87,6 +90,7 @@ export default class TypeScriptDriver extends Driver<TypeScriptConfig, TypeScrip
             declarationDir: buildFolder,
             outDir: buildFolder,
             rootDir: srcFolder,
+            ...tsconfig.compilerOptions,
           },
           exclude: [buildFolder],
           extends: path.relative(packagePath, optionsConfigPath),
@@ -108,6 +112,7 @@ export default class TypeScriptDriver extends Driver<TypeScriptConfig, TypeScrip
 
           const testConfig = {
             compilerOptions: {
+              emitDeclarationOnly: false,
               noEmit: true,
               rootDir: '.',
             },
@@ -120,11 +125,29 @@ export default class TypeScriptDriver extends Driver<TypeScriptConfig, TypeScrip
             testConfig.include.push(path.relative(testsPath, globalTypesPath));
           }
 
-          fs.writeFileSync(path.join(testsPath, 'tsconfig.json'), this.formatConfig(testConfig));
+          const testConfigPath = path.join(testsPath, 'tsconfig.json');
+
+          this.tool.emit('typescript.create-project-config-file', [
+            context,
+            testConfigPath,
+            testConfig,
+            true,
+          ]);
+
+          fs.writeFileSync(testConfigPath, this.formatConfig(testConfig));
         }
 
         // Write the config file last
-        fs.writeFileSync(path.join(packagePath, 'tsconfig.json'), this.formatConfig(packageConfig));
+        const packageConfigPath = path.join(packagePath, 'tsconfig.json');
+
+        this.tool.emit('typescript.create-project-config-file', [
+          context,
+          packageConfigPath,
+          packageConfig,
+          false,
+        ]);
+
+        fs.writeFileSync(packageConfigPath, this.formatConfig(packageConfig));
       },
     );
   }
@@ -223,16 +246,19 @@ export default class TypeScriptDriver extends Driver<TypeScriptConfig, TypeScrip
    * Automatically create `tsconfig.json` files in each workspace package with project
    * references linked correctly. Requires the `--reference-workspaces` option.
    */
-  private handleProjectReferences = ({
-    args,
-    workspaceRoot,
-  }: DriverContext<DriverArgs & TypeScriptArgs & { referenceWorkspaces?: boolean }>) => {
+  private handleProjectReferences = (
+    context: DriverContext<DriverArgs & TypeScriptArgs & { referenceWorkspaces?: boolean }>,
+  ) => {
+    const { args, workspaceRoot } = context;
+
     if (!args.referenceWorkspaces) {
       return;
+    } else if (!args.build && !args.b) {
+      throw new Error(this.tool.msg('errors:workspacesProjectRefsBuildRequired'));
     } else if (args.workspaces) {
-      throw new Error(this.tool.msg('errors:workspacesMixedProjectRefs'));
+      throw new Error(this.tool.msg('errors:workspacesProjectRefsMixed'));
     }
 
-    this.createProjectRefConfigsInWorkspaces(workspaceRoot);
+    this.createProjectRefConfigsInWorkspaces(context, workspaceRoot);
   };
 }
