@@ -3,3 +3,4 @@
 #### 🎉 Release
 
 - Initial release!
+- Added a `eslint.create-ignore-file` event.

@@ -253,8 +253,10 @@ export default class TypeScriptDriver extends Driver<TypeScriptConfig, TypeScrip
 
     if (!args.referenceWorkspaces) {
       return;
+    } else if (!args.build && !args.b) {
+      throw new Error(this.tool.msg('errors:workspacesProjectRefsBuildRequired'));
     } else if (args.workspaces) {
-      throw new Error(this.tool.msg('errors:workspacesMixedProjectRefs'));
+      throw new Error(this.tool.msg('errors:workspacesProjectRefsMixed'));
     }
 
     this.createProjectRefConfigsInWorkspaces(context, workspaceRoot);

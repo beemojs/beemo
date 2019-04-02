@@ -471,6 +471,7 @@ describe('TypeScriptDriver', () => {
     });
 
     it('errors if --reference-workspaces and --workspaces are passed', () => {
+      context.args.build = true;
       context.args.referenceWorkspaces = true;
       context.args.workspaces = '*';
 
@@ -480,7 +481,28 @@ describe('TypeScriptDriver', () => {
       }).toThrowErrorMatchingSnapshot();
     });
 
+    it('errors if --build isnt passed with --reference-workspaces', () => {
+      context.args.referenceWorkspaces = true;
+
+      expect(() => {
+        // @ts-ignore Allow private access
+        driver.handleProjectReferences(context);
+      }).toThrowErrorMatchingSnapshot();
+    });
+
     it('creates configs if --reference-workspaces is passed', () => {
+      context.args.build = true;
+      context.args.referenceWorkspaces = true;
+      context.workspaceRoot = PROJECT_REFS_FIXTURE_PATH;
+
+      // @ts-ignore Allow private access
+      driver.handleProjectReferences(context);
+
+      expect(spy).toHaveBeenCalledWith(context, PROJECT_REFS_FIXTURE_PATH);
+    });
+
+    it('works with -b flag', () => {
+      context.args.b = true;
       context.args.referenceWorkspaces = true;
       context.workspaceRoot = PROJECT_REFS_FIXTURE_PATH;
 

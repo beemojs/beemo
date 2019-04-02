@@ -4,3 +4,4 @@
 
 - Initial release!
 - Added automatic project references support via the `--reference-workspaces` option.
+- Added a `typescript.create-project-config-file` event.
