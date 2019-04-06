@@ -33,6 +33,6 @@
     "webpack": "^4.0.0"
   },
   "dependencies": {
-    "@types/webpack": "^4.4.26"
+    "@types/webpack": "^4.4.27"
   }
 }

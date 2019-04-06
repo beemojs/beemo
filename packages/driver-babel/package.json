@@ -26,10 +26,10 @@
     "access": "public"
   },
   "devDependencies": {
-    "@babel/cli": "^7.2.3",
-    "@babel/core": "^7.4.0",
+    "@babel/cli": "^7.4.3",
+    "@babel/core": "^7.4.3",
     "@babel/plugin-proposal-class-properties": "^7.4.0",
-    "@babel/preset-env": "^7.4.2",
+    "@babel/preset-env": "^7.4.3",
     "@types/rimraf": "^2.0.2"
   },
   "peerDependencies": {

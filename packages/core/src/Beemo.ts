@@ -67,7 +67,7 @@ export default class Beemo {
    * Register global options within our CLI application.
    */
   bootstrapCLI(app: Yargv) {
-    CLI.registerGlobalOptions(app, this.tool);
+    CLI.registerGlobalOptions(app as any, this.tool);
   }
 
   /**
