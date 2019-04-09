@@ -16,10 +16,10 @@ import { Argv, Execution, BeemoTool } from '../types';
 const OPTION_PATTERN: RegExp = /-?-[a-z0-9-]+(,|\s)/giu;
 
 export interface RunCommandOptions {
-  additionalArgv: Argv;
-  argv: Argv;
-  forceConfigOption: boolean;
-  packageRoot: string;
+  additionalArgv?: Argv;
+  argv?: Argv;
+  forceConfigOption?: boolean;
+  packageRoot?: string;
 }
 
 export default class RunCommandRoutine extends Routine<

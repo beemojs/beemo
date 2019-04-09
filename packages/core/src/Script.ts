@@ -4,9 +4,10 @@ import execa, { Options as ExecaOptions, ExecaReturns } from 'execa';
 import ScriptContext from './contexts/ScriptContext';
 import { ExecuteType } from './types';
 
-export default class Script<Args extends object = {}, Opts extends object = {}> extends Plugin<
-  Opts
-> {
+export default abstract class Script<
+  Args extends object = {},
+  Opts extends object = {}
+> extends Plugin<Opts> {
   tasks: Task<any>[] = [];
 
   /**

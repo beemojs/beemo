@@ -11,7 +11,7 @@ import {
 } from './constants';
 import { Argv, DriverCommandOptions, DriverOptions, DriverMetadata, Execution } from './types';
 
-export default class Driver<
+export default abstract class Driver<
   Config extends object = {},
   Opts extends DriverOptions = DriverOptions
 > extends Plugin<Opts> {
@@ -62,7 +62,7 @@ export default class Driver<
    * Return a list of user defined arguments.
    */
   getArgs(): Argv {
-    return [...this.options.args];
+    return Array.from(this.options.args!);
   }
 
   /**
@@ -73,7 +73,7 @@ export default class Driver<
       // Always required; configured by the driver
       ...this.metadata.dependencies,
       // Custom; configured by the consumer
-      ...this.options.dependencies,
+      ...Array.from(this.options.dependencies!),
     ];
   }
 

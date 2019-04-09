@@ -5,7 +5,7 @@ import ScriptContext from '../contexts/ScriptContext';
 import { BeemoTool, ExecuteType } from '../types';
 
 export interface RunScriptOptions {
-  packageRoot: string;
+  packageRoot?: string;
 }
 
 export default class RunScriptRoutine extends Routine<ScriptContext, BeemoTool, RunScriptOptions> {

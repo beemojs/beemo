@@ -4,7 +4,7 @@ import ModuleLoader from '@boost/core/lib/ModuleLoader';
 import ExecuteScriptRoutine from '../src/ExecuteScriptRoutine';
 import RunScriptRoutine from '../src/execute/RunScriptRoutine';
 import Script from '../src/Script';
-import { mockDebugger, mockTool, stubScriptContext, getRoot } from '../src/testUtils';
+import { mockDebugger, mockTool, mockScript, stubScriptContext, getRoot } from '../src/testUtils';
 
 jest.mock('@boost/core/lib/ModuleLoader', () =>
   jest.fn(() => ({
@@ -34,12 +34,6 @@ describe('ExecuteScriptRoutine', () => {
   let routine: ExecuteScriptRoutine;
   let script: Script;
 
-  class TestScript extends Script {
-    execute() {
-      return Promise.resolve(123);
-    }
-  }
-
   function createTestRunScript(title: string, options: any = {}) {
     const run = new RunScriptRoutine(title, '-a --foo bar baz', {
       packageRoot: getRoot(),
@@ -52,8 +46,7 @@ describe('ExecuteScriptRoutine', () => {
   }
 
   beforeEach(() => {
-    script = new TestScript();
-    script.name = 'plugin-name';
+    script = mockScript('plugin-name');
 
     routine = new ExecuteScriptRoutine('script', 'Executing script');
     routine.context = stubScriptContext();
@@ -113,6 +106,10 @@ describe('ExecuteScriptRoutine', () => {
   });
 
   describe('execute()', () => {
+    beforeEach(() => {
+      script.execute = () => Promise.resolve(123);
+    });
+
     it('skips 2 tasks when script is returned from tool', async () => {
       const loadToolSpy = jest.spyOn(routine, 'loadScriptFromTool');
       const loadModuleSpy = jest.spyOn(routine, 'loadScriptFromConfigModule');

@@ -1,7 +1,12 @@
 import { Tool } from '@boost/core';
-import Script from '../../src/Script';
 import RunScriptRoutine from '../../src/execute/RunScriptRoutine';
-import { mockTool, stubScriptContext, mockDebugger } from '../../src/testUtils';
+import {
+  mockTool,
+  stubScriptContext,
+  mockDebugger,
+  mockScript,
+  TestScript,
+} from '../../src/testUtils';
 
 describe('RunScriptRoutine', () => {
   let routine: RunScriptRoutine;
@@ -12,14 +17,14 @@ describe('RunScriptRoutine', () => {
 
     routine = new RunScriptRoutine('script', 'Run script');
     routine.tool = tool;
-    routine.context = stubScriptContext(new Script());
+    routine.context = stubScriptContext(mockScript('test'));
     routine.debug = mockDebugger();
     routine.bootstrap();
   });
 
   describe('execute()', () => {
     it('calls the script args() and execute()', async () => {
-      class TestScript extends Script {
+      class BaseTestScript extends TestScript {
         args() {
           return {
             boolean: ['foo'],
@@ -30,7 +35,7 @@ describe('RunScriptRoutine', () => {
         }
       }
 
-      const script = new TestScript();
+      const script = new BaseTestScript();
       script.bootstrap();
 
       const argsSpy = jest.spyOn(script, 'args');
@@ -52,7 +57,7 @@ describe('RunScriptRoutine', () => {
     it('clones the context and sets root to `packageRoot`', async () => {
       routine.options.packageRoot = '/some/path';
 
-      const script = new Script();
+      const script = mockScript('test');
       const exSpy = jest.spyOn(script, 'execute');
 
       await routine.execute(routine.context, script);
@@ -66,7 +71,7 @@ describe('RunScriptRoutine', () => {
     });
 
     it('add tasks to parent routine', async () => {
-      class TasksScript extends Script {
+      class TasksScript extends TestScript {
         bootstrap() {
           this.task('Task', () => 123);
           this.task('Task', () => 456);
@@ -86,7 +91,7 @@ describe('RunScriptRoutine', () => {
     });
 
     it('parallelizes tasks', async () => {
-      class ParallelTasksScript extends Script {
+      class ParallelTasksScript extends TestScript {
         bootstrap() {
           this.task('Task', () => 123);
           this.task('Task', () => 456);
@@ -109,7 +114,7 @@ describe('RunScriptRoutine', () => {
     });
 
     it('pools tasks', async () => {
-      class PoolTasksScript extends Script {
+      class PoolTasksScript extends TestScript {
         bootstrap() {
           this.task('Task', () => 123);
           this.task('Task', () => 456);
@@ -132,7 +137,7 @@ describe('RunScriptRoutine', () => {
     });
 
     it('serializes tasks', async () => {
-      class SerialTasksScript extends Script {
+      class SerialTasksScript extends TestScript {
         bootstrap() {
           this.task('Task', () => 123);
           this.task('Task', () => 456);
@@ -155,7 +160,7 @@ describe('RunScriptRoutine', () => {
     });
 
     it('synchronizes tasks', async () => {
-      class SyncTasksScript extends Script {
+      class SyncTasksScript extends TestScript {
         bootstrap() {
           this.task('Task', () => 123);
           this.task('Task', () => 456);
@@ -178,7 +183,7 @@ describe('RunScriptRoutine', () => {
     });
 
     it('doesnt run script tasks if `executeTasks` is not called', async () => {
-      class NoTasksScript extends Script {
+      class NoTasksScript extends TestScript {
         bootstrap() {
           this.task('Task', () => 123);
         }
@@ -199,7 +204,7 @@ describe('RunScriptRoutine', () => {
     });
 
     it('triggers `before-execute` event', async () => {
-      class MockScript extends Script {
+      class MockScript extends TestScript {
         execute() {
           return Promise.resolve();
         }
@@ -221,7 +226,7 @@ describe('RunScriptRoutine', () => {
     });
 
     it('triggers `after-execute` event on success', async () => {
-      class SuccessScript extends Script {
+      class SuccessScript extends TestScript {
         execute() {
           return Promise.resolve(123);
         }
@@ -239,7 +244,7 @@ describe('RunScriptRoutine', () => {
     });
 
     it('triggers `failed-execute` event on failure', async () => {
-      class FailureScript extends Script {
+      class FailureScript extends TestScript {
         execute() {
           return Promise.reject(new Error('Oops'));
         }
@@ -261,7 +266,7 @@ describe('RunScriptRoutine', () => {
 
   describe('runScriptTasks()', () => {
     it('rebinds the task to the script', () => {
-      class TaskScript extends Script {
+      class TaskScript extends TestScript {
         bootstrap() {
           this.task('Test', this.boundTask);
         }

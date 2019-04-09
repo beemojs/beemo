@@ -1,6 +1,6 @@
 import execa from 'execa';
 import Script from '../src/Script';
-import { mockTool, stubScriptContext } from '../src/testUtils';
+import { mockScript, stubScriptContext } from '../src/testUtils';
 
 jest.mock('execa');
 
@@ -8,8 +8,7 @@ describe('Script', () => {
   let script: Script;
 
   beforeEach(() => {
-    script = new Script();
-    script.tool = mockTool();
+    script = mockScript('test');
   });
 
   describe('args()', () => {

@@ -1,3 +1,5 @@
+/* eslint-disable max-classes-per-file */
+
 import path from 'path';
 import execa from 'execa';
 import parseArgs from 'yargs-parser';
@@ -10,6 +12,14 @@ import DriverContext, { DriverArgs } from './contexts/DriverContext';
 import ScaffoldContext, { ScaffoldArgs } from './contexts/ScaffoldContext';
 import ScriptContext, { ScriptArgs } from './contexts/ScriptContext';
 import { BeemoTool, BeemoConfig, BeemoPluginRegistry, DriverMetadata } from './types';
+
+export class TestDriver<T extends object = {}> extends Driver<T> {}
+
+export class TestScript<A extends object = {}, T extends object = {}> extends Script<A, T> {
+  blueprint() {
+    return {} as any;
+  }
+}
 
 // Use core package since resources are located here
 export const BEEMO_APP_PATH = path.join(__dirname, '..');
@@ -58,7 +68,7 @@ export function mockDriver<C extends object = {}>(
   tool: BeemoTool | null = null,
   metadata: Partial<DriverMetadata> = {},
 ): Driver<C> {
-  const driver = new Driver<C>();
+  const driver = new TestDriver<C>();
 
   driver.name = name;
   driver.tool = tool || mockTool();
@@ -73,6 +83,18 @@ export function mockDriver<C extends object = {}>(
   driver.bootstrap();
 
   return driver;
+}
+
+export function mockScript<C extends object = {}>(
+  name: string,
+  tool: BeemoTool | null = null,
+): Script<{}, C> {
+  const script = new TestScript<{}, C>();
+
+  script.name = name;
+  script.tool = tool || mockTool();
+
+  return script;
 }
 
 export function applyContext<T extends Context>(context: T): T {
@@ -112,7 +134,7 @@ export function stubDriverArgs(fields?: Partial<DriverArgs>) {
 }
 
 export function stubDriverContext(driver?: Driver): DriverContext {
-  return applyContext(new DriverContext(stubDriverArgs(), driver || new Driver()));
+  return applyContext(new DriverContext(stubDriverArgs(), driver || new TestDriver()));
 }
 
 export function stubScaffoldArgs(fields?: Partial<ScaffoldArgs>) {

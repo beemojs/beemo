@@ -1,6 +1,5 @@
 import ScriptContext from '../../src/contexts/ScriptContext';
-import Script from '../../src/Script';
-import { stubScriptArgs } from '../../src/testUtils';
+import { mockScript, stubScriptArgs } from '../../src/testUtils';
 
 describe('ScriptContext', () => {
   let context: ScriptContext;
@@ -30,7 +29,7 @@ describe('ScriptContext', () => {
 
   describe('setScript()', () => {
     it('sets script object, name, and path', () => {
-      const script = new Script();
+      const script = mockScript('foo');
 
       context.setScript(script, './foo.js');
 

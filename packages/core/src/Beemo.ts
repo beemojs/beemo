@@ -136,7 +136,7 @@ export default class Beemo {
   /**
    * Define the blueprint for Beemo configuration.
    */
-  getConfigBlueprint(): Blueprint<Partial<BeemoConfig>> {
+  getConfigBlueprint(): Blueprint<BeemoConfig> {
     return {
       configure: shape({
         cleanup: bool(false),
@@ -149,7 +149,7 @@ export default class Beemo {
       module: process.env.BEEMO_CONFIG_MODULE
         ? string(process.env.BEEMO_CONFIG_MODULE)
         : string().required(),
-    };
+    } as FixMe;
   }
 
   /**
