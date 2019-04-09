@@ -40,14 +40,3 @@ tool.debug.invariant(loaded, 'Has it loaded?', 'Yes', 'No');
 > Messages (excluding invariant) are formatted with
 > [util.format](https://nodejs.org/api/util.html#util_util_format_format_args) and can interpolate
 > variables.
-
-## Events
-
-Event listeners can be registered and unregistered with `on(event, listener)` and
-`off(event, listener)` respectively. Listeners may return false to stop propagation.
-
-```js
-tool.on('init', () => false);
-```
-
-> Event stopping should be used carefully.

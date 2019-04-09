@@ -93,7 +93,7 @@ describe('PrettierDriver', () => {
         config.ignore.push('qux');
       });
 
-      driver.tool.on('prettier.create-ignore-file', createSpy);
+      driver.onCreateIgnoreFile.listen(createSpy);
 
       const config = {
         semi: true,

@@ -278,10 +278,7 @@ export default class Beemo extends Tool<BeemoPluginRegistry, BeemoConfig> {
 
     // Delete config files on failure
     if (this.config.configure.cleanup) {
-      this.on(
-        'exit',
-        /* istanbul ignore next */ code => this.handleCleanupOnFailure(code, context),
-      );
+      this.onExit.listen(code => this.handleCleanupOnFailure(code, context));
     }
 
     this.pipeline = new Pipeline(this, context);

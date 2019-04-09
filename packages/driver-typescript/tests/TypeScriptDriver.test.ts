@@ -236,7 +236,7 @@ describe('TypeScriptDriver', () => {
         }
       });
 
-      driver.tool.on('typescript.create-project-config-file', spy);
+      driver.onCreateProjectConfigFile.listen(spy);
 
       driver.createProjectRefConfigsInWorkspaces(context, PROJECT_REFS_FIXTURE_PATH);
 

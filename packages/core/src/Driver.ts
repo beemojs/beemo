@@ -168,15 +168,6 @@ export default abstract class Driver<
   }
 
   /**
-   * Easily register events in the tool.
-   */
-  on(eventName: string, listener: EventListener): this {
-    this.tool.on(eventName, listener);
-
-    return this;
-  }
-
-  /**
    * Setup additional command options.
    */
   setCommandOptions(options: DriverCommandOptions): this {
