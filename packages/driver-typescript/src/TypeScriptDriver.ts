@@ -3,13 +3,20 @@ import path from 'path';
 import rimraf from 'rimraf';
 import ts from 'typescript';
 import { Event } from '@boost/event';
-import { Driver, DriverArgs, DriverContext, Predicates } from '@beemo/core';
+import {
+  Driver,
+  DriverArgs,
+  DriverContext,
+  Predicates,
+  ConfigContext,
+  ConfigArgs,
+} from '@beemo/core';
 import { TypeScriptArgs, TypeScriptConfig, TypeScriptOptions } from './types';
 
 // Success: Writes nothing to stdout or stderr
 // Failure: Writes to stdout on syntax and type error
 export default class TypeScriptDriver extends Driver<TypeScriptConfig, TypeScriptOptions> {
-  onCreateProjectConfigFile = new Event<[DriverContext, string, TypeScriptConfig, boolean]>(
+  onCreateProjectConfigFile = new Event<[ConfigContext, string, TypeScriptConfig, boolean]>(
     'create-project-config-file',
   );
 
@@ -228,13 +235,15 @@ export default class TypeScriptDriver extends Driver<TypeScriptConfig, TypeScrip
     if (args.clean && outDir) {
       rimraf.sync(path.resolve(outDir));
     }
+
+    return Promise.resolve();
   };
 
   /**
    * Define references and compiler options when `--reference-workspaces` option is passed.
    */
   private handlePrepareConfigs = (
-    context: DriverContext<DriverArgs & TypeScriptArgs & { referenceWorkspaces?: boolean }>,
+    context: ConfigContext<ConfigArgs & TypeScriptArgs & { referenceWorkspaces?: boolean }>,
     configPath: string,
     config: TypeScriptConfig,
   ) => {

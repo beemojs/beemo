@@ -1,9 +1,10 @@
-import { ToolConfig, ToolPluginRegistry, PluginSetting } from '@boost/core';
+/* eslint-disable no-unused-vars, @typescript-eslint/no-unused-vars */
+
+import { Tool, ToolConfig, ToolPluginRegistry, PluginSetting } from '@boost/core';
 import { ExecaReturns } from 'execa';
 import { Arguments, Options } from 'yargs';
 import Driver from './Driver';
 import Script from './Script';
-// eslint-disable-next-line no-unused-vars, @typescript-eslint/no-unused-vars
 import Context from './contexts/Context';
 
 export { Arguments };

@@ -43,11 +43,11 @@ describe('Beemo', () => {
   beforeEach(() => {
     beemo = new Beemo(['foo', 'bar'], '', mockTool());
     beemo.moduleRoot = root;
-    beemo.tool.options.root = root;
+    beemo.options.root = root;
 
     // Stop `exit` event from firing
     onSpy = jest.fn();
-    beemo.tool.on = onSpy;
+    beemo.onExit.emit = onSpy;
 
     fs.existsSync = jest.fn();
     fs.readJsonSync = jest.fn();
@@ -67,7 +67,7 @@ describe('Beemo', () => {
   describe('bootstrapConfigModule()', () => {
     beforeEach(() => {
       (bootstrapIndex as jest.Mock).mockReset();
-      beemo.tool.config.module = '@local';
+      beemo.config.module = '@local';
     });
 
     it('does nothing if no index file', () => {
@@ -90,8 +90,8 @@ describe('Beemo', () => {
   describe('createConfigFiles()', () => {
     beforeEach(() => {
       // @ts-ignore
-      beemo.tool.getPlugin = (type, name) => mockDriver(name);
-      beemo.tool.getPlugins = () => [mockDriver('foo'), mockDriver('bar'), mockDriver('baz')];
+      beemo.getPlugin = (type, name) => mockDriver(name);
+      beemo.getPlugins = () => [mockDriver('foo'), mockDriver('bar'), mockDriver('baz')];
     });
 
     it('triggers `init-driver` event with context for the first driver (primary)', async () => {
@@ -138,7 +138,7 @@ describe('Beemo', () => {
       expect(spy).toHaveBeenCalledWith(
         expect.objectContaining({
           argv: ['foo', 'bar'],
-          drivers: new Set(beemo.tool.getPlugins('driver')),
+          drivers: new Set(beemo.getPlugins('driver')),
         }),
       );
       expect((spy.mock.calls[0][0] as any).drivers.size).toBe(3);
@@ -173,7 +173,7 @@ describe('Beemo', () => {
     });
 
     it('errors if no module name', () => {
-      beemo.tool.config.module = '';
+      beemo.config.module = '';
 
       expect(() => {
         beemo.getConfigModuleRoot();
@@ -181,7 +181,7 @@ describe('Beemo', () => {
     });
 
     it('errors if a fake and or missing node module', () => {
-      beemo.tool.config.module = 'beemo-this-should-never-exist';
+      beemo.config.module = 'beemo-this-should-never-exist';
 
       expect(() => {
         beemo.getConfigModuleRoot();
@@ -189,7 +189,7 @@ describe('Beemo', () => {
     });
 
     it('returns cwd if using @local', () => {
-      beemo.tool.config.module = '@local';
+      beemo.config.module = '@local';
 
       expect(beemo.getConfigModuleRoot()).toBe(process.cwd());
       expect(beemo.moduleRoot).toBe(process.cwd());
@@ -199,7 +199,7 @@ describe('Beemo', () => {
     it('returns node module path', () => {
       (fs.existsSync as jest.Mock).mockImplementation(() => true);
 
-      beemo.tool.config.module = 'boost';
+      beemo.config.module = 'boost';
 
       const rootPath = path.join(process.cwd(), 'node_modules/boost');
 
@@ -243,7 +243,7 @@ describe('Beemo', () => {
   describe('executeDriver()', () => {
     beforeEach(() => {
       // @ts-ignore
-      beemo.tool.getPlugin = () => ({
+      beemo.getPlugin = () => ({
         name: 'foo-bar',
         metadata: { title: 'Foo Bar' },
         getVersion: () => '0.0.0',
@@ -292,7 +292,7 @@ describe('Beemo', () => {
     });
 
     it('doesnt pipe cleanup routine if `configure.cleanup` is false', async () => {
-      beemo.tool.config.configure.cleanup = false;
+      beemo.config.configure.cleanup = false;
 
       await beemo.executeDriver(stubDriverArgs(), 'foo-bar');
 
@@ -300,7 +300,7 @@ describe('Beemo', () => {
     });
 
     it('pipes cleanup routine if `configure.cleanup` is true', async () => {
-      beemo.tool.config.configure.cleanup = true;
+      beemo.config.configure.cleanup = true;
 
       await beemo.executeDriver(stubDriverArgs(), 'foo-bar');
 
@@ -372,7 +372,7 @@ describe('Beemo', () => {
     });
 
     it('registers an exit listener if cleanup is true', async () => {
-      beemo.tool.config.configure.cleanup = true;
+      beemo.config.configure.cleanup = true;
 
       beemo.startPipeline(stubContext());
 
@@ -380,7 +380,7 @@ describe('Beemo', () => {
     });
 
     it('doesnt register exit listener if cleanup is false', async () => {
-      beemo.tool.config.configure.cleanup = false;
+      beemo.config.configure.cleanup = false;
 
       beemo.startPipeline(stubContext());
 

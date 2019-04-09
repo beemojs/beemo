@@ -42,5 +42,7 @@ export default class BabelDriver extends Driver<BabelConfig> {
     if (args.clean && args.outDir) {
       rimraf.sync(path.resolve(args.outDir));
     }
+
+    return Promise.resolve();
   };
 }

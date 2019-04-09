@@ -14,7 +14,6 @@ const { main, parallel } = parseSpecialArgv(process.argv.slice(2));
 // Initialize
 const binName = path.basename(process.argv[1]);
 const beemo = new Beemo(main.slice(1), binName);
-const { tool } = beemo;
 const app = yargs(main);
 const manualURL = process.env.BEEMO_MANUAL_URL || 'https://milesj.gitbook.io/beemo';
 
@@ -25,12 +24,12 @@ beemo.bootstrapConfigModule();
 beemo.bootstrapCLI(app);
 
 // Add a command for each driver
-tool.getPlugins('driver').forEach(driver => {
+beemo.getPlugins('driver').forEach(driver => {
   const { command, metadata } = driver;
 
   app.command(
     driver.name,
-    metadata.description || tool.msg('app:run', { title: metadata.title }),
+    metadata.description || beemo.msg('app:run', { title: metadata.title }),
     cmd => {
       Object.keys(command).forEach(key => {
         cmd.option(key, command[key]);
@@ -39,22 +38,22 @@ tool.getPlugins('driver').forEach(driver => {
       return cmd
         .option('concurrency', {
           default: 0,
-          description: tool.msg('app:cliOptionConcurrency'),
+          description: beemo.msg('app:cliOptionConcurrency'),
           number: true,
         })
         .option('live', {
           boolean: true,
           default: false,
-          description: tool.msg('app:cliOptionLive'),
+          description: beemo.msg('app:cliOptionLive'),
         })
         .option('priority', {
           boolean: true,
           default: true,
-          description: tool.msg('app:cliOptionPriority'),
+          description: beemo.msg('app:cliOptionPriority'),
         })
         .option('workspaces', {
           default: '',
-          description: tool.msg('app:cliOptionWorkspaces'),
+          description: beemo.msg('app:cliOptionWorkspaces'),
           string: true,
         });
     },
@@ -65,11 +64,11 @@ tool.getPlugins('driver').forEach(driver => {
 // Add Beemo commands
 app.command(
   ['create-config [names..]', 'config [names..]'],
-  tool.msg('app:cliCommandConfig'),
+  beemo.msg('app:cliCommandConfig'),
   cmd =>
     cmd.positional('names', {
       default: [],
-      description: tool.msg('app:cliArgConfigNames'),
+      description: beemo.msg('app:cliArgConfigNames'),
       type: 'string',
     }),
   args => beemo.createConfigFiles(args, args.names),
@@ -77,32 +76,32 @@ app.command(
 
 app.command(
   ['run-script <name>', 'run <name>'],
-  tool.msg('app:cliCommandRunScript'),
+  beemo.msg('app:cliCommandRunScript'),
   cmd =>
     cmd
       .positional('name', {
         default: '',
-        description: tool.msg('app:cliArgScriptName'),
+        description: beemo.msg('app:cliArgScriptName'),
         type: 'string',
       })
       .option('concurrency', {
         default: 0,
-        description: tool.msg('app:cliOptionConcurrency'),
+        description: beemo.msg('app:cliOptionConcurrency'),
         number: true,
       })
       .option('live', {
         boolean: true,
         default: false,
-        description: tool.msg('app:cliOptionLive'),
+        description: beemo.msg('app:cliOptionLive'),
       })
       .option('priority', {
         boolean: true,
         default: false,
-        description: tool.msg('app:cliOptionPriority'),
+        description: beemo.msg('app:cliOptionPriority'),
       })
       .option('workspaces', {
         default: '',
-        description: tool.msg('app:cliOptionWorkspaces'),
+        description: beemo.msg('app:cliOptionWorkspaces'),
         string: true,
       }),
   args => beemo.executeScript(args, args.name),
@@ -110,34 +109,34 @@ app.command(
 
 app.command(
   'scaffold <generator> <action> [name]',
-  tool.msg('app:cliCommandScaffold'),
+  beemo.msg('app:cliCommandScaffold'),
   cmd =>
     cmd
       .positional('generator', {
         default: '',
-        description: tool.msg('app:cliArgGenerator'),
+        description: beemo.msg('app:cliArgGenerator'),
         type: 'string',
       })
       .positional('action', {
         default: '',
-        description: tool.msg('app:cliArgGeneratorAction'),
+        description: beemo.msg('app:cliArgGeneratorAction'),
         type: 'string',
       })
       .positional('name', {
         default: '',
-        description: tool.msg('app:cliArgGeneratorName'),
+        description: beemo.msg('app:cliArgGeneratorName'),
         type: 'string',
       })
       .option('dry', {
         boolean: true,
         default: false,
-        description: tool.msg('app:cliOptionDryRun'),
+        description: beemo.msg('app:cliOptionDryRun'),
       }),
   args => beemo.scaffold(args, args.generator, args.action, args.name),
 );
 
 app.command('*', false, {}, () => {
-  console.error(chalk.red(tool.msg('errors:cliNoCommand')));
+  console.error(chalk.red(beemo.msg('errors:cliNoCommand')));
 });
 
 // Run application
@@ -147,10 +146,10 @@ app
   .epilogue(
     // prettier-ignore
     chalk.gray([
-      tool.msg('app:cliEpilogue', { manualURL }),
-      tool.msg('app:poweredBy', { version: corePackage.version })
+      beemo.msg('app:cliEpilogue', { manualURL }),
+      beemo.msg('app:poweredBy', { version: corePackage.version })
     ].join('\n')),
   )
-  .demandCommand(1, chalk.red(tool.msg('errors:cliNoCommand')))
+  .demandCommand(1, chalk.red(beemo.msg('errors:cliNoCommand')))
   .showHelpOnFail(true)
   .help().argv;

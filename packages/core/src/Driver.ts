@@ -1,4 +1,4 @@
-import { Plugin, EventListener, Predicates } from '@boost/core';
+import { Plugin, Predicates } from '@boost/core';
 import { Event, ConcurrentEvent } from '@boost/event';
 import mergeWith from 'lodash/mergeWith';
 import execa from 'execa';
@@ -223,4 +223,6 @@ export default abstract class Driver<
 
     return this;
   }
+
+  on() {}
 }
