@@ -3,10 +3,10 @@ import fs from 'fs-extra';
 import path from 'path';
 import camelCase from 'lodash/camelCase';
 import { ConfigLoader, Routine, Predicates } from '@boost/core';
+import Beemo from '../Beemo';
 import Driver from '../Driver';
 import ConfigContext from '../contexts/ConfigContext';
 import { STRATEGY_COPY, STRATEGY_REFERENCE, STRATEGY_CREATE, STRATEGY_NATIVE } from '../constants';
-import { BeemoTool } from '../types';
 
 export interface ConfigObject {
   [key: string]: unknown;
@@ -18,7 +18,7 @@ export interface CreateConfigOptions {
 
 export default class CreateConfigRoutine<Ctx extends ConfigContext> extends Routine<
   Ctx,
-  BeemoTool,
+  Beemo,
   CreateConfigOptions
 > {
   blueprint({ instance }: Predicates) /* infer */ {

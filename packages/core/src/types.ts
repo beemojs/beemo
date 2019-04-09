@@ -1,4 +1,4 @@
-import { Tool, ToolConfig, ToolPluginRegistry, PluginSetting } from '@boost/core';
+import { ToolConfig, ToolPluginRegistry, PluginSetting } from '@boost/core';
 import { ExecaReturns } from 'execa';
 import { Arguments, Options } from 'yargs';
 import Driver from './Driver';
@@ -30,8 +30,6 @@ export interface BeemoConfig extends ToolConfig {
   // Driver overrides
   [key: string]: unknown;
 }
-
-export type BeemoTool = Tool<BeemoPluginRegistry, BeemoConfig>;
 
 export interface DriverCommandOptions {
   [name: string]: Options;
@@ -70,7 +68,7 @@ declare global {
     interface Process {
       beemo: {
         context: Context<any>;
-        tool: BeemoTool;
+        tool: Tool<BeemoPluginRegistry, BeemoConfig>;
       };
     }
   }

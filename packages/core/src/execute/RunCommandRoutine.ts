@@ -7,11 +7,12 @@ import isGlob from 'is-glob';
 import merge from 'lodash/merge';
 import execa from 'execa';
 import parseArgs from 'yargs-parser';
+import Beemo from '../Beemo';
 import DriverContext from '../contexts/DriverContext';
 import BatchStream from '../streams/BatchStream';
 import filterArgs, { OptionMap } from '../utils/filterArgs';
 import { STRATEGY_COPY } from '../constants';
-import { Argv, Execution, BeemoTool } from '../types';
+import { Argv, Execution } from '../types';
 
 const OPTION_PATTERN: RegExp = /-?-[a-z0-9-]+(,|\s)/giu;
 
@@ -22,11 +23,7 @@ export interface RunCommandOptions {
   packageRoot?: string;
 }
 
-export default class RunCommandRoutine extends Routine<
-  DriverContext,
-  BeemoTool,
-  RunCommandOptions
-> {
+export default class RunCommandRoutine extends Routine<DriverContext, Beemo, RunCommandOptions> {
   blueprint({ array, bool, string }: Predicates) /* infer */ {
     return {
       additionalArgv: array(string()),
@@ -58,10 +55,6 @@ export default class RunCommandRoutine extends Routine<
     }
 
     this.task(tool.msg('app:driverRunCommand'), this.runCommandWithArgs);
-  }
-
-  execute(): Promise<Execution> {
-    return this.serializeTasks();
   }
 
   /**

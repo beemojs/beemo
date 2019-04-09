@@ -1,7 +1,6 @@
 import ConfigureRoutine from '../src/ConfigureRoutine';
 import Driver from '../src/Driver';
-import { BeemoTool } from '../src/types';
-import { mockTool, mockDebugger, mockDriver, stubConfigContext } from '../src/testUtils';
+import { BeemoTool, mockTool, mockDebugger, mockDriver, stubConfigContext } from '../src/testUtils';
 
 describe('ConfigureRoutine', () => {
   let routine: ConfigureRoutine;

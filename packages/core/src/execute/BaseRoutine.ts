@@ -1,8 +1,8 @@
 import { Routine, WorkspacePackageConfig } from '@boost/core';
 import Graph from '@beemo/dependency-graph';
+import Beemo from '../Beemo';
 import Context from '../contexts/Context';
 import isPatternMatch from '../utils/isPatternMatch';
-import { BeemoTool } from '../types';
 
 export interface BaseContextArgs {
   concurrency: number;
@@ -12,7 +12,7 @@ export interface BaseContextArgs {
 
 export default abstract class BaseRoutine<Ctx extends Context<BaseContextArgs>> extends Routine<
   Ctx,
-  BeemoTool
+  Beemo
 > {
   workspacePackages: WorkspacePackageConfig[] = [];
 
@@ -94,7 +94,7 @@ export default abstract class BaseRoutine<Ctx extends Context<BaseContextArgs>> 
   /**
    * Group routines in order of which they are dependend on.
    */
-  orderByWorkspacePriorityGraph(): Routine<Ctx, BeemoTool>[][] {
+  orderByWorkspacePriorityGraph(): Routine<Ctx, Beemo>[][] {
     const enabled = this.context.args.priority || this.tool.config.execute.priority;
 
     if (!enabled || !this.context.args.workspaces) {
@@ -102,12 +102,12 @@ export default abstract class BaseRoutine<Ctx extends Context<BaseContextArgs>> 
     }
 
     const batchList = new Graph(this.workspacePackages).resolveBatchList();
-    const batches: Routine<Ctx, BeemoTool>[][] = [];
+    const batches: Routine<Ctx, Beemo>[][] = [];
 
     batchList.forEach(batch => {
       const routines = batch
         .map(pkg => this.routines.find(route => route.key === pkg.workspace.packageName))
-        .filter(Boolean) as Routine<Ctx, BeemoTool>[];
+        .filter(Boolean) as Routine<Ctx, Beemo>[];
 
       if (routines.length > 0) {
         batches.push(routines);

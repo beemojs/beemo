@@ -1,12 +1,12 @@
 import { Routine } from '@boost/core';
 import chalk from 'chalk';
+import Beemo from './Beemo';
 import CreateConfigRoutine from './configure/CreateConfigRoutine';
 import ConfigContext from './contexts/ConfigContext';
-import { BeemoTool } from './types';
 
 export default class ConfigureRoutine<T extends ConfigContext = ConfigContext> extends Routine<
   T,
-  BeemoTool
+  Beemo
 > {
   bootstrap() {
     this.resolveDependencies();

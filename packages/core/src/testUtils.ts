@@ -3,6 +3,7 @@
 import path from 'path';
 import execa from 'execa';
 import parseArgs from 'yargs-parser';
+import { Tool } from '@boost/core';
 import { mockDebugger, mockTool as baseMockTool, stubArgs } from '@boost/core/test-utils';
 import Driver from './Driver';
 import Script from './Script';
@@ -11,7 +12,9 @@ import ConfigContext, { ConfigArgs } from './contexts/ConfigContext';
 import DriverContext, { DriverArgs } from './contexts/DriverContext';
 import ScaffoldContext, { ScaffoldArgs } from './contexts/ScaffoldContext';
 import ScriptContext, { ScriptArgs } from './contexts/ScriptContext';
-import { BeemoTool, BeemoConfig, BeemoPluginRegistry, DriverMetadata } from './types';
+import { BeemoConfig, BeemoPluginRegistry, DriverMetadata } from './types';
+
+export type BeemoTool = Tool<BeemoPluginRegistry, BeemoConfig>;
 
 export class TestDriver<T extends object = {}> extends Driver<T> {}
 

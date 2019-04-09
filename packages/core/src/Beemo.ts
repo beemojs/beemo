@@ -6,7 +6,7 @@ import upperFirst from 'lodash/upperFirst';
 import { Argv as Yargv } from 'yargs';
 import { CLI, Pipeline, Tool } from '@boost/core';
 import { Event } from '@boost/event';
-import { bool, number, string, shape, Blueprint } from 'optimal';
+import { bool, number, string, shape } from 'optimal';
 import CleanupRoutine from './CleanupRoutine';
 import ConfigureRoutine from './ConfigureRoutine';
 import ExecuteDriverRoutine from './ExecuteDriverRoutine';
@@ -20,16 +20,26 @@ import DriverContext from './contexts/DriverContext';
 import ScriptContext from './contexts/ScriptContext';
 import ScaffoldContext from './contexts/ScaffoldContext';
 import { KEBAB_PATTERN } from './constants';
-import { Argv, BeemoTool, Execution, BeemoPluginRegistry, BeemoConfig } from './types';
+import { Argv, Execution, BeemoPluginRegistry, BeemoConfig } from './types';
 
-export default class Beemo {
-  argv: Argv;
+const configBlueprint = {
+  configure: shape({
+    cleanup: bool(false),
+    parallel: bool(true),
+  }),
+  execute: shape({
+    concurrency: number(),
+    priority: bool(true),
+  }),
+  module: process.env.BEEMO_CONFIG_MODULE
+    ? string(process.env.BEEMO_CONFIG_MODULE)
+    : string().required(),
+};
 
+export default class Beemo extends Tool<BeemoPluginRegistry, BeemoConfig> {
   moduleRoot: string = '';
 
-  pipeline: Pipeline<any, BeemoTool> | null = null;
-
-  tool: BeemoTool;
+  pipeline: Pipeline<any, Beemo> | null = null;
 
   onResolveDependencies = new Event<[ConfigContext, Driver<any, any>[]]>('resolve-dependencies');
 
@@ -41,44 +51,39 @@ export default class Beemo {
 
   onScaffold = new Event<[ScaffoldContext, string, string, string?]>('scaffold');
 
-  constructor(argv: Argv, binName?: string, tool?: BeemoTool) {
-    this.argv = argv;
+  constructor(argv: Argv, binName?: string) {
+    super(
+      {
+        appName: 'beemo',
+        appPath: path.join(__dirname, '..'),
+        configBlueprint,
+        configName: binName,
+        scoped: true,
+      },
+      argv,
+    );
 
     // eslint-disable-next-line global-require
     const { version } = require('../package.json');
 
-    this.tool =
-      tool ||
-      new Tool<BeemoPluginRegistry, BeemoConfig>(
-        {
-          appName: 'beemo',
-          appPath: path.join(__dirname, '..'),
-          configBlueprint: this.getConfigBlueprint(),
-          configName: binName,
-          scoped: true,
-        },
-        argv,
-      );
-
-    this.tool.debug('Using beemo v%s', version);
+    this.debug('Using beemo v%s', version);
 
     // Immediately load config and plugins
-    this.tool
-      .registerPlugin('driver', Driver)
+    this.registerPlugin('driver', Driver)
       .registerPlugin('script', Script)
       .initialize();
 
     // Set footer after messages have been loaded
-    const footer = this.tool.msg('app:poweredBy', { version });
+    const footer = this.msg('app:poweredBy', { version });
 
-    this.tool.options.footer = `\n${this.tool.isCI() ? '' : '🤖  '}${footer}`;
+    this.options.footer = `\n${this.isCI() ? '' : '🤖  '}${footer}`;
   }
 
   /**
    * Register global options within our CLI application.
    */
   bootstrapCLI(app: Yargv) {
-    CLI.registerGlobalOptions(app as any, this.tool);
+    CLI.registerGlobalOptions(app as FixMe, this);
   }
 
   /**
@@ -86,13 +91,13 @@ export default class Beemo {
    * execute it with the current tool instance.
    */
   bootstrapConfigModule() {
-    this.tool.debug('Bootstrapping configuration module');
+    this.debug('Bootstrapping configuration module');
 
     const moduleRoot = this.getConfigModuleRoot();
     const indexPath = path.join(moduleRoot, 'index.js');
 
     if (!fs.existsSync(indexPath)) {
-      this.tool.debug('No index.js file detected, aborting bootstrap');
+      this.debug('No index.js file detected, aborting bootstrap');
 
       return this;
     }
@@ -101,10 +106,10 @@ export default class Beemo {
     const bootstrap = require(indexPath);
     const isFunction = typeof bootstrap === 'function';
 
-    this.tool.debug.invariant(isFunction, 'Executing bootstrap function', 'Found', 'Not found');
+    this.debug.invariant(isFunction, 'Executing bootstrap function', 'Found', 'Not found');
 
     if (isFunction) {
-      bootstrap(this.tool);
+      bootstrap(this);
     }
 
     return this;
@@ -114,50 +119,30 @@ export default class Beemo {
    * Create a configuration file for the specified driver names.
    */
   async createConfigFiles(args: ConfigContext['args'], driverNames: string[] = []): Promise<any> {
-    const { tool } = this;
     const context = this.prepareContext(new ConfigContext(args));
 
     // Create for all enabled drivers
     if (driverNames.length === 0) {
-      tool.getPlugins('driver').forEach(driver => {
+      this.getPlugins('driver').forEach(driver => {
         context.addDriverDependency(driver);
       });
 
-      tool.debug('Running with all drivers');
+      this.debug('Running with all drivers');
 
       // Create for one or many driver
     } else {
       driverNames.forEach(driverName => {
-        context.addDriverDependency(tool.getPlugin('driver', driverName));
+        context.addDriverDependency(this.getPlugin('driver', driverName));
       });
 
-      tool.debug('Running with %s driver(s)', driverNames.join(', '));
+      this.debug('Running with %s driver(s)', driverNames.join(', '));
 
       this.onRunConfig.emit([context, driverNames]);
     }
 
     return this.startPipeline(context)
-      .pipe(new ConfigureRoutine('config', tool.msg('app:configGenerate')))
+      .pipe(new ConfigureRoutine('config', this.msg('app:configGenerate')))
       .run();
-  }
-
-  /**
-   * Define the blueprint for Beemo configuration.
-   */
-  getConfigBlueprint(): Blueprint<BeemoConfig> {
-    return {
-      configure: shape({
-        cleanup: bool(false),
-        parallel: bool(true),
-      }),
-      execute: shape({
-        concurrency: number(),
-        priority: bool(true),
-      }),
-      module: process.env.BEEMO_CONFIG_MODULE
-        ? string(process.env.BEEMO_CONFIG_MODULE)
-        : string().required(),
-    } as FixMe;
   }
 
   /**
@@ -168,19 +153,18 @@ export default class Beemo {
       return this.moduleRoot;
     }
 
-    const { tool } = this;
-    const { configName } = tool.options;
-    const { module } = tool.config;
+    const { configName } = this.options;
+    const { module } = this.config;
 
-    tool.debug('Locating configuration module root');
+    this.debug('Locating configuration module root');
 
     if (!module) {
-      throw new Error(tool.msg('errors:moduleConfigMissing', { configName }));
+      throw new Error(this.msg('errors:moduleConfigMissing', { configName }));
     }
 
     // Allow for local development
     if (module === '@local') {
-      tool.debug('Using %s configuration module', chalk.yellow('@local'));
+      this.debug('Using %s configuration module', chalk.yellow('@local'));
 
       this.moduleRoot = process.cwd();
 
@@ -191,30 +175,14 @@ export default class Beemo {
     const rootPath = path.join(process.cwd(), 'node_modules', module);
 
     if (!fs.existsSync(rootPath)) {
-      throw new Error(tool.msg('errors:moduleMissing', { configName, module }));
+      throw new Error(this.msg('errors:moduleMissing', { configName, module }));
     }
 
-    tool.debug('Found configuration module root path: %s', chalk.cyan(rootPath));
+    this.debug('Found configuration module root path: %s', chalk.cyan(rootPath));
 
     this.moduleRoot = rootPath;
 
     return rootPath;
-  }
-
-  /**
-   * Delete config files if a process fails.
-   */
-  handleCleanupOnFailure(code: number, context: Context) {
-    if (code === 0) {
-      return;
-    }
-
-    // Must not be async!
-    if (Array.isArray(context.configPaths)) {
-      context.configPaths.forEach(config => {
-        fs.removeSync(config.path);
-      });
-    }
   }
 
   /**
@@ -225,21 +193,20 @@ export default class Beemo {
     driverName: string,
     parallelArgv: Argv[] = [],
   ): Promise<Execution[]> {
-    const { tool } = this;
-    const driver = tool.getPlugin('driver', driverName);
+    const driver = this.getPlugin('driver', driverName);
     const context = this.prepareContext(new DriverContext(args, driver, parallelArgv));
     const version = driver.getVersion();
 
     this.onRunDriver.emit([context, driverName, driver]);
 
-    tool.debug('Running with %s v%s driver', driverName, version);
+    this.debug('Running with %s v%s driver', driverName, version);
 
     const pipeline = this.startPipeline(context)
-      .pipe(new ConfigureRoutine('config', tool.msg('app:configGenerate')))
+      .pipe(new ConfigureRoutine('config', this.msg('app:configGenerate')))
       .pipe(
         new ExecuteDriverRoutine(
           'driver',
-          tool.msg('app:driverExecute', {
+          this.msg('app:driverExecute', {
             name: driver.metadata.title,
             version,
           }),
@@ -247,8 +214,8 @@ export default class Beemo {
       );
 
     // Only add cleanup routine if we need it
-    if (tool.config.configure.cleanup) {
-      pipeline.pipe(new CleanupRoutine('cleanup', tool.msg('app:cleanup')));
+    if (this.config.configure.cleanup) {
+      pipeline.pipe(new CleanupRoutine('cleanup', this.msg('app:cleanup')));
     }
 
     return pipeline.run(driverName);
@@ -258,42 +225,25 @@ export default class Beemo {
    * Run a script found within the configuration module.
    */
   async executeScript(args: ScriptContext['args'], scriptName: string): Promise<Execution> {
-    const { tool } = this;
-
     if (!scriptName || !scriptName.match(KEBAB_PATTERN)) {
-      throw new Error(tool.msg('errors:scriptNameInvalidFormat'));
+      throw new Error(this.msg('errors:scriptNameInvalidFormat'));
     }
 
     const context = this.prepareContext(new ScriptContext(args, scriptName));
 
     this.onRunScript.emit([context, scriptName]);
 
-    tool.debug('Running with %s script', context.scriptName);
+    this.debug('Running with %s script', context.scriptName);
 
     return this.startPipeline(context)
       .pipe(
         new ExecuteScriptRoutine(
           'script',
           // Try and match the name of the class
-          tool.msg('app:scriptExecute', { name: upperFirst(camelCase(context.scriptName)) }),
+          this.msg('app:scriptExecute', { name: upperFirst(camelCase(context.scriptName)) }),
         ),
       )
       .run();
-  }
-
-  /**
-   * Prepare the context object by setting default values for specific properties.
-   */
-  prepareContext<T extends Context>(context: T): T {
-    const { tool } = this;
-
-    context.argv = this.argv;
-    context.cwd = tool.options.root;
-    context.moduleRoot = this.getConfigModuleRoot();
-    context.workspaceRoot = tool.options.workspaceRoot || tool.options.root;
-    context.workspaces = tool.getWorkspacePaths({ root: context.workspaceRoot });
-
-    return context;
   }
 
   /**
@@ -305,40 +255,66 @@ export default class Beemo {
     action: string,
     name: string = '',
   ): Promise<any> {
-    const { tool } = this;
     const context = this.prepareContext(new ScaffoldContext(args, generator, action, name));
 
     this.onScaffold.emit([context, generator, action, name]);
 
-    tool.debug('Running scaffold command');
+    this.debug('Running scaffold command');
 
     return this.startPipeline(context)
-      .pipe(new ScaffoldRoutine('scaffold', tool.msg('app:scaffoldGenerate')))
+      .pipe(new ScaffoldRoutine('scaffold', this.msg('app:scaffoldGenerate')))
       .run();
   }
 
   /**
    * Setup and start a fresh pipeline.
    */
-  startPipeline<T extends Context>(context: T): Pipeline<T, BeemoTool> {
-    const { tool } = this;
-
+  protected startPipeline<T extends Context>(context: T): Pipeline<T, Beemo> {
     // Make the tool available to all processes
     process.beemo = {
       context,
-      tool,
+      tool: this,
     };
 
     // Delete config files on failure
-    if (tool.config.configure.cleanup) {
-      tool.on(
+    if (this.config.configure.cleanup) {
+      this.on(
         'exit',
         /* istanbul ignore next */ code => this.handleCleanupOnFailure(code, context),
       );
     }
 
-    this.pipeline = new Pipeline(this.tool, context);
+    this.pipeline = new Pipeline(this, context);
 
     return this.pipeline;
+  }
+
+  /**
+   * Prepare the context object by setting default values for specific properties.
+   */
+  protected prepareContext<T extends Context>(context: T): T {
+    context.argv = this.argv;
+    context.cwd = this.options.root;
+    context.moduleRoot = this.getConfigModuleRoot();
+    context.workspaceRoot = this.options.workspaceRoot || this.options.root;
+    context.workspaces = this.getWorkspacePaths({ root: context.workspaceRoot });
+
+    return context;
+  }
+
+  /**
+   * Delete config files if a process fails.
+   */
+  private handleCleanupOnFailure(code: number, context: Context) {
+    if (code === 0) {
+      return;
+    }
+
+    // Must not be async!
+    if (Array.isArray(context.configPaths)) {
+      context.configPaths.forEach(config => {
+        fs.removeSync(config.path);
+      });
+    }
   }
 }

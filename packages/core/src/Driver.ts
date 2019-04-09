@@ -4,6 +4,7 @@ import mergeWith from 'lodash/mergeWith';
 import execa from 'execa';
 import optimal, { array, bool, object, string, shape } from 'optimal';
 import DriverContext from './contexts/DriverContext';
+import ConfigContext from './contexts/ConfigContext';
 import {
   STRATEGY_COPY,
   STRATEGY_CREATE,
@@ -12,7 +13,6 @@ import {
   STRATEGY_NONE,
 } from './constants';
 import { Argv, DriverCommandOptions, DriverOptions, DriverMetadata, Execution } from './types';
-import ConfigContext from './contexts/ConfigContext';
 
 export default abstract class Driver<
   Config extends object = {},
