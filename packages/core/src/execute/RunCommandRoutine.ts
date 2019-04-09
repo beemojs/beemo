@@ -328,7 +328,7 @@ export default class RunCommandRoutine extends Routine<
       chalk.cyan(cwd),
     );
 
-    this.tool.emit(`${context.eventName}.before-execute`, [context, argv, driver]);
+    await driver.onBeforeExecute.emit([context, argv]);
 
     try {
       result = await this.executeCommand(driver.metadata.bin, argv, {
@@ -340,13 +340,13 @@ export default class RunCommandRoutine extends Routine<
 
       driver.handleSuccess(result);
 
-      this.tool.emit(`${context.eventName}.after-execute`, [context, result, driver]);
+      await driver.onAfterExecute.emit([context, result]);
     } catch (error) {
       if (error.name !== 'MaxBufferError') {
         driver.handleFailure(error);
       }
 
-      this.tool.emit(`${context.eventName}.failed-execute`, [context, error, driver]);
+      await driver.onFailedExecute.emit([context, error]);
 
       throw new Error((driver.extractErrorMessage(error) || '').trim());
     }

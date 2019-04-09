@@ -1,7 +1,9 @@
 import { Plugin, EventListener, Predicates } from '@boost/core';
+import { Event, ConcurrentEvent } from '@boost/event';
 import mergeWith from 'lodash/mergeWith';
 import execa from 'execa';
 import optimal, { array, bool, object, string, shape } from 'optimal';
+import DriverContext from './contexts/DriverContext';
 import {
   STRATEGY_COPY,
   STRATEGY_CREATE,
@@ -10,11 +12,12 @@ import {
   STRATEGY_NONE,
 } from './constants';
 import { Argv, DriverCommandOptions, DriverOptions, DriverMetadata, Execution } from './types';
+import ConfigContext from './contexts/ConfigContext';
 
 export default abstract class Driver<
   Config extends object = {},
-  Opts extends DriverOptions = DriverOptions
-> extends Plugin<Opts> {
+  Options extends DriverOptions = DriverOptions
+> extends Plugin<Options> {
   command: DriverCommandOptions = {};
 
   // @ts-ignore Set after instantiation
@@ -22,6 +25,26 @@ export default abstract class Driver<
 
   // @ts-ignore Set after instantiation
   metadata: DriverMetadata;
+
+  onLoadModuleConfig = new Event<[ConfigContext, string, Config]>('load-module-config');
+
+  onLoadPackageConfig = new Event<[ConfigContext, Config]>('load-package-config');
+
+  onMergeConfig = new Event<[ConfigContext, Config]>('merge-config');
+
+  onCreateConfigFile = new Event<[ConfigContext, string, Config]>('create-config-file');
+
+  onCopyConfigFile = new Event<[ConfigContext, string, Config]>('copy-config-file');
+
+  onReferenceConfigFile = new Event<[ConfigContext, string, Config]>('reference-config-file');
+
+  onDeleteConfigFile = new Event<[ConfigContext, string]>('delete-config-file');
+
+  onBeforeExecute = new ConcurrentEvent<[DriverContext, Argv]>('before-execute');
+
+  onAfterExecute = new ConcurrentEvent<[DriverContext, unknown]>('after-execute');
+
+  onFailedExecute = new ConcurrentEvent<[DriverContext, Error]>('failed-execute');
 
   blueprint(predicates: Predicates) /* infer */ {
     return {
@@ -35,7 +58,7 @@ export default abstract class Driver<
         STRATEGY_COPY,
         STRATEGY_NONE,
       ]),
-    } as any;
+    } as FixMe;
   }
 
   /**

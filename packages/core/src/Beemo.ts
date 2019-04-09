@@ -5,6 +5,7 @@ import camelCase from 'lodash/camelCase';
 import upperFirst from 'lodash/upperFirst';
 import { Argv as Yargv } from 'yargs';
 import { CLI, Pipeline, Tool } from '@boost/core';
+import { Event } from '@boost/event';
 import { bool, number, string, shape, Blueprint } from 'optimal';
 import CleanupRoutine from './CleanupRoutine';
 import ConfigureRoutine from './ConfigureRoutine';
@@ -29,6 +30,16 @@ export default class Beemo {
   pipeline: Pipeline<any, BeemoTool> | null = null;
 
   tool: BeemoTool;
+
+  onResolveDependencies = new Event<[ConfigContext, Driver<any, any>[]]>('resolve-dependencies');
+
+  onRunConfig = new Event<[ConfigContext, string[]]>('run-config');
+
+  onRunDriver = new Event<[DriverContext, string, Driver<any, any>]>('run-driver');
+
+  onRunScript = new Event<[ScriptContext, string]>('run-script');
+
+  onScaffold = new Event<[ScaffoldContext, string, string, string?]>('scaffold');
 
   constructor(argv: Argv, binName?: string, tool?: BeemoTool) {
     this.argv = argv;
@@ -122,10 +133,7 @@ export default class Beemo {
 
       tool.debug('Running with %s driver(s)', driverNames.join(', '));
 
-      // Emit for the primary driver so any bootstrap events can react
-      const driver = tool.getPlugin('driver', driverNames[0]);
-
-      tool.emit(`${driver.name}.init-driver`, [context, driver]);
+      this.onRunConfig.emit([context, driverNames]);
     }
 
     return this.startPipeline(context)
@@ -222,7 +230,8 @@ export default class Beemo {
     const context = this.prepareContext(new DriverContext(args, driver, parallelArgv));
     const version = driver.getVersion();
 
-    tool.emit(`${context.eventName}.init-driver`, [context, driver]);
+    this.onRunDriver.emit([context, driverName, driver]);
+
     tool.debug('Running with %s v%s driver', driverName, version);
 
     const pipeline = this.startPipeline(context)
@@ -257,7 +266,8 @@ export default class Beemo {
 
     const context = this.prepareContext(new ScriptContext(args, scriptName));
 
-    tool.emit(`${context.eventName}.init-script`, [context, scriptName]);
+    this.onRunScript.emit([context, scriptName]);
+
     tool.debug('Running with %s script', context.scriptName);
 
     return this.startPipeline(context)
@@ -298,7 +308,8 @@ export default class Beemo {
     const { tool } = this;
     const context = this.prepareContext(new ScaffoldContext(args, generator, action, name));
 
-    tool.emit(`${tool.options.appName}.scaffold`, [context, generator, action, name]);
+    this.onScaffold.emit([context, generator, action, name]);
+
     tool.debug('Running scaffold command');
 
     return this.startPipeline(context)

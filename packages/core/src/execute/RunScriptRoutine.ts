@@ -25,19 +25,19 @@ export default class RunScriptRoutine extends Routine<ScriptContext, BeemoTool, 
   async execute(oldContext: ScriptContext, script: Script): Promise<any> {
     const context = oldContext.clone();
 
+    // Set the context so tasks inherit it
+    this.setContext(context);
+
     // Update the cwd to point to the package root
     if (this.options.packageRoot) {
       context.cwd = this.options.packageRoot;
     }
 
-    // Set the context so tasks inherit it
-    this.setContext(context);
-
     const { argv } = context;
 
     this.debug('Executing script with args "%s"', argv.join(' '));
 
-    this.tool.emit(`${context.eventName}.before-execute`, [context, argv, script]);
+    await script.onBeforeExecute.emit([context, argv]);
 
     const args = parseArgs(argv, script.args());
     let result = null;
@@ -49,9 +49,9 @@ export default class RunScriptRoutine extends Routine<ScriptContext, BeemoTool, 
         result = await this.runScriptTasks(args, result.type, result.tasks);
       }
 
-      this.tool.emit(`${context.eventName}.after-execute`, [context, result, script]);
+      await script.onAfterExecute.emit([context, result]);
     } catch (error) {
-      this.tool.emit(`${context.eventName}.failed-execute`, [context, error, script]);
+      await script.onFailedExecute.emit([context, error]);
 
       throw error;
     }

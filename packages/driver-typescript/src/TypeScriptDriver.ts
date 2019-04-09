@@ -2,12 +2,17 @@ import fs from 'fs';
 import path from 'path';
 import rimraf from 'rimraf';
 import ts from 'typescript';
+import { Event } from '@boost/event';
 import { Driver, DriverArgs, DriverContext, Predicates } from '@beemo/core';
 import { TypeScriptArgs, TypeScriptConfig, TypeScriptOptions } from './types';
 
 // Success: Writes nothing to stdout or stderr
 // Failure: Writes to stdout on syntax and type error
 export default class TypeScriptDriver extends Driver<TypeScriptConfig, TypeScriptOptions> {
+  onCreateProjectConfigFile = new Event<[DriverContext, string, TypeScriptConfig, boolean]>(
+    'create-project-config-file',
+  );
+
   blueprint(preds: Predicates) /* infer */ {
     const { bool, string } = preds;
 
@@ -42,19 +47,19 @@ export default class TypeScriptDriver extends Driver<TypeScriptConfig, TypeScrip
       },
     });
 
-    this.on('typescript.create-config-file', this.handlePrepareConfigs);
-    this.on('typescript.before-execute', this.handleCleanTarget);
-    this.on('typescript.before-execute', this.handleProjectReferences);
+    this.onCreateConfigFile.listen(this.handlePrepareConfigs);
+    this.onBeforeExecute.listen(this.handleCleanTarget);
+    this.onBeforeExecute.listen(this.handleProjectReferences);
   }
 
   /**
    * Create a `tsconfig.json` in each workspace package. Automatically link packages
    * together using project references. Attempt to handle source and test folders.
    */
-  createProjectRefConfigsInWorkspaces(
+  async createProjectRefConfigsInWorkspaces(
     context: DriverContext<DriverArgs & TypeScriptArgs>,
     workspaceRoot: string,
-  ) {
+  ): Promise<any> {
     const { buildFolder, srcFolder, testsFolder, typesFolder, globalTypes } = this.options;
     const optionsConfigPath = path.join(workspaceRoot, 'tsconfig.options.json');
     const globalTypesPath = path.join(workspaceRoot, typesFolder, '**/*');
@@ -65,90 +70,94 @@ export default class TypeScriptDriver extends Driver<TypeScriptConfig, TypeScrip
       root: workspaceRoot,
     });
 
+    // Helper to write a file and return a promise
+    const writeFile = (filePath: string, config: object, isTests: boolean) => {
+      const configPath = path.join(filePath, 'tsconfig.json');
+
+      this.onCreateProjectConfigFile.emit([context, configPath, config, isTests]);
+
+      return new Promise((resolve, reject) => {
+        fs.writeFile(configPath, this.formatConfig(config), error => {
+          if (error) {
+            reject(error);
+          } else {
+            resolve();
+          }
+        });
+      });
+    };
+
     // Map package name to absolute paths
     workspacePackages.forEach(wsPkg => {
       namesToPaths[wsPkg.name] = wsPkg.workspace.packagePath;
     });
 
     // Create a config file in each package
-    workspacePackages.forEach(
-      ({ dependencies = {}, peerDependencies = {}, tsconfig = {}, workspace }) => {
-        const { packagePath } = workspace;
-        const testsPath = path.join(packagePath, testsFolder);
-        const references: ts.ProjectReference[] = [];
+    return Promise.all(
+      workspacePackages.map(
+        ({ dependencies = {}, peerDependencies = {}, tsconfig = {}, workspace }) => {
+          const { packagePath } = workspace;
+          const testsPath = path.join(packagePath, testsFolder);
+          const references: ts.ProjectReference[] = [];
+          const promises: Promise<any>[] = [];
 
-        // Extract and determine references
-        Object.keys({ ...dependencies, ...peerDependencies }).forEach(depName => {
-          if (namesToPaths[depName]) {
-            references.push({ path: path.relative(packagePath, namesToPaths[depName]) });
-          }
-        });
+          // Extract and determine references
+          Object.keys({ ...dependencies, ...peerDependencies }).forEach(depName => {
+            if (namesToPaths[depName]) {
+              references.push({ path: path.relative(packagePath, namesToPaths[depName]) });
+            }
+          });
 
-        // Build package config
-        const packageConfig = {
-          compilerOptions: {
-            declarationDir: buildFolder,
-            outDir: buildFolder,
-            rootDir: srcFolder,
-            ...tsconfig.compilerOptions,
-          },
-          exclude: [buildFolder],
-          extends: path.relative(packagePath, optionsConfigPath),
-          include: [path.join(srcFolder, '**/*'), path.join(typesFolder, '**/*')],
-          references,
-        };
-
-        if (globalTypes) {
-          packageConfig.include.push(path.relative(packagePath, globalTypesPath));
-        }
-
-        if (Array.isArray(tsconfig.exclude)) {
-          packageConfig.exclude.push(...tsconfig.exclude);
-        }
-
-        // Build tests specific package config
-        if (testsFolder && fs.existsSync(testsPath)) {
-          packageConfig.exclude.push(testsFolder);
-
-          const testConfig = {
+          // Build package config
+          const packageConfig = {
             compilerOptions: {
-              emitDeclarationOnly: false,
-              noEmit: true,
-              rootDir: '.',
+              declarationDir: buildFolder,
+              outDir: buildFolder,
+              rootDir: srcFolder,
+              ...tsconfig.compilerOptions,
             },
-            extends: path.relative(testsPath, optionsConfigPath),
-            include: ['**/*', path.join('..', typesFolder, '**/*')],
-            references: [{ path: '..' }],
+            exclude: [buildFolder],
+            extends: path.relative(packagePath, optionsConfigPath),
+            include: [path.join(srcFolder, '**/*'), path.join(typesFolder, '**/*')],
+            references,
           };
 
           if (globalTypes) {
-            testConfig.include.push(path.relative(testsPath, globalTypesPath));
+            packageConfig.include.push(path.relative(packagePath, globalTypesPath));
           }
 
-          const testConfigPath = path.join(testsPath, 'tsconfig.json');
+          if (Array.isArray(tsconfig.exclude)) {
+            packageConfig.exclude.push(...tsconfig.exclude);
+          }
 
-          this.tool.emit('typescript.create-project-config-file', [
-            context,
-            testConfigPath,
-            testConfig,
-            true,
-          ]);
+          // Build tests specific package config
+          if (testsFolder && fs.existsSync(testsPath)) {
+            packageConfig.exclude.push(testsFolder);
 
-          fs.writeFileSync(testConfigPath, this.formatConfig(testConfig));
-        }
+            const testConfig = {
+              compilerOptions: {
+                emitDeclarationOnly: false,
+                noEmit: true,
+                rootDir: '.',
+              },
+              extends: path.relative(testsPath, optionsConfigPath),
+              include: ['**/*', path.join('..', typesFolder, '**/*')],
+              references: [{ path: '..' }],
+            };
 
-        // Write the config file last
-        const packageConfigPath = path.join(packagePath, 'tsconfig.json');
+            if (globalTypes) {
+              testConfig.include.push(path.relative(testsPath, globalTypesPath));
+            }
 
-        this.tool.emit('typescript.create-project-config-file', [
-          context,
-          packageConfigPath,
-          packageConfig,
-          false,
-        ]);
+            promises.push(writeFile(testsPath, testConfig, true));
+          }
 
-        fs.writeFileSync(packageConfigPath, this.formatConfig(packageConfig));
-      },
+          // Write the config file last
+          promises.push(writeFile(packagePath, packageConfig, false));
+
+          return Promise.all(promises);
+        },
+      ),
     );
   }
 
@@ -252,13 +261,13 @@ export default class TypeScriptDriver extends Driver<TypeScriptConfig, TypeScrip
     const { args, workspaceRoot } = context;
 
     if (!args.referenceWorkspaces) {
-      return;
+      return Promise.resolve();
     } else if (!args.build && !args.b) {
       throw new Error(this.tool.msg('errors:workspacesProjectRefsBuildRequired'));
     } else if (args.workspaces) {
       throw new Error(this.tool.msg('errors:workspacesProjectRefsMixed'));
     }
 
-    this.createProjectRefConfigsInWorkspaces(context, workspaceRoot);
+    return this.createProjectRefConfigsInWorkspaces(context, workspaceRoot);
   };
 }

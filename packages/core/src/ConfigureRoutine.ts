@@ -64,9 +64,6 @@ export default class ConfigureRoutine<T extends ConfigContext = ConfigContext> e
       this.context.addDriverDependency(driver);
     }
 
-    this.tool.emit(`${this.tool.options.appName}.resolve-dependencies`, [
-      this.context,
-      Array.from(this.context.drivers),
-    ]);
+    this.tool.onResolveDependencies.emit([this.context, Array.from(this.context.drivers)]);
   }
 }

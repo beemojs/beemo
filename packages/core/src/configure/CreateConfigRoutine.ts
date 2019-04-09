@@ -68,7 +68,8 @@ export default class CreateConfigRoutine<Ctx extends ConfigContext> extends Rout
    * Copy configuration file from module.
    */
   async copyConfigFile(context: Ctx): Promise<string> {
-    const { metadata, name } = this.options.driver;
+    const { driver } = this.options;
+    const { metadata, name } = driver;
     const configLoader = new ConfigLoader(this.tool);
     const sourcePath = this.getConfigPath(configLoader);
     const configPath = path.join(context.cwd, metadata.configName);
@@ -81,11 +82,10 @@ export default class CreateConfigRoutine<Ctx extends ConfigContext> extends Rout
 
     this.debug('Copying config file to %s', chalk.cyan(configPath));
 
-    this.options.driver.config = config;
+    driver.config = config;
+    driver.onCopyConfigFile.emit([context, configPath, config]);
 
     context.addConfigPath(name, configPath);
-
-    this.tool.emit(`${name}.copy-config-file`, [context, configPath, config]);
 
     return fs
       .copy(sourcePath, configPath, {
@@ -98,16 +98,16 @@ export default class CreateConfigRoutine<Ctx extends ConfigContext> extends Rout
    * Create a temporary configuration file or pass as an option.
    */
   async createConfigFile(context: Ctx, config: object): Promise<string> {
-    const { metadata, name } = this.options.driver;
+    const { driver } = this.options;
+    const { metadata, name } = driver;
     const configPath = path.join(context.cwd, metadata.configName);
 
     this.debug('Creating config file %s', chalk.cyan(configPath));
 
-    this.options.driver.config = config as any;
+    driver.config = config as FixMe;
+    driver.onCreateConfigFile.emit([context, configPath, config]);
 
     context.addConfigPath(name, configPath);
-
-    this.tool.emit(`${name}.create-config-file`, [context, configPath, config]);
 
     return fs
       .writeFile(configPath, this.options.driver.formatConfig(config))
@@ -118,7 +118,8 @@ export default class CreateConfigRoutine<Ctx extends ConfigContext> extends Rout
    * Extract configuration from "beemo.<driver>" within the local project's package.json.
    */
   extractConfigFromPackage(context: Ctx, prevConfigs: ConfigObject[]): Promise<ConfigObject[]> {
-    const { name } = this.options.driver;
+    const { driver } = this.options;
+    const { name } = driver;
     const { config } = this.tool;
     const configs = [...prevConfigs];
     const configName = this.getConfigName(name);
@@ -131,11 +132,10 @@ export default class CreateConfigRoutine<Ctx extends ConfigContext> extends Rout
     );
 
     if (config[configName]) {
-      const pkgConfig = config[configName];
+      const pkgConfig = config[configName] as FixMe;
 
-      configs.push(pkgConfig as object);
-
-      this.tool.emit(`${name}.load-package-config`, [context, pkgConfig]);
+      configs.push(pkgConfig);
+      driver.onLoadPackageConfig.emit([context, pkgConfig]);
     }
 
     return Promise.resolve(configs);
@@ -183,7 +183,8 @@ export default class CreateConfigRoutine<Ctx extends ConfigContext> extends Rout
    * Merge multiple configuration sources using the current driver.
    */
   mergeConfigs(context: Ctx, configs: ConfigObject[]): Promise<ConfigObject> {
-    const { name } = this.options.driver;
+    const { driver } = this.options;
+    const { name } = driver;
 
     this.debug('Merging %s config from %d sources', chalk.green(name), configs.length);
 
@@ -192,7 +193,7 @@ export default class CreateConfigRoutine<Ctx extends ConfigContext> extends Rout
       {},
     );
 
-    this.tool.emit(`${name}.merge-config`, [context, config]);
+    driver.onMergeConfig.emit([context, config]);
 
     return Promise.resolve(config);
   }
@@ -203,11 +204,7 @@ export default class CreateConfigRoutine<Ctx extends ConfigContext> extends Rout
   loadConfig(configLoader: ConfigLoader, filePath: string): ConfigObject {
     const config = configLoader.parseFile(filePath, [], { errorOnFunction: true });
 
-    this.tool.emit(`${this.options.driver.name}.load-module-config`, [
-      this.context,
-      filePath,
-      config,
-    ]);
+    this.options.driver.onLoadModuleConfig.emit([this.context, filePath, config]);
 
     return config;
   }
@@ -239,7 +236,8 @@ export default class CreateConfigRoutine<Ctx extends ConfigContext> extends Rout
    * Reference configuration file from module using a require statement.
    */
   referenceConfigFile(context: Ctx): Promise<string> {
-    const { metadata, name } = this.options.driver;
+    const { driver } = this.options;
+    const { metadata, name } = driver;
     const configLoader = new ConfigLoader(this.tool);
     const sourcePath = this.getConfigPath(configLoader);
     const configPath = path.join(context.cwd, metadata.configName);
@@ -252,11 +250,10 @@ export default class CreateConfigRoutine<Ctx extends ConfigContext> extends Rout
 
     this.debug('Referencing config file to %s', chalk.cyan(configPath));
 
-    this.options.driver.config = config;
+    driver.config = config;
+    driver.onReferenceConfigFile.emit([context, configPath, config]);
 
     context.addConfigPath(name, configPath);
-
-    this.tool.emit(`${name}.reference-config-file`, [context, configPath, config]);
 
     return fs
       .writeFile(

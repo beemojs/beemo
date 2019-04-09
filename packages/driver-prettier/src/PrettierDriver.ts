@@ -6,6 +6,10 @@ import { PrettierArgs, PrettierConfig } from './types';
 // Success: Writes file list to stdout
 // Failure: Writes to stderr for no files found and syntax errors
 export default class PrettierDriver extends Driver<PrettierConfig> {
+  onCreateIgnoreFile = new Event<[DriverContext, string, { ignore: string[] }]>(
+    'create-ignore-file',
+  );
+
   bootstrap() {
     this.setMetadata({
       bin: 'prettier',
@@ -15,7 +19,7 @@ export default class PrettierDriver extends Driver<PrettierConfig> {
       title: 'Prettier',
     });
 
-    this.on('prettier.create-config-file', this.handleCreateIgnoreFile);
+    this.onCreateConfigFile.listen(this.handleCreateIgnoreFile);
   }
 
   extractErrorMessage(error: Error): string {
@@ -43,9 +47,9 @@ export default class PrettierDriver extends Driver<PrettierConfig> {
     }
 
     const ignorePath = path.join(path.dirname(configPath), '.prettierignore');
-    const { ignore } = config;
+    const { ignore = [] } = config;
 
-    this.tool.emit('prettier.create-ignore-file', [context, ignorePath, { ignore }]);
+    this.onCreateIgnoreFile.emit([context, ignorePath, { ignore }]);
 
     fs.writeFileSync(ignorePath, ignore.join('\n'));
 

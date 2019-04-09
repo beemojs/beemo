@@ -222,7 +222,7 @@ describe('Driver', () => {
         },
       });
 
-      expect(driver.command).toEqual({
+      expect(driver.Options).toEqual({
         foo: {
           description: 'Foo',
         },

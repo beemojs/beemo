@@ -24,7 +24,7 @@ export default class BabelDriver extends Driver<BabelConfig> {
       },
     });
 
-    this.on('babel.before-execute', this.handleCleanTarget);
+    this.onBeforeExecute.listen(this.handleCleanTarget);
   }
 
   extractErrorMessage(error: Error): string {
