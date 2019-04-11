@@ -1,6 +1,7 @@
 import fs from 'fs-extra';
 import BabelDriver from '@beemo/driver-babel';
 import ConfigLoader from '@boost/core/lib/ConfigLoader';
+import Beemo from '../../src/Beemo';
 import CreateConfigRoutine from '../../src/configure/CreateConfigRoutine';
 import Driver from '../../src/Driver';
 import {
@@ -10,13 +11,7 @@ import {
   STRATEGY_NONE,
   STRATEGY_NATIVE,
 } from '../../src/constants';
-import {
-  BeemoTool,
-  stubConfigContext,
-  mockDebugger,
-  mockTool,
-  prependRoot,
-} from '../../src/testUtils';
+import { stubConfigContext, mockDebugger, mockTool, prependRoot } from '../../src/testUtils';
 
 jest.mock('@boost/core/lib/ConfigLoader');
 
@@ -26,7 +21,7 @@ describe('CreateConfigRoutine', () => {
   const oldCopy = fs.copy;
   let routine: CreateConfigRoutine<any>;
   let driver: Driver;
-  let tool: BeemoTool;
+  let tool: Beemo;
 
   beforeEach(() => {
     tool = mockTool();

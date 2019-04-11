@@ -28,8 +28,8 @@
   },
   "dependencies": {
     "@beemo/dependency-graph": "^1.0.0-alpha.1",
-    "@boost/core": "^1.11.0-alpha.1",
-    "@boost/event": "^1.0.0-alpha.0",
+    "@boost/core": "^1.11.0-alpha.2",
+    "@boost/event": "^1.0.0-alpha.1",
     "@types/execa": "^0.9.0",
     "@types/fs-extra": "^5.0.5",
     "@types/is-glob": "^4.0.1",

@@ -26,14 +26,14 @@
   },
   "devDependencies": {
     "@boost/test-utils": "^1.2.0-alpha.0",
-    "typescript": "^3.4.2"
+    "typescript": "^3.4.3"
   },
   "peerDependencies": {
     "@beemo/core": "^1.0.0-alpha.0",
     "typescript": "^2.0.0 || ^3.0.0"
   },
   "dependencies": {
-    "@boost/event": "^1.0.0-alpha.0",
+    "@boost/event": "^1.0.0-alpha.1",
     "rimraf": "^2.6.3"
   },
   "tsconfig": {

@@ -1,11 +1,12 @@
+import Beemo from '../src/Beemo';
 import ConfigureRoutine from '../src/ConfigureRoutine';
 import Driver from '../src/Driver';
-import { BeemoTool, mockTool, mockDebugger, mockDriver, stubConfigContext } from '../src/testUtils';
+import { mockTool, mockDebugger, mockDriver, stubConfigContext } from '../src/testUtils';
 
 describe('ConfigureRoutine', () => {
   let routine: ConfigureRoutine;
   let plugins: { [name: string]: Driver };
-  let tool: BeemoTool;
+  let tool: Beemo;
   let driver: Driver;
 
   beforeEach(() => {

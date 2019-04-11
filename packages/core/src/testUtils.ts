@@ -3,8 +3,8 @@
 import path from 'path';
 import execa from 'execa';
 import parseArgs from 'yargs-parser';
-import { Tool } from '@boost/core';
-import { mockDebugger, mockTool as baseMockTool, stubArgs } from '@boost/core/test-utils';
+import { mockDebugger, stubArgs } from '@boost/core/test-utils';
+import Beemo from './Beemo';
 import Driver from './Driver';
 import Script from './Script';
 import Context from './contexts/Context';
@@ -12,9 +12,9 @@ import ConfigContext, { ConfigArgs } from './contexts/ConfigContext';
 import DriverContext, { DriverArgs } from './contexts/DriverContext';
 import ScaffoldContext, { ScaffoldArgs } from './contexts/ScaffoldContext';
 import ScriptContext, { ScriptArgs } from './contexts/ScriptContext';
-import { BeemoConfig, BeemoPluginRegistry, DriverMetadata } from './types';
+import { DriverMetadata } from './types';
 
-export type BeemoTool = Tool<BeemoPluginRegistry, BeemoConfig>;
+export { mockDebugger, stubArgs };
 
 export class TestDriver<T extends object = {}> extends Driver<T> {}
 
@@ -30,45 +30,34 @@ export const BEEMO_APP_PATH = path.join(__dirname, '..');
 // Use a folder that should not cause issues / contain much code
 export const BEEMO_TEST_ROOT = path.join(__dirname, '../../../tests');
 
-export { mockDebugger, stubArgs };
+export function mockTool(): Beemo {
+  const tool = new Beemo([], 'beemo', false);
 
-export function mockTool(): BeemoTool {
-  const tool = baseMockTool<BeemoPluginRegistry, BeemoConfig>(
-    {
-      appName: 'beemo',
-      appPath: BEEMO_APP_PATH,
-      configBlueprint: {},
-      configName: 'beemo',
-      root: BEEMO_TEST_ROOT,
-      scoped: true,
-      workspaceRoot: BEEMO_TEST_ROOT,
+  Object.assign(tool.options, {
+    appPath: BEEMO_APP_PATH,
+    root: BEEMO_TEST_ROOT,
+    workspaceRoot: BEEMO_TEST_ROOT,
+  });
+
+  Object.assign(tool.config, {
+    configure: {
+      cleanup: false,
+      parallel: true,
     },
-    {
-      configure: {
-        cleanup: false,
-        parallel: true,
-      },
-      drivers: [],
-      execute: {
-        concurrency: 0,
-        priority: true,
-      },
-      scripts: [],
+    drivers: [],
+    execute: {
+      concurrency: 0,
+      priority: true,
     },
-    false,
-  );
-
-  // Stub out emitter
-  const baseOn = tool.on.bind(tool);
-
-  tool.on = jest.fn((...args) => baseOn(...args));
+    scripts: [],
+  });
 
   return tool;
 }
 
 export function mockDriver<C extends object = {}>(
   name: string,
-  tool: BeemoTool | null = null,
+  tool: Beemo | null = null,
   metadata: Partial<DriverMetadata> = {},
 ): Driver<C> {
   const driver = new TestDriver<C>();
@@ -90,7 +79,7 @@ export function mockDriver<C extends object = {}>(
 
 export function mockScript<C extends object = {}>(
   name: string,
-  tool: BeemoTool | null = null,
+  tool: Beemo | null = null,
 ): Script<{}, C> {
   const script = new TestScript<{}, C>();
 

@@ -22,7 +22,7 @@ import ScaffoldContext from './contexts/ScaffoldContext';
 import { KEBAB_PATTERN } from './constants';
 import { Argv, Execution, BeemoPluginRegistry, BeemoConfig } from './types';
 
-const configBlueprint = {
+export const configBlueprint = {
   configure: shape({
     cleanup: bool(false),
     parallel: bool(true),
@@ -51,7 +51,7 @@ export default class Beemo extends Tool<BeemoPluginRegistry, BeemoConfig> {
 
   onScaffold = new Event<[ScaffoldContext, string, string, string?]>('scaffold');
 
-  constructor(argv: Argv, binName?: string) {
+  constructor(argv: Argv, binName?: string, initialize: boolean = true) {
     super(
       {
         appName: 'beemo',
@@ -67,11 +67,14 @@ export default class Beemo extends Tool<BeemoPluginRegistry, BeemoConfig> {
     const { version } = require('../package.json');
 
     this.debug('Using beemo v%s', version);
+    this.registerPlugin('driver', Driver);
+    this.registerPlugin('script', Script);
 
-    // Immediately load config and plugins
-    this.registerPlugin('driver', Driver)
-      .registerPlugin('script', Script)
-      .initialize();
+    if (!initialize) {
+      return;
+    }
+
+    this.initialize();
 
     // Set footer after messages have been loaded
     const footer = this.msg('app:poweredBy', { version });
@@ -269,7 +272,7 @@ export default class Beemo extends Tool<BeemoPluginRegistry, BeemoConfig> {
   /**
    * Setup and start a fresh pipeline.
    */
-  protected startPipeline<T extends Context>(context: T): Pipeline<T, Beemo> {
+  startPipeline<T extends Context>(context: T): Pipeline<T, Beemo> {
     // Make the tool available to all processes
     process.beemo = {
       context,

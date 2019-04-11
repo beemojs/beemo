@@ -1,4 +1,4 @@
-import { Tool } from '@boost/core';
+import Beemo from '../../src/Beemo';
 import RunScriptRoutine from '../../src/execute/RunScriptRoutine';
 import {
   mockTool,
@@ -10,7 +10,7 @@ import {
 
 describe('RunScriptRoutine', () => {
   let routine: RunScriptRoutine;
-  let tool: Tool<any, any>;
+  let tool: Beemo;
 
   beforeEach(() => {
     tool = mockTool();

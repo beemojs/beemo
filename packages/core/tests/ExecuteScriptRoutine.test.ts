@@ -290,12 +290,13 @@ describe('ExecuteScriptRoutine', () => {
       expect(routine.tool.addPlugin).toHaveBeenCalledWith('script', script);
     });
 
-    it('triggers `load-script` event', () => {
-      const spy = jest.spyOn(routine.tool, 'emit');
+    it('emits `onLoadPlugin` event with "script" scope', () => {
+      const spy = jest.fn();
 
+      routine.tool.onLoadPlugin.listen(spy, 'script');
       routine.handlePostLoad(routine.context, script);
 
-      expect(spy).toHaveBeenCalledWith('plugin-name.load-script', [routine.context, script]);
+      expect(spy).toHaveBeenCalledWith(script);
     });
   });
 });
