@@ -22,19 +22,21 @@ import ScaffoldContext from './contexts/ScaffoldContext';
 import { KEBAB_PATTERN } from './constants';
 import { Argv, Execution, BeemoPluginRegistry, BeemoConfig } from './types';
 
-export const configBlueprint = {
-  configure: shape({
-    cleanup: bool(false),
-    parallel: bool(true),
-  }),
-  execute: shape({
-    concurrency: number(),
-    priority: bool(true),
-  }),
-  module: process.env.BEEMO_CONFIG_MODULE
-    ? string(process.env.BEEMO_CONFIG_MODULE)
-    : string().required(),
-};
+export function configBlueprint() {
+  return {
+    configure: shape({
+      cleanup: bool(false),
+      parallel: bool(true),
+    }),
+    execute: shape({
+      concurrency: number(),
+      priority: bool(true),
+    }),
+    module: process.env.BEEMO_CONFIG_MODULE
+      ? string(process.env.BEEMO_CONFIG_MODULE)
+      : string().required(),
+  };
+}
 
 export default class Beemo extends Tool<BeemoPluginRegistry, BeemoConfig> {
   moduleRoot: string = '';
@@ -51,13 +53,13 @@ export default class Beemo extends Tool<BeemoPluginRegistry, BeemoConfig> {
 
   onScaffold = new Event<[ScaffoldContext, string, string, string?]>('scaffold');
 
-  constructor(argv: Argv, binName?: string, initialize: boolean = true) {
+  constructor(argv: Argv, binName?: string, testingOnly: boolean = false) {
     super(
       {
         appName: 'beemo',
         appPath: path.join(__dirname, '..'),
-        configBlueprint,
-        configName: binName,
+        configBlueprint: configBlueprint(),
+        configName: binName || 'beemo',
         scoped: true,
       },
       argv,
@@ -70,7 +72,8 @@ export default class Beemo extends Tool<BeemoPluginRegistry, BeemoConfig> {
     this.registerPlugin('driver', Driver);
     this.registerPlugin('script', Script);
 
-    if (!initialize) {
+    // Abort early for testing purposes
+    if (testingOnly) {
       return;
     }
 
@@ -128,6 +131,7 @@ export default class Beemo extends Tool<BeemoPluginRegistry, BeemoConfig> {
     if (driverNames.length === 0) {
       this.getPlugins('driver').forEach(driver => {
         context.addDriverDependency(driver);
+        driverNames.push(driver.name);
       });
 
       this.debug('Running with all drivers');
@@ -139,9 +143,9 @@ export default class Beemo extends Tool<BeemoPluginRegistry, BeemoConfig> {
       });
 
       this.debug('Running with %s driver(s)', driverNames.join(', '));
-
-      this.onRunConfig.emit([context, driverNames]);
     }
+
+    this.onRunConfig.emit([context, driverNames]);
 
     return this.startPipeline(context)
       .pipe(new ConfigureRoutine('config', this.msg('app:configGenerate')))
@@ -201,6 +205,9 @@ export default class Beemo extends Tool<BeemoPluginRegistry, BeemoConfig> {
     const version = driver.getVersion();
 
     this.onRunDriver.emit([context, driverName, driver]);
+
+    // TEMP until upstream config is updated
+    this.emit(`${driverName}.init-driver`, [context, driver]);
 
     this.debug('Running with %s v%s driver', driverName, version);
 

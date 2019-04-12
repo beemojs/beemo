@@ -39,8 +39,10 @@ describe('CleanupRoutine', () => {
       expect(result).toEqual([true, true]);
     });
 
-    it('triggers `delete-config-file` event', async () => {
-      const spy = jest.spyOn(routine.tool, 'emit');
+    it('emits `onDeleteConfigFile` event', async () => {
+      const spy = jest.fn();
+
+      routine.context.primaryDriver.onDeleteConfigFile.listen(spy);
 
       routine.context.configPaths = [
         { driver: 'foo', path: './foo.json' },
@@ -49,8 +51,8 @@ describe('CleanupRoutine', () => {
 
       await routine.deleteConfigFiles(routine.context);
 
-      expect(spy).toHaveBeenCalledWith('foo.delete-config-file', [routine.context, './foo.json']);
-      expect(spy).toHaveBeenCalledWith('bar.delete-config-file', [routine.context, './.barrc']);
+      expect(spy).toHaveBeenCalledWith(routine.context, './foo.json');
+      expect(spy).toHaveBeenCalledWith(routine.context, './.barrc');
     });
   });
 });

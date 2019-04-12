@@ -203,55 +203,57 @@ describe('RunScriptRoutine', () => {
       expect(exSpy).not.toHaveBeenCalled();
     });
 
-    it('triggers `before-execute` event', async () => {
+    it('emits `onBeforeExecute` event', async () => {
       class MockScript extends TestScript {
         execute() {
           return Promise.resolve();
         }
       }
 
-      const spy = jest.spyOn(routine.tool, 'emit');
+      const spy = jest.fn();
       const script = new MockScript();
+
+      script.onBeforeExecute.listen(spy);
       script.bootstrap();
 
       routine.context.eventName = 'before';
 
       await routine.execute(routine.context, script);
 
-      expect(spy).toHaveBeenCalledWith('before.before-execute', [
-        routine.context,
-        routine.context.argv,
-        script,
-      ]);
+      expect(spy).toHaveBeenCalledWith(routine.context, routine.context.argv);
     });
 
-    it('triggers `after-execute` event on success', async () => {
+    it('emits `onAfterExecute` event on success', async () => {
       class SuccessScript extends TestScript {
         execute() {
           return Promise.resolve(123);
         }
       }
 
-      const spy = jest.spyOn(routine.tool, 'emit');
+      const spy = jest.fn();
       const script = new SuccessScript();
+
+      script.onAfterExecute.listen(spy);
       script.bootstrap();
 
       routine.context.eventName = 'after';
 
       await routine.execute(routine.context, script);
 
-      expect(spy).toHaveBeenCalledWith('after.after-execute', [routine.context, 123, script]);
+      expect(spy).toHaveBeenCalledWith(routine.context, 123);
     });
 
-    it('triggers `failed-execute` event on failure', async () => {
+    it('emits `onFailedExecute` event on failure', async () => {
       class FailureScript extends TestScript {
         execute() {
           return Promise.reject(new Error('Oops'));
         }
       }
 
-      const spy = jest.spyOn(routine.tool, 'emit');
+      const spy = jest.fn();
       const script = new FailureScript();
+
+      script.onFailedExecute.listen(spy);
       script.bootstrap();
 
       routine.context.eventName = 'fail';
@@ -259,7 +261,7 @@ describe('RunScriptRoutine', () => {
       try {
         await routine.execute(routine.context, script);
       } catch (error) {
-        expect(spy).toHaveBeenCalledWith('fail.failed-execute', [routine.context, error, script]);
+        expect(spy).toHaveBeenCalledWith(routine.context, error);
       }
     });
   });

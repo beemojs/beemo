@@ -118,17 +118,16 @@ describe('ConfigureRoutine', () => {
       ]);
     });
 
-    it('triggers `resolve-dependencies` event', async () => {
-      const spy = jest.spyOn(routine.tool, 'emit');
+    it('emits `onResolveDependencies` event', async () => {
+      const spy = jest.fn();
+
+      routine.tool.onResolveDependencies.listen(spy);
 
       driver.metadata.dependencies = ['bar'];
 
       await routine.resolveDependencies();
 
-      expect(spy).toHaveBeenCalledWith('beemo.resolve-dependencies', [
-        routine.context,
-        Array.from(routine.context.drivers),
-      ]);
+      expect(spy).toHaveBeenCalledWith(routine.context, Array.from(routine.context.drivers));
     });
   });
 });

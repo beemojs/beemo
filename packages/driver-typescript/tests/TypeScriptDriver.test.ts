@@ -227,7 +227,7 @@ describe('TypeScriptDriver', () => {
       );
     });
 
-    it('emits `create-project-config-file` event', () => {
+    it('emits `onCreateProjectConfigFile` event', () => {
       const spy = jest.fn((ctx, filePath, config, isTests) => {
         if (isTests) {
           config.compilerOptions.testsOnly = true;

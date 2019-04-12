@@ -88,7 +88,7 @@ describe('PrettierDriver', () => {
       expect(config).toEqual({ semi: true });
     });
 
-    it('emits `create-ignore-file` event', () => {
+    it('emits `onCreateIgnoreFile` event', () => {
       const createSpy = jest.fn((ctx, path, config) => {
         config.ignore.push('qux');
       });

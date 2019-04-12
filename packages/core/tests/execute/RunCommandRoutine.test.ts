@@ -337,7 +337,7 @@ describe('RunCommandRoutine', () => {
 
       routine.bootstrap();
 
-      const response = await routine.execute();
+      const response = await routine.execute(routine.context, null);
 
       expect(argSpy).toHaveBeenCalledWith(routine.context, expect.anything(), expect.anything());
       expect(globSpy).toHaveBeenCalledWith(
@@ -371,7 +371,7 @@ describe('RunCommandRoutine', () => {
 
       routine.bootstrap();
 
-      await routine.execute();
+      await routine.execute(routine.context, null);
 
       expect(optSpy).toHaveBeenCalledWith(routine.context, ['baz'], expect.anything());
       expect(runSpy).toHaveBeenCalledWith(
@@ -388,7 +388,7 @@ describe('RunCommandRoutine', () => {
 
       routine.bootstrap();
 
-      await routine.execute();
+      await routine.execute(routine.context, null);
 
       expect(filterSpy).not.toHaveBeenCalled();
     });
@@ -401,7 +401,7 @@ describe('RunCommandRoutine', () => {
 
       routine.bootstrap();
 
-      await routine.execute();
+      await routine.execute(routine.context, null);
 
       expect(copySpy).toHaveBeenCalledWith(routine.context, ['baz'], expect.anything());
     });
@@ -413,7 +413,7 @@ describe('RunCommandRoutine', () => {
 
       routine.bootstrap();
 
-      await routine.execute();
+      await routine.execute(routine.context, null);
 
       expect(copySpy).not.toHaveBeenCalled();
     });
@@ -425,7 +425,7 @@ describe('RunCommandRoutine', () => {
 
       routine.bootstrap();
 
-      await routine.execute();
+      await routine.execute(routine.context, null);
 
       expect(copySpy).not.toHaveBeenCalled();
     });
@@ -679,32 +679,30 @@ describe('RunCommandRoutine', () => {
       }
     });
 
-    it('triggers `before-execute` event', async () => {
-      const spy = jest.spyOn(routine.tool, 'emit');
+    it('emits `onBeforeExecute` event', async () => {
+      const spy = jest.fn();
+
+      driver.onBeforeExecute.listen(spy);
 
       await routine.runCommandWithArgs(routine.context, ['--wtf'], task);
 
-      expect(spy).toHaveBeenCalledWith('babel.before-execute', [
-        routine.context,
-        ['--wtf'],
-        driver,
-      ]);
+      expect(spy).toHaveBeenCalledWith(routine.context, ['--wtf']);
     });
 
-    it('triggers `after-execute` event on success', async () => {
-      const spy = jest.spyOn(routine.tool, 'emit');
+    it('emits `onAfterExecute` event on success', async () => {
+      const spy = jest.fn();
+
+      driver.onAfterExecute.listen(spy);
 
       await routine.runCommandWithArgs(routine.context, ['--wtf'], task);
 
-      expect(spy).toHaveBeenCalledWith('babel.after-execute', [
-        routine.context,
-        { success: true },
-        driver,
-      ]);
+      expect(spy).toHaveBeenCalledWith(routine.context, { success: true });
     });
 
-    it('triggers `failed-execute` event on failure', async () => {
-      const spy = jest.spyOn(routine.tool, 'emit');
+    it('emits `onFailedExecute` event on failure', async () => {
+      const spy = jest.fn();
+
+      driver.onFailedExecute.listen(spy);
 
       (routine.executeCommand as jest.Mock).mockImplementation(() =>
         Promise.reject(new Error('Oops')),
@@ -713,7 +711,7 @@ describe('RunCommandRoutine', () => {
       try {
         await routine.runCommandWithArgs(routine.context, ['--wtf'], task);
       } catch (error) {
-        expect(spy).toHaveBeenCalledWith('babel.failed-execute', [routine.context, error, driver]);
+        expect(spy).toHaveBeenCalledWith(routine.context, error);
       }
     });
   });

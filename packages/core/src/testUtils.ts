@@ -3,7 +3,7 @@
 import path from 'path';
 import execa from 'execa';
 import parseArgs from 'yargs-parser';
-import { mockDebugger, stubArgs } from '@boost/core/test-utils';
+import { mockDebugger, stubArgs, stubToolConfig } from '@boost/core/test-utils';
 import Beemo from './Beemo';
 import Driver from './Driver';
 import Script from './Script';
@@ -12,7 +12,7 @@ import ConfigContext, { ConfigArgs } from './contexts/ConfigContext';
 import DriverContext, { DriverArgs } from './contexts/DriverContext';
 import ScaffoldContext, { ScaffoldArgs } from './contexts/ScaffoldContext';
 import ScriptContext, { ScriptArgs } from './contexts/ScriptContext';
-import { DriverMetadata } from './types';
+import { DriverMetadata, Argv, BeemoConfig } from './types';
 
 export { mockDebugger, stubArgs };
 
@@ -30,16 +30,17 @@ export const BEEMO_APP_PATH = path.join(__dirname, '..');
 // Use a folder that should not cause issues / contain much code
 export const BEEMO_TEST_ROOT = path.join(__dirname, '../../../tests');
 
-export function mockTool(): Beemo {
-  const tool = new Beemo([], 'beemo', false);
+export function mockTool(argv: Argv = []): Beemo {
+  const tool = new Beemo(argv, '', true);
 
   Object.assign(tool.options, {
+    appName: 'beemo',
     appPath: BEEMO_APP_PATH,
     root: BEEMO_TEST_ROOT,
     workspaceRoot: BEEMO_TEST_ROOT,
   });
 
-  Object.assign(tool.config, {
+  tool.config = stubToolConfig<BeemoConfig>({
     configure: {
       cleanup: false,
       parallel: true,

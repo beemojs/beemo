@@ -5,6 +5,7 @@ import Beemo, { configBlueprint } from '../src/Beemo';
 import Context from '../src/contexts/Context';
 import DriverContext from '../src/contexts/DriverContext';
 import {
+  mockTool,
   mockDriver,
   stubArgs,
   stubContext,
@@ -33,30 +34,14 @@ jest.mock('../../../tests', () => jest.fn());
 const root = path.join(__dirname, '../../../tests');
 
 describe('Beemo', () => {
-  const oldExistsSync = fs.existsSync;
-  const oldReadJsonSync = fs.readJsonSync;
-  const oldRemoveSync = fs.removeSync;
   let beemo: Beemo;
-  let onSpy: jest.Mock;
 
   beforeEach(() => {
-    beemo = new Beemo(['foo', 'bar'], '');
+    beemo = mockTool(['foo', 'bar']);
     beemo.moduleRoot = root;
     beemo.options.root = root;
 
-    // Stop `exit` event from firing
-    onSpy = jest.fn();
-    beemo.onExit.emit = onSpy;
-
-    fs.existsSync = jest.fn();
-    fs.readJsonSync = jest.fn();
-    fs.removeSync = jest.fn();
-  });
-
-  afterEach(() => {
-    fs.existsSync = oldExistsSync;
-    fs.readJsonSync = oldReadJsonSync;
-    fs.removeSync = oldRemoveSync;
+    (bootstrapIndex as jest.Mock).mockReset();
   });
 
   it('sets argv', () => {
@@ -64,13 +49,19 @@ describe('Beemo', () => {
   });
 
   describe('bootstrapConfigModule()', () => {
+    let existsSpy: jest.SpyInstance;
+
     beforeEach(() => {
-      (bootstrapIndex as jest.Mock).mockReset();
+      existsSpy = jest.spyOn(fs, 'existsSync');
       beemo.config.module = '@local';
     });
 
+    afterEach(() => {
+      existsSpy.mockRestore();
+    });
+
     it('does nothing if no index file', () => {
-      (fs.existsSync as jest.Mock).mockImplementation(() => false);
+      existsSpy.mockImplementation(() => false);
 
       beemo.bootstrapConfigModule();
 
@@ -78,7 +69,7 @@ describe('Beemo', () => {
     });
 
     it('calls bootstrap with tool if index exists', () => {
-      (fs.existsSync as jest.Mock).mockImplementation(() => true);
+      existsSpy.mockImplementation(() => true);
 
       beemo.bootstrapConfigModule();
 
@@ -93,20 +84,36 @@ describe('Beemo', () => {
       beemo.getPlugins = () => [mockDriver('foo'), mockDriver('bar'), mockDriver('baz')];
     });
 
-    it('emits `onRunConfig` event with context', async () => {
+    it('emits `onRunConfig` event for a single driver', async () => {
       const spy = jest.fn();
 
       beemo.onRunConfig.listen(spy);
 
       await beemo.createConfigFiles(stubConfigArgs(), ['foo']);
 
-      expect(spy).toHaveBeenCalledWith('foo.init-driver', [
+      expect(spy).toHaveBeenCalledWith(
         expect.objectContaining({
           argv: ['foo', 'bar'],
           drivers: expect.anything(),
         }),
-        expect.objectContaining({ name: 'foo' }),
-      ]);
+        ['foo'],
+      );
+    });
+
+    it('emits `onRunConfig` event for all drivers', async () => {
+      const spy = jest.fn();
+
+      beemo.onRunConfig.listen(spy);
+
+      await beemo.createConfigFiles(stubConfigArgs(), []);
+
+      expect(spy).toHaveBeenCalledWith(
+        expect.objectContaining({
+          argv: ['foo', 'bar'],
+          drivers: expect.anything(),
+        }),
+        ['foo', 'bar', 'baz'],
+      );
     });
 
     it('passes context to pipeline', async () => {
@@ -146,28 +153,6 @@ describe('Beemo', () => {
     });
   });
 
-  describe('getConfigBlueprint()', () => {
-    it('errors if no module', () => {
-      expect(() => {
-        optimal({}, configBlueprint);
-      }).toThrowErrorMatchingSnapshot();
-    });
-
-    it('doesnt error if module is defined with env var', () => {
-      process.env.BEEMO_CONFIG_MODULE = 'test-boost';
-
-      let opts: any = {};
-
-      expect(() => {
-        opts = optimal({}, configBlueprint);
-      }).not.toThrowError();
-
-      expect(opts.module).toBe('test-boost');
-
-      process.env.BEEMO_CONFIG_MODULE = '';
-    });
-  });
-
   describe('getConfigModuleRoot()', () => {
     beforeEach(() => {
       beemo.moduleRoot = '';
@@ -198,40 +183,45 @@ describe('Beemo', () => {
     });
 
     it('returns node module path', () => {
-      (fs.existsSync as jest.Mock).mockImplementation(() => true);
+      const existsSpy = jest.spyOn(fs, 'existsSync').mockImplementation(() => true);
+      const rootPath = path.join(process.cwd(), 'node_modules/boost');
 
       beemo.config.module = 'boost';
-
-      const rootPath = path.join(process.cwd(), 'node_modules/boost');
 
       expect(beemo.getConfigModuleRoot()).toBe(rootPath);
       expect(beemo.moduleRoot).toBe(rootPath);
       expect(beemo.getConfigModuleRoot()).toBe(beemo.moduleRoot);
+
+      existsSpy.mockRestore();
     });
   });
 
   describe('handleCleanupOnFailure()', () => {
     let context: DriverContext;
+    let removeSpy: jest.SpyInstance;
 
     beforeEach(() => {
       context = stubDriverContext();
-
-      (fs.removeSync as jest.Mock).mockReset();
+      removeSpy = jest.spyOn(fs, 'removeSync').mockImplementation(() => true);
 
       beemo.config.configure.cleanup = true;
       beemo.startPipeline(context);
     });
 
+    afterEach(() => {
+      removeSpy.mockRestore();
+    });
+
     it('does nothing if exit code is 0', () => {
       beemo.onExit.emit([0]);
 
-      expect(fs.removeSync).not.toHaveBeenCalled();
+      expect(removeSpy).not.toHaveBeenCalled();
     });
 
     it('does nothing if no config paths', () => {
       beemo.onExit.emit([1]);
 
-      expect(fs.removeSync).not.toHaveBeenCalled();
+      expect(removeSpy).not.toHaveBeenCalled();
     });
 
     it('removes file for each config path', () => {
@@ -239,8 +229,8 @@ describe('Beemo', () => {
 
       beemo.onExit.emit([1]);
 
-      expect(fs.removeSync).toHaveBeenCalledWith('foo');
-      expect(fs.removeSync).toHaveBeenCalledWith('bar');
+      expect(removeSpy).toHaveBeenCalledWith('foo');
+      expect(removeSpy).toHaveBeenCalledWith('bar');
     });
   });
 
@@ -261,13 +251,14 @@ describe('Beemo', () => {
 
       await beemo.executeDriver(stubDriverArgs(), 'foo-bar');
 
-      expect(spy).toHaveBeenCalledWith('foo-bar.init-driver', [
+      expect(spy).toHaveBeenCalledWith(
         expect.objectContaining({
           argv: ['foo', 'bar'],
           driverName: 'foo-bar',
         }),
+        'foo-bar',
         expect.objectContaining({ name: 'foo-bar' }),
-      ]);
+      );
     });
 
     it('passes driver name and context to pipeline run', async () => {
@@ -336,13 +327,13 @@ describe('Beemo', () => {
 
       await beemo.executeScript(stubScriptArgs(), 'foo-bar');
 
-      expect(spy).toHaveBeenCalledWith('foo-bar.init-script', [
+      expect(spy).toHaveBeenCalledWith(
         expect.objectContaining({
           argv: ['foo', 'bar'],
           scriptName: 'foo-bar',
         }),
         'foo-bar',
-      ]);
+      );
     });
   });
 
@@ -381,19 +372,21 @@ describe('Beemo', () => {
     });
 
     it('registers an exit listener if cleanup is true', async () => {
-      beemo.config.configure.cleanup = true;
+      expect(beemo.onExit.getListeners().size).toBe(0);
 
+      beemo.config.configure.cleanup = true;
       beemo.startPipeline(stubContext());
 
-      expect(onSpy).toHaveBeenCalledWith('exit', expect.any(Function));
+      expect(beemo.onExit.getListeners().size).toBe(1);
     });
 
     it('doesnt register exit listener if cleanup is false', async () => {
-      beemo.config.configure.cleanup = false;
+      expect(beemo.onExit.getListeners().size).toBe(0);
 
+      beemo.config.configure.cleanup = false;
       beemo.startPipeline(stubContext());
 
-      expect(onSpy).not.toHaveBeenCalled();
+      expect(beemo.onExit.getListeners().size).toBe(0);
     });
   });
 
@@ -427,5 +420,27 @@ describe('Beemo', () => {
         }),
       );
     });
+  });
+});
+
+describe('configBlueprint()', () => {
+  it('errors if no module', () => {
+    expect(() => {
+      optimal({}, configBlueprint());
+    }).toThrowErrorMatchingSnapshot();
+  });
+
+  it('doesnt error if module is defined with env var', () => {
+    process.env.BEEMO_CONFIG_MODULE = 'test-boost';
+
+    let opts: any = {};
+
+    expect(() => {
+      opts = optimal({}, configBlueprint());
+    }).not.toThrowError();
+
+    expect(opts.module).toBe('test-boost');
+
+    process.env.BEEMO_CONFIG_MODULE = '';
   });
 });

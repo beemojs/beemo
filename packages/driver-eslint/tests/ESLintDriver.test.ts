@@ -115,12 +115,12 @@ describe('ESLintDriver', () => {
       expect(config).toEqual({ parser: 'babel' });
     });
 
-    it('emits `create-ignore-file` event', () => {
+    it('emits `onCreateIgnoreFile` event', () => {
       const createSpy = jest.fn((ctx, path, config) => {
         config.ignore.push('qux');
       });
 
-      driver.tool.on('eslint.create-ignore-file', createSpy);
+      driver.onCreateIgnoreFile.listen(createSpy);
 
       const config = {
         parser: 'babel',
