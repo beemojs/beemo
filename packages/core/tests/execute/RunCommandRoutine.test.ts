@@ -13,8 +13,6 @@ import {
   getRoot,
 } from '../../src/testUtils';
 
-jest.mock('fs-extra');
-
 const BABEL_HELP = `
 Usage: babel [options] <files ...>
 
@@ -288,7 +286,7 @@ describe('RunCommandRoutine', () => {
         stream.stdout.emit();
         stream.stdout.emit();
 
-        routine.tool.console.emit('error', [new SignalError('Error', 'SIGINT')]);
+        routine.tool.console.onError.emit([new SignalError('Error', 'SIGINT')]);
 
         expect(writeSpy).toHaveBeenCalledWith('\n\nbufferedbufferedbuffered');
       });
@@ -300,7 +298,7 @@ describe('RunCommandRoutine', () => {
         stream.stdout.emit();
         stream.stdout.emit();
 
-        routine.tool.console.emit('error', [new SignalError('Error', 'SIGABRT')]);
+        routine.tool.console.onError.emit([new SignalError('Error', 'SIGABRT')]);
 
         expect(writeSpy).not.toHaveBeenCalled();
       });
@@ -312,7 +310,7 @@ describe('RunCommandRoutine', () => {
         stream.stdout.emit();
         stream.stdout.emit();
 
-        routine.tool.console.emit('error', [new Error('Error')]);
+        routine.tool.console.onError.emit([new Error('Error')]);
 
         expect(writeSpy).not.toHaveBeenCalled();
       });
@@ -433,6 +431,8 @@ describe('RunCommandRoutine', () => {
 
   describe('copyConfigToWorkspacePackage()', () => {
     it('copies each config into workspace root', async () => {
+      const copySpy = jest.spyOn(fs, 'copyFileSync').mockImplementation(() => true);
+
       routine.options.packageRoot = '/some/root';
       routine.context.configPaths = [
         { driver: 'babel', path: '.babelrc' },
@@ -442,8 +442,10 @@ describe('RunCommandRoutine', () => {
       const args = await routine.copyConfigToWorkspacePackage(routine.context, ['foo', '--bar']);
 
       expect(args).toEqual(['foo', '--bar']);
-      expect(fs.copyFileSync).toHaveBeenCalledWith('.babelrc', '/some/root/.babelrc');
-      expect(fs.copyFileSync).toHaveBeenCalledWith('jest.json', '/some/root/jest.json');
+      expect(copySpy).toHaveBeenCalledWith('.babelrc', '/some/root/.babelrc');
+      expect(copySpy).toHaveBeenCalledWith('jest.json', '/some/root/jest.json');
+
+      copySpy.mockRestore();
     });
   });
 

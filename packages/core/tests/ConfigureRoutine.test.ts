@@ -12,7 +12,7 @@ describe('ConfigureRoutine', () => {
   beforeEach(() => {
     plugins = {};
     tool = mockTool();
-    driver = mockDriver('foo');
+    driver = mockDriver('foo', tool);
 
     routine = new ConfigureRoutine('config', 'Generating configurations');
     routine.tool = tool;
@@ -60,9 +60,9 @@ describe('ConfigureRoutine', () => {
 
   describe('setupConfigFiles()', () => {
     it('pipes a routine for each driver', async () => {
-      const foo = mockDriver('foo');
-      const bar = mockDriver('bar');
-      const baz = mockDriver('baz');
+      const foo = mockDriver('foo', tool);
+      const bar = mockDriver('bar', tool);
+      const baz = mockDriver('baz', tool);
 
       expect(routine.routines).toHaveLength(0);
 

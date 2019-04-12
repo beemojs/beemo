@@ -21,7 +21,7 @@ describe('Script', () => {
     it('executes tasks serially by default', async () => {
       const spy = jest.spyOn(script, 'executeTasks');
 
-      await script.execute(stubScriptContext(), {});
+      await script.execute(stubScriptContext(script), {});
 
       expect(spy).toHaveBeenCalledWith('serial');
     });

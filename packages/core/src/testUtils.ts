@@ -16,9 +16,13 @@ import { DriverMetadata, Argv, BeemoConfig } from './types';
 
 export { mockDebugger, stubArgs };
 
-export class TestDriver<T extends object = {}> extends Driver<T> {}
+export class TestDriver<T extends object = {}> extends Driver<T> {
+  name = 'test-driver';
+}
 
 export class TestScript<A extends object = {}, T extends object = {}> extends Script<A, T> {
+  name = 'test-script';
+
   blueprint() {
     return {} as any;
   }

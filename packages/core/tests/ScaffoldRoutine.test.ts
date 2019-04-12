@@ -8,7 +8,7 @@ describe('ScaffoldRoutine', () => {
   let routine: ScaffoldRoutine;
 
   beforeEach(() => {
-    routine = new ScaffoldRoutine('sync', 'Syncing dotfiles');
+    routine = new ScaffoldRoutine('scaffold', 'Scaffolding templates');
     routine.context = stubScaffoldContext();
     routine.tool = mockTool();
     routine.debug = mockDebugger();

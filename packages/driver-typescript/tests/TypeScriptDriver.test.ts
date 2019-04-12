@@ -11,17 +11,14 @@ jest.mock('rimraf');
 const PROJECT_REFS_FIXTURE_PATH = getFixturePath('project-refs');
 const PROJECT_REFS_ROOT_CONFIG = path.join(PROJECT_REFS_FIXTURE_PATH, 'tsconfig.json');
 const PROJECT_REFS_OPTIONS_CONFIG = path.join(PROJECT_REFS_FIXTURE_PATH, 'tsconfig.options.json');
-const oldWriteFileSync = fs.writeFileSync;
 
 describe('TypeScriptDriver', () => {
   let driver: TypeScriptDriver;
   let context: DriverContext;
-  let writeSpy: jest.Mock;
+  let writeSpy: jest.SpyInstance;
+  let writeSyncSpy: jest.SpyInstance;
 
   beforeEach(() => {
-    writeSpy = jest.fn();
-    fs.writeFileSync = writeSpy;
-
     driver = new TypeScriptDriver();
     driver.tool = mockTool();
     driver.bootstrap();
@@ -30,10 +27,17 @@ describe('TypeScriptDriver', () => {
     };
 
     context = stubDriverContext(driver);
+
+    writeSyncSpy = jest.spyOn(fs, 'writeFileSync').mockImplementation(() => null);
+    writeSpy = jest.spyOn(fs, 'writeFile').mockImplementation((fp, config, cb) => {
+      // @ts-ignore
+      cb(null);
+    });
   });
 
   afterEach(() => {
-    fs.writeFileSync = oldWriteFileSync;
+    writeSpy.mockRestore();
+    writeSyncSpy.mockRestore();
   });
 
   it('sets options from constructor', () => {
@@ -90,6 +94,7 @@ describe('TypeScriptDriver', () => {
           include: ['src/**/*', 'types/**/*'],
           references: [{ path: '../foo' }],
         }),
+        expect.anything(),
       );
 
       expect(writeSpy).toHaveBeenCalledWith(
@@ -105,6 +110,7 @@ describe('TypeScriptDriver', () => {
           include: ['src/**/*', 'types/**/*'],
           references: [{ path: '../foo' }, { path: '../bar' }],
         }),
+        expect.anything(),
       );
 
       expect(writeSpy).toHaveBeenCalledWith(
@@ -119,6 +125,7 @@ describe('TypeScriptDriver', () => {
           include: ['**/*', '../types/**/*'],
           references: [{ path: '..' }],
         }),
+        expect.anything(),
       );
 
       expect(writeSpy).toHaveBeenCalledWith(
@@ -134,6 +141,7 @@ describe('TypeScriptDriver', () => {
           include: ['src/**/*', 'types/**/*'],
           references: [],
         }),
+        expect.anything(),
       );
     });
 
@@ -155,6 +163,7 @@ describe('TypeScriptDriver', () => {
           include: ['source/**/*', 'types/**/*'],
           references: [{ path: '../foo' }],
         }),
+        expect.anything(),
       );
     });
 
@@ -175,6 +184,7 @@ describe('TypeScriptDriver', () => {
           include: ['**/*', '../typings/**/*'],
           references: [{ path: '..' }],
         }),
+        expect.anything(),
       );
 
       expect(writeSpy).toHaveBeenCalledWith(
@@ -190,6 +200,7 @@ describe('TypeScriptDriver', () => {
           include: ['src/**/*', 'typings/**/*'],
           references: [],
         }),
+        expect.anything(),
       );
     });
 
@@ -210,6 +221,7 @@ describe('TypeScriptDriver', () => {
           include: ['src/**/*', 'types/**/*', '../../types/**/*'],
           references: [{ path: '../foo' }, { path: '../bar' }],
         }),
+        expect.anything(),
       );
 
       expect(writeSpy).toHaveBeenCalledWith(
@@ -224,6 +236,7 @@ describe('TypeScriptDriver', () => {
           include: ['**/*', '../types/**/*', '../../../types/**/*'],
           references: [{ path: '..' }],
         }),
+        expect.anything(),
       );
     });
 
@@ -237,7 +250,6 @@ describe('TypeScriptDriver', () => {
       });
 
       driver.onCreateProjectConfigFile.listen(spy);
-
       driver.createProjectRefConfigsInWorkspaces(context, PROJECT_REFS_FIXTURE_PATH);
 
       expect(spy).toHaveBeenCalledTimes(4);
@@ -255,6 +267,7 @@ describe('TypeScriptDriver', () => {
           include: ['**/*', '../types/**/*'],
           references: [{ path: '..' }],
         }),
+        expect.anything(),
       );
 
       expect(writeSpy).toHaveBeenCalledWith(
@@ -271,6 +284,7 @@ describe('TypeScriptDriver', () => {
           include: ['src/**/*', 'types/**/*'],
           references: [{ path: '../foo' }, { path: '../bar' }],
         }),
+        expect.anything(),
       );
     });
   });
@@ -323,7 +337,7 @@ describe('TypeScriptDriver', () => {
         config,
       );
 
-      expect(writeSpy).toHaveBeenCalledWith(
+      expect(writeSyncSpy).toHaveBeenCalledWith(
         PROJECT_REFS_OPTIONS_CONFIG,
         driver.formatConfig({
           compilerOptions: {

@@ -11,6 +11,7 @@ jest.mock('@boost/core/lib/ModuleLoader', () =>
     importModule: jest.fn(tempName => {
       const { basename } = require.requireActual('path');
       const kebabCase = require.requireActual('lodash/kebabCase');
+      const BaseScript = require.requireActual('../src/Script').default;
       let name = tempName.includes('/') ? basename(tempName) : tempName;
 
       if (tempName.endsWith('Missing.js') || tempName === 'missing') {
@@ -19,13 +20,21 @@ jest.mock('@boost/core/lib/ModuleLoader', () =>
 
       name = kebabCase(name.replace('.js', ''));
 
-      return {
-        name,
-        moduleName: `beemo-script-${name}`,
-        args: jest.fn(() => ({})),
-        boostrap: jest.fn(),
-        execute: () => Promise.resolve(123),
-      };
+      class MockScript extends BaseScript {
+        name = name;
+
+        moduleName = `beemo-script-${name}`;
+
+        blueprint() {
+          return {};
+        }
+
+        execute() {
+          return Promise.resolve(123);
+        }
+      }
+
+      return new MockScript();
     }),
   })),
 );
@@ -46,18 +55,17 @@ describe('ExecuteScriptRoutine', () => {
   }
 
   beforeEach(() => {
-    script = mockScript('plugin-name');
+    const tool = mockTool();
+
+    script = mockScript('plugin-name', tool);
 
     routine = new ExecuteScriptRoutine('script', 'Executing script');
-    routine.context = stubScriptContext();
-    routine.tool = mockTool();
+    routine.context = stubScriptContext(script);
+    routine.tool = tool;
     routine.debug = mockDebugger();
 
     routine.context.scriptName = 'plugin-name';
     routine.context.eventName = 'plugin-name';
-
-    // TEMP
-    routine.tool.registerPlugin('script', Script);
 
     // @ts-ignore
     ModuleLoader.mockClear();
@@ -135,7 +143,6 @@ describe('ExecuteScriptRoutine', () => {
       const postSpy = jest.spyOn(routine, 'handlePostLoad');
 
       routine.bootstrap();
-      routine.tool.addPlugin = jest.fn();
 
       const response = await routine.execute(routine.context);
 
@@ -272,10 +279,6 @@ describe('ExecuteScriptRoutine', () => {
   });
 
   describe('handlePostLoad()', () => {
-    beforeEach(() => {
-      routine.tool.addPlugin = jest.fn();
-    });
-
     it('throws when previous errors exist and no script found', () => {
       routine.errors.push(new Error('One'), new Error('Two'), new Error('Three'));
 
@@ -285,9 +288,11 @@ describe('ExecuteScriptRoutine', () => {
     });
 
     it('adds plugin to tool', () => {
+      const spy = jest.spyOn(routine.tool, 'addPlugin');
+
       routine.handlePostLoad(routine.context, script);
 
-      expect(routine.tool.addPlugin).toHaveBeenCalledWith('script', script);
+      expect(spy).toHaveBeenCalledWith('script', script);
     });
 
     it('emits `onLoadPlugin` event with "script" scope', () => {

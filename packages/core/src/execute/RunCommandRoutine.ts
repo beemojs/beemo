@@ -88,7 +88,7 @@ export default class RunCommandRoutine extends Routine<DriverContext, Beemo, Run
 
     // When cmd/ctrl + c is pressed, write out the current buffer
     if (!args.live) {
-      this.tool.console.on('error', error => {
+      this.tool.console.onError.listen(error => {
         if (
           error instanceof SignalError &&
           (error.signal === 'SIGINT' || error.signal === 'SIGTERM')

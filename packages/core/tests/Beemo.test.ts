@@ -80,8 +80,12 @@ describe('Beemo', () => {
   describe('createConfigFiles()', () => {
     beforeEach(() => {
       // @ts-ignore
-      beemo.getPlugin = (type, name) => mockDriver(name);
-      beemo.getPlugins = () => [mockDriver('foo'), mockDriver('bar'), mockDriver('baz')];
+      beemo.getPlugin = (type, name) => mockDriver(name, beemo);
+      beemo.getPlugins = () => [
+        mockDriver('foo', beemo),
+        mockDriver('bar', beemo),
+        mockDriver('baz', beemo),
+      ];
     });
 
     it('emits `onRunConfig` event for a single driver', async () => {

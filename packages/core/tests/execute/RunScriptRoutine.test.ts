@@ -17,7 +17,7 @@ describe('RunScriptRoutine', () => {
 
     routine = new RunScriptRoutine('script', 'Run script');
     routine.tool = tool;
-    routine.context = stubScriptContext(mockScript('test'));
+    routine.context = stubScriptContext(mockScript('test', tool));
     routine.debug = mockDebugger();
     routine.bootstrap();
   });

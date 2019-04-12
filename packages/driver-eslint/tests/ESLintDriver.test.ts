@@ -6,7 +6,7 @@ import ESLintDriver from '../src/ESLintDriver';
 describe('ESLintDriver', () => {
   let driver: ESLintDriver;
   let context: DriverContext;
-  let spy: jest.SpyInstance;
+  let writeSpy: jest.SpyInstance;
 
   beforeEach(() => {
     driver = new ESLintDriver();
@@ -15,11 +15,11 @@ describe('ESLintDriver', () => {
 
     context = stubDriverContext(driver);
 
-    spy = jest.spyOn(fs, 'writeFileSync').mockImplementation(() => true);
+    writeSpy = jest.spyOn(fs, 'writeFileSync').mockImplementation(() => true);
   });
 
   afterEach(() => {
-    spy.mockRestore();
+    writeSpy.mockRestore();
   });
 
   it('sets options from constructor', () => {
@@ -108,7 +108,7 @@ describe('ESLintDriver', () => {
 
       driver.handleCreateIgnoreFile(context, '/some/path/.eslintrc.js', config);
 
-      expect(spy).toHaveBeenCalledWith('/some/path/.eslintignore', 'foo\nbar\nbaz');
+      expect(writeSpy).toHaveBeenCalledWith('/some/path/.eslintignore', 'foo\nbar\nbaz');
 
       expect(context.configPaths).toEqual([{ driver: 'eslint', path: '/some/path/.eslintignore' }]);
 
@@ -133,7 +133,7 @@ describe('ESLintDriver', () => {
         ignore: ['foo', 'bar', 'baz', 'qux'],
       });
 
-      expect(spy).toHaveBeenCalledWith('/some/path/.eslintignore', 'foo\nbar\nbaz\nqux');
+      expect(writeSpy).toHaveBeenCalledWith('/some/path/.eslintignore', 'foo\nbar\nbaz\nqux');
     });
   });
 });
