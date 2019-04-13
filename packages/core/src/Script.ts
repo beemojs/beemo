@@ -1,5 +1,5 @@
 import { Plugin, Task, TaskAction } from '@boost/core';
-import { Event, ConcurrentEvent } from '@boost/event';
+import { ConcurrentEvent } from '@boost/event';
 import { Options } from 'yargs-parser';
 import execa, { Options as ExecaOptions, ExecaReturns } from 'execa';
 import ScriptContext from './contexts/ScriptContext';

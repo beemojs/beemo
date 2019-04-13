@@ -137,8 +137,6 @@ export default class ExecuteScriptRoutine extends BaseExecuteRoutine<ScriptConte
       throw new Error(`Failed to load script from multiple sources:\n${messages}`);
     }
 
-    console.log('handlePostLoad', script);
-
     this.tool.addPlugin('script', script);
 
     return script;

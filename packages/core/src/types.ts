@@ -1,8 +1,9 @@
 /* eslint-disable no-unused-vars, @typescript-eslint/no-unused-vars */
 
-import { Tool, ToolConfig, ToolPluginRegistry, PluginSetting } from '@boost/core';
+import { ToolConfig, ToolPluginRegistry, PluginSetting } from '@boost/core';
 import { ExecaReturns } from 'execa';
 import { Arguments, Options } from 'yargs';
+import Beemo from './Beemo';
 import Driver from './Driver';
 import Script from './Script';
 import Context from './contexts/Context';
@@ -69,7 +70,7 @@ declare global {
     interface Process {
       beemo: {
         context: Context<any>;
-        tool: Tool<BeemoPluginRegistry, BeemoConfig>;
+        tool: Beemo;
       };
     }
   }

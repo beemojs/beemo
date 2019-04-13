@@ -49,14 +49,23 @@ graph.addPackage({
 });
 ```
 
-Once all packages have been defined, we can generate a graph using `Graph#resolveList`, which
-returns an array of packages in order of most depended on, or with `Graph#resolveTree`, which
-returns a tree of nodes based on the graph.
+Once all packages have been defined, we can generate a graph using these `Graph` methods:
+
+- `resolveList` - Returns an array of packages in order of most depended on.
+- `resolveBatchList` - Like the previous, but returns the array batched based on depth.
+- `resolveTree` - Returns a tree of nodes based on the graph.
 
 ```ts
 // List of packages
 graph.resolveList().forEach(pkg => {
   console.log(pkg.name);
+});
+
+// List of list of packages
+graph.resolveBatchList().forEach(pkgs => {
+  pkgs.forEach(pkg => {
+    console.log(pkg.name);
+  });
 });
 
 // Tree of nodes
