@@ -65,7 +65,6 @@ describe('ExecuteScriptRoutine', () => {
     routine.debug = mockDebugger();
 
     routine.context.scriptName = 'plugin-name';
-    routine.context.eventName = 'plugin-name';
 
     // @ts-ignore
     ModuleLoader.mockClear();

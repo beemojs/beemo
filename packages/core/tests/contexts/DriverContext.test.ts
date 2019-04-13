@@ -22,7 +22,6 @@ describe('DriverContext', () => {
 
       expect(context.primaryDriver).toBe(driver);
       expect(context.driverName).toBe('bar');
-      expect(context.eventName).toBe('bar');
     });
 
     it('adds to driver list', () => {

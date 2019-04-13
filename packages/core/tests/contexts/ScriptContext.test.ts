@@ -23,7 +23,6 @@ describe('ScriptContext', () => {
       context = new ScriptContext(stubScriptArgs(), 'foo-bar');
 
       expect(context.scriptName).toBe('foo-bar');
-      expect(context.eventName).toBe('foo-bar');
     });
   });
 

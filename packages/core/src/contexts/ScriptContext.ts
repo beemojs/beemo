@@ -10,9 +10,6 @@ export interface ScriptArgs {
 }
 
 export default class ScriptContext<T = ScriptArgs> extends Context<T> {
-  // Name used for emitting events (kebab case)
-  eventName: string;
-
   // Absolute path to the script (changes depending on source location)
   path: string = '';
 
@@ -26,7 +23,6 @@ export default class ScriptContext<T = ScriptArgs> extends Context<T> {
     super(args);
 
     this.scriptName = name;
-    this.eventName = name;
   }
 
   /**

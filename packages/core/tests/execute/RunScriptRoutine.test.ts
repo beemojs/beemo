@@ -216,8 +216,6 @@ describe('RunScriptRoutine', () => {
       script.onBeforeExecute.listen(spy);
       script.bootstrap();
 
-      routine.context.eventName = 'before';
-
       await routine.execute(routine.context, script);
 
       expect(spy).toHaveBeenCalledWith(routine.context, routine.context.argv);
@@ -236,8 +234,6 @@ describe('RunScriptRoutine', () => {
       script.onAfterExecute.listen(spy);
       script.bootstrap();
 
-      routine.context.eventName = 'after';
-
       await routine.execute(routine.context, script);
 
       expect(spy).toHaveBeenCalledWith(routine.context, 123);
@@ -255,8 +251,6 @@ describe('RunScriptRoutine', () => {
 
       script.onFailedExecute.listen(spy);
       script.bootstrap();
-
-      routine.context.eventName = 'fail';
 
       try {
         await routine.execute(routine.context, script);
