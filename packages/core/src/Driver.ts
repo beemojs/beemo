@@ -58,7 +58,7 @@ export default abstract class Driver<
         STRATEGY_COPY,
         STRATEGY_NONE,
       ]),
-    } as FixMe;
+    } as $FixMe;
   }
 
   /**

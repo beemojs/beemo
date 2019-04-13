@@ -89,7 +89,7 @@ export default class Beemo extends Tool<BeemoPluginRegistry, BeemoConfig> {
    * Register global options within our CLI application.
    */
   bootstrapCLI(app: Yargv) {
-    CLI.registerGlobalOptions(app as FixMe, this);
+    CLI.registerGlobalOptions(app as $FixMe, this);
   }
 
   /**

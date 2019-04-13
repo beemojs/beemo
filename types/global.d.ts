@@ -1,1 +1,1 @@
-declare type FixMe = any;
+declare type $FixMe = any;

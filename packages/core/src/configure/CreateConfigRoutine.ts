@@ -104,7 +104,7 @@ export default class CreateConfigRoutine<Ctx extends ConfigContext> extends Rout
 
     this.debug('Creating config file %s', chalk.cyan(configPath));
 
-    driver.config = config as FixMe;
+    driver.config = config as $FixMe;
     driver.onCreateConfigFile.emit([context, configPath, config]);
 
     context.addConfigPath(name, configPath);
@@ -132,7 +132,7 @@ export default class CreateConfigRoutine<Ctx extends ConfigContext> extends Rout
     );
 
     if (config[configName]) {
-      const pkgConfig = config[configName] as FixMe;
+      const pkgConfig = config[configName] as $FixMe;
 
       configs.push(pkgConfig);
       driver.onLoadPackageConfig.emit([context, pkgConfig]);
