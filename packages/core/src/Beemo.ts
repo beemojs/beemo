@@ -47,9 +47,9 @@ export default class Beemo extends Tool<BeemoPluginRegistry, BeemoConfig> {
 
   onRunConfig = new Event<[ConfigContext, string[]]>('run-config');
 
-  onRunDriver = new Event<[DriverContext, string, Driver<any, any>]>('run-driver');
+  onRunDriver = new Event<[DriverContext, Driver<any, any>]>('run-driver');
 
-  onRunScript = new Event<[ScriptContext, string]>('run-script');
+  onRunScript = new Event<[ScriptContext]>('run-script');
 
   onScaffold = new Event<[ScaffoldContext, string, string, string?]>('scaffold');
 
@@ -204,7 +204,7 @@ export default class Beemo extends Tool<BeemoPluginRegistry, BeemoConfig> {
     const context = this.prepareContext(new DriverContext(args, driver, parallelArgv));
     const version = driver.getVersion();
 
-    this.onRunDriver.emit([context, driverName, driver]);
+    this.onRunDriver.emit([context, driver], driverName);
 
     // TEMP until upstream config is updated
     this.emit(`${driverName}.init-driver`, [context, driver]);
@@ -241,7 +241,7 @@ export default class Beemo extends Tool<BeemoPluginRegistry, BeemoConfig> {
 
     const context = this.prepareContext(new ScriptContext(args, scriptName));
 
-    this.onRunScript.emit([context, scriptName]);
+    this.onRunScript.emit([context], scriptName);
 
     this.debug('Running with %s script', context.scriptName);
 

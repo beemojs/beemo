@@ -30,8 +30,8 @@ The following list of events, and their arguments, can be listened to.
 | `onLoadPlugin`          | `plugin: Driver | Script`                                                    | Normal | Called after a plugin is loaded and registered into the tool. _Requires a scope of `driver` or `script`._ |
 | `onResolveDependencies` | `context: ConfigContext, drivers: Driver[]`                                  | Normal | Called after a list of `Driver`s have been resolved in which to create configuration files.               |
 | `onRunConfig`           | `context: ConfigContext, driverNames: string[]`                              | Normal | Called before `beemo create-config` is ran.                                                               |
-| `onRunDriver`           | `context: DriverContext, driverName: string, driver: Driver`                 | Normal | Called before `beemo <driver>` is ran.                                                                    |
-| `onRunScript`           | `context: ScriptContext, scriptName: string`                                 | Normal | Called before `beemo run-script <script>` is ran.                                                         |
+| `onRunDriver`           | `context: DriverContext, driver: Driver`                                     | Normal | Called before `beemo <driver>` is ran. _Requires a scope of the driver name._                             |
+| `onRunScript`           | `context: ScriptContext`                                                     | Normal | Called before `beemo run-script <script>` is ran. _Requires a scope of the script name._                  |
 | `onScaffold`            | `context: ScaffoldContext, generator: string, action: string, name?: string` | Normal | Called before templates are generated when scaffolding.                                                   |
 
 ### Driver

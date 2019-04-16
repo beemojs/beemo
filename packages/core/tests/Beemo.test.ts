@@ -251,7 +251,7 @@ describe('Beemo', () => {
     it('emits `onRunDriver` event with context', async () => {
       const spy = jest.fn();
 
-      beemo.onRunDriver.listen(spy);
+      beemo.onRunDriver.listen(spy, 'foo-bar');
 
       await beemo.executeDriver(stubDriverArgs(), 'foo-bar');
 
@@ -260,7 +260,6 @@ describe('Beemo', () => {
           argv: ['foo', 'bar'],
           driverName: 'foo-bar',
         }),
-        'foo-bar',
         expect.objectContaining({ name: 'foo-bar' }),
       );
     });
@@ -327,7 +326,7 @@ describe('Beemo', () => {
     it('emits `onRunScript` event with context', async () => {
       const spy = jest.fn();
 
-      beemo.onRunScript.listen(spy);
+      beemo.onRunScript.listen(spy, 'foo-bar');
 
       await beemo.executeScript(stubScriptArgs(), 'foo-bar');
 
@@ -336,7 +335,6 @@ describe('Beemo', () => {
           argv: ['foo', 'bar'],
           scriptName: 'foo-bar',
         }),
-        'foo-bar',
       );
     });
   });
