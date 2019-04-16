@@ -57,17 +57,21 @@ describe('PrettierDriver', () => {
     it('does nothing if no ignore field', () => {
       const config = { semi: true };
 
-      driver.handleCreateIgnoreFile(context, '/some/path/prettier.config.js', config);
+      driver.onCreateConfigFile.emit([context, '/some/path/prettier.config.js', config]);
 
       expect(config).toEqual({ semi: true });
     });
 
     it('errors if not an array', () => {
       expect(() => {
-        driver.handleCreateIgnoreFile(context, '/some/path/prettier.config.js', {
-          // @ts-ignore
-          ignore: 'foo',
-        });
+        driver.onCreateConfigFile.emit([
+          context,
+          '/some/path/prettier.config.js',
+          {
+            // @ts-ignore
+            ignore: 'foo',
+          },
+        ]);
       }).toThrowErrorMatchingSnapshot();
     });
 
@@ -77,7 +81,7 @@ describe('PrettierDriver', () => {
         ignore: ['foo', 'bar', 'baz'],
       };
 
-      driver.handleCreateIgnoreFile(context, '/some/path/prettier.config.js', config);
+      driver.onCreateConfigFile.emit([context, '/some/path/prettier.config.js', config]);
 
       expect(writeSpy).toHaveBeenCalledWith('/some/path/.prettierignore', 'foo\nbar\nbaz');
 
@@ -100,7 +104,7 @@ describe('PrettierDriver', () => {
         ignore: ['foo', 'bar', 'baz'],
       };
 
-      driver.handleCreateIgnoreFile(context, '/some/path/prettier.config.js', config);
+      driver.onCreateConfigFile.emit([context, '/some/path/prettier.config.js', config]);
 
       expect(createSpy).toHaveBeenCalledWith(context, '/some/path/.prettierignore', {
         ignore: ['foo', 'bar', 'baz', 'qux'],

@@ -6,6 +6,8 @@
 - Script names (on the command line) will now error if not in kebab case.
 - Scripts and Drivers now require an explicit `blueprint` method.
 - Renamed `Context#root` to `cwd`.
+- Renamed `Driver#handleFailure` to `processFailure`.
+- Renamed `Driver#handleSuccess` to `processSuccess`.
 - Removed `DriverContext#eventName` and `ScriptContext#eventName`.
 - Removed `ScriptContext#binName`. Use `scriptName` instead.
 

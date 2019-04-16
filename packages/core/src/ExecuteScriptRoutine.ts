@@ -17,7 +17,7 @@ export default class ExecuteScriptRoutine extends BaseExecuteRoutine<ScriptConte
     this.task(this.tool.msg('app:scriptLoad'), this.loadScriptFromTool);
     this.task(this.tool.msg('app:scriptLoadConfigModule'), this.loadScriptFromConfigModule);
     this.task(this.tool.msg('app:scriptLoadNodeModules'), this.loadScriptFromNodeModules);
-    this.task(this.tool.msg('app:scriptLoadPost'), this.handlePostLoad);
+    this.task(this.tool.msg('app:scriptLoadPost'), this.postLoad);
   }
 
   pipeRoutine(packageName: string, packageRoot: string) {
@@ -130,7 +130,7 @@ export default class ExecuteScriptRoutine extends BaseExecuteRoutine<ScriptConte
    * If all of the loading patterns have failed, thrown an error,
    * otherwise add the script and continue.
    */
-  handlePostLoad(context: ScriptContext, script: Script | null): Script {
+  postLoad(context: ScriptContext, script: Script | null): Script {
     if (!script) {
       const messages = this.errors.map(error => `  - ${error.message}`).join('\n');
 

@@ -86,17 +86,21 @@ describe('ESLintDriver', () => {
     it('does nothing if no ignore field', () => {
       const config = { parser: 'babel' };
 
-      driver.handleCreateIgnoreFile(context, '/some/path/.eslintrc.js', config);
+      driver.onCreateConfigFile.emit([context, '/some/path/.eslintrc.js', config]);
 
       expect(config).toEqual({ parser: 'babel' });
     });
 
     it('errors if not an array', () => {
       expect(() => {
-        driver.handleCreateIgnoreFile(context, '/some/path/.eslintrc.js', {
-          // @ts-ignore
-          ignore: 'foo',
-        });
+        driver.onCreateConfigFile.emit([
+          context,
+          '/some/path/.eslintrc.js',
+          {
+            // @ts-ignore
+            ignore: 'foo',
+          },
+        ]);
       }).toThrowErrorMatchingSnapshot();
     });
 
@@ -106,7 +110,7 @@ describe('ESLintDriver', () => {
         ignore: ['foo', 'bar', 'baz'],
       };
 
-      driver.handleCreateIgnoreFile(context, '/some/path/.eslintrc.js', config);
+      driver.onCreateConfigFile.emit([context, '/some/path/.eslintrc.js', config]);
 
       expect(writeSpy).toHaveBeenCalledWith('/some/path/.eslintignore', 'foo\nbar\nbaz');
 
@@ -127,7 +131,7 @@ describe('ESLintDriver', () => {
         ignore: ['foo', 'bar', 'baz'],
       };
 
-      driver.handleCreateIgnoreFile(context, '/some/path/.eslintrc.js', config);
+      driver.onCreateConfigFile.emit([context, '/some/path/.eslintrc.js', config]);
 
       expect(createSpy).toHaveBeenCalledWith(context, '/some/path/.eslintignore', {
         ignore: ['foo', 'bar', 'baz', 'qux'],

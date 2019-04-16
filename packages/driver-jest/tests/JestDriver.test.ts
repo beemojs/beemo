@@ -42,11 +42,11 @@ describe('JestDriver', () => {
     );
   });
 
-  describe('handleSuccess()', () => {
+  describe('processSuccess()', () => {
     it('outputs stderr', () => {
       const spy = jest.spyOn(driver.tool, 'log');
 
-      driver.handleSuccess(
+      driver.processSuccess(
         stubExecResult({
           cmd: 'jest',
           stdout: 'Hello',
@@ -60,7 +60,7 @@ describe('JestDriver', () => {
     it('outputs nothing if empty strings', () => {
       const spy = jest.spyOn(driver.tool, 'log');
 
-      driver.handleSuccess(
+      driver.processSuccess(
         stubExecResult({
           cmd: 'jest',
           stdout: '',
@@ -74,7 +74,7 @@ describe('JestDriver', () => {
     it('outputs stdout and stderr when running coverage', () => {
       const spy = jest.spyOn(driver.tool, 'log');
 
-      driver.handleSuccess(
+      driver.processSuccess(
         stubExecResult({
           cmd: 'jest --coverage',
           stdout: 'Coverage',
@@ -89,7 +89,7 @@ describe('JestDriver', () => {
     it('outputs nothing if empty strings when running coverage', () => {
       const spy = jest.spyOn(driver.tool, 'log');
 
-      driver.handleSuccess(
+      driver.processSuccess(
         stubExecResult({
           cmd: 'jest --coverage',
           stdout: '',

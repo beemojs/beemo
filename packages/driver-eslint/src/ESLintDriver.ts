@@ -32,7 +32,7 @@ export default class ESLintDriver extends Driver<ESLintConfig> {
   /**
    * If an "ignore" property exists in the ESLint config, create an ".eslintignore" file.
    */
-  handleCreateIgnoreFile = (
+  private handleCreateIgnoreFile = (
     context: ConfigContext<ConfigArgs & ESLintArgs>,
     configPath: string,
     config: ESLintConfig,

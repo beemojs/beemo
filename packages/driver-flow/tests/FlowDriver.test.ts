@@ -215,11 +215,11 @@ describe('FlowDriver', () => {
     });
   });
 
-  describe('handleFailure()', () => {
+  describe('processFailure()', () => {
     it('logs stdout on error code 2', () => {
       const spy = jest.spyOn(driver.tool, 'logError');
 
-      driver.handleFailure(
+      driver.processFailure(
         stubExecResult({
           code: 2,
           stdout: 'Out',
@@ -233,7 +233,7 @@ describe('FlowDriver', () => {
     it('logs stderr on other error codes', () => {
       const spy = jest.spyOn(driver.tool, 'logError');
 
-      driver.handleFailure(
+      driver.processFailure(
         stubExecResult({
           code: 1,
           stdout: 'Out',

@@ -331,12 +331,12 @@ export default class RunCommandRoutine extends Routine<DriverContext, Beemo, Run
         wrap: this.captureLiveOutput,
       });
 
-      driver.handleSuccess(result);
+      driver.processSuccess(result);
 
       await driver.onAfterExecute.emit([context, result]);
     } catch (error) {
       if (error.name !== 'MaxBufferError') {
-        driver.handleFailure(error);
+        driver.processFailure(error);
       }
 
       await driver.onFailedExecute.emit([context, error]);

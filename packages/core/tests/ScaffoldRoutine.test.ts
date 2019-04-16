@@ -19,6 +19,7 @@ describe('ScaffoldRoutine', () => {
       const spy = jest.fn();
 
       routine.executeCommand = spy;
+      // @ts-ignore Allow access
       routine.handleExec('babel', 'const foo = {};');
 
       expect(spy).toHaveBeenCalledWith('babel', [], {
@@ -32,6 +33,7 @@ describe('ScaffoldRoutine', () => {
     it('logs to tool', () => {
       const spy = jest.spyOn(routine.tool, 'log');
 
+      // @ts-ignore Allow access
       routine.handleLog('foo');
 
       expect(spy).toHaveBeenCalledWith('foo');
@@ -68,6 +70,7 @@ describe('ScaffoldRoutine', () => {
         createPrompter: expect.anything(),
         cwd: routine.tool.options.root,
         debug: false,
+        // @ts-ignore Allow access
         exec: routine.handleExec,
         logger: expect.anything(),
         templates: 'root/templates',

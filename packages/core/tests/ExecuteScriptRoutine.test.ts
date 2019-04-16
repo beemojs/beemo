@@ -121,7 +121,7 @@ describe('ExecuteScriptRoutine', () => {
       const loadToolSpy = jest.spyOn(routine, 'loadScriptFromTool');
       const loadModuleSpy = jest.spyOn(routine, 'loadScriptFromConfigModule');
       const loadNodeSpy = jest.spyOn(routine, 'loadScriptFromNodeModules');
-      const postSpy = jest.spyOn(routine, 'handlePostLoad');
+      const postSpy = jest.spyOn(routine, 'postLoad');
 
       routine.bootstrap();
       routine.tool.addPlugin('script', script);
@@ -139,7 +139,7 @@ describe('ExecuteScriptRoutine', () => {
       const loadToolSpy = jest.spyOn(routine, 'loadScriptFromTool');
       const loadModuleSpy = jest.spyOn(routine, 'loadScriptFromConfigModule');
       const loadNodeSpy = jest.spyOn(routine, 'loadScriptFromNodeModules');
-      const postSpy = jest.spyOn(routine, 'handlePostLoad');
+      const postSpy = jest.spyOn(routine, 'postLoad');
 
       routine.bootstrap();
 
@@ -277,19 +277,19 @@ describe('ExecuteScriptRoutine', () => {
     });
   });
 
-  describe('handlePostLoad()', () => {
+  describe('postLoad()', () => {
     it('throws when previous errors exist and no script found', () => {
       routine.errors.push(new Error('One'), new Error('Two'), new Error('Three'));
 
       expect(() => {
-        routine.handlePostLoad(routine.context, null);
+        routine.postLoad(routine.context, null);
       }).toThrowError('Failed to load script from multiple sources:\n  - One\n  - Two\n  - Three');
     });
 
     it('adds plugin to tool', () => {
       const spy = jest.spyOn(routine.tool, 'addPlugin');
 
-      routine.handlePostLoad(routine.context, script);
+      routine.postLoad(routine.context, script);
 
       expect(spy).toHaveBeenCalledWith('script', script);
     });
@@ -298,7 +298,7 @@ describe('ExecuteScriptRoutine', () => {
       const spy = jest.fn();
 
       routine.tool.onLoadPlugin.listen(spy, 'script');
-      routine.handlePostLoad(routine.context, script);
+      routine.postLoad(routine.context, script);
 
       expect(spy).toHaveBeenCalledWith(script);
     });

@@ -134,7 +134,7 @@ export default class JestDriver extends Driver<JestConfig> {
     ];
   }
 
-  handleSuccess(response: Execution) {
+  processSuccess(response: Execution) {
     const out = response.stdout.trim();
     const err = response.stderr.trim();
 

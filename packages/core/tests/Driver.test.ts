@@ -66,7 +66,7 @@ describe('Driver', () => {
     });
   });
 
-  describe('handleFailure()', () => {
+  describe('processFailure()', () => {
     let spy: jest.SpyInstance;
 
     beforeEach(() => {
@@ -78,7 +78,7 @@ describe('Driver', () => {
     });
 
     it('logs stdout', () => {
-      driver.handleFailure(
+      driver.processFailure(
         stubExecResult({
           stdout: 'out',
         }),
@@ -88,7 +88,7 @@ describe('Driver', () => {
     });
 
     it('logs stderr', () => {
-      driver.handleFailure(
+      driver.processFailure(
         stubExecResult({
           stderr: 'error',
         }),
@@ -98,7 +98,7 @@ describe('Driver', () => {
     });
 
     it('logs stderr over stdout', () => {
-      driver.handleFailure(
+      driver.processFailure(
         stubExecResult({
           stderr: 'error',
           stdout: 'out',
@@ -109,7 +109,7 @@ describe('Driver', () => {
     });
 
     it('doesnt log if empty', () => {
-      driver.handleFailure(
+      driver.processFailure(
         stubExecResult({
           stderr: '',
           stdout: '',
@@ -120,7 +120,7 @@ describe('Driver', () => {
     });
   });
 
-  describe('handleSuccess()', () => {
+  describe('processSuccess()', () => {
     let spy: jest.SpyInstance;
 
     beforeEach(() => {
@@ -132,7 +132,7 @@ describe('Driver', () => {
     });
 
     it('logs stdout', () => {
-      driver.handleSuccess(
+      driver.processSuccess(
         stubExecResult({
           stdout: 'out',
         }),
@@ -142,7 +142,7 @@ describe('Driver', () => {
     });
 
     it('doesnt log stdout if empty', () => {
-      driver.handleSuccess(
+      driver.processSuccess(
         stubExecResult({
           stdout: '',
         }),
@@ -152,7 +152,7 @@ describe('Driver', () => {
     });
 
     it('doesnt log stderr', () => {
-      driver.handleFailure(
+      driver.processFailure(
         stubExecResult({
           stderr: 'error',
         }),
@@ -162,7 +162,7 @@ describe('Driver', () => {
     });
 
     it('doesnt log if empty', () => {
-      driver.handleFailure(
+      driver.processFailure(
         stubExecResult({
           stderr: '',
           stdout: '',

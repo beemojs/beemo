@@ -15,29 +15,6 @@ export default class ScaffoldRoutine extends Routine<ScaffoldContext, Beemo> {
   }
 
   /**
-   * Handle shell executions from hygen.
-   */
-  handleExec = (action: string, input: string) =>
-    this.executeCommand(action, [], {
-      input,
-      shell: true,
-    });
-
-  /**
-   * Pipe a message from hygen to boost.
-   */
-  handleLog = (message: string) => {
-    if (message && message.trim()) {
-      this.tool.log(message);
-    }
-  };
-
-  /**
-   * Temporary solution until boost supports prompts.
-   */
-  handlePrompt = /* istanbul ignore next */ () => Promise.resolve({ overwrite: true });
-
-  /**
    * Execute the hygen scaffolding generator.
    */
   async runGenerator(context: ScaffoldContext, moduleRoot: string) {
@@ -62,4 +39,27 @@ export default class ScaffoldRoutine extends Routine<ScaffoldContext, Beemo> {
       throw error;
     }
   }
+
+  /**
+   * Handle shell executions from hygen.
+   */
+  private handleExec = (action: string, input: string) =>
+    this.executeCommand(action, [], {
+      input,
+      shell: true,
+    });
+
+  /**
+   * Pipe a message from hygen to boost.
+   */
+  private handleLog = (message: string) => {
+    if (message && message.trim()) {
+      this.tool.log(message);
+    }
+  };
+
+  /**
+   * Temporary solution until boost supports prompts.
+   */
+  private handlePrompt = /* istanbul ignore next */ () => Promise.resolve({ overwrite: true });
 }

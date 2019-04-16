@@ -38,7 +38,9 @@ export default class BabelDriver extends Driver<BabelConfig> {
   /**
    * Automatically clean the target folder if --out-dir is used.
    */
-  handleCleanTarget = ({ args }: DriverContext<DriverArgs & BabelArgs & { clean?: boolean }>) => {
+  private handleCleanTarget = ({
+    args,
+  }: DriverContext<DriverArgs & BabelArgs & { clean?: boolean }>) => {
     if (args.clean && args.outDir) {
       rimraf.sync(path.resolve(args.outDir));
     }

@@ -634,8 +634,8 @@ describe('RunCommandRoutine', () => {
 
     beforeEach(() => {
       routine.executeCommand = jest.fn(() => Promise.resolve({ success: true } as any));
-      driver.handleSuccess = jest.fn();
-      driver.handleFailure = jest.fn();
+      driver.processSuccess = jest.fn();
+      driver.processFailure = jest.fn();
     });
 
     it('executes command with correct args', async () => {
@@ -653,7 +653,7 @@ describe('RunCommandRoutine', () => {
       const response = await routine.runCommandWithArgs(routine.context, ['--wtf'], task);
 
       expect(response).toEqual({ success: true });
-      expect(driver.handleSuccess).toHaveBeenCalledWith({ success: true });
+      expect(driver.processSuccess).toHaveBeenCalledWith({ success: true });
     });
 
     it('handles failure using driver', async () => {
@@ -664,7 +664,7 @@ describe('RunCommandRoutine', () => {
       try {
         await routine.runCommandWithArgs(routine.context, ['--wtf'], task);
       } catch (error) {
-        expect(driver.handleFailure).toHaveBeenCalledWith(error);
+        expect(driver.processFailure).toHaveBeenCalledWith(error);
       }
     });
 
@@ -677,7 +677,7 @@ describe('RunCommandRoutine', () => {
       try {
         await routine.runCommandWithArgs(routine.context, ['--wtf'], task);
       } catch {
-        expect(driver.handleFailure).not.toHaveBeenCalled();
+        expect(driver.processFailure).not.toHaveBeenCalled();
       }
     });
 

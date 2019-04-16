@@ -62,6 +62,17 @@ export default abstract class Driver<
   }
 
   /**
+   * Special case for merging arrays.
+   */
+  doMerge(prevValue: any, nextValue: any): any {
+    if (Array.isArray(prevValue)) {
+      return prevValue.concat(nextValue);
+    }
+
+    return undefined;
+  }
+
+  /**
    * Extract the error message when the driver fails to execute.
    */
   extractErrorMessage(error: Error): string {
@@ -121,9 +132,16 @@ export default abstract class Driver<
   }
 
   /**
+   * Merge multiple configuration objects.
+   */
+  mergeConfig(prev: Config, next: Config): Config {
+    return mergeWith(prev, next, this.doMerge);
+  }
+
+  /**
    * Handle command failures according to this driver.
    */
-  handleFailure(error: Execution) {
+  processFailure(error: Execution) {
     const { stderr, stdout } = error;
     const out = (stderr || stdout).trim();
 
@@ -139,7 +157,7 @@ export default abstract class Driver<
   /**
    * Handle successful commands according to this driver.
    */
-  handleSuccess(response: Execution) {
+  processSuccess(response: Execution) {
     const out = response.stdout.trim();
 
     // Integration debugging
@@ -149,24 +167,6 @@ export default abstract class Driver<
     if (out) {
       this.tool.log(out);
     }
-  }
-
-  /**
-   * Special case for merging arrays.
-   */
-  handleMerge(prevValue: any, nextValue: any): any {
-    if (Array.isArray(prevValue)) {
-      return prevValue.concat(nextValue);
-    }
-
-    return undefined;
-  }
-
-  /**
-   * Merge multiple configuration objects.
-   */
-  mergeConfig(prev: Config, next: Config): Config {
-    return mergeWith(prev, next, this.handleMerge);
   }
 
   /**

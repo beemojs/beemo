@@ -53,7 +53,7 @@ describe('BabelDriver', () => {
     it('doesnt run if no clean param', () => {
       context.args.outDir = './lib';
 
-      driver.handleCleanTarget(context);
+      driver.onBeforeExecute.emit([context, []]);
 
       expect(rimraf.sync).not.toHaveBeenCalled();
     });
@@ -61,7 +61,7 @@ describe('BabelDriver', () => {
     it('doesnt run if no outDir param', () => {
       context.args.clean = true;
 
-      driver.handleCleanTarget(context);
+      driver.onBeforeExecute.emit([context, []]);
 
       expect(rimraf.sync).not.toHaveBeenCalled();
     });
@@ -70,7 +70,7 @@ describe('BabelDriver', () => {
       context.args.outDir = './lib';
       context.args.clean = true;
 
-      driver.handleCleanTarget(context);
+      driver.onBeforeExecute.emit([context, []]);
 
       expect(rimraf.sync).toHaveBeenCalledWith(path.resolve('./lib'));
     });

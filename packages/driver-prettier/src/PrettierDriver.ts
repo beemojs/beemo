@@ -34,7 +34,7 @@ export default class PrettierDriver extends Driver<PrettierConfig> {
   /**
    * If an "ignore" property exists in the Prettier config, create an ".prettierconfig" file.
    */
-  handleCreateIgnoreFile = (
+  private handleCreateIgnoreFile = (
     context: ConfigContext<ConfigArgs & PrettierArgs>,
     configPath: string,
     config: PrettierConfig,
