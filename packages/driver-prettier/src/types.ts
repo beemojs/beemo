@@ -2,6 +2,8 @@ import { RequiredOptions } from 'prettier';
 
 export interface PrettierConfig extends Partial<RequiredOptions> {
   ignore?: string[];
+  // Temp until upstream is updated
+  quoteProps?: 'as-needed' | 'preserve' | 'consistent';
 }
 
 export interface PrettierArgs {
@@ -30,6 +32,7 @@ export interface PrettierArgs {
   pluginSearchDir?: string;
   printWidth?: number;
   proseWrap?: PrettierConfig['proseWrap'];
+  quoteProps?: PrettierConfig['quoteProps'];
   rangeEnd?: number;
   rangeStart?: number;
   requirePragma?: boolean;
