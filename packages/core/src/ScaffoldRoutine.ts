@@ -2,10 +2,10 @@ import path from 'path';
 import { engine } from 'hygen';
 import Logger from 'hygen/lib/logger';
 import { Routine } from '@boost/core';
+import Beemo from './Beemo';
 import ScaffoldContext from './contexts/ScaffoldContext';
-import { BeemoTool } from './types';
 
-export default class ScaffoldRoutine extends Routine<ScaffoldContext, BeemoTool> {
+export default class ScaffoldRoutine extends Routine<ScaffoldContext, Beemo> {
   bootstrap() {
     this.task(this.tool.msg('app:scaffoldRunGenerator'), this.runGenerator);
   }

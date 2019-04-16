@@ -16,20 +16,20 @@ exports[`Driver formatConfig() formats to JSON if config ends in .json 1`] = `
 }"
 `;
 
-exports[`Driver setCommandOptions() doesnt support description as other types 1`] = `"Invalid Driver field \\"foo.description\\". Must be a string."`;
+exports[`Driver setCommandOptions() doesnt support description as other types 1`] = `"Invalid TestDriver field \\"foo.description\\". Must be a string."`;
 
-exports[`Driver setCommandOptions() doesnt support empty descriptions 1`] = `"Invalid Driver field \\"foo.description\\". String cannot be empty."`;
+exports[`Driver setCommandOptions() doesnt support empty descriptions 1`] = `"Invalid TestDriver field \\"foo.description\\". String cannot be empty."`;
 
-exports[`Driver setCommandOptions() requires a description 1`] = `"Invalid Driver field \\"foo.description\\". Field is required and must be defined."`;
+exports[`Driver setCommandOptions() requires a description 1`] = `"Invalid TestDriver field \\"foo.description\\". Field is required and must be defined."`;
 
-exports[`Driver setMetadata() bin is required 1`] = `"Invalid Driver field \\"bin\\". Field is required and must be defined."`;
+exports[`Driver setMetadata() bin is required 1`] = `"Invalid TestDriver field \\"bin\\". Field is required and must be defined."`;
 
-exports[`Driver setMetadata() configName doesnt support non-strings 1`] = `"Invalid Driver field \\"configName\\". Must be a string."`;
+exports[`Driver setMetadata() configName doesnt support non-strings 1`] = `"Invalid TestDriver field \\"configName\\". Must be a string."`;
 
-exports[`Driver setMetadata() configName is required 1`] = `"Invalid Driver field \\"configName\\". Field is required and must be defined."`;
+exports[`Driver setMetadata() configName is required 1`] = `"Invalid TestDriver field \\"configName\\". Field is required and must be defined."`;
 
-exports[`Driver setMetadata() title doesnt support non-strings 1`] = `"Invalid Driver field \\"title\\". Must be a string."`;
+exports[`Driver setMetadata() title doesnt support non-strings 1`] = `"Invalid TestDriver field \\"title\\". Must be a string."`;
 
-exports[`Driver setMetadata() title is required 1`] = `"Invalid Driver field \\"title\\". Field is required and must be defined."`;
+exports[`Driver setMetadata() title is required 1`] = `"Invalid TestDriver field \\"title\\". Field is required and must be defined."`;
 
 exports[`Driver validates fields 1`] = `"Invalid Driver field \\"args\\". Must be an array."`;

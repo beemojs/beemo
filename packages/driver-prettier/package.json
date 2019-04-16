@@ -33,6 +33,7 @@
     "prettier": "^1.0.0"
   },
   "dependencies": {
+    "@boost/event": "^1.0.0-alpha.1",
     "@types/prettier": "^1.16.1"
   }
 }

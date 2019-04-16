@@ -1,6 +1,7 @@
 import fs from 'fs-extra';
 import BabelDriver from '@beemo/driver-babel';
 import ConfigLoader from '@boost/core/lib/ConfigLoader';
+import Beemo from '../../src/Beemo';
 import CreateConfigRoutine from '../../src/configure/CreateConfigRoutine';
 import Driver from '../../src/Driver';
 import {
@@ -10,7 +11,6 @@ import {
   STRATEGY_NONE,
   STRATEGY_NATIVE,
 } from '../../src/constants';
-import { BeemoTool } from '../../src/types';
 import { stubConfigContext, mockDebugger, mockTool, prependRoot } from '../../src/testUtils';
 
 jest.mock('@boost/core/lib/ConfigLoader');
@@ -21,7 +21,7 @@ describe('CreateConfigRoutine', () => {
   const oldCopy = fs.copy;
   let routine: CreateConfigRoutine<any>;
   let driver: Driver;
-  let tool: BeemoTool;
+  let tool: Beemo;
 
   beforeEach(() => {
     tool = mockTool();
@@ -349,16 +349,16 @@ describe('CreateConfigRoutine', () => {
       expect(driver.config).toEqual({ foo: 123 });
     });
 
-    it('triggers `copy-config-file` event', async () => {
-      const spy = jest.spyOn(routine.tool, 'emit');
+    it('emits `onCopyConfigFile` event', async () => {
+      const spy = jest.fn();
+
+      driver.onCopyConfigFile.listen(spy);
 
       await routine.copyConfigFile(routine.context);
 
-      expect(spy).toHaveBeenCalledWith('babel.copy-config-file', [
-        routine.context,
-        prependRoot('/babel.config.js'),
-        { foo: 123 },
-      ]);
+      expect(spy).toHaveBeenCalledWith(routine.context, prependRoot('/babel.config.js'), {
+        foo: 123,
+      });
     });
 
     it('errors if no source file', () => {
@@ -393,16 +393,16 @@ describe('CreateConfigRoutine', () => {
       expect(driver.config).toEqual({ foo: 'bar' });
     });
 
-    it('triggers `create-config-file` event', async () => {
-      const spy = jest.spyOn(routine.tool, 'emit');
+    it('emits `onCreateConfigFile` event', async () => {
+      const spy = jest.fn();
+
+      driver.onCreateConfigFile.listen(spy);
 
       await routine.createConfigFile(routine.context, { foo: 'bar' });
 
-      expect(spy).toHaveBeenCalledWith('babel.create-config-file', [
-        routine.context,
-        prependRoot('/babel.config.js'),
-        { foo: 'bar' },
-      ]);
+      expect(spy).toHaveBeenCalledWith(routine.context, prependRoot('/babel.config.js'), {
+        foo: 'bar',
+      });
     });
   });
 
@@ -421,21 +421,22 @@ describe('CreateConfigRoutine', () => {
       expect(configs).toEqual([{ foo: 'bar' }]);
     });
 
-    it('triggers `load-package-config` event', async () => {
-      const spy = jest.spyOn(routine.tool, 'emit');
+    it('emits `onLoadPackageConfig` event', async () => {
+      const spy = jest.fn();
+
+      driver.onLoadPackageConfig.listen(spy);
 
       routine.tool.config.babel = { foo: 'bar' };
 
       await routine.extractConfigFromPackage(routine.context, []);
 
-      expect(spy).toHaveBeenCalledWith('babel.load-package-config', [
-        routine.context,
-        { foo: 'bar' },
-      ]);
+      expect(spy).toHaveBeenCalledWith(routine.context, { foo: 'bar' });
     });
 
-    it('doesnt trigger `load-package-config` if no config', async () => {
-      const spy = jest.spyOn(routine.tool, 'emit');
+    it('doesnt trigger `onLoadPackageConfig` if no config', async () => {
+      const spy = jest.fn();
+
+      driver.onLoadPackageConfig.listen(spy);
 
       await routine.extractConfigFromPackage(routine.context, [routine.context]);
 
@@ -470,8 +471,10 @@ describe('CreateConfigRoutine', () => {
       expect(spy).toHaveBeenCalledTimes(3);
     });
 
-    it('triggers `merge-config` event with final config object', async () => {
-      const spy = jest.spyOn(routine.tool, 'emit');
+    it('emits `onMergeConfig` event with final config object', async () => {
+      const spy = jest.fn();
+
+      driver.onMergeConfig.listen(spy);
 
       const config = await routine.mergeConfigs(routine.context, [
         { foo: 123, qux: true },
@@ -479,7 +482,7 @@ describe('CreateConfigRoutine', () => {
         { foo: 456 },
       ]);
 
-      expect(spy).toHaveBeenCalledWith('babel.merge-config', [routine.context, config]);
+      expect(spy).toHaveBeenCalledWith(routine.context, config);
     });
   });
 
@@ -533,20 +536,22 @@ describe('CreateConfigRoutine', () => {
       ]);
     });
 
-    it('triggers `load-module-config` event', async () => {
-      const spy = jest.spyOn(routine.tool, 'emit');
+    it('emits `onLoadModuleConfig` event', async () => {
+      const spy = jest.fn();
+
+      driver.onLoadModuleConfig.listen(spy);
 
       await routine.loadConfigFromSources(routine.context, []);
 
-      expect(spy).toHaveBeenCalledWith('babel.load-module-config', [
-        routine.context,
-        prependRoot('/configs/babel.js'),
-        { filePath: prependRoot('/configs/babel.js') },
-      ]);
+      expect(spy).toHaveBeenCalledWith(routine.context, prependRoot('/configs/babel.js'), {
+        filePath: prependRoot('/configs/babel.js'),
+      });
     });
 
-    it('doesnt trigger `load-module-config` event if files does not exist', async () => {
-      const spy = jest.spyOn(routine.tool, 'emit');
+    it('doesnt trigger `onLoadModuleConfig` event if files does not exist', async () => {
+      const spy = jest.fn();
+
+      driver.onLoadModuleConfig.listen(spy);
 
       (fs.existsSync as jest.Mock).mockImplementation(() => false);
 
@@ -589,16 +594,16 @@ describe('CreateConfigRoutine', () => {
       expect(driver.config).toEqual({ foo: 123 });
     });
 
-    it('triggers `reference-config-file` event', async () => {
-      const spy = jest.spyOn(routine.tool, 'emit');
+    it('emits `onReferenceConfigFile` event', async () => {
+      const spy = jest.fn();
+
+      driver.onReferenceConfigFile.listen(spy);
 
       await routine.referenceConfigFile(routine.context);
 
-      expect(spy).toHaveBeenCalledWith('babel.reference-config-file', [
-        routine.context,
-        prependRoot('/babel.config.js'),
-        { foo: 123 },
-      ]);
+      expect(spy).toHaveBeenCalledWith(routine.context, prependRoot('/babel.config.js'), {
+        foo: 123,
+      });
     });
 
     it('errors if no source file', () => {

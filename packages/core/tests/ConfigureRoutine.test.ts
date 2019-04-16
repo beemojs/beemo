@@ -1,18 +1,18 @@
+import Beemo from '../src/Beemo';
 import ConfigureRoutine from '../src/ConfigureRoutine';
 import Driver from '../src/Driver';
-import { BeemoTool } from '../src/types';
 import { mockTool, mockDebugger, mockDriver, stubConfigContext } from '../src/testUtils';
 
 describe('ConfigureRoutine', () => {
   let routine: ConfigureRoutine;
   let plugins: { [name: string]: Driver };
-  let tool: BeemoTool;
+  let tool: Beemo;
   let driver: Driver;
 
   beforeEach(() => {
     plugins = {};
     tool = mockTool();
-    driver = mockDriver('foo');
+    driver = mockDriver('foo', tool);
 
     routine = new ConfigureRoutine('config', 'Generating configurations');
     routine.tool = tool;
@@ -60,9 +60,9 @@ describe('ConfigureRoutine', () => {
 
   describe('setupConfigFiles()', () => {
     it('pipes a routine for each driver', async () => {
-      const foo = mockDriver('foo');
-      const bar = mockDriver('bar');
-      const baz = mockDriver('baz');
+      const foo = mockDriver('foo', tool);
+      const bar = mockDriver('bar', tool);
+      const baz = mockDriver('baz', tool);
 
       expect(routine.routines).toHaveLength(0);
 
@@ -118,17 +118,16 @@ describe('ConfigureRoutine', () => {
       ]);
     });
 
-    it('triggers `resolve-dependencies` event', async () => {
-      const spy = jest.spyOn(routine.tool, 'emit');
+    it('emits `onResolveDependencies` event', async () => {
+      const spy = jest.fn();
+
+      routine.tool.onResolveDependencies.listen(spy);
 
       driver.metadata.dependencies = ['bar'];
 
       await routine.resolveDependencies();
 
-      expect(spy).toHaveBeenCalledWith('beemo.resolve-dependencies', [
-        routine.context,
-        Array.from(routine.context.drivers),
-      ]);
+      expect(spy).toHaveBeenCalledWith(routine.context, Array.from(routine.context.drivers));
     });
   });
 });

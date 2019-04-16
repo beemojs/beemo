@@ -7,26 +7,23 @@ import isGlob from 'is-glob';
 import merge from 'lodash/merge';
 import execa from 'execa';
 import parseArgs from 'yargs-parser';
+import Beemo from '../Beemo';
 import DriverContext from '../contexts/DriverContext';
 import BatchStream from '../streams/BatchStream';
 import filterArgs, { OptionMap } from '../utils/filterArgs';
 import { STRATEGY_COPY } from '../constants';
-import { Argv, Execution, BeemoTool } from '../types';
+import { Argv, Execution } from '../types';
 
 const OPTION_PATTERN: RegExp = /-?-[a-z0-9-]+(,|\s)/giu;
 
 export interface RunCommandOptions {
-  additionalArgv: Argv;
-  argv: Argv;
-  forceConfigOption: boolean;
-  packageRoot: string;
+  additionalArgv?: Argv;
+  argv?: Argv;
+  forceConfigOption?: boolean;
+  packageRoot?: string;
 }
 
-export default class RunCommandRoutine extends Routine<
-  DriverContext,
-  BeemoTool,
-  RunCommandOptions
-> {
+export default class RunCommandRoutine extends Routine<DriverContext, Beemo, RunCommandOptions> {
   blueprint({ array, bool, string }: Predicates) /* infer */ {
     return {
       additionalArgv: array(string()),
@@ -60,10 +57,6 @@ export default class RunCommandRoutine extends Routine<
     this.task(tool.msg('app:driverRunCommand'), this.runCommandWithArgs);
   }
 
-  execute(): Promise<Execution> {
-    return this.serializeTasks();
-  }
-
   /**
    * Capture live output via `--live` or `--watch`. Buffer the output incase ctrl+c is entered.
    */
@@ -95,7 +88,7 @@ export default class RunCommandRoutine extends Routine<
 
     // When cmd/ctrl + c is pressed, write out the current buffer
     if (!args.live) {
-      this.tool.console.on('error', error => {
+      this.tool.console.onError.listen(error => {
         if (
           error instanceof SignalError &&
           (error.signal === 'SIGINT' || error.signal === 'SIGTERM')
@@ -328,7 +321,7 @@ export default class RunCommandRoutine extends Routine<
       chalk.cyan(cwd),
     );
 
-    this.tool.emit(`${context.eventName}.before-execute`, [context, argv, driver]);
+    await driver.onBeforeExecute.emit([context, argv]);
 
     try {
       result = await this.executeCommand(driver.metadata.bin, argv, {
@@ -340,13 +333,13 @@ export default class RunCommandRoutine extends Routine<
 
       driver.handleSuccess(result);
 
-      this.tool.emit(`${context.eventName}.after-execute`, [context, result, driver]);
+      await driver.onAfterExecute.emit([context, result]);
     } catch (error) {
       if (error.name !== 'MaxBufferError') {
         driver.handleFailure(error);
       }
 
-      this.tool.emit(`${context.eventName}.failed-execute`, [context, error, driver]);
+      await driver.onFailedExecute.emit([context, error]);
 
       throw new Error((driver.extractErrorMessage(error) || '').trim());
     }

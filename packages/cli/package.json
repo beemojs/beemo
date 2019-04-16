@@ -29,8 +29,8 @@
     "@beemo/core": "^1.0.0-alpha.0"
   },
   "devDependencies": {
-    "@types/semver": "^5.5.0",
-    "@types/yargs": "^12.0.10",
+    "@types/semver": "^6.0.0",
+    "@types/yargs": "^13.0.0",
     "time-require": "^0.1.2"
   }
 }

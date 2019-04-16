@@ -1,13 +1,21 @@
 import { Plugin, Task, TaskAction } from '@boost/core';
+import { ConcurrentEvent } from '@boost/event';
 import { Options } from 'yargs-parser';
 import execa, { Options as ExecaOptions, ExecaReturns } from 'execa';
 import ScriptContext from './contexts/ScriptContext';
-import { ExecuteType } from './types';
+import { Argv, ExecuteType } from './types';
 
-export default class Script<Args extends object = {}, Opts extends object = {}> extends Plugin<
-  Opts
-> {
+export default abstract class Script<
+  Args extends object = {},
+  Opts extends object = {}
+> extends Plugin<Opts> {
   tasks: Task<any>[] = [];
+
+  onBeforeExecute = new ConcurrentEvent<[ScriptContext, Argv]>('before-execute');
+
+  onAfterExecute = new ConcurrentEvent<[ScriptContext, unknown]>('after-execute');
+
+  onFailedExecute = new ConcurrentEvent<[ScriptContext, Error]>('failed-execute');
 
   /**
    * Define a configuration object to parse args with.

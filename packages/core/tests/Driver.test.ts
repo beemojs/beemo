@@ -204,16 +204,6 @@ describe('Driver', () => {
     });
   });
 
-  describe('on()', () => {
-    it('pipes event to tool', () => {
-      const func = () => {};
-
-      driver.on('foo', func);
-
-      expect(driver.tool.on).toHaveBeenCalledWith('foo', func);
-    });
-  });
-
   describe('setCommandOptions()', () => {
     it('supports description as a string', () => {
       driver.setCommandOptions({

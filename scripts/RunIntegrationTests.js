@@ -15,6 +15,10 @@ module.exports = class RunIntegrationTestsScript extends Script {
     };
   }
 
+  blueprint() {
+    return {};
+  }
+
   execute(context, options) {
     // eslint-disable-next-line no-nested-ternary
     const key = options.pass ? 'pass' : options.fail ? 'fail' : '';

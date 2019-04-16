@@ -6,7 +6,7 @@ import PrettierDriver from '../src/PrettierDriver';
 describe('PrettierDriver', () => {
   let driver: PrettierDriver;
   let context: DriverContext;
-  let spy: jest.SpyInstance;
+  let writeSpy: jest.SpyInstance;
 
   beforeEach(() => {
     driver = new PrettierDriver();
@@ -15,11 +15,11 @@ describe('PrettierDriver', () => {
 
     context = stubDriverContext(driver);
 
-    spy = jest.spyOn(fs, 'writeFileSync').mockImplementation(() => true);
+    writeSpy = jest.spyOn(fs, 'writeFileSync').mockImplementation(() => true);
   });
 
   afterEach(() => {
-    spy.mockRestore();
+    writeSpy.mockRestore();
   });
 
   it('sets options from constructor', () => {
@@ -79,7 +79,7 @@ describe('PrettierDriver', () => {
 
       driver.handleCreateIgnoreFile(context, '/some/path/prettier.config.js', config);
 
-      expect(spy).toHaveBeenCalledWith('/some/path/.prettierignore', 'foo\nbar\nbaz');
+      expect(writeSpy).toHaveBeenCalledWith('/some/path/.prettierignore', 'foo\nbar\nbaz');
 
       expect(context.configPaths).toEqual([
         { driver: 'prettier', path: '/some/path/.prettierignore' },
@@ -88,12 +88,12 @@ describe('PrettierDriver', () => {
       expect(config).toEqual({ semi: true });
     });
 
-    it('emits `create-ignore-file` event', () => {
+    it('emits `onCreateIgnoreFile` event', () => {
       const createSpy = jest.fn((ctx, path, config) => {
         config.ignore.push('qux');
       });
 
-      driver.tool.on('prettier.create-ignore-file', createSpy);
+      driver.onCreateIgnoreFile.listen(createSpy);
 
       const config = {
         semi: true,
@@ -106,7 +106,7 @@ describe('PrettierDriver', () => {
         ignore: ['foo', 'bar', 'baz', 'qux'],
       });
 
-      expect(spy).toHaveBeenCalledWith('/some/path/.prettierignore', 'foo\nbar\nbaz\nqux');
+      expect(writeSpy).toHaveBeenCalledWith('/some/path/.prettierignore', 'foo\nbar\nbaz\nqux');
     });
   });
 });

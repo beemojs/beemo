@@ -139,8 +139,6 @@ export default class ExecuteScriptRoutine extends BaseExecuteRoutine<ScriptConte
 
     this.tool.addPlugin('script', script);
 
-    this.tool.emit(`${context.eventName}.load-script`, [context, script]);
-
     return script;
   }
 }

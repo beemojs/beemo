@@ -16,5 +16,5 @@
     "target": "es2017"
   },
   "exclude": ["*.test.ts"],
-  "include": ["./src/**/*", "./types/**/*"]
+  "include": ["./src/**/*", "./types/**/*", "../../types/**/*"]
 }

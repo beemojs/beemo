@@ -1,9 +1,11 @@
-import { Tool, ToolConfig, ToolPluginRegistry, PluginSetting } from '@boost/core';
+/* eslint-disable no-unused-vars, @typescript-eslint/no-unused-vars */
+
+import { ToolConfig, ToolPluginRegistry, PluginSetting } from '@boost/core';
 import { ExecaReturns } from 'execa';
 import { Arguments, Options } from 'yargs';
+import Beemo from './Beemo';
 import Driver from './Driver';
 import Script from './Script';
-// eslint-disable-next-line no-unused-vars, @typescript-eslint/no-unused-vars
 import Context from './contexts/Context';
 
 export { Arguments };
@@ -31,17 +33,15 @@ export interface BeemoConfig extends ToolConfig {
   [key: string]: unknown;
 }
 
-export type BeemoTool = Tool<BeemoPluginRegistry, BeemoConfig>;
-
 export interface DriverCommandOptions {
   [name: string]: Options;
 }
 
 export interface DriverOptions {
-  args: string[];
-  dependencies: string[];
-  env: { [key: string]: string };
-  strategy: 'native' | 'create' | 'reference' | 'copy' | 'none';
+  args?: string[];
+  dependencies?: string[];
+  env?: { [key: string]: string };
+  strategy?: 'native' | 'create' | 'reference' | 'copy' | 'none';
 }
 
 export interface DriverMetadata {
@@ -70,7 +70,7 @@ declare global {
     interface Process {
       beemo: {
         context: Context<any>;
-        tool: BeemoTool;
+        tool: Beemo;
       };
     }
   }

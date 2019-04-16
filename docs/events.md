@@ -12,7 +12,7 @@ which listeners can be registered.
 // index.js
 module.exports = function(tool) {
   // Add command line args to every execution
-  tool.on('eslint.before-execute', (driver, argv) => {
+  tool.getPlugin('driver', 'eslint').onBeforeExecute.listen(driver, argv) => {
     argv.push('--color', '--report-unused-disable-directives');
   });
 };
@@ -22,34 +22,42 @@ module.exports = function(tool) {
 
 The following list of events, and their arguments, can be listened to.
 
-| Event                            | Arguments                                                                                  | Description                                                                                                        |
-| -------------------------------- | ------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------ |
-| `exit`                           | `code: number`                                                                             | Called when the process exits, either successfully, or with an error.                                              |
-| `<driver>.init-driver`           | `context: DriverContext | ConfigContext, driver: Driver`                                   | Called before a driver is executed with `beemo <driver>` or before a config is created with `beemo create-config`. |
-| `<driver>.load-module-config`    | `context: DriverContext | ConfigContext, path: string, config: object`                     | Called after configuration has been loaded from the configuration module.                                          |
-| `<driver>.load-package-config`   | `context: DriverContext | ConfigContext, config: object`                                   | Called after configuration has been extracted from `package.json`.                                                 |
-| `<driver>.merge-config`          | `context: DriverContext | ConfigContext, config: object`                                   | Called after multiple configuration sources have been merged into 1.                                               |
-| `<driver>.create-config-file`    | `context: DriverContext | ConfigContext, path: string, config: object`                     | Called before the configuration file is written.                                                                   |
-| `<driver>.copy-config-file`      | `context: DriverContext | ConfigContext, path: string, config: object, sourcePath: string` | Called before the configuration file is copied from module.                                                        |
-| `<driver>.reference-config-file` | `context: DriverContext | ConfigContext, path: string, config: object`                     | Called before the configuration file is referenced.                                                                |
-| `<driver>.delete-config-file`    | `context: DriverContext, path: string`                                                     | Called before the configuration file is deleted. Occurs during the `cleanup` phase.                                |
-| `<driver>.before-execute`        | `context: DriverContext, argv: string[], driver: Driver`                                   | Called before the underlying `Driver` command is executed.                                                         |
-| `<driver>.after-execute`         | `context: DriverContext, response: any, driver: Driver`                                    | Called after the driver has successfully been executed.                                                            |
-| `<driver>.failed-execute`        | `context: DriverContext, error: Error, driver: Driver`                                     | Called after the driver has failed to execute.                                                                     |
-| `<script>.init-script`           | `context: ScriptContext, scriptName: string`                                               | Called before a custom script is executed with `beemo run-script <script>`.                                        |
-| `<script>.load-script`           | `context: ScriptContext, script: Script`                                                   | Called after a `Script` has been loaded and instantiated from the configuration module.                            |
-| `<script>.before-execute`        | `context: ScriptContext, argv: string[], script: Script`                                   | Called before the `Script#run` method is executed.                                                                 |
-| `<script>.after-execute`         | `context: ScriptContext, response: any, script: Script`                                    | Called after the script has successfully been executed.                                                            |
-| `<script>.failed-execute`        | `context: ScriptContext, error: Error, script: Script`                                     | Called after the script has failed to execute.                                                                     |
-| `<app>.resolve-dependencies`     | `context: DriverContext | ConfigContext, drivers: Driver[]`                                | Called after a list of `Driver`s have been resolved in which to create configuration files.                        |
-| `<app>.scaffold`                 | `context: ScaffoldContext, generator: string, action: string, name?: string`               | Called before templates are generated when scaffolding.                                                            |
+### Tool
 
-> `<driver>` and `<script>` should be replaced with their names.
+| Event                   | Arguments                                                                    | Type   | Description                                                                                               |
+| ----------------------- | ---------------------------------------------------------------------------- | ------ | --------------------------------------------------------------------------------------------------------- |
+| `onExit`                | `code: number`                                                               | Normal | Called when the process exits, either successfully, or with an error.                                     |
+| `onLoadPlugin`          | `plugin: Driver | Script`                                                    | Normal | Called after a plugin is loaded and registered into the tool. _Requires a scope of `driver` or `script`._ |
+| `onResolveDependencies` | `context: ConfigContext, drivers: Driver[]`                                  | Normal | Called after a list of `Driver`s have been resolved in which to create configuration files.               |
+| `onRunConfig`           | `context: ConfigContext, driverNames: string[]`                              | Normal | Called before `beemo create-config` is ran.                                                               |
+| `onRunDriver`           | `context: DriverContext, driverName: string, driver: Driver`                 | Normal | Called before `beemo <driver>` is ran.                                                                    |
+| `onRunScript`           | `context: ScriptContext, scriptName: string`                                 | Normal | Called before `beemo run-script <script>` is ran.                                                         |
+| `onScaffold`            | `context: ScaffoldContext, generator: string, action: string, name?: string` | Normal | Called before templates are generated when scaffolding.                                                   |
 
-> `<app>` is the name of a [custom executeable](./tips.md#custom-executable--config-name), or
-> "beemo" when not defined.
+### Driver
 
-### Type Declarations
+| Event                   | Arguments                                              | Type       | Description                                                                         |
+| ----------------------- | ------------------------------------------------------ | ---------- | ----------------------------------------------------------------------------------- |
+| `onAfterExecute`        | `context: DriverContext, response: unknown`            | Concurrent | Called after the driver has successfully been executed.                             |
+| `onBeforeExecute`       | `context: DriverContext, argv: string[]`               | Concurrent | Called before the underlying `Driver` binary command is executed.                   |
+| `onCreateConfigFile`    | `context: ConfigContext, path: string, config: object` | Normal     | Called before the configuration file is written.                                    |
+| `onCopyConfigFile`      | `context: ConfigContext, path: string, config: object` | Normal     | Called before the configuration file is copied from module.                         |
+| `onDeleteConfigFile`    | `context: ConfigContext, path: string`                 | Normal     | Called before the configuration file is deleted. Occurs during the `cleanup` phase. |
+| `onFailedExecute`       | `context: DriverContext, error: Error`                 | Concurrent | Called after the driver has failed to execute.                                      |
+| `onLoadModuleConfig`    | `context: ConfigContext, path: string, config: object` | Normal     | Called after configuration has been loaded from the configuration module.           |
+| `onLoadPackageConfig`   | `context: ConfigContext, config: object`               | Normal     | Called after configuration has been extracted from `package.json`.                  |
+| `onMergeConfig`         | `context: ConfigContext, config: object`               | Normal     | Called after multiple configuration sources have been merged into 1.                |
+| `onReferenceConfigFile` | `context: ConfigContext, path: string, config: object` | Normal     | Called before the configuration file is referenced.                                 |
+
+### Script
+
+| Event             | Arguments                                   | Type       | Description                                             |
+| ----------------- | ------------------------------------------- | ---------- | ------------------------------------------------------- |
+| `onAfterExecute`  | `context: ScriptContext, response: unknown` | Concurrent | Called after the script has successfully been executed. |
+| `onBeforeExecute` | `context: ScriptContext, argv: string[]`    | Concurrent | Called before the `Script#execute` method is ran.       |
+| `onFailedExecute` | `context: ScriptContext, error: Error`      | Concurrent | Called after the script has failed to execute.          |
+
+## Type Declarations
 
 - `Driver` - An instance of the
   [Driver](https://github.com/beemojs/beemo/blob/master/packages/core/src/Driver.ts) class.

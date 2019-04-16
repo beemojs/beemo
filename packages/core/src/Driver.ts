@@ -1,7 +1,10 @@
-import { Plugin, EventListener, Predicates } from '@boost/core';
+import { Plugin, Predicates } from '@boost/core';
+import { Event, ConcurrentEvent } from '@boost/event';
 import mergeWith from 'lodash/mergeWith';
 import execa from 'execa';
 import optimal, { array, bool, object, string, shape } from 'optimal';
+import DriverContext from './contexts/DriverContext';
+import ConfigContext from './contexts/ConfigContext';
 import {
   STRATEGY_COPY,
   STRATEGY_CREATE,
@@ -11,10 +14,10 @@ import {
 } from './constants';
 import { Argv, DriverCommandOptions, DriverOptions, DriverMetadata, Execution } from './types';
 
-export default class Driver<
+export default abstract class Driver<
   Config extends object = {},
-  Opts extends DriverOptions = DriverOptions
-> extends Plugin<Opts> {
+  Options extends DriverOptions = DriverOptions
+> extends Plugin<Options> {
   command: DriverCommandOptions = {};
 
   // @ts-ignore Set after instantiation
@@ -22,6 +25,26 @@ export default class Driver<
 
   // @ts-ignore Set after instantiation
   metadata: DriverMetadata;
+
+  onLoadModuleConfig = new Event<[ConfigContext, string, Config]>('load-module-config');
+
+  onLoadPackageConfig = new Event<[ConfigContext, Config]>('load-package-config');
+
+  onMergeConfig = new Event<[ConfigContext, Config]>('merge-config');
+
+  onCreateConfigFile = new Event<[ConfigContext, string, Config]>('create-config-file');
+
+  onCopyConfigFile = new Event<[ConfigContext, string, Config]>('copy-config-file');
+
+  onReferenceConfigFile = new Event<[ConfigContext, string, Config]>('reference-config-file');
+
+  onDeleteConfigFile = new Event<[ConfigContext, string]>('delete-config-file');
+
+  onBeforeExecute = new ConcurrentEvent<[DriverContext, Argv]>('before-execute');
+
+  onAfterExecute = new ConcurrentEvent<[DriverContext, unknown]>('after-execute');
+
+  onFailedExecute = new ConcurrentEvent<[DriverContext, Error]>('failed-execute');
 
   blueprint(predicates: Predicates) /* infer */ {
     return {
@@ -35,7 +58,7 @@ export default class Driver<
         STRATEGY_COPY,
         STRATEGY_NONE,
       ]),
-    } as any;
+    } as $FixMe;
   }
 
   /**
@@ -62,18 +85,20 @@ export default class Driver<
    * Return a list of user defined arguments.
    */
   getArgs(): Argv {
-    return [...this.options.args];
+    return Array.isArray(this.options.args) ? this.options.args : [];
   }
 
   /**
    * Return a list of dependent drivers.
    */
   getDependencies(): string[] {
+    const dependencies = Array.isArray(this.options.dependencies) ? this.options.dependencies : [];
+
     return [
       // Always required; configured by the driver
       ...this.metadata.dependencies,
       // Custom; configured by the consumer
-      ...this.options.dependencies,
+      ...dependencies,
     ];
   }
 
@@ -142,15 +167,6 @@ export default class Driver<
    */
   mergeConfig(prev: Config, next: Config): Config {
     return mergeWith(prev, next, this.handleMerge);
-  }
-
-  /**
-   * Easily register events in the tool.
-   */
-  on(eventName: string, listener: EventListener): this {
-    this.tool.on(eventName, listener);
-
-    return this;
   }
 
   /**

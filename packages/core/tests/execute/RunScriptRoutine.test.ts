@@ -1,25 +1,30 @@
-import { Tool } from '@boost/core';
-import Script from '../../src/Script';
+import Beemo from '../../src/Beemo';
 import RunScriptRoutine from '../../src/execute/RunScriptRoutine';
-import { mockTool, stubScriptContext, mockDebugger } from '../../src/testUtils';
+import {
+  mockTool,
+  stubScriptContext,
+  mockDebugger,
+  mockScript,
+  TestScript,
+} from '../../src/testUtils';
 
 describe('RunScriptRoutine', () => {
   let routine: RunScriptRoutine;
-  let tool: Tool<any, any>;
+  let tool: Beemo;
 
   beforeEach(() => {
     tool = mockTool();
 
     routine = new RunScriptRoutine('script', 'Run script');
     routine.tool = tool;
-    routine.context = stubScriptContext(new Script());
+    routine.context = stubScriptContext(mockScript('test', tool));
     routine.debug = mockDebugger();
     routine.bootstrap();
   });
 
   describe('execute()', () => {
     it('calls the script args() and execute()', async () => {
-      class TestScript extends Script {
+      class BaseTestScript extends TestScript {
         args() {
           return {
             boolean: ['foo'],
@@ -30,7 +35,7 @@ describe('RunScriptRoutine', () => {
         }
       }
 
-      const script = new TestScript();
+      const script = new BaseTestScript();
       script.bootstrap();
 
       const argsSpy = jest.spyOn(script, 'args');
@@ -52,7 +57,7 @@ describe('RunScriptRoutine', () => {
     it('clones the context and sets root to `packageRoot`', async () => {
       routine.options.packageRoot = '/some/path';
 
-      const script = new Script();
+      const script = mockScript('test');
       const exSpy = jest.spyOn(script, 'execute');
 
       await routine.execute(routine.context, script);
@@ -66,7 +71,7 @@ describe('RunScriptRoutine', () => {
     });
 
     it('add tasks to parent routine', async () => {
-      class TasksScript extends Script {
+      class TasksScript extends TestScript {
         bootstrap() {
           this.task('Task', () => 123);
           this.task('Task', () => 456);
@@ -86,7 +91,7 @@ describe('RunScriptRoutine', () => {
     });
 
     it('parallelizes tasks', async () => {
-      class ParallelTasksScript extends Script {
+      class ParallelTasksScript extends TestScript {
         bootstrap() {
           this.task('Task', () => 123);
           this.task('Task', () => 456);
@@ -109,7 +114,7 @@ describe('RunScriptRoutine', () => {
     });
 
     it('pools tasks', async () => {
-      class PoolTasksScript extends Script {
+      class PoolTasksScript extends TestScript {
         bootstrap() {
           this.task('Task', () => 123);
           this.task('Task', () => 456);
@@ -132,7 +137,7 @@ describe('RunScriptRoutine', () => {
     });
 
     it('serializes tasks', async () => {
-      class SerialTasksScript extends Script {
+      class SerialTasksScript extends TestScript {
         bootstrap() {
           this.task('Task', () => 123);
           this.task('Task', () => 456);
@@ -155,7 +160,7 @@ describe('RunScriptRoutine', () => {
     });
 
     it('synchronizes tasks', async () => {
-      class SyncTasksScript extends Script {
+      class SyncTasksScript extends TestScript {
         bootstrap() {
           this.task('Task', () => 123);
           this.task('Task', () => 456);
@@ -178,7 +183,7 @@ describe('RunScriptRoutine', () => {
     });
 
     it('doesnt run script tasks if `executeTasks` is not called', async () => {
-      class NoTasksScript extends Script {
+      class NoTasksScript extends TestScript {
         bootstrap() {
           this.task('Task', () => 123);
         }
@@ -198,70 +203,66 @@ describe('RunScriptRoutine', () => {
       expect(exSpy).not.toHaveBeenCalled();
     });
 
-    it('triggers `before-execute` event', async () => {
-      class MockScript extends Script {
+    it('emits `onBeforeExecute` event', async () => {
+      class MockScript extends TestScript {
         execute() {
           return Promise.resolve();
         }
       }
 
-      const spy = jest.spyOn(routine.tool, 'emit');
+      const spy = jest.fn();
       const script = new MockScript();
-      script.bootstrap();
 
-      routine.context.eventName = 'before';
+      script.onBeforeExecute.listen(spy);
+      script.bootstrap();
 
       await routine.execute(routine.context, script);
 
-      expect(spy).toHaveBeenCalledWith('before.before-execute', [
-        routine.context,
-        routine.context.argv,
-        script,
-      ]);
+      expect(spy).toHaveBeenCalledWith(routine.context, routine.context.argv);
     });
 
-    it('triggers `after-execute` event on success', async () => {
-      class SuccessScript extends Script {
+    it('emits `onAfterExecute` event on success', async () => {
+      class SuccessScript extends TestScript {
         execute() {
           return Promise.resolve(123);
         }
       }
 
-      const spy = jest.spyOn(routine.tool, 'emit');
+      const spy = jest.fn();
       const script = new SuccessScript();
-      script.bootstrap();
 
-      routine.context.eventName = 'after';
+      script.onAfterExecute.listen(spy);
+      script.bootstrap();
 
       await routine.execute(routine.context, script);
 
-      expect(spy).toHaveBeenCalledWith('after.after-execute', [routine.context, 123, script]);
+      expect(spy).toHaveBeenCalledWith(routine.context, 123);
     });
 
-    it('triggers `failed-execute` event on failure', async () => {
-      class FailureScript extends Script {
+    it('emits `onFailedExecute` event on failure', async () => {
+      class FailureScript extends TestScript {
         execute() {
           return Promise.reject(new Error('Oops'));
         }
       }
 
-      const spy = jest.spyOn(routine.tool, 'emit');
+      const spy = jest.fn();
       const script = new FailureScript();
-      script.bootstrap();
 
-      routine.context.eventName = 'fail';
+      script.onFailedExecute.listen(spy);
+      script.bootstrap();
 
       try {
         await routine.execute(routine.context, script);
       } catch (error) {
-        expect(spy).toHaveBeenCalledWith('fail.failed-execute', [routine.context, error, script]);
+        expect(spy).toHaveBeenCalledWith(routine.context, error);
       }
     });
   });
 
   describe('runScriptTasks()', () => {
     it('rebinds the task to the script', () => {
-      class TaskScript extends Script {
+      class TaskScript extends TestScript {
         bootstrap() {
           this.task('Test', this.boundTask);
         }
