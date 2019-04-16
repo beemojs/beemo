@@ -38,10 +38,7 @@
       "jest",
       "mocha",
       "prettier",
-      {
-        "driver": "typescript",
-        "globalTypes": true
-      },
+      "typescript",
       "webpack"
     ],
     "settings": {

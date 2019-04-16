@@ -12,8 +12,8 @@ which listeners can be registered.
 // index.js
 module.exports = function(tool) {
   // Add command line args to every execution
-  tool.getPlugin('driver', 'eslint').onBeforeExecute.listen(driver, argv) => {
-    argv.push('--color', '--report-unused-disable-directives');
+  tool.getPlugin('driver', 'eslint').onBeforeExecute.listen(context => {
+    context.argv.push('--color', '--report-unused-disable-directives');
   });
 };
 ```
