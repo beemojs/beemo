@@ -16,6 +16,10 @@ module.exports = class BumpPeerDepsScript extends Script {
     };
   }
 
+  blueprint() {
+    return {};
+  }
+
   execute(context, options) {
     const { release } = options;
 

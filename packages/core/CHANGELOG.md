@@ -4,6 +4,7 @@
 
 - Migrated to the new [@boost/event](https://milesj.gitbook.io/boost/event) system.
 - Script names (on the command line) will now error if not in kebab case.
+- Scripts and Drivers now require an explicit `blueprint` method.
 - Renamed `Context#root` to `cwd`.
 - Removed `DriverContext#eventName` and `ScriptContext#eventName`.
 - Removed `ScriptContext#binName`. Use `scriptName` instead.

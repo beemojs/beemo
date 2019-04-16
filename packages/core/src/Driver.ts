@@ -85,18 +85,20 @@ export default abstract class Driver<
    * Return a list of user defined arguments.
    */
   getArgs(): Argv {
-    return Array.from(this.options.args!);
+    return Array.isArray(this.options.args) ? this.options.args : [];
   }
 
   /**
    * Return a list of dependent drivers.
    */
   getDependencies(): string[] {
+    const dependencies = Array.isArray(this.options.dependencies) ? this.options.dependencies : [];
+
     return [
       // Always required; configured by the driver
       ...this.metadata.dependencies,
       // Custom; configured by the consumer
-      ...Array.from(this.options.dependencies!),
+      ...dependencies,
     ];
   }
 
@@ -223,7 +225,4 @@ export default abstract class Driver<
 
     return this;
   }
-
-  // TEMP remove
-  on() {}
 }
