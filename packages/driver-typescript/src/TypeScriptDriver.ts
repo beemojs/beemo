@@ -26,7 +26,8 @@ export default class TypeScriptDriver extends Driver<TypeScriptConfig, TypeScrip
     return {
       ...super.blueprint(preds),
       buildFolder: string('lib'),
-      globalTypes: bool(),
+      globalTypes: bool(true),
+      localTypes: bool(true),
       srcFolder: string('src'),
       testsFolder: string('tests'),
       typesFolder: string('types'),
@@ -67,7 +68,14 @@ export default class TypeScriptDriver extends Driver<TypeScriptConfig, TypeScrip
     context: DriverContext<DriverArgs & TypeScriptArgs>,
     workspaceRoot: string,
   ): Promise<any> {
-    const { buildFolder, srcFolder, testsFolder, typesFolder, globalTypes } = this.options;
+    const {
+      buildFolder,
+      srcFolder,
+      testsFolder,
+      typesFolder,
+      globalTypes,
+      localTypes,
+    } = this.options;
     const optionsConfigPath = path.join(workspaceRoot, 'tsconfig.options.json');
     const globalTypesPath = path.join(workspaceRoot, typesFolder, '**/*');
     const namesToPaths: { [key: string]: string } = {};
@@ -104,6 +112,7 @@ export default class TypeScriptDriver extends Driver<TypeScriptConfig, TypeScrip
       workspacePackages.map(
         ({ dependencies = {}, peerDependencies = {}, tsconfig = {}, workspace }) => {
           const { packagePath } = workspace;
+          const srcPath = path.join(packagePath, srcFolder);
           const testsPath = path.join(packagePath, testsFolder);
           const references: ts.ProjectReference[] = [];
           const promises: Promise<any>[] = [];
@@ -116,31 +125,41 @@ export default class TypeScriptDriver extends Driver<TypeScriptConfig, TypeScrip
           });
 
           // Build package config
-          const packageConfig = {
-            compilerOptions: {
-              declarationDir: buildFolder,
-              outDir: buildFolder,
-              rootDir: srcFolder,
-              ...tsconfig.compilerOptions,
-            },
-            exclude: [buildFolder],
-            extends: path.relative(packagePath, optionsConfigPath),
-            include: [path.join(srcFolder, '**/*'), path.join(typesFolder, '**/*')],
-            references,
-          };
+          if (srcFolder && fs.existsSync(srcPath)) {
+            const packageConfig = {
+              compilerOptions: {
+                ...tsconfig.compilerOptions,
+                declarationDir: buildFolder,
+                outDir: buildFolder,
+                rootDir: srcFolder,
+              },
+              exclude: [buildFolder],
+              extends: path.relative(packagePath, optionsConfigPath),
+              include: [path.join(srcFolder, '**/*')],
+              references,
+            };
 
-          if (globalTypes) {
-            packageConfig.include.push(path.relative(packagePath, globalTypesPath));
-          }
+            if (localTypes) {
+              packageConfig.include.push(path.join(typesFolder, '**/*'));
+            }
 
-          if (Array.isArray(tsconfig.exclude)) {
-            packageConfig.exclude.push(...tsconfig.exclude);
+            if (globalTypes) {
+              packageConfig.include.push(path.relative(packagePath, globalTypesPath));
+            }
+
+            if (testsFolder) {
+              packageConfig.exclude.push(testsFolder);
+            }
+
+            if (Array.isArray(tsconfig.exclude)) {
+              packageConfig.exclude.push(...tsconfig.exclude);
+            }
+
+            promises.push(writeFile(packagePath, packageConfig, false));
           }
 
           // Build tests specific package config
           if (testsFolder && fs.existsSync(testsPath)) {
-            packageConfig.exclude.push(testsFolder);
-
             const testConfig = {
               compilerOptions: {
                 emitDeclarationOnly: false,
@@ -148,9 +167,13 @@ export default class TypeScriptDriver extends Driver<TypeScriptConfig, TypeScrip
                 rootDir: '.',
               },
               extends: path.relative(testsPath, optionsConfigPath),
-              include: ['**/*', path.join('..', typesFolder, '**/*')],
+              include: ['**/*'],
               references: [{ path: '..' }],
             };
+
+            if (localTypes) {
+              testConfig.include.push(path.join('..', typesFolder, '**/*'));
+            }
 
             if (globalTypes) {
               testConfig.include.push(path.relative(testsPath, globalTypesPath));
@@ -158,9 +181,6 @@ export default class TypeScriptDriver extends Driver<TypeScriptConfig, TypeScrip
 
             promises.push(writeFile(testsPath, testConfig, true));
           }
-
-          // Write the config file last
-          promises.push(writeFile(packagePath, packageConfig, false));
 
           return Promise.all(promises);
         },
@@ -177,7 +197,7 @@ export default class TypeScriptDriver extends Driver<TypeScriptConfig, TypeScrip
     configPath: string,
     config: TypeScriptConfig,
   ): string {
-    const { testsFolder } = this.options;
+    const { srcFolder, testsFolder } = this.options;
     const optionsPath = path.join(path.dirname(configPath), 'tsconfig.options.json');
 
     // Extract compiler options to a new config file
@@ -208,17 +228,21 @@ export default class TypeScriptDriver extends Driver<TypeScriptConfig, TypeScrip
     config.references = [];
 
     this.tool.getWorkspacePackages({ root: workspaceRoot }).forEach(({ workspace }) => {
-      config.references!.push({
-        path: path.relative(workspaceRoot, workspace.packagePath),
-      });
-
-      // Reference a separate tests folder if it exists
+      const srcPath = path.join(workspace.packagePath, srcFolder);
       const testsPath = path.join(workspace.packagePath, testsFolder);
 
-      if (testsFolder && fs.existsSync(testsPath)) {
+      // Reference a package *only* if it has a src folder
+      if (srcFolder && fs.existsSync(srcPath)) {
         config.references!.push({
-          path: path.relative(workspaceRoot, testsPath),
+          path: path.relative(workspaceRoot, workspace.packagePath),
         });
+
+        // Reference a separate tests folder if it exists
+        if (testsFolder && fs.existsSync(testsPath)) {
+          config.references!.push({
+            path: path.relative(workspaceRoot, testsPath),
+          });
+        }
       }
     });
 

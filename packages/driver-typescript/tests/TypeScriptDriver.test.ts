@@ -45,6 +45,7 @@ describe('TypeScriptDriver', () => {
       args: ['--foo', '--bar=1'],
       dependencies: ['babel'],
       env: { DEV: 'true' },
+      localTypes: false,
     });
 
     expect(driver.options).toEqual({
@@ -53,7 +54,8 @@ describe('TypeScriptDriver', () => {
       env: { DEV: 'true' },
       strategy: 'native',
       buildFolder: 'lib',
-      globalTypes: false,
+      globalTypes: true,
+      localTypes: false,
       srcFolder: 'src',
       testsFolder: 'tests',
       typesFolder: 'types',
@@ -89,124 +91,13 @@ describe('TypeScriptDriver', () => {
             outDir: 'lib',
             rootDir: 'src',
           },
-          exclude: ['lib'],
-          extends: '../../tsconfig.options.json',
-          include: ['src/**/*', 'types/**/*'],
-          references: [{ path: '../foo' }],
-        }),
-        expect.anything(),
-      );
-
-      expect(writeSpy).toHaveBeenCalledWith(
-        path.join(PROJECT_REFS_FIXTURE_PATH, 'packages/baz/tsconfig.json'),
-        driver.formatConfig({
-          compilerOptions: {
-            declarationDir: 'lib',
-            outDir: 'lib',
-            rootDir: 'src',
-          },
           exclude: ['lib', 'tests'],
           extends: '../../tsconfig.options.json',
-          include: ['src/**/*', 'types/**/*'],
-          references: [{ path: '../foo' }, { path: '../bar' }],
-        }),
-        expect.anything(),
-      );
-
-      expect(writeSpy).toHaveBeenCalledWith(
-        path.join(PROJECT_REFS_FIXTURE_PATH, 'packages/baz/tests/tsconfig.json'),
-        driver.formatConfig({
-          compilerOptions: {
-            emitDeclarationOnly: false,
-            noEmit: true,
-            rootDir: '.',
-          },
-          extends: '../../../tsconfig.options.json',
-          include: ['**/*', '../types/**/*'],
-          references: [{ path: '..' }],
-        }),
-        expect.anything(),
-      );
-
-      expect(writeSpy).toHaveBeenCalledWith(
-        path.join(PROJECT_REFS_FIXTURE_PATH, 'packages/foo/tsconfig.json'),
-        driver.formatConfig({
-          compilerOptions: {
-            declarationDir: 'lib',
-            outDir: 'lib',
-            rootDir: 'src',
-          },
-          exclude: ['lib', 'some/path'],
-          extends: '../../tsconfig.options.json',
-          include: ['src/**/*', 'types/**/*'],
-          references: [],
-        }),
-        expect.anything(),
-      );
-    });
-
-    it('supports custom `srcFolder` and `buildFolder`', () => {
-      driver.options.buildFolder = 'build';
-      driver.options.srcFolder = 'source';
-      driver.createProjectRefConfigsInWorkspaces(context, PROJECT_REFS_FIXTURE_PATH);
-
-      expect(writeSpy).toHaveBeenCalledWith(
-        path.join(PROJECT_REFS_FIXTURE_PATH, 'packages/bar/tsconfig.json'),
-        driver.formatConfig({
-          compilerOptions: {
-            declarationDir: 'build',
-            outDir: 'build',
-            rootDir: 'source',
-          },
-          exclude: ['build'],
-          extends: '../../tsconfig.options.json',
-          include: ['source/**/*', 'types/**/*'],
+          include: ['src/**/*', 'types/**/*', '../../types/**/*'],
           references: [{ path: '../foo' }],
         }),
         expect.anything(),
       );
-    });
-
-    it('supports custom `typesFolder` and `testsFolder`', () => {
-      driver.options.typesFolder = 'typings';
-      driver.options.testsFolder = 'custom-tests';
-      driver.createProjectRefConfigsInWorkspaces(context, PROJECT_REFS_FIXTURE_PATH);
-
-      expect(writeSpy).toHaveBeenCalledWith(
-        path.join(PROJECT_REFS_FIXTURE_PATH, 'packages/foo/custom-tests/tsconfig.json'),
-        driver.formatConfig({
-          compilerOptions: {
-            emitDeclarationOnly: false,
-            noEmit: true,
-            rootDir: '.',
-          },
-          extends: '../../../tsconfig.options.json',
-          include: ['**/*', '../typings/**/*'],
-          references: [{ path: '..' }],
-        }),
-        expect.anything(),
-      );
-
-      expect(writeSpy).toHaveBeenCalledWith(
-        path.join(PROJECT_REFS_FIXTURE_PATH, 'packages/foo/tsconfig.json'),
-        driver.formatConfig({
-          compilerOptions: {
-            declarationDir: 'lib',
-            outDir: 'lib',
-            rootDir: 'src',
-          },
-          exclude: ['lib', 'some/path', 'custom-tests'],
-          extends: '../../tsconfig.options.json',
-          include: ['src/**/*', 'typings/**/*'],
-          references: [],
-        }),
-        expect.anything(),
-      );
-    });
-
-    it('includes global types when `globalTypes` is true', () => {
-      driver.options.globalTypes = true;
-      driver.createProjectRefConfigsInWorkspaces(context, PROJECT_REFS_FIXTURE_PATH);
 
       expect(writeSpy).toHaveBeenCalledWith(
         path.join(PROJECT_REFS_FIXTURE_PATH, 'packages/baz/tsconfig.json'),
@@ -238,6 +129,153 @@ describe('TypeScriptDriver', () => {
         }),
         expect.anything(),
       );
+
+      expect(writeSpy).toHaveBeenCalledWith(
+        path.join(PROJECT_REFS_FIXTURE_PATH, 'packages/foo/tsconfig.json'),
+        driver.formatConfig({
+          compilerOptions: {
+            declarationDir: 'lib',
+            outDir: 'lib',
+            rootDir: 'src',
+          },
+          exclude: ['lib', 'tests', 'some/path'],
+          extends: '../../tsconfig.options.json',
+          include: ['src/**/*', 'types/**/*', '../../types/**/*'],
+          references: [],
+        }),
+        expect.anything(),
+      );
+    });
+
+    it('supports custom `srcFolder` and `buildFolder`', () => {
+      driver.options.buildFolder = 'build';
+      driver.options.srcFolder = 'source';
+      driver.createProjectRefConfigsInWorkspaces(context, PROJECT_REFS_FIXTURE_PATH);
+
+      expect(writeSpy).toHaveBeenCalledWith(
+        path.join(PROJECT_REFS_FIXTURE_PATH, 'packages/qux/tsconfig.json'),
+        driver.formatConfig({
+          compilerOptions: {
+            declarationDir: 'build',
+            outDir: 'build',
+            rootDir: 'source',
+          },
+          exclude: ['build', 'tests'],
+          extends: '../../tsconfig.options.json',
+          include: ['source/**/*', 'types/**/*', '../../types/**/*'],
+          references: [],
+        }),
+        expect.anything(),
+      );
+    });
+
+    it('supports custom `typesFolder` and `testsFolder`', () => {
+      driver.options.typesFolder = 'typings';
+      driver.options.testsFolder = 'custom-tests';
+      driver.createProjectRefConfigsInWorkspaces(context, PROJECT_REFS_FIXTURE_PATH);
+
+      expect(writeSpy).toHaveBeenCalledWith(
+        path.join(PROJECT_REFS_FIXTURE_PATH, 'packages/foo/custom-tests/tsconfig.json'),
+        driver.formatConfig({
+          compilerOptions: {
+            emitDeclarationOnly: false,
+            noEmit: true,
+            rootDir: '.',
+          },
+          extends: '../../../tsconfig.options.json',
+          include: ['**/*', '../typings/**/*', '../../../typings/**/*'],
+          references: [{ path: '..' }],
+        }),
+        expect.anything(),
+      );
+
+      expect(writeSpy).toHaveBeenCalledWith(
+        path.join(PROJECT_REFS_FIXTURE_PATH, 'packages/foo/tsconfig.json'),
+        driver.formatConfig({
+          compilerOptions: {
+            declarationDir: 'lib',
+            outDir: 'lib',
+            rootDir: 'src',
+          },
+          exclude: ['lib', 'custom-tests', 'some/path'],
+          extends: '../../tsconfig.options.json',
+          include: ['src/**/*', 'typings/**/*', '../../typings/**/*'],
+          references: [],
+        }),
+        expect.anything(),
+      );
+    });
+
+    it('excludes local types when `localTypes` is false', () => {
+      driver.options.localTypes = false;
+      driver.createProjectRefConfigsInWorkspaces(context, PROJECT_REFS_FIXTURE_PATH);
+
+      expect(writeSpy).toHaveBeenCalledWith(
+        path.join(PROJECT_REFS_FIXTURE_PATH, 'packages/baz/tsconfig.json'),
+        driver.formatConfig({
+          compilerOptions: {
+            declarationDir: 'lib',
+            outDir: 'lib',
+            rootDir: 'src',
+          },
+          exclude: ['lib', 'tests'],
+          extends: '../../tsconfig.options.json',
+          include: ['src/**/*', '../../types/**/*'],
+          references: [{ path: '../foo' }, { path: '../bar' }],
+        }),
+        expect.anything(),
+      );
+
+      expect(writeSpy).toHaveBeenCalledWith(
+        path.join(PROJECT_REFS_FIXTURE_PATH, 'packages/baz/tests/tsconfig.json'),
+        driver.formatConfig({
+          compilerOptions: {
+            emitDeclarationOnly: false,
+            noEmit: true,
+            rootDir: '.',
+          },
+          extends: '../../../tsconfig.options.json',
+          include: ['**/*', '../../../types/**/*'],
+          references: [{ path: '..' }],
+        }),
+        expect.anything(),
+      );
+    });
+
+    it('excludes global types when `globalTypes` is false', () => {
+      driver.options.globalTypes = false;
+      driver.createProjectRefConfigsInWorkspaces(context, PROJECT_REFS_FIXTURE_PATH);
+
+      expect(writeSpy).toHaveBeenCalledWith(
+        path.join(PROJECT_REFS_FIXTURE_PATH, 'packages/baz/tsconfig.json'),
+        driver.formatConfig({
+          compilerOptions: {
+            declarationDir: 'lib',
+            outDir: 'lib',
+            rootDir: 'src',
+          },
+          exclude: ['lib', 'tests'],
+          extends: '../../tsconfig.options.json',
+          include: ['src/**/*', 'types/**/*'],
+          references: [{ path: '../foo' }, { path: '../bar' }],
+        }),
+        expect.anything(),
+      );
+
+      expect(writeSpy).toHaveBeenCalledWith(
+        path.join(PROJECT_REFS_FIXTURE_PATH, 'packages/baz/tests/tsconfig.json'),
+        driver.formatConfig({
+          compilerOptions: {
+            emitDeclarationOnly: false,
+            noEmit: true,
+            rootDir: '.',
+          },
+          extends: '../../../tsconfig.options.json',
+          include: ['**/*', '../types/**/*'],
+          references: [{ path: '..' }],
+        }),
+        expect.anything(),
+      );
     });
 
     it('emits `onCreateProjectConfigFile` event', () => {
@@ -265,7 +303,7 @@ describe('TypeScriptDriver', () => {
             testsOnly: true,
           },
           extends: '../../../tsconfig.options.json',
-          include: ['**/*', '../types/**/*'],
+          include: ['**/*', '../types/**/*', '../../../types/**/*'],
           references: [{ path: '..' }],
         }),
         expect.anything(),
@@ -283,7 +321,7 @@ describe('TypeScriptDriver', () => {
           },
           exclude: ['lib', 'tests'],
           extends: '../../tsconfig.options.json',
-          include: ['src/**/*', 'types/**/*'],
+          include: ['src/**/*', 'types/**/*', '../../types/**/*'],
           references: [{ path: '../foo' }, { path: '../bar' }],
         }),
         expect.anything(),

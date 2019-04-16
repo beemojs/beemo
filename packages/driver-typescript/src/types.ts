@@ -204,6 +204,7 @@ export interface TypeScriptArgs {
 export interface TypeScriptOptions extends DriverOptions {
   buildFolder?: string;
   globalTypes?: boolean;
+  localTypes?: boolean;
   srcFolder?: string;
   testsFolder?: string;
   typesFolder?: string;
