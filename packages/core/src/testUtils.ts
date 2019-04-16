@@ -2,6 +2,7 @@
 
 import path from 'path';
 import execa from 'execa';
+import { Arguments } from 'yargs';
 import parseArgs from 'yargs-parser';
 import { mockDebugger, stubArgs, stubToolConfig } from '@boost/core/test-utils';
 import Beemo from './Beemo';
@@ -109,8 +110,8 @@ export function stubContext(): Context {
   return applyContext(new Context(stubArgs()));
 }
 
-export function stubConfigArgs(fields?: Partial<ConfigArgs>) {
-  return stubArgs<ConfigArgs>({
+export function stubConfigArgs(fields?: Partial<ConfigArgs>): Arguments<ConfigArgs> {
+  return stubArgs({
     names: [],
     ...fields,
   });
@@ -120,8 +121,8 @@ export function stubConfigContext(): ConfigContext {
   return applyContext(new ConfigContext(stubConfigArgs()));
 }
 
-export function stubDriverArgs(fields?: Partial<DriverArgs>) {
-  return stubArgs<DriverArgs>({
+export function stubDriverArgs(fields?: Partial<DriverArgs>): Arguments<DriverArgs> {
+  return stubArgs({
     concurrency: 1,
     live: false,
     priority: false,
@@ -134,8 +135,8 @@ export function stubDriverContext(driver?: Driver): DriverContext {
   return applyContext(new DriverContext(stubDriverArgs(), driver || new TestDriver()));
 }
 
-export function stubScaffoldArgs(fields?: Partial<ScaffoldArgs>) {
-  return stubArgs<ScaffoldArgs>({
+export function stubScaffoldArgs(fields?: Partial<ScaffoldArgs>): Arguments<ScaffoldArgs> {
+  return stubArgs({
     action: '',
     dry: false,
     generator: '',
@@ -152,8 +153,8 @@ export function stubScaffoldContext(
   return applyContext(new ScaffoldContext(stubScaffoldArgs(), generator, action, name));
 }
 
-export function stubScriptArgs(fields?: Partial<ScriptArgs>) {
-  return stubArgs<ScriptArgs>({
+export function stubScriptArgs(fields?: Partial<ScriptArgs>): Arguments<ScriptArgs> {
+  return stubArgs({
     concurrency: 1,
     name: 'foo',
     priority: false,
