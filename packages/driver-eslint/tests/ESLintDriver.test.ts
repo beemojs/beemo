@@ -80,6 +80,21 @@ describe('ESLintDriver', () => {
         },
       });
     });
+
+    it('merges ignore list correctly', () => {
+      expect(
+        driver.mergeConfig(
+          {
+            ignore: ['foo', 'bar'],
+          },
+          {
+            ignore: ['baz', 'foo'],
+          },
+        ),
+      ).toEqual({
+        ignore: ['foo', 'bar', 'baz'],
+      });
+    });
   });
 
   describe('handleCreateIgnoreFile()', () => {

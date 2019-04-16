@@ -25,8 +25,19 @@ export default class ESLintDriver extends Driver<ESLintConfig> {
     this.onCreateConfigFile.listen(this.handleCreateIgnoreFile);
   }
 
+  /**
+   * ESLints merging logic does not combine arrays but replaces indices.
+   * We do not want this functionality for ignore lists, so handle separately.
+   */
   mergeConfig(prev: ESLintConfig, next: ESLintConfig): ESLintConfig {
-    return ConfigOps.merge(prev, next);
+    const ignore = this.doMerge(prev.ignore || [], next.ignore || []);
+    const config = ConfigOps.merge(prev, next);
+
+    if (ignore && ignore.length > 0) {
+      config.ignore = ignore;
+    }
+
+    return config;
   }
 
   /**

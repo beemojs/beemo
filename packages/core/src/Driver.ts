@@ -66,7 +66,7 @@ export default abstract class Driver<
    */
   doMerge(prevValue: any, nextValue: any): any {
     if (Array.isArray(prevValue)) {
-      return prevValue.concat(nextValue);
+      return Array.from(new Set(prevValue.concat(nextValue)));
     }
 
     return undefined;
