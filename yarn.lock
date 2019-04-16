@@ -1716,10 +1716,10 @@
     npmlog "^4.1.2"
     write-file-atomic "^2.3.0"
 
-"@milesj/build-tool-config@0.162.0":
-  version "0.162.0"
-  resolved "https://registry.npmjs.org/@milesj/build-tool-config/-/build-tool-config-0.162.0.tgz#f41a2217fb755983ee4706553c5f01607fa79a9b"
-  integrity sha512-52/0RprtQZDTBKSa9OIl4Q48F7gRjyaezGbN2/T99IpY5T3AnbHwFztgeZ6uaWkmkEt2jwSjBXRT/YwejRwulg==
+"@milesj/build-tool-config@0.162.2":
+  version "0.162.2"
+  resolved "https://registry.npmjs.org/@milesj/build-tool-config/-/build-tool-config-0.162.2.tgz#306353438a98fcc771652f2c6f66f383471cd74d"
+  integrity sha512-FfqPYqQu+0n3QLtVTgCkxlQoRk6WfvsFJwRJwFIwMvS5sEtcf2/suut18T0m42YZ+SNA7e3utNjLby8nvGeqjw==
   dependencies:
     "@babel/cli" "^7.4.3"
     "@babel/core" "^7.4.3"
@@ -10445,6 +10445,11 @@ util@^0.11.0:
   integrity sha512-HShAsny+zS2TZfaXxD9tYj4HQGlBezXZMZuM/S5PKLLoZkShZiGk9o5CzukI1LVHZvjdvZ2Sj1aW/Ndn2NB/HQ==
   dependencies:
     inherits "2.0.3"
+
+utility-types@^3.5.0:
+  version "3.5.0"
+  resolved "https://registry.npmjs.org/utility-types/-/utility-types-3.5.0.tgz#d80c95b774575d1683f5ba807879c52d8f35db1c"
+  integrity sha512-1XdYkHN+Dcgh1PQEER1CF5BXkGLvf7Owor6tYSyEs+lbHi4obz4ZeJZQVZyinKvFaGwriBKRlEk5hiApfhglQg==
 
 uuid@^3.0.1, uuid@^3.3.2:
   version "3.3.2"

@@ -261,6 +261,7 @@ describe('TypeScriptDriver', () => {
             emitDeclarationOnly: false,
             noEmit: true,
             rootDir: '.',
+            // @ts-ignore Testing purposes
             testsOnly: true,
           },
           extends: '../../../tsconfig.options.json',
@@ -277,6 +278,7 @@ describe('TypeScriptDriver', () => {
             declarationDir: 'lib',
             outDir: 'lib',
             rootDir: 'src',
+            // @ts-ignore Testing purposes
             srcOnly: true,
           },
           exclude: ['lib', 'tests'],

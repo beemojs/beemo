@@ -1,18 +1,37 @@
 import ts from 'typescript';
 import { DriverOptions } from '@beemo/core';
 
-export type TargetSetting = 'ES5' | 'ES2015' | 'ES2016' | 'ES2017' | 'ES2018' | 'ESNEXT';
+export type TargetSetting =
+  | 'es3'
+  | 'es5'
+  | 'es2015'
+  | 'es2016'
+  | 'es2017'
+  | 'es2018'
+  | 'es2019'
+  | 'esnext';
 
-export type ModuleSetting = 'none' | 'commonjs' | 'amd' | 'system' | 'umd' | 'es2015' | 'ESNext';
+export type ModuleSetting =
+  | 'none'
+  | 'commonjs'
+  | 'amd'
+  | 'system'
+  | 'umd'
+  | 'es6'
+  | 'es2015'
+  | 'esnext';
+
+export type ModuleResolutionSetting = 'node' | 'classic';
 
 export type LibSetting =
   | 'es5'
   | 'es6'
-  | 'es2015'
   | 'es7'
+  | 'es2015'
   | 'es2016'
   | 'es2017'
   | 'es2018'
+  | 'es2019'
   | 'esnext'
   | 'dom'
   | 'dom.iterable'
@@ -43,11 +62,92 @@ export type LibSetting =
   | 'esnext.intl'
   | 'esnext.bigint';
 
-export type JSXSetting = 'preserve' | 'react-native' | 'react';
+export type JSXSetting = 'preserve' | 'react-native' | 'react' | 'none';
+
+export interface CompilerOptions {
+  allowJs?: boolean;
+  allowSyntheticDefaultImports?: boolean;
+  allowUnreachableCode?: boolean;
+  allowUnusedLabels?: boolean;
+  alwaysStrict?: boolean;
+  baseUrl?: string;
+  charset?: string;
+  checkJs?: boolean;
+  composite?: boolean;
+  declaration?: boolean;
+  declarationDir?: string;
+  declarationMap?: boolean;
+  disableSizeLimit?: boolean;
+  downlevelIteration?: boolean;
+  emitBOM?: boolean;
+  emitDeclarationOnly?: boolean;
+  emitDecoratorMetadata?: boolean;
+  esModuleInterop?: boolean;
+  experimentalDecorators?: boolean;
+  forceConsistentCasingInFileNames?: boolean;
+  importHelpers?: boolean;
+  incremental?: boolean;
+  inlineSourceMap?: boolean;
+  inlineSources?: boolean;
+  isolatedModules?: boolean;
+  jsx?: JSXSetting;
+  jsxFactory?: string;
+  keyofStringsOnly?: boolean;
+  lib?: string[];
+  locale?: string;
+  mapRoot?: string;
+  maxNodeModuleJsDepth?: number;
+  module?: ModuleSetting;
+  moduleResolution?: ModuleResolutionSetting;
+  newLine?: 'lf' | 'crlf';
+  noEmit?: boolean;
+  noEmitHelpers?: boolean;
+  noEmitOnError?: boolean;
+  noErrorTruncation?: boolean;
+  noFallthroughCasesInSwitch?: boolean;
+  noImplicitAny?: boolean;
+  noImplicitReturns?: boolean;
+  noImplicitThis?: boolean;
+  noImplicitUseStrict?: boolean;
+  noLib?: boolean;
+  noResolve?: boolean;
+  noStrictGenericChecks?: boolean;
+  noUnusedLocals?: boolean;
+  noUnusedParameters?: boolean;
+  out?: string;
+  outDir?: string;
+  outFile?: string;
+  paths?: { [key: string]: string[] };
+  preserveConstEnums?: boolean;
+  preserveSymlinks?: boolean;
+  project?: string;
+  reactNamespace?: string;
+  removeComments?: boolean;
+  resolveJsonModule?: boolean;
+  rootDir?: string;
+  rootDirs?: string[];
+  skipDefaultLibCheck?: boolean;
+  skipLibCheck?: boolean;
+  sourceMap?: boolean;
+  sourceRoot?: string;
+  strict?: boolean;
+  strictBindCallApply?: boolean;
+  strictFunctionTypes?: boolean;
+  strictNullChecks?: boolean;
+  strictPropertyInitialization?: boolean;
+  stripInternal?: boolean;
+  suppressExcessPropertyErrors?: boolean;
+  suppressImplicitAnyIndexErrors?: boolean;
+  target?: TargetSetting;
+  traceResolution?: boolean;
+  tsBuildInfoFile?: string;
+  typeRoots?: string[];
+  types?: string[];
+}
 
 export interface TypeScriptConfig {
   compileOnSave?: boolean;
-  compilerOptions?: ts.CompilerOptions;
+  compilerOptions?: CompilerOptions;
   exclude?: string[];
   extends?: string;
   files?: string[];

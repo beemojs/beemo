@@ -32,5 +32,9 @@
     "@beemo/core": "^1.0.0-alpha.0",
     "@beemo/driver-babel": "^1.0.0-alpha.0",
     "jest": "^24.0.0"
+  },
+  "dependencies": {
+    "@jest/types": "^24.7.0",
+    "utility-types": "^3.5.0"
   }
 }

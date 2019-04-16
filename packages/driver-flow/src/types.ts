@@ -21,6 +21,7 @@ export interface OptionsConfig {
   'esproposal.nullish_coalescing'?: OptionSetting;
   'experimental.const_params'?: boolean;
   include_warnings?: boolean;
+  lazy_mode?: 'fs' | 'ide' | 'watchman' | 'none';
   'log.file'?: string;
   max_header_tokens?: number;
   'module.file_ext'?: string[];
@@ -52,6 +53,7 @@ export interface FlowConfig {
   libs?: string[];
   lints?: LintsConfig;
   options?: OptionsConfig;
+  untyped?: string[];
   version?: string;
 }
 

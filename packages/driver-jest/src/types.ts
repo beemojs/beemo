@@ -1,3 +1,6 @@
+import { Config } from '@jest/types';
+import { Omit } from 'utility-types';
+
 export interface CoverageThreshold {
   branches?: number;
   functions?: number;
@@ -5,68 +8,14 @@ export interface CoverageThreshold {
   statements?: number;
 }
 
-export type ReporterConfig = [string, { [option: string]: any }];
-
-export interface CommonConfig {
-  automock?: boolean;
-  bail?: boolean;
-  browser?: boolean;
-  cache?: boolean;
-  cacheDirectory?: string;
-  clearMocks?: boolean;
-  collectCoverage?: boolean;
-  collectCoverageFrom?: string[];
-  coverageDirectory?: string;
-  coveragePathIgnorePatterns?: string[];
-  coverageReporters?: ('json' | 'lcov' | 'text')[];
+export type CommonConfig = Partial<
+  Omit<Config.InitialOptions, 'coverageThreshold' | 'notifyMode' | 'projects'>
+> & {
   coverageThreshold?: { [key: string]: CoverageThreshold };
-  cwd?: string;
-  detectLeaks?: boolean;
-  errorOnDeprecated?: boolean;
-  forceCoverageMatch?: string[];
-  globals?: { [global: string]: boolean };
-  globalSetup?: string;
-  globalTeardown?: string;
-  moduleDirectories?: string[];
-  moduleFileExtensions?: string[];
-  moduleLoader?: string;
-  moduleNameMapper?: { [key: string]: string };
-  modulePathIgnorePatterns?: string[];
-  modulePaths?: string[];
-  notify?: string;
-  notifyMode?: 'always' | 'failure' | 'success' | 'change' | 'success-change' | 'failure-success';
-  preset?: string;
-  prettierPath?: string;
-  reporters?: (string | ReporterConfig)[];
-  resetMocks?: boolean;
-  resetModules?: boolean;
-  resolver?: string;
-  restoreMocks?: boolean;
-  rootDir?: string;
-  roots?: string[];
-  runner?: string;
-  setupFiles?: string[];
-  setupTestFrameworkScriptFile?: string;
-  snapshotSerializers?: string[];
-  testEnvironment?: string;
-  testEnvironmentOptions?: object;
-  testMatch?: string[];
-  testPathIgnorePatterns?: string[];
-  testRegex?: string;
-  testResultsProcessor?: string;
-  testRunner?: string;
-  testURL?: string;
-  timers?: 'real' | 'fake';
-  transform?: { [key: string]: string };
-  transformIgnorePatterns?: string[];
-  unmockedModulePathPatterns?: string[];
-  verbose?: boolean;
-  watchPathIgnorePatterns?: string[];
-}
+  notifyMode?: 'always' | 'failure' | 'success' | 'change' | 'success-change' | 'failure-change';
+};
 
-export interface ProjectConfig extends CommonConfig {
-  displayName: string;
-}
+export type ProjectConfig = Partial<Config.ProjectConfig>;
 
 export interface JestConfig extends CommonConfig {
   projects?: (string | ProjectConfig)[];
@@ -88,14 +37,14 @@ export interface JestArgs {
   clearMocks?: boolean;
   collectCoverage?: boolean;
   collectCoverageFrom?: string;
-  collectCoverageOnlyFrom?: string | string[];
+  collectCoverageOnlyFrom?: string[];
   color?: boolean;
   colors?: boolean;
   config?: string;
   coverage?: boolean;
   coverageDirectory?: string;
-  coveragePathIgnorePatterns?: string | string[];
-  coverageReporters?: string | string[];
+  coveragePathIgnorePatterns?: string[];
+  coverageReporters?: string[];
   coverageThreshold?: string;
   debug?: boolean;
   detectLeaks?: boolean;
@@ -122,11 +71,11 @@ export interface JestArgs {
   logHeapUsage?: boolean;
   mapCoverage?: boolean;
   maxWorkers?: number;
-  moduleDirectories?: string | string[];
-  moduleFileExtensions?: string | string[];
+  moduleDirectories?: string[];
+  moduleFileExtensions?: string[];
   moduleNameMapper?: string;
-  modulePathIgnorePatterns?: string | string[];
-  modulePaths?: string | string[];
+  modulePathIgnorePatterns?: string[];
+  modulePaths?: string[];
   watchman?: string;
   noStackTrace?: boolean;
   notify?: boolean;
@@ -138,41 +87,41 @@ export interface JestArgs {
   passWithNoTests?: boolean;
   preset?: string;
   prettierPath?: string;
-  projects?: string | string[];
-  reporters?: string | string[];
+  projects?: string[];
+  reporters?: string[];
   resetMocks?: boolean;
   resetModules?: boolean;
   resolver?: string;
   restoreMocks?: boolean;
   rootDir?: string;
-  roots?: string | string[];
+  roots?: string[];
   runInBand?: boolean;
   runner?: string;
   runTestsByPath?: string;
-  setupFiles?: string | string[];
-  setupFilesAfterEnv?: string | string[];
+  setupFiles?: string[];
+  setupFilesAfterEnv?: string[];
   showConfig?: boolean;
   silent?: boolean;
   skipFilter?: boolean;
-  snapshotSerializers?: string | string[];
+  snapshotSerializers?: string[];
   t?: string;
   testEnvironment?: string;
   testEnvironmentOptions?: string;
   testFailureExitCode?: string | number;
   testLocationInResults?: boolean;
-  testMatch?: string | string[];
+  testMatch?: string[];
   testNamePattern?: string;
-  testPathIgnorePatterns?: string | string[];
-  testPathPattern?: string | string[];
+  testPathIgnorePatterns?: string[];
+  testPathPattern?: string[];
   testRegex?: string | string[];
   testResultsProcessor?: string;
   testRunner?: string;
   testURL?: string;
   timers?: string;
   transform?: string;
-  transformIgnorePatterns?: string | string[];
+  transformIgnorePatterns?: string[];
   u?: boolean;
-  unmockedModulePathPatterns?: string | string[];
+  unmockedModulePathPatterns?: string[];
   updateSnapshot?: boolean;
   useStderr?: boolean;
   v?: boolean;
@@ -181,5 +130,5 @@ export interface JestArgs {
   w?: number;
   watch?: boolean;
   watchAll?: boolean;
-  watchPathIgnorePatterns?: string | string[];
+  watchPathIgnorePatterns?: string[];
 }
