@@ -14,17 +14,17 @@
     "test:int:fail": "beemo run-script run-integration-tests --fail --workspaces=\"@beemo/driver-*\"",
     "test:int:pass": "beemo run-script run-integration-tests --pass --workspaces=\"@beemo/driver-*\"",
     "prettier": "beemo prettier",
-    "prerelease": "yarn test && yarn run build",
+    "prerelease": "yarn test",
     "release": "lerna publish",
     "release:bump": "beemo run-script bump-peer-deps",
     "type": "beemo typescript --build --reference-workspaces"
   },
   "devDependencies": {
-    "@milesj/build-tool-config": "0.162.2",
+    "@milesj/build-tool-config": "0.163.0",
     "chalk": "^2.4.2",
     "fast-glob": "^2.2.6",
     "fs-extra": "^7.0.1",
-    "lerna": "3.13.2",
+    "lerna": "3.13.3",
     "semver": "^6.0.0"
   },
   "workspaces": [

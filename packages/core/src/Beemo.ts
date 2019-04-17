@@ -206,9 +206,6 @@ export default class Beemo extends Tool<BeemoPluginRegistry, BeemoConfig> {
 
     this.onRunDriver.emit([context, driver], driverName);
 
-    // TEMP until upstream config is updated
-    this.emit(`${driverName}.init-driver`, [context, driver]);
-
     this.debug('Running with %s v%s driver', driverName, version);
 
     const pipeline = this.startPipeline(context)
