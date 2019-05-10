@@ -34,6 +34,6 @@
   },
   "dependencies": {
     "@boost/event": "^1.0.0",
-    "@types/prettier": "^1.16.2"
+    "@types/prettier": "^1.16.3"
   }
 }

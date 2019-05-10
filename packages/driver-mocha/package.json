@@ -26,7 +26,7 @@
     "access": "public"
   },
   "devDependencies": {
-    "mocha": "^6.1.3"
+    "mocha": "^6.1.4"
   },
   "peerDependencies": {
     "@beemo/core": "^1.0.0-alpha.0",

@@ -28,12 +28,12 @@
   },
   "dependencies": {
     "@beemo/dependency-graph": "^1.0.0-alpha.1",
-    "@boost/core": "^1.11.0",
+    "@boost/core": "^1.11.1",
     "@boost/event": "^1.0.0",
     "@types/execa": "^0.9.0",
-    "@types/fs-extra": "^5.0.5",
+    "@types/fs-extra": "^5.1.0",
     "@types/is-glob": "^4.0.1",
-    "@types/lodash": "^4.14.123",
+    "@types/lodash": "^4.14.125",
     "@types/micromatch": "^3.1.0",
     "@types/node": "^11.13.4",
     "@types/yargs": "^13.0.0",
@@ -45,12 +45,12 @@
     "hygen": "^4.0.2",
     "is-glob": "^4.0.1",
     "lodash": "^4.17.11",
-    "micromatch": "^4.0.1",
-    "optimal": "^3.1.1",
+    "micromatch": "^4.0.2",
+    "optimal": "^3.2.1",
     "yargs": "^13.2.2",
-    "yargs-parser": "^13.0.0"
+    "yargs-parser": "^13.1.0"
   },
   "devDependencies": {
-    "@boost/test-utils": "^1.2.0-alpha.0"
+    "@boost/test-utils": "^1.2.1"
   }
 }

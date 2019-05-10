@@ -90,7 +90,8 @@ export default class RunCommandRoutine extends Routine<DriverContext, Beemo, Run
     if (!args.live) {
       this.tool.console.onError.listen(error => {
         if (
-          error instanceof SignalError &&
+          (error instanceof SignalError || error.name === 'SignalError') &&
+          // @ts-ignore Temporary fix
           (error.signal === 'SIGINT' || error.signal === 'SIGTERM')
         ) {
           process.stdout.write(chalk.gray(this.tool.msg('app:signalBufferMessage')));
