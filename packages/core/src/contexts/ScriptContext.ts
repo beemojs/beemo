@@ -4,8 +4,8 @@ import { Arguments } from '../types';
 
 export interface ScriptArgs {
   concurrency: number;
+  graph: boolean;
   name: string;
-  priority: boolean;
   workspaces: string;
 }
 

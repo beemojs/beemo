@@ -41,15 +41,15 @@ beemo.getPlugins('driver').forEach(driver => {
           description: beemo.msg('app:cliOptionConcurrency'),
           number: true,
         })
+        .option('graph', {
+          boolean: true,
+          default: true,
+          description: beemo.msg('app:cliOptionGraph'),
+        })
         .option('live', {
           boolean: true,
           default: false,
           description: beemo.msg('app:cliOptionLive'),
-        })
-        .option('priority', {
-          boolean: true,
-          default: true,
-          description: beemo.msg('app:cliOptionPriority'),
         })
         .option('workspaces', {
           default: '',
@@ -89,15 +89,15 @@ app.command(
         description: beemo.msg('app:cliOptionConcurrency'),
         number: true,
       })
+      .option('graph', {
+        boolean: true,
+        default: false,
+        description: beemo.msg('app:cliOptionGraph'),
+      })
       .option('live', {
         boolean: true,
         default: false,
         description: beemo.msg('app:cliOptionLive'),
-      })
-      .option('priority', {
-        boolean: true,
-        default: false,
-        description: beemo.msg('app:cliOptionPriority'),
       })
       .option('workspaces', {
         default: '',

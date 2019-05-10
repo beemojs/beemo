@@ -9,8 +9,8 @@ export const KEBAB_PATTERN = /^[a-z]{1}[a-z-]+[a-z]{1}$/u;
 // Keep in sync with CLI options
 export const EXECUTE_OPTIONS = {
   '--concurrency': true,
+  '--graph': true,
   '--live': true,
-  '--priority': true,
   '--reference-workspaces': true,
   '--workspaces': true,
 };

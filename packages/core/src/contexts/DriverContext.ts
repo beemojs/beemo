@@ -4,8 +4,8 @@ import { Arguments, Argv } from '../types';
 
 export interface DriverArgs {
   concurrency: number;
+  graph: boolean;
   live: boolean;
-  priority: boolean;
   workspaces: string;
 }
 

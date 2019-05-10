@@ -6,7 +6,7 @@ import isPatternMatch from '../utils/isPatternMatch';
 
 export interface BaseContextArgs {
   concurrency: number;
-  priority: boolean;
+  graph: boolean;
   workspaces: string;
 }
 
@@ -95,7 +95,7 @@ export default abstract class BaseRoutine<Ctx extends Context<BaseContextArgs>> 
    * Group routines in order of which they are dependend on.
    */
   orderByWorkspacePriorityGraph(): Routine<Ctx, Beemo>[][] {
-    const enabled = this.context.args.priority || this.tool.config.execute.priority;
+    const enabled = this.context.args.graph || this.tool.config.execute.graph;
 
     if (!enabled || !this.context.args.workspaces) {
       return [this.routines];

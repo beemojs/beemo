@@ -30,7 +30,7 @@ export function configBlueprint() {
     }),
     execute: shape({
       concurrency: number(),
-      priority: bool(true),
+      graph: bool(true),
     }),
     module: process.env.BEEMO_CONFIG_MODULE
       ? string(process.env.BEEMO_CONFIG_MODULE)

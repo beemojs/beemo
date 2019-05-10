@@ -33,7 +33,7 @@ to manage your own provider).
 - `configure.parallel` (bool) - Create configuration files in parallel. Defaults to `true`.
 - `execute.concurrency` (number) - Number of builds to run in parallel. Defaults to the amount of
   CPUs.
-- `execute.priority` (bool) - Prioritize workspace builds based on
+- `execute.graph` (bool) - Prioritize workspace builds based on
   [dependency graph](./workspaces.md#priority-packages).
 - `drivers` (string[] | object[]) - List of drivers to enable for the consumer.
 - `settings` (object) - Custom settings specific to your project that can easily be referenced.
@@ -137,7 +137,7 @@ The following options are available when executing a driver.
 
 - `--concurrency` (number) - Number of builds to run in parallel. Defaults to the amount of CPUs.
 - `--live` (bool) - Display output live while process is running instead of on success or failure.
-- `--[no-]priority` (bool) - Prioritize workspace builds based on
+- `--[no-]graph` (bool) - Prioritize workspace builds based on
   [dependency graph](./workspaces.md#priority-packages).
 - `--workspaces` (string) - Execute the command in each [workspace](./workspaces.md) defined by the
   pattern/value. Pass `*` to run in all workspaces.

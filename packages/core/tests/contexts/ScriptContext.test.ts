@@ -10,9 +10,9 @@ describe('ScriptContext', () => {
 
   describe('constructor()', () => {
     it('sets args', () => {
-      context = new ScriptContext(stubScriptArgs({ priority: true }), 'foo');
+      context = new ScriptContext(stubScriptArgs({ graph: true }), 'foo');
 
-      expect(context.args).toEqual(stubScriptArgs({ priority: true }));
+      expect(context.args).toEqual(stubScriptArgs({ graph: true }));
     });
 
     it('sets script name', () => {

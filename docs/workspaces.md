@@ -25,13 +25,13 @@ yarn beemo typescript --workspaces=driver-*
 There are situations where a single package or multiple packages need to be executed before all
 other packages, for example, a core/common/main package. This is very common for typed languages
 like Flow or TypeScript. By default, Beemo will automatically resolve a priority order based on the
-workspaces dependency graph. To disable this process, pass a `--no-priority` option.
+workspaces dependency graph. To disable this process, pass a `--no-graph` option.
 
 ```
-yarn beemo typescript --workspaces=* --no-priority
+yarn beemo typescript --workspaces=* --no-graph
 ```
 
-High priority packages will be executed in parallel batches, based on the order of dependency,
+Highly depended on packages will be executed in parallel batches, based on the order of dependency,
 followed by all remaining packages being executed in parallel batches as well.
 
 ## Driver Support

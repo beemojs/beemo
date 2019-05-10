@@ -53,7 +53,7 @@ export function mockTool(argv: Argv = []): Beemo {
     drivers: [],
     execute: {
       concurrency: 0,
-      priority: true,
+      graph: true,
     },
     scripts: [],
   });
@@ -124,8 +124,8 @@ export function stubConfigContext(): ConfigContext {
 export function stubDriverArgs(fields?: Partial<DriverArgs>): Arguments<DriverArgs> {
   return stubArgs({
     concurrency: 1,
+    graph: false,
     live: false,
-    priority: false,
     workspaces: '',
     ...fields,
   });
@@ -156,8 +156,8 @@ export function stubScaffoldContext(
 export function stubScriptArgs(fields?: Partial<ScriptArgs>): Arguments<ScriptArgs> {
   return stubArgs({
     concurrency: 1,
+    graph: false,
     name: 'foo',
-    priority: false,
     workspaces: '',
     ...fields,
   });

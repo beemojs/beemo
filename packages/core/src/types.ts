@@ -25,7 +25,7 @@ export interface BeemoConfig extends ToolConfig {
   drivers: PluginSetting<Driver>;
   execute: {
     concurrency: number;
-    priority: boolean;
+    graph: boolean;
   };
   module: string;
   scripts: PluginSetting<Script>;

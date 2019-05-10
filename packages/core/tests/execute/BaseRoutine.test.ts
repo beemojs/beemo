@@ -137,7 +137,7 @@ describe('BaseExecuteRoutine', () => {
 
     describe('workspaces', () => {
       beforeEach(() => {
-        routine.context.args.priority = true;
+        routine.context.args.graph = true;
         routine.context.args.workspaces = '*';
       });
 
@@ -243,13 +243,13 @@ describe('BaseExecuteRoutine', () => {
 
   describe('orderByWorkspacePriorityGraph()', () => {
     beforeEach(() => {
-      routine.context.args.priority = true;
+      routine.context.args.graph = true;
       routine.context.args.workspaces = '*';
     });
 
-    it('returns all in single batch if priority is false', () => {
-      routine.context.args.priority = false;
-      routine.tool.config.execute.priority = false;
+    it('returns all in single batch if graph is false', () => {
+      routine.context.args.graph = false;
+      routine.tool.config.execute.graph = false;
 
       expect(routine.orderByWorkspacePriorityGraph()).toEqual([[primary, foo, bar, baz, qux]]);
     });
