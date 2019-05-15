@@ -3,4 +3,4 @@
 #### 🎉 Release
 
 - Initial release!
-- Added a `prettier.create-ignore-file` event.
+- Added a `PrettierDriver.onCreateIgnoreFile` event.

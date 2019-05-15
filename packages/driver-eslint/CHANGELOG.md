@@ -3,7 +3,7 @@
 #### 🎉 Release
 
 - Initial release!
-- Added a `eslint.create-ignore-file` event.
+- Added a `ESLintDriver.onCreateIgnoreFile` event.
 
 #### 🐞 Fixes
 
