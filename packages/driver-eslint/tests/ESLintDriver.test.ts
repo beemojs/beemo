@@ -1,6 +1,6 @@
 import fs from 'fs';
 import { DriverContext } from '@beemo/core';
-import { mockTool, stubDriverContext } from '@beemo/core/lib/testUtils';
+import { mockTool, stubDriverContext, stubExecResult } from '@beemo/core/lib/testUtils';
 import ESLintDriver from '../src/ESLintDriver';
 
 describe('ESLintDriver', () => {
@@ -94,6 +94,24 @@ describe('ESLintDriver', () => {
       ).toEqual({
         ignore: ['foo', 'bar', 'baz'],
       });
+    });
+  });
+
+  describe('processFailure()', () => {
+    it('outputs stderr and stdout', () => {
+      const logSpy = jest.spyOn(driver.tool, 'log');
+      const errorSpy = jest.spyOn(driver.tool, 'logError');
+
+      driver.processFailure(
+        stubExecResult({
+          cmd: 'eslint',
+          stdout: 'Warning',
+          stderr: 'Error',
+        }),
+      );
+
+      expect(logSpy).toHaveBeenCalledWith('Warning');
+      expect(errorSpy).toHaveBeenCalledWith('Error');
     });
   });
 

@@ -1,13 +1,13 @@
 import fs from 'fs';
 import path from 'path';
 import { Event } from '@boost/event';
-import { Driver, ConfigContext, ConfigArgs } from '@beemo/core';
+import { Driver, ConfigContext, ConfigArgs, Execution } from '@beemo/core';
 // @ts-ignore
 import ConfigOps from 'eslint/lib/config/config-ops';
 import { ESLintArgs, ESLintConfig } from './types';
 
-// Success: Writes nothing to stdout or stderr
-// Failure: Writes to stdout
+// Success: Writes warnings to stdout
+// Failure: Writes to stdout and stderr
 export default class ESLintDriver extends Driver<ESLintConfig> {
   onCreateIgnoreFile = new Event<
     [ConfigContext<ConfigArgs & ESLintArgs>, string, { ignore: string[] }]
@@ -38,6 +38,22 @@ export default class ESLintDriver extends Driver<ESLintConfig> {
     }
 
     return config;
+  }
+
+  /**
+   * ESLint writes warnings to stdout, so we need to display
+   * both stdout and stderr on failure.
+   */
+  processFailure(error: Execution) {
+    const { stderr, stdout } = error;
+
+    if (stderr) {
+      this.tool.logError(stderr);
+    }
+
+    if (stdout) {
+      this.tool.log(stdout);
+    }
   }
 
   /**
