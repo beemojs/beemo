@@ -125,7 +125,7 @@ export function stubDriverArgs(fields?: Partial<DriverArgs>): Arguments<DriverAr
   return stubArgs({
     concurrency: 1,
     graph: false,
-    live: false,
+    stdio: 'reporter',
     workspaces: '',
     ...fields,
   });
@@ -158,6 +158,7 @@ export function stubScriptArgs(fields?: Partial<ScriptArgs>): Arguments<ScriptAr
     concurrency: 1,
     graph: false,
     name: 'foo',
+    stdio: 'reporter',
     workspaces: '',
     ...fields,
   });

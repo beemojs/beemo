@@ -216,24 +216,24 @@ describe('ExecuteCommandRoutine', () => {
       });
     });
 
-    describe('live', () => {
-      it('enables if args includes live option', () => {
-        routine.context.args.live = true;
+    describe('pipe', () => {
+      it('enables if args includes stdio option', () => {
+        routine.context.args.stdio = 'pipe';
 
-        expect(routine.captureLiveOutput(stream)).toBe('live');
+        expect(routine.captureLiveOutput(stream)).toBe('pipe');
       });
 
-      it('disables if args live is wrong', () => {
-        routine.context.args.lived = true;
+      it('disables if stdio option is wrong', () => {
+        routine.context.args.stdiod = 'pipe';
 
         expect(routine.captureLiveOutput(stream)).toBe('buffer');
       });
 
-      it('doesnt pipe a batch stream when using live', () => {
+      it('doesnt pipe a batch stream when using stdio', () => {
         const outSpy = jest.spyOn(stream.stdout, 'pipe');
         const errSpy = jest.spyOn(stream.stderr, 'pipe');
 
-        routine.context.args.live = true;
+        routine.context.args.stdio = 'pipe';
 
         routine.captureLiveOutput(stream);
 
@@ -241,11 +241,11 @@ describe('ExecuteCommandRoutine', () => {
         expect(errSpy).not.toHaveBeenCalled();
       });
 
-      it('registers a data handler when using live', () => {
+      it('registers a data handler when using stdio', () => {
         const outSpy = jest.spyOn(stream.stdout, 'on');
         const errSpy = jest.spyOn(stream.stderr, 'on');
 
-        routine.context.args.live = true;
+        routine.context.args.stdio = 'pipe';
 
         routine.captureLiveOutput(stream);
 
@@ -254,7 +254,7 @@ describe('ExecuteCommandRoutine', () => {
       });
 
       it('writes chunk to `process.stdout`', () => {
-        routine.context.args.live = true;
+        routine.context.args.stdio = 'pipe';
 
         routine.captureLiveOutput(stream);
 
@@ -265,7 +265,7 @@ describe('ExecuteCommandRoutine', () => {
     });
 
     describe('buffer', () => {
-      it('defaults to buffer if no live or watch', () => {
+      it('defaults to buffer if no stdio or watch', () => {
         expect(routine.captureLiveOutput(stream)).toBe('buffer');
       });
 

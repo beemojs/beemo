@@ -10,9 +10,9 @@ describe('Context', () => {
 
   describe('constructor()', () => {
     it('sets args', () => {
-      context = new Context(stubArgs({ live: true }));
+      context = new Context(stubArgs({ stdio: 'pipe' }));
 
-      expect(context.args).toEqual(stubArgs({ live: true }));
+      expect(context.args).toEqual(stubArgs({ stdio: 'pipe' }));
     });
   });
 

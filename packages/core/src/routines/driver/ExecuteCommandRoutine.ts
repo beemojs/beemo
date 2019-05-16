@@ -65,7 +65,7 @@ export default class ExecuteCommandRoutine extends Routine<
   }
 
   /**
-   * Capture live output via `--live` or `--watch`. Buffer the output incase ctrl+c is entered.
+   * Capture live output via `--stdio=pipe` or `--watch`. Buffer the output incase ctrl+c is entered.
    */
   captureLiveOutput = (stream: execa.ExecaChildProcess) => {
     const { args, primaryDriver } = this.context;
@@ -94,7 +94,7 @@ export default class ExecuteCommandRoutine extends Routine<
     let buffer = '';
 
     // When cmd/ctrl + c is pressed, write out the current buffer
-    if (!args.live) {
+    if (args.stdio !== 'pipe') {
       this.tool.console.onError.listen(error => {
         if (
           (error instanceof SignalError || error.name === 'SignalError') &&
@@ -108,7 +108,7 @@ export default class ExecuteCommandRoutine extends Routine<
     }
 
     const handler = (chunk: Buffer) => {
-      if (args.live) {
+      if (args.stdio === 'pipe') {
         process.stdout.write(String(chunk));
       } else {
         buffer += String(chunk);
@@ -118,7 +118,7 @@ export default class ExecuteCommandRoutine extends Routine<
     stream.stdout!.on('data', handler);
     stream.stderr!.on('data', handler);
 
-    return args.live ? 'live' : 'buffer';
+    return args.stdio || 'buffer';
   };
 
   /**

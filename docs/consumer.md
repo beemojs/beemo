@@ -136,9 +136,10 @@ That being said, consistently remembering the correct commands and arguments to 
 The following options are available when executing a driver.
 
 - `--concurrency` (number) - Number of builds to run in parallel. Defaults to the amount of CPUs.
-- `--live` (bool) - Display output live while process is running instead of on success or failure.
 - `--[no-]graph` (bool) - Prioritize workspace builds based on
   [dependency graph](./workspaces.md#priority-packages).
+- `--stdio` (reporter | pipe | inherit) - Control how the underlying driver output is displayed in
+  the console. Defaults to "reporter", which is the default Boost reporter.
 - `--workspaces` (string) - Execute the command in each [workspace](./workspaces.md) defined by the
   pattern/value. Pass `*` to run in all workspaces.
 
@@ -150,7 +151,7 @@ If the underlying driver supports file watching, most commonly through a CLI opt
 ### Live Mode
 
 The Beemo console masks output of the underlying driver while it is executing. If you prefer to see
-the driver output live, simply pass `--live`.
+the driver output live, simply pass `--stdio=pipe` or `--stdio=inherit`.
 
 ## Executing Scripts
 

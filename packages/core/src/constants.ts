@@ -10,7 +10,7 @@ export const KEBAB_PATTERN = /^[a-z]{1}[a-z-]+[a-z]{1}$/u;
 export const EXECUTE_OPTIONS = {
   '--concurrency': true,
   '--graph': true,
-  '--live': true,
   '--reference-workspaces': true,
+  '--stdio': true,
   '--workspaces': true,
 };
