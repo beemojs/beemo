@@ -57,7 +57,7 @@ beemo.getPlugins('driver').forEach(driver => {
           string: true,
         });
     },
-    args => beemo.executeDriver(args, driver.name, parallel),
+    args => beemo.runDriver(args, driver.name, parallel),
   );
 });
 
@@ -104,7 +104,7 @@ app.command(
         description: beemo.msg('app:cliOptionWorkspaces'),
         string: true,
       }),
-  args => beemo.executeScript(args, args.name),
+  args => beemo.runScript(args, args.name),
 );
 
 app.command(

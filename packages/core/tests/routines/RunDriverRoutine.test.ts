@@ -1,16 +1,16 @@
 import path from 'path';
 import { getFixturePath } from '@boost/test-utils';
-import ExecuteDriverRoutine from '../src/ExecuteDriverRoutine';
-import RunCommandRoutine from '../src/execute/RunCommandRoutine';
-import Driver from '../src/Driver';
-import { mockDebugger, mockTool, mockDriver, stubDriverContext } from '../src/testUtils';
+import RunDriverRoutine from '../../src/routines/RunDriverRoutine';
+import ExecuteCommandRoutine from '../../src/routines/driver/ExecuteCommandRoutine';
+import Driver from '../../src/Driver';
+import { mockDebugger, mockTool, mockDriver, stubDriverContext } from '../../src/testUtils';
 
-describe('ExecuteDriverRoutine', () => {
-  let routine: ExecuteDriverRoutine;
+describe('RunDriverRoutine', () => {
+  let routine: RunDriverRoutine;
   let driver: Driver;
 
   function createTestRunCommand(title: string, command: string, options: any = {}) {
-    const run = new RunCommandRoutine(title, command, {
+    const run = new ExecuteCommandRoutine(title, command, {
       argv: ['-a', '--foo', 'bar', 'baz'],
       ...options,
     });
@@ -26,7 +26,7 @@ describe('ExecuteDriverRoutine', () => {
 
     driver = mockDriver('primary', tool);
 
-    routine = new ExecuteDriverRoutine('driver', 'Executing driver');
+    routine = new RunDriverRoutine('driver', 'Executing driver');
     routine.context = stubDriverContext(driver);
     routine.tool = tool;
     routine.debug = mockDebugger();

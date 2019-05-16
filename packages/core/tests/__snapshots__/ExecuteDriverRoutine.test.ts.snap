@@ -1,5 +1,0 @@
-// Jest Snapshot v1, https://goo.gl/fbAQLP
-
-exports[`ExecuteDriverRoutine bootstrap() workspaces errors if workspaces config is empty 1`] = `"Option --workspaces=* provided but project is not workspaces enabled."`;
-
-exports[`ExecuteDriverRoutine bootstrap() workspaces errors if workspaces config is not set 1`] = `"Option --workspaces=* provided but project is not workspaces enabled."`;

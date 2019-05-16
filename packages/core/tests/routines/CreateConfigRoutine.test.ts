@@ -2,7 +2,7 @@ import fs from 'fs-extra';
 import BabelDriver from '@beemo/driver-babel';
 import ConfigLoader from '@boost/core/lib/ConfigLoader';
 import Beemo from '../../src/Beemo';
-import CreateConfigRoutine from '../../src/configure/CreateConfigRoutine';
+import CreateConfigRoutine from '../../src/routines/CreateConfigRoutine';
 import Driver from '../../src/Driver';
 import {
   STRATEGY_COPY,

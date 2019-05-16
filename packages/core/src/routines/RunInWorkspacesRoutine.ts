@@ -4,16 +4,15 @@ import Beemo from '../Beemo';
 import Context from '../contexts/Context';
 import isPatternMatch from '../utils/isPatternMatch';
 
-export interface BaseContextArgs {
+export interface RunInWorkspacesContextArgs {
   concurrency: number;
   graph: boolean;
   workspaces: string;
 }
 
-export default abstract class BaseRoutine<Ctx extends Context<BaseContextArgs>> extends Routine<
-  Ctx,
-  Beemo
-> {
+export default abstract class RunInWorkspacesRoutine<
+  Ctx extends Context<RunInWorkspacesContextArgs>
+> extends Routine<Ctx, Beemo> {
   workspacePackages: WorkspacePackageConfig[] = [];
 
   bootstrap() {

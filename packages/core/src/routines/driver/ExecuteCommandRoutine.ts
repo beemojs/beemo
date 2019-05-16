@@ -7,23 +7,27 @@ import isGlob from 'is-glob';
 import merge from 'lodash/merge';
 import execa from 'execa';
 import parseArgs from 'yargs-parser';
-import Beemo from '../Beemo';
-import DriverContext from '../contexts/DriverContext';
-import BatchStream from '../streams/BatchStream';
-import filterArgs, { OptionMap } from '../utils/filterArgs';
-import { STRATEGY_COPY } from '../constants';
-import { Argv, Execution } from '../types';
+import Beemo from '../../Beemo';
+import DriverContext from '../../contexts/DriverContext';
+import BatchStream from '../../streams/BatchStream';
+import filterArgs, { OptionMap } from '../../utils/filterArgs';
+import { STRATEGY_COPY } from '../../constants';
+import { Argv, Execution } from '../../types';
 
 const OPTION_PATTERN: RegExp = /-?-[a-z0-9-]+(,|\s)/giu;
 
-export interface RunCommandOptions {
+export interface ExecuteCommandOptions {
   additionalArgv?: Argv;
   argv?: Argv;
   forceConfigOption?: boolean;
   packageRoot?: string;
 }
 
-export default class RunCommandRoutine extends Routine<DriverContext, Beemo, RunCommandOptions> {
+export default class ExecuteCommandRoutine extends Routine<
+  DriverContext,
+  Beemo,
+  ExecuteCommandOptions
+> {
   blueprint({ array, bool, string }: Predicates) /* infer */ {
     return {
       additionalArgv: array(string()),
@@ -38,23 +42,26 @@ export default class RunCommandRoutine extends Routine<DriverContext, Beemo, Run
     const { forceConfigOption, packageRoot } = this.options;
     const { metadata } = this.context.primaryDriver;
 
-    this.task(tool.msg('app:driverRunGatherArgs'), this.gatherArgs);
+    this.task(tool.msg('app:driverExecuteGatherArgs'), this.gatherArgs);
 
-    this.task(tool.msg('app:driverRunExpandGlob'), this.expandGlobPatterns);
+    this.task(tool.msg('app:driverExecuteExpandGlob'), this.expandGlobPatterns);
 
-    this.task(tool.msg('app:driverRunFilterOptions'), this.filterUnknownOptions).skip(
+    this.task(tool.msg('app:driverExecuteFilterOptions'), this.filterUnknownOptions).skip(
       !metadata.filterOptions,
     );
 
     if (packageRoot && metadata.workspaceStrategy === STRATEGY_COPY) {
-      this.task(tool.msg('app:driverRunCopyWorkspaceConfig'), this.copyConfigToWorkspacePackage);
+      this.task(
+        tool.msg('app:driverExecuteCopyWorkspaceConfig'),
+        this.copyConfigToWorkspacePackage,
+      );
     } else {
-      this.task(tool.msg('app:driverRunIncludeConfigOption'), this.includeConfigOption).skip(
+      this.task(tool.msg('app:driverExecuteIncludeConfigOption'), this.includeConfigOption).skip(
         !metadata.useConfigOption && !forceConfigOption,
       );
     }
 
-    this.task(tool.msg('app:driverRunCommand'), this.runCommandWithArgs);
+    this.task(tool.msg('app:driverExecute'), this.runCommandWithArgs);
   }
 
   /**

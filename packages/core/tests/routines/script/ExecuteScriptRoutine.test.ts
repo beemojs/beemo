@@ -1,21 +1,21 @@
-import Beemo from '../../src/Beemo';
-import RunScriptRoutine from '../../src/execute/RunScriptRoutine';
+import Beemo from '../../../src/Beemo';
+import ExecuteScriptRoutine from '../../../src/routines/script/ExecuteScriptRoutine';
 import {
   mockTool,
   stubScriptContext,
   mockDebugger,
   mockScript,
   TestScript,
-} from '../../src/testUtils';
+} from '../../../src/testUtils';
 
-describe('RunScriptRoutine', () => {
-  let routine: RunScriptRoutine;
+describe('ExecuteScriptRoutine', () => {
+  let routine: ExecuteScriptRoutine;
   let tool: Beemo;
 
   beforeEach(() => {
     tool = mockTool();
 
-    routine = new RunScriptRoutine('script', 'Run script');
+    routine = new ExecuteScriptRoutine('script', 'Run script');
     routine.tool = tool;
     routine.context = stubScriptContext(mockScript('test', tool));
     routine.debug = mockDebugger();

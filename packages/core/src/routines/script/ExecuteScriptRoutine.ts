@@ -1,15 +1,19 @@
 import { Routine, Task, Predicates } from '@boost/core';
 import parseArgs, { Arguments } from 'yargs-parser';
-import Beemo from '../Beemo';
-import Script from '../Script';
-import ScriptContext from '../contexts/ScriptContext';
-import { ExecuteType } from '../types';
+import Beemo from '../../Beemo';
+import Script from '../../Script';
+import ScriptContext from '../../contexts/ScriptContext';
+import { ExecuteType } from '../../types';
 
-export interface RunScriptOptions {
+export interface ExecuteScriptOptions {
   packageRoot?: string;
 }
 
-export default class RunScriptRoutine extends Routine<ScriptContext, Beemo, RunScriptOptions> {
+export default class ExecuteScriptRoutine extends Routine<
+  ScriptContext,
+  Beemo,
+  ExecuteScriptOptions
+> {
   blueprint({ string }: Predicates) /* infer */ {
     return {
       packageRoot: string(),

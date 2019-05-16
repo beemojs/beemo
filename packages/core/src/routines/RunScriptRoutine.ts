@@ -1,14 +1,14 @@
 import path from 'path';
 import camelCase from 'lodash/camelCase';
 import upperFirst from 'lodash/upperFirst';
-import Script from './Script';
-import ScriptContext from './contexts/ScriptContext';
-import RunScriptRoutine from './execute/RunScriptRoutine';
-import BaseExecuteRoutine from './execute/BaseRoutine';
-import filterArgs from './utils/filterArgs';
-import { EXECUTE_OPTIONS } from './constants';
+import Script from '../Script';
+import ScriptContext from '../contexts/ScriptContext';
+import filterArgs from '../utils/filterArgs';
+import { EXECUTE_OPTIONS } from '../constants';
+import ExecuteScriptRoutine from './script/ExecuteScriptRoutine';
+import RunInWorkspacesRoutine from './RunInWorkspacesRoutine';
 
-export default class ExecuteScriptRoutine extends BaseExecuteRoutine<ScriptContext> {
+export default class RunScriptRoutine extends RunInWorkspacesRoutine<ScriptContext> {
   errors: Error[] = [];
 
   bootstrap() {
@@ -29,13 +29,13 @@ export default class ExecuteScriptRoutine extends BaseExecuteRoutine<ScriptConte
 
     if (packageName) {
       this.pipe(
-        new RunScriptRoutine(packageName, command, {
+        new ExecuteScriptRoutine(packageName, command, {
           packageRoot,
         }),
       );
     } else {
       this.pipe(
-        new RunScriptRoutine(scriptName, command, {
+        new ExecuteScriptRoutine(scriptName, command, {
           packageRoot: cwd,
         }),
       );

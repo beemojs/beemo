@@ -1,10 +1,10 @@
-import DriverContext from './contexts/DriverContext';
-import RunCommandRoutine, { RunCommandOptions } from './execute/RunCommandRoutine';
-import BaseExecuteRoutine from './execute/BaseRoutine';
-import filterArgs from './utils/filterArgs';
-import { EXECUTE_OPTIONS } from './constants';
+import DriverContext from '../contexts/DriverContext';
+import ExecuteCommandRoutine, { ExecuteCommandOptions } from './driver/ExecuteCommandRoutine';
+import RunInWorkspacesRoutine from './RunInWorkspacesRoutine';
+import filterArgs from '../utils/filterArgs';
+import { EXECUTE_OPTIONS } from '../constants';
 
-export default class ExecuteDriverRoutine extends BaseExecuteRoutine<DriverContext> {
+export default class ExecuteDriverRoutine extends RunInWorkspacesRoutine<DriverContext> {
   pipeRoutine(packageName?: string, packageRoot?: string) {
     if (packageName) {
       this.pipeParallelBuilds(packageName, {
@@ -20,7 +20,7 @@ export default class ExecuteDriverRoutine extends BaseExecuteRoutine<DriverConte
    * When a parallel pipe "//" is defined, we need to create an additional routine
    * for each instance.
    */
-  pipeParallelBuilds(key: string, options: Partial<RunCommandOptions> = {}) {
+  pipeParallelBuilds(key: string, options: Partial<ExecuteCommandOptions> = {}) {
     const { argv, parallelArgv, primaryDriver } = this.context;
     const { filteredArgv } = filterArgs(argv, {
       block: EXECUTE_OPTIONS,
@@ -28,7 +28,7 @@ export default class ExecuteDriverRoutine extends BaseExecuteRoutine<DriverConte
     const command = `${primaryDriver.metadata.bin} ${filteredArgv.join(' ')}`.trim();
 
     this.pipe(
-      new RunCommandRoutine(key, command, {
+      new ExecuteCommandRoutine(key, command, {
         ...options,
         argv: filteredArgv,
       }),
@@ -36,7 +36,7 @@ export default class ExecuteDriverRoutine extends BaseExecuteRoutine<DriverConte
 
     parallelArgv.forEach(pargv => {
       this.pipe(
-        new RunCommandRoutine(key, `${command} ${pargv.join(' ')}`.trim(), {
+        new ExecuteCommandRoutine(key, `${command} ${pargv.join(' ')}`.trim(), {
           ...options,
           additionalArgv: pargv,
           argv: filteredArgv,

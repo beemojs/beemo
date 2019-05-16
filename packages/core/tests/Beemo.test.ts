@@ -238,7 +238,7 @@ describe('Beemo', () => {
     });
   });
 
-  describe('executeDriver()', () => {
+  describe('runDriver()', () => {
     beforeEach(() => {
       // @ts-ignore
       beemo.getPlugin = () => ({
@@ -253,7 +253,7 @@ describe('Beemo', () => {
 
       beemo.onRunDriver.listen(spy, 'foo-bar');
 
-      await beemo.executeDriver(stubDriverArgs(), 'foo-bar');
+      await beemo.runDriver(stubDriverArgs(), 'foo-bar');
 
       expect(spy).toHaveBeenCalledWith(
         expect.objectContaining({
@@ -267,7 +267,7 @@ describe('Beemo', () => {
     it('passes driver name and context to pipeline run', async () => {
       const spy = jest.spyOn(beemo, 'startPipeline');
 
-      await beemo.executeDriver(stubDriverArgs(), 'foo-bar');
+      await beemo.runDriver(stubDriverArgs(), 'foo-bar');
 
       expect(spy).toHaveBeenCalledWith(
         expect.objectContaining({
@@ -282,7 +282,7 @@ describe('Beemo', () => {
     it('passes `parallelArgv` to context', async () => {
       const spy = jest.spyOn(beemo, 'startPipeline');
 
-      await beemo.executeDriver(stubDriverArgs(), 'foo', [['--foo'], ['bar']]);
+      await beemo.runDriver(stubDriverArgs(), 'foo', [['--foo'], ['bar']]);
 
       expect(spy).toHaveBeenCalledWith(
         expect.objectContaining({
@@ -294,7 +294,7 @@ describe('Beemo', () => {
     it('doesnt pipe cleanup routine if `configure.cleanup` is false', async () => {
       beemo.config.configure.cleanup = false;
 
-      await beemo.executeDriver(stubDriverArgs(), 'foo-bar');
+      await beemo.runDriver(stubDriverArgs(), 'foo-bar');
 
       expect(beemo.pipeline!.pipe).toHaveBeenCalledTimes(2);
     });
@@ -302,25 +302,23 @@ describe('Beemo', () => {
     it('pipes cleanup routine if `configure.cleanup` is true', async () => {
       beemo.config.configure.cleanup = true;
 
-      await beemo.executeDriver(stubDriverArgs(), 'foo-bar');
+      await beemo.runDriver(stubDriverArgs(), 'foo-bar');
 
       expect(beemo.pipeline!.pipe).toHaveBeenCalledTimes(3);
     });
   });
 
-  describe('executeScript()', () => {
+  describe('runScript()', () => {
     it('errors if script name is not in kebab case', () => {
-      expect(
-        beemo.executeScript(stubScriptArgs(), 'Foo_Bar'),
-      ).rejects.toThrowErrorMatchingSnapshot();
+      expect(beemo.runScript(stubScriptArgs(), 'Foo_Bar')).rejects.toThrowErrorMatchingSnapshot();
     });
 
     it('errors if script name starts with a dash', () => {
-      expect(beemo.executeScript(stubScriptArgs(), '-foo')).rejects.toThrowErrorMatchingSnapshot();
+      expect(beemo.runScript(stubScriptArgs(), '-foo')).rejects.toThrowErrorMatchingSnapshot();
     });
 
     it('errors if script name ends with a dash', () => {
-      expect(beemo.executeScript(stubScriptArgs(), 'bar-')).rejects.toThrowErrorMatchingSnapshot();
+      expect(beemo.runScript(stubScriptArgs(), 'bar-')).rejects.toThrowErrorMatchingSnapshot();
     });
 
     it('emits `onRunScript` event with context', async () => {
@@ -328,7 +326,7 @@ describe('Beemo', () => {
 
       beemo.onRunScript.listen(spy, 'foo-bar');
 
-      await beemo.executeScript(stubScriptArgs(), 'foo-bar');
+      await beemo.runScript(stubScriptArgs(), 'foo-bar');
 
       expect(spy).toHaveBeenCalledWith(
         expect.objectContaining({

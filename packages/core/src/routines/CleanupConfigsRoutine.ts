@@ -1,10 +1,10 @@
 import { Routine } from '@boost/core';
 import chalk from 'chalk';
 import fs from 'fs-extra';
-import Beemo from './Beemo';
-import DriverContext from './contexts/DriverContext';
+import Beemo from '../Beemo';
+import DriverContext from '../contexts/DriverContext';
 
-export default class CleanupRoutine extends Routine<DriverContext, Beemo> {
+export default class CleanupConfigsRoutine extends Routine<DriverContext, Beemo> {
   bootstrap() {
     this.task(this.tool.msg('app:configCleanup'), this.deleteConfigFiles);
   }

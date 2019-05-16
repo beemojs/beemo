@@ -1,10 +1,10 @@
-import Beemo from '../src/Beemo';
-import ConfigureRoutine from '../src/ConfigureRoutine';
-import Driver from '../src/Driver';
-import { mockTool, mockDebugger, mockDriver, stubConfigContext } from '../src/testUtils';
+import Beemo from '../../src/Beemo';
+import ResolveConfigsRoutine from '../../src/routines/ResolveConfigsRoutine';
+import Driver from '../../src/Driver';
+import { mockTool, mockDebugger, mockDriver, stubConfigContext } from '../../src/testUtils';
 
-describe('ConfigureRoutine', () => {
-  let routine: ConfigureRoutine;
+describe('ResolveConfigsRoutine', () => {
+  let routine: ResolveConfigsRoutine;
   let plugins: { [name: string]: Driver };
   let tool: Beemo;
   let driver: Driver;
@@ -14,7 +14,7 @@ describe('ConfigureRoutine', () => {
     tool = mockTool();
     driver = mockDriver('foo', tool);
 
-    routine = new ConfigureRoutine('config', 'Generating configurations');
+    routine = new ResolveConfigsRoutine('config', 'Generating configurations');
     routine.tool = tool;
     routine.context = stubConfigContext();
     routine.debug = mockDebugger();

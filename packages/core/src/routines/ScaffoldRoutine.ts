@@ -2,8 +2,8 @@ import path from 'path';
 import { engine } from 'hygen';
 import Logger from 'hygen/lib/logger';
 import { Routine } from '@boost/core';
-import Beemo from './Beemo';
-import ScaffoldContext from './contexts/ScaffoldContext';
+import Beemo from '../Beemo';
+import ScaffoldContext from '../contexts/ScaffoldContext';
 
 export default class ScaffoldRoutine extends Routine<ScaffoldContext, Beemo> {
   bootstrap() {

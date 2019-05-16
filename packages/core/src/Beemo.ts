@@ -4,14 +4,14 @@ import path from 'path';
 import camelCase from 'lodash/camelCase';
 import upperFirst from 'lodash/upperFirst';
 import { Argv as Yargv } from 'yargs';
-import { CLI, Pipeline, Tool } from '@boost/core';
 import { Event } from '@boost/event';
+import { CLI, Pipeline, Tool } from '@boost/core';
 import { bool, number, string, shape } from 'optimal';
-import CleanupRoutine from './CleanupRoutine';
-import ConfigureRoutine from './ConfigureRoutine';
-import ExecuteDriverRoutine from './ExecuteDriverRoutine';
-import ExecuteScriptRoutine from './ExecuteScriptRoutine';
-import ScaffoldRoutine from './ScaffoldRoutine';
+import CleanupConfigsRoutine from './routines/CleanupConfigsRoutine';
+import ResolveConfigsRoutine from './routines/ResolveConfigsRoutine';
+import RunDriverRoutine from './routines/RunDriverRoutine';
+import RunScriptRoutine from './routines/RunScriptRoutine';
+import ScaffoldRoutine from './routines/ScaffoldRoutine';
 import Driver from './Driver';
 import Script from './Script';
 import Context from './contexts/Context';
@@ -148,7 +148,7 @@ export default class Beemo extends Tool<BeemoPluginRegistry, BeemoConfig> {
     this.onRunConfig.emit([context, driverNames]);
 
     return this.startPipeline(context)
-      .pipe(new ConfigureRoutine('config', this.msg('app:configGenerate')))
+      .pipe(new ResolveConfigsRoutine('config', this.msg('app:configGenerate')))
       .run();
   }
 
@@ -195,7 +195,7 @@ export default class Beemo extends Tool<BeemoPluginRegistry, BeemoConfig> {
   /**
    * Execute all routines for the chosen driver.
    */
-  async executeDriver(
+  async runDriver(
     args: DriverContext['args'],
     driverName: string,
     parallelArgv: Argv[] = [],
@@ -209,11 +209,11 @@ export default class Beemo extends Tool<BeemoPluginRegistry, BeemoConfig> {
     this.debug('Running with %s v%s driver', driverName, version);
 
     const pipeline = this.startPipeline(context)
-      .pipe(new ConfigureRoutine('config', this.msg('app:configGenerate')))
+      .pipe(new ResolveConfigsRoutine('config', this.msg('app:configGenerate')))
       .pipe(
-        new ExecuteDriverRoutine(
+        new RunDriverRoutine(
           'driver',
-          this.msg('app:driverExecute', {
+          this.msg('app:driverRun', {
             name: driver.metadata.title,
             version,
           }),
@@ -222,7 +222,7 @@ export default class Beemo extends Tool<BeemoPluginRegistry, BeemoConfig> {
 
     // Only add cleanup routine if we need it
     if (this.config.configure.cleanup) {
-      pipeline.pipe(new CleanupRoutine('cleanup', this.msg('app:cleanup')));
+      pipeline.pipe(new CleanupConfigsRoutine('cleanup', this.msg('app:cleanup')));
     }
 
     return pipeline.run(driverName);
@@ -231,7 +231,7 @@ export default class Beemo extends Tool<BeemoPluginRegistry, BeemoConfig> {
   /**
    * Run a script found within the configuration module.
    */
-  async executeScript(args: ScriptContext['args'], scriptName: string): Promise<Execution> {
+  async runScript(args: ScriptContext['args'], scriptName: string): Promise<Execution> {
     if (!scriptName || !scriptName.match(KEBAB_PATTERN)) {
       throw new Error(this.msg('errors:scriptNameInvalidFormat'));
     }
@@ -244,10 +244,10 @@ export default class Beemo extends Tool<BeemoPluginRegistry, BeemoConfig> {
 
     return this.startPipeline(context)
       .pipe(
-        new ExecuteScriptRoutine(
+        new RunScriptRoutine(
           'script',
           // Try and match the name of the class
-          this.msg('app:scriptExecute', { name: upperFirst(camelCase(context.scriptName)) }),
+          this.msg('app:scriptRun', { name: upperFirst(camelCase(context.scriptName)) }),
         ),
       )
       .run();

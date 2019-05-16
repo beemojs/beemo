@@ -1,17 +1,23 @@
 import path from 'path';
 import { getFixturePath } from '@boost/test-utils';
 import ModuleLoader from '@boost/core/lib/ModuleLoader';
-import ExecuteScriptRoutine from '../src/ExecuteScriptRoutine';
-import RunScriptRoutine from '../src/execute/RunScriptRoutine';
-import Script from '../src/Script';
-import { mockDebugger, mockTool, mockScript, stubScriptContext, getRoot } from '../src/testUtils';
+import RunScriptRoutine from '../../src/routines/RunScriptRoutine';
+import ExecuteScriptRoutine from '../../src/routines/script/ExecuteScriptRoutine';
+import Script from '../../src/Script';
+import {
+  mockDebugger,
+  mockTool,
+  mockScript,
+  stubScriptContext,
+  getRoot,
+} from '../../src/testUtils';
 
 jest.mock('@boost/core/lib/ModuleLoader', () =>
   jest.fn(() => ({
     importModule: jest.fn(tempName => {
       const { basename } = require.requireActual('path');
       const kebabCase = require.requireActual('lodash/kebabCase');
-      const BaseScript = require.requireActual('../src/Script').default;
+      const BaseScript = require.requireActual('../../src/Script').default;
       let name = tempName.includes('/') ? basename(tempName) : tempName;
 
       if (tempName.endsWith('Missing.js') || tempName === 'missing') {
@@ -39,12 +45,12 @@ jest.mock('@boost/core/lib/ModuleLoader', () =>
   })),
 );
 
-describe('ExecuteScriptRoutine', () => {
-  let routine: ExecuteScriptRoutine;
+describe('RunScriptRoutine', () => {
+  let routine: RunScriptRoutine;
   let script: Script;
 
-  function createTestRunScript(title: string, options: any = {}) {
-    const run = new RunScriptRoutine(title, '-a --foo bar baz', {
+  function createTestExecuteScript(title: string, options: any = {}) {
+    const run = new ExecuteScriptRoutine(title, '-a --foo bar baz', {
       packageRoot: getRoot(),
       ...options,
     });
@@ -59,7 +65,7 @@ describe('ExecuteScriptRoutine', () => {
 
     script = mockScript('plugin-name', tool);
 
-    routine = new ExecuteScriptRoutine('script', 'Executing script');
+    routine = new RunScriptRoutine('script', 'Executing script');
     routine.context = stubScriptContext(script);
     routine.tool = tool;
     routine.debug = mockDebugger();
@@ -75,7 +81,7 @@ describe('ExecuteScriptRoutine', () => {
       routine.pipe = jest.fn();
       routine.bootstrap();
 
-      expect(routine.pipe).toHaveBeenCalledWith(createTestRunScript('plugin-name'));
+      expect(routine.pipe).toHaveBeenCalledWith(createTestExecuteScript('plugin-name'));
     });
 
     describe('workspaces', () => {
@@ -94,17 +100,17 @@ describe('ExecuteScriptRoutine', () => {
 
         expect(routine.pipe).toHaveBeenCalledTimes(3);
         expect(routine.pipe).toHaveBeenCalledWith(
-          createTestRunScript('foo', {
+          createTestExecuteScript('foo', {
             packageRoot: path.join(fixturePath, './packages/foo'),
           }),
         );
         expect(routine.pipe).toHaveBeenCalledWith(
-          createTestRunScript('bar', {
+          createTestExecuteScript('bar', {
             packageRoot: path.join(fixturePath, './packages/bar'),
           }),
         );
         expect(routine.pipe).toHaveBeenCalledWith(
-          createTestRunScript('baz', {
+          createTestExecuteScript('baz', {
             packageRoot: path.join(fixturePath, './packages/baz'),
           }),
         );

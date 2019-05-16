@@ -3,15 +3,15 @@ import chalk from 'chalk';
 import { Task, SignalError } from '@boost/core';
 import BabelDriver from '@beemo/driver-babel';
 import JestDriver from '@beemo/driver-jest';
-import Driver from '../../src/Driver';
-import RunCommandRoutine from '../../src/execute/RunCommandRoutine';
+import Driver from '../../../src/Driver';
+import ExecuteCommandRoutine from '../../../src/routines/driver/ExecuteCommandRoutine';
 import {
   mockTool,
   stubDriverContext,
   mockDebugger,
   prependRoot,
   getRoot,
-} from '../../src/testUtils';
+} from '../../../src/testUtils';
 
 const BABEL_HELP = `
 Usage: babel [options] <files ...>
@@ -53,8 +53,8 @@ Options:
   -h, --help                           output usage information
 `;
 
-describe('RunCommandRoutine', () => {
-  let routine: RunCommandRoutine;
+describe('ExecuteCommandRoutine', () => {
+  let routine: ExecuteCommandRoutine;
   let driver: Driver;
   let tool;
 
@@ -69,7 +69,7 @@ describe('RunCommandRoutine', () => {
     driver.tool = tool;
     driver.bootstrap();
 
-    routine = new RunCommandRoutine('babel', 'Run babel', {
+    routine = new ExecuteCommandRoutine('babel', 'Run babel', {
       argv: ['-a', '--foo', 'bar', 'baz'],
     });
     routine.tool = tool;
@@ -82,7 +82,7 @@ describe('RunCommandRoutine', () => {
     it('errors if `forceConfigOption` is not a boolean', () => {
       expect(() => {
         // @ts-ignore
-        routine = new RunCommandRoutine('test', 'test', {
+        routine = new ExecuteCommandRoutine('test', 'test', {
           forceConfigOption: 'foo',
         });
       }).toThrowErrorMatchingSnapshot();
@@ -91,7 +91,7 @@ describe('RunCommandRoutine', () => {
     it('errors if `packageRoot` is not a string', () => {
       expect(() => {
         // @ts-ignore
-        routine = new RunCommandRoutine('test', 'test', {
+        routine = new ExecuteCommandRoutine('test', 'test', {
           packageRoot: 123,
         });
       }).toThrowErrorMatchingSnapshot();

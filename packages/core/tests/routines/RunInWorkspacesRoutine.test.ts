@@ -1,6 +1,6 @@
 import { Routine } from '@boost/core';
 import Driver from '../../src/Driver';
-import BaseExecuteRoutine from '../../src/execute/BaseRoutine';
+import RunInWorkspacesRoutine from '../../src/routines/RunInWorkspacesRoutine';
 import { mockTool, mockDriver, stubDriverContext, mockDebugger } from '../../src/testUtils';
 
 class PipedRoutine extends Routine<any, any> {
@@ -9,14 +9,14 @@ class PipedRoutine extends Routine<any, any> {
   }
 }
 
-class ExecuteRoutine extends BaseExecuteRoutine<any> {
+class ExecuteRoutine extends RunInWorkspacesRoutine<any> {
   pipeRoutine(packageName?: string, packageRoot?: string) {
     this.pipe(new PipedRoutine(packageName || 'root', packageRoot || ''));
   }
 }
 
-describe('BaseExecuteRoutine', () => {
-  let routine: BaseExecuteRoutine<any>;
+describe('RunInWorkspacesRoutine', () => {
+  let routine: RunInWorkspacesRoutine<any>;
   let driver: Driver;
   let primary: PipedRoutine;
   let foo: PipedRoutine;

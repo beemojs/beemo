@@ -1,6 +1,6 @@
 import hygen from 'hygen';
-import ScaffoldRoutine from '../src/ScaffoldRoutine';
-import { mockTool, mockDebugger, stubScaffoldContext, getRoot } from '../src/testUtils';
+import ScaffoldRoutine from '../../src/routines/ScaffoldRoutine';
+import { mockTool, mockDebugger, stubScaffoldContext, getRoot } from '../../src/testUtils';
 
 jest.mock('hygen');
 

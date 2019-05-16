@@ -1,10 +1,10 @@
 import { Routine } from '@boost/core';
 import chalk from 'chalk';
-import Beemo from './Beemo';
-import CreateConfigRoutine from './configure/CreateConfigRoutine';
-import ConfigContext from './contexts/ConfigContext';
+import Beemo from '../Beemo';
+import ConfigContext from '../contexts/ConfigContext';
+import CreateConfigRoutine from './CreateConfigRoutine';
 
-export default class ConfigureRoutine<T extends ConfigContext = ConfigContext> extends Routine<
+export default class ResolveConfigsRoutine<T extends ConfigContext = ConfigContext> extends Routine<
   T,
   Beemo
 > {

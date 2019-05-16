@@ -1,15 +1,15 @@
 import fs from 'fs-extra';
-import CleanupRoutine from '../src/CleanupRoutine';
-import { mockTool, mockDebugger, mockDriver, stubDriverContext } from '../src/testUtils';
+import CleanupConfigsRoutine from '../../src/routines/CleanupConfigsRoutine';
+import { mockTool, mockDebugger, mockDriver, stubDriverContext } from '../../src/testUtils';
 
-describe('CleanupRoutine', () => {
-  let routine: CleanupRoutine;
+describe('CleanupConfigsRoutine', () => {
+  let routine: CleanupConfigsRoutine;
 
   beforeEach(() => {
     const tool = mockTool();
     const driver = mockDriver('test-driver', tool);
 
-    routine = new CleanupRoutine('cleanup', 'Cleaning up');
+    routine = new CleanupConfigsRoutine('cleanup', 'Cleaning up');
     routine.context = stubDriverContext(driver);
     routine.tool = tool;
     routine.debug = mockDebugger();
