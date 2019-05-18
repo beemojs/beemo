@@ -48,11 +48,11 @@ export default class ESLintDriver extends Driver<ESLintConfig> {
     const { stderr, stdout } = error;
 
     if (stderr) {
-      this.tool.logError(stderr);
+      this.tool.console.logError(stderr);
     }
 
     if (stdout) {
-      this.tool.log(stdout);
+      this.tool.console.log(stdout);
     }
   }
 

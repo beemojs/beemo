@@ -70,7 +70,7 @@ describe('Driver', () => {
     let spy: jest.SpyInstance;
 
     beforeEach(() => {
-      spy = jest.spyOn(driver.tool, 'logError');
+      spy = jest.spyOn(driver.tool.console, 'logError');
     });
 
     afterEach(() => {
@@ -124,7 +124,7 @@ describe('Driver', () => {
     let spy: jest.SpyInstance;
 
     beforeEach(() => {
-      spy = jest.spyOn(driver.tool, 'log');
+      spy = jest.spyOn(driver.tool.console, 'log');
     });
 
     afterEach(() => {

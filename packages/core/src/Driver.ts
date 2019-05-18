@@ -146,11 +146,11 @@ export default abstract class Driver<
     const out = (stderr || stdout).trim();
 
     // Integration debugging
-    // this.tool.logError('STDERR', JSON.stringify(error));
+    // this.tool.console.logError('STDERR', JSON.stringify(error));
 
     // Use console to by pass silent
     if (out) {
-      this.tool.logError(out);
+      this.tool.console.logError(out);
     }
   }
 
@@ -161,11 +161,11 @@ export default abstract class Driver<
     const out = response.stdout.trim();
 
     // Integration debugging
-    // this.tool.log('STDOUT', JSON.stringify(response));
+    // this.tool.console.log('STDOUT', JSON.stringify(response));
 
     // Use console to by pass silent
     if (out) {
-      this.tool.log(out);
+      this.tool.console.log(out);
     }
   }
 

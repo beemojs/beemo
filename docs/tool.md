@@ -21,11 +21,13 @@ tool.package.name;
 ## Logging
 
 Standard messages can be logged with `log(message)` and will be displayed on success (stdout), while
-error messages can be logged `logError(message)` and will be displayed on failure (stderr).
+error messages can be logged `log.error(message)` and will be displayed on failure (stderr).
+
+// TODO link to docs
 
 ```js
 tool.log('Something happened!');
-tool.logError('Oops, something is broken!');
+tool.log.error('Oops, something is broken!');
 ```
 
 Debug messages that will only be displayed during `--debug` can be logged with

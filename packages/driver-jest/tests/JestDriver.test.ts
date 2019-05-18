@@ -44,7 +44,7 @@ describe('JestDriver', () => {
 
   describe('processSuccess()', () => {
     it('outputs stderr', () => {
-      const spy = jest.spyOn(driver.tool, 'log');
+      const spy = jest.spyOn(driver.tool.console, 'log');
 
       driver.processSuccess(
         stubExecResult({
@@ -58,7 +58,7 @@ describe('JestDriver', () => {
     });
 
     it('outputs nothing if empty strings', () => {
-      const spy = jest.spyOn(driver.tool, 'log');
+      const spy = jest.spyOn(driver.tool.console, 'log');
 
       driver.processSuccess(
         stubExecResult({
@@ -72,7 +72,7 @@ describe('JestDriver', () => {
     });
 
     it('outputs stdout and stderr when running coverage', () => {
-      const spy = jest.spyOn(driver.tool, 'log');
+      const spy = jest.spyOn(driver.tool.console, 'log');
 
       driver.processSuccess(
         stubExecResult({
@@ -87,7 +87,7 @@ describe('JestDriver', () => {
     });
 
     it('outputs nothing if empty strings when running coverage', () => {
-      const spy = jest.spyOn(driver.tool, 'log');
+      const spy = jest.spyOn(driver.tool.console, 'log');
 
       driver.processSuccess(
         stubExecResult({
