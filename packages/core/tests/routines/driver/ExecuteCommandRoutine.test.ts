@@ -216,7 +216,7 @@ describe('ExecuteCommandRoutine', () => {
       });
     });
 
-    ['pipe', 'inherit'].forEach(stdio => {
+    ['stream', 'inherit'].forEach(stdio => {
       describe(`${stdio}`, () => {
         beforeEach(() => {
           routine.context.args.stdio = stdio as any;
@@ -256,13 +256,13 @@ describe('ExecuteCommandRoutine', () => {
       });
     });
 
-    describe('reporter / buffer', () => {
+    describe('buffer', () => {
       beforeEach(() => {
-        routine.context.args.stdio = 'reporter';
+        routine.context.args.stdio = 'buffer';
       });
 
       it('defaults to buffer if no `stdio` option or not watching', () => {
-        expect(routine.captureOutput(stream)).toBe('reporter');
+        expect(routine.captureOutput(stream)).toBe('buffer');
       });
 
       it('registers a data handler when buffering', () => {

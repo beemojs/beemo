@@ -64,7 +64,7 @@ export type Execution = ExecaReturns;
 
 export type ExecuteType = 'parallel' | 'pool' | 'serial' | 'sync';
 
-export type StdioType = 'reporter' | 'pipe' | 'inherit';
+export type StdioType = 'buffer' | 'stream' | 'inherit';
 
 declare global {
   // eslint-disable-next-line @typescript-eslint/no-namespace

@@ -47,8 +47,8 @@ beemo.getPlugins('driver').forEach(driver => {
           description: beemo.msg('app:cliOptionGraph'),
         })
         .option('stdio', {
-          choices: ['reporter', 'pipe', 'inherit'],
-          default: 'reporter' as StdioType,
+          choices: ['buffer', 'stream', 'inherit'],
+          default: 'buffer' as StdioType,
           description: beemo.msg('app:cliOptionStdio'),
           string: true,
         })
@@ -96,8 +96,8 @@ app.command(
         description: beemo.msg('app:cliOptionGraph'),
       })
       .option('stdio', {
-        choices: ['reporter', 'pipe', 'inherit'],
-        default: 'reporter' as StdioType,
+        choices: ['buffer', 'stream', 'inherit'],
+        default: 'buffer' as StdioType,
         description: beemo.msg('app:cliOptionStdio'),
         string: true,
       })

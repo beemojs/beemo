@@ -95,7 +95,7 @@ export default class ExecuteCommandRoutine extends Routine<
     let buffer = '';
 
     // When cmd/ctrl + c is pressed, write out the current buffer
-    if (args.stdio === 'reporter') {
+    if (args.stdio === 'buffer') {
       this.tool.console.onError.listen(error => {
         if (
           (error instanceof SignalError || error.name === 'SignalError') &&
@@ -108,10 +108,10 @@ export default class ExecuteCommandRoutine extends Routine<
       });
     }
 
-    // When piping or inheriting, output immediately,
+    // When streaming or inheriting, output immediately,
     // otherwise buffer for the reporter.
     const handler = (chunk: Buffer) => {
-      if (args.stdio === 'pipe' || args.stdio === 'inherit') {
+      if (args.stdio === 'stream' || args.stdio === 'inherit') {
         process.stdout.write(String(chunk));
       } else {
         buffer += String(chunk);

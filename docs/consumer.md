@@ -138,12 +138,12 @@ The following options are available when executing a driver.
 - `--concurrency` (number) - Number of builds to run in parallel. Defaults to the amount of CPUs.
 - `--[no-]graph` (bool) - Prioritize workspace builds based on
   [dependency graph](./workspaces.md#priority-packages).
-- `--stdio` (reporter | pipe | inherit) - Control how the underlying driver output is displayed in
-  the console. Defaults to "reporter".
-  - `reporter` - Renders Beemo output using the defined reporter(s). Underlying driver output will
-    be rendered on success or failure.
+- `--stdio` (buffer | inherit | stream) - Control how the underlying driver output is displayed in
+  the console. Defaults to "buffer".
+  - `buffer` - Renders Beemo output using the defined reporter(s). Underlying driver output will be
+    rendered on success or failure.
   - `inherit` - Doesn't render Beemo output and instead streams the underlying driver output live.
-  - `pipe` - A combination of `reporter` and `inherit`.
+  - `stream` - A combination of `buffer` and `inherit`.
 - `--workspaces` (string) - Execute the command in each [workspace](./workspaces.md) defined by the
   pattern/value. Pass `*` to run in all workspaces.
 
@@ -155,7 +155,7 @@ If the underlying driver supports file watching, most commonly through a CLI opt
 ### Live Mode
 
 The Beemo console masks output of the underlying driver while it is executing. If you prefer to see
-the driver output live, simply pass `--stdio=pipe` or `--stdio=inherit`.
+the driver output live, simply pass `--stdio=stream` or `--stdio=inherit`.
 
 ## Executing Scripts
 
