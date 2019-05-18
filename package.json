@@ -57,6 +57,9 @@
       "testPathIgnorePatterns": [
         "integration"
       ]
+    },
+    "prettier": {
+      "ignore": ["CHANGELOG.md"]
     }
   }
 }
