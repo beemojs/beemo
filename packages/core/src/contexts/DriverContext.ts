@@ -1,11 +1,11 @@
 import ConfigContext from './ConfigContext';
 import Driver from '../Driver';
-import { Arguments, Argv } from '../types';
+import { Arguments, Argv, StdioType } from '../types';
 
 export interface DriverArgs {
   concurrency: number;
   graph: boolean;
-  live: boolean;
+  stdio: StdioType;
   workspaces: string;
 }
 

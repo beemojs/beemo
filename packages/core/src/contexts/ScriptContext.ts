@@ -1,11 +1,12 @@
 import Context from './Context';
 import Script from '../Script';
-import { Arguments } from '../types';
+import { Arguments, StdioType } from '../types';
 
 export interface ScriptArgs {
   concurrency: number;
   graph: boolean;
   name: string;
+  stdio: StdioType;
   workspaces: string;
 }
 

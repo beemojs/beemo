@@ -5,6 +5,7 @@
 - Migrated to the new [@boost/event](https://milesj.gitbook.io/boost/event) system.
 - Script names (on the command line) will now error if not in kebab case.
 - Scripts and Drivers now require an explicit `blueprint` method.
+- Renamed `--live` option to `--stdio`.
 - Renamed `--priority` option to `--graph`.
 - Renamed `execute.priority` setting to `execute.graph`.
 - Renamed `Context#root` to `cwd`.

@@ -54,7 +54,7 @@ export default class ScaffoldRoutine extends Routine<ScaffoldContext, Beemo> {
    */
   private handleLog = (message: string) => {
     if (message && message.trim()) {
-      this.tool.log(message);
+      this.tool.console.log(message);
     }
   };
 

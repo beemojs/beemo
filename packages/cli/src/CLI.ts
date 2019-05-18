@@ -3,7 +3,7 @@
 import path from 'path';
 import chalk from 'chalk';
 import yargs from 'yargs';
-import Beemo from '@beemo/core';
+import Beemo, { StdioType } from '@beemo/core';
 // @ts-ignore
 import corePackage from '@beemo/core/package.json';
 import parseSpecialArgv from './parseSpecialArgv';
@@ -46,10 +46,11 @@ beemo.getPlugins('driver').forEach(driver => {
           default: true,
           description: beemo.msg('app:cliOptionGraph'),
         })
-        .option('live', {
-          boolean: true,
-          default: false,
-          description: beemo.msg('app:cliOptionLive'),
+        .option('stdio', {
+          choices: ['buffer', 'stream', 'inherit'],
+          default: 'buffer' as StdioType,
+          description: beemo.msg('app:cliOptionStdio'),
+          string: true,
         })
         .option('workspaces', {
           default: '',
@@ -94,10 +95,11 @@ app.command(
         default: false,
         description: beemo.msg('app:cliOptionGraph'),
       })
-      .option('live', {
-        boolean: true,
-        default: false,
-        description: beemo.msg('app:cliOptionLive'),
+      .option('stdio', {
+        choices: ['buffer', 'stream', 'inherit'],
+        default: 'buffer' as StdioType,
+        description: beemo.msg('app:cliOptionStdio'),
+        string: true,
       })
       .option('workspaces', {
         default: '',

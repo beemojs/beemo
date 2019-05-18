@@ -388,6 +388,17 @@ describe('Beemo', () => {
 
       expect(beemo.onExit.getListeners().size).toBe(0);
     });
+
+    it('silences output if `stdio` argument is `inherit`', async () => {
+      beemo.config.silent = false;
+
+      const ctx = stubContext();
+      ctx.args.stdio = 'inherit';
+
+      beemo.startPipeline(ctx);
+
+      expect(beemo.config.silent).toBe(true);
+    });
   });
 
   describe('scaffold()', () => {

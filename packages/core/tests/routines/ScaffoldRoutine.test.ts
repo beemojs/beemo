@@ -31,7 +31,7 @@ describe('ScaffoldRoutine', () => {
 
   describe('handleLog()', () => {
     it('logs to tool', () => {
-      const spy = jest.spyOn(routine.tool, 'log');
+      const spy = jest.spyOn(routine.tool.console, 'log');
 
       // @ts-ignore Allow access
       routine.handleLog('foo');

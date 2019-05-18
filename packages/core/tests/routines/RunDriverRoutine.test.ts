@@ -16,7 +16,7 @@ describe('RunDriverRoutine', () => {
     });
 
     run.action = expect.anything();
-    run.captureLiveOutput = expect.anything();
+    run.captureOutput = expect.anything();
 
     return run;
   }

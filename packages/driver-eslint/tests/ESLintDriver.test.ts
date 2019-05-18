@@ -99,8 +99,8 @@ describe('ESLintDriver', () => {
 
   describe('processFailure()', () => {
     it('outputs stderr and stdout', () => {
-      const logSpy = jest.spyOn(driver.tool, 'log');
-      const errorSpy = jest.spyOn(driver.tool, 'logError');
+      const logSpy = jest.spyOn(driver.tool.console, 'log');
+      const errorSpy = jest.spyOn(driver.tool.console, 'logError');
 
       driver.processFailure(
         stubExecResult({
