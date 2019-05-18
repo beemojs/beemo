@@ -37,7 +37,7 @@ module.exports = class RunIntegrationTestsScript extends Script {
       );
     }
 
-    this.tool.log('Testing %s', chalk.yellow(pkg.name));
+    console.log('Testing %s', chalk.yellow(pkg.name));
 
     return Promise.all(
       script.split('&&').map(command =>

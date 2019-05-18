@@ -14,7 +14,7 @@ import filterArgs, { OptionMap } from '../../utils/filterArgs';
 import { STRATEGY_COPY } from '../../constants';
 import { Argv, Execution } from '../../types';
 
-const OPTION_PATTERN: RegExp = /-?-[a-z0-9-]+(,|\s)/giu;
+const OPTION_PATTERN = /-?-[a-z0-9-]+(,|\s)/giu;
 
 export interface ExecuteCommandOptions {
   additionalArgv?: Argv;

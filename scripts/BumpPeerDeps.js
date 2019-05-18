@@ -31,7 +31,7 @@ module.exports = class BumpPeerDepsScript extends Script {
     const packages = {};
     const packagePaths = {};
 
-    this.tool.log('Loading packages and incrementing versions');
+    console.log('Loading packages and incrementing versions');
 
     glob.sync('./packages/*/package.json', { cwd: this.tool.options.root }).forEach(path => {
       const data = fs.readJsonSync(String(path));
@@ -51,7 +51,7 @@ module.exports = class BumpPeerDepsScript extends Script {
 
             const nextVersion = `^${versions[peerName]}`;
 
-            this.tool.log(
+            console.log(
               `Bumping %s peer %s from %s to %s`,
               chalk.yellow(name),
               chalk.cyan(peerName),
