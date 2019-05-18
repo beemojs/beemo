@@ -16,3 +16,5 @@ jest.config.js
 lerna.json
 prettier.config.js
 tsconfig.json
+*.tsbuildinfo
+.DS_Store

@@ -5,3 +5,5 @@ tests/
 types/
 .flowconfig
 tsconfig.json
+*.tsbuildinfo
+.DS_Store
