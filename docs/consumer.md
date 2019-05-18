@@ -139,7 +139,11 @@ The following options are available when executing a driver.
 - `--[no-]graph` (bool) - Prioritize workspace builds based on
   [dependency graph](./workspaces.md#priority-packages).
 - `--stdio` (reporter | pipe | inherit) - Control how the underlying driver output is displayed in
-  the console. Defaults to "reporter", which is the default Boost reporter.
+  the console. Defaults to "reporter".
+  - `reporter` - Renders Beemo output using the defined reporter(s). Underlying driver output will
+    be rendered on success or failure.
+  - `inherit` - Doesn't render Beemo output and instead streams the underlying driver output live.
+  - `pipe` - A combination of `reporter` and `inherit`.
 - `--workspaces` (string) - Execute the command in each [workspace](./workspaces.md) defined by the
   pattern/value. Pass `*` to run in all workspaces.
 

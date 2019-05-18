@@ -67,7 +67,7 @@ export default class ExecuteCommandRoutine extends Routine<
   /**
    * Capture live output via `--stdio=pipe` or `--watch`. Buffer the output incase ctrl+c is entered.
    */
-  captureLiveOutput = (stream: execa.ExecaChildProcess) => {
+  captureOutput = (stream: execa.ExecaChildProcess) => {
     const { args, primaryDriver } = this.context;
     const { watchOptions } = primaryDriver.metadata;
     const isWatching = watchOptions.some(option => {
@@ -81,12 +81,13 @@ export default class ExecuteCommandRoutine extends Routine<
     });
 
     if (isWatching) {
+      const wait = 1000;
       const handler = (chunk: Buffer) => {
         process.stdout.write(String(chunk));
       };
 
-      stream.stdout!.pipe(new BatchStream({ wait: 1000 })).on('data', handler);
-      stream.stderr!.pipe(new BatchStream({ wait: 1000 })).on('data', handler);
+      stream.stdout!.pipe(new BatchStream({ wait })).on('data', handler);
+      stream.stderr!.pipe(new BatchStream({ wait })).on('data', handler);
 
       return 'watch';
     }
@@ -94,7 +95,7 @@ export default class ExecuteCommandRoutine extends Routine<
     let buffer = '';
 
     // When cmd/ctrl + c is pressed, write out the current buffer
-    if (args.stdio !== 'pipe') {
+    if (args.stdio === 'reporter') {
       this.tool.console.onError.listen(error => {
         if (
           (error instanceof SignalError || error.name === 'SignalError') &&
@@ -107,8 +108,10 @@ export default class ExecuteCommandRoutine extends Routine<
       });
     }
 
+    // When piping or inheriting, output immediately,
+    // otherwise buffer for the reporter.
     const handler = (chunk: Buffer) => {
-      if (args.stdio === 'pipe') {
+      if (args.stdio === 'pipe' || args.stdio === 'inherit') {
         process.stdout.write(String(chunk));
       } else {
         buffer += String(chunk);
@@ -336,7 +339,7 @@ export default class ExecuteCommandRoutine extends Routine<
         cwd,
         env: driver.options.env,
         task,
-        wrap: this.captureLiveOutput,
+        wrap: this.captureOutput,
       });
 
       driver.processSuccess(result);

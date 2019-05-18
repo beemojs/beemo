@@ -288,6 +288,11 @@ export default class Beemo extends Tool<BeemoPluginRegistry, BeemoConfig> {
       this.onExit.listen(code => this.handleCleanupOnFailure(code, context));
     }
 
+    // Silence console reporter to inherit stdio
+    if (context.args.stdio === 'inherit') {
+      this.config.silent = true;
+    }
+
     this.pipeline = new Pipeline(this, context);
 
     return this.pipeline;
