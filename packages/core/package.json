@@ -33,14 +33,14 @@
     "@types/execa": "^0.9.0",
     "@types/fs-extra": "^5.1.0",
     "@types/is-glob": "^4.0.1",
-    "@types/lodash": "^4.14.129",
+    "@types/lodash": "^4.14.134",
     "@types/micromatch": "^3.1.0",
-    "@types/node": "^11.13.4",
+    "@types/node": "^12.0.7",
     "@types/yargs": "^13.0.0",
     "@types/yargs-parser": "^13.0.0",
     "chalk": "^2.4.2",
     "execa": "^1.0.0",
-    "fast-glob": "^2.2.6",
+    "fast-glob": "^2.2.7",
     "fs-extra": "^7.0.1",
     "hygen": "^4.0.2",
     "is-glob": "^4.0.1",
@@ -48,7 +48,7 @@
     "micromatch": "^4.0.2",
     "optimal": "^3.2.1",
     "yargs": "^13.2.4",
-    "yargs-parser": "^13.1.0"
+    "yargs-parser": "^13.1.1"
   },
   "devDependencies": {
     "@boost/test-utils": "^1.2.1"
