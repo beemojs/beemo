@@ -1,6 +1,6 @@
 {
   "name": "@beemo/cli",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Beemo CLI for consuming projects.",
   "keywords": [
     "beemo",
