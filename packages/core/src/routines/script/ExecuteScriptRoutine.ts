@@ -2,6 +2,7 @@ import { Routine, Task, Predicates } from '@boost/core';
 import parseArgs, { Arguments } from 'yargs-parser';
 import Beemo from '../../Beemo';
 import Script from '../../Script';
+import formatExecReturn from '../../utils/formatExecReturn';
 import ScriptContext from '../../contexts/ScriptContext';
 import { ExecuteType } from '../../types';
 
@@ -54,8 +55,13 @@ export default class ExecuteScriptRoutine extends Routine<
         result = await this.runScriptTasks(args, result.type, result.tasks);
       }
 
+      this.debug('  Success: %o', formatExecReturn(result));
+
       await script.onAfterExecute.emit([context, result]);
     } catch (error) {
+      this.debug('  Failure: %o', formatExecReturn(error));
+      this.debug('  Error message: %s', error.message);
+
       await script.onFailedExecute.emit([context, error]);
 
       throw error;

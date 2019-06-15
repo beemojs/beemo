@@ -664,6 +664,19 @@ describe('ExecuteCommandRoutine', () => {
       }
     });
 
+    it('handles out of memory failures', async () => {
+      (routine.executeCommand as jest.Mock).mockImplementation(() =>
+        // eslint-disable-next-line prefer-promise-reject-errors
+        Promise.reject({ code: null, signal: 'SIGKILL' }),
+      );
+
+      try {
+        await routine.runCommandWithArgs(routine.context, ['--wtf'], task);
+      } catch (error) {
+        expect(error).toEqual(new Error('Out of memory!'));
+      }
+    });
+
     it('doesnt handle failure using driver if MaxBufferError occured', async () => {
       const error = new Error('Oops');
       error.name = 'MaxBufferError';

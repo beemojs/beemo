@@ -10,6 +10,7 @@ import parseArgs from 'yargs-parser';
 import Beemo from '../../Beemo';
 import DriverContext from '../../contexts/DriverContext';
 import BatchStream from '../../streams/BatchStream';
+import formatExecReturn from '../../utils/formatExecReturn';
 import filterArgs, { OptionMap } from '../../utils/filterArgs';
 import { STRATEGY_COPY } from '../../constants';
 import { Argv, Execution } from '../../types';
@@ -342,17 +343,38 @@ export default class ExecuteCommandRoutine extends Routine<
         wrap: this.captureOutput,
       });
 
+      this.debug('  Success: %o', formatExecReturn(result));
+
       driver.processSuccess(result);
 
       await driver.onAfterExecute.emit([context, result]);
     } catch (error) {
-      if (error.name !== 'MaxBufferError') {
-        driver.processFailure(error);
+      result = error as execa.ExecaError;
+
+      this.debug('  Failure: %o', formatExecReturn(result));
+      this.debug('  Error message: %s', chalk.gray(result.message));
+
+      if (result.name !== 'MaxBufferError') {
+        driver.processFailure(result);
       }
 
-      await driver.onFailedExecute.emit([context, error]);
+      await driver.onFailedExecute.emit([context, result]);
 
-      throw new Error((driver.extractErrorMessage(error) || '').trim());
+      // Throw a new formatted error with the old stack trace
+      let newError: Error;
+
+      // https://nodejs.org/api/child_process.html#child_process_event_exit
+      if (result.code === null && result.signal === 'SIGKILL') {
+        newError = new Error('Out of memory!');
+      } else {
+        newError = new Error((driver.extractErrorMessage(result) || '').trim());
+      }
+
+      if (error.stack) {
+        newError.stack = error.stack;
+      }
+
+      throw newError;
     }
 
     return result;
