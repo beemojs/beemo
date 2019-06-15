@@ -3,6 +3,18 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+### 1.0.2 - 2019-06-15
+
+#### 🐞 Fixes
+
+- Add debugging around child processes. Handle OOM errors. ([fbf9e19](https://github.com/beemojs/beemo/tree/master/packages/core/commit/fbf9e19))
+
+**Note:** Version bump only for package @beemo/core
+
+
+
+
+
 ### 1.0.1 - 2019-06-13
 
 #### 📦 Dependencies
