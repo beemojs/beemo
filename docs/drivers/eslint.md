@@ -9,7 +9,7 @@ yarn add @beemo/driver-eslint eslint
 
 ## Requirements
 
-- ESLint ^4.0.0
+- ESLint ^4.0.0 || ^5.0.0 || ^6.0.0
 
 ## Usage
 
@@ -29,9 +29,9 @@ In your consuming project, enable the driver by adding `eslint` to your `drivers
 
 ## Events
 
-| Event                       | Arguments                                                                            | Description                               |
-| --------------------------- | ------------------------------------------------------------------------------------ | ----------------------------------------- |
-| `eslint.create-ignore-file` | `context: DriverContext | ConfigContext, path: string, config: { ignore: string[] }` | Called before the ignore file is written. |
+| Event                       | Arguments                                                            | Description                               |
+| --------------------------- | -------------------------------------------------------------------- | ----------------------------------------- |
+| `eslint.onCreateIgnoreFile` | `context: ConfigContext, path: string, config: { ignore: string[] }` | Called before the ignore file is written. |
 
 ## Ignoring Paths
 
