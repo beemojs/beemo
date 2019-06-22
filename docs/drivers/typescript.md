@@ -33,9 +33,9 @@ In your consuming project, enable the driver by adding `typescript` to your `dri
 
 ## Events
 
-| Event                                   | Arguments                                                                | Description                                                                             |
-| --------------------------------------- | ------------------------------------------------------------------------ | --------------------------------------------------------------------------------------- |
-| `typescript.create-project-config-file` | `context: DriverContext, path: string, config: object, isTests: boolean` | Called before a workspace package config file is written when using project references. |
+| Event                                  | Arguments                                                                          | Description                                                                             |
+| -------------------------------------- | ---------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------- |
+| `typescript.onCreateProjectConfigFile` | `context: DriverContext, path: string, config: TypeScriptConfig, isTests: boolean` | Called before a workspace package config file is written when using project references. |
 
 ## Workspaces Support
 
