@@ -65,6 +65,7 @@ export function mockDriver<C extends object = {}>(
   name: string,
   tool: Beemo | null = null,
   metadata: Partial<DriverMetadata> = {},
+  boot: boolean = true,
 ): Driver<C> {
   const driver = new TestDriver<C>();
 
@@ -72,13 +73,15 @@ export function mockDriver<C extends object = {}>(
   driver.tool = tool || mockTool();
 
   driver.setMetadata({
-    bin: name,
+    bin: name.toLowerCase(),
     configName: `${name}.json`,
     title: name,
     ...metadata,
   });
 
-  driver.bootstrap();
+  if (boot) {
+    driver.bootstrap();
+  }
 
   return driver;
 }
