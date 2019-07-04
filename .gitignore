@@ -29,7 +29,5 @@ babel.config.js
 jest.config.js
 mocha.opts
 prettier.config.js
-tsconfig.json
-tsconfig.options.json
 webpack.config.js
 *.tsbuildinfo
