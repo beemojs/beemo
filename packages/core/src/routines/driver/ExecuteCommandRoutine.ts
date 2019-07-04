@@ -1,4 +1,4 @@
-import { Routine, Task, Predicates, SignalError } from '@boost/core';
+import { Routine, Task, Predicates, SignalError, ExitError } from '@boost/core';
 import chalk from 'chalk';
 import glob from 'fast-glob';
 import path from 'path';
@@ -359,13 +359,13 @@ export default class ExecuteCommandRoutine extends Routine<
       await driver.onFailedExecute.emit([context, result]);
 
       // Throw a new formatted error with the old stack trace
-      let newError: Error;
+      let newError: ExitError;
 
       // https://nodejs.org/api/child_process.html#child_process_event_exit
       if (result.exitCode === null && result.signal === 'SIGKILL') {
-        newError = new Error('Out of memory!');
+        newError = new ExitError('Out of memory!', 1);
       } else {
-        newError = new Error((driver.extractErrorMessage(result) || '').trim());
+        newError = new ExitError((driver.extractErrorMessage(result) || '').trim(), error.exitCode);
       }
 
       if (error.stack) {

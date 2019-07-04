@@ -1,6 +1,6 @@
 import fs from 'fs-extra';
 import chalk from 'chalk';
-import { Task, SignalError } from '@boost/core';
+import { Task, SignalError, ExitError } from '@boost/core';
 import BabelDriver from '@beemo/driver-babel';
 import JestDriver from '@beemo/driver-jest';
 import Driver from '../../../src/Driver';
@@ -664,6 +664,23 @@ describe('ExecuteCommandRoutine', () => {
       }
     });
 
+    it('persists exit code when a failure', async () => {
+      (routine.executeCommand as jest.Mock).mockImplementation(() => {
+        const error = new Error('Oops');
+        // @ts-ignore
+        error.exitCode = 3;
+
+        return Promise.reject(error);
+      });
+
+      try {
+        await routine.runCommandWithArgs(routine.context, ['--wtf'], task);
+      } catch (error) {
+        expect(error).toBeInstanceOf(ExitError);
+        expect(error.code).toBe(3);
+      }
+    });
+
     it('handles out of memory failures', async () => {
       (routine.executeCommand as jest.Mock).mockImplementation(() =>
         // eslint-disable-next-line prefer-promise-reject-errors
@@ -673,7 +690,7 @@ describe('ExecuteCommandRoutine', () => {
       try {
         await routine.runCommandWithArgs(routine.context, ['--wtf'], task);
       } catch (error) {
-        expect(error).toEqual(new Error('Out of memory!'));
+        expect(error).toEqual(new ExitError('Out of memory!', 1));
       }
     });
 
