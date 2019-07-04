@@ -110,7 +110,13 @@ export default class TypeScriptDriver extends Driver<TypeScriptConfig, TypeScrip
     // Create a config file in each package
     return Promise.all(
       workspacePackages.map(
-        ({ dependencies = {}, peerDependencies = {}, tsconfig = {}, workspace }) => {
+        ({
+          dependencies = {},
+          devDependencies = {},
+          peerDependencies = {},
+          tsconfig = {},
+          workspace,
+        }) => {
           const { packagePath } = workspace;
           const srcPath = path.join(packagePath, srcFolder);
           const testsPath = path.join(packagePath, testsFolder);
@@ -118,11 +124,13 @@ export default class TypeScriptDriver extends Driver<TypeScriptConfig, TypeScrip
           const promises: Promise<any>[] = [];
 
           // Extract and determine references
-          Object.keys({ ...dependencies, ...peerDependencies }).forEach(depName => {
-            if (namesToPaths[depName]) {
-              references.push({ path: path.relative(packagePath, namesToPaths[depName]) });
-            }
-          });
+          Object.keys({ ...dependencies, ...devDependencies, ...peerDependencies }).forEach(
+            depName => {
+              if (namesToPaths[depName]) {
+                references.push({ path: path.relative(packagePath, namesToPaths[depName]) });
+              }
+            },
+          );
 
           // Build package config
           if (srcFolder && fs.existsSync(srcPath)) {
