@@ -23,10 +23,10 @@ export default class CreateConfigRoutine<Ctx extends ConfigContext> extends Rout
 > {
   blueprint({ instance }: Predicates) /* infer */ {
     return {
-      driver: instance(Driver, true)
+      driver: instance(Driver as $FixMe, true)
         .required()
         .notNullable(),
-    };
+    } as $FixMe;
   }
 
   bootstrap() {
@@ -202,7 +202,7 @@ export default class CreateConfigRoutine<Ctx extends ConfigContext> extends Rout
    * Load a config file with passing the args and tool to the file.
    */
   loadConfig(configLoader: ConfigLoader, filePath: string): ConfigObject {
-    const config = configLoader.parseFile(filePath, [], { errorOnFunction: true });
+    const config: ConfigObject = configLoader.parseFile(filePath, [], { errorOnFunction: true });
 
     this.options.driver.onLoadModuleConfig.emit([this.context, filePath, config]);
 

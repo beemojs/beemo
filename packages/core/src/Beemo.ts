@@ -69,7 +69,7 @@ export default class Beemo extends Tool<BeemoPluginRegistry, BeemoConfig> {
     const { version } = require('../package.json');
 
     this.debug('Using beemo v%s', version);
-    this.registerPlugin('driver', Driver);
+    this.registerPlugin('driver', Driver as $FixMe);
     this.registerPlugin('script', Script);
 
     // Abort early for testing purposes

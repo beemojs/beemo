@@ -20,7 +20,9 @@ describe('ResolveConfigsRoutine', () => {
     routine.debug = mockDebugger();
 
     routine.context.addDriverDependency(driver);
-    routine.tool.getPlugin = jest.fn((type, name) => plugins[name] || mockDriver(name, tool));
+    routine.tool.getPlugin = jest.fn(
+      (type, name) => plugins[name] || mockDriver(name, tool),
+    ) as any;
   });
 
   describe('bootstrap()', () => {

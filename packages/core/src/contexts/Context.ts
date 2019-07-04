@@ -86,8 +86,8 @@ export default class Context<T = {}> extends BaseContext {
       value = false;
     }
 
-    this.args[name] = value;
-    this.args[camelCase(name)] = value;
+    (this.args as any)[name] = value;
+    (this.args as any)[camelCase(name)] = value;
 
     if (typeof value === 'boolean' || !value) {
       list.push(option);
