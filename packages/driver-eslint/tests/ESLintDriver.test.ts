@@ -104,7 +104,7 @@ describe('ESLintDriver', () => {
 
       driver.processFailure(
         stubExecResult({
-          cmd: 'eslint',
+          command: 'eslint',
           stdout: 'Warning',
           stderr: 'Error',
         }),

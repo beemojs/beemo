@@ -48,7 +48,7 @@ describe('JestDriver', () => {
 
       driver.processSuccess(
         stubExecResult({
-          cmd: 'jest',
+          command: 'jest',
           stdout: 'Hello',
           stderr: ' Why??? ',
         }),
@@ -62,7 +62,7 @@ describe('JestDriver', () => {
 
       driver.processSuccess(
         stubExecResult({
-          cmd: 'jest',
+          command: 'jest',
           stdout: '',
           stderr: '',
         }),
@@ -76,7 +76,7 @@ describe('JestDriver', () => {
 
       driver.processSuccess(
         stubExecResult({
-          cmd: 'jest --coverage',
+          command: 'jest --coverage',
           stdout: 'Coverage',
           stderr: 'Tests',
         }),
@@ -91,7 +91,7 @@ describe('JestDriver', () => {
 
       driver.processSuccess(
         stubExecResult({
-          cmd: 'jest --coverage',
+          command: 'jest --coverage',
           stdout: '',
           stderr: '',
         }),

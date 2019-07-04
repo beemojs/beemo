@@ -341,7 +341,7 @@ export default class ExecuteCommandRoutine extends Routine<
         env: driver.options.env,
         task,
         wrap: this.captureOutput,
-      } as $FixMe);
+      });
 
       this.debug('  Success: %o', formatExecReturn(result));
 
@@ -364,7 +364,7 @@ export default class ExecuteCommandRoutine extends Routine<
       let newError: Error;
 
       // https://nodejs.org/api/child_process.html#child_process_event_exit
-      if (result.code === null && result.signal === 'SIGKILL') {
+      if (result.exitCode === null && result.signal === 'SIGKILL') {
         newError = new Error('Out of memory!');
       } else {
         newError = new Error((driver.extractErrorMessage(result) || '').trim());

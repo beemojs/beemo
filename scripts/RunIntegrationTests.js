@@ -42,7 +42,7 @@ module.exports = class RunIntegrationTestsScript extends Script {
     return Promise.all(
       script.split('&&').map(command =>
         execa
-          .shell(command.trim(), { cwd: context.cwd })
+          .command(command.trim(), { cwd: context.cwd, shell: true })
           // Handles everything else
           .then(response => this.handleResult(name, options, response))
           // Handles syntax errors

@@ -1,7 +1,7 @@
 import { Plugin, Task, TaskAction } from '@boost/core';
 import { ConcurrentEvent } from '@boost/event';
 import { Options } from 'yargs-parser';
-import execa, { Options as ExecaOptions, ExecaReturns } from 'execa';
+import execa, { Options as ExecaOptions, ExecaReturnValue } from 'execa';
 import ScriptContext from './contexts/ScriptContext';
 import { Argv, ExecuteType } from './types';
 
@@ -38,7 +38,7 @@ export default abstract class Script<
     command: string,
     args: string[],
     options: ExecaOptions = {},
-  ): Promise<ExecaReturns> {
+  ): Promise<ExecaReturnValue> {
     return execa(command, args, options);
   }
 

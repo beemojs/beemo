@@ -174,13 +174,16 @@ export function stubScriptContext(script?: Script): ScriptContext {
   return context;
 }
 
-export function stubExecResult(fields?: Partial<execa.ExecaReturns>): execa.ExecaReturns {
+export function stubExecResult(fields?: Partial<execa.ExecaReturnValue>): execa.ExecaReturnValue {
   return {
-    cmd: '',
-    code: 0,
+    all: '',
+    command: '',
+    exitCode: 0,
+    exitCodeName: '',
     failed: false,
+    isCanceled: false,
     killed: false,
-    signal: null,
+    signal: undefined,
     stderr: '',
     stdout: '',
     timedOut: false,

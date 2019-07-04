@@ -221,7 +221,7 @@ describe('FlowDriver', () => {
 
       driver.processFailure(
         stubExecResult({
-          code: 2,
+          exitCode: 2,
           stdout: 'Out',
           stderr: 'Err',
         }),
@@ -235,7 +235,7 @@ describe('FlowDriver', () => {
 
       driver.processFailure(
         stubExecResult({
-          code: 1,
+          exitCode: 1,
           stdout: 'Out',
           stderr: 'Err',
         }),

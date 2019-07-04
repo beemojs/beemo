@@ -128,9 +128,7 @@ describe('RunInWorkspacesRoutine', () => {
     });
 
     it('returns a result for a single routine', async () => {
-      routine.poolRoutines = jest.fn(() =>
-        Promise.resolve({ errors: [], results: [123] }),
-      ) as $FixMe;
+      routine.poolRoutines = jest.fn(() => Promise.resolve({ errors: [], results: [123] })) as any;
 
       const response = await routine.execute(routine.context);
 

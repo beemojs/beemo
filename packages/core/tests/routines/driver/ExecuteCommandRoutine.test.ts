@@ -667,7 +667,7 @@ describe('ExecuteCommandRoutine', () => {
     it('handles out of memory failures', async () => {
       (routine.executeCommand as jest.Mock).mockImplementation(() =>
         // eslint-disable-next-line prefer-promise-reject-errors
-        Promise.reject({ code: null, signal: 'SIGKILL' }),
+        Promise.reject({ exitCode: null, message: '', signal: 'SIGKILL' }),
       );
 
       try {
