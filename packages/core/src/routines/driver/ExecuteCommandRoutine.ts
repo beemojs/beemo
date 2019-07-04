@@ -341,7 +341,7 @@ export default class ExecuteCommandRoutine extends Routine<
         env: driver.options.env,
         task,
         wrap: this.captureOutput,
-      });
+      } as $FixMe);
 
       this.debug('  Success: %o', formatExecReturn(result));
 

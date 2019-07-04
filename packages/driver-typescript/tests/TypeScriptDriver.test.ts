@@ -148,8 +148,10 @@ describe('TypeScriptDriver', () => {
     });
 
     it('supports custom `srcFolder` and `buildFolder`', () => {
-      driver.options.buildFolder = 'build';
-      driver.options.srcFolder = 'source';
+      driver.configure({
+        buildFolder: 'build',
+        srcFolder: 'source',
+      });
       driver.createProjectRefConfigsInWorkspaces(context, PROJECT_REFS_FIXTURE_PATH);
 
       expect(writeSpy).toHaveBeenCalledWith(
@@ -170,8 +172,10 @@ describe('TypeScriptDriver', () => {
     });
 
     it('supports custom `typesFolder` and `testsFolder`', () => {
-      driver.options.typesFolder = 'typings';
-      driver.options.testsFolder = 'custom-tests';
+      driver.configure({
+        typesFolder: 'typings',
+        testsFolder: 'custom-tests',
+      });
       driver.createProjectRefConfigsInWorkspaces(context, PROJECT_REFS_FIXTURE_PATH);
 
       expect(writeSpy).toHaveBeenCalledWith(
@@ -207,7 +211,7 @@ describe('TypeScriptDriver', () => {
     });
 
     it('excludes local types when `localTypes` is false', () => {
-      driver.options.localTypes = false;
+      driver.configure({ localTypes: false });
       driver.createProjectRefConfigsInWorkspaces(context, PROJECT_REFS_FIXTURE_PATH);
 
       expect(writeSpy).toHaveBeenCalledWith(
@@ -243,7 +247,7 @@ describe('TypeScriptDriver', () => {
     });
 
     it('excludes global types when `globalTypes` is false', () => {
-      driver.options.globalTypes = false;
+      driver.configure({ globalTypes: false });
       driver.createProjectRefConfigsInWorkspaces(context, PROJECT_REFS_FIXTURE_PATH);
 
       expect(writeSpy).toHaveBeenCalledWith(
@@ -420,7 +424,7 @@ describe('TypeScriptDriver', () => {
     it('includes `testsFolder` when using a custom value', () => {
       const config = {};
 
-      driver.options.testsFolder = 'custom-tests';
+      driver.configure({ testsFolder: 'custom-tests' });
 
       driver.prepareProjectRefsRootConfigs(
         PROJECT_REFS_FIXTURE_PATH,

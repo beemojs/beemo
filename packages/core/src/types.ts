@@ -60,7 +60,7 @@ export interface DriverMetadata {
   workspaceStrategy: 'reference' | 'copy';
 }
 
-export type Execution = ExecaReturns;
+export type Execution = $FixMe;
 
 export type ExecuteType = 'parallel' | 'pool' | 'serial' | 'sync';
 

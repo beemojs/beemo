@@ -1,16 +1,12 @@
+/* eslint-disable jest/expect-expect */
+
 import path from 'path';
 import { getFixturePath } from '@boost/test-utils';
 import ModuleLoader from '@boost/core/lib/ModuleLoader';
 import RunScriptRoutine from '../../src/routines/RunScriptRoutine';
-import ExecuteScriptRoutine from '../../src/routines/script/ExecuteScriptRoutine';
+import { ExecuteScriptOptions } from '../../src/routines/script/ExecuteScriptRoutine';
 import Script from '../../src/Script';
-import {
-  mockDebugger,
-  mockTool,
-  mockScript,
-  stubScriptContext,
-  getRoot,
-} from '../../src/testUtils';
+import { mockDebugger, mockTool, mockScript, stubScriptContext } from '../../src/testUtils';
 
 jest.mock('@boost/core/lib/ModuleLoader', () =>
   jest.fn(() => ({
@@ -49,15 +45,21 @@ describe('RunScriptRoutine', () => {
   let routine: RunScriptRoutine;
   let script: Script;
 
-  function createTestExecuteScript(title: string, options: any = {}) {
-    const run = new ExecuteScriptRoutine(title, '-a --foo bar baz', {
-      packageRoot: getRoot(),
-      ...options,
+  function expectPipedRoutines(mock: any, tests: ({ key: string } & ExecuteScriptOptions)[]) {
+    expect(mock).toHaveBeenCalledTimes(tests.length);
+
+    tests.forEach(test => {
+      const { key = expect.anything(), ...options } = test;
+
+      expect(mock).toHaveBeenCalledWith(
+        expect.objectContaining({
+          key,
+          options: expect.objectContaining({
+            ...options,
+          }),
+        }),
+      );
     });
-
-    run.action = expect.anything();
-
-    return run;
   }
 
   beforeEach(() => {
@@ -81,7 +83,7 @@ describe('RunScriptRoutine', () => {
       routine.pipe = jest.fn();
       routine.bootstrap();
 
-      expect(routine.pipe).toHaveBeenCalledWith(createTestExecuteScript('plugin-name'));
+      expectPipedRoutines(routine.pipe, [{ key: 'plugin-name' }]);
     });
 
     describe('workspaces', () => {
@@ -98,22 +100,11 @@ describe('RunScriptRoutine', () => {
         routine.pipe = jest.fn();
         routine.bootstrap();
 
-        expect(routine.pipe).toHaveBeenCalledTimes(3);
-        expect(routine.pipe).toHaveBeenCalledWith(
-          createTestExecuteScript('foo', {
-            packageRoot: path.join(fixturePath, './packages/foo'),
-          }),
-        );
-        expect(routine.pipe).toHaveBeenCalledWith(
-          createTestExecuteScript('bar', {
-            packageRoot: path.join(fixturePath, './packages/bar'),
-          }),
-        );
-        expect(routine.pipe).toHaveBeenCalledWith(
-          createTestExecuteScript('baz', {
-            packageRoot: path.join(fixturePath, './packages/baz'),
-          }),
-        );
+        expectPipedRoutines(routine.pipe, [
+          { key: 'foo', packageRoot: path.join(fixturePath, './packages/foo') },
+          { key: 'bar', packageRoot: path.join(fixturePath, './packages/bar') },
+          { key: 'baz', packageRoot: path.join(fixturePath, './packages/baz') },
+        ]);
       });
     });
   });

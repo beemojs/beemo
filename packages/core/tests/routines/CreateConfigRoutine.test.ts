@@ -74,7 +74,7 @@ describe('CreateConfigRoutine', () => {
   describe('bootstrap()', () => {
     describe('create strategy', () => {
       beforeEach(() => {
-        driver.options.strategy = STRATEGY_CREATE;
+        driver.configure({ strategy: STRATEGY_CREATE });
       });
 
       it('sets the correct tasks', () => {
@@ -87,7 +87,7 @@ describe('CreateConfigRoutine', () => {
 
     describe('copy strategy', () => {
       beforeEach(() => {
-        driver.options.strategy = STRATEGY_COPY;
+        driver.configure({ strategy: STRATEGY_COPY });
       });
 
       it('sets the correct tasks', () => {
@@ -100,7 +100,7 @@ describe('CreateConfigRoutine', () => {
 
     describe('reference strategy', () => {
       beforeEach(() => {
-        driver.options.strategy = STRATEGY_REFERENCE;
+        driver.configure({ strategy: STRATEGY_REFERENCE });
       });
 
       it('sets the correct tasks', () => {
@@ -113,7 +113,7 @@ describe('CreateConfigRoutine', () => {
 
     describe('native strategy', () => {
       beforeEach(() => {
-        driver.options.strategy = STRATEGY_NATIVE;
+        driver.configure({ strategy: STRATEGY_NATIVE });
         driver.metadata.configStrategy = STRATEGY_COPY;
       });
 
@@ -127,7 +127,7 @@ describe('CreateConfigRoutine', () => {
 
     describe('none strategy', () => {
       beforeEach(() => {
-        driver.options.strategy = STRATEGY_NONE;
+        driver.configure({ strategy: STRATEGY_NONE });
       });
 
       it('sets no tasks and skips routine', () => {
@@ -141,7 +141,7 @@ describe('CreateConfigRoutine', () => {
 
   describe('run()', () => {
     beforeEach(() => {
-      driver.options.strategy = STRATEGY_NATIVE;
+      driver.configure({ strategy: STRATEGY_NATIVE });
     });
 
     describe('create strategy', () => {
@@ -183,7 +183,7 @@ describe('CreateConfigRoutine', () => {
       });
 
       it('creates config file if `strategy` option is create', async () => {
-        driver.options.strategy = STRATEGY_CREATE;
+        driver.configure({ strategy: STRATEGY_CREATE });
 
         const envSpy = jest.spyOn(routine, 'setEnvVars');
         const loadSpy = jest.spyOn(routine, 'loadConfigFromSources');
@@ -235,7 +235,7 @@ describe('CreateConfigRoutine', () => {
       });
 
       it('copies config file if `strategy` option is copy', async () => {
-        driver.options.strategy = STRATEGY_COPY;
+        driver.configure({ strategy: STRATEGY_COPY });
 
         const envSpy = jest.spyOn(routine, 'setEnvVars');
         const createSpy = jest.spyOn(routine, 'createConfigFile');
@@ -271,7 +271,7 @@ describe('CreateConfigRoutine', () => {
       });
 
       it('references config file if `strategy` option is reference', async () => {
-        driver.options.strategy = STRATEGY_REFERENCE;
+        driver.configure({ strategy: STRATEGY_REFERENCE });
 
         const envSpy = jest.spyOn(routine, 'setEnvVars');
         const createSpy = jest.spyOn(routine, 'createConfigFile');
@@ -290,7 +290,7 @@ describe('CreateConfigRoutine', () => {
 
     describe('native strategy', () => {
       it('falls back to `configStrategy` metadata when `strategy` option is native', async () => {
-        driver.options.strategy = STRATEGY_NATIVE;
+        driver.configure({ strategy: STRATEGY_NATIVE });
         driver.metadata.configStrategy = STRATEGY_COPY;
 
         const envSpy = jest.spyOn(routine, 'setEnvVars');
@@ -310,7 +310,7 @@ describe('CreateConfigRoutine', () => {
 
     describe('none strategy', () => {
       it('does nothing since routine is skipped', async () => {
-        driver.options.strategy = STRATEGY_NONE;
+        driver.configure({ strategy: STRATEGY_NONE });
 
         const envSpy = jest.spyOn(routine, 'setEnvVars');
 

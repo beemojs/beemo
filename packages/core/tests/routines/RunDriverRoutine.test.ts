@@ -1,7 +1,9 @@
+/* eslint-disable jest/expect-expect */
+
 import path from 'path';
 import { getFixturePath } from '@boost/test-utils';
 import RunDriverRoutine from '../../src/routines/RunDriverRoutine';
-import ExecuteCommandRoutine from '../../src/routines/driver/ExecuteCommandRoutine';
+import { ExecuteCommandOptions } from '../../src/routines/driver/ExecuteCommandRoutine';
 import Driver from '../../src/Driver';
 import { mockDebugger, mockTool, mockDriver, stubDriverContext } from '../../src/testUtils';
 
@@ -9,16 +11,26 @@ describe('RunDriverRoutine', () => {
   let routine: RunDriverRoutine;
   let driver: Driver;
 
-  function createTestRunCommand(title: string, command: string, options: any = {}) {
-    const run = new ExecuteCommandRoutine(title, command, {
-      argv: ['-a', '--foo', 'bar', 'baz'],
-      ...options,
+  function expectPipedRoutines(
+    mock: any,
+    tests: ({ key?: string; title: string } & ExecuteCommandOptions)[],
+  ) {
+    expect(mock).toHaveBeenCalledTimes(tests.length);
+
+    tests.forEach((test, index) => {
+      const { key = expect.anything(), title, ...options } = test;
+
+      expect(mock).toHaveBeenCalledWith(
+        expect.objectContaining({
+          key,
+          title,
+          options: expect.objectContaining({
+            argv: ['-a', '--foo', 'bar', 'baz'],
+            ...options,
+          }),
+        }),
+      );
     });
-
-    run.action = expect.anything();
-    run.captureOutput = expect.anything();
-
-    return run;
   }
 
   beforeEach(() => {
@@ -37,9 +49,7 @@ describe('RunDriverRoutine', () => {
       routine.pipe = jest.fn();
       routine.bootstrap();
 
-      expect(routine.pipe).toHaveBeenCalledWith(
-        createTestRunCommand('primary', 'primary -a --foo bar baz'),
-      );
+      expectPipedRoutines(routine.pipe, [{ title: 'primary -a --foo bar baz' }]);
     });
 
     it('adds multiple routines when parallel is used', () => {
@@ -47,16 +57,11 @@ describe('RunDriverRoutine', () => {
       routine.pipe = jest.fn();
       routine.bootstrap();
 
-      expect(routine.pipe).toHaveBeenCalledWith(
-        createTestRunCommand('primary', 'primary -a --foo bar baz --one --two=2', {
-          additionalArgv: ['--one', '--two=2'],
-        }),
-      );
-      expect(routine.pipe).toHaveBeenCalledWith(
-        createTestRunCommand('primary', 'primary -a --foo bar baz --three -f', {
-          additionalArgv: ['--three', '-f'],
-        }),
-      );
+      expectPipedRoutines(routine.pipe, [
+        { title: 'primary -a --foo bar baz' },
+        { title: 'primary -a --foo bar baz --one --two=2', additionalArgv: ['--one', '--two=2'] },
+        { title: 'primary -a --foo bar baz --three -f', additionalArgv: ['--three', '-f'] },
+      ]);
     });
 
     it('adds a routine if parallel is empty', () => {
@@ -64,9 +69,7 @@ describe('RunDriverRoutine', () => {
       routine.pipe = jest.fn();
       routine.bootstrap();
 
-      expect(routine.pipe).toHaveBeenCalledWith(
-        createTestRunCommand('primary', 'primary -a --foo bar baz'),
-      );
+      expectPipedRoutines(routine.pipe, [{ title: 'primary -a --foo bar baz' }]);
     });
 
     describe('workspaces', () => {
@@ -83,25 +86,26 @@ describe('RunDriverRoutine', () => {
         routine.pipe = jest.fn();
         routine.bootstrap();
 
-        expect(routine.pipe).toHaveBeenCalledTimes(3);
-        expect(routine.pipe).toHaveBeenCalledWith(
-          createTestRunCommand('foo', 'primary -a --foo bar baz', {
-            forceConfigOption: true,
-            packageRoot: path.join(fixturePath, './packages/foo'),
-          }),
-        );
-        expect(routine.pipe).toHaveBeenCalledWith(
-          createTestRunCommand('bar', 'primary -a --foo bar baz', {
+        expectPipedRoutines(routine.pipe, [
+          {
+            key: 'bar',
+            title: 'primary -a --foo bar baz',
             forceConfigOption: true,
             packageRoot: path.join(fixturePath, './packages/bar'),
-          }),
-        );
-        expect(routine.pipe).toHaveBeenCalledWith(
-          createTestRunCommand('baz', 'primary -a --foo bar baz', {
+          },
+          {
+            key: 'baz',
+            title: 'primary -a --foo bar baz',
             forceConfigOption: true,
             packageRoot: path.join(fixturePath, './packages/baz'),
-          }),
-        );
+          },
+          {
+            key: 'foo',
+            title: 'primary -a --foo bar baz',
+            forceConfigOption: true,
+            packageRoot: path.join(fixturePath, './packages/foo'),
+          },
+        ]);
       });
 
       it('adds a routine for each when parallel is used', () => {
@@ -109,49 +113,68 @@ describe('RunDriverRoutine', () => {
         routine.pipe = jest.fn();
         routine.bootstrap();
 
-        expect(routine.pipe).toHaveBeenCalledTimes(9);
-        expect(routine.pipe).toHaveBeenCalledWith(
-          createTestRunCommand('foo', 'primary -a --foo bar baz --one --two=2', {
+        expectPipedRoutines(routine.pipe, [
+          {
+            key: 'foo',
+            title: 'primary -a --foo bar baz',
+            forceConfigOption: true,
+            packageRoot: path.join(fixturePath, './packages/foo'),
+          },
+          {
+            key: 'foo',
+            title: 'primary -a --foo bar baz --one --two=2',
             additionalArgv: ['--one', '--two=2'],
             forceConfigOption: true,
             packageRoot: path.join(fixturePath, './packages/foo'),
-          }),
-        );
-        expect(routine.pipe).toHaveBeenCalledWith(
-          createTestRunCommand('foo', 'primary -a --foo bar baz --three -f', {
+          },
+          {
+            key: 'foo',
+            title: 'primary -a --foo bar baz --three -f',
             additionalArgv: ['--three', '-f'],
             forceConfigOption: true,
             packageRoot: path.join(fixturePath, './packages/foo'),
-          }),
-        );
-        expect(routine.pipe).toHaveBeenCalledWith(
-          createTestRunCommand('bar', 'primary -a --foo bar baz --one --two=2', {
+          },
+          {
+            key: 'bar',
+            title: 'primary -a --foo bar baz',
+            forceConfigOption: true,
+            packageRoot: path.join(fixturePath, './packages/bar'),
+          },
+          {
+            key: 'bar',
+            title: 'primary -a --foo bar baz --one --two=2',
             additionalArgv: ['--one', '--two=2'],
             forceConfigOption: true,
             packageRoot: path.join(fixturePath, './packages/bar'),
-          }),
-        );
-        expect(routine.pipe).toHaveBeenCalledWith(
-          createTestRunCommand('bar', 'primary -a --foo bar baz --three -f', {
+          },
+          {
+            key: 'bar',
+            title: 'primary -a --foo bar baz --three -f',
             additionalArgv: ['--three', '-f'],
             forceConfigOption: true,
             packageRoot: path.join(fixturePath, './packages/bar'),
-          }),
-        );
-        expect(routine.pipe).toHaveBeenCalledWith(
-          createTestRunCommand('baz', 'primary -a --foo bar baz --one --two=2', {
+          },
+          {
+            key: 'baz',
+            title: 'primary -a --foo bar baz',
+            forceConfigOption: true,
+            packageRoot: path.join(fixturePath, './packages/baz'),
+          },
+          {
+            key: 'baz',
+            title: 'primary -a --foo bar baz --one --two=2',
             additionalArgv: ['--one', '--two=2'],
             forceConfigOption: true,
             packageRoot: path.join(fixturePath, './packages/baz'),
-          }),
-        );
-        expect(routine.pipe).toHaveBeenCalledWith(
-          createTestRunCommand('baz', 'primary -a --foo bar baz --three -f', {
+          },
+          {
+            key: 'baz',
+            title: 'primary -a --foo bar baz --three -f',
             additionalArgv: ['--three', '-f'],
             forceConfigOption: true,
             packageRoot: path.join(fixturePath, './packages/baz'),
-          }),
-        );
+          },
+        ]);
       });
 
       it('errors if workspaces config is not set', () => {

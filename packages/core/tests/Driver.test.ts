@@ -45,7 +45,7 @@ describe('Driver', () => {
 
   describe('getArgs()', () => {
     it('returns passed fields', () => {
-      driver.options.args = ['--foo'];
+      driver.configure({ args: ['--foo'] });
 
       expect(driver.getArgs()).toEqual(['--foo']);
     });
@@ -54,7 +54,7 @@ describe('Driver', () => {
   describe('getDependencies()', () => {
     it('returns both field and metadata dependencies', () => {
       driver.metadata.dependencies = ['foo'];
-      driver.options.dependencies = ['bar'];
+      driver.configure({ dependencies: ['bar'] });
 
       expect(driver.getDependencies()).toEqual(['foo', 'bar']);
     });
