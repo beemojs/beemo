@@ -2,7 +2,6 @@
   "private": true,
   "name": "beemo-root",
   "scripts": {
-    "setup": "bash ./scripts/buildPackages.sh",
     "build": "yarn run type",
     "clean": "rm -rf ./packages/*/lib",
     "coverage": "yarn run jest --coverage",

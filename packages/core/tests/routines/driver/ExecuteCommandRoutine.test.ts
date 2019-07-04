@@ -463,7 +463,6 @@ describe('ExecuteCommandRoutine', () => {
         '--foo',
         '../scripts/BumpPeerDeps.js',
         '../scripts/RunIntegrationTests.js',
-        '../scripts/buildPackages.sh',
         '../scripts/extractOptionList.js',
         '../tests/index.js',
         'bar',

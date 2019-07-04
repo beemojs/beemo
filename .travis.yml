@@ -14,7 +14,6 @@ install:
   - yarn install --frozen-lockfile --ignore-engines
 before_script:
   - yarn danger ci --use-github-checks
-  - yarn run setup
 script:
   - yarn test
   - yarn run test:int:pass

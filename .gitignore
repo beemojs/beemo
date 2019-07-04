@@ -31,3 +31,7 @@ mocha.opts
 prettier.config.js
 webpack.config.js
 *.tsbuildinfo
+
+# Tests
+tests/__fixtures__/**/tsconfig.json
+tests/__fixtures__/**/tsconfig.options.json
