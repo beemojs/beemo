@@ -50,6 +50,7 @@ describe('TypeScriptDriver', () => {
 
     expect(driver.options).toEqual({
       args: ['--foo', '--bar=1'],
+      declarationOnly: false,
       dependencies: ['babel'],
       env: { DEV: 'true' },
       strategy: 'native',
@@ -142,6 +143,30 @@ describe('TypeScriptDriver', () => {
           extends: '../../tsconfig.options.json',
           include: ['src/**/*', 'types/**/*', '../../types/**/*'],
           references: [],
+        }),
+        expect.anything(),
+      );
+    });
+
+    it('supports emitting `declarationOnly', () => {
+      driver.configure({
+        declarationOnly: true,
+      });
+      driver.createProjectRefConfigsInWorkspaces(context, PROJECT_REFS_FIXTURE_PATH);
+
+      expect(writeSpy).toHaveBeenCalledWith(
+        path.join(PROJECT_REFS_FIXTURE_PATH, 'packages/bar/tsconfig.json'),
+        driver.formatConfig({
+          compilerOptions: {
+            declarationDir: 'lib',
+            outDir: 'lib',
+            rootDir: 'src',
+            emitDeclarationOnly: true,
+          },
+          exclude: ['lib', 'tests'],
+          extends: '../../tsconfig.options.json',
+          include: ['src/**/*', 'types/**/*', '../../types/**/*'],
+          references: [{ path: '../foo' }],
         }),
         expect.anything(),
       );

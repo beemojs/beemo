@@ -30,12 +30,14 @@ In your consuming project, enable the driver by adding `typescript` to your `dri
 ### CLI Options
 
 - `--[no-]clean` (bool) - Clean the target `outDir` before transpiling. Defaults to `true`.
+- `--reference-workspaces` (bool) - Automatically generate project references based on workspace
+  dependency graph. Defaults to `false`.
 
 ## Events
 
-| Event                                  | Arguments                                                                          | Description                                                                             |
-| -------------------------------------- | ---------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------- |
-| `typescript.onCreateProjectConfigFile` | `context: DriverContext, path: string, config: TypeScriptConfig, isTests: boolean` | Called before a workspace package config file is written when using project references. |
+| Event                       | Arguments                                                                          | Description                                                                             |
+| --------------------------- | ---------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------- |
+| `onCreateProjectConfigFile` | `context: DriverContext, path: string, config: TypeScriptConfig, isTests: boolean` | Called before a workspace package config file is written when using project references. |
 
 ## Workspaces Support
 
@@ -75,6 +77,8 @@ tsconfig.json # Created with refs that point to each package
 To customize this process, the following options are available.
 
 - `buildFolder` (string) - Name of output directory relative to package root. Defaults to `lib`.
+- `declarationOnly` (bool) - Only emit declaration files for all packages instead of source files.
+  Defaults to `false`.
 - `globalTypes` (bool) - Include global types defined in the root (usually cwd). Defaults to
   `false`.
 - `srcFolder` (string) - Name of source directory relative to package root. Defaults to `src`.

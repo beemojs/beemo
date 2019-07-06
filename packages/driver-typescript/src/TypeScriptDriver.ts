@@ -26,6 +26,7 @@ export default class TypeScriptDriver extends Driver<TypeScriptConfig, TypeScrip
     return {
       ...super.blueprint(preds),
       buildFolder: string('lib'),
+      declarationOnly: bool(),
       globalTypes: bool(true),
       localTypes: bool(true),
       srcFolder: string('src'),
@@ -70,6 +71,7 @@ export default class TypeScriptDriver extends Driver<TypeScriptConfig, TypeScrip
   ): Promise<any> {
     const {
       buildFolder,
+      declarationOnly,
       srcFolder,
       testsFolder,
       typesFolder,
@@ -110,6 +112,7 @@ export default class TypeScriptDriver extends Driver<TypeScriptConfig, TypeScrip
     // Create a config file in each package
     return Promise.all(
       workspacePackages.map(
+        // eslint-disable-next-line complexity
         ({
           dependencies = {},
           devDependencies = {},
@@ -146,6 +149,10 @@ export default class TypeScriptDriver extends Driver<TypeScriptConfig, TypeScrip
               include: [path.join(srcFolder, '**/*')],
               references,
             };
+
+            if (declarationOnly) {
+              (packageConfig.compilerOptions as ts.CompilerOptions).emitDeclarationOnly = true;
+            }
 
             if (localTypes) {
               packageConfig.include.push(path.join(typesFolder, '**/*'));
