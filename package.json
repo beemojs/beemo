@@ -15,7 +15,7 @@
     "test:int:pass": "beemo run-script run-integration-tests --pass --workspaces=\"@beemo/driver-*\"",
     "prettier": "beemo prettier",
     "prerelease": "yarn test",
-    "release": "lerna publish",
+    "release": "lerna version --conventional-commits --changelog-preset conventional-changelog-beemo --create-release github --push && lerna publish from-git",
     "release:bump": "beemo run-script bump-peer-deps",
     "type": "beemo typescript --build --reference-workspaces"
   },
