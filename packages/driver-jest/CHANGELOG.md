@@ -3,6 +3,22 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+### 1.0.2 - 2019-07-06
+
+#### 📦 Dependencies
+
+- Updated execa to v2. ([b5bec8c](https://github.com/beemojs/beemo/tree/master/packages/driver-jest/commit/b5bec8c))
+
+#### 🛠 Internals
+
+- Utilize generated tsconfig.json files. (#56) ([788843e](https://github.com/beemojs/beemo/tree/master/packages/driver-jest/commit/788843e)), closes [#56](https://github.com/beemojs/beemo/tree/master/packages/driver-jest/issues/56)
+
+**Note:** Version bump only for package @beemo/driver-jest
+
+
+
+
+
 ### 1.0.1 - 2019-06-13
 
 #### 📦 Dependencies

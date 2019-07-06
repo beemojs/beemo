@@ -3,6 +3,23 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+### 1.0.2 - 2019-07-06
+
+#### 📦 Dependencies
+
+- Updated boost to v1.2. Migrate APIs. ([0a01612](https://github.com/beemojs/beemo/tree/master/packages/driver-webpack/commit/0a01612))
+- Updated driver deps. ([5ed870d](https://github.com/beemojs/beemo/tree/master/packages/driver-webpack/commit/5ed870d))
+
+#### 🛠 Internals
+
+- Utilize generated tsconfig.json files. (#56) ([788843e](https://github.com/beemojs/beemo/tree/master/packages/driver-webpack/commit/788843e)), closes [#56](https://github.com/beemojs/beemo/tree/master/packages/driver-webpack/issues/56)
+
+**Note:** Version bump only for package @beemo/driver-webpack
+
+
+
+
+
 ### 1.0.1 - 2019-06-13
 
 #### 📦 Dependencies

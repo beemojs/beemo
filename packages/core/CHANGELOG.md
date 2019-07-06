@@ -3,6 +3,31 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+### 1.0.3 - 2019-07-06
+
+#### 🐞 Fixes
+
+- Persist exit code when driver executions fail. [#54] ([fdf0b10](https://github.com/beemojs/beemo/tree/master/packages/core/commit/fdf0b10)), closes [#54](https://github.com/beemojs/beemo/tree/master/packages/core/issues/54)
+
+#### 📦 Dependencies
+
+- Updated boost to v1.2. Migrate APIs. ([0a01612](https://github.com/beemojs/beemo/tree/master/packages/core/commit/0a01612))
+- Updated build deps. ([bfa490c](https://github.com/beemojs/beemo/tree/master/packages/core/commit/bfa490c))
+- Updated driver deps. ([5ed870d](https://github.com/beemojs/beemo/tree/master/packages/core/commit/5ed870d))
+- Updated execa to v2. ([b5bec8c](https://github.com/beemojs/beemo/tree/master/packages/core/commit/b5bec8c))
+- Updated fast-glob to v3. ([84b6497](https://github.com/beemojs/beemo/tree/master/packages/core/commit/84b6497))
+- Updated fs-extra to v8.1. ([3faf131](https://github.com/beemojs/beemo/tree/master/packages/core/commit/3faf131))
+
+#### 🛠 Internals
+
+- Utilize generated tsconfig.json files. (#56) ([788843e](https://github.com/beemojs/beemo/tree/master/packages/core/commit/788843e)), closes [#56](https://github.com/beemojs/beemo/tree/master/packages/core/issues/56)
+
+**Note:** Version bump only for package @beemo/core
+
+
+
+
+
 ### 1.0.2 - 2019-06-15
 
 #### 🐞 Fixes

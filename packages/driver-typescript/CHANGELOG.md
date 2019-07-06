@@ -3,6 +3,31 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## 1.1.0 - 2019-07-06
+
+#### 🚀 Updates
+
+- Add declarationOnly option to only emit declaration files. ([3ccfd82](https://github.com/beemojs/beemo/tree/master/packages/driver-typescript/commit/3ccfd82))
+
+#### 🐞 Fixes
+
+- Resolve devDependencies when generating TS project references. ([c325b18](https://github.com/beemojs/beemo/tree/master/packages/driver-typescript/commit/c325b18))
+
+#### 📦 Dependencies
+
+- Updated boost to v1.2. Migrate APIs. ([0a01612](https://github.com/beemojs/beemo/tree/master/packages/driver-typescript/commit/0a01612))
+- Updated driver deps. ([5ed870d](https://github.com/beemojs/beemo/tree/master/packages/driver-typescript/commit/5ed870d))
+
+#### 🛠 Internals
+
+- Utilize generated tsconfig.json files. (#56) ([788843e](https://github.com/beemojs/beemo/tree/master/packages/driver-typescript/commit/788843e)), closes [#56](https://github.com/beemojs/beemo/tree/master/packages/driver-typescript/issues/56)
+
+**Note:** Version bump only for package @beemo/driver-typescript
+
+
+
+
+
 ### 1.0.1 - 2019-06-13
 
 #### 📦 Dependencies

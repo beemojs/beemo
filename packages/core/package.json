@@ -1,6 +1,6 @@
 {
   "name": "@beemo/core",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "Manage all dev tool configurations in a single centralized repository.",
   "keywords": [
     "beemo",
@@ -27,7 +27,7 @@
     "access": "public"
   },
   "dependencies": {
-    "@beemo/dependency-graph": "^1.0.0",
+    "@beemo/dependency-graph": "^1.0.1",
     "@boost/core": "^1.12.1",
     "@boost/event": "^1.0.2",
     "@types/fs-extra": "^8.0.0",
