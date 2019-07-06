@@ -1,0 +1,72 @@
+{
+  "extends": "./tsconfig.options.json",
+  "files": [],
+  "references": [
+    {
+      "path": "packages/cli"
+    },
+    {
+      "path": "packages/cli/tests"
+    },
+    {
+      "path": "packages/core"
+    },
+    {
+      "path": "packages/core/tests"
+    },
+    {
+      "path": "packages/dependency-graph"
+    },
+    {
+      "path": "packages/dependency-graph/tests"
+    },
+    {
+      "path": "packages/driver-babel"
+    },
+    {
+      "path": "packages/driver-babel/tests"
+    },
+    {
+      "path": "packages/driver-eslint"
+    },
+    {
+      "path": "packages/driver-eslint/tests"
+    },
+    {
+      "path": "packages/driver-flow"
+    },
+    {
+      "path": "packages/driver-flow/tests"
+    },
+    {
+      "path": "packages/driver-jest"
+    },
+    {
+      "path": "packages/driver-jest/tests"
+    },
+    {
+      "path": "packages/driver-mocha"
+    },
+    {
+      "path": "packages/driver-mocha/tests"
+    },
+    {
+      "path": "packages/driver-prettier"
+    },
+    {
+      "path": "packages/driver-prettier/tests"
+    },
+    {
+      "path": "packages/driver-typescript"
+    },
+    {
+      "path": "packages/driver-typescript/tests"
+    },
+    {
+      "path": "packages/driver-webpack"
+    },
+    {
+      "path": "packages/driver-webpack/tests"
+    }
+  ]
+}

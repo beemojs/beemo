@@ -4,17 +4,21 @@
     "allowSyntheticDefaultImports": true,
     "declaration": true,
     "esModuleInterop": true,
+    "experimentalDecorators": false,
     "forceConsistentCasingInFileNames": true,
-    "lib": ["dom", "esnext"],
+    "lib": [
+      "dom",
+      "esnext"
+    ],
     "module": "commonjs",
+    "noEmitOnError": true,
     "noImplicitReturns": true,
-    "outDir": "./lib",
     "pretty": true,
-    "removeComments": true,
+    "removeComments": false,
     "sourceMap": false,
     "strict": true,
-    "target": "es2017"
-  },
-  "exclude": ["*.test.ts"],
-  "include": ["./src/**/*", "./types/**/*", "../../types/**/*"]
+    "target": "es2017",
+    "composite": true,
+    "declarationMap": true
+  }
 }

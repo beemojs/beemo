@@ -1,8 +1,6 @@
 import fs from 'fs-extra';
 import chalk from 'chalk';
 import { Task, SignalError, ExitError } from '@boost/core';
-import BabelDriver from '@beemo/driver-babel';
-import JestDriver from '@beemo/driver-jest';
 import Driver from '../../../src/Driver';
 import ExecuteCommandRoutine from '../../../src/routines/driver/ExecuteCommandRoutine';
 import {
@@ -11,6 +9,7 @@ import {
   mockDebugger,
   prependRoot,
   getRoot,
+  mockDriver,
 } from '../../../src/testUtils';
 
 const BABEL_HELP = `
@@ -61,12 +60,11 @@ describe('ExecuteCommandRoutine', () => {
   beforeEach(() => {
     tool = mockTool();
 
-    driver = new BabelDriver({
+    driver = mockDriver('babel', tool);
+    driver.configure({
       args: ['--qux'],
       env: { DEV: 'true' },
     });
-    driver.name = 'babel';
-    driver.tool = tool;
     driver.bootstrap();
 
     routine = new ExecuteCommandRoutine('babel', 'Run babel', {
@@ -370,7 +368,7 @@ describe('ExecuteCommandRoutine', () => {
       expect(optSpy).toHaveBeenCalledWith(routine.context, ['baz'], expect.anything());
       expect(runSpy).toHaveBeenCalledWith(
         routine.context,
-        ['baz', '--config-file', prependRoot(driver.metadata.configName)],
+        ['baz', '--config', prependRoot(driver.metadata.configName)],
         expect.anything(),
       );
     });
@@ -463,7 +461,6 @@ describe('ExecuteCommandRoutine', () => {
         '--foo',
         '../scripts/BumpPeerDeps.js',
         '../scripts/RunIntegrationTests.js',
-        '../scripts/buildPackages.sh',
         '../scripts/extractOptionList.js',
         '../tests/index.js',
         'bar',
@@ -502,9 +499,7 @@ describe('ExecuteCommandRoutine', () => {
     });
 
     it('supports uppercased options', async () => {
-      driver = new JestDriver();
-      driver.tool = routine.tool;
-      driver.bootstrap();
+      driver.getSupportedOptions = () => ['-u', '--all', '--changedFiles', '--watch-only'];
 
       routine.context.primaryDriver = driver;
 
@@ -514,7 +509,8 @@ describe('ExecuteCommandRoutine', () => {
         expect.objectContaining({
           '-u': true, // Short
           '--all': true, // Long
-          '--changedFilesWithAncestor': true, // Camel case
+          '--changedFiles': true, // Camel case
+          '--watch-only': true, // Dashed
         }),
       );
     });
@@ -621,7 +617,7 @@ describe('ExecuteCommandRoutine', () => {
 
       const args = await routine.includeConfigOption(routine.context, ['--foo']);
 
-      expect(args).toEqual(['--foo', '--config-file', prependRoot(driver.metadata.configName)]);
+      expect(args).toEqual(['--foo', '--config', prependRoot(driver.metadata.configName)]);
     });
   });
 

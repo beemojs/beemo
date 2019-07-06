@@ -1,0 +1,18 @@
+{
+  "compilerOptions": {
+    "emitDeclarationOnly": false,
+    "noEmit": true,
+    "rootDir": "."
+  },
+  "extends": "../../../tsconfig.options.json",
+  "include": [
+    "**/*",
+    "../types/**/*",
+    "../../../types/**/*"
+  ],
+  "references": [
+    {
+      "path": ".."
+    }
+  ]
+}

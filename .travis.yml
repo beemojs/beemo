@@ -16,7 +16,8 @@ before_script:
   - yarn danger ci --use-github-checks
   - yarn run setup
 script:
-  - yarn test
+  - yarn run jest
+  - yarn run eslint
   - yarn run test:int:pass
   - yarn run test:int:fail
 notifications:
