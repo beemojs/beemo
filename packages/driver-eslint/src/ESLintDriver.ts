@@ -2,8 +2,6 @@ import fs from 'fs';
 import path from 'path';
 import { Event } from '@boost/event';
 import { Driver, ConfigContext, ConfigArgs, Execution } from '@beemo/core';
-// @ts-ignore
-import ConfigOps from 'eslint/lib/config/config-ops';
 import { ESLintArgs, ESLintConfig } from './types';
 
 // Success: Writes warnings to stdout
@@ -23,21 +21,6 @@ export default class ESLintDriver extends Driver<ESLintConfig> {
     });
 
     this.onCreateConfigFile.listen(this.handleCreateIgnoreFile);
-  }
-
-  /**
-   * ESLints merging logic does not combine arrays but replaces indices.
-   * We do not want this functionality for ignore lists, so handle separately.
-   */
-  mergeConfig(prev: ESLintConfig, next: ESLintConfig): ESLintConfig {
-    const ignore = this.doMerge(prev.ignore || [], next.ignore || []);
-    const config = ConfigOps.merge(prev, next);
-
-    if (ignore && ignore.length > 0) {
-      config.ignore = ignore;
-    }
-
-    return config;
   }
 
   /**
