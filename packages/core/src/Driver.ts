@@ -65,7 +65,7 @@ export default abstract class Driver<
    * Special case for merging arrays.
    */
   doMerge(prevValue: any, nextValue: any): any {
-    if (Array.isArray(prevValue)) {
+    if (Array.isArray(prevValue) && Array.isArray(nextValue)) {
       return Array.from(new Set(prevValue.concat(nextValue)));
     }
 

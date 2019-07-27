@@ -202,6 +202,10 @@ describe('Driver', () => {
     it('concats arrays', () => {
       expect(driver.mergeConfig({ foo: [1, 2] }, { foo: [3, 4] })).toEqual({ foo: [1, 2, 3, 4] });
     });
+
+    it('replaces array if new value is not an array', () => {
+      expect(driver.mergeConfig({ foo: [1, 2] }, { foo: 'bar' })).toEqual({ foo: 'bar' });
+    });
   });
 
   describe('setCommandOptions()', () => {
