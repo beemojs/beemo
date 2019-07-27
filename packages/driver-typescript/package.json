@@ -26,7 +26,7 @@
   },
   "devDependencies": {
     "@boost/test-utils": "^1.2.3",
-    "typescript": "^3.5.2"
+    "typescript": "^3.5.3"
   },
   "peerDependencies": {
     "@beemo/core": "^1.0.0",
