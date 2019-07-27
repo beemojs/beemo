@@ -1,6 +1,6 @@
 /* eslint-disable no-unused-vars, @typescript-eslint/no-unused-vars */
 
-import { ToolConfig, ToolPluginRegistry, PluginSetting } from '@boost/core';
+import { Task, ToolConfig, ToolPluginRegistry, PluginSetting } from '@boost/core';
 import { ExecaReturnValue } from 'execa';
 import { Arguments, Options } from 'yargs';
 import Beemo from './Beemo';
@@ -64,6 +64,11 @@ export type Execution = ExecaReturnValue;
 
 export type ExecuteType = 'parallel' | 'pool' | 'serial' | 'sync';
 
+export interface ExecuteQueue<T extends Context> {
+  tasks: Task<T>[];
+  type: ExecuteType;
+}
+
 export type StdioType = 'buffer' | 'stream' | 'inherit';
 
 declare global {
@@ -71,7 +76,7 @@ declare global {
   namespace NodeJS {
     interface Process {
       beemo: {
-        context: Context<any>;
+        context: Context;
         tool: Beemo;
       };
     }

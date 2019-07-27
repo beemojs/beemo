@@ -129,7 +129,7 @@ export default class ExecuteCommandRoutine extends Routine<
    * When workspaces are enabled, some drivers require the config to be within each workspace,
    * instead of being referenced from the root, so we need to copy it.
    */
-  async copyConfigToWorkspacePackage(context: DriverContext, argv: Argv): Promise<Argv> {
+  copyConfigToWorkspacePackage(context: DriverContext, argv: Argv): Argv {
     const { packageRoot } = this.options;
 
     this.debug('Copying config files to workspace');
@@ -144,7 +144,7 @@ export default class ExecuteCommandRoutine extends Routine<
   /**
    * Expand arguments that look like globs.
    */
-  async expandGlobPatterns(context: DriverContext, argv: Argv): Promise<Argv> {
+  expandGlobPatterns(context: DriverContext, argv: Argv): Argv {
     const nextArgv: Argv = [];
 
     this.debug('Expanding glob patterns');
@@ -236,7 +236,7 @@ export default class ExecuteCommandRoutine extends Routine<
   /**
    * Gather arguments from all sources to pass to the driver.
    */
-  async gatherArgs(context: DriverContext): Promise<Argv> {
+  gatherArgs(context: DriverContext): Argv {
     this.debug('Gathering arguments to pass to driver');
 
     const argv = [
@@ -297,7 +297,7 @@ export default class ExecuteCommandRoutine extends Routine<
   /**
    * Include --config option if driver requires it (instead of auto-lookup resolution).
    */
-  async includeConfigOption(context: DriverContext, prevArgv: Argv): Promise<Argv> {
+  includeConfigOption(context: DriverContext, prevArgv: Argv): Argv {
     const { primaryDriver } = context;
     const configPath = context.findConfigByName(primaryDriver.metadata.configName);
     const argv = [...prevArgv];

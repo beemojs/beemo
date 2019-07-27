@@ -1,3 +1,5 @@
+/* eslint-disable no-underscore-dangle */
+
 import { Transform, TransformCallback } from 'stream';
 
 const WAIT_THRESHOLD = 500;

@@ -25,8 +25,8 @@ export default class MochaDriver extends Driver<MochaConfig> {
       const value = data[key];
       const type = typeof value;
 
-      if (key === 'reporterOptions') {
-        output.push(`${option} ${this.formatReporterOptions(value)}`);
+      if (key === 'reporterOptions' && typeof value === 'object' && value) {
+        output.push(`${option} ${this.formatReporterOptions(value as ReporterOptions)}`);
       } else if (type === 'boolean') {
         output.push(option);
       } else if (Array.isArray(value)) {

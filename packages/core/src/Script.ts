@@ -3,13 +3,13 @@ import { ConcurrentEvent } from '@boost/event';
 import { Options } from 'yargs-parser';
 import execa, { Options as ExecaOptions, ExecaReturnValue } from 'execa';
 import ScriptContext from './contexts/ScriptContext';
-import { Argv, ExecuteType } from './types';
+import { Argv, ExecuteType, ExecuteQueue } from './types';
 
 export default abstract class Script<
   Args extends object = {},
   Opts extends object = {}
 > extends Plugin<Opts> {
-  tasks: Task<any>[] = [];
+  tasks: Task<ScriptContext>[] = [];
 
   onBeforeExecute = new ConcurrentEvent<[ScriptContext, Argv]>('before-execute');
 
@@ -27,7 +27,7 @@ export default abstract class Script<
   /**
    * Execute the script with the context and parsed args.
    */
-  async execute(context: ScriptContext, args: Args): Promise<any> {
+  async execute(context: ScriptContext, args: Args): Promise<unknown> {
     return this.executeTasks('serial');
   }
 
@@ -45,7 +45,7 @@ export default abstract class Script<
   /**
    * Execute the enqueued tasks using the defined process.
    */
-  async executeTasks(type: ExecuteType) {
+  async executeTasks(type: ExecuteType): Promise<ExecuteQueue<ScriptContext>> {
     return Promise.resolve({
       tasks: this.tasks,
       type,
@@ -55,7 +55,7 @@ export default abstract class Script<
   /**
    * Define an individual task that will be piped to an upstream routine.
    */
-  task(title: string, action: TaskAction<any>): Task<any> {
+  task(title: string, action: TaskAction<ScriptContext>): Task<ScriptContext> {
     if (typeof action !== 'function') {
       throw new TypeError(this.tool.msg('errors:taskRequireAction'));
     }

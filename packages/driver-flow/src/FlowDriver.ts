@@ -69,7 +69,7 @@ export default class FlowDriver extends Driver<FlowConfig> {
     return output;
   }
 
-  formatOption(value: any, quote: boolean = false): string {
+  formatOption(value: unknown, quote: boolean = false): string {
     let option = value;
 
     // http://caml.inria.fr/pub/docs/manual-ocaml/libref/Str.html#TYPEregexp
@@ -82,7 +82,7 @@ export default class FlowDriver extends Driver<FlowConfig> {
       option = String(value);
     }
 
-    return quote ? `'${option}'` : option;
+    return quote ? `'${option}'` : String(option);
   }
 
   formatOptionsSection(options: OptionsConfig): string[] {

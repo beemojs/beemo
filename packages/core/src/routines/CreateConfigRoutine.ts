@@ -266,7 +266,7 @@ export default class CreateConfigRoutine<Ctx extends ConfigContext> extends Rout
   /**
    * Set environment variables defined by the driver.
    */
-  setEnvVars(context: Ctx, configs: ConfigObject[]): Promise<any> {
+  setEnvVars(context: Ctx, configs: ConfigObject[]): Promise<unknown> {
     const { env } = this.options.driver.options;
 
     // TODO: This may cause collisions, isolate in a child process?

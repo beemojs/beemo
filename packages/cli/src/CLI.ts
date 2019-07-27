@@ -1,4 +1,4 @@
-/* eslint-disable no-console */
+/* eslint-disable no-console, @typescript-eslint/no-misused-promises */
 
 import path from 'path';
 import chalk from 'chalk';

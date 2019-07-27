@@ -306,16 +306,22 @@ describe('Beemo', () => {
   });
 
   describe('runScript()', () => {
-    it('errors if script name is not in kebab case', () => {
-      expect(beemo.runScript(stubScriptArgs(), 'Foo_Bar')).rejects.toThrowErrorMatchingSnapshot();
+    it('errors if script name is not in kebab case', async () => {
+      await expect(
+        beemo.runScript(stubScriptArgs(), 'Foo_Bar'),
+      ).rejects.toThrowErrorMatchingSnapshot();
     });
 
-    it('errors if script name starts with a dash', () => {
-      expect(beemo.runScript(stubScriptArgs(), '-foo')).rejects.toThrowErrorMatchingSnapshot();
+    it('errors if script name starts with a dash', async () => {
+      await expect(
+        beemo.runScript(stubScriptArgs(), '-foo'),
+      ).rejects.toThrowErrorMatchingSnapshot();
     });
 
-    it('errors if script name ends with a dash', () => {
-      expect(beemo.runScript(stubScriptArgs(), 'bar-')).rejects.toThrowErrorMatchingSnapshot();
+    it('errors if script name ends with a dash', async () => {
+      await expect(
+        beemo.runScript(stubScriptArgs(), 'bar-'),
+      ).rejects.toThrowErrorMatchingSnapshot();
     });
 
     it('emits `onRunScript` event with context', async () => {
@@ -368,7 +374,7 @@ describe('Beemo', () => {
       });
     });
 
-    it('registers an exit listener if cleanup is true', async () => {
+    it('registers an exit listener if cleanup is true', () => {
       expect(beemo.onExit.getListeners().size).toBe(0);
 
       beemo.config.configure.cleanup = true;
@@ -377,7 +383,7 @@ describe('Beemo', () => {
       expect(beemo.onExit.getListeners().size).toBe(1);
     });
 
-    it('doesnt register exit listener if cleanup is false', async () => {
+    it('doesnt register exit listener if cleanup is false', () => {
       expect(beemo.onExit.getListeners().size).toBe(0);
 
       beemo.config.configure.cleanup = false;
@@ -386,7 +392,7 @@ describe('Beemo', () => {
       expect(beemo.onExit.getListeners().size).toBe(0);
     });
 
-    it('silences output if `stdio` argument is `inherit`', async () => {
+    it('silences output if `stdio` argument is `inherit`', () => {
       beemo.config.silent = false;
 
       const ctx = stubContext();

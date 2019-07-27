@@ -374,10 +374,10 @@ describe('CreateConfigRoutine', () => {
       });
     });
 
-    it('errors if no source file', () => {
+    it('errors if no source file', async () => {
       routine.getConfigPath = () => '';
 
-      expect(routine.copyConfigFile(routine.context)).rejects.toThrowErrorMatchingSnapshot();
+      await expect(routine.copyConfigFile(routine.context)).rejects.toThrowErrorMatchingSnapshot();
     });
   });
 

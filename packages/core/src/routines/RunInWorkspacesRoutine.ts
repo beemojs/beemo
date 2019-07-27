@@ -35,11 +35,11 @@ export default abstract class RunInWorkspacesRoutine<
     }
   }
 
-  async execute(context: Ctx): Promise<any[]> {
+  async execute(context: Ctx): Promise<unknown> {
     const value = await this.serializeTasks();
     const batches = this.orderByWorkspacePriorityGraph();
     const allErrors: Error[] = [];
-    const allResults: any[] = [];
+    const allResults: unknown[] = [];
 
     const concurrency = context.args.concurrency || this.tool.config.execute.concurrency;
 

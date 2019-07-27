@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
 import { Context as BaseContext } from '@boost/core';
 import camelCase from 'lodash/camelCase';
 import trim from 'lodash/trim';
@@ -123,7 +125,7 @@ export default class Context<T = {}> extends BaseContext {
   /**
    * Return an argument or option value by name, or a fallback value if not found.
    */
-  getArg<T>(name: string, fallback: any = null): T {
-    return this.args[name] || fallback;
+  getArg(name: string, fallback?: unknown): unknown {
+    return this.args[name] || fallback || null;
   }
 }

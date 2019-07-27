@@ -25,7 +25,7 @@ export class TestScript<A extends object = {}, T extends object = {}> extends Sc
   name = 'test-script';
 
   blueprint() {
-    return {} as any;
+    return {} as $FixMe;
   }
 }
 

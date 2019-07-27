@@ -20,7 +20,7 @@ import DriverContext from './contexts/DriverContext';
 import ScriptContext from './contexts/ScriptContext';
 import ScaffoldContext from './contexts/ScaffoldContext';
 import { KEBAB_PATTERN } from './constants';
-import { Argv, Execution, BeemoPluginRegistry, BeemoConfig } from './types';
+import { Argv, Execution, BeemoPluginRegistry, BeemoConfig, DriverOptions } from './types';
 
 export function configBlueprint() {
   return {
@@ -41,13 +41,16 @@ export function configBlueprint() {
 export default class Beemo extends Tool<BeemoPluginRegistry, BeemoConfig> {
   moduleRoot: string = '';
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   pipeline: Pipeline<any, Beemo> | null = null;
 
-  onResolveDependencies = new Event<[ConfigContext, Driver<any, any>[]]>('resolve-dependencies');
+  onResolveDependencies = new Event<[ConfigContext, Driver<object, DriverOptions>[]]>(
+    'resolve-dependencies',
+  );
 
   onRunConfig = new Event<[ConfigContext, string[]]>('run-config');
 
-  onRunDriver = new Event<[DriverContext, Driver<any, any>]>('run-driver');
+  onRunDriver = new Event<[DriverContext, Driver<object, DriverOptions>]>('run-driver');
 
   onRunScript = new Event<[ScriptContext]>('run-script');
 
@@ -124,7 +127,10 @@ export default class Beemo extends Tool<BeemoPluginRegistry, BeemoConfig> {
   /**
    * Create a configuration file for the specified driver names.
    */
-  async createConfigFiles(args: ConfigContext['args'], driverNames: string[] = []): Promise<any> {
+  async createConfigFiles(
+    args: ConfigContext['args'],
+    driverNames: string[] = [],
+  ): Promise<unknown> {
     const context = this.prepareContext(new ConfigContext(args));
 
     // Create for all enabled drivers
@@ -261,7 +267,7 @@ export default class Beemo extends Tool<BeemoPluginRegistry, BeemoConfig> {
     generator: string,
     action: string,
     name: string = '',
-  ): Promise<any> {
+  ): Promise<unknown> {
     const context = this.prepareContext(new ScaffoldContext(args, generator, action, name));
 
     this.onScaffold.emit([context, generator, action, name]);

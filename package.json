@@ -20,7 +20,7 @@
     "type": "beemo typescript --build --reference-workspaces"
   },
   "devDependencies": {
-    "@milesj/build-tool-config": "0.170.3",
+    "@milesj/build-tool-config": "0.172.3",
     "chalk": "^2.4.2",
     "conventional-changelog-beemo": "^1.4.0",
     "danger": "^9.1.3",

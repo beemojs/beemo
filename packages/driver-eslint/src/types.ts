@@ -29,7 +29,7 @@ export type EnvType =
 
 export type RuleSetting = 0 | 1 | 2 | '0' | '1' | '2' | 'off' | 'warn' | 'error';
 
-export type RuleOptions = string | number | boolean | { [option: string]: any };
+export type RuleOptions = string | number | boolean | { [option: string]: unknown };
 
 export interface Rules {
   [rule: string]:
@@ -56,7 +56,7 @@ export interface CommonConfig {
   plugins?: string[];
   rules?: Rules;
   root?: boolean;
-  settings?: { [setting: string]: any };
+  settings?: { [setting: string]: unknown };
 }
 
 export interface OverrideConfig extends CommonConfig {

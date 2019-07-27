@@ -1,13 +1,13 @@
 export type MatchPattern =
   | string
   | RegExp
-  | ((fileName: string, context: any, envName: string) => boolean);
+  | ((fileName: string, context: unknown, envName: string) => boolean);
 
 export type SourceMapsOption = boolean | 'inline' | 'both';
 
-export type PluginEntry = [string, { [option: string]: any }, string?];
+export type PluginEntry = [string, { [option: string]: unknown }, string?];
 
-export type PresetEntry = [string, { [option: string]: any }, string?];
+export type PresetEntry = [string, { [option: string]: unknown }, string?];
 
 export interface BabelConfig {
   ast?: boolean;
@@ -15,7 +15,7 @@ export interface BabelConfig {
   auxiliaryCommentBefore?: string;
   babelrc?: boolean;
   babelrcRoots?: boolean | MatchPattern | MatchPattern[];
-  caller?: { name: string; [key: string]: any };
+  caller?: { name: string; [key: string]: unknown };
   code?: boolean;
   comments?: boolean;
   compact?: boolean | 'auto';
@@ -27,7 +27,7 @@ export interface BabelConfig {
   extends?: string;
   filename?: string;
   filenameRelative?: string;
-  generatorOpts?: { [option: string]: any };
+  generatorOpts?: { [option: string]: unknown };
   getModuleId?: (name: string) => string;
   highlightCode?: boolean;
   ignore?: MatchPattern[];
@@ -39,7 +39,7 @@ export interface BabelConfig {
   moduleRoot?: string;
   only?: MatchPattern[];
   overrides?: BabelConfig[];
-  parserOpts?: { [option: string]: any };
+  parserOpts?: { [option: string]: unknown };
   passPerPreset?: boolean;
   plugins?: (string | PluginEntry)[];
   presets?: (string | PresetEntry)[];

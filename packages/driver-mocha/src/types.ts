@@ -1,7 +1,7 @@
 export type UISetting = 'bdd' | 'tdd' | 'qunit' | 'exports';
 
 export interface ReporterOptions {
-  [key: string]: any;
+  [key: string]: unknown;
 }
 
 export interface MochaConfig {
@@ -59,7 +59,7 @@ export interface MochaConfig {
   watch?: boolean;
   watch_extensions?: string[];
   // Harmony flags
-  [option: string]: any;
+  [option: string]: unknown;
 }
 
 export interface MochaArgs {

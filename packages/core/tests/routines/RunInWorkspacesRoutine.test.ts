@@ -144,7 +144,7 @@ describe('RunInWorkspacesRoutine', () => {
       it('returns an array of results for multiple routines', async () => {
         const response = await routine.execute(routine.context);
 
-        expect(response.sort()).toEqual(['bar', 'baz', 'foo', 'primary', 'qux']);
+        expect((response as string[]).sort()).toEqual(['bar', 'baz', 'foo', 'primary', 'qux']);
       });
 
       it('serializes priority routines before pooling other routines', async () => {

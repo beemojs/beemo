@@ -2,7 +2,7 @@ import { Plugin, Predicates } from '@boost/core';
 import { Event, ConcurrentEvent } from '@boost/event';
 import mergeWith from 'lodash/mergeWith';
 import execa from 'execa';
-import optimal, { array, bool, object, string, shape } from 'optimal';
+import optimal, { array, bool, object, string, shape, Blueprint } from 'optimal';
 import DriverContext from './contexts/DriverContext';
 import ConfigContext from './contexts/ConfigContext';
 import {
@@ -64,7 +64,7 @@ export default abstract class Driver<
   /**
    * Special case for merging arrays.
    */
-  doMerge(prevValue: any, nextValue: any): any {
+  doMerge(prevValue: unknown, nextValue: unknown): unknown {
     if (Array.isArray(prevValue) && Array.isArray(nextValue)) {
       return Array.from(new Set(prevValue.concat(nextValue)));
     }
@@ -173,7 +173,7 @@ export default abstract class Driver<
    * Setup additional command options.
    */
   setCommandOptions(options: DriverCommandOptions): this {
-    const blueprint: any = {};
+    const blueprint: Blueprint<DriverCommandOptions> = {};
 
     Object.keys(options).forEach(key => {
       blueprint[key] = shape({

@@ -68,7 +68,7 @@ export default class TypeScriptDriver extends Driver<TypeScriptConfig, TypeScrip
   async createProjectRefConfigsInWorkspaces(
     context: DriverContext<DriverArgs & TypeScriptArgs>,
     workspaceRoot: string,
-  ): Promise<any> {
+  ): Promise<unknown> {
     const {
       buildFolder,
       declarationOnly,
@@ -124,7 +124,7 @@ export default class TypeScriptDriver extends Driver<TypeScriptConfig, TypeScrip
           const srcPath = path.join(packagePath, srcFolder);
           const testsPath = path.join(packagePath, testsFolder);
           const references: ts.ProjectReference[] = [];
-          const promises: Promise<any>[] = [];
+          const promises: Promise<unknown>[] = [];
 
           // Extract and determine references
           Object.keys({ ...dependencies, ...devDependencies, ...peerDependencies }).forEach(

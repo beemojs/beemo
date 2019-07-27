@@ -1,4 +1,4 @@
-interface ExecLike {
+export interface ExecLike {
   command?: string;
   stderr?: string;
   stdout?: string;

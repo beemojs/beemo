@@ -23,6 +23,7 @@ describe('CleanupConfigsRoutine', () => {
     let removeSpy: jest.SpyInstance;
 
     beforeEach(() => {
+      // eslint-disable-next-line @typescript-eslint/no-misused-promises
       removeSpy = jest.spyOn(fs, 'remove').mockImplementation(() => Promise.resolve());
     });
 
