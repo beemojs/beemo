@@ -3,6 +3,23 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+### 1.0.4 - 2019-07-28
+
+#### 🐞 Fixes
+
+- Only merge arrays if both values are an array. ([2e6c6f5](https://github.com/beemojs/beemo/tree/master/packages/core/commit/2e6c6f5))
+- Refine and improve types. Replace some any usage with unknown. ([162219a](https://github.com/beemojs/beemo/tree/master/packages/core/commit/162219a))
+
+#### 📦 Dependencies
+
+- Update all minor and patch versions. ([15c3f20](https://github.com/beemojs/beemo/tree/master/packages/core/commit/15c3f20))
+
+**Note:** Version bump only for package @beemo/core
+
+
+
+
+
 ### 1.0.3 - 2019-07-06
 
 #### 🐞 Fixes
