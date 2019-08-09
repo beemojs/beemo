@@ -1,22 +1,26 @@
 import { Routine } from '@boost/core';
 import Driver from '../../src/Driver';
-import RunInWorkspacesRoutine from '../../src/routines/RunInWorkspacesRoutine';
+import RunInWorkspacesRoutine, {
+  RunInWorkspacesContextArgs,
+} from '../../src/routines/RunInWorkspacesRoutine';
 import { mockTool, mockDriver, stubDriverContext, mockDebugger } from '../../src/testUtils';
+import Context from '../../src/contexts/Context';
+import Beemo from '../../src/Beemo';
 
-class PipedRoutine extends Routine<any, any> {
+class PipedRoutine extends Routine<Context<$FixMe>, Beemo> {
   execute() {
     return Promise.resolve(this.key);
   }
 }
 
-class ExecuteRoutine extends RunInWorkspacesRoutine<any> {
+class ExecuteRoutine extends RunInWorkspacesRoutine<Context<$FixMe>> {
   pipeRoutine(packageName?: string, packageRoot?: string) {
     this.pipe(new PipedRoutine(packageName || 'root', packageRoot || ''));
   }
 }
 
 describe('RunInWorkspacesRoutine', () => {
-  let routine: RunInWorkspacesRoutine<any>;
+  let routine: RunInWorkspacesRoutine<Context<RunInWorkspacesContextArgs>>;
   let driver: Driver;
   let primary: PipedRoutine;
   let foo: PipedRoutine;
@@ -128,7 +132,9 @@ describe('RunInWorkspacesRoutine', () => {
     });
 
     it('returns a result for a single routine', async () => {
-      routine.poolRoutines = jest.fn(() => Promise.resolve({ errors: [], results: [123] })) as any;
+      routine.poolRoutines = jest.fn(() =>
+        Promise.resolve({ errors: [], results: [123] }),
+      ) as $FixMe;
 
       const response = await routine.execute(routine.context);
 

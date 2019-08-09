@@ -12,7 +12,7 @@ describe('RunDriverRoutine', () => {
   let driver: Driver;
 
   function expectPipedRoutines(
-    mock: any,
+    mock: unknown,
     tests: ({ key?: string; title: string } & ExecuteCommandOptions)[],
   ) {
     expect(mock).toHaveBeenCalledTimes(tests.length);

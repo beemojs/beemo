@@ -45,7 +45,7 @@ describe('RunScriptRoutine', () => {
   let routine: RunScriptRoutine;
   let script: Script;
 
-  function expectPipedRoutines(mock: any, tests: ({ key: string } & ExecuteScriptOptions)[]) {
+  function expectPipedRoutines(mock: unknown, tests: ({ key: string } & ExecuteScriptOptions)[]) {
     expect(mock).toHaveBeenCalledTimes(tests.length);
 
     tests.forEach(test => {

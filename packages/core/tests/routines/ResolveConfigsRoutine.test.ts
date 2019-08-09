@@ -22,7 +22,7 @@ describe('ResolveConfigsRoutine', () => {
     routine.context.addDriverDependency(driver);
     routine.tool.getPlugin = jest.fn(
       (type, name) => plugins[name] || mockDriver(name, tool),
-    ) as any;
+    ) as $FixMe;
   });
 
   describe('bootstrap()', () => {

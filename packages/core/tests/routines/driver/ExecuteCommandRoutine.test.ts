@@ -1,5 +1,6 @@
 import fs from 'fs-extra';
 import chalk from 'chalk';
+import execa from 'execa';
 import { Task, SignalError, ExitError } from '@boost/core';
 import Driver from '../../../src/Driver';
 import ExecuteCommandRoutine from '../../../src/routines/driver/ExecuteCommandRoutine';
@@ -11,6 +12,8 @@ import {
   getRoot,
   mockDriver,
 } from '../../../src/testUtils';
+import { StdioType } from '../../../src/types';
+import DriverContext from '../../../lib/contexts/DriverContext';
 
 const BABEL_HELP = `
 Usage: babel [options] <files ...>
@@ -99,7 +102,7 @@ describe('ExecuteCommandRoutine', () => {
   describe('captureOutput()', () => {
     const oldWrite = process.stdout.write;
     let writeSpy: jest.Mock;
-    let stream: any;
+    let stream: execa.ExecaChildProcess;
 
     class MockStream {
       handler?: (chunk: Buffer) => void;
@@ -123,7 +126,9 @@ describe('ExecuteCommandRoutine', () => {
 
     beforeEach(() => {
       stream = {
+        // @ts-ignore
         stdout: new MockStream(),
+        // @ts-ignore
         stderr: new MockStream(),
       };
       writeSpy = jest.fn();
@@ -177,8 +182,8 @@ describe('ExecuteCommandRoutine', () => {
       });
 
       it('pipes a batch stream when enabled', () => {
-        const outSpy = jest.spyOn(stream.stdout, 'pipe');
-        const errSpy = jest.spyOn(stream.stderr, 'pipe');
+        const outSpy = jest.spyOn(stream.stdout!, 'pipe');
+        const errSpy = jest.spyOn(stream.stderr!, 'pipe');
 
         driver.metadata.watchOptions = ['--watch'];
         routine.context.args.watch = true;
@@ -190,8 +195,8 @@ describe('ExecuteCommandRoutine', () => {
       });
 
       it('registers a data handler when using watch', () => {
-        const outSpy = jest.spyOn(stream.stdout, 'on');
-        const errSpy = jest.spyOn(stream.stderr, 'on');
+        const outSpy = jest.spyOn(stream.stdout!, 'on');
+        const errSpy = jest.spyOn(stream.stderr!, 'on');
 
         driver.metadata.watchOptions = ['--watch'];
         routine.context.args.watch = true;
@@ -208,7 +213,7 @@ describe('ExecuteCommandRoutine', () => {
 
         routine.captureOutput(stream);
 
-        stream.stdout.emit();
+        stream.stdout!.emit('data');
 
         expect(writeSpy).toHaveBeenCalledWith('buffered');
       });
@@ -217,7 +222,7 @@ describe('ExecuteCommandRoutine', () => {
     ['stream', 'inherit'].forEach(stdio => {
       describe(`${stdio}`, () => {
         beforeEach(() => {
-          routine.context.args.stdio = stdio as any;
+          routine.context.args.stdio = stdio as StdioType;
         });
 
         it('enables if `stdio` option is set', () => {
@@ -225,8 +230,8 @@ describe('ExecuteCommandRoutine', () => {
         });
 
         it('doesnt pipe a batch stream when using `stdio`', () => {
-          const outSpy = jest.spyOn(stream.stdout, 'pipe');
-          const errSpy = jest.spyOn(stream.stderr, 'pipe');
+          const outSpy = jest.spyOn(stream.stdout!, 'pipe');
+          const errSpy = jest.spyOn(stream.stderr!, 'pipe');
 
           routine.captureOutput(stream);
 
@@ -235,8 +240,8 @@ describe('ExecuteCommandRoutine', () => {
         });
 
         it('registers a data handler when using `stdio`', () => {
-          const outSpy = jest.spyOn(stream.stdout, 'on');
-          const errSpy = jest.spyOn(stream.stderr, 'on');
+          const outSpy = jest.spyOn(stream.stdout!, 'on');
+          const errSpy = jest.spyOn(stream.stderr!, 'on');
 
           routine.captureOutput(stream);
 
@@ -247,7 +252,7 @@ describe('ExecuteCommandRoutine', () => {
         it('writes chunk to `process.stdout`', () => {
           routine.captureOutput(stream);
 
-          stream.stdout.emit();
+          stream.stdout!.emit('data');
 
           expect(writeSpy).toHaveBeenCalledWith('buffered');
         });
@@ -264,8 +269,8 @@ describe('ExecuteCommandRoutine', () => {
       });
 
       it('registers a data handler when buffering', () => {
-        const outSpy = jest.spyOn(stream.stdout, 'on');
-        const errSpy = jest.spyOn(stream.stderr, 'on');
+        const outSpy = jest.spyOn(stream.stdout!, 'on');
+        const errSpy = jest.spyOn(stream.stderr!, 'on');
 
         routine.captureOutput(stream);
 
@@ -276,9 +281,9 @@ describe('ExecuteCommandRoutine', () => {
       it('writes buffered chunk to `process.stdout` when a signal error occurs', () => {
         routine.captureOutput(stream);
 
-        stream.stdout.emit();
-        stream.stdout.emit();
-        stream.stdout.emit();
+        stream.stdout!.emit('data');
+        stream.stdout!.emit('data');
+        stream.stdout!.emit('data');
 
         routine.tool.console.onError.emit([new SignalError('Error', 'SIGINT')]);
 
@@ -288,9 +293,9 @@ describe('ExecuteCommandRoutine', () => {
       it('doesnt write buffered chunk if a non-supported signal error occurs', () => {
         routine.captureOutput(stream);
 
-        stream.stdout.emit();
-        stream.stdout.emit();
-        stream.stdout.emit();
+        stream.stdout!.emit('data');
+        stream.stdout!.emit('data');
+        stream.stdout!.emit('data');
 
         routine.tool.console.onError.emit([new SignalError('Error', 'SIGABRT')]);
 
@@ -300,9 +305,9 @@ describe('ExecuteCommandRoutine', () => {
       it('doesnt write buffered chunk if a non-signal error occurs', () => {
         routine.captureOutput(stream);
 
-        stream.stdout.emit();
-        stream.stdout.emit();
-        stream.stdout.emit();
+        stream.stdout!.emit('data');
+        stream.stdout!.emit('data');
+        stream.stdout!.emit('data');
 
         routine.tool.console.onError.emit([new Error('Error')]);
 
@@ -313,7 +318,7 @@ describe('ExecuteCommandRoutine', () => {
 
   describe('execute()', () => {
     beforeEach(() => {
-      routine.executeCommand = jest.fn(() => Promise.resolve({ stdout: BABEL_HELP } as any));
+      routine.executeCommand = jest.fn(() => Promise.resolve({ stdout: BABEL_HELP } as $FixMe));
 
       driver.metadata.filterOptions = true;
     });
@@ -518,7 +523,7 @@ describe('ExecuteCommandRoutine', () => {
 
   describe('filterUnknownOptions()', () => {
     beforeEach(() => {
-      routine.executeCommand = jest.fn(() => Promise.resolve({ stdout: BABEL_HELP } as any));
+      routine.executeCommand = jest.fn(() => Promise.resolve({ stdout: BABEL_HELP } as $FixMe));
     });
 
     it('returns supported options', async () => {
@@ -622,10 +627,10 @@ describe('ExecuteCommandRoutine', () => {
   });
 
   describe('runCommandWithArgs()', () => {
-    const task = new Task<any>('Task', () => {});
+    const task = new Task<DriverContext>('Task', () => {});
 
     beforeEach(() => {
-      routine.executeCommand = jest.fn(() => Promise.resolve({ success: true } as any));
+      routine.executeCommand = jest.fn(() => Promise.resolve({ success: true } as $FixMe));
       driver.processSuccess = jest.fn();
       driver.processFailure = jest.fn();
     });

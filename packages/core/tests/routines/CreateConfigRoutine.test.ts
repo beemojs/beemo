@@ -17,6 +17,7 @@ import {
   prependRoot,
   mockDriver,
 } from '../../src/testUtils';
+import ConfigContext from '../../src/contexts/ConfigContext';
 
 jest.mock('@boost/core/lib/ConfigLoader');
 
@@ -24,7 +25,7 @@ describe('CreateConfigRoutine', () => {
   const oldExistsSync = fs.existsSync;
   const oldWriteFile = fs.writeFile;
   const oldCopy = fs.copy;
-  let routine: CreateConfigRoutine<any>;
+  let routine: CreateConfigRoutine<ConfigContext>;
   let driver: Driver;
   let tool: Beemo;
 
@@ -451,7 +452,7 @@ describe('CreateConfigRoutine', () => {
 
       driver.onLoadPackageConfig.listen(spy);
 
-      await routine.extractConfigFromPackage(routine.context, [routine.context]);
+      await routine.extractConfigFromPackage(routine.context, []);
 
       expect(spy).not.toHaveBeenCalled();
     });

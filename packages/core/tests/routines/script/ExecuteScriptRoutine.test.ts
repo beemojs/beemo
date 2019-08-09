@@ -287,7 +287,7 @@ describe('ExecuteScriptRoutine', () => {
 
       routine.context.script = script;
 
-      routine.runScriptTasks({} as any, 'pool', script.tasks);
+      routine.runScriptTasks({} as $FixMe, 'pool', script.tasks);
     });
   });
 });

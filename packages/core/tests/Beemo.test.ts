@@ -82,7 +82,7 @@ describe('Beemo', () => {
       // @ts-ignore
       beemo.getPlugin = (type, name) => mockDriver(name, beemo);
       beemo.getPlugins = () =>
-        [mockDriver('foo', beemo), mockDriver('bar', beemo), mockDriver('baz', beemo)] as any;
+        [mockDriver('foo', beemo), mockDriver('bar', beemo), mockDriver('baz', beemo)] as $FixMe;
     });
 
     it('emits `onRunConfig` event for a single driver', async () => {
@@ -136,7 +136,7 @@ describe('Beemo', () => {
       await beemo.createConfigFiles(stubConfigArgs(), ['foo', 'bar', 'baz']);
 
       expect(spy).toHaveBeenCalled();
-      expect((spy.mock.calls[0][0] as any).drivers.size).toBe(3);
+      expect((spy.mock.calls[0][0] as $FixMe).drivers.size).toBe(3);
     });
 
     it('creates for all drivers if list is empty', async () => {
@@ -150,7 +150,7 @@ describe('Beemo', () => {
           drivers: new Set(beemo.getPlugins('driver')),
         }),
       );
-      expect((spy.mock.calls[0][0] as any).drivers.size).toBe(3);
+      expect((spy.mock.calls[0][0] as $FixMe).drivers.size).toBe(3);
     });
   });
 
@@ -447,7 +447,7 @@ describe('configBlueprint()', () => {
   it('doesnt error if module is defined with env var', () => {
     process.env.BEEMO_CONFIG_MODULE = 'test-boost';
 
-    let opts: any = {};
+    let opts: { module?: string } = {};
 
     expect(() => {
       opts = optimal({}, configBlueprint());

@@ -1811,10 +1811,10 @@
     npmlog "^4.1.2"
     write-file-atomic "^2.3.0"
 
-"@milesj/build-tool-config@0.172.3":
-  version "0.172.3"
-  resolved "https://registry.npmjs.org/@milesj/build-tool-config/-/build-tool-config-0.172.3.tgz#b2f4fa1a8a69044dadca17454ccc28ca72c284f9"
-  integrity sha512-TTontOTujQVOFVmEKg+MgKZ4d9MZwW1mh/7cK+IRjYAw72TSJ1LFT5EQQDwgO1AG6x3qpMQoze+CikNCgR8sDQ==
+"@milesj/build-tool-config@0.172.5":
+  version "0.172.5"
+  resolved "https://registry.npmjs.org/@milesj/build-tool-config/-/build-tool-config-0.172.5.tgz#f6b6817865b1074ba9aaa115106a426d3685fcb1"
+  integrity sha512-b77Vvvf86IiTE0yr32oO9nhcpdkyJHYNx4dsm9woaPxuVDMyxqdJQK3p4SG6q+/iJFJdvyQnkzf8druEo48e7g==
   dependencies:
     "@babel/cli" "^7.5.5"
     "@babel/core" "^7.5.5"
@@ -1827,7 +1827,7 @@
     "@babel/preset-react" "^7.0.0"
     "@babel/preset-typescript" "^7.3.3"
     "@types/enzyme" "^3.10.3"
-    "@types/jest" "^24.0.15"
+    "@types/jest" "^24.0.16"
     "@typescript-eslint/eslint-plugin" "~1.13.0"
     "@typescript-eslint/parser" "~1.13.0"
     babel-plugin-transform-dev "^2.0.1"
@@ -1841,7 +1841,7 @@
     eslint-plugin-babel "^5.3.0"
     eslint-plugin-compat "^3.3.0"
     eslint-plugin-import "^2.18.2"
-    eslint-plugin-jest "^22.13.7"
+    eslint-plugin-jest "^22.14.0"
     eslint-plugin-jsx-a11y "^6.2.3"
     eslint-plugin-promise "^4.2.1"
     eslint-plugin-react "^7.14.3"
@@ -2090,10 +2090,10 @@
   resolved "https://registry.npmjs.org/@types/jest-diff/-/jest-diff-20.0.1.tgz#35cc15b9c4f30a18ef21852e255fdb02f6d59b89"
   integrity sha512-yALhelO3i0hqZwhjtcr6dYyaLoCHbAMshwtj6cGxTvHZAKXHsYGdff6E8EPw3xLKY0ELUTQ69Q1rQiJENnccMA==
 
-"@types/jest@^24.0.15":
-  version "24.0.15"
-  resolved "https://registry.npmjs.org/@types/jest/-/jest-24.0.15.tgz#6c42d5af7fe3b44ffff7cc65de7bf741e8fa427f"
-  integrity sha512-MU1HIvWUme74stAoc3mgAi+aMlgKOudgEvQDIm1v4RkrDudBh1T+NFp5sftpBAdXdx1J0PbdpJ+M2EsSOi1djA==
+"@types/jest@^24.0.16":
+  version "24.0.17"
+  resolved "https://registry.npmjs.org/@types/jest/-/jest-24.0.17.tgz#b66ea026efb746eb5db1356ee28518aaff7af416"
+  integrity sha512-1cy3xkOAfSYn78dsBWy4M3h/QF/HeWPchNFDjysVtp3GHeTdSmtluNnELfCmfNRRHo0OWEcpf+NsEJQvwQfdqQ==
   dependencies:
     "@types/jest-diff" "*"
 
@@ -3738,10 +3738,10 @@ conventional-changelog-angular@^5.0.3:
     compare-func "^1.3.1"
     q "^1.5.1"
 
-conventional-changelog-beemo@^1.4.0:
-  version "1.4.0"
-  resolved "https://registry.npmjs.org/conventional-changelog-beemo/-/conventional-changelog-beemo-1.4.0.tgz#bc893112996ef4d7e778823f5cc978678afcbf03"
-  integrity sha512-/OuAzHBTrPYM/WXCSFg7AHW/jBN/a44CWXPUoOCTkpkLAUSaJ8Z3UTaqvzxHAupJt6VybVk9fNoklJSmfpRL2g==
+conventional-changelog-beemo@^1.5.0:
+  version "1.5.0"
+  resolved "https://registry.npmjs.org/conventional-changelog-beemo/-/conventional-changelog-beemo-1.5.0.tgz#933fd677df6f7960a0f4d2b8567b415fbfc8c226"
+  integrity sha512-gl5oIbKZqctZcy02KqnBrpgSrTWoKbvtq8SGVCjoLvUiIl2oteqFM4rP/4DOddAPro0hmvc9LnmNlNbYGdLuFg==
 
 conventional-changelog-core@^3.1.6:
   version "3.1.6"
@@ -4037,10 +4037,10 @@ damerau-levenshtein@^1.0.4:
   resolved "https://registry.npmjs.org/damerau-levenshtein/-/damerau-levenshtein-1.0.4.tgz#03191c432cb6eea168bb77f3a55ffdccb8978514"
   integrity sha1-AxkcQyy27qFou3fzpV/9zLiXhRQ=
 
-danger@^9.1.3:
-  version "9.1.3"
-  resolved "https://registry.npmjs.org/danger/-/danger-9.1.3.tgz#05b8349ec08350161245cd4098774c9b69f5b47e"
-  integrity sha512-uL18hAWVaLIAsA+7roOs78hRlz+oL5p9DQnTRiw5lJU1VhF1Td+fpsbgoZ3fnQbZs5IGo/upgPaaLyn9HOr4yg==
+danger@^9.1.5:
+  version "9.1.5"
+  resolved "https://registry.npmjs.org/danger/-/danger-9.1.5.tgz#3210e5f0df87ac3b3825d494c11cbeb23a9a740a"
+  integrity sha512-iIuwOLkbJzFSnOf4vALQIHb9u0qgez++asYBIy9RqabU+LRzb3F3tAOOQgiAo3ZSBPU12Nnd1xPK+WMx1ocK5w==
   dependencies:
     "@babel/polyfill" "^7.2.5"
     "@octokit/rest" "^16.14.1"
@@ -4049,7 +4049,7 @@ danger@^9.1.3:
     commander "^2.18.0"
     debug "^4.1.1"
     get-stdin "^6.0.0"
-    gitlab "~6.0.0"
+    gitlab "^10.0.1"
     http-proxy-agent "^2.1.0"
     https-proxy-agent "^2.2.1"
     hyperlinker "^1.0.0"
@@ -4778,10 +4778,10 @@ eslint-plugin-import@^2.18.2:
     read-pkg-up "^2.0.0"
     resolve "^1.11.0"
 
-eslint-plugin-jest@^22.13.7:
-  version "22.14.0"
-  resolved "https://registry.npmjs.org/eslint-plugin-jest/-/eslint-plugin-jest-22.14.0.tgz#f9b09837f665cfe360b55c08866904255294cc16"
-  integrity sha512-Xtc9ZTtxdYFC7vu0PHxDeQ9lOMQ8gjwMmSQq/ni83TdflgL3eVh/qg3t99I7gcDxpeXfcp+lHu9C0vN3QAhATw==
+eslint-plugin-jest@^22.14.0:
+  version "22.15.0"
+  resolved "https://registry.npmjs.org/eslint-plugin-jest/-/eslint-plugin-jest-22.15.0.tgz#fe70bfff7eeb47ca0ab229588a867f82bb8592c5"
+  integrity sha512-hgnPbSqAIcLLS9ePb12hNHTRkXnkVaCfOwCt2pzQ8KpOKPWGA4HhLMaFN38NBa/0uvLfrZpcIRjT+6tMAfr58Q==
   dependencies:
     "@typescript-eslint/experimental-utils" "^1.13.0"
 
@@ -5601,17 +5601,17 @@ github-url-from-git@^1.5.0:
   resolved "https://registry.npmjs.org/github-url-from-git/-/github-url-from-git-1.5.0.tgz#f985fedcc0a9aa579dc88d7aff068d55cc6251a0"
   integrity sha1-+YX+3MCpqledyI16/waNVcxiUaA=
 
-gitlab@~6.0.0:
-  version "6.0.0"
-  resolved "https://registry.npmjs.org/gitlab/-/gitlab-6.0.0.tgz#7bd44bf57dcb6b1231c70a52ea9b83934e6c1539"
-  integrity sha512-/0KE/Un0Hg/CDTtiYfC1Z4lkuHhkSmC3JjkKy4VsCgTb51rTtOfk7NGspyM+wTIgEPd6cE061Pu5m4a5ao01Ow==
+gitlab@^10.0.1:
+  version "10.1.0"
+  resolved "https://registry.npmjs.org/gitlab/-/gitlab-10.1.0.tgz#87684632a051d5f7e580d35e574ef3b36999e495"
+  integrity sha512-JKvHZdFQMTOoXTUhXbM2QjIvW11PNwXN8J3mY8R+ms1yCqW0paBZfN58HF4QCVdlzB/KIv4rE5AlVWm74T8cjg==
   dependencies:
     form-data "^2.3.3"
     humps "^2.0.1"
-    ky "^0.11.0"
+    ky "^0.11.2"
     ky-universal "^0.2.1"
     li "^1.3.0"
-    query-string "^6.5.0"
+    query-string "^6.8.1"
     randomstring "^1.1.5"
     universal-url "^2.0.0"
 
@@ -7311,10 +7311,10 @@ ky-universal@^0.2.1:
     abort-controller "^3.0.0"
     node-fetch "^2.3.0"
 
-ky@^0.11.0:
-  version "0.11.1"
-  resolved "https://registry.npmjs.org/ky/-/ky-0.11.1.tgz#0bdffb441eb92ac910124ac6cd63088db9e66b5f"
-  integrity sha512-ppp6nrKXRTCMVsWP0sDDdLJXXNnH+5defcpQNiNE712/KpdGwG87290ldFAGsx4CAI/F2eVg3Exql0Oo/eGU5A==
+ky@^0.11.2:
+  version "0.11.2"
+  resolved "https://registry.npmjs.org/ky/-/ky-0.11.2.tgz#4ffe6621d9d9ab61bf0f5500542e3a96d1ba0815"
+  integrity sha512-5Aou5BWue5/mkPqIRqzSWW+0Hkl403pr/2AIrCKYw7cVl/Xoe8Xe4KLBO0PRjbz7GnRe1/8wW1KhqQNFFE7/GQ==
 
 latest-version@^3.0.0:
   version "3.1.0"
@@ -9488,10 +9488,10 @@ qs@~6.5.2:
   resolved "https://registry.npmjs.org/qs/-/qs-6.5.2.tgz#cb3ae806e8740444584ef154ce8ee98d403f3e36"
   integrity sha512-N5ZAX4/LxJmF+7wN74pUD6qAh9/wnvdQcjq9TZjevvXzSUo7bfmw91saqMjzGS2xq91/odN2dW/WOl7qQHNDGA==
 
-query-string@^6.5.0:
-  version "6.8.1"
-  resolved "https://registry.npmjs.org/query-string/-/query-string-6.8.1.tgz#62c54a7ef37d01b538c8fd56f95740c81d438a26"
-  integrity sha512-g6y0Lbq10a5pPQpjlFuojfMfV1Pd2Jw9h75ypiYPPia3Gcq2rgkKiIwbkS6JxH7c5f5u/B/sB+d13PU+g1eu4Q==
+query-string@^6.8.1:
+  version "6.8.2"
+  resolved "https://registry.npmjs.org/query-string/-/query-string-6.8.2.tgz#36cb7e452ae11a4b5e9efee83375e0954407b2f6"
+  integrity sha512-J3Qi8XZJXh93t2FiKyd/7Ec6GNifsjKXUsVFkSBj/kjLsDylWhnCz4NT1bkPcKotttPW+QbKGqqPH8OoI2pdqw==
   dependencies:
     decode-uri-component "^0.2.0"
     split-on-first "^1.0.0"
