@@ -3,6 +3,18 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+### 1.0.4 - 2019-08-09
+
+#### 📦 Dependencies
+
+- Update minor and patch versions. ([4b5f532](https://github.com/beemojs/beemo/tree/master/packages/driver-webpack/commit/4b5f532))
+
+**Note:** Version bump only for package @beemo/driver-webpack
+
+
+
+
+
 ### 1.0.3 - 2019-07-28
 
 #### 📦 Dependencies

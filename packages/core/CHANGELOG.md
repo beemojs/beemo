@@ -3,6 +3,20 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+### 1.0.5 - 2019-08-09
+
+#### 📦 Dependencies
+
+- Update dev versions. ([df01e03](https://github.com/beemojs/beemo/tree/master/packages/core/commit/df01e03))
+- **[Boost]** Update to latest. ([15550ad](https://github.com/beemojs/beemo/tree/master/packages/core/commit/15550ad))
+- Update minor and patch versions. ([4b5f532](https://github.com/beemojs/beemo/tree/master/packages/core/commit/4b5f532))
+
+**Note:** Version bump only for package @beemo/core
+
+
+
+
+
 ### 1.0.4 - 2019-07-28
 
 #### 🐞 Fixes

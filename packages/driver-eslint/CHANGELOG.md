@@ -3,6 +3,18 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+### 1.0.5 - 2019-08-09
+
+#### 📦 Dependencies
+
+- **[Boost]** Update to latest. ([15550ad](https://github.com/beemojs/beemo/tree/master/packages/driver-eslint/commit/15550ad))
+
+**Note:** Version bump only for package @beemo/driver-eslint
+
+
+
+
+
 ### 1.0.4 - 2019-07-28
 
 #### 🐞 Fixes

@@ -3,6 +3,18 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+### 1.0.3 - 2019-08-09
+
+#### 📦 Dependencies
+
+- **[Boost]** Update to latest. ([15550ad](https://github.com/beemojs/beemo/tree/master/packages/driver-prettier/commit/15550ad))
+
+**Note:** Version bump only for package @beemo/driver-prettier
+
+
+
+
+
 ### 1.0.2 - 2019-07-06
 
 #### 📦 Dependencies
