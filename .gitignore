@@ -31,6 +31,7 @@ mocha.opts
 prettier.config.js
 webpack.config.js
 *.tsbuildinfo
+tsconfig.eslint.json
 
 # Tests
 tests/__fixtures__/**/tsconfig.json
