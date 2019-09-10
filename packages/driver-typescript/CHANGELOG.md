@@ -3,6 +3,19 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+### 1.1.3 - 2019-09-10
+
+#### 📦 Dependencies
+
+- **[TypeScript]** Update to v3.6. ([b5b8916](https://github.com/beemojs/beemo/tree/master/packages/driver-typescript/commit/b5b8916))
+- Update remaining dependencies. ([9b35265](https://github.com/beemojs/beemo/tree/master/packages/driver-typescript/commit/9b35265))
+
+**Note:** Version bump only for package @beemo/driver-typescript
+
+
+
+
+
 ### 1.1.2 - 2019-08-09
 
 #### 📦 Dependencies

@@ -3,6 +3,18 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+### 1.0.6 - 2019-09-10
+
+#### 📦 Dependencies
+
+- **[ESLint]** Update to v6.3. ([3f9b6eb](https://github.com/beemojs/beemo/tree/master/packages/driver-eslint/commit/3f9b6eb))
+
+**Note:** Version bump only for package @beemo/driver-eslint
+
+
+
+
+
 ### 1.0.5 - 2019-08-09
 
 #### 📦 Dependencies
