@@ -22,6 +22,7 @@ export default class CreateConfigRoutine<Ctx extends ConfigContext> extends Rout
   CreateConfigOptions
 > {
   blueprint({ instance }: Predicates) /* infer */ {
+    // eslint-disable-next-line
     return {
       driver: instance(Driver as $FixMe, true)
         .required()

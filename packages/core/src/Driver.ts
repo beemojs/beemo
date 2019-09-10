@@ -47,6 +47,7 @@ export default abstract class Driver<
   onFailedExecute = new ConcurrentEvent<[DriverContext, Error]>('failed-execute');
 
   blueprint(predicates: Predicates) /* infer */ {
+    // eslint-disable-next-line
     return {
       args: array(string()),
       dependencies: array(string()),

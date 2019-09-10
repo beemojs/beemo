@@ -25,6 +25,7 @@ export class TestScript<A extends object = {}, T extends object = {}> extends Sc
   name = 'test-script';
 
   blueprint() {
+    // eslint-disable-next-line
     return {} as $FixMe;
   }
 }
