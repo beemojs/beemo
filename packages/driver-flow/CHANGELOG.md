@@ -3,6 +3,18 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+### 1.0.5 - 2019-10-30
+
+#### 📦 Dependencies
+
+- Update drivers to latest. ([8e74463](https://github.com/beemojs/beemo/tree/master/packages/driver-flow/commit/8e74463))
+
+**Note:** Version bump only for package @beemo/driver-flow
+
+
+
+
+
 ### 1.0.4 - 2019-09-10
 
 #### 📦 Dependencies

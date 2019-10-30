@@ -3,6 +3,23 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+### 1.0.7 - 2019-10-30
+
+#### 📦 Dependencies
+
+- **[boost,execa]** Update to latest. ([a66692b](https://github.com/beemojs/beemo/tree/master/packages/core/commit/a66692b))
+- **[hygen]** Update to v5. ([cff08a0](https://github.com/beemojs/beemo/tree/master/packages/core/commit/cff08a0))
+- **[yargs,yargs-parser]** Update to latest. ([48bac7f](https://github.com/beemojs/beemo/tree/master/packages/core/commit/48bac7f))
+- Rebuild lock file. ([34f3198](https://github.com/beemojs/beemo/tree/master/packages/core/commit/34f3198))
+- Update [@types](https://github.com/types) packages. ([aba4190](https://github.com/beemojs/beemo/tree/master/packages/core/commit/aba4190))
+- Update root dependencies. ([6fd1aea](https://github.com/beemojs/beemo/tree/master/packages/core/commit/6fd1aea))
+
+**Note:** Version bump only for package @beemo/core
+
+
+
+
+
 ### 1.0.6 - 2019-09-10
 
 #### 📦 Dependencies
