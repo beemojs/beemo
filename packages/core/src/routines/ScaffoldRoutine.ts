@@ -1,5 +1,6 @@
 import path from 'path';
 import { engine } from 'hygen';
+// @ts-ignore
 import Logger from 'hygen/lib/logger';
 import { Routine } from '@boost/core';
 import Beemo from '../Beemo';

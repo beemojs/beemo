@@ -1,4 +1,4 @@
-import hygen from 'hygen';
+import * as hygen from 'hygen';
 import ScaffoldRoutine from '../../src/routines/ScaffoldRoutine';
 import { mockTool, mockDebugger, stubScaffoldContext, getRoot } from '../../src/testUtils';
 
