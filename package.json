@@ -24,7 +24,7 @@
     "chalk": "^2.4.2",
     "conventional-changelog-beemo": "^1.5.0",
     "danger": "^9.2.0",
-    "execa": "^2.0.4",
+    "execa": "^3.2.0",
     "fast-glob": "^3.0.4",
     "fs-extra": "^8.1.0",
     "lerna": "^3.16.4",

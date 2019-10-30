@@ -183,7 +183,6 @@ export function stubExecResult(fields?: Partial<execa.ExecaReturnValue>): execa.
     all: '',
     command: '',
     exitCode: 0,
-    exitCodeName: '',
     failed: false,
     isCanceled: false,
     killed: false,
