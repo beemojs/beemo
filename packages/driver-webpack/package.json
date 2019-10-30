@@ -25,14 +25,14 @@
     "access": "public"
   },
   "devDependencies": {
-    "webpack": "^4.39.3",
-    "webpack-cli": "^3.3.8"
+    "webpack": "^4.41.2",
+    "webpack-cli": "^3.3.9"
   },
   "peerDependencies": {
     "@beemo/core": "^1.0.0",
     "webpack": "^4.0.0"
   },
   "dependencies": {
-    "@types/webpack": "^4.39.1"
+    "@types/webpack": "*"
   }
 }
