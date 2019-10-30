@@ -1,5 +1,4 @@
 import { Config } from '@jest/types';
-import { Omit } from 'utility-types';
 
 export interface CoverageThreshold {
   branches?: number;
