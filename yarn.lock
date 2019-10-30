@@ -2007,13 +2007,6 @@
   resolved "https://registry.npmjs.org/@types/exit/-/exit-0.1.30.tgz#7078b736a7d166c80b6394dc0d9de1577ca76daf"
   integrity sha1-cHi3NqfRZsgLY5TcDZ3hV3ynba8=
 
-"@types/fs-extra@^8.0.0":
-  version "8.0.0"
-  resolved "https://registry.npmjs.org/@types/fs-extra/-/fs-extra-8.0.0.tgz#d3e2c313ca29f95059f198dd60d1f774642d4b25"
-  integrity sha512-bCtL5v9zdbQW86yexOlXWTEGvLNqWxMFyi7gQA7Gcthbezr2cPSOb8SkESVKA937QD5cIwOFLDFt0MQoXOEr9Q==
-  dependencies:
-    "@types/node" "*"
-
 "@types/fs-extra@^8.0.1":
   version "8.0.1"
   resolved "https://registry.npmjs.org/@types/fs-extra/-/fs-extra-8.0.1.tgz#a2378d6e7e8afea1564e44aafa2e207dadf77686"
@@ -2094,15 +2087,10 @@
   resolved "https://registry.npmjs.org/@types/minimatch/-/minimatch-3.0.3.tgz#3dca0e3f33b200fc7d1139c0cd96c1268cadfd9d"
   integrity sha512-tHq6qdbT9U1IRSGf14CL0pUlULksvY9OZ+5eEgl1N7t+OA3tGvNpxJCzuKQlsNgCVwbAs670L1vcVQi8j9HjnA==
 
-"@types/node@*":
-  version "11.13.4"
-  resolved "https://registry.npmjs.org/@types/node/-/node-11.13.4.tgz#f83ec3c3e05b174b7241fadeb6688267fe5b22ca"
-  integrity sha512-+rabAZZ3Yn7tF/XPGHupKIL5EcAbrLxnTr/hgQICxbeuAfWtT0UZSfULE+ndusckBItcv4o6ZeOJplQikVcLvQ==
-
-"@types/node@^12.7.4":
-  version "12.7.4"
-  resolved "https://registry.npmjs.org/@types/node/-/node-12.7.4.tgz#64db61e0359eb5a8d99b55e05c729f130a678b04"
-  integrity sha512-W0+n1Y+gK/8G2P/piTkBBN38Qc5Q1ZSO6B5H3QmPCUewaiXOo2GCAWZ4ElZCcNhjJuBSUSLGFUJnmlCn5+nxOQ==
+"@types/node@*", "@types/node@^12.12.0":
+  version "12.12.0"
+  resolved "https://registry.npmjs.org/@types/node/-/node-12.12.0.tgz#ff3201972d6dc851a9275308a17b9b5094e68057"
+  integrity sha512-6N8Sa5AaENRtJnpKXZgvc119PKxT1Lk9VPy4kfT8JF23tIe1qDfaGkBR2DRKJFIA7NptMz+fps//C6aLi1Uoug==
 
 "@types/normalize-package-data@^2.4.0":
   version "2.4.0"
@@ -2127,10 +2115,10 @@
     "@types/glob" "*"
     "@types/node" "*"
 
-"@types/semver@^6.0.2":
-  version "6.0.2"
-  resolved "https://registry.npmjs.org/@types/semver/-/semver-6.0.2.tgz#5e8b09f0e4af53034b1d0fb9977a277847836205"
-  integrity sha512-G1Ggy7/9Nsa1Jt2yiBR2riEuyK2DFNnqow6R7cromXPMNynackRY1vqFTLz/gwnef1LHokbXThcPhqMRjUbkpQ==
+"@types/semver@^6.2.0":
+  version "6.2.0"
+  resolved "https://registry.npmjs.org/@types/semver/-/semver-6.2.0.tgz#d688d574400d96c5b0114968705366f431831e1a"
+  integrity sha512-1OzrNb4RuAzIT7wHSsgZRlMBlNsJl+do6UblR7JMW4oB7bbR+uBEYtUh7gEc/jM84GGilh68lSOokyM/zNUlBA==
 
 "@types/source-list-map@*":
   version "0.1.2"
