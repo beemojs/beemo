@@ -220,6 +220,7 @@ describe('ExecuteCommandRoutine', () => {
     });
 
     ['stream', 'inherit'].forEach(stdio => {
+      // eslint-disable-next-line jest/valid-describe
       describe(`${stdio}`, () => {
         beforeEach(() => {
           routine.context.args.stdio = stdio as StdioType;
