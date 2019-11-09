@@ -220,7 +220,6 @@ describe('ExecuteCommandRoutine', () => {
     });
 
     ['stream', 'inherit'].forEach(stdio => {
-      // eslint-disable-next-line jest/valid-describe
       describe(`${stdio}`, () => {
         beforeEach(() => {
           routine.context.args.stdio = stdio as StdioType;
@@ -319,7 +318,9 @@ describe('ExecuteCommandRoutine', () => {
 
   describe('execute()', () => {
     beforeEach(() => {
-      routine.executeCommand = jest.fn(() => Promise.resolve({ stdout: BABEL_HELP } as $FixMe));
+      jest
+        .spyOn(routine, 'executeCommand')
+        .mockImplementation(() => Promise.resolve({ stdout: BABEL_HELP } as $FixMe));
 
       driver.metadata.filterOptions = true;
     });
@@ -524,7 +525,9 @@ describe('ExecuteCommandRoutine', () => {
 
   describe('filterUnknownOptions()', () => {
     beforeEach(() => {
-      routine.executeCommand = jest.fn(() => Promise.resolve({ stdout: BABEL_HELP } as $FixMe));
+      jest
+        .spyOn(routine, 'executeCommand')
+        .mockImplementation(() => Promise.resolve({ stdout: BABEL_HELP } as $FixMe));
     });
 
     it('returns supported options', async () => {
@@ -631,9 +634,11 @@ describe('ExecuteCommandRoutine', () => {
     const task = new Task<DriverContext>('Task', () => {});
 
     beforeEach(() => {
-      routine.executeCommand = jest.fn(() => Promise.resolve({ success: true } as $FixMe));
-      driver.processSuccess = jest.fn();
-      driver.processFailure = jest.fn();
+      jest
+        .spyOn(routine, 'executeCommand')
+        .mockImplementation(() => Promise.resolve({ success: true } as $FixMe));
+      jest.spyOn(driver, 'processSuccess').mockImplementation();
+      jest.spyOn(driver, 'processFailure').mockImplementation();
     });
 
     it('executes command with correct args', async () => {

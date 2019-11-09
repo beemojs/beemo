@@ -18,6 +18,8 @@ import {
 // @ts-ignore
 import bootstrapIndex from '../../../tests';
 
+// Can't use spyOn here because its not a real object.
+/* eslint-disable jest/prefer-spy-on */
 jest.mock(
   '@boost/core/lib/Pipeline',
   () =>
@@ -28,6 +30,7 @@ jest.mock(
       this.run = jest.fn(() => this);
     },
 );
+/* eslint-enable jest/prefer-spy-on */
 
 jest.mock('../../../tests', () => jest.fn());
 
@@ -451,7 +454,7 @@ describe('configBlueprint()', () => {
 
     expect(() => {
       opts = optimal({}, configBlueprint());
-    }).not.toThrowError();
+    }).not.toThrow();
 
     expect(opts.module).toBe('test-boost');
 

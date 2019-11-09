@@ -9,7 +9,6 @@ tests/
 .gitignore
 .npmignore
 .prettierignore
-.travis.yml
 .yarnclean
 babel.config.js
 jest.config.js

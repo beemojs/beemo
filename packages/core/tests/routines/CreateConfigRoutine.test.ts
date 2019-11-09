@@ -51,9 +51,11 @@ describe('CreateConfigRoutine', () => {
     routine.tool.config.module = '@local';
     routine.debug = mockDebugger();
 
-    fs.existsSync = jest.fn(() => true);
-    fs.writeFile = jest.fn(() => Promise.resolve());
-    fs.copy = jest.fn(() => Promise.resolve());
+    jest.spyOn(fs, 'existsSync').mockImplementation(() => true);
+    // eslint-disable-next-line @typescript-eslint/no-misused-promises
+    jest.spyOn(fs, 'writeFile').mockImplementation(() => Promise.resolve());
+    // eslint-disable-next-line @typescript-eslint/no-misused-promises
+    jest.spyOn(fs, 'copy').mockImplementation(() => Promise.resolve());
 
     // @ts-ignore
     ConfigLoader.mockImplementation(() => ({

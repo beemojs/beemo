@@ -24,14 +24,15 @@ dist/
 # Configs
 .eslintignore
 .eslintrc.js
+.mocharc.js
 .prettierignore
 babel.config.js
 jest.config.js
 mocha.opts
 prettier.config.js
 webpack.config.js
-*.tsbuildinfo
 tsconfig.eslint.json
+*.tsbuildinfo
 
 # Tests
 tests/__fixtures__/**/tsconfig.json

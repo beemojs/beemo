@@ -1,6 +1,6 @@
 # Mocha Driver
 
-[![Build Status](https://travis-ci.org/beemojs/beemo.svg?branch=master)](https://travis-ci.org/beemojs/beemo)
+[![Build Status](https://github.com/beemojs/beemo/workflows/Build/badge.svg)](https://github.com/beemojs/beemo/actions?query=branch%3Amaster)
 [![npm version](https://badge.fury.io/js/%40beemo%2Fdriver-mocha.svg)](https://www.npmjs.com/package/@beemo/driver-mocha)
 [![npm deps](https://david-dm.org/beemojs/beemo.svg?path=packages/driver-mocha)](https://www.npmjs.com/package/@beemo/driver-mocha)
 

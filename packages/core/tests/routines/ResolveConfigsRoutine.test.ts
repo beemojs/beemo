@@ -39,8 +39,8 @@ describe('ResolveConfigsRoutine', () => {
 
   describe('execute()', () => {
     beforeEach(() => {
-      routine.serializeRoutines = jest.fn();
-      routine.parallelizeRoutines = jest.fn();
+      jest.spyOn(routine, 'serializeRoutines').mockImplementation();
+      jest.spyOn(routine, 'parallelizeRoutines').mockImplementation();
     });
 
     it('serializes if `parallel` config is false', async () => {

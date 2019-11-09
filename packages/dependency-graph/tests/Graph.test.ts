@@ -16,7 +16,7 @@ function getBeemoPackages() {
 }
 
 describe('Graph', () => {
-  it('graphs Beemo dependencies correctly ', () => {
+  it('graphs Beemo dependencies correctly', () => {
     const pkgs = getBeemoPackages();
     const graph = new Graph(Object.values(pkgs));
 
@@ -485,7 +485,7 @@ describe('Graph', () => {
 
         expect(() => {
           graph.resolveList();
-        }).toThrowError('Circular dependency detected: foo -> bar -> baz -> foo');
+        }).toThrow('Circular dependency detected: foo -> bar -> baz -> foo');
       });
 
       it('errors when only some of the deps are a cycle', () => {
@@ -497,7 +497,7 @@ describe('Graph', () => {
 
         expect(() => {
           graph.resolveList();
-        }).toThrowError('Circular dependency detected: foo -> bar -> foo');
+        }).toThrow('Circular dependency detected: foo -> bar -> foo');
       });
     });
 
@@ -511,7 +511,7 @@ describe('Graph', () => {
 
         expect(() => {
           graph.resolveTree();
-        }).toThrowError('Circular dependency detected: foo -> bar -> baz -> foo');
+        }).toThrow('Circular dependency detected: foo -> bar -> baz -> foo');
       });
 
       it('errors when only some of the deps are a cycle', () => {
@@ -523,7 +523,7 @@ describe('Graph', () => {
 
         expect(() => {
           graph.resolveTree();
-        }).toThrowError('Circular dependency detected: foo -> bar -> foo');
+        }).toThrow('Circular dependency detected: foo -> bar -> foo');
       });
     });
 
@@ -537,7 +537,7 @@ describe('Graph', () => {
 
         expect(() => {
           graph.resolveBatchList();
-        }).toThrowError('Circular dependency detected: foo -> bar -> baz -> foo');
+        }).toThrow('Circular dependency detected: foo -> bar -> baz -> foo');
       });
 
       it('errors when only some of the deps are a cycle', () => {
@@ -549,7 +549,7 @@ describe('Graph', () => {
 
         expect(() => {
           graph.resolveBatchList();
-        }).toThrowError('Circular dependency detected: foo -> bar -> foo');
+        }).toThrow('Circular dependency detected: foo -> bar -> foo');
       });
     });
   });

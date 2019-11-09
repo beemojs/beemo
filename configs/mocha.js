@@ -1,6 +1,6 @@
 module.exports = {
-  check_leaks: true,
+  checkLeaks: true,
   colors: true,
-  full_trace: true,
+  fullTrace: true,
   reporter: 'nyan',
 };
