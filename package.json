@@ -2,7 +2,8 @@
   "private": true,
   "name": "beemo-root",
   "scripts": {
-    "setup": "yarn run clean && tsc --build",
+    "prepare": "beemo create-config --silent",
+    "setup": "yarn run prepare && yarn run clean && tsc --build",
     "build": "yarn run type",
     "clean": "rm -rf ./packages/*/{lib,*.tsbuildinfo}",
     "coverage": "yarn run jest --coverage",
