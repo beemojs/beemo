@@ -31,5 +31,6 @@ jobs:
           node-version: ${{ matrix.node-version }}
       - run: yarn install --ignore-engines --frozen-lockfile
       - run: yarn run setup
+      - run: yarn beemo create-config --silent
       - run: yarn run test:int:pass
       - run: yarn run test:int:fail
