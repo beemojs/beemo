@@ -18,6 +18,7 @@
     "sourceMap": false,
     "strict": true,
     "target": "es2018",
+    "useDefineForClassFields": true,
     "composite": true,
     "declarationMap": true
   }

@@ -20,7 +20,7 @@
     "type": "beemo typescript --build --reference-workspaces"
   },
   "devDependencies": {
-    "@milesj/build-tool-config": "0.179.0",
+    "@milesj/build-tool-config": "0.181.1",
     "@types/prettier": "^1.18.3",
     "@types/webpack": "^4.39.5",
     "chalk": "^2.4.2",
@@ -29,7 +29,7 @@
     "execa": "^3.2.0",
     "fast-glob": "^3.0.4",
     "fs-extra": "^8.1.0",
-    "lerna": "^3.18.3",
+    "lerna": "^3.18.4",
     "semver": "^6.3.0"
   },
   "workspaces": [
