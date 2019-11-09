@@ -46,7 +46,7 @@ describe('RunDriverRoutine', () => {
 
   describe('bootstrap()', () => {
     it('adds a routine for the primary driver', () => {
-      routine.pipe = jest.fn();
+      jest.spyOn(routine, 'pipe').mockImplementation();
       routine.bootstrap();
 
       expectPipedRoutines(routine.pipe, [{ title: 'primary -a --foo bar baz' }]);
@@ -54,7 +54,7 @@ describe('RunDriverRoutine', () => {
 
     it('adds multiple routines when parallel is used', () => {
       routine.context.parallelArgv = [['--one', '--two=2'], ['--three', '-f']];
-      routine.pipe = jest.fn();
+      jest.spyOn(routine, 'pipe').mockImplementation();
       routine.bootstrap();
 
       expectPipedRoutines(routine.pipe, [
@@ -66,7 +66,7 @@ describe('RunDriverRoutine', () => {
 
     it('adds a routine if parallel is empty', () => {
       routine.context.parallelArgv = [];
-      routine.pipe = jest.fn();
+      jest.spyOn(routine, 'pipe').mockImplementation();
       routine.bootstrap();
 
       expectPipedRoutines(routine.pipe, [{ title: 'primary -a --foo bar baz' }]);
@@ -83,7 +83,7 @@ describe('RunDriverRoutine', () => {
       });
 
       it('adds a routine for each', () => {
-        routine.pipe = jest.fn();
+        jest.spyOn(routine, 'pipe').mockImplementation();
         routine.bootstrap();
 
         expectPipedRoutines(routine.pipe, [
@@ -110,7 +110,7 @@ describe('RunDriverRoutine', () => {
 
       it('adds a routine for each when parallel is used', () => {
         routine.context.parallelArgv = [['--one', '--two=2'], ['--three', '-f']];
-        routine.pipe = jest.fn();
+        jest.spyOn(routine, 'pipe').mockImplementation();
         routine.bootstrap();
 
         expectPipedRoutines(routine.pipe, [

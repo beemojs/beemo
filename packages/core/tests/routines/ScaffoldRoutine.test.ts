@@ -42,7 +42,7 @@ describe('ScaffoldRoutine', () => {
 
   describe('execute()', () => {
     it('passes module root to tasks', async () => {
-      routine.serializeTasks = jest.fn();
+      jest.spyOn(routine, 'serializeTasks').mockImplementation();
 
       routine.bootstrap();
 

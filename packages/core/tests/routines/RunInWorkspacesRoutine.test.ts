@@ -82,7 +82,7 @@ describe('RunInWorkspacesRoutine', () => {
 
   describe('execute()', () => {
     it('pools each routine', async () => {
-      routine.poolRoutines = jest.fn(() => Promise.resolve({ errors: [], results: [] }));
+      jest.spyOn(routine, 'poolRoutines').mockImplementation(() => Promise.resolve({ errors: [], results: [] }));
 
       await routine.execute(routine.context);
 
@@ -90,7 +90,7 @@ describe('RunInWorkspacesRoutine', () => {
     });
 
     it('passes concurrency to pooler', async () => {
-      routine.poolRoutines = jest.fn(() => Promise.resolve({ errors: [], results: [] }));
+      jest.spyOn(routine, 'poolRoutines').mockImplementation(() => Promise.resolve({ errors: [], results: [] }));
       routine.context.args.concurrency = 2;
 
       await routine.execute(routine.context);
@@ -103,7 +103,7 @@ describe('RunInWorkspacesRoutine', () => {
     });
 
     it('passes concurrency option to pooler', async () => {
-      routine.poolRoutines = jest.fn(() => Promise.resolve({ errors: [], results: [] }));
+      jest.spyOn(routine, 'poolRoutines').mockImplementation(() => Promise.resolve({ errors: [], results: [] }));
       routine.tool.config.execute.concurrency = 3;
 
       await routine.execute(routine.context);
@@ -116,9 +116,8 @@ describe('RunInWorkspacesRoutine', () => {
     });
 
     it('throws an error if any failures', async () => {
-      routine.poolRoutines = jest.fn(() =>
-        Promise.resolve({ errors: [new Error('Failed'), new Error('Oops')], results: [] }),
-      );
+      jest.spyOn(routine, 'poolRoutines').mockImplementation(() =>
+        Promise.resolve({ errors: [new Error('Failed'), new Error('Oops')], results: [] }));
 
       try {
         await routine.execute(routine.context);
@@ -154,7 +153,7 @@ describe('RunInWorkspacesRoutine', () => {
       });
 
       it('serializes priority routines before pooling other routines', async () => {
-        routine.poolRoutines = jest.fn(() => Promise.resolve({ errors: [], results: [] }));
+        jest.spyOn(routine, 'poolRoutines').mockImplementation(() => Promise.resolve({ errors: [], results: [] }));
         // primary -> foo
         routine.workspacePackages[0].peerDependencies = {
           '@scope/foo': '1.0.0',

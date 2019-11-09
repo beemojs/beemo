@@ -273,7 +273,7 @@ describe('Driver', () => {
             ...options,
             bin: 'foo-123',
           });
-        }).not.toThrowError();
+        }).not.toThrow();
       });
 
       it('doesnt support underscores', () => {
@@ -282,7 +282,9 @@ describe('Driver', () => {
             ...options,
             bin: 'foo_123',
           });
-        }).toThrowError();
+        }).toThrow(
+          'Invalid TestDriver field "bin". String does not match pattern "^[a-z]{1}[a-zA-Z0-9-]+$".',
+        );
         // Broken in Node 8
         // }).toThrowErrorMatchingSnapshot();
       });
@@ -293,7 +295,9 @@ describe('Driver', () => {
             ...options,
             bin: 'Foo_123',
           });
-        }).toThrowError();
+        }).toThrow(
+          'Invalid TestDriver field "bin". String does not match pattern "^[a-z]{1}[a-zA-Z0-9-]+$".',
+        );
         // Broken in Node 8
         // }).toThrowErrorMatchingSnapshot();
       });

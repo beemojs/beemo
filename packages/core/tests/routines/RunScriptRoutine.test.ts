@@ -80,7 +80,7 @@ describe('RunScriptRoutine', () => {
 
   describe('bootstrap()', () => {
     it('adds a routine for the script', () => {
-      routine.pipe = jest.fn();
+      jest.spyOn(routine, 'pipe').mockImplementation();
       routine.bootstrap();
 
       expectPipedRoutines(routine.pipe, [{ key: 'plugin-name' }]);
@@ -97,7 +97,7 @@ describe('RunScriptRoutine', () => {
       });
 
       it('adds a routine for each workspace', () => {
-        routine.pipe = jest.fn();
+        jest.spyOn(routine, 'pipe').mockImplementation();
         routine.bootstrap();
 
         expectPipedRoutines(routine.pipe, [
@@ -280,7 +280,7 @@ describe('RunScriptRoutine', () => {
 
       expect(() => {
         routine.postLoad(routine.context, null);
-      }).toThrowError('Failed to load script from multiple sources:\n  - One\n  - Two\n  - Three');
+      }).toThrow('Failed to load script from multiple sources:\n  - One\n  - Two\n  - Three');
     });
 
     it('adds plugin to tool', () => {
