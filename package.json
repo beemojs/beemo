@@ -25,7 +25,6 @@
     "@types/webpack": "^4.39.5",
     "chalk": "^2.4.2",
     "conventional-changelog-beemo": "^1.5.1",
-    "danger": "^9.2.2",
     "execa": "^3.2.0",
     "fast-glob": "^3.0.4",
     "fs-extra": "^8.1.0",
