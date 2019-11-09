@@ -1,6 +1,6 @@
 # Dependency Graph
 
-[![Build Status](https://travis-ci.org/beemojs/beemo.svg?branch=master)](https://travis-ci.org/beemojs/beemo)
+[![Build Status](https://github.com/beemojs/beemo/workflows/Build/badge.svg)](https://github.com/beemojs/beemo/actions?query=branch%3Amaster)
 [![npm version](https://badge.fury.io/js/%40beemo%2Fdependency-graph.svg)](https://www.npmjs.com/package/@beemo/dependency-graph)
 [![npm deps](https://david-dm.org/beemojs/beemo.svg?path=packages/dependency-graph)](https://www.npmjs.com/package/@beemo/dependency-graph)
 
