@@ -1,5 +1,5 @@
 import { Driver } from '@beemo/core';
-import { MochaConfig, ReporterOptions } from './types';
+import { MochaConfig } from './types';
 
 // Success: Writes passed tests to stdout
 // Failure: Writes failed tests to stdout
@@ -14,40 +14,5 @@ export default class MochaDriver extends Driver<MochaConfig> {
       useConfigOption: true,
       watchOptions: ['-w', '--watch'],
     });
-  }
-
-  formatConfig(data: MochaConfig): string {
-    const output: string[] = [];
-
-    Object.keys(data).forEach(key => {
-      const option =
-        key === 'es_staging' || key === 'use_strict' ? `--${key}` : `--${key.replace(/_/gu, '-')}`;
-      const value = data[key];
-      const type = typeof value;
-
-      if (key === 'reporterOptions' && typeof value === 'object' && value) {
-        output.push(`${option} ${this.formatReporterOptions(value as ReporterOptions)}`);
-      } else if (type === 'boolean') {
-        output.push(option);
-      } else if (Array.isArray(value)) {
-        if (key === 'globals') {
-          output.push(value.join(', '));
-        } else {
-          value.forEach(v => {
-            output.push(`${option} ${v}`);
-          });
-        }
-      } else {
-        output.push(`${option} ${value}`);
-      }
-    });
-
-    return output.join('\n');
-  }
-
-  formatReporterOptions(options: ReporterOptions): string {
-    return Object.keys(options)
-      .map(key => `${key}=${options[key]}`)
-      .join(',');
   }
 }
