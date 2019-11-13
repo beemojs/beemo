@@ -9,17 +9,12 @@ export type TargetSetting =
   | 'es2017'
   | 'es2018'
   | 'es2019'
-  | 'esnext';
+  | 'es2020'
+  | 'esnext'
+  | 'json'
+  | 'latest';
 
-export type ModuleSetting =
-  | 'none'
-  | 'commonjs'
-  | 'amd'
-  | 'system'
-  | 'umd'
-  | 'es6'
-  | 'es2015'
-  | 'esnext';
+export type ModuleSetting = 'none' | 'commonjs' | 'amd' | 'umd' | 'system' | 'es2015' | 'esnext';
 
 export type ModuleResolutionSetting = 'node' | 'classic';
 
@@ -32,6 +27,7 @@ export type LibSetting =
   | 'es2017'
   | 'es2018'
   | 'es2019'
+  | 'es2020'
   | 'esnext'
   | 'dom'
   | 'dom.iterable'
@@ -67,6 +63,7 @@ export type JSXSetting = 'preserve' | 'react-native' | 'react' | 'none';
 export interface CompilerOptions {
   allowJs?: boolean;
   allowSyntheticDefaultImports?: boolean;
+  allowUmdGlobalAccess?: boolean;
   allowUnreachableCode?: boolean;
   allowUnusedLabels?: boolean;
   alwaysStrict?: boolean;
@@ -120,6 +117,7 @@ export interface CompilerOptions {
   paths?: { [key: string]: string[] };
   preserveConstEnums?: boolean;
   preserveSymlinks?: boolean;
+  pretty?: boolean;
   project?: string;
   reactNamespace?: string;
   removeComments?: boolean;
@@ -143,6 +141,7 @@ export interface CompilerOptions {
   tsBuildInfoFile?: string;
   typeRoots?: string[];
   types?: string[];
+  useDefineForClassFields?: boolean;
 }
 
 export interface TypeScriptConfig {
