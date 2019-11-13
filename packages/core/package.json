@@ -43,7 +43,7 @@
     "micromatch": "^4.0.2",
     "optimal": "^3.2.1",
     "yargs": "^14.2.0",
-    "yargs-parser": "^16.0.0"
+    "yargs-parser": "^16.1.0"
   },
   "devDependencies": {
     "@boost/test-utils": "^1.2.6"
