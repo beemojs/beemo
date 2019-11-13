@@ -3,6 +3,23 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+### 1.0.6 - 2019-11-13
+
+#### 📦 Dependencies
+
+- **[boost]** Update to latest. Rework `@types` packages. ([9a945ba](https://github.com/commit/9a945ba))
+- **[chalk]** Update to v3. ([b22fc59](https://github.com/commit/b22fc59))
+
+#### 🛠 Internals
+
+- Migrate to GitHub actions. (#65) ([d6d27af](https://github.com/commit/d6d27af)), closes [#65](https://github.com/issues/65)
+
+**Note:** Version bump only for package @beemo/cli
+
+
+
+
+
 ### 1.0.5 - 2019-10-30
 
 #### 📦 Dependencies

@@ -3,6 +3,26 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+### 1.1.5 - 2019-11-13
+
+#### ⚙️ Types
+
+- Add new and missing compiler options. ([6a4a205](https://github.com/commit/6a4a205))
+
+#### 📦 Dependencies
+
+- **[boost]** Update to latest. Rework `@types` packages. ([9a945ba](https://github.com/commit/9a945ba))
+
+#### 🛠 Internals
+
+- Migrate to GitHub actions. (#65) ([d6d27af](https://github.com/commit/d6d27af)), closes [#65](https://github.com/issues/65)
+
+**Note:** Version bump only for package @beemo/driver-typescript
+
+
+
+
+
 ### 1.1.4 - 2019-10-30
 
 #### 📦 Dependencies

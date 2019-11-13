@@ -3,6 +3,23 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+### 1.0.4 - 2019-11-13
+
+#### 📦 Dependencies
+
+- **[boost]** Update to latest. Rework `@types` packages. ([9a945ba](https://github.com/commit/9a945ba))
+- Update drivers to latest. ([7f67ea3](https://github.com/commit/7f67ea3))
+
+#### 🛠 Internals
+
+- Migrate to GitHub actions. (#65) ([d6d27af](https://github.com/commit/d6d27af)), closes [#65](https://github.com/issues/65)
+
+**Note:** Version bump only for package @beemo/driver-prettier
+
+
+
+
+
 ### 1.0.3 - 2019-08-09
 
 #### 📦 Dependencies

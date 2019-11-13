@@ -3,6 +3,22 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+### 1.0.7 - 2019-11-13
+
+#### 📦 Dependencies
+
+- **[boost]** Update to latest. Rework `@types` packages. ([9a945ba](https://github.com/commit/9a945ba))
+
+#### 🛠 Internals
+
+- Migrate to GitHub actions. (#65) ([d6d27af](https://github.com/commit/d6d27af)), closes [#65](https://github.com/issues/65)
+
+**Note:** Version bump only for package @beemo/driver-eslint
+
+
+
+
+
 ### 1.0.6 - 2019-09-10
 
 #### 📦 Dependencies
