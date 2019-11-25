@@ -13,6 +13,12 @@ import {
 } from '@beemo/core';
 import { TypeScriptArgs, TypeScriptConfig, TypeScriptOptions } from './types';
 
+// Use the same separator slashes on all platforms,
+// so that config churn is reduced.
+function normalize(filePath: string): string {
+  return path.normalize(filePath).replace(/\\/gu, '/');
+}
+
 // Success: Writes nothing to stdout or stderr
 // Failure: Writes to stdout on syntax and type error
 export default class TypeScriptDriver extends Driver<TypeScriptConfig, TypeScriptOptions> {
@@ -88,8 +94,20 @@ export default class TypeScriptDriver extends Driver<TypeScriptConfig, TypeScrip
     });
 
     // Helper to write a file and return a promise
-    const writeFile = (filePath: string, config: object, isTests: boolean) => {
+    const writeFile = (filePath: string, config: TypeScriptConfig, isTests: boolean) => {
       const configPath = path.join(filePath, 'tsconfig.json');
+
+      if (config.extends) {
+        config.extends = normalize(config.extends);
+      }
+
+      if (config.exclude) {
+        config.exclude = config.exclude.map(normalize);
+      }
+
+      if (config.include) {
+        config.include = config.include.map(normalize);
+      }
 
       this.onCreateProjectConfigFile.emit([context, configPath, config, isTests]);
 
@@ -130,7 +148,9 @@ export default class TypeScriptDriver extends Driver<TypeScriptConfig, TypeScrip
           Object.keys({ ...dependencies, ...devDependencies, ...peerDependencies }).forEach(
             depName => {
               if (namesToPaths[depName]) {
-                references.push({ path: path.relative(packagePath, namesToPaths[depName]) });
+                references.push({
+                  path: normalize(path.relative(packagePath, namesToPaths[depName])),
+                });
               }
             },
           );
