@@ -24,6 +24,7 @@ export default class ScaffoldRoutine extends Routine<ScaffoldContext, Beemo> {
 
     try {
       return await engine(context.argv, {
+        // @ts-ignore Broken upstream
         createPrompter: /* istanbul ignore next */ () => ({ prompt: this.handlePrompt }),
         cwd: tool.options.root,
         debug: tool.config.debug,
