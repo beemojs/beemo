@@ -12,7 +12,7 @@ import parseSpecialArgv from './parseSpecialArgv';
 const { main, parallel } = parseSpecialArgv(process.argv.slice(2));
 
 // Initialize
-const binName = path.basename(process.argv[1]);
+const binName = path.basename(process.argv[1]).replace('.js', ''); // Windows has an ext
 const beemo = new Beemo(main.slice(1), binName);
 const app = yargs(main);
 const manualURL = process.env.BEEMO_MANUAL_URL || 'https://milesj.gitbook.io/beemo';
