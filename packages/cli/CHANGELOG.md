@@ -3,6 +3,22 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+### 1.0.7 - 2019-11-25
+
+#### 🐞 Fixes
+
+- Remove extension from binary on Windows. ([db49d0e](https://github.com/beemojs/beemo/commit/db49d0e))
+
+#### 📦 Dependencies
+
+- **[yargs]** Update to v15. ([460152c](https://github.com/beemojs/beemo/commit/460152c))
+
+**Note:** Version bump only for package @beemo/cli
+
+
+
+
+
 ### 1.0.6 - 2019-11-13
 
 #### 📦 Dependencies

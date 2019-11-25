@@ -3,6 +3,18 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+### 1.1.6 - 2019-11-25
+
+#### 🐞 Fixes
+
+- Normalize generated file paths to reduce churn. ([f3f23a0](https://github.com/beemojs/beemo/commit/f3f23a0))
+
+**Note:** Version bump only for package @beemo/driver-typescript
+
+
+
+
+
 ### 1.1.5 - 2019-11-13
 
 #### ⚙️ Types

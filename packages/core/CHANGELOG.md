@@ -3,6 +3,22 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+### 1.0.9 - 2019-11-25
+
+#### 🐞 Fixes
+
+- Normalize reference strategy path. [#66] ([b8efe41](https://github.com/beemojs/beemo/commit/b8efe41)), closes [#66](https://github.com/beemojs/beemo/issues/66)
+
+#### 📦 Dependencies
+
+- **[yargs]** Update to v15. ([460152c](https://github.com/beemojs/beemo/commit/460152c))
+
+**Note:** Version bump only for package @beemo/core
+
+
+
+
+
 ### 1.0.8 - 2019-11-13
 
 #### 📦 Dependencies
