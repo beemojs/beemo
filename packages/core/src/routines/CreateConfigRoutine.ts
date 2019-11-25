@@ -256,11 +256,10 @@ export default class CreateConfigRoutine<Ctx extends ConfigContext> extends Rout
 
     context.addConfigPath(name, configPath);
 
+    const requirePath = path.normalize(path.relative(context.cwd, sourcePath));
+
     return fs
-      .writeFile(
-        configPath,
-        `module.exports = require('./${path.relative(context.cwd, sourcePath)}');`,
-      )
+      .writeFile(configPath, `module.exports = require('.${path.sep}${requirePath}');`)
       .then(() => configPath);
   }
 
