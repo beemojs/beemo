@@ -78,7 +78,14 @@ export default abstract class RunInWorkspacesRoutine<
       message += error.message.split(/\s+at\s+/u)[0].trim();
     });
 
-    throw new Error(message);
+    const error = new Error(message);
+
+    // Inherit stack for easier debugging.
+    if (errors.length === 1) {
+      error.stack = errors[0].stack;
+    }
+
+    throw error;
   }
 
   /**
