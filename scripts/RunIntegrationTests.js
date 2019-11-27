@@ -36,17 +36,20 @@ module.exports = class RunIntegrationTestsScript extends Script {
       );
     }
 
-    console.log('Testing %s', chalk.yellow(pkg.name));
+    console.log('Testing %s - %s', chalk.yellow(pkg.name), script);
 
     return Promise.all(
-      script.split('&&').map(command =>
-        execa
-          .command(command.trim(), { cwd: context.cwd.path(), preferLocal: true })
-          // Handles everything else
-          .then(response => this.handleResult(name, options, response))
-          // Handles syntax errors
-          .catch(error => this.handleResult(name, options, error)),
-      ),
+      script.split('&&').map(command => {
+        const [cmd, args] = command.trim().split(' ', 2);
+
+        return (
+          execa(cmd, args, { cwd: context.cwd.path(), preferLocal: true })
+            // Handles everything else
+            .then(response => this.handleResult(name, options, response))
+            // Handles syntax errors
+            .catch(error => this.handleResult(name, options, error))
+        );
+      }),
     );
   }
 
