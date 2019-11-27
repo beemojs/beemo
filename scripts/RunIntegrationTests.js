@@ -40,7 +40,7 @@ module.exports = class RunIntegrationTestsScript extends Script {
 
     return Promise.all(
       script.split('&&').map(command => {
-        const [cmd, args] = command.trim().split(' ', 2);
+        const [cmd, ...args] = command.trim().split(' ', 2);
 
         console.log({ cmd, args, cwd: String(context.cwd) });
 
