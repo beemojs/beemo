@@ -106,7 +106,7 @@ describe('PrettierDriver', () => {
 
       driver.onCreateConfigFile.emit([context, new Path('/some/path/prettier.config.js'), config]);
 
-      expect(createSpy).toHaveBeenCalledWith(context, '/some/path/.prettierignore', {
+      expect(createSpy).toHaveBeenCalledWith(context, new Path('/some/path/.prettierignore'), {
         ignore: ['foo', 'bar', 'baz', 'qux'],
       });
 

@@ -168,7 +168,7 @@ describe('ESLintDriver', () => {
 
       driver.onCreateConfigFile.emit([context, new Path('/some/path/.eslintrc.js'), config]);
 
-      expect(createSpy).toHaveBeenCalledWith(context, '/some/path/.eslintignore', {
+      expect(createSpy).toHaveBeenCalledWith(context, new Path('/some/path/.eslintignore'), {
         ignore: ['foo', 'bar', 'baz', 'qux'],
       });
 

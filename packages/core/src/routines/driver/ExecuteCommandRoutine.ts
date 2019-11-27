@@ -151,11 +151,13 @@ export default class ExecuteCommandRoutine extends Routine<
 
     argv.forEach(arg => {
       if (arg.charAt(0) !== '-' && isGlob(arg)) {
-        const paths = glob.sync(arg, {
-          cwd: String(context.cwd),
-          onlyDirectories: false,
-          onlyFiles: false,
-        });
+        const paths = glob
+          .sync(arg, {
+            cwd: String(context.cwd),
+            onlyDirectories: false,
+            onlyFiles: false,
+          })
+          .map(path => new Path(path).path());
 
         this.debug(
           '  %s %s %s',

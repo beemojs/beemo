@@ -41,9 +41,9 @@ export function mockTool(argv: Argv = []): Beemo {
 
   Object.assign(tool.options, {
     appName: 'beemo',
-    appPath: BEEMO_APP_PATH,
-    root: BEEMO_TEST_ROOT,
-    workspaceRoot: BEEMO_TEST_ROOT,
+    appPath: BEEMO_APP_PATH.path(),
+    root: BEEMO_TEST_ROOT.path(),
+    workspaceRoot: BEEMO_TEST_ROOT.path(),
   });
 
   tool.config = stubToolConfig<BeemoConfig>({

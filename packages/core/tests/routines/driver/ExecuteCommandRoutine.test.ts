@@ -465,6 +465,9 @@ describe('ExecuteCommandRoutine', () => {
         'bar',
       ]);
 
+      // Make testing easier
+      args.sort();
+
       expect(args).toEqual([
         '--foo',
         '../scripts/BumpPeerDeps.js',
