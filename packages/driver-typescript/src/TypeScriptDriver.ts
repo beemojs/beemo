@@ -285,7 +285,7 @@ export default class TypeScriptDriver extends Driver<TypeScriptConfig, TypeScrip
       args.outDir || (this.config.compilerOptions && this.config.compilerOptions.outDir);
 
     if (args.clean && outDir) {
-      rimraf.sync(new Path(outDir).resolve().path());
+      rimraf.sync(Path.resolve(outDir).path());
     }
 
     return Promise.resolve();

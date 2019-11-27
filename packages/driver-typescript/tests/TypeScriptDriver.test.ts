@@ -1,5 +1,4 @@
 import fs from 'fs';
-import path from 'path';
 import rimraf from 'rimraf';
 import { getFixturePath } from '@boost/test-utils';
 import { DriverContext, Path } from '@beemo/core';
@@ -502,7 +501,7 @@ describe('TypeScriptDriver', () => {
       // @ts-ignore Allow private access
       driver.handleCleanTarget(context);
 
-      expect(rimraf.sync).toHaveBeenCalledWith(path.resolve('./lib'));
+      expect(rimraf.sync).toHaveBeenCalledWith(Path.resolve('./lib').path());
     });
   });
 

@@ -2,7 +2,6 @@ const { Script } = require('@beemo/core');
 const chalk = require('chalk');
 const fs = require('fs-extra');
 const execa = require('execa');
-const path = require('path');
 
 module.exports = class RunIntegrationTestsScript extends Script {
   args() {
@@ -27,7 +26,7 @@ module.exports = class RunIntegrationTestsScript extends Script {
       throw new Error('Please pass one of --fail or --pass.');
     }
 
-    const pkg = fs.readJsonSync(path.join(context.cwd, 'package.json'));
+    const pkg = fs.readJsonSync(context.cwd.append('package.json').path());
     const name = pkg.name.split('/')[1];
     const script = pkg.scripts && pkg.scripts[`integration:${key}`];
 
@@ -42,7 +41,7 @@ module.exports = class RunIntegrationTestsScript extends Script {
     return Promise.all(
       script.split('&&').map(command =>
         execa
-          .command(command.trim(), { cwd: context.cwd, shell: true })
+          .command(command.trim(), { cwd: context.cwd.path(), shell: true })
           // Handles everything else
           .then(response => this.handleResult(name, options, response))
           // Handles syntax errors

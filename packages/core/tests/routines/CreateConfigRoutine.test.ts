@@ -25,8 +25,6 @@ jest.mock(
   { virtual: true },
 );
 
-jest.mock('../../../../tests/configs/babel.js', () => ({ babel: true }), { virtual: true });
-
 describe('CreateConfigRoutine', () => {
   let existsSpy: jest.SpyInstance;
   let writeSpy: jest.SpyInstance;

@@ -1,6 +1,5 @@
-import path from 'path';
 import rimraf from 'rimraf';
-import { DriverContext } from '@beemo/core';
+import { DriverContext, Path } from '@beemo/core';
 import { mockTool, stubDriverContext } from '@beemo/core/lib/testUtils';
 import BabelDriver from '../src/BabelDriver';
 
@@ -72,7 +71,7 @@ describe('BabelDriver', () => {
 
       driver.onBeforeExecute.emit([context, []]);
 
-      expect(rimraf.sync).toHaveBeenCalledWith(path.resolve('./lib'));
+      expect(rimraf.sync).toHaveBeenCalledWith(Path.resolve('./lib').path());
     });
   });
 });

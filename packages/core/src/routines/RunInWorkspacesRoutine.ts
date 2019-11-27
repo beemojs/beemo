@@ -82,7 +82,10 @@ export default abstract class RunInWorkspacesRoutine<
 
     // Inherit stack for easier debugging.
     if (errors.length === 1) {
-      error.stack = errors[0].stack;
+      error.stack = String(errors[0].stack)
+        .split('\n')
+        .slice(1)
+        .join('\n');
     }
 
     throw error;
