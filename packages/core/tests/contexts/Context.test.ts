@@ -1,3 +1,4 @@
+import { Path } from '@boost/common';
 import Context from '../../src/contexts/Context';
 import { stubArgs } from '../../src/testUtils';
 
@@ -110,7 +111,7 @@ describe('Context', () => {
   });
 
   describe('findConfigByName()', () => {
-    const configFoo = { driver: 'foo', path: '/some/path/foo.js' };
+    const configFoo = { driver: 'foo', path: new Path('/some/path/foo.js') };
 
     it('returns nothing if not found', () => {
       expect(context.findConfigByName('foo.js')).toBeUndefined();
@@ -129,7 +130,10 @@ describe('Context', () => {
     });
 
     it('only checks file base name', () => {
-      context.configPaths.push({ driver: 'foo', path: '/some/path/foo.js/other/file.js' });
+      context.configPaths.push({
+        driver: 'foo',
+        path: new Path('/some/path/foo.js/other/file.js'),
+      });
 
       expect(context.findConfigByName('foo.js')).toBeUndefined();
     });

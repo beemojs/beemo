@@ -73,7 +73,7 @@ export default class CreateConfigRoutine<Ctx extends ConfigContext> extends Rout
     const { metadata, name } = driver;
     const configLoader = new ConfigLoader(this.tool);
     const sourcePath = this.getConfigPath(configLoader);
-    const configPath = path.join(context.cwd, metadata.configName);
+    const configPath = context.cwd.append(metadata.configName).path(); // TODO
 
     if (!sourcePath) {
       throw new Error(this.tool.msg('errors:configCopySourceMissing'));
@@ -101,7 +101,7 @@ export default class CreateConfigRoutine<Ctx extends ConfigContext> extends Rout
   async createConfigFile(context: Ctx, config: object): Promise<string> {
     const { driver } = this.options;
     const { metadata, name } = driver;
-    const configPath = path.join(context.cwd, metadata.configName);
+    const configPath = context.cwd.append(metadata.configName).path(); // TODO
 
     this.debug('Creating config file %s', chalk.cyan(configPath));
 
@@ -162,7 +162,7 @@ export default class CreateConfigRoutine<Ctx extends ConfigContext> extends Rout
 
     // Allow for local development
     const filePath = isLocal
-      ? path.join(workspaceRoot || cwd, `configs/${configName}.js`)
+      ? (workspaceRoot || cwd).append(`configs/${configName}.js`).path() // TODO
       : configLoader.resolveModuleConfigPath(configName, moduleName);
     const fileExists = fs.existsSync(filePath);
 
@@ -241,7 +241,7 @@ export default class CreateConfigRoutine<Ctx extends ConfigContext> extends Rout
     const { metadata, name } = driver;
     const configLoader = new ConfigLoader(this.tool);
     const sourcePath = this.getConfigPath(configLoader);
-    const configPath = path.join(context.cwd, metadata.configName);
+    const configPath = context.cwd.append(metadata.configName).path(); // TODO
 
     if (!sourcePath) {
       throw new Error(this.tool.msg('errors:configReferenceSourceMissing'));
@@ -256,7 +256,7 @@ export default class CreateConfigRoutine<Ctx extends ConfigContext> extends Rout
 
     context.addConfigPath(name, configPath);
 
-    const requirePath = path.normalize(path.relative(context.cwd, sourcePath));
+    const requirePath = path.normalize(path.relative(context.cwd.path(), sourcePath));
 
     return fs
       .writeFile(configPath, `module.exports = require('.${path.sep}${requirePath}');`)

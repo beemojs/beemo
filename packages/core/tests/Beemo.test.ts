@@ -1,6 +1,6 @@
-import path from 'path';
 import fs from 'fs-extra';
 import optimal from 'optimal';
+import { Path } from '@boost/common';
 import Beemo, { configBlueprint } from '../src/Beemo';
 import Context from '../src/contexts/Context';
 import DriverContext from '../src/contexts/DriverContext';
@@ -34,7 +34,7 @@ jest.mock(
 
 jest.mock('../../../tests', () => jest.fn());
 
-const root = path.join(__dirname, '../../../tests');
+const root = Path.resolve('../../../tests', __dirname);
 
 describe('Beemo', () => {
   let beemo: Beemo;
@@ -42,7 +42,7 @@ describe('Beemo', () => {
   beforeEach(() => {
     beemo = mockTool(['foo', 'bar']);
     beemo.moduleRoot = root;
-    beemo.options.root = root;
+    beemo.options.root = root.path();
 
     (bootstrapIndex as jest.Mock).mockReset();
   });
@@ -159,7 +159,7 @@ describe('Beemo', () => {
 
   describe('getConfigModuleRoot()', () => {
     beforeEach(() => {
-      beemo.moduleRoot = '';
+      delete beemo.moduleRoot;
     });
 
     it('errors if no module name', () => {
@@ -188,7 +188,7 @@ describe('Beemo', () => {
 
     it('returns node module path', () => {
       const existsSpy = jest.spyOn(fs, 'existsSync').mockImplementation(() => true);
-      const rootPath = path.join(process.cwd(), 'node_modules/boost');
+      const rootPath = Path.resolve('node_modules/boost');
 
       beemo.config.module = 'boost';
 
@@ -229,7 +229,10 @@ describe('Beemo', () => {
     });
 
     it('removes file for each config path', () => {
-      context.configPaths = [{ driver: 'foo', path: 'foo' }, { driver: 'bar', path: 'bar' }];
+      context.configPaths = [
+        { driver: 'foo', path: new Path('foo') },
+        { driver: 'bar', path: new Path('bar') },
+      ];
 
       beemo.onExit.emit([1]);
 

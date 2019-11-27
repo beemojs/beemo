@@ -2,15 +2,15 @@ import fs from 'fs';
 import path from 'path';
 import rimraf from 'rimraf';
 import { getFixturePath } from '@boost/test-utils';
-import { DriverContext } from '@beemo/core';
+import { DriverContext, Path } from '@beemo/core';
 import { mockTool, stubDriverContext } from '@beemo/core/lib/testUtils';
 import TypeScriptDriver from '../src/TypeScriptDriver';
 
 jest.mock('rimraf');
 
-const PROJECT_REFS_FIXTURE_PATH = getFixturePath('project-refs');
-const PROJECT_REFS_ROOT_CONFIG = path.join(PROJECT_REFS_FIXTURE_PATH, 'tsconfig.json');
-const PROJECT_REFS_OPTIONS_CONFIG = path.join(PROJECT_REFS_FIXTURE_PATH, 'tsconfig.options.json');
+const PROJECT_REFS_FIXTURE_PATH = new Path(getFixturePath('project-refs'));
+const PROJECT_REFS_ROOT_CONFIG = PROJECT_REFS_FIXTURE_PATH.append('tsconfig.json');
+const PROJECT_REFS_OPTIONS_CONFIG = PROJECT_REFS_FIXTURE_PATH.append('tsconfig.options.json');
 
 describe('TypeScriptDriver', () => {
   let driver: TypeScriptDriver;
@@ -85,7 +85,7 @@ describe('TypeScriptDriver', () => {
       driver.createProjectRefConfigsInWorkspaces(context, PROJECT_REFS_FIXTURE_PATH);
 
       expect(writeSpy).toHaveBeenCalledWith(
-        path.join(PROJECT_REFS_FIXTURE_PATH, 'packages/bar/tsconfig.json'),
+        PROJECT_REFS_FIXTURE_PATH.append('packages/bar/tsconfig.json'),
         driver.formatConfig({
           compilerOptions: {
             declarationDir: 'lib',
@@ -101,7 +101,7 @@ describe('TypeScriptDriver', () => {
       );
 
       expect(writeSpy).toHaveBeenCalledWith(
-        path.join(PROJECT_REFS_FIXTURE_PATH, 'packages/baz/tsconfig.json'),
+        PROJECT_REFS_FIXTURE_PATH.append('packages/baz/tsconfig.json'),
         driver.formatConfig({
           compilerOptions: {
             declarationDir: 'lib',
@@ -117,7 +117,7 @@ describe('TypeScriptDriver', () => {
       );
 
       expect(writeSpy).toHaveBeenCalledWith(
-        path.join(PROJECT_REFS_FIXTURE_PATH, 'packages/baz/tests/tsconfig.json'),
+        PROJECT_REFS_FIXTURE_PATH.append('packages/baz/tests/tsconfig.json'),
         driver.formatConfig({
           compilerOptions: {
             emitDeclarationOnly: false,
@@ -132,7 +132,7 @@ describe('TypeScriptDriver', () => {
       );
 
       expect(writeSpy).toHaveBeenCalledWith(
-        path.join(PROJECT_REFS_FIXTURE_PATH, 'packages/foo/tsconfig.json'),
+        PROJECT_REFS_FIXTURE_PATH.append('packages/foo/tsconfig.json'),
         driver.formatConfig({
           compilerOptions: {
             declarationDir: 'lib',
@@ -155,7 +155,7 @@ describe('TypeScriptDriver', () => {
       driver.createProjectRefConfigsInWorkspaces(context, PROJECT_REFS_FIXTURE_PATH);
 
       expect(writeSpy).toHaveBeenCalledWith(
-        path.join(PROJECT_REFS_FIXTURE_PATH, 'packages/bar/tsconfig.json'),
+        PROJECT_REFS_FIXTURE_PATH.append('packages/bar/tsconfig.json'),
         driver.formatConfig({
           compilerOptions: {
             declarationDir: 'lib',
@@ -180,7 +180,7 @@ describe('TypeScriptDriver', () => {
       driver.createProjectRefConfigsInWorkspaces(context, PROJECT_REFS_FIXTURE_PATH);
 
       expect(writeSpy).toHaveBeenCalledWith(
-        path.join(PROJECT_REFS_FIXTURE_PATH, 'packages/qux/tsconfig.json'),
+        PROJECT_REFS_FIXTURE_PATH.append('packages/qux/tsconfig.json'),
         driver.formatConfig({
           compilerOptions: {
             declarationDir: 'build',
@@ -204,7 +204,7 @@ describe('TypeScriptDriver', () => {
       driver.createProjectRefConfigsInWorkspaces(context, PROJECT_REFS_FIXTURE_PATH);
 
       expect(writeSpy).toHaveBeenCalledWith(
-        path.join(PROJECT_REFS_FIXTURE_PATH, 'packages/foo/custom-tests/tsconfig.json'),
+        PROJECT_REFS_FIXTURE_PATH.append('packages/foo/custom-tests/tsconfig.json'),
         driver.formatConfig({
           compilerOptions: {
             emitDeclarationOnly: false,
@@ -219,7 +219,7 @@ describe('TypeScriptDriver', () => {
       );
 
       expect(writeSpy).toHaveBeenCalledWith(
-        path.join(PROJECT_REFS_FIXTURE_PATH, 'packages/foo/tsconfig.json'),
+        PROJECT_REFS_FIXTURE_PATH.append('packages/foo/tsconfig.json'),
         driver.formatConfig({
           compilerOptions: {
             declarationDir: 'lib',
@@ -240,7 +240,7 @@ describe('TypeScriptDriver', () => {
       driver.createProjectRefConfigsInWorkspaces(context, PROJECT_REFS_FIXTURE_PATH);
 
       expect(writeSpy).toHaveBeenCalledWith(
-        path.join(PROJECT_REFS_FIXTURE_PATH, 'packages/baz/tsconfig.json'),
+        PROJECT_REFS_FIXTURE_PATH.append('packages/baz/tsconfig.json'),
         driver.formatConfig({
           compilerOptions: {
             declarationDir: 'lib',
@@ -256,7 +256,7 @@ describe('TypeScriptDriver', () => {
       );
 
       expect(writeSpy).toHaveBeenCalledWith(
-        path.join(PROJECT_REFS_FIXTURE_PATH, 'packages/baz/tests/tsconfig.json'),
+        PROJECT_REFS_FIXTURE_PATH.append('packages/baz/tests/tsconfig.json'),
         driver.formatConfig({
           compilerOptions: {
             emitDeclarationOnly: false,
@@ -276,7 +276,7 @@ describe('TypeScriptDriver', () => {
       driver.createProjectRefConfigsInWorkspaces(context, PROJECT_REFS_FIXTURE_PATH);
 
       expect(writeSpy).toHaveBeenCalledWith(
-        path.join(PROJECT_REFS_FIXTURE_PATH, 'packages/baz/tsconfig.json'),
+        PROJECT_REFS_FIXTURE_PATH.append('packages/baz/tsconfig.json'),
         driver.formatConfig({
           compilerOptions: {
             declarationDir: 'lib',
@@ -292,7 +292,7 @@ describe('TypeScriptDriver', () => {
       );
 
       expect(writeSpy).toHaveBeenCalledWith(
-        path.join(PROJECT_REFS_FIXTURE_PATH, 'packages/baz/tests/tsconfig.json'),
+        PROJECT_REFS_FIXTURE_PATH.append('packages/baz/tests/tsconfig.json'),
         driver.formatConfig({
           compilerOptions: {
             emitDeclarationOnly: false,
@@ -322,7 +322,7 @@ describe('TypeScriptDriver', () => {
       expect(spy).toHaveBeenCalledTimes(4);
 
       expect(writeSpy).toHaveBeenCalledWith(
-        path.join(PROJECT_REFS_FIXTURE_PATH, 'packages/baz/tests/tsconfig.json'),
+        PROJECT_REFS_FIXTURE_PATH.append('packages/baz/tests/tsconfig.json'),
         driver.formatConfig({
           compilerOptions: {
             emitDeclarationOnly: false,
@@ -339,7 +339,7 @@ describe('TypeScriptDriver', () => {
       );
 
       expect(writeSpy).toHaveBeenCalledWith(
-        path.join(PROJECT_REFS_FIXTURE_PATH, 'packages/baz/tsconfig.json'),
+        PROJECT_REFS_FIXTURE_PATH.append('packages/baz/tsconfig.json'),
         driver.formatConfig({
           compilerOptions: {
             declarationDir: 'lib',

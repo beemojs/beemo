@@ -1,6 +1,7 @@
 import fs from 'fs-extra';
 import chalk from 'chalk';
 import execa from 'execa';
+import { Path } from '@boost/common';
 import { Task, SignalError, ExitError } from '@boost/core';
 import Driver from '../../../src/Driver';
 import ExecuteCommandRoutine from '../../../src/routines/driver/ExecuteCommandRoutine';
@@ -436,8 +437,8 @@ describe('ExecuteCommandRoutine', () => {
 
       routine.options.packageRoot = '/some/root';
       routine.context.configPaths = [
-        { driver: 'babel', path: '.babelrc' },
-        { driver: 'jest', path: 'jest.json' },
+        { driver: 'babel', path: new Path('.babelrc') },
+        { driver: 'jest', path: new Path('jest.json') },
       ];
 
       const args = await routine.copyConfigToWorkspacePackage(routine.context, ['foo', '--bar']);

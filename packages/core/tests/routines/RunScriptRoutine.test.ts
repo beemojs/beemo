@@ -1,6 +1,6 @@
 /* eslint-disable jest/expect-expect */
 
-import path from 'path';
+import { Path } from '@boost/common';
 import { getFixturePath } from '@boost/test-utils';
 import ModuleLoader from '@boost/core/lib/ModuleLoader';
 import RunScriptRoutine from '../../src/routines/RunScriptRoutine';
@@ -87,7 +87,7 @@ describe('RunScriptRoutine', () => {
     });
 
     describe('workspaces', () => {
-      const fixturePath = getFixturePath('workspaces-driver');
+      const fixturePath = new Path(getFixturePath('workspaces-driver'));
 
       beforeEach(() => {
         routine.context.args.workspaces = '*';
@@ -101,9 +101,9 @@ describe('RunScriptRoutine', () => {
         routine.bootstrap();
 
         expectPipedRoutines(routine.pipe, [
-          { key: 'foo', packageRoot: path.join(fixturePath, './packages/foo') },
-          { key: 'bar', packageRoot: path.join(fixturePath, './packages/bar') },
-          { key: 'baz', packageRoot: path.join(fixturePath, './packages/baz') },
+          { key: 'foo', packageRoot: fixturePath.append('./packages/foo').path() },
+          { key: 'bar', packageRoot: fixturePath.append('./packages/bar').path() },
+          { key: 'baz', packageRoot: fixturePath.append('./packages/baz').path() },
         ]);
       });
     });

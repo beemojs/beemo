@@ -1,9 +1,9 @@
 /* eslint-disable max-classes-per-file */
 
-import path from 'path';
 import execa from 'execa';
 import { Arguments } from 'yargs';
 import parseArgs from 'yargs-parser';
+import { Path } from '@boost/common';
 import { mockDebugger, stubArgs, stubToolConfig } from '@boost/core/test-utils';
 import Beemo from './Beemo';
 import Driver from './Driver';
@@ -31,10 +31,10 @@ export class TestScript<A extends object = {}, T extends object = {}> extends Sc
 }
 
 // Use core package since resources are located here
-export const BEEMO_APP_PATH = path.join(__dirname, '..');
+export const BEEMO_APP_PATH = Path.resolve('..', __dirname);
 
 // Use a folder that should not cause issues / contain much code
-export const BEEMO_TEST_ROOT = path.join(__dirname, '../../../tests');
+export const BEEMO_TEST_ROOT = Path.resolve('../../../tests', __dirname);
 
 export function mockTool(argv: Argv = []): Beemo {
   const tool = new Beemo(argv, '', true);
@@ -194,10 +194,10 @@ export function stubExecResult(fields?: Partial<execa.ExecaReturnValue>): execa.
   };
 }
 
-export function prependRoot(part: string): string {
-  return path.join(BEEMO_TEST_ROOT, part);
+export function prependRoot(part: string): Path {
+  return BEEMO_TEST_ROOT.append(part);
 }
 
-export function getRoot(): string {
+export function getRoot(): Path {
   return BEEMO_TEST_ROOT;
 }

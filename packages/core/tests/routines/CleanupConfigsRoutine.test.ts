@@ -1,4 +1,5 @@
 import fs from 'fs-extra';
+import { Path } from '@boost/common';
 import CleanupConfigsRoutine from '../../src/routines/CleanupConfigsRoutine';
 import { mockTool, mockDebugger, mockDriver, stubDriverContext } from '../../src/testUtils';
 
@@ -39,8 +40,8 @@ describe('CleanupConfigsRoutine', () => {
 
     it('calls remove for each config path', async () => {
       routine.context.configPaths = [
-        { driver: 'test-driver', path: './foo.json' },
-        { driver: 'other-driver', path: './.barrc' },
+        { driver: 'test-driver', path: new Path('./foo.json') },
+        { driver: 'other-driver', path: new Path('./.barrc') },
       ];
 
       const result = await routine.deleteConfigFiles(routine.context);
@@ -56,8 +57,8 @@ describe('CleanupConfigsRoutine', () => {
       routine.context.primaryDriver.onDeleteConfigFile.listen(spy);
 
       routine.context.configPaths = [
-        { driver: 'test-driver', path: './foo.json' },
-        { driver: 'other-driver', path: './.barrc' },
+        { driver: 'test-driver', path: new Path('./foo.json') },
+        { driver: 'other-driver', path: new Path('./.barrc') },
       ];
 
       await routine.deleteConfigFiles(routine.context);

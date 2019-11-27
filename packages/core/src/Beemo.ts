@@ -5,6 +5,7 @@ import camelCase from 'lodash/camelCase';
 import upperFirst from 'lodash/upperFirst';
 import { Argv as Yargv } from 'yargs';
 import { Event } from '@boost/event';
+import { Path, requireModule } from '@boost/common';
 import { CLI, Pipeline, Tool } from '@boost/core';
 import { bool, number, string, shape } from 'optimal';
 import CleanupConfigsRoutine from './routines/CleanupConfigsRoutine';
@@ -39,7 +40,7 @@ export function configBlueprint() {
 }
 
 export default class Beemo extends Tool<BeemoPluginRegistry, BeemoConfig> {
-  moduleRoot: string = '';
+  moduleRoot?: Path;
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   pipeline: Pipeline<any, Beemo> | null = null;
@@ -103,16 +104,15 @@ export default class Beemo extends Tool<BeemoPluginRegistry, BeemoConfig> {
     this.debug('Bootstrapping configuration module');
 
     const moduleRoot = this.getConfigModuleRoot();
-    const indexPath = path.join(moduleRoot, 'index.js');
+    const indexPath = moduleRoot.append('index.js');
 
-    if (!fs.existsSync(indexPath)) {
+    if (!indexPath.exists()) {
       this.debug('No index.js file detected, aborting bootstrap');
 
       return this;
     }
 
-    // eslint-disable-next-line
-    const bootstrap = require(indexPath);
+    const bootstrap = requireModule<Function>(indexPath);
     const isFunction = typeof bootstrap === 'function';
 
     this.debug.invariant(isFunction, 'Executing bootstrap function', 'Found', 'Not found');
@@ -161,7 +161,7 @@ export default class Beemo extends Tool<BeemoPluginRegistry, BeemoConfig> {
   /**
    * Validate the configuration module and return its absolute path.
    */
-  getConfigModuleRoot(): string {
+  getConfigModuleRoot(): Path {
     if (this.moduleRoot) {
       return this.moduleRoot;
     }
@@ -179,15 +179,15 @@ export default class Beemo extends Tool<BeemoPluginRegistry, BeemoConfig> {
     if (module === '@local') {
       this.debug('Using %s configuration module', chalk.yellow('@local'));
 
-      this.moduleRoot = process.cwd();
+      this.moduleRoot = new Path(process.cwd());
 
       return this.moduleRoot;
     }
 
     // Reference a node module
-    const rootPath = path.join(process.cwd(), 'node_modules', module);
+    const rootPath = Path.resolve('node_modules', module);
 
-    if (!fs.existsSync(rootPath)) {
+    if (!rootPath.exists()) {
       throw new Error(this.msg('errors:moduleMissing', { configName, module }));
     }
 
@@ -309,10 +309,10 @@ export default class Beemo extends Tool<BeemoPluginRegistry, BeemoConfig> {
    */
   protected prepareContext<T extends Context>(context: T): T {
     context.argv = this.argv;
-    context.cwd = this.options.root;
+    context.cwd = Path.resolve(this.options.root);
     context.moduleRoot = this.getConfigModuleRoot();
-    context.workspaceRoot = this.options.workspaceRoot || this.options.root;
-    context.workspaces = this.getWorkspacePaths({ root: context.workspaceRoot });
+    context.workspaceRoot = Path.resolve(this.options.workspaceRoot || this.options.root);
+    context.workspaces = this.getWorkspacePaths({ root: context.workspaceRoot.path() });
 
     return context;
   }
@@ -328,7 +328,7 @@ export default class Beemo extends Tool<BeemoPluginRegistry, BeemoConfig> {
     // Must not be async!
     if (Array.isArray(context.configPaths)) {
       context.configPaths.forEach(config => {
-        fs.removeSync(config.path);
+        fs.removeSync(config.path.path());
       });
     }
   }

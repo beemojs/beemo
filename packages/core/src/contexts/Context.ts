@@ -1,5 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
+import { Path, PortablePath, FilePath } from '@boost/common';
 import { Context as BaseContext } from '@boost/core';
 import camelCase from 'lodash/camelCase';
 import trim from 'lodash/trim';
@@ -7,7 +8,7 @@ import { Arguments, Argv } from '../types';
 
 export interface ConfigPath {
   driver: string;
-  path: string;
+  path: Path;
 }
 
 export default class Context<T = {}> extends BaseContext {
@@ -18,16 +19,16 @@ export default class Context<T = {}> extends BaseContext {
   configPaths: ConfigPath[] = [];
 
   // Current working directory
-  cwd: string = '';
+  cwd!: Path;
 
   // Absolute path to the configuration module
-  moduleRoot: string = '';
+  moduleRoot!: Path;
 
   // Absolute path to the folder containing `package.json` (Yarn workspaces) or `lerna.json`
-  workspaceRoot: string = '';
+  workspaceRoot!: Path;
 
   // List of paths (with trailing glob star) for each defined workspace
-  workspaces: string[] = [];
+  workspaces: FilePath[] = [];
 
   constructor(args: Arguments<T>) {
     super();
@@ -59,10 +60,10 @@ export default class Context<T = {}> extends BaseContext {
   /**
    * Add a config path for the defined driver.
    */
-  addConfigPath(driverName: string, path: string): this {
+  addConfigPath(driverName: string, path: PortablePath): this {
     this.configPaths.push({
       driver: driverName,
-      path,
+      path: Path.create(path),
     });
 
     return this;
@@ -119,7 +120,9 @@ export default class Context<T = {}> extends BaseContext {
    * Find a configuration path by file name.
    */
   findConfigByName(name: string): ConfigPath | undefined {
-    return this.configPaths.find(config => config.path.endsWith(name) || config.driver === name);
+    return this.configPaths.find(
+      config => String(config.path).endsWith(name) || config.driver === name,
+    );
   }
 
   /**

@@ -1,7 +1,7 @@
+import { Path } from '@boost/common';
 import { Routine, Task, Predicates, SignalError, ExitError } from '@boost/core';
 import chalk from 'chalk';
 import glob from 'fast-glob';
-import path from 'path';
 import fs from 'fs-extra';
 import isGlob from 'is-glob';
 import merge from 'lodash/merge';
@@ -135,7 +135,7 @@ export default class ExecuteCommandRoutine extends Routine<
     this.debug('Copying config files to workspace');
 
     context.configPaths.forEach(config => {
-      fs.copyFileSync(config.path, path.join(packageRoot, path.basename(config.path)));
+      fs.copyFileSync(config.path.path(), new Path(packageRoot, config.path.name()).path());
     });
 
     return argv;
@@ -152,7 +152,7 @@ export default class ExecuteCommandRoutine extends Routine<
     argv.forEach(arg => {
       if (arg.charAt(0) !== '-' && isGlob(arg)) {
         const paths = glob.sync(arg, {
-          cwd: context.cwd,
+          cwd: String(context.cwd),
           onlyDirectories: false,
           onlyFiles: false,
         });
@@ -303,7 +303,7 @@ export default class ExecuteCommandRoutine extends Routine<
     const argv = [...prevArgv];
 
     if (configPath && primaryDriver.metadata.configOption) {
-      argv.push(primaryDriver.metadata.configOption, configPath.path);
+      argv.push(primaryDriver.metadata.configOption, configPath.path.path());
     }
 
     this.debug('Including config option to args');
@@ -321,7 +321,7 @@ export default class ExecuteCommandRoutine extends Routine<
     task: Task<DriverContext>,
   ): Promise<Execution> {
     const driver = context.primaryDriver;
-    const cwd = this.options.packageRoot || context.cwd;
+    const cwd = String(this.options.packageRoot || context.cwd);
     let result = null;
 
     this.debug(
