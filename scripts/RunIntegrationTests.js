@@ -43,7 +43,7 @@ module.exports = class RunIntegrationTestsScript extends Script {
         const [cmd, args] = command.trim().split(' ', 2);
 
         return (
-          execa(cmd, args, { cwd: context.cwd.path(), preferLocal: true })
+          execa(cmd, args, { cwd: context.cwd.path(), preferLocal: true, timeout: 120000 })
             // Handles everything else
             .then(response => this.handleResult(name, options, response))
             // Handles syntax errors
@@ -56,8 +56,8 @@ module.exports = class RunIntegrationTestsScript extends Script {
   handleResult(name, options, response) {
     const output = response.stdout || response.stderr;
 
-    // console.log(name.toUpperCase());
-    // console.log(response);
+    console.log(name.toUpperCase());
+    console.log(response);
 
     if (options.fail && !response.failed) {
       throw new Error(`${name} should of failed when running --fail.\n\n${output}`);
