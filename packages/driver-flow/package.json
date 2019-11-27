@@ -11,8 +11,8 @@
     "type"
   ],
   "scripts": {
-    "integration:fail": "flow check-contents < ./integration/fail.js && flow check-contents < ./integration/fail-syntax.js",
-    "integration:pass": "flow check-contents < ./integration/pass.js && flow check-contents < ./integration/pass-untyped.js"
+    "integration:fail": "flow check --flowconfig-name .flowconfig.fail",
+    "integration:pass": "flow check --flowconfig-name .flowconfig.pass"
   },
   "main": "./lib/index.js",
   "types": "./lib/index.d.ts",

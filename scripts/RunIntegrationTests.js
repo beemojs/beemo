@@ -40,12 +40,10 @@ module.exports = class RunIntegrationTestsScript extends Script {
 
     return Promise.all(
       script.split('&&').map(command => {
-        const [cmd, ...args] = command.trim();
-
-        console.log({ cmd, args, cwd: String(context.cwd) });
+        const [cmd, ...args] = command.trim().split(' ');
 
         return (
-          execa(cmd, args, { cwd: context.cwd.path(), preferLocal: true, timeout: 120000 })
+          execa(cmd, args, { cwd: context.cwd.path(), preferLocal: true })
             // Handles everything else
             .then(response => this.handleResult(name, options, response))
             // Handles syntax errors

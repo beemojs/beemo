@@ -1,0 +1,6 @@
+[include]
+./integration/fail.js
+./integration/fail-syntax.js
+
+[ignore]
+.*pass.*
