@@ -29,9 +29,9 @@ In your consuming project, enable the driver by adding `prettier` to your `drive
 
 ## Events
 
-| Event                | Arguments                                                            | Description                               |
-| -------------------- | -------------------------------------------------------------------- | ----------------------------------------- |
-| `onCreateIgnoreFile` | `context: ConfigContext, path: string, config: { ignore: string[] }` | Called before the ignore file is written. |
+| Event                | Arguments                                                          | Description                               |
+| -------------------- | ------------------------------------------------------------------ | ----------------------------------------- |
+| `onCreateIgnoreFile` | `context: ConfigContext, path: Path, config: { ignore: string[] }` | Called before the ignore file is written. |
 
 ## Ignoring Paths
 

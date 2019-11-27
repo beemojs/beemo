@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
-import { Path, PortablePath, FilePath } from '@boost/common';
+import { Path, FilePath } from '@boost/common';
 import { Context as BaseContext } from '@boost/core';
 import camelCase from 'lodash/camelCase';
 import trim from 'lodash/trim';
@@ -60,10 +60,10 @@ export default class Context<T = {}> extends BaseContext {
   /**
    * Add a config path for the defined driver.
    */
-  addConfigPath(driverName: string, path: PortablePath): this {
+  addConfigPath(driverName: string, path: Path): this {
     this.configPaths.push({
       driver: driverName,
-      path: Path.create(path),
+      path,
     });
 
     return this;

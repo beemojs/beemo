@@ -378,7 +378,7 @@ describe('CreateConfigRoutine', () => {
     });
 
     it('errors if no source file', async () => {
-      routine.getConfigPath = () => '';
+      routine.getConfigPath = () => null;
 
       await expect(routine.copyConfigFile(routine.context)).rejects.toThrowErrorMatchingSnapshot();
     });
@@ -623,7 +623,7 @@ describe('CreateConfigRoutine', () => {
     });
 
     it('errors if no source file', () => {
-      routine.getConfigPath = () => '';
+      routine.getConfigPath = () => null;
 
       expect(() => {
         routine.referenceConfigFile(routine.context);

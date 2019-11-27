@@ -3,7 +3,7 @@
  * @license     https://opensource.org/licenses/MIT
  */
 
-import { Path } from '@boost/common';
+import { Path, PortablePath } from '@boost/common';
 import { Predicates } from '@boost/core';
 import Beemo from './Beemo';
 import Driver from './Driver';
@@ -28,6 +28,7 @@ export {
   ScriptContext,
   Path,
   Predicates,
+  PortablePath,
 };
 
 export * from './constants';

@@ -1,5 +1,5 @@
 import fs from 'fs';
-import path from 'path';
+import { relative } from 'path';
 import rimraf from 'rimraf';
 import ts from 'typescript';
 import { Event } from '@boost/event';
@@ -8,22 +8,25 @@ import {
   DriverArgs,
   DriverContext,
   Path,
+  PortablePath,
   Predicates,
   ConfigContext,
   ConfigArgs,
 } from '@beemo/core';
 import { TypeScriptArgs, TypeScriptConfig, TypeScriptOptions } from './types';
 
-// Use the same separator slashes on all platforms,
-// so that config churn is reduced.
-function normalize(filePath: string): string {
-  return path.normalize(filePath).replace(/\\/gu, '/');
+function join(...parts: string[]): string {
+  return new Path(...parts).path();
+}
+
+function relativeTo(from: PortablePath, to: PortablePath): string {
+  return new Path(relative(String(from), String(to))).path();
 }
 
 // Success: Writes nothing to stdout or stderr
 // Failure: Writes to stdout on syntax and type error
 export default class TypeScriptDriver extends Driver<TypeScriptConfig, TypeScriptOptions> {
-  onCreateProjectConfigFile = new Event<[ConfigContext, string, TypeScriptConfig, boolean]>(
+  onCreateProjectConfigFile = new Event<[ConfigContext, Path, TypeScriptConfig, boolean]>(
     'create-project-config-file',
   );
 
@@ -98,19 +101,7 @@ export default class TypeScriptDriver extends Driver<TypeScriptConfig, TypeScrip
     const writeFile = (filePath: Path, config: TypeScriptConfig, isTests: boolean) => {
       const configPath = filePath.append('tsconfig.json');
 
-      if (config.extends) {
-        config.extends = normalize(config.extends);
-      }
-
-      if (config.exclude) {
-        config.exclude = config.exclude.map(normalize);
-      }
-
-      if (config.include) {
-        config.include = config.include.map(normalize);
-      }
-
-      this.onCreateProjectConfigFile.emit([context, configPath.path(), config, isTests]);
+      this.onCreateProjectConfigFile.emit([context, configPath, config, isTests]);
 
       return new Promise((resolve, reject) => {
         fs.writeFile(configPath.path(), this.formatConfig(config), error => {
@@ -150,7 +141,7 @@ export default class TypeScriptDriver extends Driver<TypeScriptConfig, TypeScrip
             depName => {
               if (namesToPaths[depName]) {
                 references.push({
-                  path: normalize(path.relative(pkgPath.path(), namesToPaths[depName])),
+                  path: relativeTo(pkgPath, namesToPaths[depName]),
                 });
               }
             },
@@ -166,8 +157,8 @@ export default class TypeScriptDriver extends Driver<TypeScriptConfig, TypeScrip
                 rootDir: srcFolder,
               },
               exclude: [buildFolder],
-              extends: path.relative(pkgPath.path(), optionsConfigPath.path()),
-              include: [path.join(srcFolder, '**/*')],
+              extends: relativeTo(pkgPath, optionsConfigPath),
+              include: [join(srcFolder, '**/*')],
               references,
             };
 
@@ -176,11 +167,11 @@ export default class TypeScriptDriver extends Driver<TypeScriptConfig, TypeScrip
             }
 
             if (localTypes) {
-              packageConfig.include.push(path.join(typesFolder, '**/*'));
+              packageConfig.include.push(join(typesFolder, '**/*'));
             }
 
             if (globalTypes) {
-              packageConfig.include.push(path.relative(pkgPath.path(), globalTypesPath.path()));
+              packageConfig.include.push(relativeTo(pkgPath, globalTypesPath));
             }
 
             if (testsFolder) {
@@ -202,17 +193,17 @@ export default class TypeScriptDriver extends Driver<TypeScriptConfig, TypeScrip
                 noEmit: true,
                 rootDir: '.',
               },
-              extends: path.relative(testsPath.path(), optionsConfigPath.path()),
+              extends: relativeTo(testsPath, optionsConfigPath),
               include: ['**/*'],
               references: [{ path: '..' }],
             };
 
             if (localTypes) {
-              testConfig.include.push(path.join('..', typesFolder, '**/*'));
+              testConfig.include.push(join('..', typesFolder, '**/*'));
             }
 
             if (globalTypes) {
-              testConfig.include.push(path.relative(testsPath.path(), globalTypesPath.path()));
+              testConfig.include.push(relativeTo(testsPath, globalTypesPath));
             }
 
             promises.push(writeFile(testsPath, testConfig, true));
@@ -271,13 +262,13 @@ export default class TypeScriptDriver extends Driver<TypeScriptConfig, TypeScrip
       // Reference a package *only* if it has a src folder
       if (srcFolder && srcPath.exists()) {
         config.references!.push({
-          path: path.relative(workspaceRoot.path(), pkgPath.path()),
+          path: relativeTo(workspaceRoot, pkgPath),
         });
 
         // Reference a separate tests folder if it exists
         if (testsFolder && testsPath.exists()) {
           config.references!.push({
-            path: path.relative(workspaceRoot.path(), testsPath.path()),
+            path: relativeTo(workspaceRoot, testsPath),
           });
         }
       }
@@ -294,7 +285,7 @@ export default class TypeScriptDriver extends Driver<TypeScriptConfig, TypeScrip
       args.outDir || (this.config.compilerOptions && this.config.compilerOptions.outDir);
 
     if (args.clean && outDir) {
-      rimraf.sync(path.resolve(outDir));
+      rimraf.sync(new Path(outDir).resolve().path());
     }
 
     return Promise.resolve();
@@ -305,7 +296,7 @@ export default class TypeScriptDriver extends Driver<TypeScriptConfig, TypeScrip
    */
   private handlePrepareConfigs = (
     context: ConfigContext<ConfigArgs & TypeScriptArgs & { referenceWorkspaces?: boolean }>,
-    configPath: string | Path,
+    configPath: Path,
     config: TypeScriptConfig,
   ) => {
     const { args, workspaceRoot } = context;
@@ -317,7 +308,7 @@ export default class TypeScriptDriver extends Driver<TypeScriptConfig, TypeScrip
     // Add to context so that it can be automatically cleaned up
     context.addConfigPath(
       'typescript',
-      this.prepareProjectRefsRootConfigs(workspaceRoot, Path.create(configPath), config),
+      this.prepareProjectRefsRootConfigs(workspaceRoot, configPath, config),
     );
   };
 

@@ -1,3 +1,4 @@
+import { Path } from '@boost/common';
 import { Plugin, Predicates } from '@boost/core';
 import { Event, ConcurrentEvent } from '@boost/event';
 import mergeWith from 'lodash/mergeWith';
@@ -26,19 +27,19 @@ export default abstract class Driver<
   // @ts-ignore Set after instantiation
   metadata: DriverMetadata;
 
-  onLoadModuleConfig = new Event<[ConfigContext, string, Config]>('load-module-config');
+  onLoadModuleConfig = new Event<[ConfigContext, Path, Config]>('load-module-config');
 
   onLoadPackageConfig = new Event<[ConfigContext, Config]>('load-package-config');
 
   onMergeConfig = new Event<[ConfigContext, Config]>('merge-config');
 
-  onCreateConfigFile = new Event<[ConfigContext, string, Config]>('create-config-file');
+  onCreateConfigFile = new Event<[ConfigContext, Path, Config]>('create-config-file');
 
-  onCopyConfigFile = new Event<[ConfigContext, string, Config]>('copy-config-file');
+  onCopyConfigFile = new Event<[ConfigContext, Path, Config]>('copy-config-file');
 
-  onReferenceConfigFile = new Event<[ConfigContext, string, Config]>('reference-config-file');
+  onReferenceConfigFile = new Event<[ConfigContext, Path, Config]>('reference-config-file');
 
-  onDeleteConfigFile = new Event<[ConfigContext, string]>('delete-config-file');
+  onDeleteConfigFile = new Event<[ConfigContext, Path]>('delete-config-file');
 
   onBeforeExecute = new ConcurrentEvent<[DriverContext, Argv]>('before-execute');
 
