@@ -17,6 +17,9 @@ lib/
 node_modules/
 dist/
 
+# Testing
+!tests/node_modules/foo-bar/configs/babel.js
+
 # Custom
 *.min.js
 *.map

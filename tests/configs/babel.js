@@ -1,2 +1,2 @@
-// Used for tests
+// Used in tests and required for Windows
 module.exports = { babel: true };
