@@ -2,7 +2,6 @@ const { Script } = require('@beemo/core');
 const chalk = require('chalk');
 const fs = require('fs-extra');
 const execa = require('execa');
-const path = require('path');
 
 module.exports = class RunIntegrationTestsScript extends Script {
   args() {
@@ -27,7 +26,7 @@ module.exports = class RunIntegrationTestsScript extends Script {
       throw new Error('Please pass one of --fail or --pass.');
     }
 
-    const pkg = fs.readJsonSync(path.join(context.cwd, 'package.json'));
+    const pkg = fs.readJsonSync(context.cwd.append('package.json').path());
     const name = pkg.name.split('/')[1];
     const script = pkg.scripts && pkg.scripts[`integration:${key}`];
 
@@ -37,17 +36,20 @@ module.exports = class RunIntegrationTestsScript extends Script {
       );
     }
 
-    console.log('Testing %s', chalk.yellow(pkg.name));
+    console.log('Testing %s - %s', chalk.yellow(pkg.name), script);
 
     return Promise.all(
-      script.split('&&').map(command =>
-        execa
-          .command(command.trim(), { cwd: context.cwd, shell: true })
-          // Handles everything else
-          .then(response => this.handleResult(name, options, response))
-          // Handles syntax errors
-          .catch(error => this.handleResult(name, options, error)),
-      ),
+      script.split('&&').map(command => {
+        const [cmd, ...args] = command.trim().split(' ');
+
+        return (
+          execa(cmd, args, { cwd: context.cwd.path(), preferLocal: true })
+            // Handles everything else
+            .then(response => this.handleResult(name, options, response))
+            // Handles syntax errors
+            .catch(error => this.handleResult(name, options, error))
+        );
+      }),
     );
   }
 

@@ -1,6 +1,5 @@
-import path from 'path';
 import rimraf from 'rimraf';
-import { Driver, DriverArgs, DriverContext } from '@beemo/core';
+import { Driver, DriverArgs, DriverContext, Path } from '@beemo/core';
 import { BabelArgs, BabelConfig } from './types';
 
 // Success: Writes file list to stdout
@@ -42,7 +41,7 @@ export default class BabelDriver extends Driver<BabelConfig> {
     args,
   }: DriverContext<DriverArgs & BabelArgs & { clean?: boolean }>) => {
     if (args.clean && args.outDir) {
-      rimraf.sync(path.resolve(args.outDir));
+      rimraf.sync(Path.resolve(args.outDir).path());
     }
 
     return Promise.resolve();

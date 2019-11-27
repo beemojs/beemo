@@ -1,0 +1,6 @@
+[include]
+./integration/pass.js
+./integration/pass-untyped.js
+
+[ignore]
+.*fail.*

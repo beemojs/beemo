@@ -1,4 +1,3 @@
-import path from 'path';
 import camelCase from 'lodash/camelCase';
 import upperFirst from 'lodash/upperFirst';
 import Script from '../Script';
@@ -36,7 +35,7 @@ export default class RunScriptRoutine extends RunInWorkspacesRoutine<ScriptConte
     } else {
       this.pipe(
         new ExecuteScriptRoutine(scriptName, command, {
-          packageRoot: cwd,
+          packageRoot: cwd.path(),
         }),
       );
     }
@@ -83,7 +82,7 @@ export default class RunScriptRoutine extends RunInWorkspacesRoutine<ScriptConte
     this.debug('Attempting to load script from configuration module');
 
     const fileName = upperFirst(camelCase(context.scriptName));
-    const filePath = path.join(context.moduleRoot, 'scripts', `${fileName}.js`);
+    const filePath = context.moduleRoot.append('scripts', `${fileName}.js`).path();
 
     try {
       script = this.tool.getRegisteredPlugin('script').loader.importModule(filePath);

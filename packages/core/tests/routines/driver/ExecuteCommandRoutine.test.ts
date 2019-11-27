@@ -1,6 +1,7 @@
 import fs from 'fs-extra';
 import chalk from 'chalk';
 import execa from 'execa';
+import { Path } from '@boost/common';
 import { Task, SignalError, ExitError } from '@boost/core';
 import Driver from '../../../src/Driver';
 import ExecuteCommandRoutine from '../../../src/routines/driver/ExecuteCommandRoutine';
@@ -375,7 +376,7 @@ describe('ExecuteCommandRoutine', () => {
       expect(optSpy).toHaveBeenCalledWith(routine.context, ['baz'], expect.anything());
       expect(runSpy).toHaveBeenCalledWith(
         routine.context,
-        ['baz', '--config', prependRoot(driver.metadata.configName)],
+        ['baz', '--config', prependRoot(driver.metadata.configName).path()],
         expect.anything(),
       );
     });
@@ -436,8 +437,8 @@ describe('ExecuteCommandRoutine', () => {
 
       routine.options.packageRoot = '/some/root';
       routine.context.configPaths = [
-        { driver: 'babel', path: '.babelrc' },
-        { driver: 'jest', path: 'jest.json' },
+        { driver: 'babel', path: new Path('.babelrc') },
+        { driver: 'jest', path: new Path('jest.json') },
       ];
 
       const args = await routine.copyConfigToWorkspacePackage(routine.context, ['foo', '--bar']);
@@ -463,6 +464,9 @@ describe('ExecuteCommandRoutine', () => {
         '../{scripts,tests}/*.{sh,js}',
         'bar',
       ]);
+
+      // Make testing easier
+      args.sort();
 
       expect(args).toEqual([
         '--foo',
@@ -626,7 +630,7 @@ describe('ExecuteCommandRoutine', () => {
 
       const args = await routine.includeConfigOption(routine.context, ['--foo']);
 
-      expect(args).toEqual(['--foo', '--config', prependRoot(driver.metadata.configName)]);
+      expect(args).toEqual(['--foo', '--config', prependRoot(driver.metadata.configName).path()]);
     });
   });
 
@@ -645,7 +649,7 @@ describe('ExecuteCommandRoutine', () => {
       await routine.runCommandWithArgs(routine.context, ['--wtf'], task);
 
       expect(routine.executeCommand).toHaveBeenCalledWith('babel', ['--wtf'], {
-        cwd: getRoot(),
+        cwd: getRoot().path(),
         env: { DEV: 'true' },
         task,
         wrap: routine.captureOutput,

@@ -6,7 +6,8 @@ import { PackageConfig } from '../src/types';
 function getBeemoPackages() {
   const pkgs: { [key: string]: PackageConfig } = {};
 
-  glob.sync(path.join(__dirname, '../../*/package.json')).forEach(pkgPath => {
+  // Globs must be forward slashes on Windows to work correctly
+  glob.sync(path.join(__dirname, '../../*/package.json').replace(/\\/gu, '/')).forEach(pkgPath => {
     // eslint-disable-next-line
     const pkg = require(String(pkgPath));
     pkgs[pkg.name] = pkg;
@@ -434,7 +435,10 @@ describe('Graph', () => {
     ]);
 
     expect(graph.resolveBatchList()).toEqual([
-      [{ name: 'stats', dependencies: {} }, { name: 'config', dependencies: {} }],
+      [
+        { name: 'stats', dependencies: {} },
+        { name: 'config', dependencies: {} },
+      ],
       [
         { name: 'http-client', dependencies: { stats: '0.0.0' } },
         { name: 'feature-flags', dependencies: { config: '0.0.0' } },

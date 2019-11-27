@@ -36,18 +36,18 @@ The following list of events, and their arguments, can be listened to.
 
 ### Driver
 
-| Event                   | Arguments                                              | Type       | Description                                                                         |
-| ----------------------- | ------------------------------------------------------ | ---------- | ----------------------------------------------------------------------------------- |
-| `onAfterExecute`        | `context: DriverContext, response: unknown`            | Concurrent | Called after the driver has successfully been executed.                             |
-| `onBeforeExecute`       | `context: DriverContext, argv: string[]`               | Concurrent | Called before the underlying `Driver` binary command is executed.                   |
-| `onCreateConfigFile`    | `context: ConfigContext, path: string, config: object` | Normal     | Called before the configuration file is written.                                    |
-| `onCopyConfigFile`      | `context: ConfigContext, path: string, config: object` | Normal     | Called before the configuration file is copied from module.                         |
-| `onDeleteConfigFile`    | `context: ConfigContext, path: string`                 | Normal     | Called before the configuration file is deleted. Occurs during the `cleanup` phase. |
-| `onFailedExecute`       | `context: DriverContext, error: Error`                 | Concurrent | Called after the driver has failed to execute.                                      |
-| `onLoadModuleConfig`    | `context: ConfigContext, path: string, config: object` | Normal     | Called after configuration has been loaded from the configuration module.           |
-| `onLoadPackageConfig`   | `context: ConfigContext, config: object`               | Normal     | Called after configuration has been extracted from `package.json`.                  |
-| `onMergeConfig`         | `context: ConfigContext, config: object`               | Normal     | Called after multiple configuration sources have been merged into 1.                |
-| `onReferenceConfigFile` | `context: ConfigContext, path: string, config: object` | Normal     | Called before the configuration file is referenced.                                 |
+| Event                   | Arguments                                            | Type       | Description                                                                         |
+| ----------------------- | ---------------------------------------------------- | ---------- | ----------------------------------------------------------------------------------- |
+| `onAfterExecute`        | `context: DriverContext, response: unknown`          | Concurrent | Called after the driver has successfully been executed.                             |
+| `onBeforeExecute`       | `context: DriverContext, argv: string[]`             | Concurrent | Called before the underlying `Driver` binary command is executed.                   |
+| `onCreateConfigFile`    | `context: ConfigContext, path: Path, config: object` | Normal     | Called before the configuration file is written.                                    |
+| `onCopyConfigFile`      | `context: ConfigContext, path: Path, config: object` | Normal     | Called before the configuration file is copied from module.                         |
+| `onDeleteConfigFile`    | `context: ConfigContext, path: Path`                 | Normal     | Called before the configuration file is deleted. Occurs during the `cleanup` phase. |
+| `onFailedExecute`       | `context: DriverContext, error: Error`               | Concurrent | Called after the driver has failed to execute.                                      |
+| `onLoadModuleConfig`    | `context: ConfigContext, path: Path, config: object` | Normal     | Called after configuration has been loaded from the configuration module.           |
+| `onLoadPackageConfig`   | `context: ConfigContext, config: object`             | Normal     | Called after configuration has been extracted from `package.json`.                  |
+| `onMergeConfig`         | `context: ConfigContext, config: object`             | Normal     | Called after multiple configuration sources have been merged into 1.                |
+| `onReferenceConfigFile` | `context: ConfigContext, path: Path, config: object` | Normal     | Called before the configuration file is referenced.                                 |
 
 ### Script
 

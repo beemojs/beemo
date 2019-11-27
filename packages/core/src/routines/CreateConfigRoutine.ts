@@ -2,6 +2,7 @@ import chalk from 'chalk';
 import fs from 'fs-extra';
 import path from 'path';
 import camelCase from 'lodash/camelCase';
+import { Path } from '@boost/common';
 import { ConfigLoader, Routine, Predicates } from '@boost/core';
 import Beemo from '../Beemo';
 import Driver from '../Driver';
@@ -61,19 +62,19 @@ export default class CreateConfigRoutine<Ctx extends ConfigContext> extends Rout
     }
   }
 
-  execute(): Promise<string> {
+  execute(): Promise<ConfigObject[]> {
     return this.serializeTasks([]);
   }
 
   /**
    * Copy configuration file from module.
    */
-  async copyConfigFile(context: Ctx): Promise<string> {
+  async copyConfigFile(context: Ctx): Promise<Path> {
     const { driver } = this.options;
     const { metadata, name } = driver;
     const configLoader = new ConfigLoader(this.tool);
     const sourcePath = this.getConfigPath(configLoader);
-    const configPath = path.join(context.cwd, metadata.configName);
+    const configPath = context.cwd.append(metadata.configName);
 
     if (!sourcePath) {
       throw new Error(this.tool.msg('errors:configCopySourceMissing'));
@@ -89,7 +90,7 @@ export default class CreateConfigRoutine<Ctx extends ConfigContext> extends Rout
     context.addConfigPath(name, configPath);
 
     return fs
-      .copy(sourcePath, configPath, {
+      .copy(sourcePath.path(), configPath.path(), {
         overwrite: true,
       })
       .then(() => configPath);
@@ -98,10 +99,10 @@ export default class CreateConfigRoutine<Ctx extends ConfigContext> extends Rout
   /**
    * Create a temporary configuration file or pass as an option.
    */
-  async createConfigFile(context: Ctx, config: object): Promise<string> {
+  async createConfigFile(context: Ctx, config: object): Promise<Path> {
     const { driver } = this.options;
     const { metadata, name } = driver;
-    const configPath = path.join(context.cwd, metadata.configName);
+    const configPath = context.cwd.append(metadata.configName);
 
     this.debug('Creating config file %s', chalk.cyan(configPath));
 
@@ -111,7 +112,7 @@ export default class CreateConfigRoutine<Ctx extends ConfigContext> extends Rout
     context.addConfigPath(name, configPath);
 
     return fs
-      .writeFile(configPath, this.options.driver.formatConfig(config))
+      .writeFile(configPath.path(), this.options.driver.formatConfig(config))
       .then(() => configPath);
   }
 
@@ -153,7 +154,7 @@ export default class CreateConfigRoutine<Ctx extends ConfigContext> extends Rout
    * Return absolute file path for config file within configuration module,
    * or an empty string if it does not exist.
    */
-  getConfigPath(configLoader: ConfigLoader, forceLocal: boolean = false): string {
+  getConfigPath(configLoader: ConfigLoader, forceLocal: boolean = false): Path | null {
     const { cwd, workspaceRoot } = this.context;
     const moduleName = this.tool.config.module;
     const { name } = this.options.driver;
@@ -162,9 +163,9 @@ export default class CreateConfigRoutine<Ctx extends ConfigContext> extends Rout
 
     // Allow for local development
     const filePath = isLocal
-      ? path.join(workspaceRoot || cwd, `configs/${configName}.js`)
-      : configLoader.resolveModuleConfigPath(configName, moduleName);
-    const fileExists = fs.existsSync(filePath);
+      ? (workspaceRoot || cwd).append(`configs/${configName}.js`)
+      : new Path(configLoader.resolveModuleConfigPath(configName, moduleName));
+    const fileExists = filePath.exists();
 
     this.debug.invariant(
       fileExists,
@@ -177,7 +178,7 @@ export default class CreateConfigRoutine<Ctx extends ConfigContext> extends Rout
       'Does not exist, skipping',
     );
 
-    return fileExists ? filePath : '';
+    return fileExists ? filePath : null;
   }
 
   /**
@@ -202,7 +203,7 @@ export default class CreateConfigRoutine<Ctx extends ConfigContext> extends Rout
   /**
    * Load a config file with passing the args and tool to the file.
    */
-  loadConfig(configLoader: ConfigLoader, filePath: string): ConfigObject {
+  loadConfig(configLoader: ConfigLoader, filePath: Path): ConfigObject {
     const config: ConfigObject = configLoader.parseFile(filePath, [], { errorOnFunction: true });
 
     this.options.driver.onLoadModuleConfig.emit([this.context, filePath, config]);
@@ -226,7 +227,7 @@ export default class CreateConfigRoutine<Ctx extends ConfigContext> extends Rout
 
     // Local files should override anything defined in the configuration module above
     // Also don't double load files, so check against @local to avoid
-    if (localPath && localPath !== modulePath) {
+    if (localPath && modulePath && localPath.path() !== modulePath.path()) {
       configs.push(this.loadConfig(configLoader, localPath));
     }
 
@@ -236,12 +237,12 @@ export default class CreateConfigRoutine<Ctx extends ConfigContext> extends Rout
   /**
    * Reference configuration file from module using a require statement.
    */
-  referenceConfigFile(context: Ctx): Promise<string> {
+  referenceConfigFile(context: Ctx): Promise<Path> {
     const { driver } = this.options;
     const { metadata, name } = driver;
     const configLoader = new ConfigLoader(this.tool);
     const sourcePath = this.getConfigPath(configLoader);
-    const configPath = path.join(context.cwd, metadata.configName);
+    const configPath = context.cwd.append(metadata.configName);
 
     if (!sourcePath) {
       throw new Error(this.tool.msg('errors:configReferenceSourceMissing'));
@@ -256,17 +257,17 @@ export default class CreateConfigRoutine<Ctx extends ConfigContext> extends Rout
 
     context.addConfigPath(name, configPath);
 
-    const requirePath = path.normalize(path.relative(context.cwd, sourcePath));
+    const requirePath = new Path(path.relative(context.cwd.path(), sourcePath.path()));
 
     return fs
-      .writeFile(configPath, `module.exports = require('.${path.sep}${requirePath}');`)
+      .writeFile(configPath.path(), `module.exports = require('./${requirePath}');`)
       .then(() => configPath);
   }
 
   /**
    * Set environment variables defined by the driver.
    */
-  setEnvVars(context: Ctx, configs: ConfigObject[]): Promise<unknown> {
+  setEnvVars(context: Ctx, configs: ConfigObject[]): Promise<ConfigObject[]> {
     const { env } = this.options.driver.options;
 
     // TODO: This may cause collisions, isolate in a child process?

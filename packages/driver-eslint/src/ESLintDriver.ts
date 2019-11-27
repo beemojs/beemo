@@ -1,14 +1,13 @@
 import fs from 'fs';
-import path from 'path';
 import { Event } from '@boost/event';
-import { Driver, ConfigContext, ConfigArgs, Execution } from '@beemo/core';
+import { Driver, ConfigContext, ConfigArgs, Execution, Path } from '@beemo/core';
 import { ESLintArgs, ESLintConfig } from './types';
 
 // Success: Writes warnings to stdout
 // Failure: Writes to stdout and stderr
 export default class ESLintDriver extends Driver<ESLintConfig> {
   onCreateIgnoreFile = new Event<
-    [ConfigContext<ConfigArgs & ESLintArgs>, string, { ignore: string[] }]
+    [ConfigContext<ConfigArgs & ESLintArgs>, Path, { ignore: string[] }]
   >('create-ignore-file');
 
   bootstrap() {
@@ -44,7 +43,7 @@ export default class ESLintDriver extends Driver<ESLintConfig> {
    */
   private handleCreateIgnoreFile = (
     context: ConfigContext<ConfigArgs & ESLintArgs>,
-    configPath: string,
+    configPath: Path,
     config: ESLintConfig,
   ) => {
     if (!config.ignore) {
@@ -55,12 +54,12 @@ export default class ESLintDriver extends Driver<ESLintConfig> {
       throw new TypeError(this.tool.msg('errors:eslintIgnoreInvalid'));
     }
 
-    const ignorePath = path.join(path.dirname(configPath), '.eslintignore');
+    const ignorePath = configPath.parent().append('.eslintignore');
     const { ignore = [] } = config;
 
     this.onCreateIgnoreFile.emit([context, ignorePath, { ignore }]);
 
-    fs.writeFileSync(ignorePath, ignore.join('\n'));
+    fs.writeFileSync(ignorePath.path(), ignore.join('\n'));
 
     // Add to context so that it can be automatically cleaned up
     context.addConfigPath('eslint', ignorePath);

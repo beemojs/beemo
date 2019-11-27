@@ -1,4 +1,5 @@
 import fs from 'fs-extra';
+import { Path } from '@boost/common';
 import CleanupConfigsRoutine from '../../src/routines/CleanupConfigsRoutine';
 import { mockTool, mockDebugger, mockDriver, stubDriverContext } from '../../src/testUtils';
 
@@ -39,14 +40,14 @@ describe('CleanupConfigsRoutine', () => {
 
     it('calls remove for each config path', async () => {
       routine.context.configPaths = [
-        { driver: 'test-driver', path: './foo.json' },
-        { driver: 'other-driver', path: './.barrc' },
+        { driver: 'test-driver', path: new Path('./foo.json') },
+        { driver: 'other-driver', path: new Path('./.barrc') },
       ];
 
       const result = await routine.deleteConfigFiles(routine.context);
 
-      expect(removeSpy).toHaveBeenCalledWith('./foo.json');
-      expect(removeSpy).toHaveBeenCalledWith('./.barrc');
+      expect(removeSpy).toHaveBeenCalledWith('foo.json');
+      expect(removeSpy).toHaveBeenCalledWith('.barrc');
       expect(result).toEqual([true, true]);
     });
 
@@ -56,14 +57,14 @@ describe('CleanupConfigsRoutine', () => {
       routine.context.primaryDriver.onDeleteConfigFile.listen(spy);
 
       routine.context.configPaths = [
-        { driver: 'test-driver', path: './foo.json' },
-        { driver: 'other-driver', path: './.barrc' },
+        { driver: 'test-driver', path: new Path('./foo.json') },
+        { driver: 'other-driver', path: new Path('./.barrc') },
       ];
 
       await routine.deleteConfigFiles(routine.context);
 
-      expect(spy).toHaveBeenCalledWith(routine.context, './foo.json');
-      expect(spy).not.toHaveBeenCalledWith(routine.context, './.barrc');
+      expect(spy).toHaveBeenCalledWith(routine.context, new Path('foo.json'));
+      expect(spy).not.toHaveBeenCalledWith(routine.context, new Path('.barrc'));
     });
   });
 });

@@ -1,6 +1,6 @@
 /* eslint-disable jest/expect-expect */
 
-import path from 'path';
+import { Path } from '@boost/common';
 import { getFixturePath } from '@boost/test-utils';
 import RunDriverRoutine from '../../src/routines/RunDriverRoutine';
 import { ExecuteCommandOptions } from '../../src/routines/driver/ExecuteCommandRoutine';
@@ -12,7 +12,7 @@ describe('RunDriverRoutine', () => {
   let driver: Driver;
 
   function expectPipedRoutines(
-    mock: unknown,
+    mock: jest.SpyInstance,
     tests: ({ key?: string; title: string } & ExecuteCommandOptions)[],
   ) {
     expect(mock).toHaveBeenCalledTimes(tests.length);
@@ -46,18 +46,24 @@ describe('RunDriverRoutine', () => {
 
   describe('bootstrap()', () => {
     it('adds a routine for the primary driver', () => {
-      jest.spyOn(routine, 'pipe').mockImplementation();
+      const spy = jest.spyOn(routine, 'pipe').mockImplementation();
+
       routine.bootstrap();
 
-      expectPipedRoutines(routine.pipe, [{ title: 'primary -a --foo bar baz' }]);
+      expectPipedRoutines(spy, [{ title: 'primary -a --foo bar baz' }]);
     });
 
     it('adds multiple routines when parallel is used', () => {
-      routine.context.parallelArgv = [['--one', '--two=2'], ['--three', '-f']];
-      jest.spyOn(routine, 'pipe').mockImplementation();
+      routine.context.parallelArgv = [
+        ['--one', '--two=2'],
+        ['--three', '-f'],
+      ];
+
+      const spy = jest.spyOn(routine, 'pipe').mockImplementation();
+
       routine.bootstrap();
 
-      expectPipedRoutines(routine.pipe, [
+      expectPipedRoutines(spy, [
         { title: 'primary -a --foo bar baz' },
         { title: 'primary -a --foo bar baz --one --two=2', additionalArgv: ['--one', '--two=2'] },
         { title: 'primary -a --foo bar baz --three -f', additionalArgv: ['--three', '-f'] },
@@ -66,14 +72,16 @@ describe('RunDriverRoutine', () => {
 
     it('adds a routine if parallel is empty', () => {
       routine.context.parallelArgv = [];
-      jest.spyOn(routine, 'pipe').mockImplementation();
+
+      const spy = jest.spyOn(routine, 'pipe').mockImplementation();
+
       routine.bootstrap();
 
-      expectPipedRoutines(routine.pipe, [{ title: 'primary -a --foo bar baz' }]);
+      expectPipedRoutines(spy, [{ title: 'primary -a --foo bar baz' }]);
     });
 
     describe('workspaces', () => {
-      const fixturePath = getFixturePath('workspaces-driver');
+      const fixturePath = new Path(getFixturePath('workspaces-driver'));
 
       beforeEach(() => {
         routine.context.args.workspaces = '*';
@@ -83,96 +91,102 @@ describe('RunDriverRoutine', () => {
       });
 
       it('adds a routine for each', () => {
-        jest.spyOn(routine, 'pipe').mockImplementation();
+        const spy = jest.spyOn(routine, 'pipe').mockImplementation();
+
         routine.bootstrap();
 
-        expectPipedRoutines(routine.pipe, [
+        expectPipedRoutines(spy, [
           {
             key: 'bar',
             title: 'primary -a --foo bar baz',
             forceConfigOption: true,
-            packageRoot: path.join(fixturePath, './packages/bar'),
+            packageRoot: fixturePath.append('./packages/bar').path(),
           },
           {
             key: 'baz',
             title: 'primary -a --foo bar baz',
             forceConfigOption: true,
-            packageRoot: path.join(fixturePath, './packages/baz'),
+            packageRoot: fixturePath.append('./packages/baz').path(),
           },
           {
             key: 'foo',
             title: 'primary -a --foo bar baz',
             forceConfigOption: true,
-            packageRoot: path.join(fixturePath, './packages/foo'),
+            packageRoot: fixturePath.append('./packages/foo').path(),
           },
         ]);
       });
 
       it('adds a routine for each when parallel is used', () => {
-        routine.context.parallelArgv = [['--one', '--two=2'], ['--three', '-f']];
-        jest.spyOn(routine, 'pipe').mockImplementation();
+        routine.context.parallelArgv = [
+          ['--one', '--two=2'],
+          ['--three', '-f'],
+        ];
+
+        const spy = jest.spyOn(routine, 'pipe').mockImplementation();
+
         routine.bootstrap();
 
-        expectPipedRoutines(routine.pipe, [
+        expectPipedRoutines(spy, [
           {
             key: 'foo',
             title: 'primary -a --foo bar baz',
             forceConfigOption: true,
-            packageRoot: path.join(fixturePath, './packages/foo'),
+            packageRoot: fixturePath.append('./packages/foo').path(),
           },
           {
             key: 'foo',
             title: 'primary -a --foo bar baz --one --two=2',
             additionalArgv: ['--one', '--two=2'],
             forceConfigOption: true,
-            packageRoot: path.join(fixturePath, './packages/foo'),
+            packageRoot: fixturePath.append('./packages/foo').path(),
           },
           {
             key: 'foo',
             title: 'primary -a --foo bar baz --three -f',
             additionalArgv: ['--three', '-f'],
             forceConfigOption: true,
-            packageRoot: path.join(fixturePath, './packages/foo'),
+            packageRoot: fixturePath.append('./packages/foo').path(),
           },
           {
             key: 'bar',
             title: 'primary -a --foo bar baz',
             forceConfigOption: true,
-            packageRoot: path.join(fixturePath, './packages/bar'),
+            packageRoot: fixturePath.append('./packages/bar').path(),
           },
           {
             key: 'bar',
             title: 'primary -a --foo bar baz --one --two=2',
             additionalArgv: ['--one', '--two=2'],
             forceConfigOption: true,
-            packageRoot: path.join(fixturePath, './packages/bar'),
+            packageRoot: fixturePath.append('./packages/bar').path(),
           },
           {
             key: 'bar',
             title: 'primary -a --foo bar baz --three -f',
             additionalArgv: ['--three', '-f'],
             forceConfigOption: true,
-            packageRoot: path.join(fixturePath, './packages/bar'),
+            packageRoot: fixturePath.append('./packages/bar').path(),
           },
           {
             key: 'baz',
             title: 'primary -a --foo bar baz',
             forceConfigOption: true,
-            packageRoot: path.join(fixturePath, './packages/baz'),
+            packageRoot: fixturePath.append('./packages/baz').path(),
           },
           {
             key: 'baz',
             title: 'primary -a --foo bar baz --one --two=2',
             additionalArgv: ['--one', '--two=2'],
             forceConfigOption: true,
-            packageRoot: path.join(fixturePath, './packages/baz'),
+            packageRoot: fixturePath.append('./packages/baz').path(),
           },
           {
             key: 'baz',
             title: 'primary -a --foo bar baz --three -f',
             additionalArgv: ['--three', '-f'],
             forceConfigOption: true,
-            packageRoot: path.join(fixturePath, './packages/baz'),
+            packageRoot: fixturePath.append('./packages/baz').path(),
           },
         ]);
       });

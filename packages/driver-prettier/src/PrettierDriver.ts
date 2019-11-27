@@ -1,14 +1,13 @@
 import fs from 'fs';
-import path from 'path';
 import { Event } from '@boost/event';
-import { Driver, ConfigContext, ConfigArgs } from '@beemo/core';
+import { Driver, ConfigContext, ConfigArgs, Path } from '@beemo/core';
 import { PrettierArgs, PrettierConfig } from './types';
 
 // Success: Writes file list to stdout
 // Failure: Writes to stderr for no files found and syntax errors
 export default class PrettierDriver extends Driver<PrettierConfig> {
   onCreateIgnoreFile = new Event<
-    [ConfigContext<ConfigArgs & PrettierArgs>, string, { ignore: string[] }]
+    [ConfigContext<ConfigArgs & PrettierArgs>, Path, { ignore: string[] }]
   >('create-ignore-file');
 
   bootstrap() {
@@ -36,7 +35,7 @@ export default class PrettierDriver extends Driver<PrettierConfig> {
    */
   private handleCreateIgnoreFile = (
     context: ConfigContext<ConfigArgs & PrettierArgs>,
-    configPath: string,
+    configPath: Path,
     config: PrettierConfig,
   ) => {
     if (!config.ignore) {
@@ -47,12 +46,12 @@ export default class PrettierDriver extends Driver<PrettierConfig> {
       throw new TypeError(this.tool.msg('errors:prettierIgnoreInvalid'));
     }
 
-    const ignorePath = path.join(path.dirname(configPath), '.prettierignore');
+    const ignorePath = configPath.parent().append('.prettierignore');
     const { ignore = [] } = config;
 
     this.onCreateIgnoreFile.emit([context, ignorePath, { ignore }]);
 
-    fs.writeFileSync(ignorePath, ignore.join('\n'));
+    fs.writeFileSync(ignorePath.path(), ignore.join('\n'));
 
     // Add to context so that it can be automatically cleaned up
     context.addConfigPath('prettier', ignorePath);

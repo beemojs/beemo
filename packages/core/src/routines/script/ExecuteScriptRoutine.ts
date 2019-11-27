@@ -1,3 +1,4 @@
+import { Path } from '@boost/common';
 import { Routine, Task, Predicates } from '@boost/core';
 import parseArgs, { Arguments } from 'yargs-parser';
 import Beemo from '../../Beemo';
@@ -36,7 +37,7 @@ export default class ExecuteScriptRoutine extends Routine<
 
     // Update the cwd to point to the package root
     if (this.options.packageRoot) {
-      context.cwd = this.options.packageRoot;
+      context.cwd = new Path(this.options.packageRoot);
     }
 
     const { argv } = context;

@@ -82,42 +82,45 @@ describe('RunInWorkspacesRoutine', () => {
 
   describe('execute()', () => {
     it('pools each routine', async () => {
-      jest.spyOn(routine, 'poolRoutines').mockImplementation(() => Promise.resolve({ errors: [], results: [] }));
+      const spy = jest
+        .spyOn(routine, 'poolRoutines')
+        .mockImplementation(() => Promise.resolve({ errors: [], results: [] }));
 
       await routine.execute(routine.context);
 
-      expect(routine.poolRoutines).toHaveBeenCalledWith(undefined, {}, routine.routines);
+      expect(spy).toHaveBeenCalledWith(undefined, {}, routine.routines);
     });
 
     it('passes concurrency to pooler', async () => {
-      jest.spyOn(routine, 'poolRoutines').mockImplementation(() => Promise.resolve({ errors: [], results: [] }));
+      const spy = jest
+        .spyOn(routine, 'poolRoutines')
+        .mockImplementation(() => Promise.resolve({ errors: [], results: [] }));
+
       routine.context.args.concurrency = 2;
 
       await routine.execute(routine.context);
 
-      expect(routine.poolRoutines).toHaveBeenCalledWith(
-        undefined,
-        { concurrency: 2 },
-        routine.routines,
-      );
+      expect(spy).toHaveBeenCalledWith(undefined, { concurrency: 2 }, routine.routines);
     });
 
     it('passes concurrency option to pooler', async () => {
-      jest.spyOn(routine, 'poolRoutines').mockImplementation(() => Promise.resolve({ errors: [], results: [] }));
+      const spy = jest
+        .spyOn(routine, 'poolRoutines')
+        .mockImplementation(() => Promise.resolve({ errors: [], results: [] }));
+
       routine.tool.config.execute.concurrency = 3;
 
       await routine.execute(routine.context);
 
-      expect(routine.poolRoutines).toHaveBeenCalledWith(
-        undefined,
-        { concurrency: 3 },
-        routine.routines,
-      );
+      expect(spy).toHaveBeenCalledWith(undefined, { concurrency: 3 }, routine.routines);
     });
 
     it('throws an error if any failures', async () => {
-      jest.spyOn(routine, 'poolRoutines').mockImplementation(() =>
-        Promise.resolve({ errors: [new Error('Failed'), new Error('Oops')], results: [] }));
+      jest
+        .spyOn(routine, 'poolRoutines')
+        .mockImplementation(() =>
+          Promise.resolve({ errors: [new Error('Failed'), new Error('Oops')], results: [] }),
+        );
 
       try {
         await routine.execute(routine.context);
@@ -131,9 +134,9 @@ describe('RunInWorkspacesRoutine', () => {
     });
 
     it('returns a result for a single routine', async () => {
-      routine.poolRoutines = jest.fn(() =>
-        Promise.resolve({ errors: [], results: [123] }),
-      ) as $FixMe;
+      jest
+        .spyOn(routine, 'poolRoutines')
+        .mockImplementation(() => Promise.resolve({ errors: [], results: [123] }));
 
       const response = await routine.execute(routine.context);
 
@@ -153,7 +156,10 @@ describe('RunInWorkspacesRoutine', () => {
       });
 
       it('serializes priority routines before pooling other routines', async () => {
-        jest.spyOn(routine, 'poolRoutines').mockImplementation(() => Promise.resolve({ errors: [], results: [] }));
+        const spy = jest
+          .spyOn(routine, 'poolRoutines')
+          .mockImplementation(() => Promise.resolve({ errors: [], results: [] }));
+
         // primary -> foo
         routine.workspacePackages[0].peerDependencies = {
           '@scope/foo': '1.0.0',
@@ -161,8 +167,8 @@ describe('RunInWorkspacesRoutine', () => {
 
         await routine.execute(routine.context);
 
-        expect(routine.poolRoutines).toHaveBeenCalledWith(undefined, {}, [foo, bar, baz, qux]);
-        expect(routine.poolRoutines).toHaveBeenCalledWith(undefined, {}, [primary]);
+        expect(spy).toHaveBeenCalledWith(undefined, {}, [foo, bar, baz, qux]);
+        expect(spy).toHaveBeenCalledWith(undefined, {}, [primary]);
       });
     });
   });

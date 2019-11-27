@@ -1,5 +1,5 @@
 import fs from 'fs';
-import { DriverContext } from '@beemo/core';
+import { DriverContext, Path } from '@beemo/core';
 import { mockTool, stubDriverContext } from '@beemo/core/lib/testUtils';
 import PrettierDriver from '../src/PrettierDriver';
 
@@ -57,7 +57,7 @@ describe('PrettierDriver', () => {
     it('does nothing if no ignore field', () => {
       const config = { semi: true };
 
-      driver.onCreateConfigFile.emit([context, '/some/path/prettier.config.js', config]);
+      driver.onCreateConfigFile.emit([context, new Path('/some/path/prettier.config.js'), config]);
 
       expect(config).toEqual({ semi: true });
     });
@@ -66,7 +66,7 @@ describe('PrettierDriver', () => {
       expect(() => {
         driver.onCreateConfigFile.emit([
           context,
-          '/some/path/prettier.config.js',
+          new Path('/some/path/prettier.config.js'),
           {
             // @ts-ignore
             ignore: 'foo',
@@ -81,12 +81,12 @@ describe('PrettierDriver', () => {
         ignore: ['foo', 'bar', 'baz'],
       };
 
-      driver.onCreateConfigFile.emit([context, '/some/path/prettier.config.js', config]);
+      driver.onCreateConfigFile.emit([context, new Path('/some/path/prettier.config.js'), config]);
 
       expect(writeSpy).toHaveBeenCalledWith('/some/path/.prettierignore', 'foo\nbar\nbaz');
 
       expect(context.configPaths).toEqual([
-        { driver: 'prettier', path: '/some/path/.prettierignore' },
+        { driver: 'prettier', path: new Path('/some/path/.prettierignore') },
       ]);
 
       expect(config).toEqual({ semi: true });
@@ -104,9 +104,9 @@ describe('PrettierDriver', () => {
         ignore: ['foo', 'bar', 'baz'],
       };
 
-      driver.onCreateConfigFile.emit([context, '/some/path/prettier.config.js', config]);
+      driver.onCreateConfigFile.emit([context, new Path('/some/path/prettier.config.js'), config]);
 
-      expect(createSpy).toHaveBeenCalledWith(context, '/some/path/.prettierignore', {
+      expect(createSpy).toHaveBeenCalledWith(context, new Path('/some/path/.prettierignore'), {
         ignore: ['foo', 'bar', 'baz', 'qux'],
       });
 
