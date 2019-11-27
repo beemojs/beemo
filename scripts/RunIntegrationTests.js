@@ -42,6 +42,8 @@ module.exports = class RunIntegrationTestsScript extends Script {
       script.split('&&').map(command => {
         const [cmd, args] = command.trim().split(' ', 2);
 
+        console.log({ cmd, args });
+
         return (
           execa(cmd, args, { cwd: context.cwd.path(), preferLocal: true, timeout: 120000 })
             // Handles everything else
