@@ -185,7 +185,7 @@ export default class Beemo extends Tool<BeemoPluginRegistry, BeemoConfig> {
     }
 
     // Reference a node module
-    const rootPath = Path.resolve('node_modules', module);
+    const rootPath = Path.resolve(`node_modules/${module}`);
 
     if (!rootPath.exists()) {
       throw new Error(this.msg('errors:moduleMissing', { configName, module }));

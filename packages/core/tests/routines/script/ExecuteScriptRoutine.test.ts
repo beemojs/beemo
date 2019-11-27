@@ -1,3 +1,4 @@
+import { Path } from '@boost/common';
 import Beemo from '../../../src/Beemo';
 import ExecuteScriptRoutine from '../../../src/routines/script/ExecuteScriptRoutine';
 import {
@@ -64,7 +65,7 @@ describe('ExecuteScriptRoutine', () => {
 
       expect(exSpy).toHaveBeenCalledWith(
         expect.objectContaining({
-          cwd: '/some/path',
+          cwd: new Path('/some/path'),
         }),
         expect.anything(),
       );

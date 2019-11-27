@@ -305,7 +305,7 @@ export default class TypeScriptDriver extends Driver<TypeScriptConfig, TypeScrip
    */
   private handlePrepareConfigs = (
     context: ConfigContext<ConfigArgs & TypeScriptArgs & { referenceWorkspaces?: boolean }>,
-    configPath: string,
+    configPath: string | Path,
     config: TypeScriptConfig,
   ) => {
     const { args, workspaceRoot } = context;
@@ -317,7 +317,7 @@ export default class TypeScriptDriver extends Driver<TypeScriptConfig, TypeScrip
     // Add to context so that it can be automatically cleaned up
     context.addConfigPath(
       'typescript',
-      this.prepareProjectRefsRootConfigs(workspaceRoot, new Path(configPath), config),
+      this.prepareProjectRefsRootConfigs(workspaceRoot, Path.create(configPath), config),
     );
   };
 

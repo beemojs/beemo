@@ -1,7 +1,7 @@
-import path from 'path';
 import { engine } from 'hygen';
 // @ts-ignore
 import Logger from 'hygen/lib/logger';
+import { Path } from '@boost/common';
 import { Routine } from '@boost/core';
 import Beemo from '../Beemo';
 import ScaffoldContext from '../contexts/ScaffoldContext';
@@ -18,7 +18,7 @@ export default class ScaffoldRoutine extends Routine<ScaffoldContext, Beemo> {
   /**
    * Execute the hygen scaffolding generator.
    */
-  async runGenerator(context: ScaffoldContext, moduleRoot: string) {
+  async runGenerator(context: ScaffoldContext, moduleRoot: Path) {
     const { tool } = this;
     const args = [context.generator, context.action];
 
@@ -30,7 +30,7 @@ export default class ScaffoldRoutine extends Routine<ScaffoldContext, Beemo> {
         debug: tool.config.debug,
         exec: this.handleExec,
         logger: new Logger(this.handleLog),
-        templates: path.join(moduleRoot, 'templates'),
+        templates: moduleRoot.append('templates').path(),
       });
     } catch (error) {
       // Intercept hygen error to provide a better error message

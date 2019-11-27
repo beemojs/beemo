@@ -46,8 +46,8 @@ describe('CleanupConfigsRoutine', () => {
 
       const result = await routine.deleteConfigFiles(routine.context);
 
-      expect(removeSpy).toHaveBeenCalledWith('./foo.json');
-      expect(removeSpy).toHaveBeenCalledWith('./.barrc');
+      expect(removeSpy).toHaveBeenCalledWith('foo.json');
+      expect(removeSpy).toHaveBeenCalledWith('.barrc');
       expect(result).toEqual([true, true]);
     });
 
@@ -63,8 +63,8 @@ describe('CleanupConfigsRoutine', () => {
 
       await routine.deleteConfigFiles(routine.context);
 
-      expect(spy).toHaveBeenCalledWith(routine.context, './foo.json');
-      expect(spy).not.toHaveBeenCalledWith(routine.context, './.barrc');
+      expect(spy).toHaveBeenCalledWith(routine.context, 'foo.json');
+      expect(spy).not.toHaveBeenCalledWith(routine.context, '.barrc');
     });
   });
 });

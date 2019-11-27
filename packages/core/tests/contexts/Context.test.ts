@@ -46,7 +46,9 @@ describe('Context', () => {
 
       context.addConfigPath('babel', './babel.config.js');
 
-      expect(context.configPaths).toEqual([{ driver: 'babel', path: './babel.config.js' }]);
+      expect(context.configPaths).toEqual([
+        { driver: 'babel', path: new Path('./babel.config.js') },
+      ]);
     });
   });
 

@@ -52,28 +52,11 @@ describe('Beemo', () => {
   });
 
   describe('bootstrapConfigModule()', () => {
-    let existsSpy: jest.SpyInstance;
-
     beforeEach(() => {
-      existsSpy = jest.spyOn(fs, 'existsSync');
       beemo.config.module = '@local';
     });
 
-    afterEach(() => {
-      existsSpy.mockRestore();
-    });
-
-    it('does nothing if no index file', () => {
-      existsSpy.mockImplementation(() => false);
-
-      beemo.bootstrapConfigModule();
-
-      expect(bootstrapIndex).not.toHaveBeenCalled();
-    });
-
     it('calls bootstrap with tool if index exists', () => {
-      existsSpy.mockImplementation(() => true);
-
       beemo.bootstrapConfigModule();
 
       expect(bootstrapIndex).toHaveBeenCalledWith(beemo);
@@ -82,10 +65,15 @@ describe('Beemo', () => {
 
   describe('createConfigFiles()', () => {
     beforeEach(() => {
-      // @ts-ignore
-      beemo.getPlugin = (type, name) => mockDriver(name, beemo);
-      beemo.getPlugins = () =>
-        [mockDriver('foo', beemo), mockDriver('bar', beemo), mockDriver('baz', beemo)] as $FixMe;
+      jest.spyOn(beemo, 'getPlugin').mockImplementation((type, name) => mockDriver(name, beemo));
+
+      jest
+        .spyOn(beemo, 'getPlugins')
+        .mockImplementation(() => [
+          mockDriver('foo', beemo),
+          mockDriver('bar', beemo),
+          mockDriver('baz', beemo),
+        ]);
     });
 
     it('emits `onRunConfig` event for a single driver', async () => {
@@ -179,24 +167,23 @@ describe('Beemo', () => {
     });
 
     it('returns cwd if using @local', () => {
+      const cwdPath = new Path(process.cwd());
+
       beemo.config.module = '@local';
 
-      expect(beemo.getConfigModuleRoot()).toBe(process.cwd());
-      expect(beemo.moduleRoot).toBe(process.cwd());
+      expect(beemo.getConfigModuleRoot()).toEqual(cwdPath);
+      expect(beemo.moduleRoot).toEqual(cwdPath);
       expect(beemo.getConfigModuleRoot()).toBe(beemo.moduleRoot);
     });
 
     it('returns node module path', () => {
-      const existsSpy = jest.spyOn(fs, 'existsSync').mockImplementation(() => true);
-      const rootPath = Path.resolve('node_modules/boost');
+      const modPath = Path.resolve('node_modules/@boost/core');
 
-      beemo.config.module = 'boost';
+      beemo.config.module = '@boost/core';
 
-      expect(beemo.getConfigModuleRoot()).toBe(rootPath);
-      expect(beemo.moduleRoot).toBe(rootPath);
+      expect(beemo.getConfigModuleRoot()).toEqual(modPath);
+      expect(beemo.moduleRoot).toEqual(modPath);
       expect(beemo.getConfigModuleRoot()).toBe(beemo.moduleRoot);
-
-      existsSpy.mockRestore();
     });
   });
 
@@ -243,11 +230,11 @@ describe('Beemo', () => {
 
   describe('runDriver()', () => {
     beforeEach(() => {
-      // @ts-ignore
-      beemo.getPlugin = () => ({
-        name: 'foo-bar',
-        metadata: { title: 'Foo Bar' },
-        getVersion: () => '0.0.0',
+      jest.spyOn(beemo, 'getPlugin').mockImplementation(() => {
+        const driver = mockDriver('foo-bar', beemo, { title: 'Foo Bar' });
+        driver.getVersion = () => '0.0.0';
+
+        return driver;
       });
     });
 

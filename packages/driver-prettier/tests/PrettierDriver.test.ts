@@ -1,5 +1,5 @@
 import fs from 'fs';
-import { DriverContext } from '@beemo/core';
+import { DriverContext, Path } from '@beemo/core';
 import { mockTool, stubDriverContext } from '@beemo/core/lib/testUtils';
 import PrettierDriver from '../src/PrettierDriver';
 
@@ -86,7 +86,7 @@ describe('PrettierDriver', () => {
       expect(writeSpy).toHaveBeenCalledWith('/some/path/.prettierignore', 'foo\nbar\nbaz');
 
       expect(context.configPaths).toEqual([
-        { driver: 'prettier', path: '/some/path/.prettierignore' },
+        { driver: 'prettier', path: new Path('/some/path/.prettierignore') },
       ]);
 
       expect(config).toEqual({ semi: true });

@@ -12,7 +12,7 @@ describe('RunDriverRoutine', () => {
   let driver: Driver;
 
   function expectPipedRoutines(
-    mock: unknown,
+    mock: jest.SpyInstance,
     tests: ({ key?: string; title: string } & ExecuteCommandOptions)[],
   ) {
     expect(mock).toHaveBeenCalledTimes(tests.length);
@@ -46,10 +46,11 @@ describe('RunDriverRoutine', () => {
 
   describe('bootstrap()', () => {
     it('adds a routine for the primary driver', () => {
-      jest.spyOn(routine, 'pipe').mockImplementation();
+      const spy = jest.spyOn(routine, 'pipe').mockImplementation();
+
       routine.bootstrap();
 
-      expectPipedRoutines(routine.pipe, [{ title: 'primary -a --foo bar baz' }]);
+      expectPipedRoutines(spy, [{ title: 'primary -a --foo bar baz' }]);
     });
 
     it('adds multiple routines when parallel is used', () => {
@@ -57,10 +58,12 @@ describe('RunDriverRoutine', () => {
         ['--one', '--two=2'],
         ['--three', '-f'],
       ];
-      jest.spyOn(routine, 'pipe').mockImplementation();
+
+      const spy = jest.spyOn(routine, 'pipe').mockImplementation();
+
       routine.bootstrap();
 
-      expectPipedRoutines(routine.pipe, [
+      expectPipedRoutines(spy, [
         { title: 'primary -a --foo bar baz' },
         { title: 'primary -a --foo bar baz --one --two=2', additionalArgv: ['--one', '--two=2'] },
         { title: 'primary -a --foo bar baz --three -f', additionalArgv: ['--three', '-f'] },
@@ -69,10 +72,12 @@ describe('RunDriverRoutine', () => {
 
     it('adds a routine if parallel is empty', () => {
       routine.context.parallelArgv = [];
-      jest.spyOn(routine, 'pipe').mockImplementation();
+
+      const spy = jest.spyOn(routine, 'pipe').mockImplementation();
+
       routine.bootstrap();
 
-      expectPipedRoutines(routine.pipe, [{ title: 'primary -a --foo bar baz' }]);
+      expectPipedRoutines(spy, [{ title: 'primary -a --foo bar baz' }]);
     });
 
     describe('workspaces', () => {
@@ -86,10 +91,11 @@ describe('RunDriverRoutine', () => {
       });
 
       it('adds a routine for each', () => {
-        jest.spyOn(routine, 'pipe').mockImplementation();
+        const spy = jest.spyOn(routine, 'pipe').mockImplementation();
+
         routine.bootstrap();
 
-        expectPipedRoutines(routine.pipe, [
+        expectPipedRoutines(spy, [
           {
             key: 'bar',
             title: 'primary -a --foo bar baz',
@@ -116,10 +122,12 @@ describe('RunDriverRoutine', () => {
           ['--one', '--two=2'],
           ['--three', '-f'],
         ];
-        jest.spyOn(routine, 'pipe').mockImplementation();
+
+        const spy = jest.spyOn(routine, 'pipe').mockImplementation();
+
         routine.bootstrap();
 
-        expectPipedRoutines(routine.pipe, [
+        expectPipedRoutines(spy, [
           {
             key: 'foo',
             title: 'primary -a --foo bar baz',

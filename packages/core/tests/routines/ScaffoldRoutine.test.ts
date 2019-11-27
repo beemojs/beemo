@@ -1,4 +1,5 @@
 import * as hygen from 'hygen';
+import { Path } from '@boost/common';
 import ScaffoldRoutine from '../../src/routines/ScaffoldRoutine';
 import { mockTool, mockDebugger, stubScaffoldContext, getRoot } from '../../src/testUtils';
 
@@ -16,9 +17,8 @@ describe('ScaffoldRoutine', () => {
 
   describe('handleExec()', () => {
     it('executes command internally', () => {
-      const spy = jest.fn();
+      const spy = jest.spyOn(routine, 'executeCommand').mockImplementation();
 
-      routine.executeCommand = spy;
       // @ts-ignore Allow access
       routine.handleExec('babel', 'const foo = {};');
 
@@ -64,7 +64,7 @@ describe('ScaffoldRoutine', () => {
 
   describe('runGenerator()', () => {
     it('executes hygen engine', async () => {
-      await routine.runGenerator(routine.context, './root');
+      await routine.runGenerator(routine.context, new Path('./root'));
 
       expect(hygen.engine).toHaveBeenCalledWith(['-a', '--foo', 'bar', 'baz'], {
         createPrompter: expect.anything(),
@@ -85,7 +85,7 @@ describe('ScaffoldRoutine', () => {
       });
 
       try {
-        await routine.runGenerator(routine.context, './root');
+        await routine.runGenerator(routine.context, new Path('./root'));
       } catch (error) {
         expect(error).toBe(baseError);
       }
@@ -97,7 +97,7 @@ describe('ScaffoldRoutine', () => {
       });
 
       try {
-        await routine.runGenerator(routine.context, './root');
+        await routine.runGenerator(routine.context, new Path('./root'));
       } catch (error) {
         expect(error).toMatchSnapshot();
       }

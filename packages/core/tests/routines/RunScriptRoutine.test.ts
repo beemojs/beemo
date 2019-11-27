@@ -45,7 +45,10 @@ describe('RunScriptRoutine', () => {
   let routine: RunScriptRoutine;
   let script: Script;
 
-  function expectPipedRoutines(mock: unknown, tests: ({ key: string } & ExecuteScriptOptions)[]) {
+  function expectPipedRoutines(
+    mock: jest.SpyInstance,
+    tests: ({ key: string } & ExecuteScriptOptions)[],
+  ) {
     expect(mock).toHaveBeenCalledTimes(tests.length);
 
     tests.forEach(test => {
@@ -80,10 +83,11 @@ describe('RunScriptRoutine', () => {
 
   describe('bootstrap()', () => {
     it('adds a routine for the script', () => {
-      jest.spyOn(routine, 'pipe').mockImplementation();
+      const spy = jest.spyOn(routine, 'pipe').mockImplementation();
+
       routine.bootstrap();
 
-      expectPipedRoutines(routine.pipe, [{ key: 'plugin-name' }]);
+      expectPipedRoutines(spy, [{ key: 'plugin-name' }]);
     });
 
     describe('workspaces', () => {
@@ -97,10 +101,11 @@ describe('RunScriptRoutine', () => {
       });
 
       it('adds a routine for each workspace', () => {
-        jest.spyOn(routine, 'pipe').mockImplementation();
+        const spy = jest.spyOn(routine, 'pipe').mockImplementation();
+
         routine.bootstrap();
 
-        expectPipedRoutines(routine.pipe, [
+        expectPipedRoutines(spy, [
           { key: 'foo', packageRoot: fixturePath.append('./packages/foo').path() },
           { key: 'bar', packageRoot: fixturePath.append('./packages/bar').path() },
           { key: 'baz', packageRoot: fixturePath.append('./packages/baz').path() },
@@ -111,7 +116,7 @@ describe('RunScriptRoutine', () => {
 
   describe('execute()', () => {
     beforeEach(() => {
-      script.execute = () => Promise.resolve(123);
+      jest.spyOn(script, 'execute').mockImplementation(() => Promise.resolve(123));
     });
 
     it('skips 2 tasks when script is returned from tool', async () => {

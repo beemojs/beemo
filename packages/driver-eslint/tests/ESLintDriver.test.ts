@@ -1,5 +1,5 @@
 import fs from 'fs';
-import { DriverContext } from '@beemo/core';
+import { DriverContext, Path } from '@beemo/core';
 import { mockTool, stubDriverContext, stubExecResult } from '@beemo/core/lib/testUtils';
 import ESLintDriver from '../src/ESLintDriver';
 
@@ -147,7 +147,9 @@ describe('ESLintDriver', () => {
 
       expect(writeSpy).toHaveBeenCalledWith('/some/path/.eslintignore', 'foo\nbar\nbaz');
 
-      expect(context.configPaths).toEqual([{ driver: 'eslint', path: '/some/path/.eslintignore' }]);
+      expect(context.configPaths).toEqual([
+        { driver: 'eslint', path: new Path('/some/path/.eslintignore') },
+      ]);
 
       expect(config).toEqual({ parser: 'babel' });
     });
