@@ -1,5 +1,4 @@
 import fs from 'fs';
-import { relative } from 'path';
 import rimraf from 'rimraf';
 import ts from 'typescript';
 import { Event } from '@boost/event';
@@ -8,7 +7,6 @@ import {
   DriverArgs,
   DriverContext,
   Path,
-  PortablePath,
   Predicates,
   ConfigContext,
   ConfigArgs,
@@ -17,10 +15,6 @@ import { TypeScriptArgs, TypeScriptConfig, TypeScriptOptions } from './types';
 
 function join(...parts: string[]): string {
   return new Path(...parts).path();
-}
-
-function relativeTo(from: PortablePath, to: PortablePath): string {
-  return new Path(relative(String(from), String(to))).path();
 }
 
 // Success: Writes nothing to stdout or stderr
@@ -94,7 +88,7 @@ export default class TypeScriptDriver extends Driver<TypeScriptConfig, TypeScrip
     const workspacePackages = this.tool.getWorkspacePackages<{
       tsconfig: Pick<TypeScriptConfig, 'compilerOptions' | 'exclude'>;
     }>({
-      root: workspaceRoot.path(),
+      root: workspaceRoot,
     });
 
     // Helper to write a file and return a promise
@@ -141,7 +135,7 @@ export default class TypeScriptDriver extends Driver<TypeScriptConfig, TypeScrip
             depName => {
               if (namesToPaths[depName]) {
                 references.push({
-                  path: relativeTo(pkgPath, namesToPaths[depName]),
+                  path: pkgPath.relativeTo(namesToPaths[depName]).path(),
                 });
               }
             },
@@ -157,7 +151,7 @@ export default class TypeScriptDriver extends Driver<TypeScriptConfig, TypeScrip
                 rootDir: srcFolder,
               },
               exclude: [buildFolder],
-              extends: relativeTo(pkgPath, optionsConfigPath),
+              extends: pkgPath.relativeTo(optionsConfigPath).path(),
               include: [join(srcFolder, '**/*')],
               references,
             };
@@ -171,7 +165,7 @@ export default class TypeScriptDriver extends Driver<TypeScriptConfig, TypeScrip
             }
 
             if (globalTypes) {
-              packageConfig.include.push(relativeTo(pkgPath, globalTypesPath));
+              packageConfig.include.push(pkgPath.relativeTo(globalTypesPath).path());
             }
 
             if (testsFolder) {
@@ -193,7 +187,7 @@ export default class TypeScriptDriver extends Driver<TypeScriptConfig, TypeScrip
                 noEmit: true,
                 rootDir: '.',
               },
-              extends: relativeTo(testsPath, optionsConfigPath),
+              extends: testsPath.relativeTo(optionsConfigPath).path(),
               include: ['**/*'],
               references: [{ path: '..' }],
             };
@@ -203,7 +197,7 @@ export default class TypeScriptDriver extends Driver<TypeScriptConfig, TypeScrip
             }
 
             if (globalTypes) {
-              testConfig.include.push(relativeTo(testsPath, globalTypesPath));
+              testConfig.include.push(testsPath.relativeTo(globalTypesPath).path());
             }
 
             promises.push(writeFile(testsPath, testConfig, true));
@@ -254,7 +248,7 @@ export default class TypeScriptDriver extends Driver<TypeScriptConfig, TypeScrip
     config.files = [];
     config.references = [];
 
-    this.tool.getWorkspacePackages({ root: workspaceRoot.path() }).forEach(({ workspace }) => {
+    this.tool.getWorkspacePackages({ root: workspaceRoot }).forEach(({ workspace }) => {
       const pkgPath = new Path(workspace.packagePath);
       const srcPath = pkgPath.append(srcFolder);
       const testsPath = pkgPath.append(testsFolder);
@@ -262,13 +256,13 @@ export default class TypeScriptDriver extends Driver<TypeScriptConfig, TypeScrip
       // Reference a package *only* if it has a src folder
       if (srcFolder && srcPath.exists()) {
         config.references!.push({
-          path: relativeTo(workspaceRoot, pkgPath),
+          path: workspaceRoot.relativeTo(pkgPath).path(),
         });
 
         // Reference a separate tests folder if it exists
         if (testsFolder && testsPath.exists()) {
           config.references!.push({
-            path: relativeTo(workspaceRoot, testsPath),
+            path: workspaceRoot.relativeTo(testsPath).path(),
           });
         }
       }

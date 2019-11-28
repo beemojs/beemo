@@ -317,7 +317,7 @@ export default class Beemo extends Tool<BeemoPluginRegistry, BeemoConfig> {
     context.cwd = Path.resolve(this.options.root);
     context.moduleRoot = this.getConfigModuleRoot();
     context.workspaceRoot = Path.resolve(this.options.workspaceRoot || this.options.root);
-    context.workspaces = this.getWorkspacePaths({ root: context.workspaceRoot.path() });
+    context.workspaces = this.getWorkspacePaths({ root: context.workspaceRoot });
 
     return context;
   }

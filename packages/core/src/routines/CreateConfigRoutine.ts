@@ -1,6 +1,5 @@
 import chalk from 'chalk';
 import fs from 'fs-extra';
-import path from 'path';
 import camelCase from 'lodash/camelCase';
 import { Path } from '@boost/common';
 import { ConfigLoader, Routine, Predicates } from '@boost/core';
@@ -257,7 +256,7 @@ export default class CreateConfigRoutine<Ctx extends ConfigContext> extends Rout
 
     context.addConfigPath(name, configPath);
 
-    const requirePath = new Path(path.relative(context.cwd.path(), sourcePath.path()));
+    const requirePath = context.cwd.relativeTo(sourcePath);
 
     return fs
       .writeFile(configPath.path(), `module.exports = require('./${requirePath}');`)

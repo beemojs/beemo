@@ -24,7 +24,7 @@ export default abstract class RunInWorkspacesRoutine<
       }
 
       this.workspacePackages = this.tool.getWorkspacePackages({
-        root: workspaceRoot.path(),
+        root: workspaceRoot,
       });
 
       this.getFilteredWorkspacePackages().forEach(pkg => {

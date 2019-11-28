@@ -820,10 +820,10 @@
     lodash "^4.17.13"
     to-fast-properties "^2.0.0"
 
-"@boost/common@^1.4.0":
-  version "1.4.0"
-  resolved "https://registry.npmjs.org/@boost/common/-/common-1.4.0.tgz#02b9de25429e3c7e129dd27041e50a1d844ebe67"
-  integrity sha512-bIl70yBQ7UT+fxcVGqpX3NTQf76/AiWCUAt/A0iPGCuBqNJbedbr0l2IHl+3a0UlOJcJSKPcLyVgkc7nWo55HQ==
+"@boost/common@^1.5.0":
+  version "1.5.0"
+  resolved "https://registry.npmjs.org/@boost/common/-/common-1.5.0.tgz#e4df5b5e63470acaa8296111e177e00710a3c3a2"
+  integrity sha512-erY/xg10SXR+tCfMNePcQX20FleM69RY74hgbSUmMtdFq30+LXntGsosLQ+Jo4hGwRcrvrYA05DX5GE+HoHNxA==
   dependencies:
     "@boost/internal" "^1.0.1"
     js-yaml "^3.13.1"
@@ -831,17 +831,17 @@
     optimal "^3.2.1"
     pretty-ms "^5.1.0"
 
-"@boost/core@^1.14.0":
-  version "1.14.0"
-  resolved "https://registry.npmjs.org/@boost/core/-/core-1.14.0.tgz#0f65568d584a4d237ae2e0366b586dbd34d4f0a1"
-  integrity sha512-ezJHo/jowmWWzaB6dfk7KqMJxYPgGfuNwv6cscQpcT4gaBdYjLhCWjb2ruJ9rtvLQvbFncheVOy6+pvVSpUPCg==
+"@boost/core@^1.15.0":
+  version "1.15.0"
+  resolved "https://registry.npmjs.org/@boost/core/-/core-1.15.0.tgz#d5fb35e567d78a2daf67ec69b770d28d0ced526a"
+  integrity sha512-0ywPHTjQzjbwlZrwHzEGx6m6kwEzzAquZAl46BxL2xSP73bycAzUaA4GLxAxsCfbJvXVfnZb8PXoR2F1Sk34Bg==
   dependencies:
-    "@boost/common" "^1.4.0"
-    "@boost/debug" "^1.3.0"
+    "@boost/common" "^1.5.0"
+    "@boost/debug" "^1.3.1"
     "@boost/event" "^1.1.1"
     "@boost/internal" "^1.0.1"
-    "@boost/log" "^1.1.5"
-    "@boost/translate" "^1.3.0"
+    "@boost/log" "^1.1.6"
+    "@boost/translate" "^1.3.1"
     "@types/debug" "^4.1.5"
     "@types/yargs" "^13.0.3"
     "@types/yargs-parser" "^13.1.0"
@@ -864,12 +864,12 @@
     wrap-ansi "^6.2.0"
     yargs-parser "^16.1.0"
 
-"@boost/debug@^1.3.0":
-  version "1.3.0"
-  resolved "https://registry.npmjs.org/@boost/debug/-/debug-1.3.0.tgz#1f3ad0e95693dd768e12c31aedf8f502e7308f7a"
-  integrity sha512-WzkZpSsbawiLvA+OVHSY8yO7KuOA3nGvVtKTdJ6H1syrSWq2Si9RIXy17ulujjjHU6B6OZ67pkCCM0Hs4tZ6tw==
+"@boost/debug@^1.3.1":
+  version "1.3.1"
+  resolved "https://registry.npmjs.org/@boost/debug/-/debug-1.3.1.tgz#bd3bcb32e7f3bb00c07d4aa9a71fb4d2b0fd294d"
+  integrity sha512-1UWx989iaPZoigP1ufwS0HK+3lE/sKfZ1XQ3ABwBYY2UkCQ2OSdWMXxeCNhZ78ky98v3OntTRrk+CzTyiccIaA==
   dependencies:
-    "@boost/common" "^1.4.0"
+    "@boost/common" "^1.5.0"
     "@boost/internal" "^1.0.1"
     "@types/debug" "^4.1.5"
     debug "^4.1.1"
@@ -890,13 +890,13 @@
     chalk "^3.0.0"
     debug "^4.1.1"
 
-"@boost/log@^1.1.5":
-  version "1.1.5"
-  resolved "https://registry.npmjs.org/@boost/log/-/log-1.1.5.tgz#5140073ec4e9f5706fce8fac7aa3ef7f51cc0cc2"
-  integrity sha512-ed/RPabVnYLSElNbP4RG166kw7I18rpJ0DmOa59/Fq20VrXenIV26RGGIrmaTwsbnJBjXOEMnKEKwTswMLgmMQ==
+"@boost/log@^1.1.6":
+  version "1.1.6"
+  resolved "https://registry.npmjs.org/@boost/log/-/log-1.1.6.tgz#2b85595b1969009c984f8762e7078dfa0043bfb3"
+  integrity sha512-d8SWEfjJgAtU/OZfokbJiKgFCH2YLBxEoW3+bbSD2Cf/z7r5i4mWlZNHZG4OW52qDj+gFADq423mCiRqmyRb9w==
   dependencies:
     "@boost/internal" "^1.0.1"
-    "@boost/translate" "^1.3.0"
+    "@boost/translate" "^1.3.1"
     chalk "^3.0.0"
 
 "@boost/test-utils@^1.3.0":
@@ -906,12 +906,12 @@
   dependencies:
     fs-extra "^8.1.0"
 
-"@boost/translate@^1.3.0":
-  version "1.3.0"
-  resolved "https://registry.npmjs.org/@boost/translate/-/translate-1.3.0.tgz#6cd3bb9aa7da64ca512bfa8859e11f2679720bd8"
-  integrity sha512-DQarmVoTszzn1lZObQa0HcQa6BLCEUrf/669ltsajzKgq0+0irU1VVDweqUxEo5FvyVO0j3GJLHvOnATEmA4ZQ==
+"@boost/translate@^1.3.1":
+  version "1.3.1"
+  resolved "https://registry.npmjs.org/@boost/translate/-/translate-1.3.1.tgz#4e5a376356770321f22493022f49563d9ef30836"
+  integrity sha512-fPDSfk1N1vOtRAxxJXZC8aoydh5ipjr60uoIAXVS2IbF1keQpkLRWuh1tWUSSQhmO+Y4xMmOZloWXmUHuZIdRA==
   dependencies:
-    "@boost/common" "^1.4.0"
+    "@boost/common" "^1.5.0"
     "@boost/internal" "^1.0.1"
     i18next "^19.0.1"
     os-locale "^4.0.0"

@@ -28,8 +28,8 @@
   },
   "dependencies": {
     "@beemo/dependency-graph": "^1.0.1",
-    "@boost/common": "^1.4.0",
-    "@boost/core": "^1.14.0",
+    "@boost/common": "^1.5.0",
+    "@boost/core": "^1.15.0",
     "@boost/event": "^1.1.1",
     "@types/micromatch": "^3.1.1",
     "@types/yargs": "^13.0.0",
