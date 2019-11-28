@@ -18,7 +18,8 @@ node_modules/
 dist/
 
 # Testing
-!tests/node_modules/foo-bar/configs/babel.js
+!tests/__fixtures__/config-module/node_modules/foo-bar/configs/babel.js
+!tests/__fixtures__/config-lib-module/lib/configs/babel.js
 
 # Custom
 *.min.js

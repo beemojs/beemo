@@ -1,5 +1,8 @@
-import fsCore from 'fs';
+import fsCore, { exists } from 'fs';
 import fs from 'fs-extra';
+import { Path } from '@boost/common';
+import { ConfigLoader } from '@boost/core';
+import { getFixturePath, copyFixtureToNodeModule } from '@boost/test-utils';
 import Beemo from '../../src/Beemo';
 import CreateConfigRoutine from '../../src/routines/CreateConfigRoutine';
 import Driver from '../../src/Driver';
@@ -16,14 +19,9 @@ import {
   mockTool,
   prependRoot,
   mockDriver,
+  getRoot,
 } from '../../src/testUtils';
 import ConfigContext from '../../src/contexts/ConfigContext';
-
-jest.mock(
-  '../../../../tests/node_modules/foo-bar/configs/babel.js',
-  () => ({ babel: true, module: true }),
-  { virtual: true },
-);
 
 describe('CreateConfigRoutine', () => {
   let existsSpy: jest.SpyInstance;
@@ -35,6 +33,7 @@ describe('CreateConfigRoutine', () => {
 
   beforeEach(() => {
     tool = mockTool();
+    // tool.options.root = getFixturePath('config-module');
 
     driver = mockDriver(
       'babel',
@@ -51,6 +50,7 @@ describe('CreateConfigRoutine', () => {
 
     routine = new CreateConfigRoutine('babel', 'Configure Babel', { driver });
     routine.context = stubConfigContext();
+    // routine.context.workspaceRoot = new Path(tool.options.root);
     routine.tool = tool;
     routine.tool.config.module = '@local';
     routine.debug = mockDebugger();
@@ -359,7 +359,7 @@ describe('CreateConfigRoutine', () => {
       const path = await routine.copyConfigFile(routine.context);
 
       expect(copySpy).toHaveBeenCalledWith(
-        prependRoot('/configs/babel.js').path(),
+        getFixturePath('config-module', '/configs/babel.js'),
         prependRoot('/babel.config.js').path(),
         { overwrite: true },
       );
@@ -467,6 +467,24 @@ describe('CreateConfigRoutine', () => {
     });
   });
 
+  describe.only('getConfigPath()', () => {
+    beforeEach(() => {
+      existsSpy.mockRestore();
+    });
+
+    it('returns config at standard `configs/file.js` path', () => {
+      const unmock = copyFixtureToNodeModule('config-module', '', 'config-module');
+
+      routine.tool.config.module = 'config-module';
+
+      const path = routine.getConfigPath();
+
+      expect(path).toEqual(getRoot().append('node_modules/config-module/configs/babel.js'));
+
+      unmock();
+    });
+  });
+
   describe('mergeConfigs()', () => {
     it('merges multiple sources', async () => {
       const config = await routine.mergeConfigs(routine.context, [
@@ -545,9 +563,13 @@ describe('CreateConfigRoutine', () => {
 
       await routine.loadConfigFromSources(routine.context, []);
 
-      expect(spy).toHaveBeenCalledWith(routine.context, prependRoot('/configs/babel.js'), {
-        babel: true,
-      });
+      expect(spy).toHaveBeenCalledWith(
+        routine.context,
+        new Path(getFixturePath('config-module', '/configs/babel.js')),
+        {
+          babel: true,
+        },
+      );
     });
 
     it('doesnt trigger `onLoadModuleConfig` event if files does not exist', async () => {
@@ -577,7 +599,7 @@ describe('CreateConfigRoutine', () => {
 
       expect(writeSpy).toHaveBeenCalledWith(
         prependRoot('/babel.config.js').path(),
-        "module.exports = require('./configs/babel.js');",
+        "module.exports = require('./__fixtures__/config-module/configs/babel.js');",
       );
       expect(path).toEqual(prependRoot('/babel.config.js'));
     });
