@@ -231,6 +231,9 @@ describe('RunScriptRoutine', () => {
 
       expect(result).toBeNull();
       expect(routine.errors).toEqual([
+        // lib
+        new Error('From configuration module: Script "Missing.js" missing!'),
+        // non-lib
         new Error('From configuration module: Script "Missing.js" missing!'),
       ]);
     });

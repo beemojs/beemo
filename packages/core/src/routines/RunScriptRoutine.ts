@@ -82,22 +82,31 @@ export default class RunScriptRoutine extends RunInWorkspacesRoutine<ScriptConte
     this.debug('Attempting to load script from configuration module');
 
     const fileName = upperFirst(camelCase(context.scriptName));
-    const filePath = context.moduleRoot.append('scripts', `${fileName}.js`).path();
+    const filePaths = [
+      // module/lib/scripts/Foo.js
+      context.moduleRoot.append('lib/scripts', `${fileName}.js`).path(),
+      // module/scripts/Foo.js
+      context.moduleRoot.append('scripts', `${fileName}.js`).path(),
+    ];
 
-    try {
-      script = this.tool.getRegisteredPlugin('script').loader.importModule(filePath);
-      script.name = context.scriptName;
+    filePaths.some(filePath => {
+      try {
+        script = this.tool.getRegisteredPlugin('script').loader.importModule(filePath);
+        script.name = context.scriptName;
 
-      context.setScript(script, filePath);
+        context.setScript(script, filePath);
 
-      return script;
-    } catch (error) {
-      error.message = this.tool.msg('app:fromConfigModule', { message: error.message });
+        return true;
+      } catch (error) {
+        error.message = this.tool.msg('app:fromConfigModule', { message: error.message });
 
-      this.errors.push(error);
+        this.errors.push(error);
+      }
 
-      return null;
-    }
+      return false;
+    });
+
+    return script || null;
   }
 
   /**
