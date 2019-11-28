@@ -103,21 +103,26 @@ export default class Beemo extends Tool<BeemoPluginRegistry, BeemoConfig> {
   bootstrapConfigModule() {
     this.debug('Bootstrapping configuration module');
 
-    const moduleRoot = this.getConfigModuleRoot();
-    const indexPath = moduleRoot.append('index.js');
+    const { module } = this.config;
+    let bootstrap: Function | null = null;
 
-    if (!indexPath.exists()) {
+    try {
+      if (module === '@local') {
+        bootstrap = requireModule(this.getConfigModuleRoot().append('index.js'));
+      } else {
+        bootstrap = requireModule(module);
+      }
+    } catch {
       this.debug('No index.js file detected, aborting bootstrap');
 
       return this;
     }
 
-    const bootstrap = requireModule<Function>(indexPath);
     const isFunction = typeof bootstrap === 'function';
 
     this.debug.invariant(isFunction, 'Executing bootstrap function', 'Found', 'Not found');
 
-    if (isFunction) {
+    if (bootstrap && isFunction) {
       bootstrap(this);
     }
 
