@@ -461,7 +461,7 @@ describe('ExecuteCommandRoutine', () => {
     it('converts globs to paths', async () => {
       const args = await routine.expandGlobPatterns(routine.context, [
         '--foo',
-        '../{scripts,tests}/*.{sh,js}',
+        '../{scripts,tests}/*.js',
         'bar',
       ]);
 
@@ -473,7 +473,6 @@ describe('ExecuteCommandRoutine', () => {
         '../scripts/BumpPeerDeps.js',
         '../scripts/RunIntegrationTests.js',
         '../scripts/extractOptionList.js',
-        '../tests/index.js',
         'bar',
       ]);
     });
