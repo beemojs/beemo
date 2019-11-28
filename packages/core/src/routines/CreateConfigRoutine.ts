@@ -159,17 +159,15 @@ export default class CreateConfigRoutine<Ctx extends ConfigContext> extends Rout
     const { name } = this.options.driver;
     const configName = this.getConfigName(name);
     const isLocal = moduleName === '@local' || forceLocal;
-    const filePaths: Path[] = [];
+    const filePaths: string[] = [];
 
     // Allow for local development
     if (isLocal) {
-      filePaths.push(new Path(`configs/${configName}.js`));
+      filePaths.push(`configs/${configName}.js`);
     } else {
       filePaths.push(
-        // module/lib/configs/tool.js
-        new Path('node_modules', moduleName, `lib/configs/${configName}.js`),
-        // module/configs/tool.js
-        new Path('node_modules', moduleName, `configs/${configName}.js`),
+        `${moduleName}/lib/configs/${configName}.js`,
+        `${moduleName}/configs/${configName}.js`,
       );
     }
 
@@ -181,7 +179,11 @@ export default class CreateConfigRoutine<Ctx extends ConfigContext> extends Rout
         return result;
       }
 
-      const resolvedPath = filePath.resolve(workspaceRoot || cwd);
+      const resolvedPath = isLocal
+        ? Path.resolve(filePath, workspaceRoot || cwd)
+        : new Path(require.resolve(filePath));
+
+      console.log({ resolvedPath });
 
       if (resolvedPath.exists()) {
         return resolvedPath;
@@ -189,6 +191,8 @@ export default class CreateConfigRoutine<Ctx extends ConfigContext> extends Rout
 
       return result;
     }, null);
+
+    console.log({ configPath });
 
     this.debug.invariant(
       !!configPath,
@@ -244,17 +248,17 @@ export default class CreateConfigRoutine<Ctx extends ConfigContext> extends Rout
    */
   loadConfigFromSources(context: Ctx, prevConfigs: ConfigObject[]): Promise<ConfigObject[]> {
     const configLoader = new ConfigLoader(this.tool);
-    const modulePath = this.getConfigPath();
+    const sourcePath = this.getConfigPath();
     const localPath = this.getConfigPath(true);
     const configs = [...prevConfigs];
 
-    if (modulePath) {
-      configs.push(this.loadConfig(configLoader, modulePath));
+    if (sourcePath) {
+      configs.push(this.loadConfig(configLoader, sourcePath));
     }
 
     // Local files should override anything defined in the configuration module above
     // Also don't double load files, so check against @local to avoid
-    if (localPath && modulePath && localPath.path() !== modulePath.path()) {
+    if (localPath && sourcePath && localPath.path() !== sourcePath.path()) {
       configs.push(this.loadConfig(configLoader, localPath));
     }
 
