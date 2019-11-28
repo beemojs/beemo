@@ -15,8 +15,6 @@ import {
   stubScaffoldArgs,
   stubScriptArgs,
 } from '../src/testUtils';
-// @ts-ignore
-import bootstrapIndex from '../../../tests';
 
 // Can't use spyOn here because its not a real object.
 /* eslint-disable jest/prefer-spy-on */
@@ -32,19 +30,14 @@ jest.mock(
 );
 /* eslint-enable jest/prefer-spy-on */
 
-jest.mock('../../../tests', () => jest.fn());
-
-const root = Path.resolve('../../../tests', __dirname);
+jest.mock('fake-bootstrap-module', () => jest.fn(), { virtual: true });
 
 describe('Beemo', () => {
   let beemo: Beemo;
 
   beforeEach(() => {
     beemo = mockTool(['foo', 'bar']);
-    beemo.moduleRoot = root;
-    beemo.options.root = root.path();
-
-    (bootstrapIndex as jest.Mock).mockReset();
+    beemo.moduleRoot = new Path(beemo.options.root);
   });
 
   it('sets argv', () => {
@@ -53,13 +46,16 @@ describe('Beemo', () => {
 
   describe('bootstrapConfigModule()', () => {
     beforeEach(() => {
-      beemo.config.module = '@local';
+      beemo.config.module = 'fake-bootstrap-module';
     });
 
     it('calls bootstrap with tool if index exists', () => {
+      // eslint-disable-next-line
+      const bootstrap = require('fake-bootstrap-module');
+
       beemo.bootstrapConfigModule();
 
-      expect(bootstrapIndex).toHaveBeenCalledWith(beemo);
+      expect(bootstrap).toHaveBeenCalledWith(beemo);
     });
   });
 
@@ -340,8 +336,6 @@ describe('Beemo', () => {
         expect.objectContaining({
           args: stubArgs(),
           argv: ['foo', 'bar'],
-          moduleRoot: root,
-          cwd: root,
         }),
       );
     });
