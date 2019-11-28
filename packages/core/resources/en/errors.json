@@ -2,6 +2,7 @@
   "cliNoCommand": "Please select a command!",
   "configCopySourceMissing": "Cannot copy configuration file. Source file does not exist in configuration module.",
   "configReferenceSourceMissing": "Cannot reference configuration file. Source file does not exist in configuration module.",
+  "configNoFunction": "Configuration file \"{{name}}\" returned a function. Only plain objects are supported.",
   "executeFailed": "Failed to execute pipeline. The following errors have occurred:",
   "executeTypeUnknown": "Unknown execution type {{type}}.",
   "eslintIgnoreInvalid": "Ignore configuration must be an array of strings.",
