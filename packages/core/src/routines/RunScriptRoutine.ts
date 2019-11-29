@@ -85,9 +85,9 @@ export default class RunScriptRoutine extends RunInWorkspacesRoutine<ScriptConte
     const fileName = upperFirst(camelCase(context.scriptName));
     const filePaths = [
       // module/lib/scripts/Foo.js
-      `${moduleName}/lib/scripts/${fileName}.js`,
+      context.moduleRoot.append(`lib/scripts/${fileName}.js`),
       // module/scripts/Foo.js
-      `${moduleName}/scripts/${fileName}.js`,
+      context.moduleRoot.append(`scripts/${fileName}.js`),
     ];
 
     filePaths.some(filePath => {
@@ -96,7 +96,7 @@ export default class RunScriptRoutine extends RunInWorkspacesRoutine<ScriptConte
         script.name = context.scriptName;
         script.moduleName = moduleName;
 
-        context.setScript(script, filePath);
+        context.setScript(script, filePath.path());
 
         return true;
       } catch (error) {

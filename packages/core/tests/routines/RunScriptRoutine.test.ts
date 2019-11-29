@@ -5,59 +5,31 @@ import { getFixturePath } from '@boost/test-utils';
 import RunScriptRoutine from '../../src/routines/RunScriptRoutine';
 import { ExecuteScriptOptions } from '../../src/routines/script/ExecuteScriptRoutine';
 import Script from '../../src/Script';
-import { mockDebugger, mockTool, mockScript, stubScriptContext } from '../../src/testUtils';
+import {
+  mockDebugger,
+  mockTool,
+  mockScript,
+  stubScriptContext,
+  getRoot,
+} from '../../src/testUtils';
+
+jest.mock('beemo-script-from-node-module', () => require.requireMock('mock-script'), {
+  virtual: true,
+});
+
+jest.mock('../../../../tests/scripts/PluginName.js', () => require.requireMock('mock-script'), {
+  virtual: true,
+});
 
 jest.mock(
-  'beemo-script-from-node-module',
-  () => {
-    const MockScript = require.requireActual('../../src/Script').default;
-
-    return class FromNodeModuleScript extends MockScript {
-      blueprint() {
-        return {};
-      }
-
-      execute() {
-        return 123;
-      }
-    };
-  },
+  '../../../../tests/__fixtures__/config-module/scripts/PluginName.js',
+  () => require.requireMock('mock-script'),
   { virtual: true },
 );
 
 jest.mock(
-  'from-config-module/scripts/PluginName.js',
-  () => {
-    const MockScript = require.requireActual('../../src/Script').default;
-
-    return class FromConfigModuleScript extends MockScript {
-      blueprint() {
-        return {};
-      }
-
-      execute() {
-        return 123;
-      }
-    };
-  },
-  { virtual: true },
-);
-
-jest.mock(
-  'from-config-module-lib/scripts/PluginName.js',
-  () => {
-    const MockScript = require.requireActual('../../src/Script').default;
-
-    return class FromConfigModuleLibScript extends MockScript {
-      blueprint() {
-        return {};
-      }
-
-      execute() {
-        return 123;
-      }
-    };
-  },
+  '../../../../tests/__fixtures__/config-module-lib/scripts/PluginName.js',
+  () => require.requireMock('mock-script'),
   { virtual: true },
 );
 
@@ -211,6 +183,7 @@ describe('RunScriptRoutine', () => {
   describe('loadScriptFromConfigModule()', () => {
     beforeEach(() => {
       routine.tool.config.module = 'from-config-module';
+      routine.context.moduleRoot = new Path(getFixturePath('config-module'));
     });
 
     it('returns script if passed as an argument', () => {
@@ -226,6 +199,22 @@ describe('RunScriptRoutine', () => {
         expect.objectContaining({
           name: 'plugin-name',
           moduleName: 'from-config-module',
+        }),
+      );
+    });
+
+    it('returns script from configuration module `scripts` folder when using `@local`', () => {
+      routine.tool.config.module = '@local';
+      routine.context.moduleRoot = getRoot();
+
+      const result = routine.loadScriptFromConfigModule(routine.context, null);
+
+      console.log(routine.errors);
+
+      expect(result).toEqual(
+        expect.objectContaining({
+          name: 'plugin-name',
+          moduleName: '@local',
         }),
       );
     });
@@ -262,10 +251,16 @@ describe('RunScriptRoutine', () => {
       expect(result).toBeNull();
       expect(routine.errors).toEqual([
         new Error(
-          'From configuration module: Missing script. Attempted import in order: from-config-module/lib/scripts/Missing.js',
+          `From configuration module: Missing script. Attempted import in order: ${getFixturePath(
+            'config-module',
+            'lib/scripts/Missing.js',
+          )}`,
         ),
         new Error(
-          'From configuration module: Missing script. Attempted import in order: from-config-module/scripts/Missing.js',
+          `From configuration module: Missing script. Attempted import in order: ${getFixturePath(
+            'config-module',
+            'scripts/Missing.js',
+          )}`,
         ),
       ]);
     });
