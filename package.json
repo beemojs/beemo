@@ -19,7 +19,7 @@
     "type": "beemo typescript --build --reference-workspaces"
   },
   "devDependencies": {
-    "@milesj/build-tool-config": "0.182.2",
+    "@milesj/build-tool-config": "0.182.3",
     "@types/fs-extra": "^8.0.1",
     "@types/is-glob": "^4.0.1",
     "@types/lodash": "^4.14.149",
@@ -30,7 +30,7 @@
     "@types/webpack": "^4.41.0",
     "@types/yargs": "^13.0.0",
     "chalk": "^3.0.0",
-    "conventional-changelog-beemo": "^1.5.3",
+    "conventional-changelog-beemo": "^1.6.0",
     "execa": "^3.4.0",
     "fast-glob": "^3.0.4",
     "fs-extra": "^8.1.0",
@@ -45,7 +45,12 @@
     "drivers": [
       "babel",
       "eslint",
-      "jest",
+      {
+        "driver": "jest",
+        "env": {
+          "NODE_ENV": "test"
+        }
+      },
       "mocha",
       "prettier",
       "typescript",

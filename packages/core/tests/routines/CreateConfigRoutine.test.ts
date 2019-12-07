@@ -1,5 +1,6 @@
-import fsCore from 'fs';
 import fs from 'fs-extra';
+import { Path } from '@boost/common';
+import { copyFixtureToNodeModule, getFixturePath } from '@boost/test-utils';
 import Beemo from '../../src/Beemo';
 import CreateConfigRoutine from '../../src/routines/CreateConfigRoutine';
 import Driver from '../../src/Driver';
@@ -16,22 +17,17 @@ import {
   mockTool,
   prependRoot,
   mockDriver,
+  getRoot,
 } from '../../src/testUtils';
 import ConfigContext from '../../src/contexts/ConfigContext';
 
-jest.mock(
-  '../../../../tests/node_modules/foo-bar/configs/babel.js',
-  () => ({ babel: true, module: true }),
-  { virtual: true },
-);
-
 describe('CreateConfigRoutine', () => {
-  let existsSpy: jest.SpyInstance;
   let writeSpy: jest.SpyInstance;
   let copySpy: jest.SpyInstance;
   let routine: CreateConfigRoutine<ConfigContext>;
   let driver: Driver;
   let tool: Beemo;
+  let fixtures: Function[];
 
   beforeEach(() => {
     tool = mockTool();
@@ -55,9 +51,6 @@ describe('CreateConfigRoutine', () => {
     routine.tool.config.module = '@local';
     routine.debug = mockDebugger();
 
-    // Virtual mocks dont work with FS, so always return true
-    existsSpy = jest.spyOn(fsCore, 'existsSync').mockImplementation(() => true);
-
     // eslint-disable-next-line @typescript-eslint/no-misused-promises
     writeSpy = jest.spyOn(fs, 'writeFile').mockImplementation(() => Promise.resolve());
 
@@ -68,14 +61,17 @@ describe('CreateConfigRoutine', () => {
       context: routine.context,
       tool,
     };
+
+    fixtures = [];
   });
 
   afterEach(() => {
     delete process.beemo;
 
-    existsSpy.mockRestore();
     writeSpy.mockRestore();
     copySpy.mockRestore();
+
+    fixtures.forEach(fixture => fixture());
   });
 
   describe('constructor()', () => {
@@ -467,6 +463,52 @@ describe('CreateConfigRoutine', () => {
     });
   });
 
+  describe('getConfigPath()', () => {
+    it('returns from configuration module `configs/file.js`', () => {
+      routine.tool.config.module = 'from-config-module';
+
+      fixtures.push(copyFixtureToNodeModule('config-module', 'from-config-module'));
+
+      const path = routine.getConfigPath();
+
+      expect(path).toEqual(
+        new Path(process.cwd(), 'node_modules', 'from-config-module/configs/babel.js'),
+      );
+    });
+
+    it('returns from configuration module `lib/configs/file.js`', () => {
+      routine.tool.config.module = 'from-config-lib-module';
+
+      fixtures.push(copyFixtureToNodeModule('config-lib-module', 'from-config-lib-module'));
+
+      const path = routine.getConfigPath();
+
+      expect(path).toEqual(
+        new Path(process.cwd(), 'node_modules', 'from-config-lib-module/lib/configs/babel.js'),
+      );
+    });
+
+    it('returns from @local `configs/file.js`', () => {
+      routine.tool.config.module = '@local';
+      routine.context.workspaceRoot = new Path(getFixturePath('config-module'));
+
+      const path = routine.getConfigPath();
+
+      expect(path).toEqual(new Path(getFixturePath('config-module', 'configs/babel.js')));
+    });
+
+    it('returns from @local `lib/configs/file.js`', () => {
+      routine.tool.config.module = '@local';
+      routine.context.workspaceRoot = new Path(getFixturePath('config-lib-module'));
+
+      fixtures.push(copyFixtureToNodeModule('config-lib-module', 'from-config-lib-module'));
+
+      const path = routine.getConfigPath();
+
+      expect(path).toEqual(new Path(getFixturePath('config-lib-module', 'lib/configs/babel.js')));
+    });
+  });
+
   describe('mergeConfigs()', () => {
     it('merges multiple sources', async () => {
       const config = await routine.mergeConfigs(routine.context, [
@@ -511,13 +553,17 @@ describe('CreateConfigRoutine', () => {
 
   describe('loadConfigFromSources()', () => {
     it('loads config if it exists', async () => {
+      routine.tool.config.module = 'from-config-module';
+
+      fixtures.push(copyFixtureToNodeModule('config-module', 'from-config-module'));
+
       const configs = await routine.loadConfigFromSources(routine.context, []);
 
-      expect(configs).toEqual([{ babel: true }]);
+      expect(configs).toEqual([{ babel: true, lib: false }, { babel: true }]);
     });
 
     it('does nothing if config does not exist', async () => {
-      existsSpy.mockImplementation(() => false);
+      routine.tool.config.module = 'unknown-module';
 
       const configs = await routine.loadConfigFromSources(routine.context, []);
 
@@ -530,14 +576,6 @@ describe('CreateConfigRoutine', () => {
       expect(configs).toEqual([{ babel: true }]);
     });
 
-    it('uses module path when using custom config', async () => {
-      routine.tool.config.module = 'foo-bar';
-
-      const configs = await routine.loadConfigFromSources(routine.context, []);
-
-      expect(configs).toEqual([{ babel: true, module: true }, { babel: true }]);
-    });
-
     it('emits `onLoadModuleConfig` event', async () => {
       const spy = jest.fn();
 
@@ -545,17 +583,17 @@ describe('CreateConfigRoutine', () => {
 
       await routine.loadConfigFromSources(routine.context, []);
 
-      expect(spy).toHaveBeenCalledWith(routine.context, prependRoot('/configs/babel.js'), {
+      expect(spy).toHaveBeenCalledWith(routine.context, getRoot().append('/configs/babel.js'), {
         babel: true,
       });
     });
 
     it('doesnt trigger `onLoadModuleConfig` event if files does not exist', async () => {
+      routine.tool.config.module = 'unknown-module';
+
       const spy = jest.fn();
 
       driver.onLoadModuleConfig.listen(spy);
-
-      existsSpy.mockImplementation(() => false);
 
       await routine.loadConfigFromSources(routine.context, []);
 
@@ -613,7 +651,12 @@ describe('CreateConfigRoutine', () => {
     it('sets env vars', () => {
       expect(process.env.BEEMO_TEST_VAR).toBeUndefined();
 
-      driver.options.env.BEEMO_TEST_VAR = 'true';
+      driver.configure({
+        env: {
+          NODE_ENV: 'test',
+          BEEMO_TEST_VAR: 'true',
+        },
+      });
 
       routine.setEnvVars(routine.context, []);
 

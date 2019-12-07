@@ -1,8 +1,8 @@
 import chalk from 'chalk';
 import fs from 'fs-extra';
 import camelCase from 'lodash/camelCase';
-import { Path } from '@boost/common';
-import { ConfigLoader, Routine, Predicates } from '@boost/core';
+import { Path, PathResolver, requireModule } from '@boost/common';
+import { Routine, Predicates } from '@boost/core';
 import Beemo from '../Beemo';
 import Driver from '../Driver';
 import ConfigContext from '../contexts/ConfigContext';
@@ -71,15 +71,14 @@ export default class CreateConfigRoutine<Ctx extends ConfigContext> extends Rout
   async copyConfigFile(context: Ctx): Promise<Path> {
     const { driver } = this.options;
     const { metadata, name } = driver;
-    const configLoader = new ConfigLoader(this.tool);
-    const sourcePath = this.getConfigPath(configLoader);
+    const sourcePath = this.getConfigPath();
     const configPath = context.cwd.append(metadata.configName);
 
     if (!sourcePath) {
       throw new Error(this.tool.msg('errors:configCopySourceMissing'));
     }
 
-    const config = this.loadConfig(configLoader, sourcePath);
+    const config = this.loadConfig(sourcePath);
 
     this.debug('Copying config file to %s', chalk.cyan(configPath));
 
@@ -153,21 +152,35 @@ export default class CreateConfigRoutine<Ctx extends ConfigContext> extends Rout
    * Return absolute file path for config file within configuration module,
    * or an empty string if it does not exist.
    */
-  getConfigPath(configLoader: ConfigLoader, forceLocal: boolean = false): Path | null {
+  getConfigPath(forceLocal: boolean = false): Path | null {
     const { cwd, workspaceRoot } = this.context;
     const moduleName = this.tool.config.module;
     const { name } = this.options.driver;
     const configName = this.getConfigName(name);
     const isLocal = moduleName === '@local' || forceLocal;
+    const resolver = new PathResolver();
 
     // Allow for local development
-    const filePath = isLocal
-      ? (workspaceRoot || cwd).append(`configs/${configName}.js`)
-      : new Path(configLoader.resolveModuleConfigPath(configName, moduleName));
-    const fileExists = filePath.exists();
+    if (isLocal) {
+      resolver
+        .lookupFilePath(`lib/configs/${configName}.js`, workspaceRoot || cwd)
+        .lookupFilePath(`configs/${configName}.js`, workspaceRoot || cwd);
+    } else {
+      resolver
+        .lookupNodeModule(`${moduleName}/lib/configs/${configName}`)
+        .lookupNodeModule(`${moduleName}/configs/${configName}`);
+    }
+
+    let configPath = null;
+
+    try {
+      configPath = resolver.resolvePath();
+    } catch {
+      // Ignore
+    }
 
     this.debug.invariant(
-      fileExists,
+      !!configPath,
       isLocal
         ? `Loading ${chalk.green(name)} config from local consumer`
         : `Loading ${chalk.green(name)} config from configuration module ${chalk.yellow(
@@ -177,7 +190,11 @@ export default class CreateConfigRoutine<Ctx extends ConfigContext> extends Rout
       'Does not exist, skipping',
     );
 
-    return fileExists ? filePath : null;
+    if (configPath) {
+      this.debug('Found at %s', chalk.cyan(configPath));
+    }
+
+    return configPath;
   }
 
   /**
@@ -202,8 +219,12 @@ export default class CreateConfigRoutine<Ctx extends ConfigContext> extends Rout
   /**
    * Load a config file with passing the args and tool to the file.
    */
-  loadConfig(configLoader: ConfigLoader, filePath: Path): ConfigObject {
-    const config: ConfigObject = configLoader.parseFile(filePath, [], { errorOnFunction: true });
+  loadConfig(filePath: Path): ConfigObject {
+    const config: ConfigObject = requireModule(filePath);
+
+    if (typeof config === 'function') {
+      throw new TypeError(this.tool.msg('errors:configNoFunction', { name: filePath.name() }));
+    }
 
     this.options.driver.onLoadModuleConfig.emit([this.context, filePath, config]);
 
@@ -215,19 +236,18 @@ export default class CreateConfigRoutine<Ctx extends ConfigContext> extends Rout
    * and from the local configs/ folder in the consumer.
    */
   loadConfigFromSources(context: Ctx, prevConfigs: ConfigObject[]): Promise<ConfigObject[]> {
-    const configLoader = new ConfigLoader(this.tool);
-    const modulePath = this.getConfigPath(configLoader);
-    const localPath = this.getConfigPath(configLoader, true);
+    const sourcePath = this.getConfigPath();
+    const localPath = this.getConfigPath(true);
     const configs = [...prevConfigs];
 
-    if (modulePath) {
-      configs.push(this.loadConfig(configLoader, modulePath));
+    if (sourcePath) {
+      configs.push(this.loadConfig(sourcePath));
     }
 
     // Local files should override anything defined in the configuration module above
     // Also don't double load files, so check against @local to avoid
-    if (localPath && modulePath && localPath.path() !== modulePath.path()) {
-      configs.push(this.loadConfig(configLoader, localPath));
+    if (localPath && sourcePath && localPath.path() !== sourcePath.path()) {
+      configs.push(this.loadConfig(localPath));
     }
 
     return Promise.resolve(configs);
@@ -239,15 +259,14 @@ export default class CreateConfigRoutine<Ctx extends ConfigContext> extends Rout
   referenceConfigFile(context: Ctx): Promise<Path> {
     const { driver } = this.options;
     const { metadata, name } = driver;
-    const configLoader = new ConfigLoader(this.tool);
-    const sourcePath = this.getConfigPath(configLoader);
+    const sourcePath = this.getConfigPath();
     const configPath = context.cwd.append(metadata.configName);
 
     if (!sourcePath) {
       throw new Error(this.tool.msg('errors:configReferenceSourceMissing'));
     }
 
-    const config = this.loadConfig(configLoader, sourcePath);
+    const config = this.loadConfig(sourcePath);
 
     this.debug('Referencing config file to %s', chalk.cyan(configPath));
 
