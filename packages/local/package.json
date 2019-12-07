@@ -1,0 +1,16 @@
+{
+  "private": true,
+  "name": "@beemo/local",
+  "version": "0.0.0",
+  "main": "./lib/index.js",
+  "peerDependencies": {
+    "@beemo/core": "*",
+    "@boost/core": "*"
+  },
+  "devDependencies": {
+    "chalk": "^3.0.0",
+    "fast-glob": "^3.0.4",
+    "fs-extra": "^8.1.0",
+    "semver": "^6.3.0"
+  }
+}
