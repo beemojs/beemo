@@ -1,5 +1,6 @@
 import fs from 'fs-extra';
 import { Path } from '@boost/common';
+import { copyFixtureToNodeModule, getFixturePath } from '@boost/test-utils';
 import Beemo from '../../src/Beemo';
 import CreateConfigRoutine from '../../src/routines/CreateConfigRoutine';
 import Driver from '../../src/Driver';
@@ -20,18 +21,13 @@ import {
 } from '../../src/testUtils';
 import ConfigContext from '../../src/contexts/ConfigContext';
 
-jest.mock('config-module/configs/babel.js', () => ({ babel: true, lib: false }), { virtual: true });
-
-jest.mock('config-lib-module/lib/configs/babel.js', () => ({ babel: true, lib: true }), {
-  virtual: true,
-});
-
 describe('CreateConfigRoutine', () => {
   let writeSpy: jest.SpyInstance;
   let copySpy: jest.SpyInstance;
   let routine: CreateConfigRoutine<ConfigContext>;
   let driver: Driver;
   let tool: Beemo;
+  let fixtures: Function[];
 
   beforeEach(() => {
     tool = mockTool();
@@ -65,6 +61,8 @@ describe('CreateConfigRoutine', () => {
       context: routine.context,
       tool,
     };
+
+    fixtures = [];
   });
 
   afterEach(() => {
@@ -72,6 +70,8 @@ describe('CreateConfigRoutine', () => {
 
     writeSpy.mockRestore();
     copySpy.mockRestore();
+
+    fixtures.forEach(fixture => fixture());
   });
 
   describe('constructor()', () => {
@@ -464,20 +464,48 @@ describe('CreateConfigRoutine', () => {
   });
 
   describe('getConfigPath()', () => {
-    it('returns config at standard `configs/file.js` path', () => {
-      routine.tool.config.module = 'config-module';
+    it('returns from configuration module `configs/file.js`', () => {
+      routine.tool.config.module = 'from-config-module';
+
+      fixtures.push(copyFixtureToNodeModule('config-module', 'from-config-module'));
 
       const path = routine.getConfigPath();
 
-      expect(path).toEqual(new Path('config-module/configs/babel.js'));
+      expect(path).toEqual(
+        new Path(process.cwd(), 'node_modules', 'from-config-module/configs/babel.js'),
+      );
     });
 
-    it('returns config at compiled `lib/configs/file.js` path', () => {
-      routine.tool.config.module = 'config-lib-module';
+    it('returns from configuration module `lib/configs/file.js`', () => {
+      routine.tool.config.module = 'from-config-lib-module';
+
+      fixtures.push(copyFixtureToNodeModule('config-lib-module', 'from-config-lib-module'));
 
       const path = routine.getConfigPath();
 
-      expect(path).toEqual(new Path('config-lib-module/lib/configs/babel.js'));
+      expect(path).toEqual(
+        new Path(process.cwd(), 'node_modules', 'from-config-lib-module/lib/configs/babel.js'),
+      );
+    });
+
+    it('returns from @local `configs/file.js`', () => {
+      routine.tool.config.module = '@local';
+      routine.context.workspaceRoot = new Path(getFixturePath('config-module'));
+
+      const path = routine.getConfigPath();
+
+      expect(path).toEqual(new Path(getFixturePath('config-module', 'configs/babel.js')));
+    });
+
+    it('returns from @local `lib/configs/file.js`', () => {
+      routine.tool.config.module = '@local';
+      routine.context.workspaceRoot = new Path(getFixturePath('config-lib-module'));
+
+      fixtures.push(copyFixtureToNodeModule('config-lib-module', 'from-config-lib-module'));
+
+      const path = routine.getConfigPath();
+
+      expect(path).toEqual(new Path(getFixturePath('config-lib-module', 'lib/configs/babel.js')));
     });
   });
 
@@ -525,7 +553,9 @@ describe('CreateConfigRoutine', () => {
 
   describe('loadConfigFromSources()', () => {
     it('loads config if it exists', async () => {
-      routine.tool.config.module = 'config-module';
+      routine.tool.config.module = 'from-config-module';
+
+      fixtures.push(copyFixtureToNodeModule('config-module', 'from-config-module'));
 
       const configs = await routine.loadConfigFromSources(routine.context, []);
 
@@ -621,7 +651,12 @@ describe('CreateConfigRoutine', () => {
     it('sets env vars', () => {
       expect(process.env.BEEMO_TEST_VAR).toBeUndefined();
 
-      driver.options.env.BEEMO_TEST_VAR = 'true';
+      driver.configure({
+        env: {
+          NODE_ENV: 'test',
+          BEEMO_TEST_VAR: 'true',
+        },
+      });
 
       routine.setEnvVars(routine.context, []);
 

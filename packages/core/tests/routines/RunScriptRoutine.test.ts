@@ -5,13 +5,7 @@ import { getFixturePath, copyFixtureToNodeModule } from '@boost/test-utils';
 import RunScriptRoutine from '../../src/routines/RunScriptRoutine';
 import { ExecuteScriptOptions } from '../../src/routines/script/ExecuteScriptRoutine';
 import Script from '../../src/Script';
-import {
-  mockDebugger,
-  mockTool,
-  mockScript,
-  stubScriptContext,
-  getRoot,
-} from '../../src/testUtils';
+import { mockDebugger, mockTool, mockScript, stubScriptContext } from '../../src/testUtils';
 
 describe('RunScriptRoutine', () => {
   let fixtures: Function[] = [];

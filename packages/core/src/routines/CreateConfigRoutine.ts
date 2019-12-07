@@ -1,7 +1,7 @@
 import chalk from 'chalk';
 import fs from 'fs-extra';
 import camelCase from 'lodash/camelCase';
-import { Path, requireModule } from '@boost/common';
+import { Path, PathResolver, requireModule } from '@boost/common';
 import { Routine, Predicates } from '@boost/core';
 import Beemo from '../Beemo';
 import Driver from '../Driver';
@@ -158,33 +158,26 @@ export default class CreateConfigRoutine<Ctx extends ConfigContext> extends Rout
     const { name } = this.options.driver;
     const configName = this.getConfigName(name);
     const isLocal = moduleName === '@local' || forceLocal;
-    const filePaths: Path[] = [];
+    const resolver = new PathResolver();
 
     // Allow for local development
     if (isLocal) {
-      filePaths.push(Path.resolve(`configs/${configName}.js`, workspaceRoot || cwd));
+      resolver
+        .lookupFilePath(`lib/configs/${configName}.js`, workspaceRoot || cwd)
+        .lookupFilePath(`configs/${configName}.js`, workspaceRoot || cwd);
     } else {
-      filePaths.push(
-        new Path(`${moduleName}/lib/configs/${configName}.js`),
-        new Path(`${moduleName}/configs/${configName}.js`),
-      );
+      resolver
+        .lookupNodeModule(`${moduleName}/lib/configs/${configName}`)
+        .lookupNodeModule(`${moduleName}/configs/${configName}`);
     }
 
-    // Reduce paths until 1 is found
-    const configPath = filePaths.reduce<Path | null>((result, filePath) => {
-      if (result) {
-        return result;
-      }
+    let configPath = null;
 
-      try {
-        // Use require instead of fs as we can mock it
-        requireModule(filePath);
-
-        return filePath;
-      } catch {
-        return result;
-      }
-    }, null);
+    try {
+      configPath = resolver.resolvePath();
+    } catch {
+      // Ignore
+    }
 
     this.debug.invariant(
       !!configPath,
