@@ -7,6 +7,7 @@ const eslint_1 = __importDefault(require("@milesj/build-tool-config/configs/esli
 const config = {
     ...eslint_1.default,
     rules: {
+        ...eslint_1.default.rules,
         'function-paren-newline': 'off',
         'no-param-reassign': 'off',
         'import/first': 'off',

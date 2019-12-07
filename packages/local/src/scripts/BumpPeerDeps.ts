@@ -64,7 +64,6 @@ export default class BumpPeerDepsScript extends Script<Args> {
               chalk.green(nextVersion),
             );
 
-            // eslint-disable-next-line no-param-reassign
             data.peerDependencies![peerName] = nextVersion;
           });
         }
