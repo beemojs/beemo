@@ -36,7 +36,7 @@
     "packages/*"
   ],
   "beemo": {
-    "module": "@milesj/build-tool-config",
+    "module": "@beemo/local",
     "drivers": [
       "babel",
       "eslint",
@@ -48,23 +48,6 @@
     ],
     "settings": {
       "node": true
-    },
-    "eslint": {
-      "rules": {
-        "function-paren-newline": "off",
-        "no-param-reassign": "off",
-        "import/first": "off"
-      }
-    },
-    "jest": {
-      "testPathIgnorePatterns": [
-        "integration"
-      ]
-    },
-    "prettier": {
-      "ignore": [
-        "CHANGELOG.md"
-      ]
     }
   }
 }
