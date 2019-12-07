@@ -17,7 +17,7 @@ function getBeemoPackages() {
 }
 
 describe('Graph', () => {
-  it('graphs Beemo dependencies correctly', () => {
+  it('graphs dependencies correctly', () => {
     const pkgs = getBeemoPackages();
     const graph = new Graph(Object.values(pkgs));
 
@@ -25,14 +25,15 @@ describe('Graph', () => {
       pkgs['@beemo/dependency-graph'],
       pkgs['@beemo/core'],
       pkgs['@beemo/driver-babel'],
-      pkgs['@beemo/cli'],
       pkgs['@beemo/driver-eslint'],
       pkgs['@beemo/driver-flow'],
       pkgs['@beemo/driver-mocha'],
       pkgs['@beemo/driver-prettier'],
       pkgs['@beemo/driver-typescript'],
       pkgs['@beemo/driver-webpack'],
+      pkgs['@beemo/cli'],
       pkgs['@beemo/driver-jest'],
+      pkgs['@beemo/local'],
     ]);
 
     expect(graph.resolveBatchList()).toEqual([
@@ -40,15 +41,16 @@ describe('Graph', () => {
       [pkgs['@beemo/core']],
       [
         pkgs['@beemo/driver-babel'],
-        pkgs['@beemo/cli'],
         pkgs['@beemo/driver-eslint'],
         pkgs['@beemo/driver-flow'],
         pkgs['@beemo/driver-mocha'],
         pkgs['@beemo/driver-prettier'],
         pkgs['@beemo/driver-typescript'],
         pkgs['@beemo/driver-webpack'],
+        pkgs['@beemo/cli'],
       ],
       [pkgs['@beemo/driver-jest']],
+      [pkgs['@beemo/local']],
     ]);
 
     expect(graph.resolveTree()).toEqual({
@@ -65,11 +67,13 @@ describe('Graph', () => {
                   nodes: [
                     {
                       package: pkgs['@beemo/driver-jest'],
+                      nodes: [
+                        {
+                          package: pkgs['@beemo/local'],
+                        },
+                      ],
                     },
                   ],
-                },
-                {
-                  package: pkgs['@beemo/cli'],
                 },
                 {
                   package: pkgs['@beemo/driver-eslint'],
@@ -88,6 +92,9 @@ describe('Graph', () => {
                 },
                 {
                   package: pkgs['@beemo/driver-webpack'],
+                },
+                {
+                  package: pkgs['@beemo/cli'],
                 },
               ],
             },
