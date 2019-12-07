@@ -11,7 +11,6 @@ export default class JestDriver extends Driver<JestConfig> {
       configName: 'jest.config.js',
       dependencies: ['babel'],
       description: this.tool.msg('app:jestDescription'),
-      filterOptions: true,
       title: 'Jest',
       watchOptions: ['--watch', '--watchAll'],
     });

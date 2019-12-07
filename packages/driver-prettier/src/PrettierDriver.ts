@@ -15,7 +15,6 @@ export default class PrettierDriver extends Driver<PrettierConfig> {
       bin: 'prettier',
       configName: 'prettier.config.js',
       description: this.tool.msg('app:prettierDescription'),
-      filterOptions: true,
       title: 'Prettier',
     });
 

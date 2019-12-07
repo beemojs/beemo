@@ -212,7 +212,7 @@ export default abstract class Driver<
         ]),
         dependencies: array(string()),
         description: string(),
-        filterOptions: bool(false),
+        filterOptions: bool(true),
         helpOption: string('--help'),
         title: string().required(),
         useConfigOption: bool(),

@@ -45,7 +45,6 @@ export default class TypeScriptDriver extends Driver<TypeScriptConfig, TypeScrip
       configName: 'tsconfig.json',
       configOption: '',
       description: this.tool.msg('app:typescriptDescription'),
-      filterOptions: true,
       helpOption: '--help --all',
       title: 'TypeScript',
       watchOptions: ['-w', '--watch'],

@@ -33,7 +33,7 @@ describe('WebpackDriver', () => {
         configOption: '--config',
         dependencies: [],
         description: 'Bundle source files with Webpack',
-        filterOptions: false,
+        filterOptions: true,
         helpOption: '--help',
         title: 'Webpack',
         useConfigOption: false,
