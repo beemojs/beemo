@@ -19,7 +19,7 @@
     "type": "beemo typescript --build --reference-workspaces"
   },
   "devDependencies": {
-    "@milesj/build-tool-config": "0.182.3",
+    "@milesj/build-tool-config": "0.182.4",
     "@types/fs-extra": "^8.0.1",
     "@types/is-glob": "^4.0.1",
     "@types/lodash": "^4.14.149",
@@ -45,12 +45,7 @@
     "drivers": [
       "babel",
       "eslint",
-      {
-        "driver": "jest",
-        "env": {
-          "NODE_ENV": "test"
-        }
-      },
+      "jest",
       "mocha",
       "prettier",
       "typescript",
