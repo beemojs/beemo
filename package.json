@@ -29,19 +29,14 @@
     "@types/semver": "^6.2.0",
     "@types/webpack": "^4.41.0",
     "@types/yargs": "^13.0.0",
-    "chalk": "^3.0.0",
     "conventional-changelog-beemo": "^1.6.0",
-    "execa": "^3.4.0",
-    "fast-glob": "^3.0.4",
-    "fs-extra": "^8.1.0",
-    "lerna": "^3.19.0",
-    "semver": "^6.3.0"
+    "lerna": "^3.19.0"
   },
   "workspaces": [
     "packages/*"
   ],
   "beemo": {
-    "module": "@local",
+    "module": "@beemo/local",
     "drivers": [
       "babel",
       "eslint",
@@ -53,23 +48,6 @@
     ],
     "settings": {
       "node": true
-    },
-    "eslint": {
-      "rules": {
-        "function-paren-newline": "off",
-        "no-param-reassign": "off",
-        "import/first": "off"
-      }
-    },
-    "jest": {
-      "testPathIgnorePatterns": [
-        "integration"
-      ]
-    },
-    "prettier": {
-      "ignore": [
-        "CHANGELOG.md"
-      ]
     }
   }
 }

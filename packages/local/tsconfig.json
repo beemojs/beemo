@@ -1,0 +1,46 @@
+{
+  "compilerOptions": {
+    "declarationDir": "lib",
+    "outDir": "lib",
+    "rootDir": "src"
+  },
+  "exclude": [
+    "lib",
+    "tests"
+  ],
+  "extends": "../../tsconfig.options.json",
+  "include": [
+    "src/**/*",
+    "types/**/*",
+    "../../types/**/*"
+  ],
+  "references": [
+    {
+      "path": "../core"
+    },
+    {
+      "path": "../driver-babel"
+    },
+    {
+      "path": "../driver-eslint"
+    },
+    {
+      "path": "../driver-flow"
+    },
+    {
+      "path": "../driver-jest"
+    },
+    {
+      "path": "../driver-mocha"
+    },
+    {
+      "path": "../driver-prettier"
+    },
+    {
+      "path": "../driver-typescript"
+    },
+    {
+      "path": "../driver-webpack"
+    }
+  ]
+}

@@ -1,0 +1,25 @@
+{
+  "private": true,
+  "name": "@beemo/local",
+  "version": "0.0.0",
+  "main": "./index.js",
+  "peerDependencies": {
+    "@beemo/core": "*",
+    "@beemo/driver-babel": "*",
+    "@beemo/driver-eslint": "*",
+    "@beemo/driver-flow": "*",
+    "@beemo/driver-jest": "*",
+    "@beemo/driver-mocha": "*",
+    "@beemo/driver-prettier": "*",
+    "@beemo/driver-typescript": "*",
+    "@beemo/driver-webpack": "*",
+    "@boost/core": "*"
+  },
+  "devDependencies": {
+    "chalk": "^3.0.0",
+    "execa": "^3.4.0",
+    "fast-glob": "^3.0.4",
+    "fs-extra": "^8.1.0",
+    "semver": "^6.3.0"
+  }
+}

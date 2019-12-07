@@ -1,12 +1,17 @@
-const { Script } = require('@beemo/core');
-const chalk = require('chalk');
-const fs = require('fs-extra');
-const glob = require('fast-glob');
-const semver = require('semver');
+import { Script, ScriptContext } from '@beemo/core';
+import { PackageConfig } from '@boost/core';
+import chalk from 'chalk';
+import fs from 'fs-extra';
+import glob from 'fast-glob';
+import semver from 'semver';
 
-const RELEASE_TYPES = ['major', 'minor', 'patch'];
+export interface Args {
+  release: 'major' | 'minor' | 'patch';
+}
 
-module.exports = class BumpPeerDepsScript extends Script {
+const RELEASE_TYPES: Args['release'][] = ['major', 'minor', 'patch'];
+
+export default class BumpPeerDepsScript extends Script<Args> {
   args() {
     return {
       default: {
@@ -20,25 +25,25 @@ module.exports = class BumpPeerDepsScript extends Script {
     return {};
   }
 
-  execute(context, options) {
-    const { release } = options;
+  execute(context: ScriptContext, args: Args) {
+    const { release } = args;
 
     if (!RELEASE_TYPES.includes(release)) {
       throw new Error('Please pass one of major, minor, or patch to --release.');
     }
 
-    const versions = {};
-    const packages = {};
-    const packagePaths = {};
+    this.tool.log('Loading packages and incrementing versions');
 
-    console.log('Loading packages and incrementing versions');
+    const versions: { [name: string]: string } = {};
+    const packages: { [name: string]: PackageConfig } = {};
+    const packagePaths: { [name: string]: string } = {};
 
     glob.sync('./packages/*/package.json', { cwd: this.tool.options.root }).forEach(path => {
-      const data = fs.readJsonSync(String(path));
+      const data = fs.readJsonSync(path);
 
-      versions[data.name] = semver.inc(data.version, release);
+      versions[data.name] = semver.inc(data.version, release)!;
       packages[data.name] = data;
-      packagePaths[data.name] = String(path);
+      packagePaths[data.name] = path;
     });
 
     return Promise.all(
@@ -51,16 +56,15 @@ module.exports = class BumpPeerDepsScript extends Script {
 
             const nextVersion = `^${versions[peerName]}`;
 
-            console.log(
+            this.tool.log(
               `Bumping %s peer %s from %s to %s`,
               chalk.yellow(name),
               chalk.cyan(peerName),
-              chalk.gray(data.peerDependencies[peerName]),
+              chalk.gray(data.peerDependencies![peerName]),
               chalk.green(nextVersion),
             );
 
-            // eslint-disable-next-line no-param-reassign
-            data.peerDependencies[peerName] = nextVersion;
+            data.peerDependencies![peerName] = nextVersion;
           });
         }
 
@@ -68,4 +72,4 @@ module.exports = class BumpPeerDepsScript extends Script {
       }),
     );
   }
-};
+}

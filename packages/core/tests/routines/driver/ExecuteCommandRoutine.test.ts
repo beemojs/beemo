@@ -461,20 +461,14 @@ describe('ExecuteCommandRoutine', () => {
     it('converts globs to paths', async () => {
       const args = await routine.expandGlobPatterns(routine.context, [
         '--foo',
-        '../{scripts,tests}/*.js',
+        '../types/*',
         'bar',
       ]);
 
       // Make testing easier
       args.sort();
 
-      expect(args).toEqual([
-        '--foo',
-        '../scripts/BumpPeerDeps.js',
-        '../scripts/RunIntegrationTests.js',
-        '../scripts/extractOptionList.js',
-        'bar',
-      ]);
+      expect(args).toEqual(['--foo', '../types/global.d.ts', '../types/milesj.d.ts', 'bar']);
     });
 
     it('handles missing paths', async () => {

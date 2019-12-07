@@ -1,9 +1,15 @@
-const { Script } = require('@beemo/core');
-const chalk = require('chalk');
-const fs = require('fs-extra');
-const execa = require('execa');
+import { Script, ScriptContext } from '@beemo/core';
+import { PackageConfig } from '@boost/core';
+import chalk from 'chalk';
+import fs from 'fs-extra';
+import execa from 'execa';
 
-module.exports = class RunIntegrationTestsScript extends Script {
+export interface Args {
+  fail: boolean;
+  pass: boolean;
+}
+
+export default class RunIntegrationTestsScript extends Script<Args> {
   args() {
     return {
       boolean: ['pass', 'fail'],
@@ -18,15 +24,15 @@ module.exports = class RunIntegrationTestsScript extends Script {
     return {};
   }
 
-  execute(context, options) {
+  execute(context: ScriptContext, args: Args) {
     // eslint-disable-next-line no-nested-ternary
-    const key = options.pass ? 'pass' : options.fail ? 'fail' : '';
+    const key = args.pass ? 'pass' : args.fail ? 'fail' : '';
 
     if (!key) {
       throw new Error('Please pass one of --fail or --pass.');
     }
 
-    const pkg = fs.readJsonSync(context.cwd.append('package.json').path());
+    const pkg: PackageConfig = fs.readJsonSync(context.cwd.append('package.json').path());
     const name = pkg.name.split('/')[1];
     const script = pkg.scripts && pkg.scripts[`integration:${key}`];
 
@@ -36,24 +42,24 @@ module.exports = class RunIntegrationTestsScript extends Script {
       );
     }
 
-    console.log('Testing %s - %s', chalk.yellow(pkg.name), script);
+    this.tool.log('Testing %s - %s', chalk.yellow(pkg.name), script);
 
     return Promise.all(
       script.split('&&').map(command => {
-        const [cmd, ...args] = command.trim().split(' ');
+        const [cmd, ...cmdArgs] = command.trim().split(' ');
 
         return (
-          execa(cmd, args, { cwd: context.cwd.path(), preferLocal: true })
+          execa(cmd, cmdArgs, { cwd: context.cwd.path(), preferLocal: true })
             // Handles everything else
-            .then(response => this.handleResult(name, options, response))
+            .then(response => this.handleResult(name, args, response))
             // Handles syntax errors
-            .catch(error => this.handleResult(name, options, error))
+            .catch(error => this.handleResult(name, args, error))
         );
       }),
     );
   }
 
-  handleResult(name, options, response) {
+  handleResult(name: string, options: Args, response: execa.ExecaReturnValue) {
     const output = response.stdout || response.stderr;
 
     // console.log(name.toUpperCase());
@@ -67,4 +73,4 @@ module.exports = class RunIntegrationTestsScript extends Script {
 
     return response;
   }
-};
+}

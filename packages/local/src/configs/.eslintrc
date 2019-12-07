@@ -1,0 +1,6 @@
+{
+  "rules": {
+    "sort-keys": "off",
+    "@typescript-eslint/camelcase": "off"
+  }
+}

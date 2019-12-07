@@ -1,4 +1,4 @@
-const execa = require('execa');
+import execa from 'execa';
 
 const bin = process.argv[2];
 const pattern = /\s+-?-[a-z0-9-]+(,|\s)/giu;
@@ -10,8 +10,13 @@ if (!bin) {
 execa('npx', [bin, '--help'])
   .then(({ stdout }) => {
     const args = new Set();
+    const result = stdout.match(pattern);
 
-    stdout.match(pattern).forEach(opt => {
+    if (!result) {
+      return false;
+    }
+
+    result.forEach(opt => {
       let option = opt.trim();
 
       // Trim trailing comma
