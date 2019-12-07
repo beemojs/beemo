@@ -1,2 +1,2 @@
 // Used in tests and required for Windows
-module.exports = { babel: true };
+module.exports = { babel: true, lib: false };

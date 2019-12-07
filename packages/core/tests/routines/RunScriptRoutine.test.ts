@@ -1,7 +1,7 @@
 /* eslint-disable jest/expect-expect */
 
 import { Path } from '@boost/common';
-import { getFixturePath } from '@boost/test-utils';
+import { getFixturePath, copyFixtureToNodeModule } from '@boost/test-utils';
 import RunScriptRoutine from '../../src/routines/RunScriptRoutine';
 import { ExecuteScriptOptions } from '../../src/routines/script/ExecuteScriptRoutine';
 import Script from '../../src/Script';
@@ -13,27 +13,8 @@ import {
   getRoot,
 } from '../../src/testUtils';
 
-jest.mock('beemo-script-from-node-module', () => require.requireMock('mock-script'), {
-  virtual: true,
-});
-
-jest.mock('../../../../tests/scripts/PluginName.js', () => require.requireMock('mock-script'), {
-  virtual: true,
-});
-
-jest.mock(
-  '../../../../tests/__fixtures__/config-module/scripts/PluginName.js',
-  () => require.requireMock('mock-script'),
-  { virtual: true },
-);
-
-jest.mock(
-  '../../../../tests/__fixtures__/config-module-lib/scripts/PluginName.js',
-  () => require.requireMock('mock-script'),
-  { virtual: true },
-);
-
 describe('RunScriptRoutine', () => {
+  let fixtures: Function[] = [];
   let routine: RunScriptRoutine;
   let script: Script;
 
@@ -60,14 +41,20 @@ describe('RunScriptRoutine', () => {
   beforeEach(() => {
     const tool = mockTool();
 
-    script = mockScript('plugin-name', tool);
+    script = mockScript('build', tool);
 
     routine = new RunScriptRoutine('script', 'Executing script');
     routine.context = stubScriptContext(script);
     routine.tool = tool;
     routine.debug = mockDebugger();
 
-    routine.context.scriptName = 'plugin-name';
+    routine.context.scriptName = 'build';
+
+    fixtures = [];
+  });
+
+  afterEach(() => {
+    fixtures.forEach(fixture => fixture());
   });
 
   describe('bootstrap()', () => {
@@ -76,7 +63,7 @@ describe('RunScriptRoutine', () => {
 
       routine.bootstrap();
 
-      expectPipedRoutines(spy, [{ key: 'plugin-name' }]);
+      expectPipedRoutines(spy, [{ key: 'build' }]);
     });
 
     describe('workspaces', () => {
@@ -108,8 +95,7 @@ describe('RunScriptRoutine', () => {
       jest.spyOn(script, 'execute').mockImplementation(() => Promise.resolve(456));
 
       const loadToolSpy = jest.spyOn(routine, 'loadScriptFromTool');
-      const loadModuleSpy = jest.spyOn(routine, 'loadScriptFromConfigModule');
-      const loadNodeSpy = jest.spyOn(routine, 'loadScriptFromNodeModules');
+      const loadModuleSpy = jest.spyOn(routine, 'loadScriptFromModule');
       const postSpy = jest.spyOn(routine, 'postLoad');
 
       routine.bootstrap();
@@ -119,36 +105,8 @@ describe('RunScriptRoutine', () => {
 
       expect(loadToolSpy).toHaveBeenCalledWith(routine.context, undefined, expect.anything());
       expect(loadModuleSpy).toHaveBeenCalledWith(routine.context, script, expect.anything());
-      expect(loadNodeSpy).toHaveBeenCalledWith(routine.context, script, expect.anything());
       expect(postSpy).toHaveBeenCalledWith(routine.context, script, expect.anything());
       expect(response).toBe(456);
-    });
-
-    it('skips 1 task when script is returned from config module', async () => {
-      routine.tool.config.module = 'from-config-module';
-
-      const loadToolSpy = jest.spyOn(routine, 'loadScriptFromTool');
-      const loadModuleSpy = jest.spyOn(routine, 'loadScriptFromConfigModule');
-      const loadNodeSpy = jest.spyOn(routine, 'loadScriptFromNodeModules');
-      const postSpy = jest.spyOn(routine, 'postLoad');
-
-      routine.bootstrap();
-
-      const response = await routine.execute(routine.context);
-
-      expect(loadToolSpy).toHaveBeenCalledWith(routine.context, undefined, expect.anything());
-      expect(loadModuleSpy).toHaveBeenCalledWith(routine.context, null, expect.anything());
-      expect(loadNodeSpy).toHaveBeenCalledWith(
-        routine.context,
-        expect.objectContaining({ name: 'plugin-name' }),
-        expect.anything(),
-      );
-      expect(postSpy).toHaveBeenCalledWith(
-        routine.context,
-        expect.objectContaining({ name: 'plugin-name' }),
-        expect.anything(),
-      );
-      expect(response).toBe(123);
     });
   });
 
@@ -173,141 +131,129 @@ describe('RunScriptRoutine', () => {
 
       expect(result).toBeNull();
       expect(routine.errors).toEqual([
-        new Error(
-          'From tool instance: Failed to find script "plugin-name". Have you installed it?',
-        ),
+        new Error('From tool instance: Failed to find script "build". Have you installed it?'),
       ]);
     });
   });
 
-  describe('loadScriptFromConfigModule()', () => {
-    beforeEach(() => {
-      routine.tool.config.module = 'from-config-module';
-      routine.context.moduleRoot = new Path(getFixturePath('config-module'));
-    });
-
+  describe('loadScriptFromModule()', () => {
     it('returns script if passed as an argument', () => {
-      const result = routine.loadScriptFromConfigModule(routine.context, script);
+      const result = routine.loadScriptFromModule(routine.context, script);
 
       expect(result).toBe(script);
     });
 
     it('returns script from configuration module `scripts` folder', () => {
-      const result = routine.loadScriptFromConfigModule(routine.context, null);
+      routine.tool.config.module = 'from-config-module';
+
+      fixtures.push(copyFixtureToNodeModule('config-module', 'from-config-module'));
+
+      const result = routine.loadScriptFromModule(routine.context, null);
 
       expect(result).toEqual(
         expect.objectContaining({
-          name: 'plugin-name',
-          moduleName: 'from-config-module',
-        }),
-      );
-    });
-
-    it('returns script from configuration module `scripts` folder when using `@local`', () => {
-      routine.tool.config.module = '@local';
-      routine.context.moduleRoot = getRoot();
-
-      const result = routine.loadScriptFromConfigModule(routine.context, null);
-
-      console.log(routine.errors);
-
-      expect(result).toEqual(
-        expect.objectContaining({
-          name: 'plugin-name',
-          moduleName: '@local',
+          lib: false,
+          name: 'build',
+          moduleName: 'from-config-module/scripts/Build',
         }),
       );
     });
 
     it('returns script from configuration module `lib/scripts` folder', () => {
-      routine.tool.config.module = 'from-config-module-lib';
+      routine.tool.config.module = 'from-config-lib-module';
 
-      const result = routine.loadScriptFromConfigModule(routine.context, null);
+      fixtures.push(copyFixtureToNodeModule('config-lib-module', 'from-config-lib-module'));
+
+      const result = routine.loadScriptFromModule(routine.context, null);
 
       expect(result).toEqual(
         expect.objectContaining({
-          name: 'plugin-name',
-          moduleName: 'from-config-module-lib',
+          lib: true,
+          name: 'build',
+          moduleName: 'from-config-lib-module/lib/scripts/Build',
         }),
       );
     });
 
-    it('sets script to context', () => {
-      routine.loadScriptFromConfigModule(routine.context, null);
+    it('returns script from node module index', () => {
+      routine.tool.config.module = 'from-script-module';
 
-      expect(routine.context.script).toEqual(
+      fixtures.push(copyFixtureToNodeModule('script-module', '@beemo/script-build'));
+
+      const result = routine.loadScriptFromModule(routine.context, null);
+
+      expect(result).toEqual(
         expect.objectContaining({
-          name: 'plugin-name',
-          moduleName: 'from-config-module',
+          lib: false,
+          name: 'build',
+          moduleName: '@beemo/script-build',
+        }),
+      );
+    });
+
+    it('returns script from node module lib index', () => {
+      routine.tool.config.module = 'from-script-lib-module';
+
+      // Change name to avoid colliding with previous test
+      routine.context.scriptName = 'install';
+
+      fixtures.push(copyFixtureToNodeModule('script-lib-module', 'beemo-script-install'));
+
+      const result = routine.loadScriptFromModule(routine.context, null);
+
+      expect(result).toEqual(
+        expect.objectContaining({
+          lib: true,
+          name: 'install',
+          moduleName: 'beemo-script-install',
+        }),
+      );
+    });
+
+    it('returns script from @local `scripts` folder', () => {
+      routine.tool.config.module = '@local';
+      routine.context.moduleRoot = new Path(getFixturePath('config-module'));
+
+      const result = routine.loadScriptFromModule(routine.context, null);
+
+      expect(result).toEqual(
+        expect.objectContaining({
+          lib: false,
+          name: 'build',
+          moduleName: 'scripts/Build.js',
+        }),
+      );
+    });
+
+    it('returns script from @local `lib/scripts` folder', () => {
+      routine.tool.config.module = '@local';
+      routine.context.moduleRoot = new Path(getFixturePath('config-lib-module'));
+
+      const result = routine.loadScriptFromModule(routine.context, null);
+
+      expect(result).toEqual(
+        expect.objectContaining({
+          lib: true,
+          name: 'build',
+          moduleName: 'lib/scripts/Build.js',
         }),
       );
     });
 
     it('sets an error if script not found in tool', () => {
       routine.context.scriptName = 'missing';
+      routine.tool.config.module = 'beemo-test';
 
-      const result = routine.loadScriptFromConfigModule(routine.context, null);
-
-      expect(result).toBeNull();
-      expect(routine.errors).toEqual([
-        new Error(
-          `From configuration module: Missing script. Attempted import in order: ${getFixturePath(
-            'config-module',
-            'lib/scripts/Missing.js',
-          )}`,
-        ),
-        new Error(
-          `From configuration module: Missing script. Attempted import in order: ${getFixturePath(
-            'config-module',
-            'scripts/Missing.js',
-          )}`,
-        ),
-      ]);
-    });
-  });
-
-  describe('loadScriptFromNodeModules()', () => {
-    beforeEach(() => {
-      routine.context.scriptName = 'from-node-module';
-    });
-
-    it('returns script if passed as an argument', () => {
-      const result = routine.loadScriptFromNodeModules(routine.context, script);
-
-      expect(result).toBe(script);
-    });
-
-    it('returns script from NPM module', () => {
-      const result = routine.loadScriptFromNodeModules(routine.context, null);
-
-      expect(result).toEqual(
-        expect.objectContaining({
-          name: 'from-node-module',
-          moduleName: 'beemo-script-from-node-module',
-        }),
-      );
-    });
-
-    it('sets script to context', () => {
-      routine.loadScriptFromNodeModules(routine.context, null);
-
-      expect(routine.context.script).toEqual(
-        expect.objectContaining({
-          name: 'from-node-module',
-          moduleName: 'beemo-script-from-node-module',
-        }),
-      );
-    });
-
-    it('sets an error if script not found in tool', () => {
-      routine.context.scriptName = 'missing';
-
-      const result = routine.loadScriptFromNodeModules(routine.context, null);
+      const result = routine.loadScriptFromModule(routine.context, null);
 
       expect(result).toBeNull();
       expect(routine.errors).toEqual([
         new Error(
-          'From node modules: Missing script. Attempted import in order: @beemo/script-missing, beemo-script-missing',
+          `From configuration or node module. Failed to resolve a path using the following lookups (in order):
+  - beemo-test/lib/scripts/Missing (NODE_MODULE)
+  - beemo-test/scripts/Missing (NODE_MODULE)
+  - @beemo/script-missing (NODE_MODULE)
+  - beemo-script-missing (NODE_MODULE)`,
         ),
       ]);
     });

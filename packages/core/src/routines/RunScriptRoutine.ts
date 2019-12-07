@@ -1,5 +1,7 @@
 import camelCase from 'lodash/camelCase';
 import upperFirst from 'lodash/upperFirst';
+import { PathResolver } from '@boost/common';
+import formatModuleName from '@boost/core/lib/helpers/formatModuleName';
 import Script from '../Script';
 import ScriptContext from '../contexts/ScriptContext';
 import filterArgs from '../utils/filterArgs';
@@ -14,8 +16,7 @@ export default class RunScriptRoutine extends RunInWorkspacesRoutine<ScriptConte
     super.bootstrap();
 
     this.task(this.tool.msg('app:scriptLoad'), this.loadScriptFromTool);
-    this.task(this.tool.msg('app:scriptLoadConfigModule'), this.loadScriptFromConfigModule);
-    this.task(this.tool.msg('app:scriptLoadNodeModules'), this.loadScriptFromNodeModules);
+    this.task(this.tool.msg('app:scriptLoadModule'), this.loadScriptFromModule);
     this.task(this.tool.msg('app:scriptLoadPost'), this.postLoad);
   }
 
@@ -42,14 +43,6 @@ export default class RunScriptRoutine extends RunInWorkspacesRoutine<ScriptConte
   }
 
   /**
-   * Return node module file path for the passed script.
-   */
-  getModulePath(script: Script): string {
-    // Cannot mock require.resolve in Jest
-    return process.env.NODE_ENV === 'test' ? script.moduleName : require.resolve(script.moduleName);
-  }
-
-  /**
    * If the script has been loaded into the tool, return that directly.
    * Scripts can be preloaded from a configuration file or the command line.
    */
@@ -59,7 +52,7 @@ export default class RunScriptRoutine extends RunInWorkspacesRoutine<ScriptConte
     try {
       const script = this.tool.getPlugin('script', context.scriptName);
 
-      context.setScript(script, this.getModulePath(script));
+      context.setScript(script, script.moduleName);
 
       return script;
     } catch (error) {
@@ -72,68 +65,47 @@ export default class RunScriptRoutine extends RunInWorkspacesRoutine<ScriptConte
   }
 
   /**
-   * Attempt to load a script from the configuration module's `scripts/` folder.
+   * Attempt to load a script from the configuration module's `scripts/` folder,
+   * or a standard Node modules folder.
    */
-  loadScriptFromConfigModule(context: ScriptContext, script: Script | null): Script | null {
+  loadScriptFromModule(context: ScriptContext, script: Script | null): Script | null {
     if (script) {
       return script;
     }
 
-    this.debug('Attempting to load script from configuration module');
+    this.debug('Attempting to load script from configuration module or node module');
 
     const moduleName = this.tool.config.module;
     const fileName = upperFirst(camelCase(context.scriptName));
-    const filePaths = [
-      // module/lib/scripts/Foo.js
-      context.moduleRoot.append(`lib/scripts/${fileName}.js`),
-      // module/scripts/Foo.js
-      context.moduleRoot.append(`scripts/${fileName}.js`),
-    ];
+    const resolver = new PathResolver();
 
-    filePaths.some(filePath => {
-      try {
-        script = this.tool.getRegisteredPlugin('script').loader.importModule(filePath);
-        script.name = context.scriptName;
-        script.moduleName = moduleName;
-
-        context.setScript(script, filePath.path());
-
-        return true;
-      } catch (error) {
-        error.message = this.tool.msg('app:fromConfigModule', { message: error.message });
-
-        this.errors.push(error);
-      }
-
-      return false;
-    });
-
-    return script || null;
-  }
-
-  /**
-   * Attempt to load a script from the local `node_modules/` folder.
-   */
-  loadScriptFromNodeModules(context: ScriptContext, script: Script | null): Script | null {
-    if (script) {
-      return script;
+    if (moduleName === '@local') {
+      resolver
+        .lookupFilePath(`lib/scripts/${fileName}.js`, context.moduleRoot)
+        .lookupFilePath(`scripts/${fileName}.js`, context.moduleRoot);
+    } else {
+      resolver
+        .lookupNodeModule(`${moduleName}/lib/scripts/${fileName}`)
+        .lookupNodeModule(`${moduleName}/scripts/${fileName}`)
+        .lookupNodeModule(formatModuleName('beemo', 'script', context.scriptName, true))
+        .lookupNodeModule(formatModuleName('beemo', 'script', context.scriptName));
     }
-
-    this.debug('Attempting to load script from local node modules');
 
     try {
-      script = this.tool.getRegisteredPlugin('script').loader.importModule(context.scriptName);
+      const { originalPath, resolvedPath } = resolver.resolve();
 
-      context.setScript(script, this.getModulePath(script));
+      script = this.tool.getRegisteredPlugin('script').loader.importModule(resolvedPath);
+      script.name = context.scriptName;
+      script.moduleName = originalPath.path();
 
-      return script;
+      context.setScript(script, resolvedPath.path());
     } catch (error) {
-      error.message = this.tool.msg('app:fromNodeModules', { message: error.message });
+      error.message = this.tool.msg('app:fromModule', { message: error.message });
 
       this.errors.push(error);
-
-      return null;
     }
+
+    return script || null;
   }
 
   /**

@@ -37,3 +37,5 @@ tsconfig.eslint.json
 # Tests
 tests/__fixtures__/**/tsconfig.json
 tests/__fixtures__/**/tsconfig.options.json
+!tests/__fixtures__/config-lib-module/lib
+!tests/__fixtures__/script-lib-module/lib
