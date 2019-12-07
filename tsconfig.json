@@ -67,6 +67,9 @@
     },
     {
       "path": "packages/driver-webpack/tests"
+    },
+    {
+      "path": "packages/local"
     }
   ]
 }

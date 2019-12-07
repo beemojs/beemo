@@ -1,4 +1,4 @@
-const execa = require('execa');
+import execa from 'execa';
 
 const bin = process.argv[2];
 const pattern = /\s+-?-[a-z0-9-]+(,|\s)/giu;

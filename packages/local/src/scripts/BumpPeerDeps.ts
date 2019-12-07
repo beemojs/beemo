@@ -1,4 +1,4 @@
-import { Script } from '@beemo/core';
+import { Script, ScriptContext } from '@beemo/core';
 import { PackageConfig } from '@boost/core';
 import chalk from 'chalk';
 import fs from 'fs-extra';
@@ -25,18 +25,18 @@ export default class BumpPeerDepsScript extends Script<Args> {
     return {};
   }
 
-  execute(context, args: Args) {
+  execute(context: ScriptContext, args: Args) {
     const { release } = args;
 
     if (!RELEASE_TYPES.includes(release)) {
       throw new Error('Please pass one of major, minor, or patch to --release.');
     }
 
+    this.tool.log('Loading packages and incrementing versions');
+
     const versions: { [name: string]: string } = {};
     const packages: { [name: string]: PackageConfig } = {};
     const packagePaths: { [name: string]: string } = {};
-
-    this.tool.log('Loading packages and incrementing versions');
 
     glob.sync('./packages/*/package.json', { cwd: this.tool.options.root }).forEach(path => {
       const data = fs.readJsonSync(path);

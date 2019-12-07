@@ -30,7 +30,6 @@
     "@types/webpack": "^4.41.0",
     "@types/yargs": "^13.0.0",
     "conventional-changelog-beemo": "^1.6.0",
-    "execa": "^3.4.0",
     "lerna": "^3.19.0"
   },
   "workspaces": [
