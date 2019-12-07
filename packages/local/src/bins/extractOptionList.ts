@@ -10,8 +10,13 @@ if (!bin) {
 execa('npx', [bin, '--help'])
   .then(({ stdout }) => {
     const args = new Set();
+    const result = stdout.match(pattern);
 
-    stdout.match(pattern).forEach(opt => {
+    if (!result) {
+      return false;
+    }
+
+    result.forEach(opt => {
       let option = opt.trim();
 
       // Trim trailing comma

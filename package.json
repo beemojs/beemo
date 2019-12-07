@@ -36,7 +36,7 @@
     "packages/*"
   ],
   "beemo": {
-    "module": "@beemo/local",
+    "module": "@milesj/build-tool-config",
     "drivers": [
       "babel",
       "eslint",

@@ -17,6 +17,30 @@
   "references": [
     {
       "path": "../core"
+    },
+    {
+      "path": "../driver-babel"
+    },
+    {
+      "path": "../driver-eslint"
+    },
+    {
+      "path": "../driver-flow"
+    },
+    {
+      "path": "../driver-jest"
+    },
+    {
+      "path": "../driver-mocha"
+    },
+    {
+      "path": "../driver-prettier"
+    },
+    {
+      "path": "../driver-typescript"
+    },
+    {
+      "path": "../driver-webpack"
     }
   ]
 }

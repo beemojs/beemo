@@ -1,4 +1,6 @@
-module.exports = {
+import { FlowConfig } from '@beemo/driver-flow';
+
+const config: FlowConfig = {
   ignore: ['.*/node_modules/.*', '.*/tests/.*', '.*\\.test\\.js'],
   include: ['./src'],
   lints: {
@@ -13,3 +15,5 @@ module.exports = {
     'module.ignore_non_literal_requires': true,
   },
 };
+
+export default config;

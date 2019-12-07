@@ -41,7 +41,7 @@ export default class BumpPeerDepsScript extends Script<Args> {
     glob.sync('./packages/*/package.json', { cwd: this.tool.options.root }).forEach(path => {
       const data = fs.readJsonSync(path);
 
-      versions[data.name] = semver.inc(data.version, release);
+      versions[data.name] = semver.inc(data.version, release)!;
       packages[data.name] = data;
       packagePaths[data.name] = path;
     });
@@ -60,12 +60,12 @@ export default class BumpPeerDepsScript extends Script<Args> {
               `Bumping %s peer %s from %s to %s`,
               chalk.yellow(name),
               chalk.cyan(peerName),
-              chalk.gray(data.peerDependencies[peerName]),
+              chalk.gray(data.peerDependencies![peerName]),
               chalk.green(nextVersion),
             );
 
             // eslint-disable-next-line no-param-reassign
-            data.peerDependencies[peerName] = nextVersion;
+            data.peerDependencies![peerName] = nextVersion;
           });
         }
 

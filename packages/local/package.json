@@ -5,6 +5,14 @@
   "main": "./lib/index.js",
   "peerDependencies": {
     "@beemo/core": "*",
+    "@beemo/driver-babel": "*",
+    "@beemo/driver-eslint": "*",
+    "@beemo/driver-flow": "*",
+    "@beemo/driver-jest": "*",
+    "@beemo/driver-mocha": "*",
+    "@beemo/driver-prettier": "*",
+    "@beemo/driver-typescript": "*",
+    "@beemo/driver-webpack": "*",
     "@boost/core": "*"
   },
   "devDependencies": {
