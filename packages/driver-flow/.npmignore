@@ -3,7 +3,8 @@ integration/
 src/
 tests/
 types/
-.flowconfig
+.flowconfig.fail
+.flowconfig.pass
 tsconfig.json
 *.tsbuildinfo
 .DS_Store
