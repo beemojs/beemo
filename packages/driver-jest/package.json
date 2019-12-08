@@ -11,7 +11,7 @@
     "runner"
   ],
   "scripts": {
-    "integration:fail": "jest ./integration/fail.test.js",
+    "integration:fail": "jest ./integration/fail.test.js && jest --invalid-option",
     "integration:pass": "jest ./integration/pass.test.js"
   },
   "main": "./lib/index.js",

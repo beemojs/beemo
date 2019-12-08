@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 
 import { Task, ToolConfig, ToolPluginRegistry, PluginSetting } from '@boost/core';
-import { ExecaReturnValue } from 'execa';
+import { ExecaReturnValue, ExecaError } from 'execa';
 import { Arguments, Options } from 'yargs';
 import Beemo from './Beemo';
 import Driver from './Driver';
@@ -61,6 +61,8 @@ export interface DriverMetadata {
 }
 
 export type Execution = ExecaReturnValue;
+
+export type ExecutionError = ExecaError;
 
 export type ExecuteType = 'parallel' | 'pool' | 'serial' | 'sync';
 

@@ -11,7 +11,7 @@
     "runner"
   ],
   "scripts": {
-    "integration:fail": "mocha ./integration/fail.js",
+    "integration:fail": "mocha ./integration/fail.js && mocha --invalid-option",
     "integration:pass": "mocha ./integration/pass.js"
   },
   "main": "./lib/index.js",

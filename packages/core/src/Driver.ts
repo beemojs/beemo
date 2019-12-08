@@ -13,7 +13,14 @@ import {
   STRATEGY_NATIVE,
   STRATEGY_NONE,
 } from './constants';
-import { Argv, DriverCommandOptions, DriverOptions, DriverMetadata, Execution } from './types';
+import {
+  Argv,
+  DriverCommandOptions,
+  DriverOptions,
+  DriverMetadata,
+  Execution,
+  ExecutionError,
+} from './types';
 
 export default abstract class Driver<
   Config extends object = {},
@@ -77,7 +84,7 @@ export default abstract class Driver<
   /**
    * Extract the error message when the driver fails to execute.
    */
-  extractErrorMessage(error: Error): string {
+  extractErrorMessage(error: ExecutionError): string {
     return error.message.split('\n', 1)[0] || '';
   }
 

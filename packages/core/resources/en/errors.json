@@ -4,6 +4,7 @@
   "configReferenceSourceMissing": "Cannot reference configuration file. Source file does not exist in configuration module.",
   "configNoFunction": "Configuration file \"{{name}}\" returned a function. Only plain objects are supported.",
   "executeFailed": "Failed to execute pipeline. The following errors have occurred:",
+  "executeFailedMoreLines": "… {{count}} more lines …",
   "executeTypeUnknown": "Unknown execution type {{type}}.",
   "eslintIgnoreInvalid": "Ignore configuration must be an array of strings.",
   "moduleConfigMissing": "Beemo requires a \"{{configName}}.module\" property within your package.json. This property is the name of a module that houses your configuration files.",

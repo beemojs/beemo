@@ -1,14 +1,20 @@
 import { Routine, WorkspacePackageConfig } from '@boost/core';
 import Graph from '@beemo/dependency-graph';
+import chalk from 'chalk';
+// eslint-disable-next-line
+import stripAnsi from 'strip-ansi';
 import Beemo from '../Beemo';
 import Context from '../contexts/Context';
 import isPatternMatch from '../utils/isPatternMatch';
+import { ExecutionError } from '../types';
 
 export interface RunInWorkspacesContextArgs {
   concurrency: number;
   graph: boolean;
   workspaces: string;
 }
+
+const MAX_ERROR_LINES = 5;
 
 export default abstract class RunInWorkspacesRoutine<
   Ctx extends Context<RunInWorkspacesContextArgs>
@@ -73,10 +79,31 @@ export default abstract class RunInWorkspacesRoutine<
   formatAndThrowErrors(errors: Error[]) {
     let message = this.tool.msg('errors:executeFailed');
 
-    errors.forEach(error => {
+    (errors as ExecutionError[]).forEach(error => {
+      let content = stripAnsi(error.stderr || error.stdout || '')
+        .trim()
+        .split('\n');
+
+      if (content.length >= MAX_ERROR_LINES) {
+        const count = content.length - MAX_ERROR_LINES;
+
+        content = content.slice(0, MAX_ERROR_LINES);
+
+        if (count > 0) {
+          content.push(this.tool.msg('errors:executeFailedMoreLines', { count }));
+        }
+      }
+
       message += '\n\n';
-      message += error.message.split(/\s+at\s+/u)[0].trim();
+      message += chalk.reset.yellow(error.message);
+
+      if (content.length > 0) {
+        message += '\n';
+        message += chalk.reset.gray(content.join('\n'));
+      }
     });
+
+    message += '\n';
 
     const error = new Error(message);
 
