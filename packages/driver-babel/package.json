@@ -1,6 +1,6 @@
 {
   "name": "@beemo/driver-babel",
-  "version": "1.0.6",
+  "version": "1.1.0",
   "description": "Babel driver for Beemo.",
   "keywords": [
     "beemo",

@@ -3,6 +3,22 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## 1.1.0 - 2019-12-08
+
+#### 🚀 Updates
+
+- Improve error output for failed drivers and scripts. (#73) ([d9324c9](https://github.com/beemojs/beemo/commit/d9324c9)), closes [#73](https://github.com/beemojs/beemo/issues/73)
+
+#### 🐞 Fixes
+
+- Set `filterOptions` to true by default. ([b7e695c](https://github.com/beemojs/beemo/commit/b7e695c))
+
+**Note:** Version bump only for package @beemo/driver-webpack
+
+
+
+
+
 ### 1.0.7 - 2019-11-13
 
 #### 📦 Dependencies

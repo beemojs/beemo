@@ -3,6 +3,33 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## 1.1.0 - 2019-12-08
+
+#### 🚀 Updates
+
+- Improve error output for failed drivers and scripts. (#73) ([d9324c9](https://github.com/beemojs/beemo/commit/d9324c9)), closes [#73](https://github.com/beemojs/beemo/issues/73)
+- Support compiled lib paths for configs and scripts. (#70) ([5146d4c](https://github.com/beemojs/beemo/commit/5146d4c)), closes [#70](https://github.com/beemojs/beemo/issues/70)
+- Support Windows OS and Node v13. (#68) ([94ebe84](https://github.com/beemojs/beemo/commit/94ebe84)), closes [#68](https://github.com/beemojs/beemo/issues/68)
+- Use module resolution for config module bootstrapping. (#69) ([86c3403](https://github.com/beemojs/beemo/commit/86c3403)), closes [#69](https://github.com/beemojs/beemo/issues/69)
+
+#### 🐞 Fixes
+
+- Set `filterOptions` to true by default. ([b7e695c](https://github.com/beemojs/beemo/commit/b7e695c))
+
+#### 📦 Dependencies
+
+- **[beemo]** Update to latest. ([db12a13](https://github.com/beemojs/beemo/commit/db12a13))
+
+#### 🛠 Internals
+
+- Add new local package to house configs and scripts. (#72) ([5d8695d](https://github.com/beemojs/beemo/commit/5d8695d)), closes [#72](https://github.com/beemojs/beemo/issues/72)
+
+**Note:** Version bump only for package @beemo/core
+
+
+
+
+
 ### 1.0.9 - 2019-11-25
 
 #### 🐞 Fixes
