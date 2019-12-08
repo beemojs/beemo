@@ -1,0 +1,12 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`RunInWorkspacesRoutine execute() throws an error if any failures 1`] = `
+[Error: Failed to execute pipeline. The following errors have occurred:
+
+[0m[33mFailed[39m[0m
+[0m[90mStdout info...[39m[0m
+
+[0m[33mOops[39m[0m
+[0m[90mStderr message![39m[0m
+]
+`;

@@ -1,4 +1,4 @@
-import { Driver, STRATEGY_REFERENCE } from '@beemo/core';
+import { Driver, ExecutionError, STRATEGY_REFERENCE } from '@beemo/core';
 import { WebpackConfig } from './types';
 
 // Success: Writes passed tests to stdout
@@ -15,7 +15,7 @@ export default class WebpackDriver extends Driver<WebpackConfig> {
     });
   }
 
-  extractErrorMessage(error: Error): string {
+  extractErrorMessage(error: ExecutionError): string {
     if (error.message.indexOf('|') > 0) {
       return error.message.split(/|\s+at$/u, 1)[0];
     }

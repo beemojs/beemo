@@ -10,7 +10,7 @@
     "type"
   ],
   "scripts": {
-    "integration:fail": "tsc --noEmit ./integration/fail.ts ./integration/fail-syntax.ts",
+    "integration:fail": "tsc --noEmit ./integration/fail.ts ./integration/fail-syntax.ts && tsc --invalid-option",
     "integration:pass": "tsc --noEmit ./integration/pass.ts ./integration/pass-untyped.ts"
   },
   "main": "./lib/index.js",
