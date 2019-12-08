@@ -116,20 +116,22 @@ describe('RunInWorkspacesRoutine', () => {
     });
 
     it('throws an error if any failures', async () => {
-      jest
-        .spyOn(routine, 'poolRoutines')
-        .mockImplementation(() =>
-          Promise.resolve({ errors: [new Error('Failed'), new Error('Oops')], results: [] }),
-        );
+      jest.spyOn(routine, 'poolRoutines').mockImplementation(() => {
+        const a = new Error('Failed');
+        // @ts-ignore
+        a.stdout = 'Stdout info...';
+
+        const b = new Error('Oops');
+        // @ts-ignore
+        b.stderr = 'Stderr message!';
+
+        return Promise.resolve({ errors: [a, b], results: [] });
+      });
 
       try {
         await routine.execute(routine.context);
       } catch (error) {
-        expect(error).toEqual(
-          new Error(
-            'Failed to execute pipeline. The following errors have occurred:\n\nFailed\n\nOops',
-          ),
-        );
+        expect(error).toMatchSnapshot();
       }
     });
 
