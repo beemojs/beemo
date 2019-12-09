@@ -35,7 +35,9 @@ function determineType(line: string): string {
   return 'boolean';
 }
 
-execa('npx', [bin, bin === 'tsc' ? '--help --all' : '--help'])
+const args = bin === 'tsc' ? ['--help', '--all'] : ['--help'];
+
+execa('npx', [bin, ...args])
   .then(({ stdout }) => {
     const optionTypes = new Map<string, string>();
 

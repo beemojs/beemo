@@ -3,29 +3,40 @@ import webpack from 'webpack';
 // eslint-disable-next-line @typescript-eslint/no-empty-interface
 export interface WebpackConfig extends webpack.Configuration {}
 
+export type DisplaySetting =
+  | ''
+  | 'verbose'
+  | 'detailed'
+  | 'normal'
+  | 'minimal'
+  | 'errors-only'
+  | 'none';
+
+export type VerbositySetting = 'none' | 'info' | 'verbose';
+
 export interface WebpackArgs {
   bail?: boolean;
   buildDelimiter?: string;
-  cache?: string;
+  cache?: boolean;
   color?: boolean;
   colors?: boolean;
   config?: string;
   configName?: string;
-  configRegister?: string;
+  configRegister?: string[];
   context?: string;
   d?: boolean;
   debug?: boolean;
   define?: string;
   devtool?: string;
-  display?: '' | 'verbose' | 'detailed' | 'normal' | 'minimal' | 'errors-only' | 'none';
+  display?: DisplaySetting;
   displayCached?: boolean;
   displayCachedAssets?: boolean;
   displayChunks?: boolean;
   displayDepth?: boolean;
   displayEntrypoints?: boolean;
   displayErrorDetails?: boolean;
-  displayExclude?: string;
-  displayMaxModules?: number;
+  displayExclude?: boolean;
+  displayMaxModules?: boolean;
   displayModules?: boolean;
   displayOptimizationBailout?: boolean;
   displayOrigins?: boolean;
@@ -38,7 +49,7 @@ export interface WebpackArgs {
   help?: boolean;
   hideModules?: boolean;
   hot?: boolean;
-  infoVerbosity?: 'none' | 'info' | 'verbose';
+  infoVerbosity?: VerbositySetting;
   j?: boolean;
   json?: boolean;
   labeledModules?: boolean;
@@ -47,15 +58,15 @@ export interface WebpackArgs {
   moduleBindPost?: string;
   moduleBindPre?: string;
   o?: string;
-  optimizeMaxChunks?: number;
-  optimizeMinChunkSize?: number;
+  optimizeMaxChunks?: boolean;
+  optimizeMinChunkSize?: boolean;
   optimizeMinimize?: boolean;
   output?: string;
   outputChunkFilename?: string;
   outputFilename?: string;
   outputJsonpFunction?: string;
-  outputLibrary?: string;
-  outputLibraryTarget?: WebpackConfig['target'];
+  outputLibrary?: string[];
+  outputLibraryTarget?: webpack.LibraryTarget;
   outputPath?: string;
   outputPathinfo?: boolean;
   outputPublicPath?: string;
@@ -66,12 +77,12 @@ export interface WebpackArgs {
   profile?: boolean;
   progress?: boolean;
   provide?: string;
-  r?: string;
+  r?: string[];
   recordsInputPath?: string;
   recordsOutputPath?: string;
   recordsPath?: string;
   resolveAlias?: string;
-  resolveExtensions?: string | string[];
+  resolveExtensions?: string[];
   resolveLoaderAlias?: string;
   silent?: boolean;
   sortAssetsBy?: string;
