@@ -39,11 +39,12 @@ export function configBlueprint() {
   };
 }
 
-export default class Beemo extends Tool<BeemoPluginRegistry, BeemoConfig> {
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export default class Beemo<T = any> extends Tool<BeemoPluginRegistry, BeemoConfig<T>> {
   moduleRoot?: Path;
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  pipeline: Pipeline<any, Beemo> | null = null;
+  pipeline: Pipeline<any, Beemo<T>> | null = null;
 
   onResolveDependencies = new Event<[ConfigContext, Driver<object, DriverOptions>[]]>(
     'resolve-dependencies',
@@ -287,10 +288,11 @@ export default class Beemo extends Tool<BeemoPluginRegistry, BeemoConfig> {
   /**
    * Setup and start a fresh pipeline.
    */
-  startPipeline<T extends Context>(context: T): Pipeline<T, Beemo> {
+  startPipeline<C extends Context>(context: C): Pipeline<C, Beemo<T>> {
     // Make the tool available to all processes
     process.beemo = {
       context,
+      // @ts-ignore
       tool: this,
     };
 

@@ -1,5 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
-
 import { Task, ToolConfig, ToolPluginRegistry, PluginSetting } from '@boost/core';
 import { ExecaReturnValue, ExecaError } from 'execa';
 import { Arguments, Options } from 'yargs';
@@ -17,7 +15,11 @@ export interface BeemoPluginRegistry extends ToolPluginRegistry {
   script: Script;
 }
 
-export interface BeemoConfig extends ToolConfig {
+export interface UnknownSettings {
+  [key: string]: unknown;
+}
+
+export interface BeemoConfig<T = UnknownSettings> extends Omit<ToolConfig, 'settings'> {
   configure: {
     cleanup: boolean;
     parallel: boolean;
@@ -29,8 +31,14 @@ export interface BeemoConfig extends ToolConfig {
   };
   module: string;
   scripts: PluginSetting<Script>;
+  settings: T;
   // Driver overrides
   [key: string]: unknown;
+}
+
+export interface BeemoProcess<C extends Context = Context, T = UnknownSettings> {
+  context: C;
+  tool: Beemo<T>;
 }
 
 export interface DriverCommandOptions {
@@ -77,10 +85,7 @@ declare global {
   // eslint-disable-next-line @typescript-eslint/no-namespace
   namespace NodeJS {
     interface Process {
-      beemo: {
-        context: Context;
-        tool: Beemo;
-      };
+      beemo: BeemoProcess;
     }
   }
 }
