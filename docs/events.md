@@ -5,17 +5,19 @@ such, Beemo totally supports them! Events provide an easy mechanism for hooking 
 of a Beemo process.
 
 To begin, create an `index.js` file in the root of your configuration module that exports a
-function. This function will receive a [Beemo Tool instance](./tool.md) for the current process, in
-which listeners can be registered.
+function, or use the `package.json` `main` entry. This function will receive a
+[Beemo Tool instance](./tool.md) for the current process, in which listeners can be registered.
 
-```js
-// index.js
-module.exports = function(tool) {
+```ts
+// src/index.ts -> lib/index.js
+import Beemo from '@beemo/core';
+
+export default function(beemo: Beemo) {
   // Add command line args to every execution
-  tool.getPlugin('driver', 'eslint').onBeforeExecute.listen(context => {
+  beemo.getPlugin('driver', 'eslint').onBeforeExecute.listen(context => {
     context.argv.push('--color', '--report-unused-disable-directives');
   });
-};
+}
 ```
 
 ## Supported Events

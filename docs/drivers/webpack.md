@@ -14,7 +14,7 @@ yarn add @beemo/driver-webpack webpack webpack-cli
 ## Usage
 
 In your configuration module, install the driver, Webpack, and any loaders or plugins. Create a file
-at `configs/webpack.js` in which to house your Webpack configuration.
+at `configs/webpack.js` or `lib/configs/webpack.js` in which to house your Webpack configuration.
 
 In your consuming project, enable the driver by adding `webpack` to your `drivers` config.
 

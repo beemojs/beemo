@@ -14,7 +14,8 @@ yarn add @beemo/driver-typescript typescript
 ## Usage
 
 In your configuration module, install the driver and TypeScript. Create a file at
-`configs/typescript.js` in which to house your TypeScript configuration.
+`configs/typescript.js` or `lib/configs/typescript.js` in which to house your TypeScript
+configuration.
 
 In your consuming project, enable the driver by adding `typescript` to your `drivers` config.
 

@@ -13,8 +13,8 @@ yarn add @beemo/driver-flow flow-bin
 
 ## Usage
 
-In your configuration module, install the driver and Flow. Create a file at `configs/flow.js` in
-which to house your Flow configuration.
+In your configuration module, install the driver and Flow. Create a file at `configs/flow.js` or
+`lib/configs/flow.js` in which to house your Flow configuration.
 
 In your consuming project, enable the driver by adding `flow` to your `drivers` config.
 

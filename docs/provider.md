@@ -43,8 +43,8 @@ yarn add @beemo/driver-jest jest
 ## Drivers
 
 For each driver you install, there should be an associated `.js` configuration file within a
-`configs/` folder, named after the camel-cased package name (excluding "driver-"). Using the example
-above, we'd have the following:
+`configs/` or `lib/configs/` folder, named after the camel-cased package name (excluding "driver-").
+Using the example above, we'd have the following:
 
 ```
 configs/
@@ -70,6 +70,24 @@ module.exports = {
     ],
   ],
 };
+```
+
+```ts
+// src/configs/babel.ts -> lib/configs/babel.js
+import { BabelConfig } from '@beemo/driver-babel';
+
+const config: BabelConfig = {
+  presets: [
+    [
+      '@babel/preset-env',
+      {
+        targets: { node: '6.5' },
+      },
+    ],
+  ],
+};
+
+export default config;
 ```
 
 You can access the command line args, the pipeline context, and the current
@@ -103,8 +121,8 @@ module.exports = {
 ## Scripts
 
 Beemo supports executing custom scripts found within your configuration module. To utilize a script,
-create a JavaScript file (in PascalCase) within the `scripts/` folder, extend the `Script` class
-provided by Beemo, and define the `execute()` and `args()` methods.
+create a JavaScript file (in PascalCase) within the `scripts/` or `lib/scripts/` folder, extend the
+`Script` class provided by Beemo, and define the `execute()` and `args()` methods.
 
 ```js
 // scripts/InitProject.js
@@ -123,6 +141,29 @@ module.exports = class InitProjectScript extends Script {
     }
   }
 };
+```
+
+```ts
+// src/scripts/InitProject.ts -> lib/scripts/InitProject.js
+import { Script, ScriptContext } from '@beemo/core';
+
+interface Args {
+  dryRun: boolean;
+}
+
+export default class InitProjectScript extends Script<Args> {
+  args() {
+    return {
+      boolean: ['dryRun'],
+    };
+  }
+
+  execute(context: ScriptContext, args: Args) {
+    if (args.dryRun) {
+      // Do something
+    }
+  }
+}
 ```
 
 The `args()` method is optional and can be used to define parsing rules for CLI options (powered by

@@ -210,7 +210,8 @@ _all_ projects. So because of that, Beemo does allow overriding of config. To do
 > approach for interoperability, by nesting under `beemo`.
 
 However, if you'd like to avoid modifying `package.json`, you may define an override file in the
-consumer within a relative configs folder, for example: `./configs/eslint.js`.
+consumer within a relative configs folder, for example: `./configs/eslint.js` or
+`./lib/configs/eslint.js`.
 
 ```js
 // configs/eslint.js
@@ -219,4 +220,17 @@ module.exports = {
     'no-param-reassign': 0,
   },
 };
+```
+
+```ts
+// src/configs/eslint.ts -> lib/configs/eslint.js
+import { ESLintConfig } from '@beemo/driver-eslint';
+
+const config: ESLintConfig = {
+  rules: {
+    'no-param-reassign': 0,
+  },
+};
+
+export default config;
 ```

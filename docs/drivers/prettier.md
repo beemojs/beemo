@@ -14,7 +14,7 @@ yarn add @beemo/driver-prettier prettier
 ## Usage
 
 In your configuration module, install the driver and Prettier. Create a file at
-`configs/prettier.js` in which to house your Prettier configuration.
+`configs/prettier.js` or `lib/configs/prettier.js` in which to house your Prettier configuration.
 
 In your consuming project, enable the driver by adding `prettier` to your `drivers` config.
 

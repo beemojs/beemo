@@ -14,7 +14,7 @@ yarn add @beemo/driver-eslint eslint
 ## Usage
 
 In your configuration module, install the driver, ESLint, and any plugins. Create a file at
-`configs/eslint.js` in which to house your ESLint configuration.
+`configs/eslint.js` or `lib/configs/eslint.js` in which to house your ESLint configuration.
 
 In your consuming project, enable the driver by adding `eslint` to your `drivers` config.
 

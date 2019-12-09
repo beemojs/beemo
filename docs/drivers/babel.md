@@ -14,7 +14,7 @@ yarn add @beemo/driver-babel @babel/core
 ## Usage
 
 In your configuration module, install the driver, Babel, and any plugins and presets. Create a file
-at `configs/babel.js` in which to house your Babel configuration.
+at `configs/babel.js` or `lib/configs/babel.js` in which to house your Babel configuration.
 
 In your consuming project, enable the driver by adding `babel` to your `drivers` config.
 

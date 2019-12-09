@@ -15,7 +15,7 @@ yarn add @beemo/driver-jest jest
 ## Usage
 
 In your configuration module, install the driver, Jest, and [Babel](./babel.md). Create a file at
-`configs/jest.js` in which to house your Jest configuration.
+`configs/jest.js` or `lib/configs/jest.js` in which to house your Jest configuration.
 
 In your consuming project, enable the driver by adding `jest` to your `drivers` config.
 

@@ -20,13 +20,12 @@ tool.package.name;
 
 ## Logging
 
-Standard messages can be logged with `console.log(message)` and will be displayed on success
-(stdout), while error messages can be logged with `console.logError(message)` and will be displayed
-on failure (stderr).
+Standard messages can be logged with `log(message)` and will be displayed on success (stdout), while
+error messages can be logged with `log.error(message)` and will be displayed on failure (stderr).
 
 ```js
-tool.console.log('Something happened!');
-tool.console.logError('Oops, something is broken!');
+tool.log('Something happened!');
+tool.log.error('Oops, something is broken!');
 ```
 
 Debug messages that will only be displayed during `--debug` or `DEBUG` can be logged with
