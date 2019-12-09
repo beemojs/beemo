@@ -8,14 +8,15 @@ if (!bin) {
 
 const OPTION_PATTERN = /\s+-?-[a-z0-9-]+(,|\s)/giu;
 const IS_STRING = /\[?string\]?\b/iu;
-const IS_NUMBER = /\[?number|int\]?\b/iu;
+const IS_STRING_NAMED = /\[\w+\]\b/iu;
+const IS_NUMBER = /\[?(number|int)\]?\b/iu;
 const IS_OBJECT = /\[?object\]?\b/iu;
-const IS_ARRAY = /\[?array\]?\b/iu;
+const IS_ARRAY = /\[?(array|list)\]?\b/iu;
 
 function determineType(line: string): string {
   const brackets = line.match(IS_ARRAY) ? '[]' : '';
 
-  if (line.match(IS_STRING)) {
+  if (line.match(IS_STRING) || line.match(IS_STRING_NAMED)) {
     return `string${brackets}`;
   }
 

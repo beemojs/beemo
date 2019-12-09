@@ -1,13 +1,19 @@
-export type MatchPattern =
-  | string
-  | RegExp
-  | ((fileName: string, context: unknown, envName: string) => boolean);
+export interface MatchContext {
+  callee?: { name: string };
+  envName: string;
+}
 
-export type SourceMapsOption = boolean | 'inline' | 'both';
+export type MatchPattern = string | RegExp | ((fileName: string, context: MatchContext) => boolean);
+
+export type SourceMaps = boolean | 'inline' | 'both';
+
+export type SourceType = 'module' | 'script' | 'unambiguous';
 
 export type PluginEntry = [string, { [option: string]: unknown }, string?];
 
 export type PresetEntry = [string, { [option: string]: unknown }, string?];
+
+export type RootMode = 'root' | 'upward' | 'upward-optional';
 
 export interface BabelConfig {
   ast?: boolean;
@@ -45,11 +51,12 @@ export interface BabelConfig {
   presets?: (string | PresetEntry)[];
   retainLines?: boolean;
   root?: string;
+  rootMode?: RootMode;
   shouldPrintComment?: (value: string) => boolean;
   sourceFileName?: string;
-  sourceMaps?: SourceMapsOption;
+  sourceMaps?: SourceMaps;
   sourceRoot?: string;
-  sourceType?: 'module' | 'script' | 'unambiguous';
+  sourceType?: SourceType;
   test?: MatchPattern | MatchPattern[];
   wrapPluginVisitorMethod?: (key: string, nodeType: string, fn: Function) => Function;
 }
@@ -62,8 +69,8 @@ export interface BabelArgs {
   compact?: boolean | 'auto';
   configFile?: string;
   copyFiles?: boolean;
-  D?: boolean;
   d?: string;
+  D?: boolean;
   deleteDirOnStart?: boolean;
   envName?: string;
   extensions?: string;
@@ -72,30 +79,31 @@ export interface BabelArgs {
   h?: boolean;
   help?: boolean;
   highlightCode?: boolean;
-  ignore?: string | string[];
+  ignore?: string[];
   includeDotfiles?: boolean;
   keepFileExtension?: boolean;
   M?: boolean;
-  minified?: string;
+  minified?: boolean;
   moduleId?: string;
   moduleIds?: boolean;
   moduleRoot?: string;
   o?: string;
-  only?: string | string[];
+  only?: string[];
   outDir?: string;
   outFile?: string;
-  plugins?: string | string[];
-  presets?: string | string[];
+  plugins?: string[];
+  presets?: string[];
+  quiet?: boolean;
   relative?: boolean;
   retainLines?: boolean;
-  rootMode?: string;
-  s?: boolean | string;
+  rootMode?: RootMode;
+  s?: SourceMaps;
   skipInitialBuild?: boolean;
   sourceFileName?: string;
-  sourceMaps?: SourceMapsOption;
+  sourceMaps?: SourceMaps;
   sourceMapTarget?: string;
   sourceRoot?: string;
-  sourceType?: 'script' | 'module';
+  sourceType?: SourceType;
   V?: boolean;
   verbose?: boolean;
   version?: boolean;
