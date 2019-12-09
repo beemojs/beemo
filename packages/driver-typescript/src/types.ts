@@ -4,6 +4,7 @@ import { DriverOptions } from '@beemo/core';
 export type TargetSetting =
   | 'es3'
   | 'es5'
+  | 'es6'
   | 'es2015'
   | 'es2016'
   | 'es2017'
@@ -60,6 +61,8 @@ export type LibSetting =
 
 export type JSXSetting = 'preserve' | 'react-native' | 'react' | 'none';
 
+export type NewLineSetting = 'lf' | 'crlf';
+
 export interface CompilerOptions {
   allowJs?: boolean;
   allowSyntheticDefaultImports?: boolean;
@@ -74,6 +77,7 @@ export interface CompilerOptions {
   declaration?: boolean;
   declarationDir?: string;
   declarationMap?: boolean;
+  diagnostics?: boolean;
   disableSizeLimit?: boolean;
   downlevelIteration?: boolean;
   emitBOM?: boolean;
@@ -96,7 +100,7 @@ export interface CompilerOptions {
   maxNodeModuleJsDepth?: number;
   module?: ModuleSetting;
   moduleResolution?: ModuleResolutionSetting;
-  newLine?: 'lf' | 'crlf';
+  newLine?: NewLineSetting;
   noEmit?: boolean;
   noEmitHelpers?: boolean;
   noEmitOnError?: boolean;
@@ -117,6 +121,7 @@ export interface CompilerOptions {
   paths?: { [key: string]: string[] };
   preserveConstEnums?: boolean;
   preserveSymlinks?: boolean;
+  preserveWatchOutput?: boolean;
   pretty?: boolean;
   project?: string;
   reactNamespace?: string;
@@ -157,43 +162,107 @@ export interface TypeScriptConfig {
 
 export interface TypeScriptArgs {
   all?: boolean;
-  allowJs?: string;
+  allowJs?: boolean;
+  allowSyntheticDefaultImports?: boolean;
+  allowUmdGlobalAccess?: boolean;
+  allowUnreachableCode?: boolean;
+  allowUnusedLabels?: boolean;
   alwaysStrict?: boolean;
   b?: boolean;
+  baseUrl?: string;
   build?: boolean;
+  charset?: string;
+  checkJs?: boolean;
+  composite?: boolean;
   d?: boolean;
   declaration?: boolean;
+  declarationDir?: string;
   declarationMap?: boolean;
+  diagnostics?: boolean;
+  disableSizeLimit?: boolean;
+  disableSourceOfProjectReferenceRedirect?: boolean;
+  downlevelIteration?: boolean;
+  emitBOM?: boolean;
+  emitDeclarationOnly?: boolean;
+  emitDecoratorMetadata?: boolean;
   esModuleInterop?: boolean;
+  experimentalDecorators?: boolean;
+  extendedDiagnostics?: boolean;
+  forceConsistentCasingInFileNames?: boolean;
+  generateCpuProfile?: string;
   h?: boolean;
   help?: boolean;
+  i?: boolean;
+  importHelpers?: boolean;
+  incremental?: boolean;
   init?: boolean;
+  inlineSourceMap?: boolean;
+  inlineSources?: boolean;
+  isolatedModules?: boolean;
   jsx?: JSXSetting;
+  jsxFactory?: string;
+  keyofStringsOnly?: boolean;
   lib?: LibSetting;
+  listEmittedFiles?: number;
+  listFiles?: number;
+  listFilesOnly?: number;
+  locale?: string;
   m?: ModuleSetting;
+  mapRoot?: string;
+  maxNodeModuleJsDepth?: number;
   module?: ModuleSetting;
+  moduleResolution?: ModuleResolutionSetting;
+  newLine?: NewLineSetting;
   noEmit?: boolean;
+  noEmitHelpers?: boolean;
+  noEmitOnError?: boolean;
+  noErrorTruncation?: boolean;
   noFallthroughCasesInSwitch?: boolean;
   noImplicitAny?: boolean;
   noImplicitReturns?: boolean;
   noImplicitThis?: boolean;
+  noImplicitUseStrict?: boolean;
+  noLib?: boolean;
+  noResolve?: boolean;
+  noStrictGenericChecks?: boolean;
   noUnusedLocals?: boolean;
   noUnusedParameters?: boolean;
+  out?: string;
   outDir?: string;
   outFile?: string;
   p?: string;
+  paths?: string[];
+  plugins?: string[];
+  preserveConstEnums?: boolean;
+  preserveSymlinks?: boolean;
+  preserveWatchOutput?: boolean;
   pretty?: boolean;
   project?: string;
+  reactNamespace?: string;
   removeComments?: boolean;
+  resolveJsonModule?: boolean;
+  rootDir?: string;
+  rootDirs?: string[];
+  showConfig?: number;
+  skipDefaultLibCheck?: boolean;
+  skipLibCheck?: boolean;
   sourceMap?: boolean;
+  sourceRoot?: string;
   strict?: boolean;
   strictBindCallApply?: boolean;
   strictFunctionTypes?: boolean;
   strictNullChecks?: boolean;
   strictPropertyInitialization?: boolean;
+  stripInternal?: boolean;
+  suppressExcessPropertyErrors?: object;
+  suppressImplicitAnyIndexErrors?: boolean;
   t?: TargetSetting;
   target?: TargetSetting;
-  types?: boolean;
+  traceResolution?: boolean;
+  tsBuildInfoFile?: string;
+  typeRoots?: string[];
+  types?: string[];
+  useDefineForClassFields?: boolean;
   v?: boolean;
   version?: boolean;
   w?: boolean;
