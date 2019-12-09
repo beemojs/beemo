@@ -6,6 +6,8 @@ export type EnvType =
   | 'commonjs'
   | 'shared-node-browser'
   | 'es6'
+  | 'es2017'
+  | 'es2020'
   | 'worker'
   | 'amd'
   | 'mocha'
@@ -27,6 +29,10 @@ export type EnvType =
   | 'webextensions'
   | 'greasemonkey';
 
+export type GlobalSetting = 'readonly' | 'readable' | 'writable' | 'writeable' | 'off' | boolean;
+
+export type EcmaVersion = 3 | 5 | 6 | 7 | 8 | 9 | 10 | 11 | 2015 | 2016 | 2017 | 2018 | 2019 | 2020;
+
 export type RuleSetting = 0 | 1 | 2 | '0' | '1' | '2' | 'off' | 'warn' | 'error';
 
 export type RuleOptions = string | number | boolean | { [option: string]: unknown };
@@ -38,22 +44,26 @@ export interface Rules {
     | [RuleSetting, RuleOptions, RuleOptions];
 }
 
+export interface ParserOptions {
+  ecmaVersion?: EcmaVersion;
+  sourceType?: 'script' | 'module';
+  ecmaFeatures?: {
+    globalReturn?: boolean;
+    impliedStrict?: boolean;
+    jsx?: boolean;
+  };
+  [option: string]: unknown;
+}
+
 export interface CommonConfig {
-  env?: { [K in EnvType]?: boolean } & { [other: string]: boolean };
+  env?: { [K in EnvType]?: boolean } & { [env: string]: boolean };
   extends?: string | string[];
-  globals?: { [global: string]: boolean };
+  globals?: { [global: string]: GlobalSetting };
   ignore?: string[];
   parser?: string;
-  parserOptions?: {
-    ecmaVersion?: 3 | 5 | 6 | 7 | 8 | 9 | 2015 | 2016 | 2017 | 2018 | 2019;
-    sourceType?: 'script' | 'module';
-    ecmaFeatures?: {
-      globalReturn?: boolean;
-      impliedStrict?: boolean;
-      jsx?: boolean;
-    };
-  };
+  parserOptions?: ParserOptions;
   plugins?: string[];
+  processor?: string;
   rules?: Rules;
   root?: boolean;
   settings?: { [setting: string]: unknown };
@@ -66,7 +76,9 @@ export interface OverrideConfig extends CommonConfig {
 
 export interface ESLintConfig extends CommonConfig {
   extends?: string | string[];
+  noInlineConfig?: boolean;
   overrides?: OverrideConfig[];
+  reportUnusedDisableDirectives?: boolean;
   root?: boolean;
 }
 
@@ -78,14 +90,14 @@ export interface ESLintArgs {
   color?: boolean;
   config?: string;
   debug?: boolean;
-  disable?: string;
   env?: string;
+  envInfo?: boolean;
   eslintrc?: boolean;
   ext?: string;
   f?: string;
   fix?: boolean;
   fixDryRun?: boolean;
-  fixType?: string;
+  fixType?: boolean;
   format?: string;
   global?: string;
   h?: boolean;
@@ -99,12 +111,13 @@ export interface ESLintArgs {
   o?: string;
   outputFile?: string;
   parser?: string;
-  parserOptions?: string;
-  plugin?: string | string[];
+  parserOptions?: object;
+  plugin?: string;
   printConfig?: string;
   quiet?: boolean;
   reportUnusedDisableDirectives?: boolean;
-  rule?: string | string[];
+  resolvePluginsRelativeTo?: string;
+  rule?: object;
   rulesdir?: string;
   stdin?: boolean;
   stdinFilename?: string;

@@ -1,43 +1,79 @@
 import execa from 'execa';
 
 const bin = process.argv[2];
-const pattern = /\s+-?-[a-z0-9-]+(,|\s)/giu;
 
 if (!bin) {
   throw new Error('Please pass a NPM binary name.');
 }
 
-execa('npx', [bin, '--help'])
+const OPTION_PATTERN = /\s+-?-[a-z0-9-]+(,|\s)/giu;
+const IS_STRING = /\[?string\]?\b/iu;
+const IS_NUMBER = /\[?number|int\]?\b/iu;
+const IS_OBJECT = /\[?object\]?\b/iu;
+const IS_ARRAY = /\[?array\]?\b/iu;
+
+function determineType(line: string): string {
+  const brackets = line.match(IS_ARRAY) ? '[]' : '';
+
+  if (line.match(IS_STRING)) {
+    return `string${brackets}`;
+  }
+
+  if (line.match(IS_NUMBER)) {
+    return `number${brackets}`;
+  }
+
+  if (line.match(IS_OBJECT)) {
+    return `object${brackets}`;
+  }
+
+  if (brackets) {
+    return `string[]`;
+  }
+
+  return 'boolean';
+}
+
+execa('npx', [bin, bin === 'tsc' ? '--help --all' : '--help'])
   .then(({ stdout }) => {
-    const args = new Set();
-    const result = stdout.match(pattern);
+    const optionTypes = new Map<string, string>();
 
-    if (!result) {
-      return false;
-    }
+    stdout.split('\n').forEach(line => {
+      const result = line.match(OPTION_PATTERN);
 
-    result.forEach(opt => {
-      let option = opt.trim();
-
-      // Trim trailing comma
-      if (option.slice(-1) === ',') {
-        option = option.slice(0, -1);
+      if (!result) {
+        return;
       }
 
-      // Remove leading dash
-      option = option.replace(/^-{1,2}/u, '');
+      const type = determineType(line);
 
-      // Remove leading no-
-      option = option.replace(/^no-/u, '');
+      result.forEach(opt => {
+        let option = opt.trim();
 
-      // Camel case
-      option = option.replace(/-([a-z])/gu, (match, char) => char.toUpperCase());
+        // Trim trailing comma
+        if (option.slice(-1) === ',') {
+          option = option.slice(0, -1);
+        }
 
-      args.add(option);
+        // Remove leading dash
+        option = option.replace(/^-{1,2}/u, '');
+
+        // Remove leading no-
+        option = option.replace(/^no-/u, '');
+
+        // Camel case
+        option = option.replace(/-([a-z])/gu, (match, char) => char.toUpperCase());
+
+        optionTypes.set(option, type);
+      });
     });
 
-    Array.from(args).forEach(arg => {
-      console.log(`${arg}?: string;`);
+    const args = Array.from(optionTypes.entries());
+
+    args.sort((a, b) => a[0].localeCompare(b[0]));
+
+    args.forEach(arg => {
+      console.log(`${arg[0]}?: ${arg[1]};`);
     });
 
     return true;
