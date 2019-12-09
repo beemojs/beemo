@@ -10,6 +10,12 @@ export type OptionSetting = 'enable' | 'ignore' | 'warn';
 
 export type MatchPattern = string | RegExp;
 
+export type LazyMode = 'fs' | 'ide' | 'watchman' | 'none';
+
+export type ModuleSystem = 'node' | 'haste';
+
+export type MismatchType = 'choose-newest' | 'stop-server' | 'restart-client' | 'error-client';
+
 export interface OptionsConfig {
   all?: boolean;
   emoji?: boolean;
@@ -19,25 +25,28 @@ export interface OptionsConfig {
   'esproposal.export_star_as'?: OptionSetting;
   'esproposal.optional_chaining'?: OptionSetting;
   'esproposal.nullish_coalescing'?: OptionSetting;
+  exact_by_default?: boolean;
   'experimental.const_params'?: boolean;
   include_warnings?: boolean;
-  lazy_mode?: 'fs' | 'ide' | 'watchman' | 'none';
+  lazy_mode?: LazyMode;
   'log.file'?: string;
   max_header_tokens?: number;
   'module.file_ext'?: string[];
   'module.ignore_non_literal_requires'?: boolean;
   'module.name_mapper'?: { [regex: string]: string };
   'module.name_mapper.extension'?: { [ext: string]: string };
-  'module.system'?: 'node' | 'haste';
+  'module.system'?: ModuleSystem;
+  'module.system.node.main_field'?: string;
   'module.system.node.resolve_dirname'?: string[];
   'module.use_strict'?: boolean;
   munge_underscores?: boolean;
   no_flowlib?: boolean;
   'server.max_workers'?: number;
-  'sharedmemory.dirs'?: boolean;
+  'sharedmemory.dirs'?: string;
   'sharedmemory.minimum_available'?: number;
   'sharedmemory.dep_table_pow'?: number;
   'sharedmemory.hash_table_pow'?: number;
+  'sharedmemory.heap_size'?: number;
   'sharedmemory.log_level'?: number;
   strip_root?: boolean;
   suppress_comment?: MatchPattern;
@@ -66,12 +75,15 @@ export interface FlowArgs {
   ignoreVersion?: boolean;
   includeWarnings?: boolean;
   json?: boolean;
-  jsonVersion?: string | number;
+  jsonVersion?: number;
+  lazy?: boolean;
+  lazyMode?: LazyMode;
   maxWarnings?: number;
   messageWidth?: number;
+  offsetStyle?: 'utf8-bytes' | 'js-indices';
   oneLine?: boolean;
+  onMismatch?: MismatchType;
   pretty?: boolean;
-  print?: string;
   quiet?: boolean;
   retries?: number;
   retryIfInit?: boolean;
