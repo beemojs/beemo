@@ -2,13 +2,13 @@ import { RequiredOptions } from 'prettier';
 
 export interface PrettierConfig extends Partial<RequiredOptions> {
   ignore?: string[];
-  // Temp until upstream is updated
-  quoteProps?: 'as-needed' | 'preserve' | 'consistent';
 }
 
 export interface PrettierArgs {
   arrowParens?: PrettierConfig['arrowParens'];
   bracketSpacing?: boolean;
+  c?: boolean;
+  check?: boolean;
   color?: boolean;
   config?: string | boolean;
   configPrecedence?: 'cli-override' | 'file-override' | 'prefer-file';
@@ -46,6 +46,7 @@ export interface PrettierArgs {
   useTabs?: boolean;
   v?: boolean;
   version?: boolean;
+  vueIndentScriptAndStyle?: boolean;
   withNodeModules?: boolean;
   write?: boolean;
 }
