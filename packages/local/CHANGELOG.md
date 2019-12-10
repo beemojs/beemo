@@ -3,6 +3,24 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## 0.1.0 - 2019-12-10
+
+#### 🚀 Updates
+
+- Update config types. ([22c403f](https://github.com/beemojs/beemo/commit/22c403f))
+- Update config types. ([f59967c](https://github.com/beemojs/beemo/commit/f59967c))
+- Update config types. ([c5171e8](https://github.com/beemojs/beemo/commit/c5171e8))
+
+#### ⚙️ Types
+
+- Allow Beemo tool settings to be typed via generics. ([c3ad72a](https://github.com/beemojs/beemo/commit/c3ad72a))
+
+**Note:** Version bump only for package @beemo/local
+
+
+
+
+
 ### 0.0.1 - 2019-12-08
 
 #### 🛠 Internals

@@ -3,6 +3,22 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## 1.2.0 - 2019-12-10
+
+#### 🚀 Updates
+
+- Update config types. ([22c403f](https://github.com/beemojs/beemo/commit/22c403f))
+
+#### ⚙️ Types
+
+- Add driver specific args interface. ([068e0c6](https://github.com/beemojs/beemo/commit/068e0c6))
+
+**Note:** Version bump only for package @beemo/driver-webpack
+
+
+
+
+
 ## 1.1.0 - 2019-12-08
 
 #### 🚀 Updates

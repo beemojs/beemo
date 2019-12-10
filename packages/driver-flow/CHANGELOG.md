@@ -3,6 +3,26 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## 1.2.0 - 2019-12-10
+
+#### 🚀 Updates
+
+- Update config types. ([dfc921c](https://github.com/beemojs/beemo/commit/dfc921c))
+
+#### 🐞 Fixes
+
+- Dont publish flow configs. ([462b1cf](https://github.com/beemojs/beemo/commit/462b1cf))
+
+#### ⚙️ Types
+
+- Add driver specific args interface. ([068e0c6](https://github.com/beemojs/beemo/commit/068e0c6))
+
+**Note:** Version bump only for package @beemo/driver-flow
+
+
+
+
+
 ## 1.1.0 - 2019-12-08
 
 #### 🚀 Updates

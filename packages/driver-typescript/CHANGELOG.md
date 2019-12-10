@@ -3,6 +3,22 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## 1.3.0 - 2019-12-10
+
+#### 🚀 Updates
+
+- Update config types. ([1110364](https://github.com/beemojs/beemo/commit/1110364))
+
+#### ⚙️ Types
+
+- Add driver specific args interface. ([068e0c6](https://github.com/beemojs/beemo/commit/068e0c6))
+
+**Note:** Version bump only for package @beemo/driver-typescript
+
+
+
+
+
 ## 1.2.0 - 2019-12-08
 
 #### 🚀 Updates

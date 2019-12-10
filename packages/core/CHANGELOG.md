@@ -3,6 +3,18 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+### 1.1.1 - 2019-12-10
+
+#### ⚙️ Types
+
+- Allow Beemo tool settings to be typed via generics. ([c3ad72a](https://github.com/beemojs/beemo/commit/c3ad72a))
+
+**Note:** Version bump only for package @beemo/core
+
+
+
+
+
 ## 1.1.0 - 2019-12-08
 
 #### 🚀 Updates
