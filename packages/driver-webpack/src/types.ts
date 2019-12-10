@@ -99,3 +99,5 @@ export interface WebpackArgs {
   watchPoll?: string;
   watchStdin?: boolean;
 }
+
+export type WebpackDriverArgs = WebpackArgs;

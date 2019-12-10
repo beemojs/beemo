@@ -11,7 +11,7 @@ import {
   ConfigContext,
   ConfigArgs,
 } from '@beemo/core';
-import { TypeScriptArgs, TypeScriptConfig, TypeScriptOptions } from './types';
+import { TypeScriptDriverArgs, TypeScriptConfig, TypeScriptOptions } from './types';
 
 function join(...parts: string[]): string {
   return new Path(...parts).path();
@@ -69,7 +69,7 @@ export default class TypeScriptDriver extends Driver<TypeScriptConfig, TypeScrip
    * together using project references. Attempt to handle source and test folders.
    */
   async createProjectRefConfigsInWorkspaces(
-    context: DriverContext<DriverArgs & TypeScriptArgs>,
+    context: DriverContext<DriverArgs & TypeScriptDriverArgs>,
     workspaceRoot: Path,
   ): Promise<unknown> {
     const {
@@ -273,7 +273,7 @@ export default class TypeScriptDriver extends Driver<TypeScriptConfig, TypeScrip
   /**
    * Automatically clean the target folder if `outDir` and `--clean` is used.
    */
-  private handleCleanTarget = ({ args }: DriverContext<DriverArgs & TypeScriptArgs>) => {
+  private handleCleanTarget = ({ args }: DriverContext<DriverArgs & TypeScriptDriverArgs>) => {
     const outDir =
       args.outDir || (this.config.compilerOptions && this.config.compilerOptions.outDir);
 
@@ -288,7 +288,7 @@ export default class TypeScriptDriver extends Driver<TypeScriptConfig, TypeScrip
    * Define references and compiler options when `--reference-workspaces` option is passed.
    */
   private handlePrepareConfigs = (
-    context: ConfigContext<ConfigArgs & TypeScriptArgs & { referenceWorkspaces?: boolean }>,
+    context: ConfigContext<ConfigArgs & TypeScriptDriverArgs>,
     configPath: Path,
     config: TypeScriptConfig,
   ) => {
@@ -309,9 +309,7 @@ export default class TypeScriptDriver extends Driver<TypeScriptConfig, TypeScrip
    * Automatically create `tsconfig.json` files in each workspace package with project
    * references linked correctly. Requires the `--reference-workspaces` option.
    */
-  private handleProjectReferences = (
-    context: DriverContext<DriverArgs & TypeScriptArgs & { referenceWorkspaces?: boolean }>,
-  ) => {
+  private handleProjectReferences = (context: DriverContext<DriverArgs & TypeScriptDriverArgs>) => {
     const { args, workspaceRoot } = context;
 
     if (!args.referenceWorkspaces) {

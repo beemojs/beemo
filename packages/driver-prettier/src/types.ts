@@ -50,3 +50,5 @@ export interface PrettierArgs {
   withNodeModules?: boolean;
   write?: boolean;
 }
+
+export type PrettierDriverArgs = PrettierArgs;

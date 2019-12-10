@@ -110,3 +110,5 @@ export interface MochaArgs {
   watch?: boolean;
   watchExtensions?: string[];
 }
+
+export type MochaDriverArgs = MochaArgs;

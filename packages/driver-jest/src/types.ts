@@ -131,3 +131,5 @@ export interface JestArgs {
   watchAll?: boolean;
   watchPathIgnorePatterns?: string[];
 }
+
+export type JestDriverArgs = JestArgs;

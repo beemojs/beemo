@@ -1,13 +1,13 @@
 import fs from 'fs';
 import { Event } from '@boost/event';
 import { Driver, ConfigContext, ConfigArgs, Path, ExecutionError } from '@beemo/core';
-import { PrettierArgs, PrettierConfig } from './types';
+import { PrettierDriverArgs, PrettierConfig } from './types';
 
 // Success: Writes file list to stdout
 // Failure: Writes to stderr for no files found and syntax errors
 export default class PrettierDriver extends Driver<PrettierConfig> {
   onCreateIgnoreFile = new Event<
-    [ConfigContext<ConfigArgs & PrettierArgs>, Path, { ignore: string[] }]
+    [ConfigContext<ConfigArgs & PrettierDriverArgs>, Path, { ignore: string[] }]
   >('create-ignore-file');
 
   bootstrap() {
@@ -33,7 +33,7 @@ export default class PrettierDriver extends Driver<PrettierConfig> {
    * If an "ignore" property exists in the Prettier config, create an ".prettierconfig" file.
    */
   private handleCreateIgnoreFile = (
-    context: ConfigContext<ConfigArgs & PrettierArgs>,
+    context: ConfigContext<ConfigArgs & PrettierDriverArgs>,
     configPath: Path,
     config: PrettierConfig,
   ) => {

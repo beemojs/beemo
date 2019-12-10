@@ -1,6 +1,6 @@
 import rimraf from 'rimraf';
 import { Driver, DriverArgs, DriverContext, Path, ExecutionError } from '@beemo/core';
-import { BabelArgs, BabelConfig } from './types';
+import { BabelDriverArgs, BabelConfig } from './types';
 
 // Success: Writes file list to stdout
 // Failure: Throws SyntaxError to stderr
@@ -37,9 +37,7 @@ export default class BabelDriver extends Driver<BabelConfig> {
   /**
    * Automatically clean the target folder if --out-dir is used.
    */
-  private handleCleanTarget = ({
-    args,
-  }: DriverContext<DriverArgs & BabelArgs & { clean?: boolean }>) => {
+  private handleCleanTarget = ({ args }: DriverContext<DriverArgs & BabelDriverArgs>) => {
     if (args.clean && args.outDir) {
       rimraf.sync(Path.resolve(args.outDir).path());
     }
