@@ -3,6 +3,18 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+### 1.0.8 - 2020-01-25
+
+#### 📦 Dependencies
+
+- **[yargs]** Update to v15.1. ([fa36035](https://github.com/beemojs/beemo/commit/fa36035))
+
+**Note:** Version bump only for package @beemo/cli
+
+
+
+
+
 ### 1.0.7 - 2019-11-25
 
 #### 🐞 Fixes

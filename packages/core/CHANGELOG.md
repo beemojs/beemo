@@ -3,6 +3,24 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+### 1.1.2 - 2020-01-25
+
+#### 🐞 Fixes
+
+- Minor changes to support PnP. ([195fbdc](https://github.com/beemojs/beemo/commit/195fbdc))
+
+#### 📦 Dependencies
+
+- **[boost]** Update to latest. ([c2a5e94](https://github.com/beemojs/beemo/commit/c2a5e94))
+- Update `@types` packages. ([1064a44](https://github.com/beemojs/beemo/commit/1064a44))
+- **[yargs]** Update to v15.1. ([fa36035](https://github.com/beemojs/beemo/commit/fa36035))
+
+**Note:** Version bump only for package @beemo/core
+
+
+
+
+
 ### 1.1.1 - 2019-12-10
 
 #### ⚙️ Types

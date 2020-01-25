@@ -3,6 +3,18 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## 1.2.0 - 2020-01-25
+
+#### 🚀 Updates
+
+- Allow v25 dependency. ([8fd9b3a](https://github.com/beemojs/beemo/commit/8fd9b3a))
+
+**Note:** Version bump only for package @beemo/driver-jest
+
+
+
+
+
 ### 1.1.1 - 2019-12-10
 
 #### ⚙️ Types

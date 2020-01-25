@@ -3,6 +3,18 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+### 0.1.1 - 2020-01-25
+
+#### 🐞 Fixes
+
+- Minor changes to support PnP. ([195fbdc](https://github.com/beemojs/beemo/commit/195fbdc))
+
+**Note:** Version bump only for package @beemo/local
+
+
+
+
+
 ## 0.1.0 - 2019-12-10
 
 #### 🚀 Updates

@@ -3,6 +3,18 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## 1.3.0 - 2020-01-25
+
+#### 🚀 Updates
+
+- Allow v7 dependency. ([9d0a3f2](https://github.com/beemojs/beemo/commit/9d0a3f2))
+
+**Note:** Version bump only for package @beemo/driver-mocha
+
+
+
+
+
 ## 1.2.0 - 2019-12-10
 
 #### 🚀 Updates
