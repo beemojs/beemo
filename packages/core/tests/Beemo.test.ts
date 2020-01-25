@@ -173,7 +173,7 @@ describe('Beemo', () => {
     });
 
     it('returns node module path', () => {
-      const modPath = Path.resolve('node_modules/@boost/core');
+      const modPath = Path.resolve(require.resolve('@boost/core'));
 
       beemo.config.module = '@boost/core';
 
