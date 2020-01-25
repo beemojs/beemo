@@ -283,7 +283,7 @@ describe('Driver', () => {
             bin: 'foo_123',
           });
         }).toThrow(
-          'Invalid TestDriver field "bin". String does not match pattern "^[a-z]{1}[a-zA-Z0-9-]+$".',
+          'Invalid TestDriver field "bin". String does not match. (pattern "^[a-z]{1}[a-zA-Z0-9-]+$")',
         );
         // Broken in Node 8
         // }).toThrowErrorMatchingSnapshot();
@@ -296,7 +296,7 @@ describe('Driver', () => {
             bin: 'Foo_123',
           });
         }).toThrow(
-          'Invalid TestDriver field "bin". String does not match pattern "^[a-z]{1}[a-zA-Z0-9-]+$".',
+          'Invalid TestDriver field "bin". String does not match. (pattern "^[a-z]{1}[a-zA-Z0-9-]+$")',
         );
         // Broken in Node 8
         // }).toThrowErrorMatchingSnapshot();
