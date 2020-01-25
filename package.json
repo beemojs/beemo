@@ -31,7 +31,7 @@
     "@types/webpack": "^4.41.3",
     "@types/yargs": "^15.0.1",
     "conventional-changelog-beemo": "^1.6.0",
-    "lerna": "^3.19.0"
+    "lerna": "^3.20.2"
   },
   "workspaces": [
     "packages/*"
