@@ -183,6 +183,7 @@ export default class TypeScriptDriver extends Driver<TypeScriptConfig, TypeScrip
             const testConfig = {
               compilerOptions: {
                 emitDeclarationOnly: false,
+                composite: false,
                 noEmit: true,
                 rootDir: '.',
               },
