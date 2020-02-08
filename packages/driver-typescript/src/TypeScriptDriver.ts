@@ -181,10 +181,9 @@ export default class TypeScriptDriver extends Driver<TypeScriptConfig, TypeScrip
           // Build tests specific package config
           if (testsFolder && testsPath.exists()) {
             const testConfig = {
-              compilerOptions: 
-                // emitDeclarationOnly and composite cannot be used with noEmit
-                emitDeclarationOnly: false,
+              compilerOptions: {
                 composite: false,
+                emitDeclarationOnly: false,
                 noEmit: true,
                 rootDir: '.',
               },
