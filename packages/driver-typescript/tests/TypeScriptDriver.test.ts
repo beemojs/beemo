@@ -119,6 +119,7 @@ describe('TypeScriptDriver', () => {
         PROJECT_REFS_FIXTURE_PATH.append('packages/baz/tests/tsconfig.json').path(),
         driver.formatConfig({
           compilerOptions: {
+            composite: false,
             emitDeclarationOnly: false,
             noEmit: true,
             rootDir: '.',
@@ -206,6 +207,7 @@ describe('TypeScriptDriver', () => {
         PROJECT_REFS_FIXTURE_PATH.append('packages/foo/custom-tests/tsconfig.json').path(),
         driver.formatConfig({
           compilerOptions: {
+            composite: false,
             emitDeclarationOnly: false,
             noEmit: true,
             rootDir: '.',
@@ -258,6 +260,7 @@ describe('TypeScriptDriver', () => {
         PROJECT_REFS_FIXTURE_PATH.append('packages/baz/tests/tsconfig.json').path(),
         driver.formatConfig({
           compilerOptions: {
+            composite: false,
             emitDeclarationOnly: false,
             noEmit: true,
             rootDir: '.',
@@ -294,6 +297,7 @@ describe('TypeScriptDriver', () => {
         PROJECT_REFS_FIXTURE_PATH.append('packages/baz/tests/tsconfig.json').path(),
         driver.formatConfig({
           compilerOptions: {
+            composite: false,
             emitDeclarationOnly: false,
             noEmit: true,
             rootDir: '.',
@@ -324,6 +328,7 @@ describe('TypeScriptDriver', () => {
         PROJECT_REFS_FIXTURE_PATH.append('packages/baz/tests/tsconfig.json').path(),
         driver.formatConfig({
           compilerOptions: {
+            composite: false,
             emitDeclarationOnly: false,
             noEmit: true,
             rootDir: '.',
