@@ -876,31 +876,31 @@
   resolved "https://registry.npmjs.org/@bcoe/v8-coverage/-/v8-coverage-0.2.3.tgz#75a2e8b51cb758a7553d6804a5932d7aace75c39"
   integrity sha512-0hYQ8SB4Db5zvZB4axdMHGwEaQjkZzFjQiN9LVYvIFB2nSUHW9tYpxWriPrWDASIxiaXax83REcLxuSdnGPZtw==
 
-"@boost/common@^1.8.1":
-  version "1.8.1"
-  resolved "https://registry.npmjs.org/@boost/common/-/common-1.8.1.tgz#23783012e3a091ff046f2a69cb7d7e580490a812"
-  integrity sha512-qblN1ZgFdllzH3PMghSb6aajGTvSgplRDu2yluEUMQ3aAq5MLQW8P1UGTBDRW6Xz54OLXg7jOpEWU0fPLZJVGA==
+"@boost/common@^1.8.2":
+  version "1.8.2"
+  resolved "https://registry.npmjs.org/@boost/common/-/common-1.8.2.tgz#affa8b0d1de8ee9e150ce3c3c53580c21bff9008"
+  integrity sha512-fdQILlK4ZQU/YOmBJWWPVeEPfPYc0mLL8DHskUIoyKg7H5eWi3gtwCaCdJq00l19OlMjNEU2qlHrQSQjhxlPzA==
   dependencies:
-    "@boost/internal" "^1.0.3"
+    "@boost/internal" "^1.1.0"
     js-yaml "^3.13.1"
     json5 "^2.1.1"
-    optimal "^4.1.1"
+    optimal "^4.2.0"
     pretty-ms "^5.1.0"
 
-"@boost/core@^1.18.1":
-  version "1.18.1"
-  resolved "https://registry.npmjs.org/@boost/core/-/core-1.18.1.tgz#605b2e9118435dc09561107e3622b6aedbfaf057"
-  integrity sha512-DOGt9qSmkhJe1i+YUGH6P9lxaP2THARf1WCtMNDpYlY4b7MK+Qt0I+oCMQzoM2ZjxsWeiwN/LgKixXy9VWO48w==
+"@boost/core@^1.18.2":
+  version "1.18.2"
+  resolved "https://registry.npmjs.org/@boost/core/-/core-1.18.2.tgz#3e1af5805b68d555803a2cd75571d83e8b5050a9"
+  integrity sha512-N5RH/SV56EJFFTEO4ht3gwGJZF0rs6xaAxYSxOH0Ki/+OGR4t1lxgv9cMAJ8HX+iiJI5jsp55alM0bZ0LInL2A==
   dependencies:
-    "@boost/common" "^1.8.1"
-    "@boost/debug" "^1.4.2"
-    "@boost/event" "^1.2.1"
-    "@boost/internal" "^1.0.3"
-    "@boost/log" "^1.1.10"
-    "@boost/terminal" "^1.0.1"
-    "@boost/translate" "^1.3.5"
+    "@boost/common" "^1.8.2"
+    "@boost/debug" "^1.4.3"
+    "@boost/event" "^1.3.0"
+    "@boost/internal" "^1.1.0"
+    "@boost/log" "^1.1.11"
+    "@boost/terminal" "^1.0.2"
+    "@boost/translate" "^1.3.6"
     "@types/debug" "^4.1.5"
-    "@types/yargs" "^15.0.1"
+    "@types/yargs" "^15.0.3"
     "@types/yargs-parser" "^15.0.0"
     debug "^4.1.1"
     env-ci "^4.5.1"
@@ -910,51 +910,51 @@
     fs-extra "^8.1.0"
     json5 "^2.1.1"
     lodash "^4.17.15"
-    optimal "^4.1.1"
+    optimal "^4.2.0"
     pluralize "^8.0.0"
     split "^1.0.1"
     yargs-parser "^16.1.0"
 
-"@boost/debug@^1.4.2":
-  version "1.4.2"
-  resolved "https://registry.npmjs.org/@boost/debug/-/debug-1.4.2.tgz#b5949d967e0386df9230711a47624c2610b9c8f5"
-  integrity sha512-vf+VCNUYMqk9jl4AqWj/X7CvJYfatcgYCZDfC9l8j62gYi4Snh+Wa/YHYE0zJh6Z1lF8ke+j1xgmI21ZKIh3Qw==
+"@boost/debug@^1.4.3":
+  version "1.4.3"
+  resolved "https://registry.npmjs.org/@boost/debug/-/debug-1.4.3.tgz#a7bbc390fc422dacbe35905f1d1698558b3222df"
+  integrity sha512-47pKSxGn2g32M4kgb/z6dGZ2J4i9Z/fAUTzkiGj49wtzY4x0NydQ8sqDR7AI28b4udcMTKlsMUULRSETljREeg==
   dependencies:
-    "@boost/common" "^1.8.1"
-    "@boost/internal" "^1.0.3"
+    "@boost/common" "^1.8.2"
+    "@boost/internal" "^1.1.0"
     "@types/debug" "^4.1.5"
     debug "^4.1.1"
     execa "^3.4.0"
     fast-glob "^3.1.1"
 
-"@boost/event@^1.2.1":
-  version "1.2.1"
-  resolved "https://registry.npmjs.org/@boost/event/-/event-1.2.1.tgz#949f603f07a860d01dbbc297904f218930ab342c"
-  integrity sha512-/gfQHWApt0TKk7y+ESllwx4k1TLbxhHNNtSTaB5Z7CE26sGddrDzMFu4hpJKqquxRW4MhWlao5ZpNgacWkvJbA==
+"@boost/event@^1.3.0":
+  version "1.3.0"
+  resolved "https://registry.npmjs.org/@boost/event/-/event-1.3.0.tgz#7bc989098aa6e2b819ed1904170056eb288396af"
+  integrity sha512-EszQ+bSw2lfobsE5pGEnFROXMcxqClXnJIohM/INO/8xjKvFeAVVpQKUEnYVbOcCWYVnwsJ7nBapXLA6Z6Zv7w==
   dependencies:
-    "@boost/internal" "^1.0.3"
+    "@boost/internal" "^1.1.0"
 
-"@boost/internal@^1.0.3":
-  version "1.0.3"
-  resolved "https://registry.npmjs.org/@boost/internal/-/internal-1.0.3.tgz#b2a1e66e68f829e06d3b1c1565e03bbe5e3ff602"
-  integrity sha512-xVUgtVO1V3+vLZc5EwQjg0uwj2zO1JASPiisfc74dKCu9Z47kgh/Dk+NSS/j+bZJvkno0so1s5jLkYFpmzFHyQ==
+"@boost/internal@^1.1.0":
+  version "1.1.0"
+  resolved "https://registry.npmjs.org/@boost/internal/-/internal-1.1.0.tgz#380107d83bbd4d38f4b020a2273d51ef1b73e0ae"
+  integrity sha512-dYrCHKqiuLz3u1p+ve1qoWGXOFDBqOlUgMV1is20GiTFxoJzaCJOdexDErC3hLQFCr3WsZ3IbKDb6cpFH6mD9Q==
   dependencies:
     chalk "^3.0.0"
     debug "^4.1.1"
 
-"@boost/log@^1.1.10":
-  version "1.1.10"
-  resolved "https://registry.npmjs.org/@boost/log/-/log-1.1.10.tgz#89c7a19b6a93f5ea065c10e696d4c6ea9e3e9fcd"
-  integrity sha512-prwAMyMUs/Pj8+OZa80RhEOfOzcG6SJYeNs8cCe+Rez4dq5ud2CAt3l5TSh6jxNRiukF9ecAKE3f22r2FgZ5Qw==
+"@boost/log@^1.1.11":
+  version "1.1.11"
+  resolved "https://registry.npmjs.org/@boost/log/-/log-1.1.11.tgz#dd6a3f4a619c1525bba4e1916ba935aa3c4cbc2a"
+  integrity sha512-H6WKemzndR4FypiTX3iTqKQwdtR2odM4BLRhpzm5moBgFdD9xP4/qFmBfPmkDctfbMKZTcX96lqBANRf6ZyzMQ==
   dependencies:
-    "@boost/internal" "^1.0.3"
-    "@boost/translate" "^1.3.5"
+    "@boost/internal" "^1.1.0"
+    "@boost/translate" "^1.3.6"
     chalk "^3.0.0"
 
-"@boost/terminal@^1.0.1":
-  version "1.0.1"
-  resolved "https://registry.npmjs.org/@boost/terminal/-/terminal-1.0.1.tgz#f376e7a4ad32310f2fbf43567a5422c9224b9e80"
-  integrity sha512-o6SrWqFCCmjsxq/XMVnrz8atxH9euYlEoZg/d0InRgOa649YEmF2lzFxhynWIo1PeX3mJA/ce2PEEGVrbId0gA==
+"@boost/terminal@^1.0.2":
+  version "1.0.2"
+  resolved "https://registry.npmjs.org/@boost/terminal/-/terminal-1.0.2.tgz#6bafc827282926f5fee8e4cf48caa353a886b478"
+  integrity sha512-FgTE+tUri38KY0ynKNq6FO2s1H69DOOPTVbikD86b5O+QYy5fG0CdnvhVal4ql72vYVtJCW74Jeg1S7IR3dsFg==
   dependencies:
     ansi-escapes "^4.3.0"
     ansi-regex "^5.0.0"
@@ -965,7 +965,7 @@
     string-width "^4.2.0"
     strip-ansi "^6.0.0"
     supports-hyperlinks "^2.0.0"
-    term-size "^2.1.1"
+    term-size "^2.2.0"
     wrap-ansi "^6.2.0"
 
 "@boost/test-utils@^1.4.1":
@@ -975,14 +975,14 @@
   dependencies:
     fs-extra "^8.1.0"
 
-"@boost/translate@^1.3.5":
-  version "1.3.5"
-  resolved "https://registry.npmjs.org/@boost/translate/-/translate-1.3.5.tgz#b8a328df92ab9dd34890409aa8483ab19440f42c"
-  integrity sha512-j9QtqGQFeo3JTEjudxbRrEB+xKg+L6hzdEGttcrTpzFjDlEOkXkZteJgRij9IEH7Y8nbLRaphV+jTZcFGBUr2A==
+"@boost/translate@^1.3.6":
+  version "1.3.6"
+  resolved "https://registry.npmjs.org/@boost/translate/-/translate-1.3.6.tgz#ff6c13b8ee94032e38dfdbfc30f1e2df80f7f7be"
+  integrity sha512-WX6JdC1XDuB/77JRoi0YoH52KxMH5c64TEv0pP0Xx08wQExPKiT+EdKgon4y5WNWOIengvrOjb0jlQwh5IAsjw==
   dependencies:
-    "@boost/common" "^1.8.1"
-    "@boost/internal" "^1.0.3"
-    i18next "^19.0.3"
+    "@boost/common" "^1.8.2"
+    "@boost/internal" "^1.1.0"
+    i18next "^19.1.0"
     os-locale "^4.0.0"
 
 "@cnakazawa/watch@^1.0.3":
@@ -5856,10 +5856,10 @@ hygen@^5.0.3:
     ts-jest "^24.1.0"
     yargs-parser "^13.0.0"
 
-i18next@^19.0.3:
-  version "19.0.3"
-  resolved "https://registry.npmjs.org/i18next/-/i18next-19.0.3.tgz#31fd3165762d9802e08a2a86932db4eff5c862e9"
-  integrity sha512-Ru4afr++b4cUApsIBifcMYyWG9Nx8wlFdq4DuOF+UuoPoQKfuh0iAVMekTjs6w1CZLUOVb5QZEuoYRLmu17EIA==
+i18next@^19.1.0:
+  version "19.1.0"
+  resolved "https://registry.npmjs.org/i18next/-/i18next-19.1.0.tgz#fe1a1da3d208872946307c7d2d115da45d46159f"
+  integrity sha512-ISbmukX4L6Dz0QoH9+EW1AnBw7j+NRLoMu9uLPMaNSSTP9Eie9/oUL0dOyWX15baB3gYOpkHJpGZRHOqcnl0ew==
   dependencies:
     "@babel/runtime" "^7.3.1"
 
@@ -8543,10 +8543,10 @@ onetime@^5.1.0:
   dependencies:
     mimic-fn "^2.1.0"
 
-optimal@^4.1.1:
-  version "4.1.1"
-  resolved "https://registry.npmjs.org/optimal/-/optimal-4.1.1.tgz#4592e51a90efd5fe5a9eb6890b2bcd1480223dfe"
-  integrity sha512-1lLxcK5oqrnod/ztzn5ZEm06WHOdn1kIDaojcy/xQpg4NYqrMSUKpUPzloCDyvCfFG39+JFRF3yRoHrkNawjJw==
+optimal@^4.2.0:
+  version "4.2.0"
+  resolved "https://registry.npmjs.org/optimal/-/optimal-4.2.0.tgz#a97d9a12cb543988f2e54b88416b77d9a811ed69"
+  integrity sha512-jKFdiBkhJCVMh6oXsGNVFv/huPeFTEdlBtSuwDBYYClFn6lwV0fdRwRhWtpazM1ZMuV+bNNRFMth9SMWvUk3uQ==
 
 optimist@^0.6.1:
   version "0.6.1"
@@ -10548,10 +10548,10 @@ temp-write@^3.4.0:
     temp-dir "^1.0.0"
     uuid "^3.0.1"
 
-term-size@^2.1.1:
-  version "2.1.1"
-  resolved "https://registry.npmjs.org/term-size/-/term-size-2.1.1.tgz#f81ec25854af91a480d2f9d0c77ffcb26594ed1a"
-  integrity sha512-UqvQSch04R+69g4RDhrslmGvGL3ucDRX/U+snYW0Mab4uCAyKSndUksaoqlJ81QKSpRnIsuOYQCbC2ZWx2896A==
+term-size@^2.2.0:
+  version "2.2.0"
+  resolved "https://registry.npmjs.org/term-size/-/term-size-2.2.0.tgz#1f16adedfe9bdc18800e1776821734086fcc6753"
+  integrity sha512-a6sumDlzyHVJWb8+YofY4TW112G6p2FCPEAFk+59gIYHv3XHRhm9ltVQ9kli4hNWeQBwSpe8cRN25x0ROunMOw==
 
 terminal-link@^2.0.0:
   version "2.1.1"

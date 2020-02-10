@@ -33,7 +33,7 @@
     "typescript": "^2.0.0 || ^3.0.0"
   },
   "dependencies": {
-    "@boost/event": "^1.2.1",
+    "@boost/event": "^1.3.0",
     "rimraf": "^3.0.0"
   },
   "tsconfig": {
