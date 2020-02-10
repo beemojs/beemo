@@ -5,6 +5,8 @@ export interface ReporterOptions {
 }
 
 export interface MochaConfig {
+  // Dashed and alias names
+  [key: string]: unknown;
   allowUncaught?: boolean;
   asyncOnly?: boolean;
   bail?: boolean;
@@ -44,8 +46,6 @@ export interface MochaConfig {
   watch?: boolean;
   watchFiles?: string | string[];
   watchIgnore?: string | string[];
-  // Dashed and alias names
-  [key: string]: unknown;
 }
 
 export interface MochaArgs {

@@ -21,7 +21,7 @@ export interface BabelConfig {
   auxiliaryCommentBefore?: string;
   babelrc?: boolean;
   babelrcRoots?: boolean | MatchPattern | MatchPattern[];
-  caller?: { name: string; [key: string]: unknown };
+  caller?: { [key: string]: unknown; name: string };
   code?: boolean;
   comments?: boolean;
   compact?: boolean | 'auto';

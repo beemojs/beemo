@@ -45,6 +45,7 @@ export interface Rules {
 }
 
 export interface ParserOptions {
+  [option: string]: unknown;
   ecmaVersion?: EcmaVersion;
   sourceType?: 'script' | 'module';
   ecmaFeatures?: {
@@ -52,7 +53,6 @@ export interface ParserOptions {
     impliedStrict?: boolean;
     jsx?: boolean;
   };
-  [option: string]: unknown;
 }
 
 export interface CommonConfig {

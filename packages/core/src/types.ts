@@ -20,6 +20,8 @@ export interface UnknownSettings {
 }
 
 export interface BeemoConfig<T = UnknownSettings> extends Omit<ToolConfig, 'settings'> {
+  // Driver overrides
+  [key: string]: unknown;
   configure: {
     cleanup: boolean;
     parallel: boolean;
@@ -32,8 +34,6 @@ export interface BeemoConfig<T = UnknownSettings> extends Omit<ToolConfig, 'sett
   module: string;
   scripts: PluginSetting<Script>;
   settings: T;
-  // Driver overrides
-  [key: string]: unknown;
 }
 
 export interface BeemoProcess<C extends Context = Context, T = UnknownSettings> {

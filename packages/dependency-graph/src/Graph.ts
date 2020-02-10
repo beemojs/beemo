@@ -157,7 +157,7 @@ export default class Graph<T extends PackageConfig = PackageConfig> {
   protected detectCycle() {
     const dig = (node: Node, cycle: Set<Node>) => {
       if (cycle.has(node)) {
-        const path = [...cycle, node].map(n => n.name).join(' -> ');
+        const path = [...Array.from(cycle), node].map(n => n.name).join(' -> ');
 
         throw new Error(`Circular dependency detected: ${path}`);
       }
@@ -245,7 +245,7 @@ export default class Graph<T extends PackageConfig = PackageConfig> {
    * Sort a set of nodes by most depended on, fall back to alpha sort as tie breaker
    */
   protected sortByDependedOn(nodes: Set<Node> | Node[]): Node[] {
-    return [...nodes].sort((a, b) => {
+    return Array.from(nodes).sort((a, b) => {
       const diff = b.dependents.size - a.dependents.size;
 
       if (diff === 0) {
