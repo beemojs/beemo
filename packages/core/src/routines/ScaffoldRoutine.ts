@@ -30,7 +30,7 @@ export default class ScaffoldRoutine extends Routine<ScaffoldContext, Beemo> {
         debug: tool.config.debug,
         exec: this.handleExec,
         logger: new Logger(this.handleLog),
-        templates: moduleRoot.append('templates').path(),
+        templates: new Path(moduleRoot.path().replace('index.js', ''), 'templates').path(),
       });
     } catch (error) {
       // Intercept hygen error to provide a better error message
