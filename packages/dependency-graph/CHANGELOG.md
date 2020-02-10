@@ -3,6 +3,28 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## 1.1.0 - 2020-02-10
+
+#### 🚀 Updates
+
+- Support Windows OS and Node v13. (#68) ([94ebe84](https://github.com/beemojs/beemo/commit/94ebe84)), closes [#68](https://github.com/beemojs/beemo/issues/68)
+
+#### 📦 Dependencies
+
+- Update root and dev dependencies. ([1efcf4d](https://github.com/beemojs/beemo/commit/1efcf4d))
+
+#### 🛠 Internals
+
+- Add new local package to house configs and scripts. (#72) ([5d8695d](https://github.com/beemojs/beemo/commit/5d8695d)), closes [#72](https://github.com/beemojs/beemo/issues/72)
+- Fix syntax and composite issues. ([e2c67d2](https://github.com/beemojs/beemo/commit/e2c67d2))
+- Migrate to GitHub actions. (#65) ([d6d27af](https://github.com/beemojs/beemo/commit/d6d27af)), closes [#65](https://github.com/beemojs/beemo/issues/65)
+
+**Note:** Version bump only for package @beemo/dependency-graph
+
+
+
+
+
 ### 1.0.1 - 2019-07-06
 
 #### 🛠 Internals

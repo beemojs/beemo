@@ -3,6 +3,22 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+### 1.2.2 - 2020-02-10
+
+#### 📦 Dependencies
+
+- Update root and dev dependencies. ([1efcf4d](https://github.com/beemojs/beemo/commit/1efcf4d))
+
+#### 🛠 Internals
+
+- Fix syntax and composite issues. ([e2c67d2](https://github.com/beemojs/beemo/commit/e2c67d2))
+
+**Note:** Version bump only for package @beemo/driver-webpack
+
+
+
+
+
 ### 1.2.1 - 2020-01-25
 
 #### 📦 Dependencies

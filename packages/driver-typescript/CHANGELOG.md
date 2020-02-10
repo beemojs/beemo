@@ -3,6 +3,27 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+### 1.3.2 - 2020-02-10
+
+#### 🐞 Fixes
+
+- Remove composite from test config. (#76) ([26e408d](https://github.com/beemojs/beemo/commit/26e408d)), closes [#76](https://github.com/beemojs/beemo/issues/76)
+
+#### 📦 Dependencies
+
+- **[boost]** Update to latest. ([57693a9](https://github.com/beemojs/beemo/commit/57693a9))
+- Update driver dependencies. ([1238627](https://github.com/beemojs/beemo/commit/1238627))
+
+#### 🛠 Internals
+
+- Fix syntax and composite issues. ([e2c67d2](https://github.com/beemojs/beemo/commit/e2c67d2))
+
+**Note:** Version bump only for package @beemo/driver-typescript
+
+
+
+
+
 ### 1.3.1 - 2020-01-25
 
 #### 📦 Dependencies

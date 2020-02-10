@@ -3,6 +3,18 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+### 0.1.2 - 2020-02-10
+
+#### 📦 Dependencies
+
+- Update root and dev dependencies. ([1efcf4d](https://github.com/beemojs/beemo/commit/1efcf4d))
+
+**Note:** Version bump only for package @beemo/local
+
+
+
+
+
 ### 0.1.1 - 2020-01-25
 
 #### 🐞 Fixes
