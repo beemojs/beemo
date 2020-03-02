@@ -1,7 +1,7 @@
 import * as hygen from 'hygen';
 import { Path } from '@boost/common';
 import ScaffoldRoutine from '../../src/routines/ScaffoldRoutine';
-import { mockTool, mockDebugger, stubScaffoldContext, getRoot } from '../../src/testUtils';
+import { mockTool, mockDebugger, stubScaffoldContext } from '../../src/testUtils';
 
 jest.mock('hygen');
 
@@ -12,6 +12,7 @@ describe('ScaffoldRoutine', () => {
     routine = new ScaffoldRoutine('scaffold', 'Scaffolding templates');
     routine.context = stubScaffoldContext();
     routine.tool = mockTool();
+    routine.tool.config.module = '@beemo/local';
     routine.debug = mockDebugger();
   });
 
@@ -41,14 +42,14 @@ describe('ScaffoldRoutine', () => {
   });
 
   describe('execute()', () => {
-    it('passes module root to tasks', async () => {
+    it('passes module name to tasks', async () => {
       jest.spyOn(routine, 'serializeTasks').mockImplementation();
 
       routine.bootstrap();
 
       await routine.execute(routine.context);
 
-      expect(routine.serializeTasks).toHaveBeenCalledWith(getRoot());
+      expect(routine.serializeTasks).toHaveBeenCalledWith('@beemo/local');
     });
 
     it('executes pipeline in order', async () => {
@@ -58,13 +59,13 @@ describe('ScaffoldRoutine', () => {
 
       await routine.execute(routine.context);
 
-      expect(runSpy).toHaveBeenCalledWith(routine.context, getRoot(), expect.anything());
+      expect(runSpy).toHaveBeenCalledWith(routine.context, '@beemo/local', expect.anything());
     });
   });
 
   describe('runGenerator()', () => {
     it('executes hygen engine', async () => {
-      await routine.runGenerator(routine.context, new Path('./root'));
+      await routine.runGenerator(routine.context, '@beemo/local');
 
       expect(hygen.engine).toHaveBeenCalledWith(['-a', '--foo', 'bar', 'baz'], {
         createPrompter: expect.anything(),
@@ -73,7 +74,7 @@ describe('ScaffoldRoutine', () => {
         // @ts-ignore Allow access
         exec: routine.handleExec,
         logger: expect.anything(),
-        templates: 'root/templates',
+        templates: new Path(process.cwd(), 'packages/local/templates').path(),
       });
     });
 
@@ -85,7 +86,7 @@ describe('ScaffoldRoutine', () => {
       });
 
       try {
-        await routine.runGenerator(routine.context, new Path('./root'));
+        await routine.runGenerator(routine.context, '@beemo/local');
       } catch (error) {
         expect(error).toBe(baseError);
       }
@@ -97,7 +98,7 @@ describe('ScaffoldRoutine', () => {
       });
 
       try {
-        await routine.runGenerator(routine.context, new Path('./root'));
+        await routine.runGenerator(routine.context, '@beemo/local');
       } catch (error) {
         expect(error).toMatchSnapshot();
       }

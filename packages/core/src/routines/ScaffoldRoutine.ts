@@ -12,15 +12,20 @@ export default class ScaffoldRoutine extends Routine<ScaffoldContext, Beemo> {
   }
 
   execute(context: ScaffoldContext) {
-    return this.serializeTasks(context.moduleRoot);
+    return this.serializeTasks(this.tool.config.module);
   }
 
   /**
    * Execute the hygen scaffolding generator.
    */
-  async runGenerator(context: ScaffoldContext, moduleRoot: Path) {
+  async runGenerator(context: ScaffoldContext, moduleName: string) {
     const { tool } = this;
     const args = [context.generator, context.action];
+    const searchName = moduleName.includes('/') ? moduleName.split('/')[1] : moduleName;
+    let modulePath = require.resolve(moduleName);
+
+    // Index files may be nested, so we need to slice and work around it
+    modulePath = modulePath.slice(0, modulePath.lastIndexOf(searchName) + searchName.length);
 
     try {
       return await engine(context.argv, {
@@ -30,7 +35,7 @@ export default class ScaffoldRoutine extends Routine<ScaffoldContext, Beemo> {
         debug: tool.config.debug,
         exec: this.handleExec,
         logger: new Logger(this.handleLog),
-        templates: new Path(moduleRoot.path().replace('index.js', ''), 'templates').path(),
+        templates: new Path(modulePath, 'templates').path(),
       });
     } catch (error) {
       // Intercept hygen error to provide a better error message
