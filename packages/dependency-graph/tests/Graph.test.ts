@@ -7,11 +7,16 @@ function getBeemoPackages() {
   const pkgs: { [key: string]: PackageConfig } = {};
 
   // Globs must be forward slashes on Windows to work correctly
-  glob.sync(path.join(__dirname, '../../*/package.json').replace(/\\/gu, '/')).forEach(pkgPath => {
-    // eslint-disable-next-line
-    const pkg = require(String(pkgPath));
-    pkgs[pkg.name] = pkg;
-  });
+  glob
+    .sync('*/package.json', {
+      absolute: true,
+      cwd: path.join(__dirname, '../../').replace(/\\/gu, '/'),
+    })
+    .forEach(pkgPath => {
+      // eslint-disable-next-line
+      const pkg = require(pkgPath);
+      pkgs[pkg.name] = pkg;
+    });
 
   return pkgs;
 }

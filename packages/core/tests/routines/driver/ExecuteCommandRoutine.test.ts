@@ -83,8 +83,8 @@ describe('ExecuteCommandRoutine', () => {
   describe('constructor()', () => {
     it('errors if `forceConfigOption` is not a boolean', () => {
       expect(() => {
-        // @ts-ignore
         routine = new ExecuteCommandRoutine('test', 'test', {
+          // @ts-ignore
           forceConfigOption: 'foo',
         });
       }).toThrowErrorMatchingSnapshot();
@@ -92,8 +92,8 @@ describe('ExecuteCommandRoutine', () => {
 
     it('errors if `packageRoot` is not a string', () => {
       expect(() => {
-        // @ts-ignore
         routine = new ExecuteCommandRoutine('test', 'test', {
+          // @ts-ignore
           packageRoot: 123,
         });
       }).toThrowErrorMatchingSnapshot();
