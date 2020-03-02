@@ -56,6 +56,7 @@ export function mockTool(argv: Argv = []): Beemo {
       concurrency: 0,
       graph: true,
     },
+    module: 'test-module',
     scripts: [],
   });
 
