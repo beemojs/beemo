@@ -3,6 +3,18 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+### 0.1.3 - 2020-03-02
+
+#### 🐞 Fixes
+
+- Another attempt at fixing scaffold template paths. (#78) ([d025bb9](https://github.com/beemojs/beemo/commit/d025bb9)), closes [#78](https://github.com/beemojs/beemo/issues/78)
+
+**Note:** Version bump only for package @beemo/local
+
+
+
+
+
 ### 0.1.2 - 2020-02-10
 
 #### 📦 Dependencies

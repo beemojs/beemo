@@ -3,6 +3,23 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+### 1.1.5 - 2020-03-02
+
+#### 🐞 Fixes
+
+- Another attempt at fixing scaffold template paths. (#78) ([d025bb9](https://github.com/beemojs/beemo/commit/d025bb9)), closes [#78](https://github.com/beemojs/beemo/issues/78)
+
+#### 📦 Dependencies
+
+- Update driver dependencies. ([8de8be3](https://github.com/beemojs/beemo/commit/8de8be3))
+- Update root and dev dependencies. ([7387d1d](https://github.com/beemojs/beemo/commit/7387d1d))
+
+**Note:** Version bump only for package @beemo/core
+
+
+
+
+
 ### 1.1.4 - 2020-02-10
 
 #### 🐞 Fixes
