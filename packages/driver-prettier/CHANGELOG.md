@@ -3,6 +3,22 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## 1.3.0 - 2020-03-21
+
+#### 🚀 Updates
+
+- Add support for v2. ([c10afc8](https://github.com/beemojs/beemo/commit/c10afc8))
+
+#### 📦 Dependencies
+
+- Update drivers to latest. ([4c39c71](https://github.com/beemojs/beemo/commit/4c39c71))
+
+**Note:** Version bump only for package @beemo/driver-prettier
+
+
+
+
+
 ### 1.2.2 - 2020-02-10
 
 #### 📦 Dependencies

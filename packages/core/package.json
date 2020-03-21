@@ -1,6 +1,6 @@
 {
   "name": "@beemo/core",
-  "version": "1.1.5",
+  "version": "1.1.6",
   "description": "Manage all dev tool configurations in a single centralized repository.",
   "keywords": [
     "beemo",
