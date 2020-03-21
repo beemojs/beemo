@@ -43,8 +43,8 @@
     "lodash": "^4.17.15",
     "micromatch": "^4.0.2",
     "optimal": "^4.2.0",
-    "yargs": "^15.1.0",
-    "yargs-parser": "^17.1.0"
+    "yargs": "^15.3.1",
+    "yargs-parser": "^18.1.1"
   },
   "devDependencies": {
     "@boost/test-utils": "^1.4.1"
