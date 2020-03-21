@@ -33,6 +33,9 @@
     "conventional-changelog-beemo": "^1.6.0",
     "lerna": "^3.20.2"
   },
+  "resolutions": {
+    "prettier": "^2.0.1"
+  },
   "workspaces": [
     "packages/*"
   ],

@@ -14,7 +14,7 @@ export default class CleanupConfigsRoutine extends Routine<DriverContext, Beemo>
    */
   async deleteConfigFiles(context: DriverContext): Promise<boolean[]> {
     return Promise.all(
-      context.configPaths.map(config => {
+      context.configPaths.map((config) => {
         this.debug('Deleting config file %s', chalk.cyan(config.path));
 
         this.tool

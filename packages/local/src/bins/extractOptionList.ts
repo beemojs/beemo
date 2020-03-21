@@ -41,7 +41,7 @@ execa('npx', [bin, ...binArgs])
   .then(({ stdout }) => {
     const optionTypes = new Map<string, string>();
 
-    stdout.split('\n').forEach(line => {
+    stdout.split('\n').forEach((line) => {
       const result = line.match(OPTION_PATTERN);
 
       if (!result) {
@@ -50,7 +50,7 @@ execa('npx', [bin, ...binArgs])
 
       const type = determineType(line);
 
-      result.forEach(opt => {
+      result.forEach((opt) => {
         let option = opt.trim();
 
         // Trim trailing comma
@@ -75,7 +75,7 @@ execa('npx', [bin, ...binArgs])
 
     args.sort((a, b) => a[0].localeCompare(b[0]));
 
-    args.forEach(arg => {
+    args.forEach((arg) => {
       console.log(`${arg[0]}?: ${arg[1]};`);
     });
 

@@ -34,7 +34,7 @@ export default class ExecuteDriverRoutine extends RunInWorkspacesRoutine<DriverC
       }),
     );
 
-    parallelArgv.forEach(pargv => {
+    parallelArgv.forEach((pargv) => {
       this.pipe(
         new ExecuteCommandRoutine(key, `${command} ${pargv.join(' ')}`.trim(), {
           ...options,

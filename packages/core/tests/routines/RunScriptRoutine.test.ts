@@ -18,7 +18,7 @@ describe('RunScriptRoutine', () => {
   ) {
     expect(mock).toHaveBeenCalledTimes(tests.length);
 
-    tests.forEach(test => {
+    tests.forEach((test) => {
       const { key = expect.anything(), ...options } = test;
 
       expect(mock).toHaveBeenCalledWith(
@@ -48,7 +48,7 @@ describe('RunScriptRoutine', () => {
   });
 
   afterEach(() => {
-    fixtures.forEach(fixture => fixture());
+    fixtures.forEach((fixture) => fixture());
   });
 
   describe('bootstrap()', () => {

@@ -33,7 +33,7 @@ export default abstract class RunInWorkspacesRoutine<
         root: workspaceRoot,
       });
 
-      this.getFilteredWorkspacePackages().forEach(pkg => {
+      this.getFilteredWorkspacePackages().forEach((pkg) => {
         this.pipeRoutine(pkg.workspace.packageName, pkg.workspace.packagePath);
       });
     } else {
@@ -79,7 +79,7 @@ export default abstract class RunInWorkspacesRoutine<
   formatAndThrowErrors(errors: Error[]) {
     let message = this.tool.msg('errors:executeFailed');
 
-    (errors as ExecutionError[]).forEach(error => {
+    (errors as ExecutionError[]).forEach((error) => {
       let content = stripAnsi(error.stderr || error.stdout || '')
         .trim()
         .split('\n');
@@ -109,10 +109,7 @@ export default abstract class RunInWorkspacesRoutine<
 
     // Inherit stack for easier debugging.
     if (errors.length === 1) {
-      error.stack = String(errors[0].stack)
-        .split('\n')
-        .slice(1)
-        .join('\n');
+      error.stack = String(errors[0].stack).split('\n').slice(1).join('\n');
     }
 
     throw error;
@@ -122,7 +119,7 @@ export default abstract class RunInWorkspacesRoutine<
    * Return a list of workspaces optionally filtered.
    */
   getFilteredWorkspacePackages(): WorkspacePackageConfig[] {
-    return this.workspacePackages.filter(pkg =>
+    return this.workspacePackages.filter((pkg) =>
       isPatternMatch(pkg.name, this.context.args.workspaces),
     );
   }
@@ -140,9 +137,9 @@ export default abstract class RunInWorkspacesRoutine<
     const batchList = new Graph(this.workspacePackages).resolveBatchList();
     const batches: Routine<Ctx, Beemo>[][] = [];
 
-    batchList.forEach(batch => {
+    batchList.forEach((batch) => {
       const routines = batch
-        .map(pkg => this.routines.find(route => route.key === pkg.workspace.packageName))
+        .map((pkg) => this.routines.find((route) => route.key === pkg.workspace.packageName))
         .filter(Boolean) as Routine<Ctx, Beemo>[];
 
       if (routines.length > 0) {

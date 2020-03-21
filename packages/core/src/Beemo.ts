@@ -141,7 +141,7 @@ export default class Beemo<T = any> extends Tool<BeemoPluginRegistry, BeemoConfi
 
     // Create for all enabled drivers
     if (driverNames.length === 0) {
-      this.getPlugins('driver').forEach(driver => {
+      this.getPlugins('driver').forEach((driver) => {
         context.addDriverDependency(driver);
         driverNames.push(driver.name);
       });
@@ -150,7 +150,7 @@ export default class Beemo<T = any> extends Tool<BeemoPluginRegistry, BeemoConfi
 
       // Create for one or many driver
     } else {
-      driverNames.forEach(driverName => {
+      driverNames.forEach((driverName) => {
         context.addDriverDependency(this.getPlugin('driver', driverName));
       });
 
@@ -300,7 +300,7 @@ export default class Beemo<T = any> extends Tool<BeemoPluginRegistry, BeemoConfi
 
     // Delete config files on failure
     if (this.config.configure.cleanup) {
-      this.onExit.listen(code => this.handleCleanupOnFailure(code, context));
+      this.onExit.listen((code) => this.handleCleanupOnFailure(code, context));
     }
 
     // Silence console reporter to inherit stdio
@@ -336,7 +336,7 @@ export default class Beemo<T = any> extends Tool<BeemoPluginRegistry, BeemoConfi
 
     // Must not be async!
     if (Array.isArray(context.configPaths)) {
-      context.configPaths.forEach(config => {
+      context.configPaths.forEach((config) => {
         fs.removeSync(config.path.path());
       });
     }

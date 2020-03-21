@@ -220,7 +220,7 @@ describe('ExecuteCommandRoutine', () => {
       });
     });
 
-    ['stream', 'inherit'].forEach(stdio => {
+    ['stream', 'inherit'].forEach((stdio) => {
       describe(`${stdio}`, () => {
         beforeEach(() => {
           routine.context.args.stdio = stdio as StdioType;

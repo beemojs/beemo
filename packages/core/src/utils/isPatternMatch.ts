@@ -16,7 +16,7 @@ export default function isPatternMatch(
 
   // Whitelist (foo,bar)
   if (pattern.includes(',') && !pattern.includes('{')) {
-    return pattern.split(',').some(part => string === part);
+    return pattern.split(',').some((part) => string === part);
   }
 
   // Patterns ([a-z], foo|bar, etc)

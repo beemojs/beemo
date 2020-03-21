@@ -71,7 +71,7 @@ export default class ExecuteCommandRoutine extends Routine<
   captureOutput = (stream: execa.ExecaChildProcess) => {
     const { args, primaryDriver } = this.context;
     const { watchOptions } = primaryDriver.metadata;
-    const isWatching = watchOptions.some(option => {
+    const isWatching = watchOptions.some((option) => {
       // Option
       if (option.startsWith('-')) {
         return !!args[option.replace(/^-{1,2}/u, '')];
@@ -97,7 +97,7 @@ export default class ExecuteCommandRoutine extends Routine<
 
     // When cmd/ctrl + c is pressed, write out the current buffer
     if (args.stdio === 'buffer') {
-      this.tool.console.onError.listen(error => {
+      this.tool.console.onError.listen((error) => {
         if (
           (error instanceof SignalError || error.name === 'SignalError') &&
           // @ts-ignore Temporary fix
@@ -134,7 +134,7 @@ export default class ExecuteCommandRoutine extends Routine<
 
     this.debug('Copying config files to workspace');
 
-    context.configPaths.forEach(config => {
+    context.configPaths.forEach((config) => {
       fs.copyFileSync(config.path.path(), new Path(packageRoot, config.path.name()).path());
     });
 
@@ -149,7 +149,7 @@ export default class ExecuteCommandRoutine extends Routine<
 
     this.debug('Expanding glob patterns');
 
-    argv.forEach(arg => {
+    argv.forEach((arg) => {
       if (arg.charAt(0) !== '-' && isGlob(arg)) {
         const paths = glob
           .sync(arg, {
@@ -157,7 +157,7 @@ export default class ExecuteCommandRoutine extends Routine<
             onlyDirectories: false,
             onlyFiles: false,
           })
-          .map(path => new Path(path).path());
+          .map((path) => new Path(path).path());
 
         this.debug(
           '  %s %s %s',
@@ -188,7 +188,7 @@ export default class ExecuteCommandRoutine extends Routine<
 
       const nativeOptions: OptionMap = {};
 
-      options.forEach(option => {
+      options.forEach((option) => {
         nativeOptions[option] = true;
       });
 
@@ -208,7 +208,7 @@ export default class ExecuteCommandRoutine extends Routine<
     const nativeOptions: OptionMap = {};
     const matches = stdout.match(OPTION_PATTERN) || [];
 
-    matches.forEach(option => {
+    matches.forEach((option) => {
       // Trim trailing comma or space
       nativeOptions[option.slice(0, -1)] = true;
     });

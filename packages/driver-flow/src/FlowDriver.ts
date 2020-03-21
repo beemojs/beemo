@@ -17,7 +17,7 @@ export default class FlowDriver extends Driver<FlowConfig> {
   formatConfig(data: FlowConfig): string {
     const output: string[] = [];
 
-    Object.keys(data).forEach(key => {
+    Object.keys(data).forEach((key) => {
       const value = data[key as keyof FlowConfig];
 
       if (!value) {
@@ -29,7 +29,7 @@ export default class FlowDriver extends Driver<FlowConfig> {
       switch (key) {
         default:
           if (Array.isArray(value)) {
-            output.push(...value.map(v => String(v)));
+            output.push(...value.map((v) => String(v)));
           } else if (value) {
             output.push(String(value));
           }
@@ -51,7 +51,7 @@ export default class FlowDriver extends Driver<FlowConfig> {
   formatLintsSection(lints: LintsConfig): string[] {
     const output: string[] = [];
 
-    Object.keys(lints).forEach(key => {
+    Object.keys(lints).forEach((key) => {
       let value = lints[key];
 
       if (value === 0) {
@@ -73,10 +73,7 @@ export default class FlowDriver extends Driver<FlowConfig> {
 
     // http://caml.inria.fr/pub/docs/manual-ocaml/libref/Str.html#TYPEregexp
     if (value instanceof RegExp) {
-      option = value.source
-        .replace(/\|/gu, '\\|')
-        .replace(/\(/gu, '\\(')
-        .replace(/\)/gu, '\\)');
+      option = value.source.replace(/\|/gu, '\\|').replace(/\(/gu, '\\(').replace(/\)/gu, '\\)');
     } else {
       option = String(value);
     }
@@ -87,7 +84,7 @@ export default class FlowDriver extends Driver<FlowConfig> {
   formatOptionsSection(options: OptionsConfig): string[] {
     const output: string[] = [];
 
-    Object.keys(options).forEach(key => {
+    Object.keys(options).forEach((key) => {
       const value = options[key as keyof OptionsConfig];
 
       if (!value) {
@@ -95,13 +92,13 @@ export default class FlowDriver extends Driver<FlowConfig> {
 
         // Multiple values
       } else if (Array.isArray(value)) {
-        value.forEach(val => {
+        value.forEach((val) => {
           output.push(`${key}=${this.formatOption(val)}`);
         });
 
         // Mapped objects
       } else if (typeof value === 'object' && !(value instanceof RegExp)) {
-        Object.keys(value).forEach(pattern => {
+        Object.keys(value).forEach((pattern) => {
           output.push(
             `${key}=${this.formatOption(pattern, true)} -> ${this.formatOption(
               value[pattern],

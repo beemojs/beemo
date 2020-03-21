@@ -184,11 +184,9 @@ export default abstract class Driver<
   setCommandOptions(options: DriverCommandOptions): this {
     const blueprint: Blueprint<DriverCommandOptions> = {};
 
-    Object.keys(options).forEach(key => {
+    Object.keys(options).forEach((key) => {
       blueprint[key] = shape({
-        description: string()
-          .notEmpty()
-          .required(),
+        description: string().notEmpty().required(),
       });
     });
 

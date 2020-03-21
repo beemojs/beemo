@@ -13,7 +13,7 @@ export default function parseSpecialArgv(argv: Argv): ParsedArgv {
   const parallel: Argv[] = [];
   let index = -1;
 
-  argv.forEach(arg => {
+  argv.forEach((arg) => {
     if (arg === '//') {
       index += 1;
     } else if (index >= 0) {

@@ -24,14 +24,14 @@ beemo.bootstrapConfigModule();
 beemo.bootstrapCLI(app);
 
 // Add a command for each driver
-beemo.getPlugins('driver').forEach(driver => {
+beemo.getPlugins('driver').forEach((driver) => {
   const { command, metadata } = driver;
 
   app.command(
     driver.name,
     metadata.description || beemo.msg('app:run', { title: metadata.title }),
-    cmd => {
-      Object.keys(command).forEach(key => {
+    (cmd) => {
+      Object.keys(command).forEach((key) => {
         cmd.option(key, command[key]);
       });
 
@@ -58,7 +58,7 @@ beemo.getPlugins('driver').forEach(driver => {
           string: true,
         });
     },
-    args => beemo.runDriver(args, driver.name, parallel),
+    (args) => beemo.runDriver(args, driver.name, parallel),
   );
 });
 
@@ -66,19 +66,19 @@ beemo.getPlugins('driver').forEach(driver => {
 app.command(
   ['create-config [names..]', 'config [names..]'],
   beemo.msg('app:cliCommandConfig'),
-  cmd =>
+  (cmd) =>
     cmd.positional('names', {
       default: [],
       description: beemo.msg('app:cliArgConfigNames'),
       type: 'string',
     }),
-  args => beemo.createConfigFiles(args, args.names),
+  (args) => beemo.createConfigFiles(args, args.names),
 );
 
 app.command(
   ['run-script <name>', 'run <name>'],
   beemo.msg('app:cliCommandRunScript'),
-  cmd =>
+  (cmd) =>
     cmd
       .positional('name', {
         default: '',
@@ -106,13 +106,13 @@ app.command(
         description: beemo.msg('app:cliOptionWorkspaces'),
         string: true,
       }),
-  args => beemo.runScript(args, args.name),
+  (args) => beemo.runScript(args, args.name),
 );
 
 app.command(
   'scaffold <generator> <action> [name]',
   beemo.msg('app:cliCommandScaffold'),
-  cmd =>
+  (cmd) =>
     cmd
       .positional('generator', {
         default: '',
@@ -134,7 +134,7 @@ app.command(
         default: false,
         description: beemo.msg('app:cliOptionDryRun'),
       }),
-  args => beemo.scaffold(args, args.generator, args.action, args.name),
+  (args) => beemo.scaffold(args, args.generator, args.action, args.name),
 );
 
 app.command('*', false, {}, () => {

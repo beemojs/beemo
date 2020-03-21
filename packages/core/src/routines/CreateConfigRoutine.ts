@@ -289,7 +289,7 @@ export default class CreateConfigRoutine<Ctx extends ConfigContext> extends Rout
     const { env } = this.options.driver.options;
 
     // TODO: This may cause collisions, isolate in a child process?
-    Object.keys(env).forEach(key => {
+    Object.keys(env).forEach((key) => {
       process.env[key] = env[key];
     });
 

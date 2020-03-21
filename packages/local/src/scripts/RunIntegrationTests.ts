@@ -45,15 +45,15 @@ export default class RunIntegrationTestsScript extends Script<Args> {
     this.tool.log('Testing %s - %s', chalk.yellow(pkg.name), script);
 
     return Promise.all(
-      script.split('&&').map(command => {
+      script.split('&&').map((command) => {
         const [cmd, ...cmdArgs] = command.trim().split(' ');
 
         return (
           execa(cmd, cmdArgs, { cwd: context.cwd.path(), preferLocal: true })
             // Handles everything else
-            .then(response => this.handleResult(name, args, response))
+            .then((response) => this.handleResult(name, args, response))
             // Handles syntax errors
-            .catch(error => this.handleResult(name, args, error))
+            .catch((error) => this.handleResult(name, args, error))
         );
       }),
     );

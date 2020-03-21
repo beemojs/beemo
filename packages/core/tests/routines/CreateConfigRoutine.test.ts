@@ -71,7 +71,7 @@ describe('CreateConfigRoutine', () => {
     writeSpy.mockRestore();
     copySpy.mockRestore();
 
-    fixtures.forEach(fixture => fixture());
+    fixtures.forEach((fixture) => fixture());
   });
 
   describe('constructor()', () => {

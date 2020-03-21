@@ -57,19 +57,19 @@ Once all packages have been defined, we can generate a graph using these `Graph`
 
 ```ts
 // List of packages
-graph.resolveList().forEach(pkg => {
+graph.resolveList().forEach((pkg) => {
   console.log(pkg.name);
 });
 
 // List of list of packages
-graph.resolveBatchList().forEach(pkgs => {
-  pkgs.forEach(pkg => {
+graph.resolveBatchList().forEach((pkgs) => {
+  pkgs.forEach((pkg) => {
     console.log(pkg.name);
   });
 });
 
 // Tree of nodes
-graph.resolveTree().nodes.forEach(node => {
+graph.resolveTree().nodes.forEach((node) => {
   console.log(node.package.name);
 
   if (node.nodes) {

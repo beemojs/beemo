@@ -97,7 +97,7 @@ export default class TypeScriptDriver extends Driver<TypeScriptConfig, TypeScrip
       this.onCreateProjectConfigFile.emit([context, configPath, config, isTests]);
 
       return new Promise((resolve, reject) => {
-        fs.writeFile(configPath.path(), this.formatConfig(config), error => {
+        fs.writeFile(configPath.path(), this.formatConfig(config), (error) => {
           if (error) {
             reject(error);
           } else {
@@ -108,7 +108,7 @@ export default class TypeScriptDriver extends Driver<TypeScriptConfig, TypeScrip
     };
 
     // Map package name to absolute paths
-    workspacePackages.forEach(wsPkg => {
+    workspacePackages.forEach((wsPkg) => {
       namesToPaths[wsPkg.name] = wsPkg.workspace.packagePath;
     });
 
@@ -131,7 +131,7 @@ export default class TypeScriptDriver extends Driver<TypeScriptConfig, TypeScrip
 
           // Extract and determine references
           Object.keys({ ...dependencies, ...devDependencies, ...peerDependencies }).forEach(
-            depName => {
+            (depName) => {
               if (namesToPaths[depName]) {
                 references.push({
                   path: pkgPath.relativeTo(namesToPaths[depName]).path(),

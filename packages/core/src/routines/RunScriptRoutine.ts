@@ -114,7 +114,7 @@ export default class RunScriptRoutine extends RunInWorkspacesRoutine<ScriptConte
    */
   postLoad(context: ScriptContext, script: Script | null): Script {
     if (!script) {
-      const messages = this.errors.map(error => `  - ${error.message}`).join('\n');
+      const messages = this.errors.map((error) => `  - ${error.message}`).join('\n');
 
       throw new Error(`Failed to load script from multiple sources:\n${messages}`);
     }

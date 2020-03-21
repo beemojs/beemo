@@ -12,7 +12,7 @@ function getBeemoPackages() {
       absolute: true,
       cwd: path.join(__dirname, '../../').replace(/\\/gu, '/'),
     })
-    .forEach(pkgPath => {
+    .forEach((pkgPath) => {
       // eslint-disable-next-line
       const pkg = require(pkgPath);
       pkgs[pkg.name] = pkg;

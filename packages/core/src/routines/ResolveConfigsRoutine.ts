@@ -24,7 +24,7 @@ export default class ResolveConfigsRoutine<T extends ConfigContext = ConfigConte
    * and then run in parallel.
    */
   setupConfigFiles() {
-    const names = [...this.context.drivers].reverse().map(driver => {
+    const names = [...this.context.drivers].reverse().map((driver) => {
       const routine = new CreateConfigRoutine<T>(driver.name, driver.metadata.configName, {
         driver,
       });
@@ -55,7 +55,7 @@ export default class ResolveConfigsRoutine<T extends ConfigContext = ConfigConte
 
       this.debug('Resolving %s', driver.name);
 
-      deps.forEach(name => {
+      deps.forEach((name) => {
         this.debug('  Including dependency %s', chalk.green(name));
 
         queue.push(this.tool.getPlugin('driver', name));

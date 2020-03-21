@@ -35,7 +35,7 @@ export default class Graph<T extends PackageConfig = PackageConfig> {
    * Add multiple packages.
    */
   addPackages(packages: T[] = []): this {
-    packages.forEach(pkg => {
+    packages.forEach((pkg) => {
       this.addPackage(pkg);
     });
 
@@ -78,7 +78,7 @@ export default class Graph<T extends PackageConfig = PackageConfig> {
         package: pkg,
       };
 
-      this.sortByDependedOn(node.dependents).forEach(child => {
+      this.sortByDependedOn(node.dependents).forEach((child) => {
         resolve(child, branch);
       });
 
@@ -96,7 +96,7 @@ export default class Graph<T extends PackageConfig = PackageConfig> {
       root: true,
     };
 
-    this.sortByDependedOn(this.getRootNodes()).forEach(node => resolve(node, trunk));
+    this.sortByDependedOn(this.getRootNodes()).forEach((node) => resolve(node, trunk));
 
     // Some nodes are missing, so they must be a cycle
     if (seen.size !== this.nodes.size) {
@@ -116,11 +116,11 @@ export default class Graph<T extends PackageConfig = PackageConfig> {
     const batches: T[][] = [];
     const seen: Set<Node> = new Set();
     const addBatch = () => {
-      const nextBatch = Array.from(this.nodes.values()).filter(node => {
+      const nextBatch = Array.from(this.nodes.values()).filter((node) => {
         return (
           !seen.has(node) &&
           (node.requirements.size === 0 ||
-            Array.from(node.requirements.values()).filter(dep => !seen.has(dep)).length === 0)
+            Array.from(node.requirements.values()).filter((dep) => !seen.has(dep)).length === 0)
         );
       });
 
@@ -129,9 +129,9 @@ export default class Graph<T extends PackageConfig = PackageConfig> {
         this.detectCycle();
       }
 
-      batches.push(this.sortByDependedOn(nextBatch).map(node => this.packages.get(node.name)!));
+      batches.push(this.sortByDependedOn(nextBatch).map((node) => this.packages.get(node.name)!));
 
-      nextBatch.forEach(node => seen.add(node));
+      nextBatch.forEach((node) => seen.add(node));
 
       if (seen.size !== this.nodes.size) {
         addBatch();
@@ -157,17 +157,17 @@ export default class Graph<T extends PackageConfig = PackageConfig> {
   protected detectCycle() {
     const dig = (node: Node, cycle: Set<Node>) => {
       if (cycle.has(node)) {
-        const path = [...Array.from(cycle), node].map(n => n.name).join(' -> ');
+        const path = [...Array.from(cycle), node].map((n) => n.name).join(' -> ');
 
         throw new Error(`Circular dependency detected: ${path}`);
       }
 
       cycle.add(node);
 
-      node.dependents.forEach(child => dig(child, new Set(cycle)));
+      node.dependents.forEach((child) => dig(child, new Set(cycle)));
     };
 
-    this.nodes.forEach(node => dig(node, new Set()));
+    this.nodes.forEach((node) => dig(node, new Set()));
   }
 
   /**
@@ -177,7 +177,7 @@ export default class Graph<T extends PackageConfig = PackageConfig> {
   protected getRootNodes(): Node[] {
     const rootNodes: Node[] = [];
 
-    this.nodes.forEach(node => {
+    this.nodes.forEach((node) => {
       if (node.requirements.size === 0) {
         rootNodes.push(node);
       }
@@ -200,11 +200,11 @@ export default class Graph<T extends PackageConfig = PackageConfig> {
     }
 
     this.mapped = true;
-    this.packages.forEach(pkg => {
+    this.packages.forEach((pkg) => {
       Object.keys({
         ...pkg.dependencies,
         ...pkg.peerDependencies,
-      }).forEach(depName => {
+      }).forEach((depName) => {
         this.mapDependency(pkg.name, depName);
       });
     });
@@ -236,7 +236,7 @@ export default class Graph<T extends PackageConfig = PackageConfig> {
   protected resetNodes() {
     this.mapped = false;
     this.nodes = new Map();
-    this.packages.forEach(pkg => {
+    this.packages.forEach((pkg) => {
       this.addNode(pkg.name);
     });
   }

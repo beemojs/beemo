@@ -83,7 +83,7 @@ export default class ExecuteScriptRoutine extends Routine<
     type: ExecuteType,
     tasks: Task<ScriptContext>[],
   ): Promise<unknown> {
-    tasks.forEach(task => {
+    tasks.forEach((task) => {
       this.task(task.title, task.action, this.context.script);
     });
 

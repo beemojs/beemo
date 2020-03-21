@@ -38,7 +38,7 @@ export default class BumpPeerDepsScript extends Script<Args> {
     const packages: { [name: string]: PackageConfig } = {};
     const packagePaths: { [name: string]: string } = {};
 
-    glob.sync('./packages/*/package.json', { cwd: this.tool.options.root }).forEach(path => {
+    glob.sync('./packages/*/package.json', { cwd: this.tool.options.root }).forEach((path) => {
       const data = fs.readJsonSync(path);
 
       versions[data.name] = semver.inc(data.version, release)!;
@@ -49,7 +49,7 @@ export default class BumpPeerDepsScript extends Script<Args> {
     return Promise.all(
       Object.entries(packages).map(([name, data]) => {
         if (data.peerDependencies) {
-          Object.keys(data.peerDependencies).forEach(peerName => {
+          Object.keys(data.peerDependencies).forEach((peerName) => {
             if (!versions[peerName]) {
               return;
             }

@@ -50,7 +50,7 @@ export default class Context<T = {}> extends BaseContext {
    * Add multiple positional arguments.
    */
   addArgs(args: string[]): this {
-    args.forEach(arg => {
+    args.forEach((arg) => {
       this.addArg(arg);
     });
 
@@ -109,7 +109,7 @@ export default class Context<T = {}> extends BaseContext {
    * Add multiple boolean option arguments.
    */
   addOptions(args: string[]): this {
-    args.forEach(arg => {
+    args.forEach((arg) => {
       this.addOption(arg);
     });
 
@@ -121,7 +121,7 @@ export default class Context<T = {}> extends BaseContext {
    */
   findConfigByName(name: string): ConfigPath | undefined {
     return this.configPaths.find(
-      config => String(config.path).endsWith(name) || config.driver === name,
+      (config) => String(config.path).endsWith(name) || config.driver === name,
     );
   }
 
