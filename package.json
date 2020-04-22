@@ -20,7 +20,7 @@
     "task:args": "node ./packages/local/lib/bins/extractOptionList.js"
   },
   "devDependencies": {
-    "@milesj/build-tool-config": "^1.1.0",
+    "@milesj/build-tool-config": "1.0.1",
     "@types/fs-extra": "^8.1.0",
     "@types/is-glob": "^4.0.1",
     "@types/lodash": "^4.14.150",
