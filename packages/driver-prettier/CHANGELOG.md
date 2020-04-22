@@ -3,6 +3,22 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+### 1.3.1 - 2020-04-22
+
+#### ⚙️ Types
+
+- Support config overrides. [#80] ([721c1a2](https://github.com/beemojs/beemo/commit/721c1a2)), closes [#80](https://github.com/beemojs/beemo/issues/80)
+
+#### 🛠 Internals
+
+- Run prettier. ([cbdef47](https://github.com/beemojs/beemo/commit/cbdef47))
+
+**Note:** Version bump only for package @beemo/driver-prettier
+
+
+
+
+
 ## 1.3.0 - 2020-03-21
 
 #### 🚀 Updates

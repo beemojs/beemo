@@ -3,6 +3,18 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+### 1.2.2 - 2020-04-22
+
+#### 📦 Dependencies
+
+- **[jest]** Update driver. ([fd6cb79](https://github.com/beemojs/beemo/commit/fd6cb79))
+
+**Note:** Version bump only for package @beemo/driver-jest
+
+
+
+
+
 ### 1.2.1 - 2020-02-10
 
 #### 📦 Dependencies

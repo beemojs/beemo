@@ -3,6 +3,18 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+### 1.3.3 - 2020-04-22
+
+#### 🛠 Internals
+
+- Run prettier. ([cbdef47](https://github.com/beemojs/beemo/commit/cbdef47))
+
+**Note:** Version bump only for package @beemo/driver-typescript
+
+
+
+
+
 ### 1.3.2 - 2020-02-10
 
 #### 🐞 Fixes

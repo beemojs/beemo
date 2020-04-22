@@ -3,6 +3,22 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+### 1.2.5 - 2020-04-22
+
+#### 📦 Dependencies
+
+- **[flow]** Update driver. ([fbdd4c9](https://github.com/beemojs/beemo/commit/fbdd4c9))
+
+#### 🛠 Internals
+
+- Run prettier. ([cbdef47](https://github.com/beemojs/beemo/commit/cbdef47))
+
+**Note:** Version bump only for package @beemo/driver-flow
+
+
+
+
+
 ### 1.2.4 - 2020-03-21
 
 #### 📦 Dependencies

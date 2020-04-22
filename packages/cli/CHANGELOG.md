@@ -3,6 +3,18 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+### 1.0.11 - 2020-04-22
+
+#### 🛠 Internals
+
+- Run prettier. ([cbdef47](https://github.com/beemojs/beemo/commit/cbdef47))
+
+**Note:** Version bump only for package @beemo/cli
+
+
+
+
+
 ### 1.0.10 - 2020-03-21
 
 #### 📦 Dependencies

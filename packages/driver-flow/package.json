@@ -1,6 +1,6 @@
 {
   "name": "@beemo/driver-flow",
-  "version": "1.2.4",
+  "version": "1.2.5",
   "description": "Flow driver for Beemo.",
   "keywords": [
     "beemo",
