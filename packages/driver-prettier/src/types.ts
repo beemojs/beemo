@@ -1,7 +1,15 @@
 import { RequiredOptions } from 'prettier';
 
-export interface PrettierConfig extends Partial<RequiredOptions> {
+export type CommonConfig = Partial<RequiredOptions>;
+
+export interface OverrideConfig {
+  files: string | string[];
+  options: CommonConfig;
+}
+
+export interface PrettierConfig extends CommonConfig {
   ignore?: string[];
+  overrides?: OverrideConfig[];
 }
 
 export interface PrettierArgs {
