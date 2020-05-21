@@ -38,10 +38,7 @@ export type RuleSetting = 0 | 1 | 2 | '0' | '1' | '2' | 'off' | 'warn' | 'error'
 export type RuleOptions = string | number | boolean | { [option: string]: unknown };
 
 export interface Rules {
-  [rule: string]:
-    | RuleSetting
-    | [RuleSetting, RuleOptions]
-    | [RuleSetting, RuleOptions, RuleOptions];
+  [rule: string]: RuleSetting | [RuleSetting, ...RuleOptions[]];
 }
 
 export interface ParserOptions {
