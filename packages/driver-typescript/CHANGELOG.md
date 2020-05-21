@@ -3,6 +3,18 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+### 1.3.4 - 2020-05-21
+
+#### 📦 Dependencies
+
+- Update minor and patch versions. ([87b8a14](https://github.com/beemojs/beemo/commit/87b8a14))
+
+**Note:** Version bump only for package @beemo/driver-typescript
+
+
+
+
+
 ### 1.3.3 - 2020-04-22
 
 #### 🛠 Internals
