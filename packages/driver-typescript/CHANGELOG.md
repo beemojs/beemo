@@ -3,6 +3,18 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## 1.4.0 - 2020-06-22
+
+#### 🚀 Updates
+
+- Add `include` support for workspaces. ([feb91e0](https://github.com/beemojs/beemo/commit/feb91e0))
+
+**Note:** Version bump only for package @beemo/driver-typescript
+
+
+
+
+
 ### 1.3.4 - 2020-05-21
 
 #### 📦 Dependencies
