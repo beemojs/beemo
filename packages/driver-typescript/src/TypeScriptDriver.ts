@@ -85,7 +85,7 @@ export default class TypeScriptDriver extends Driver<TypeScriptConfig, TypeScrip
     const globalTypesPath = workspaceRoot.append(typesFolder, '**/*');
     const namesToPaths: { [key: string]: string } = {};
     const workspacePackages = this.tool.getWorkspacePackages<{
-      tsconfig: Pick<TypeScriptConfig, 'compilerOptions' | 'exclude'>;
+      tsconfig: Pick<TypeScriptConfig, 'compilerOptions' | 'include' | 'exclude'>;
     }>({
       root: workspaceRoot,
     });
@@ -169,6 +169,10 @@ export default class TypeScriptDriver extends Driver<TypeScriptConfig, TypeScrip
 
             if (testsFolder) {
               packageConfig.exclude.push(testsFolder);
+            }
+
+            if (Array.isArray(tsconfig.include)) {
+              packageConfig.include.push(...tsconfig.include);
             }
 
             if (Array.isArray(tsconfig.exclude)) {
