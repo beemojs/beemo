@@ -1,6 +1,6 @@
 {
   "name": "@beemo/driver-flow",
-  "version": "1.2.5",
+  "version": "2.0.0-alpha.0",
   "description": "Flow driver for Beemo.",
   "keywords": [
     "beemo",
@@ -29,7 +29,7 @@
     "flow-bin": "^0.123.0"
   },
   "peerDependencies": {
-    "@beemo/core": "^1.0.0",
+    "@beemo/core": "^2.0.0-alpha.0",
     "flow-bin": "*"
   }
 }

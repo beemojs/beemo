@@ -1,6 +1,6 @@
 {
   "name": "@beemo/driver-typescript",
-  "version": "1.4.1",
+  "version": "2.0.0-alpha.0",
   "description": "TypeScript driver for Beemo.",
   "keywords": [
     "beemo",
@@ -29,7 +29,7 @@
     "typescript": "^3.7.5"
   },
   "peerDependencies": {
-    "@beemo/core": "^1.0.0",
+    "@beemo/core": "^2.0.0-alpha.0",
     "typescript": "^2.0.0 || ^3.0.0 || ^4.0.0"
   },
   "dependencies": {

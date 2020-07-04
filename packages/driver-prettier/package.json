@@ -1,6 +1,6 @@
 {
   "name": "@beemo/driver-prettier",
-  "version": "1.3.2",
+  "version": "2.0.0-alpha.0",
   "description": "Prettier driver for Beemo.",
   "keywords": [
     "beemo",
@@ -29,7 +29,7 @@
     "prettier": "^2.0.1"
   },
   "peerDependencies": {
-    "@beemo/core": "^1.0.0",
+    "@beemo/core": "^2.0.0-alpha.0",
     "prettier": "^1.0.0 || ^2.0.0"
   },
   "dependencies": {
