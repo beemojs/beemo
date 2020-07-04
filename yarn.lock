@@ -988,6 +988,28 @@
     optimal "^4.2.0"
     pretty-ms "^5.1.0"
 
+"@boost/common@^2.0.0-alpha.1":
+  version "2.0.0-alpha.1"
+  resolved "https://registry.npmjs.org/@boost/common/-/common-2.0.0-alpha.1.tgz#1d4226d582c0f62620c245948fec93fa86b2e890"
+  integrity sha512-Vg5DgQ+BkDYBXEUul6Q++YznYrZ8j11e1O63k+IDpR40z/u3iFTKALuSLxaR++1On86+Eb6s/Kwze2oYlqDwSw==
+  dependencies:
+    "@boost/internal" "^2.0.0-alpha.1"
+    fast-glob "^3.2.4"
+    json5 "^2.1.3"
+    optimal "^4.2.0"
+    pretty-ms "^7.0.0"
+    yaml "^1.10.0"
+
+"@boost/config@^2.0.0-alpha.2":
+  version "2.0.0-alpha.2"
+  resolved "https://registry.npmjs.org/@boost/config/-/config-2.0.0-alpha.2.tgz#7cfd36461ec217547abe5558100fe2f0f214b69e"
+  integrity sha512-6WCywGjqL0JuhOUbbYcFpYm3SQIArVkR25lM5NBbBeHUzju8VK6T3eM8ldCuVHRAL/d4AeuZVFx46g6E3tCbpw==
+  dependencies:
+    "@boost/common" "^2.0.0-alpha.1"
+    "@boost/debug" "^2.0.0-alpha.1"
+    "@boost/internal" "^2.0.0-alpha.1"
+    minimatch "^3.0.4"
+
 "@boost/core@^1.18.6":
   version "1.18.6"
   resolved "https://registry.npmjs.org/@boost/core/-/core-1.18.6.tgz#2fd8ac16b05e2a92e2c0b92be9fd2ca704307630"
@@ -1027,6 +1049,18 @@
     debug "^4.1.1"
     execa "^3.4.0"
     fast-glob "^3.2.2"
+
+"@boost/debug@^2.0.0-alpha.1":
+  version "2.0.0-alpha.1"
+  resolved "https://registry.npmjs.org/@boost/debug/-/debug-2.0.0-alpha.1.tgz#466641aff5c79751e25161575d3b8dc51de532b0"
+  integrity sha512-DSPGIsdD8OpBagTAeAEhvGUB/qTD/56C9SzLAkIgRvfv1gKmBMvn0YxqagTWM1EEQAXRs5XJOBpUWruAgwtUKw==
+  dependencies:
+    "@boost/common" "^2.0.0-alpha.1"
+    "@boost/internal" "^2.0.0-alpha.1"
+    "@types/debug" "^4.1.5"
+    debug "^4.1.1"
+    execa "^4.0.2"
+    fast-glob "^3.2.4"
 
 "@boost/event@^1.3.1":
   version "1.3.1"
@@ -8447,6 +8481,13 @@ pretty-ms@^5.1.0:
   version "5.1.0"
   resolved "https://registry.npmjs.org/pretty-ms/-/pretty-ms-5.1.0.tgz#b906bdd1ec9e9799995c372e2b1c34f073f95384"
   integrity sha512-4gaK1skD2gwscCfkswYQRmddUb2GJZtzDGRjHWadVHtK/DIKFufa12MvES6/xu1tVbUYeia5bmLcwJtZJQUqnw==
+  dependencies:
+    parse-ms "^2.1.0"
+
+pretty-ms@^7.0.0:
+  version "7.0.0"
+  resolved "https://registry.npmjs.org/pretty-ms/-/pretty-ms-7.0.0.tgz#45781273110caf35f55cab21a8a9bd403a233dc0"
+  integrity sha512-J3aPWiC5e9ZeZFuSeBraGxSkGMOvulSWsxDByOcbD1Pr75YL3LSNIKIb52WXbCLE1sS5s4inBBbryjF4Y05Ceg==
   dependencies:
     parse-ms "^2.1.0"
 
