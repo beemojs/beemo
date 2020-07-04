@@ -16,7 +16,7 @@
   "main": "./lib/index.js",
   "types": "./lib/index.d.ts",
   "engines": {
-    "node": ">=8.9.0"
+    "node": ">=10.17.0"
   },
   "repository": "https://github.com/beemojs/beemo/tree/master/packages/driver-webpack",
   "author": "Miles Johnson",
