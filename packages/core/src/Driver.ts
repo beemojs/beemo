@@ -1,9 +1,8 @@
-import { Path } from '@boost/common';
-import { Plugin, Predicates } from '@boost/core';
+import { Path, Predicates, Blueprint, optimal, predicates, isObject } from '@boost/common';
 import { Event, ConcurrentEvent } from '@boost/event';
+import { Plugin } from '@boost/plugin';
 import mergeWith from 'lodash/mergeWith';
 import execa from 'execa';
-import optimal, { array, bool, object, string, shape, Blueprint } from 'optimal';
 import DriverContext from './contexts/DriverContext';
 import ConfigContext from './contexts/ConfigContext';
 import {
@@ -15,24 +14,27 @@ import {
 } from './constants';
 import {
   Argv,
+  Driverable,
   DriverCommandOptions,
   DriverOptions,
   DriverMetadata,
   Execution,
   ExecutionError,
+  DriverStrategy,
+  BeemoTool,
 } from './types';
 
 export default abstract class Driver<
   Config extends object = {},
   Options extends DriverOptions = DriverOptions
-> extends Plugin<Options> {
+> extends Plugin<BeemoTool, Options> implements Driverable {
   command: DriverCommandOptions = {};
 
-  // @ts-ignore Set after instantiation
-  config: Config;
+  // Set after instantiation
+  config!: Config;
 
-  // @ts-ignore Set after instantiation
-  metadata: DriverMetadata;
+  // Set after instantiation
+  metadata!: DriverMetadata;
 
   onLoadModuleConfig = new Event<[ConfigContext, Path, Config]>('load-module-config');
 
@@ -54,20 +56,25 @@ export default abstract class Driver<
 
   onFailedExecute = new ConcurrentEvent<[DriverContext, Error]>('failed-execute');
 
-  blueprint(predicates: Predicates) /* infer */ {
-    // eslint-disable-next-line
+  static validate(driver: Driver) {
+    if (!isObject(driver.metadata)) {
+      throw new Error('`Driver`s require a metadata object.');
+    }
+  }
+
+  blueprint({ array, object, string }: Predicates): Blueprint<DriverOptions> {
     return {
       args: array(string()),
       dependencies: array(string()),
       env: object(string()),
-      strategy: string(STRATEGY_NATIVE).oneOf([
+      strategy: string(STRATEGY_NATIVE).oneOf<DriverStrategy>([
         STRATEGY_NATIVE,
         STRATEGY_CREATE,
         STRATEGY_REFERENCE,
         STRATEGY_COPY,
         STRATEGY_NONE,
       ]),
-    } as $FixMe;
+    };
   }
 
   /**
@@ -150,32 +157,30 @@ export default abstract class Driver<
   /**
    * Handle command failures according to this driver.
    */
+  // TODO
   processFailure(error: Execution) {
-    const { stderr, stdout } = error;
-    const out = (stderr || stdout).trim();
-
+    // const { stderr, stdout } = error;
+    // const out = (stderr || stdout).trim();
     // Integration debugging
     // this.tool.console.logError('STDERR', JSON.stringify(error));
-
     // Use console to by pass silent
-    if (out) {
-      this.tool.console.logError(out);
-    }
+    // if (out) {
+    //   this.tool.console.logError(out);
+    // }
   }
 
   /**
    * Handle successful commands according to this driver.
    */
+  // TODO
   processSuccess(response: Execution) {
-    const out = response.stdout.trim();
-
-    // Integration debugging
-    // this.tool.console.log('STDOUT', JSON.stringify(response));
-
-    // Use console to by pass silent
-    if (out) {
-      this.tool.console.log(out);
-    }
+    // const out = response.stdout.trim();
+    // // Integration debugging
+    // // this.tool.console.log('STDOUT', JSON.stringify(response));
+    // // Use console to by pass silent
+    // if (out) {
+    //   this.tool.console.log(out);
+    // }
   }
 
   /**
@@ -183,10 +188,13 @@ export default abstract class Driver<
    */
   setCommandOptions(options: DriverCommandOptions): this {
     const blueprint: Blueprint<DriverCommandOptions> = {};
+    const { shape, string } = predicates;
 
     Object.keys(options).forEach((key) => {
       blueprint[key] = shape({
-        description: string().notEmpty().required(),
+        description: string()
+          .notEmpty()
+          .required(),
       });
     });
 
@@ -202,6 +210,8 @@ export default abstract class Driver<
    * Set metadata about the binary/executable in which this driver wraps.
    */
   setMetadata(metadata: Partial<DriverMetadata>): this {
+    const { array, bool, string } = predicates;
+
     this.metadata = optimal(
       metadata,
       {

@@ -4,6 +4,8 @@ import { WebpackConfig } from './types';
 // Success: Writes passed tests to stdout
 // Failure: Writes failed tests to stderr
 export default class WebpackDriver extends Driver<WebpackConfig> {
+  name = '@beemo/driver-webpack';
+
   bootstrap() {
     this.setMetadata({
       bin: 'webpack',

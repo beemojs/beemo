@@ -6,6 +6,8 @@ import { PrettierDriverArgs, PrettierConfig } from './types';
 // Success: Writes file list to stdout
 // Failure: Writes to stderr for no files found and syntax errors
 export default class PrettierDriver extends Driver<PrettierConfig> {
+  name = '@beemo/driver-prettier';
+
   onCreateIgnoreFile = new Event<
     [ConfigContext<ConfigArgs & PrettierDriverArgs>, Path, { ignore: string[] }]
   >('create-ignore-file');

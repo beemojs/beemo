@@ -5,6 +5,8 @@ import { BabelDriverArgs, BabelConfig } from './types';
 // Success: Writes file list to stdout
 // Failure: Throws SyntaxError to stderr
 export default class BabelDriver extends Driver<BabelConfig> {
+  name = '@beemo/driver-babel';
+
   bootstrap() {
     this.setMetadata({
       bin: 'babel',

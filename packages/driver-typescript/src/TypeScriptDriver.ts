@@ -20,6 +20,8 @@ function join(...parts: string[]): string {
 // Success: Writes nothing to stdout or stderr
 // Failure: Writes to stdout on syntax and type error
 export default class TypeScriptDriver extends Driver<TypeScriptConfig, TypeScriptOptions> {
+  name = '@beemo/driver-typescript';
+
   onCreateProjectConfigFile = new Event<[ConfigContext, Path, TypeScriptConfig, boolean]>(
     'create-project-config-file',
   );

@@ -1,14 +1,14 @@
-import { Plugin, Task, TaskAction } from '@boost/core';
+import { Task, TaskAction } from '@boost/core';
 import { ConcurrentEvent } from '@boost/event';
+import { Plugin } from '@boost/plugin';
 import { Options } from 'yargs-parser';
 import execa, { Options as ExecaOptions, ExecaReturnValue } from 'execa';
 import ScriptContext from './contexts/ScriptContext';
-import { Argv, ExecuteType, ExecuteQueue } from './types';
+import { Argv, ExecuteType, ExecuteQueue, Scriptable, BeemoTool } from './types';
 
-export default abstract class Script<
-  Args extends object = {},
-  Opts extends object = {}
-> extends Plugin<Opts> {
+export default abstract class Script<Args extends object = {}, Opts extends object = {}>
+  extends Plugin<BeemoTool, Opts>
+  implements Scriptable {
   tasks: Task<ScriptContext>[] = [];
 
   onBeforeExecute = new ConcurrentEvent<[ScriptContext, Argv]>('before-execute');
@@ -16,6 +16,16 @@ export default abstract class Script<
   onAfterExecute = new ConcurrentEvent<[ScriptContext, unknown]>('after-execute');
 
   onFailedExecute = new ConcurrentEvent<[ScriptContext, Error]>('failed-execute');
+
+  static validate(script: Script) {
+    if (typeof script.args !== 'function') {
+      throw new TypeError('`Script`s require an `args()` method.');
+    }
+
+    if (typeof script.execute !== 'function') {
+      throw new TypeError('`Script`s require an `execute()` method.');
+    }
+  }
 
   /**
    * Define a configuration object to parse args with.
@@ -57,7 +67,8 @@ export default abstract class Script<
    */
   task(title: string, action: TaskAction<ScriptContext>): Task<ScriptContext> {
     if (typeof action !== 'function') {
-      throw new TypeError(this.tool.msg('errors:taskRequireAction'));
+      // TODO
+      // throw new TypeError(this.tool.msg('errors:taskRequireAction'));
     }
 
     const task = new Task(title, action);

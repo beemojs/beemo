@@ -8,15 +8,13 @@ Beemo requires an external Node module (the configuration module) to run correct
 it can be setup locally to not require an external module. This is perfect for large applications,
 monorepos, or for testing your configuration module itself!
 
-In your `package.json` Beemo config, use `@local` instead of the name of your configuration module.
-This will use the current working directory (`process.cwd()`) instead of the Node module path.
+In your Beemo config, use `@local` instead of the name of your configuration module. This will use
+the current working directory (`process.cwd()`) instead of the Node module path.
 
-```json
-{
-  "beemo": {
-    "module": "@local"
-  }
-}
+```js
+module.exports = {
+  module: '@local',
+};
 ```
 
 > If your configuration module is using [workspaces](./workspaces.md) (monorepo), you can target the
@@ -32,7 +30,7 @@ Do so by adding file names to `.gitignore` (or another VCS) for each driver you 
 your configuration module. Be sure `config.cleanup` is disabled in your `beemo` config (is `false`
 by default).
 
-```
+```bash
 // .gitignore
 .eslintrc.js
 prettier.config.js
@@ -99,20 +97,18 @@ eslint --color ./tests --report-unused-disable-directives
 
 ## Custom Settings
 
-Beemo supports custom project level configuration through the `beemo.settings` property. A property
-which accepts an object of any key-value pair. This property is not used by Beemo itself, so is free
-from any possible collisions.
+Beemo supports custom project level configuration through the `settings` property. A property which
+accepts an object of any key-value pair. This property is not used by Beemo itself, so is free from
+any possible collisions.
 
-```json
-{
-  "beemo": {
-    "module": "@<username>/dev-tools",
-    "settings": {
-      "whateverYouWant": "here",
-      "coolRight": true
-    }
-  }
-}
+```js
+module.exports = {
+  module: '@<username>/dev-tools',
+  settings: {
+    whateverYouWant: 'here',
+    coolRight: true,
+  },
+};
 ```
 
 These settings can then be access through the [tool instance](./tool.md).
@@ -158,21 +154,15 @@ If `BEEMO_CONFIG_MODULE` is not defined in your custom binary, you'll need to ma
 }
 ```
 
-## Output Verbosity
-
-Console output can be controlled with the `--output` option and a numerical value of 1 (compact), 2
-(normal), and 3 (verbose). More information is logged the higher the range. To hide all output, use
-`--silent` instead.
-
 ## CLI Themes
 
 Beemo is built on [Boost](https://github.com/milesj/boost), a powerful dev tool framework, which
 provides the ability to theme the command line output (by changing important colors). To activate a
-theme, pass a `--theme` option with the name of the theme.
+theme, pass a `BOOSTJS_CLI_THEME` environment variable with the name of the theme.
 
 ```
-yarn beemo babel --theme=one-dark
+BOOSTJS_CLI_THEME=one-dark yarn beemo babel
 ```
 
 > View the list of available themes on the
-> [official Boost repo](https://github.com/milesj/boost/tree/master/packages).
+> [official Boost repository](https://github.com/milesj/boost/tree/master/themes).

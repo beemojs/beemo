@@ -12,9 +12,9 @@ function, or use the `package.json` `main` entry. This function will receive a
 // src/index.ts -> lib/index.js
 import Beemo from '@beemo/core';
 
-export default function (beemo: Beemo) {
+export default function(beemo: Beemo) {
   // Add command line args to every execution
-  beemo.getPlugin('driver', 'eslint').onBeforeExecute.listen((context) => {
+  beemo.driverRegistry.get('eslint').onBeforeExecute.listen((context) => {
     context.argv.push('--color', '--report-unused-disable-directives');
   });
 }

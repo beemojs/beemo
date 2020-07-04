@@ -5,6 +5,8 @@ import { JestConfig } from './types';
 // Success: Writes coverage to stdout
 // Failure: Writes failed tests to stderr
 export default class JestDriver extends Driver<JestConfig> {
+  name = '@beemo/driver-jest';
+
   bootstrap() {
     this.setMetadata({
       bin: 'jest',
