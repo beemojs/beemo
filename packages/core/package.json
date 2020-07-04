@@ -47,6 +47,6 @@
     "yargs-parser": "^20.0.0"
   },
   "devDependencies": {
-    "@boost/test-utils": "^1.4.1"
+    "@boost/test-utils": "^2.0.0-alpha.0"
   }
 }
