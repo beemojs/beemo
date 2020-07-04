@@ -5,7 +5,7 @@ known as your "configuration module" going forward. I suggest naming it `dev-too
 `dev-tool-config`, `build-tools`, etc, as it's straight forward, easy to understand, and defines
 intent.
 
-```
+```bash
 git clone git@github.com:<username>/dev-tools.git
 cd dev-tools/
 ```
@@ -14,7 +14,7 @@ Once cloned, initialize a new NPM package, and provide the name `dev-tools` with
 like `@beemo/dev-tools`. Why a scope? Because we don't want to clutter NPM with common named
 packages. It also avoids collisions and easily announces ownership.
 
-```
+```bash
 npm init --scope=<username>
 ```
 
@@ -24,7 +24,7 @@ Enter `0.0.0` for the version, and whatever you want for the remaining questions
 
 Now that we have a repository, we can install and setup Beemo. It's as easy as...
 
-```
+```bash
 yarn add @beemo/core @beemo/cli
 ```
 
@@ -32,7 +32,7 @@ This will only install the core functionality. To support different dev tools li
 and Jest, we need to install packages known as "drivers"
 ([view all available drivers](https://www.npmjs.com/search?q=beemo-driver)).
 
-```
+```bash
 yarn add @beemo/driver-babel @babel/core
 yarn add @beemo/driver-eslint eslint
 yarn add @beemo/driver-jest jest

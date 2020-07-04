@@ -50,9 +50,9 @@ export default class RunScriptRoutine extends RunInWorkspacesRoutine<ScriptConte
     this.debug('Attempting to load script from tool');
 
     try {
-      const script = this.tool.getPlugin('script', context.scriptName);
+      const script = this.tool.scriptRegistry.get(context.scriptName);
 
-      context.setScript(script, script.moduleName);
+      context.setScript(script, script.name);
 
       return script;
     } catch (error) {
@@ -68,7 +68,10 @@ export default class RunScriptRoutine extends RunInWorkspacesRoutine<ScriptConte
    * Attempt to load a script from the configuration module's `scripts/` folder,
    * or a standard Node modules folder.
    */
-  loadScriptFromModule(context: ScriptContext, script: Script | null): Script | null {
+  async loadScriptFromModule(
+    context: ScriptContext,
+    script: Script | null,
+  ): Promise<Script | null> {
     if (script) {
       return script;
     }
@@ -92,11 +95,9 @@ export default class RunScriptRoutine extends RunInWorkspacesRoutine<ScriptConte
     }
 
     try {
-      const { originalPath, resolvedPath } = resolver.resolve();
+      const { resolvedPath } = resolver.resolve();
 
-      script = this.tool.getRegisteredPlugin('script').loader.importModule(resolvedPath);
-      script.name = context.scriptName;
-      script.moduleName = originalPath.path();
+      script = await this.tool.scriptRegistry.load(resolvedPath.path());
 
       context.setScript(script, resolvedPath.path());
     } catch (error) {
@@ -119,7 +120,7 @@ export default class RunScriptRoutine extends RunInWorkspacesRoutine<ScriptConte
       throw new Error(`Failed to load script from multiple sources:\n${messages}`);
     }
 
-    this.tool.addPlugin('script', script);
+    this.tool.scriptRegistry.load(script);
 
     return script;
   }

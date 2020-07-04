@@ -50,7 +50,6 @@ export default class CreateConfigRoutine<Ctx extends ConfigContext> extends Rout
 
       case STRATEGY_CREATE:
         this.task(tool.msg('app:configCreateLoadFile', { name }), this.loadConfigFromSources);
-        this.task(tool.msg('app:configCreateLoadPackage', { name }), this.extractConfigFromPackage);
         this.task(tool.msg('app:configCreateMerge', { name }), this.mergeConfigs);
         this.task(tool.msg('app:configCreate', { name }), this.createConfigFile);
         break;
@@ -112,33 +111,6 @@ export default class CreateConfigRoutine<Ctx extends ConfigContext> extends Rout
     return fs
       .writeFile(configPath.path(), this.options.driver.formatConfig(config))
       .then(() => configPath);
-  }
-
-  /**
-   * Extract configuration from "beemo.<driver>" within the local project's package.json.
-   */
-  extractConfigFromPackage(context: Ctx, prevConfigs: ConfigObject[]): Promise<ConfigObject[]> {
-    const { driver } = this.options;
-    const { name } = driver;
-    const { config } = this.tool;
-    const configs = [...prevConfigs];
-    const configName = this.getConfigName(name);
-
-    this.debug.invariant(
-      !!config[configName],
-      `Extracting ${chalk.green(name)} config from package.json`,
-      'Exists, extracting',
-      'Does not exist, skipping',
-    );
-
-    if (config[configName]) {
-      const pkgConfig = config[configName] as $FixMe;
-
-      configs.push(pkgConfig);
-      driver.onLoadPackageConfig.emit([context, pkgConfig]);
-    }
-
-    return Promise.resolve(configs);
   }
 
   /**

@@ -4,6 +4,8 @@ import { MochaConfig } from './types';
 // Success: Writes passed tests to stdout
 // Failure: Writes failed tests to stdout
 export default class MochaDriver extends Driver<MochaConfig> {
+  name = '@beemo/driver-mocha';
+
   bootstrap() {
     this.setMetadata({
       bin: 'mocha',

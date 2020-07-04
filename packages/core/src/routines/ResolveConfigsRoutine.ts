@@ -58,7 +58,7 @@ export default class ResolveConfigsRoutine<T extends ConfigContext = ConfigConte
       deps.forEach((name) => {
         this.debug('  Including dependency %s', chalk.green(name));
 
-        queue.push(this.tool.getPlugin('driver', name));
+        queue.push(this.tool.driverRegistry.get(name));
       });
 
       this.context.addDriverDependency(driver);

@@ -6,6 +6,8 @@ import { ESLintDriverArgs, ESLintConfig } from './types';
 // Success: Writes warnings to stdout
 // Failure: Writes to stdout and stderr
 export default class ESLintDriver extends Driver<ESLintConfig> {
+  name = '@beemo/driver-eslint';
+
   onCreateIgnoreFile = new Event<
     [ConfigContext<ConfigArgs & ESLintDriverArgs>, Path, { ignore: string[] }]
   >('create-ignore-file');
