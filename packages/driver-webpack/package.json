@@ -1,6 +1,6 @@
 {
   "name": "@beemo/driver-webpack",
-  "version": "1.2.6",
+  "version": "2.0.0-alpha.0",
   "description": "Webpack driver for Beemo.",
   "keywords": [
     "beemo",
@@ -29,7 +29,7 @@
     "webpack-cli": "^3.3.11"
   },
   "peerDependencies": {
-    "@beemo/core": "^1.0.0",
+    "@beemo/core": "^2.0.0-alpha.0",
     "webpack": "^4.0.0"
   },
   "dependencies": {

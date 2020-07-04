@@ -1,6 +1,6 @@
 {
   "name": "@beemo/driver-babel",
-  "version": "1.2.6",
+  "version": "2.0.0-alpha.0",
   "description": "Babel driver for Beemo.",
   "keywords": [
     "beemo",
@@ -33,7 +33,7 @@
   },
   "peerDependencies": {
     "@babel/core": "^7.0.0",
-    "@beemo/core": "^1.0.0"
+    "@beemo/core": "^2.0.0-alpha.0"
   },
   "dependencies": {
     "rimraf": "^3.0.2"
