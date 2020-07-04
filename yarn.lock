@@ -1035,12 +1035,27 @@
   dependencies:
     "@boost/internal" "^1.2.0"
 
+"@boost/event@^2.0.0-alpha.1":
+  version "2.0.0-alpha.1"
+  resolved "https://registry.npmjs.org/@boost/event/-/event-2.0.0-alpha.1.tgz#94b8673b9a3b0763766a8196f95fa043181fc31b"
+  integrity sha512-yuoWRNsCGyqsb7eSAh4F7AswNLOQYIuThbAPKQwTiLu/bRrU+5md2qcSSNDYL755X7bHJB8HtouQ5Xu9jiocqA==
+  dependencies:
+    "@boost/internal" "^2.0.0-alpha.1"
+
 "@boost/internal@^1.2.0":
   version "1.2.0"
   resolved "https://registry.npmjs.org/@boost/internal/-/internal-1.2.0.tgz#1d6b505c0eedc6a0e023ba0bbfe2ee5947b2e1fa"
   integrity sha512-G+F62WMOReCD/tXC1gQgvhfbVXEtorNJZFcYZ0sG4KHWlJK0gw6DZpoFG8tCrUKQuZ5aXmA783w3iypRTCZzpg==
   dependencies:
     chalk "^3.0.0"
+    debug "^4.1.1"
+
+"@boost/internal@^2.0.0-alpha.1":
+  version "2.0.0-alpha.1"
+  resolved "https://registry.npmjs.org/@boost/internal/-/internal-2.0.0-alpha.1.tgz#7a97cc7ce14ca082cae165f744bf63aff8a00201"
+  integrity sha512-PMKEPCw0KqhDBPbKZjlxUwlE4kCBtXW9fB6yQ6AClY+qmz4x6A1SW4btxLxM2v07Cbd0oeoHTa7wjBG/Bqj54Q==
+  dependencies:
+    chalk "^4.1.0"
     debug "^4.1.1"
 
 "@boost/log@^1.2.0":
@@ -3464,9 +3479,9 @@ chalk@^3.0.0:
     ansi-styles "^4.1.0"
     supports-color "^7.1.0"
 
-chalk@^4.0.0, chalk@^4.1.0:
+chalk@^4.1.0:
   version "4.1.0"
-  resolved "https://registry.yarnpkg.com/chalk/-/chalk-4.1.0.tgz#4e14870a618d9e2edd97dd8345fd9d9dc315646a"
+  resolved "https://registry.npmjs.org/chalk/-/chalk-4.1.0.tgz#4e14870a618d9e2edd97dd8345fd9d9dc315646a"
   integrity sha512-qwx12AxXe2Q5xQ43Ac//I6v5aXTipYrSESdOgzrN+9XjgEpyjpKuvSGaN4qE93f7TQTlerQQ8S+EQ0EyDoVL1A==
   dependencies:
     ansi-styles "^4.1.0"
