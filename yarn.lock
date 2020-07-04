@@ -1084,12 +1084,12 @@
     term-size "^2.2.0"
     wrap-ansi "^6.2.0"
 
-"@boost/test-utils@^1.4.1":
-  version "1.4.1"
-  resolved "https://registry.npmjs.org/@boost/test-utils/-/test-utils-1.4.1.tgz#922b2fb63278fd1fcbc83447871cd0f940ee38a6"
-  integrity sha512-3gf1D+19RDjpS7nvoebydVJlzvBB6ZDjWw6jDIlN5bkOhCR21StYTxuYtAiynu3DWjUI9SaUyQG9ExN1zoHpcQ==
+"@boost/test-utils@^2.0.0-alpha.0":
+  version "2.0.0-alpha.0"
+  resolved "https://registry.npmjs.org/@boost/test-utils/-/test-utils-2.0.0-alpha.0.tgz#892fdd6756a2e9d8ae9133af3070a09868c08c44"
+  integrity sha512-17D2MMFrprWmILkQctaAKNgWSdeWiHN4lssBkf1GptzZyCcl4b42sPXrX/ib9evdP9bDO7yV7/A5EEobko1JLA==
   dependencies:
-    fs-extra "^8.1.0"
+    fs-extra "^9.0.1"
 
 "@boost/translate@^1.3.9":
   version "1.3.9"
