@@ -932,10 +932,10 @@
     core-js-pure "^3.0.0"
     regenerator-runtime "^0.13.4"
 
-"@babel/runtime@^7.3.1", "@babel/runtime@^7.4.5", "@babel/runtime@^7.7.7", "@babel/runtime@^7.8.4":
-  version "7.9.2"
-  resolved "https://registry.npmjs.org/@babel/runtime/-/runtime-7.9.2.tgz#d90df0583a3a252f09aaa619665367bae518db06"
-  integrity sha512-NE2DtOdufG7R5vnfQUTehdTfNycfUANEtCa9PssN9O/xmTzP4E08UI797ixaei6hBEVL9BI/PsdJS5x7mWoB9Q==
+"@babel/runtime@^7.10.1", "@babel/runtime@^7.4.5", "@babel/runtime@^7.7.7", "@babel/runtime@^7.8.4":
+  version "7.10.4"
+  resolved "https://registry.npmjs.org/@babel/runtime/-/runtime-7.10.4.tgz#a6724f1a6b8d2f6ea5236dbfe58c7d7ea9c5eb99"
+  integrity sha512-UpTN5yUJr9b4EX2CnGNWIvER7Ab83ibv0pcvvHc4UOdrBI5jb8bj+32cCwPX6xu0mt2daFNjYhoi+X7beH0RSw==
   dependencies:
     regenerator-runtime "^0.13.4"
 
@@ -1146,6 +1146,16 @@
     "@boost/internal" "^1.2.0"
     i18next "^19.4.2"
     os-locale "^4.0.0"
+
+"@boost/translate@^2.0.0-alpha.1":
+  version "2.0.0-alpha.1"
+  resolved "https://registry.npmjs.org/@boost/translate/-/translate-2.0.0-alpha.1.tgz#82dc1cd199c9ab307d8522330008ce0f20b561c5"
+  integrity sha512-kiRYTG6ZE/Mw8I9UcpzCuAcUITcokdSNfAsBHiLWSJUUSpSwdRR8WtY73mHCdIduveSgQ6/B6PYvoKrtIWesYw==
+  dependencies:
+    "@boost/common" "^2.0.0-alpha.1"
+    "@boost/internal" "^2.0.0-alpha.1"
+    i18next "^19.5.0"
+    os-locale "^5.0.0"
 
 "@cnakazawa/watch@^1.0.3":
   version "1.0.3"
@@ -5781,12 +5791,12 @@ hygen@^6.0.4:
     inflection "^1.12.0"
     yargs-parser "^18.1.3"
 
-i18next@^19.4.2:
-  version "19.4.3"
-  resolved "https://registry.npmjs.org/i18next/-/i18next-19.4.3.tgz#8eac368daa424e649d9b6d1dd9ab2d2695670738"
-  integrity sha512-mqjfrYnvoqh9s2yVnzUjMfELCOoRuiKbRYzICZozaHYZMpUx17MpWDCW6zC+E42CaveIet/Zh07j22GAo4CFqQ==
+i18next@^19.4.2, i18next@^19.5.0:
+  version "19.5.4"
+  resolved "https://registry.npmjs.org/i18next/-/i18next-19.5.4.tgz#86e4b44993621f39ab53f95a24afa69caea0a452"
+  integrity sha512-fty+v8v0Unn8KufOajoZ6OR5aKme/lP+BdbT5rirTXE8wdj6LbsbG9DwtI9VtMeru1PEf+L530Cq3IRmovMJGQ==
   dependencies:
-    "@babel/runtime" "^7.3.1"
+    "@babel/runtime" "^7.10.1"
 
 iconv-lite@0.4.24, iconv-lite@^0.4.24, iconv-lite@^0.4.4, iconv-lite@~0.4.13:
   version "0.4.24"
@@ -8038,6 +8048,15 @@ os-locale@^4.0.0:
   integrity sha512-HsSR1+2l6as4Wp2SGZxqLnuFHxVvh1Ir9pvZxyujsC13egZVe7P0YeBLN0ijQzM/twrO5To3ia3jzBXAvpMTEA==
   dependencies:
     execa "^1.0.0"
+    lcid "^3.0.0"
+    mem "^5.0.0"
+
+os-locale@^5.0.0:
+  version "5.0.0"
+  resolved "https://registry.npmjs.org/os-locale/-/os-locale-5.0.0.tgz#6d26c1d95b6597c5d5317bf5fba37eccec3672e0"
+  integrity sha512-tqZcNEDAIZKBEPnHPlVDvKrp7NzgLi7jRmhKiUoa2NUmhl13FtkAGLUVR+ZsYvApBQdBfYm43A4tXXQ4IrYLBA==
+  dependencies:
+    execa "^4.0.0"
     lcid "^3.0.0"
     mem "^5.0.0"
 
