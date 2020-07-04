@@ -1,4 +1,5 @@
-import { Task, ToolConfig, ToolPluginRegistry, PluginSetting } from '@boost/core';
+import { Task, ToolConfig, ToolPluginRegistry } from '@boost/core';
+import { PluginsSetting } from '@boost/config';
 import { ExecaReturnValue, ExecaError } from 'execa';
 import { Arguments, Options } from 'yargs';
 import Beemo from './Beemo';
@@ -20,19 +21,21 @@ export interface UnknownSettings {
 }
 
 export interface BeemoConfig<T = UnknownSettings> extends Omit<ToolConfig, 'settings'> {
-  // Driver overrides
-  [key: string]: unknown;
+  settings: T;
+}
+
+export interface ConfigFile<T extends object = UnknownSettings> {
   configure: {
     cleanup: boolean;
     parallel: boolean;
   };
-  drivers: PluginSetting<Driver>;
+  drivers: PluginsSetting;
   execute: {
     concurrency: number;
     graph: boolean;
   };
   module: string;
-  scripts: PluginSetting<Script>;
+  scripts: PluginsSetting;
   settings: T;
 }
 
