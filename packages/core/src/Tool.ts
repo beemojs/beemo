@@ -1,4 +1,5 @@
-import { Path, Contract, Blueprint, Predicates } from '@boost/common';
+import { Path, Project, Contract, Blueprint, Predicates, PackageStructure } from '@boost/common';
+import { Debugger, createDebugger } from '@boost/debug';
 import { Registry } from '@boost/plugin';
 import { Translator, createTranslator } from '@boost/translate';
 import ConfigManager from './ConfigManager';
@@ -14,13 +15,19 @@ interface ToolOptions {
 export default class Tool extends Contract<ToolOptions> {
   config!: ConfigFile;
 
+  package!: PackageStructure;
+
   readonly configManager = new ConfigManager('beemo');
 
   readonly cwd: Path;
 
+  readonly debug: Debugger;
+
   readonly driverRegistry: Registry<Driver>;
 
   readonly msg: Translator;
+
+  readonly project: Project;
 
   readonly scriptRegistry: Registry<Script>;
 
@@ -28,6 +35,13 @@ export default class Tool extends Contract<ToolOptions> {
     super(options);
 
     this.cwd = Path.create(this.options.cwd);
+
+    this.debug = createDebugger('beemo');
+
+    this.msg = createTranslator(
+      ['app', 'common'],
+      [new Path(__dirname, '../resources'), ...this.options.resourcePaths],
+    );
 
     this.driverRegistry = new Registry('beemo', 'driver', {
       validate: Driver.validate,
@@ -37,10 +51,7 @@ export default class Tool extends Contract<ToolOptions> {
       validate: Script.validate,
     });
 
-    this.msg = createTranslator(
-      ['app', 'common'],
-      [new Path(__dirname, '../resources'), ...this.options.resourcePaths],
-    );
+    this.project = new Project(this.cwd);
   }
 
   blueprint({ array, string }: Predicates): Blueprint<ToolOptions> {
@@ -54,6 +65,7 @@ export default class Tool extends Contract<ToolOptions> {
     const { config } = await this.configManager.loadConfigFromRoot(this.cwd);
 
     this.config = config;
+    this.package = this.project.getPackage();
 
     // @ts-ignore TODO
     this.driverRegistry.loadMany(config.drivers);
