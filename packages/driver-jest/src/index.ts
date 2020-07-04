@@ -3,6 +3,11 @@
  * @license     https://opensource.org/licenses/MIT
  */
 
+import { DriverOptions } from '@beemo/core';
+import JestDriver from './JestDriver';
+
 export * from './types';
 
-export { default } from './JestDriver';
+export default function jestDriver(options?: DriverOptions) {
+  return new JestDriver(options);
+}

@@ -11,20 +11,15 @@ more development dependency hell, just a single dependency.
 yarn add @<username>/dev-tools --dev
 ```
 
-That being said, add a `beemo` configuration block to your `package.json`, with a `module` property
-that matches the name of your configuration module, or another third-party module (if you don't want
-to manage your own provider).
+That being said, create a `.config/beemo.js` file (or `.json`, `.yaml`) in your project root with a
+`module` property that matches the name of your configuration module, or another third-party module
+(if you don't want to manage your own provider).
 
-```json
-{
-  "beemo": {
-    "module": "@<username>/dev-tools"
-  }
-}
+```js
+module.exports = {
+  module: '@<username>/dev-tools',
+};
 ```
-
-> If setting up a monorepo (workspaces), the Beemo configuration should be in the root
-> `package.json`.
 
 ### Settings
 
@@ -35,67 +30,50 @@ to manage your own provider).
   CPUs.
 - `execute.graph` (bool) - Prioritize workspace builds based on
   [dependency graph](./workspaces.md#priority-packages).
-- `drivers` (string[] | object[]) - List of drivers to enable for the consumer.
+- `drivers` (string[] | object) - List of drivers to enable for the consumer.
+- `scripts` (string[] | object) - List of scripts to enable for the consumer.
 - `settings` (object) - Custom settings specific to your project that can easily be referenced.
 
 > Periods denote nested objects.
-
-## Global CLI Options
-
-The following options are available to all Beemo commands.
-
-- `--debug` (bool) - Print debug logs to the console.
-- `--locale` (string) - Localize the output messages to the defined locale.
-- `--output` (number) - Control the output level sent to the console.
-  [More information](./tips.md#output-verbosity).
-- `--silent` (bool) - Hide all output from the console.
-  [More information](./tips.md#output-verbosity).
-- `--theme` (string) - Change output colors using a theme. [More information](./tips.md#cli-themes).
 
 ## Using Drivers
 
 Driver dependencies may have been installed in your configuration module, but that does not make
 them available to the current project, as not all drivers will always be necessary. To enable
-drivers per project, a `beemo.drivers` property must be defined.
+drivers per project, a `drivers` property must be defined.
 
 This property accepts an array of strings, or objects, with the names of each driver you want to
 enable. For example, if we want to use Babel, ESLint, and Jest, we would have the following.
 
-```json
-{
-  "beemo": {
-    "module": "@<username>/dev-tools",
-    "drivers": ["babel", "eslint", "jest"]
-  }
-}
+```js
+module.exports = {
+  module: '@<username>/dev-tools',
+  drivers: ['babel', 'eslint', 'jest'],
+};
 ```
 
-Furthermore, each driver can be configured with options by using an object, like so.
+Furthermore, drivers can be configured with options by using a map. If a driver does not require
+options, either pass an empty object, or a boolean `true`.
 
-```json
-{
-  "beemo": {
-    "module": "@<username>/dev-tools",
-    "drivers": [
-      "babel",
-      {
-        "driver": "eslint",
-        "args": ["--color", "--report-unused-disable-directives"]
-      },
-      {
-        "driver": "jest",
-        "env": { "NODE_ENV": "test" }
-      }
-    ]
-  }
-}
+```js
+module.exports = {
+  module: '@<username>/dev-tools',
+  drivers: {
+    babel: true,
+    eslint: {
+      args: ['--color', '--report-unused-disable-directives'],
+    },
+    jest: {
+      env: { NODE_ENV: 'test' },
+    },
+  },
+};
 ```
 
 Options can also be set through the [bootstrap and event system](./events.md).
 
 ### Options
 
-- `driver` (string) - The name of the driver module. Required when using an object.
 - `args` (string[]) - Arguments to always pass when executing the driver binary.
 - `dependencies` (string[]) - Other drivers that are required for this driver to run.
 - `env` (object) - Environment variables to pass when executing the driver binary with
@@ -174,7 +152,7 @@ When no arguments are passed, it will create a config file for all enabled drive
 `beemo.drivers` list). Otherwise, a config file will be created for each driver name passed as an
 argument.
 
-```
+```bash
 // All drivers
 yarn beemo create-config
 
@@ -188,33 +166,11 @@ yarn beemo create-config babel jest
 ## Overriding Config
 
 Your configuration module may now house all configuration, but that doesn't mean it's applicable to
-_all_ projects. So because of that, Beemo does allow overriding of config. To do so, edit your
-`package.json` to include a block under `beemo.<driver>`, like so.
-
-```json
-// package.json
-{
-  "beemo": {
-    "module": "@<username>/dev-tools",
-    "drivers": ["eslint"],
-    "eslint": {
-      "rules": {
-        "no-param-reassign": 0
-      }
-    }
-  }
-}
-```
-
-> Some dev tools support `package.json` overrides like this, but it's preferred to use the Beemo
-> approach for interoperability, by nesting under `beemo`.
-
-However, if you'd like to avoid modifying `package.json`, you may define an override file in the
-consumer within a relative configs folder, for example: `./configs/eslint.js` or
-`./lib/configs/eslint.js`.
+_all_ projects. So because of that, Beemo does allow overriding of driver config. To do so, create a
+driver specific `.config/beemo/<driver>.js` file.
 
 ```js
-// configs/eslint.js
+// .config/beemo/eslint.js
 module.exports = {
   rules: {
     'no-param-reassign': 0,
@@ -222,15 +178,5 @@ module.exports = {
 };
 ```
 
-```ts
-// src/configs/eslint.ts -> lib/configs/eslint.js
-import { ESLintConfig } from '@beemo/driver-eslint';
-
-const config: ESLintConfig = {
-  rules: {
-    'no-param-reassign': 0,
-  },
-};
-
-export default config;
-```
+> Some dev tools support `package.json` overrides like this, but it's preferred to use the Beemo
+> approach for interoperability.

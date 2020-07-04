@@ -13,7 +13,6 @@ import ResolveConfigsRoutine from './routines/ResolveConfigsRoutine';
 import RunDriverRoutine from './routines/RunDriverRoutine';
 import RunScriptRoutine from './routines/RunScriptRoutine';
 import ScaffoldRoutine from './routines/ScaffoldRoutine';
-import ConfigManager from './ConfigManager';
 import Driver from './Driver';
 import Script from './Script';
 import Context from './contexts/Context';
@@ -22,14 +21,7 @@ import DriverContext from './contexts/DriverContext';
 import ScriptContext from './contexts/ScriptContext';
 import ScaffoldContext from './contexts/ScaffoldContext';
 import { KEBAB_PATTERN } from './constants';
-import {
-  Argv,
-  Execution,
-  BeemoPluginRegistry,
-  BeemoConfig,
-  DriverOptions,
-  ConfigFile,
-} from './types';
+import { Argv, Execution, BeemoConfig, BeemoPluginRegistry, DriverOptions } from './types';
 
 export function configBlueprint() {
   return {
@@ -66,10 +58,6 @@ export default class Beemo<T = any> extends Tool<BeemoPluginRegistry, BeemoConfi
 
   onScaffold = new Event<[ScaffoldContext, string, string, string?]>('scaffold');
 
-  readonly configManager = new ConfigManager('beemo');
-
-  private tempConfig!: ConfigFile;
-
   constructor(argv: Argv, binName?: string, testingOnly: boolean = false) {
     super(
       {
@@ -94,20 +82,12 @@ export default class Beemo<T = any> extends Tool<BeemoPluginRegistry, BeemoConfi
       return;
     }
 
-    // this.bootstrap();
-    // this.initialize();
+    this.initialize();
 
     // Set footer after messages have been loaded
     const footer = this.msg('app:poweredBy', { version });
 
     this.options.footer = `\n${this.isCI() ? '' : '🤖  '}${footer}`;
-  }
-
-  async bootstrap() {
-    // TODO cwd
-    const { config } = await this.configManager.loadConfigFromRoot();
-
-    this.tempConfig = config;
   }
 
   /**
@@ -124,7 +104,7 @@ export default class Beemo<T = any> extends Tool<BeemoPluginRegistry, BeemoConfi
   bootstrapConfigModule() {
     this.debug('Bootstrapping configuration module');
 
-    const { module } = this.tempConfig;
+    const { module } = this.config;
     let bootstrap: Function | null = null;
 
     try {
@@ -193,7 +173,7 @@ export default class Beemo<T = any> extends Tool<BeemoPluginRegistry, BeemoConfi
     }
 
     const { configName } = this.options;
-    const { module } = this.tempConfig;
+    const { module } = this.config;
 
     this.debug('Locating configuration module root');
 
@@ -255,7 +235,7 @@ export default class Beemo<T = any> extends Tool<BeemoPluginRegistry, BeemoConfi
       );
 
     // Only add cleanup routine if we need it
-    if (this.tempConfig.configure.cleanup) {
+    if (this.config.configure.cleanup) {
       pipeline.pipe(new CleanupConfigsRoutine('cleanup', this.msg('app:cleanup')));
     }
 
@@ -319,7 +299,7 @@ export default class Beemo<T = any> extends Tool<BeemoPluginRegistry, BeemoConfi
     };
 
     // Delete config files on failure
-    if (this.tempConfig.configure.cleanup) {
+    if (this.config.configure.cleanup) {
       this.onExit.listen((code) => this.handleCleanupOnFailure(code, context));
     }
 

@@ -73,7 +73,7 @@ export function mockDriver<C extends object = {}>(
   const driver = new TestDriver<C>();
 
   driver.name = name;
-  driver.tool = tool || mockTool();
+  // driver.tool = tool || mockTool();
 
   driver.setMetadata({
     bin: name.toLowerCase(),
@@ -82,9 +82,9 @@ export function mockDriver<C extends object = {}>(
     ...metadata,
   });
 
-  if (boot) {
-    driver.bootstrap();
-  }
+  // if (boot) {
+  //   driver.bootstrap();
+  // }
 
   return driver;
 }
