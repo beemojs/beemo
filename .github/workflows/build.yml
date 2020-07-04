@@ -11,8 +11,8 @@ jobs:
     strategy:
       matrix:
         os: [ubuntu-latest, windows-latest]
-        node-version: [8, 10, 12, 13]
-      fail-fast: false
+        node-version: [10, 12, 14]
+      fail-fast: true
     steps:
       - uses: actions/checkout@v1
       - uses: actions/setup-node@v1
@@ -29,7 +29,7 @@ jobs:
     strategy:
       matrix:
         os: [ubuntu-latest, windows-latest]
-        node-version: [12]
+        node-version: [14]
       fail-fast: false
     steps:
       - uses: actions/checkout@v1
