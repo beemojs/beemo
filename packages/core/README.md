@@ -30,7 +30,7 @@ dependencies, continuous copy and paste, and more.
 
 ## Requirements
 
-- Node 8.9+
+- Node 10.17+
 - GitHub, Bitbucket, or another VCS
 
 ## Documentation
