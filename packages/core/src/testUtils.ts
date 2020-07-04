@@ -47,6 +47,7 @@ export function mockTool(argv: Argv = []): Beemo {
   });
 
   tool.config = stubToolConfig<BeemoConfig>({
+    // @ts-ignore
     configure: {
       cleanup: false,
       parallel: true,
