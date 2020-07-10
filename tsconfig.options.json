@@ -4,7 +4,7 @@
     "allowSyntheticDefaultImports": true,
     "declaration": true,
     "esModuleInterop": true,
-    "experimentalDecorators": false,
+    "experimentalDecorators": true,
     "forceConsistentCasingInFileNames": true,
     "lib": [
       "dom",
