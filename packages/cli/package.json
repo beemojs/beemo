@@ -21,9 +21,9 @@
     "access": "public"
   },
   "dependencies": {
-    "chalk": "^4.1.0",
-    "semver": "^7.3.2",
-    "yargs": "^16.0.3"
+    "@boost/cli": "^2.0.0-alpha.1",
+    "ink": "^3.0.0-6",
+    "react": "^16.13.1"
   },
   "peerDependencies": {
     "@beemo/core": "^2.0.0-alpha.0"

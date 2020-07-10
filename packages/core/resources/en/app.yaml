@@ -7,6 +7,7 @@ cliArgGeneratorAction: Type of action to scaffold
 cliArgGeneratorName: Name to interpolate within scaffold templates (optional)
 cliArgScriptName: Name of script (in kebab case) to run
 cliCommandConfig: Create a configuration file for all or the specified drivers
+cliCommandRunDriver: Run a configured driver
 cliCommandRunScript: Run a configuration module or Node module script
 cliCommandScaffold: Generate files with templates from configuration module
 cliEpilogue: For more information, view the manual: '{{manualURL}}'
