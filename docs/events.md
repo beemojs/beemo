@@ -20,6 +20,8 @@ export default function(beemo: Beemo) {
 }
 ```
 
+> The bootstrap function supports async/await.
+
 ## Supported Events
 
 The following list of events, and their arguments, can be listened to.

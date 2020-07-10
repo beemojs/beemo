@@ -98,39 +98,6 @@ export default class Beemo<T = any> extends Tool<BeemoPluginRegistry, BeemoConfi
   }
 
   /**
-   * If the configure module has an index export that is a function,
-   * execute it with the current tool instance.
-   */
-  bootstrapConfigModule() {
-    this.debug('Bootstrapping configuration module');
-
-    const { module } = this.config;
-    let bootstrap: Function | null = null;
-
-    try {
-      if (module === '@local') {
-        bootstrap = requireModule(this.getConfigModuleRoot().append('index.js'));
-      } else {
-        bootstrap = requireModule(module);
-      }
-    } catch {
-      this.debug('No index.js file detected, aborting bootstrap');
-
-      return this;
-    }
-
-    const isFunction = typeof bootstrap === 'function';
-
-    this.debug.invariant(isFunction, 'Executing bootstrap function', 'Found', 'Not found');
-
-    if (bootstrap && isFunction) {
-      bootstrap(this);
-    }
-
-    return this;
-  }
-
-  /**
    * Create a configuration file for the specified driver names.
    */
   async createConfigFiles(
@@ -162,48 +129,6 @@ export default class Beemo<T = any> extends Tool<BeemoPluginRegistry, BeemoConfi
     return this.startPipeline(context)
       .pipe(new ResolveConfigsRoutine('config', this.msg('app:configGenerate')))
       .run();
-  }
-
-  /**
-   * Validate the configuration module and return its absolute path.
-   */
-  getConfigModuleRoot(): Path {
-    if (this.moduleRoot) {
-      return this.moduleRoot;
-    }
-
-    const { configName } = this.options;
-    const { module } = this.config;
-
-    this.debug('Locating configuration module root');
-
-    if (!module) {
-      throw new Error(this.msg('errors:moduleConfigMissing', { configName }));
-    }
-
-    // Allow for local development
-    if (module === '@local') {
-      this.debug('Using %s configuration module', chalk.yellow('@local'));
-
-      this.moduleRoot = new Path(process.cwd());
-
-      return this.moduleRoot;
-    }
-
-    // Reference a node module
-    let rootPath: Path;
-
-    try {
-      rootPath = Path.resolve(require.resolve(module));
-    } catch {
-      throw new Error(this.msg('errors:moduleMissing', { configName, module }));
-    }
-
-    this.debug('Found configuration module root path: %s', chalk.cyan(rootPath));
-
-    this.moduleRoot = rootPath;
-
-    return rootPath;
   }
 
   /**

@@ -14,6 +14,8 @@ import DriverContext, { DriverArgs } from './contexts/DriverContext';
 import ScaffoldContext, { ScaffoldArgs } from './contexts/ScaffoldContext';
 import ScriptContext, { ScriptArgs } from './contexts/ScriptContext';
 
+import Tool from './Tool';
+
 export {
   ConfigArgs,
   ConfigContext,
@@ -29,6 +31,7 @@ export {
   Path,
   Predicates,
   PortablePath,
+  Tool,
 };
 
 export * from './constants';
