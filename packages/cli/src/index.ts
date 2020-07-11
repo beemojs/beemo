@@ -1,26 +1,27 @@
 import { Program, applyStyle } from '@boost/cli';
 // @ts-ignore
 import corePackage from '@beemo/core/package.json';
-import beemo from './beemo';
+import beemo, { argv, parallelArgv } from './beemo';
 import RunDriver from './commands/RunDriver';
 import CreateConfig from './commands/CreateConfig';
 import RunScript from './commands/RunScript';
 import Scaffold from './commands/Scaffold';
 
+const footer = applyStyle(
+  [
+    beemo.msg('app:cliEpilogue', {
+      manualURL: process.env.BEEMO_MANUAL_URL || 'https://milesj.gitbook.io/beemo',
+    }),
+    beemo.msg('app:poweredBy', { version: corePackage.version }),
+  ].join('\n'),
+  'muted',
+);
+
 const program = new Program({
   bin: 'beemo',
-  footer: applyStyle(
-    [
-      beemo.msg('app:cliEpilogue', {
-        manualURL: process.env.BEEMO_MANUAL_URL || 'https://milesj.gitbook.io/beemo',
-      }),
-      beemo.msg('app:poweredBy', { version: corePackage.version }),
-    ].join('\n'),
-    'muted',
-  ),
+  footer,
   name: 'Beemo',
-  // eslint-disable-next-line
-  version: require('@beemo/core/package.json').version,
+  version: corePackage.version,
 });
 
 async function run() {
@@ -32,7 +33,7 @@ async function run() {
 
   // Add a command for each driver
   beemo.driverRegistry.getAll().forEach((driver) => {
-    program.register(new RunDriver({ driver, parallelArgv: parallel }));
+    program.register(new RunDriver({ driver, parallelArgv }));
   });
 
   // Add normal commands
@@ -42,7 +43,7 @@ async function run() {
     .register(new Scaffold());
 
   // Run the program!
-  await program.runAndExit(main);
+  await program.runAndExit(argv);
 }
 
 run();

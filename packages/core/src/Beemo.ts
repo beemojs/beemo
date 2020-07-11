@@ -41,17 +41,6 @@ export function configBlueprint() {
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export default class Beemo<T = any> extends Tool<BeemoPluginRegistry, BeemoConfig<T>> {
-  moduleRoot?: Path;
-
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  pipeline: Pipeline<any, Beemo<T>> | null = null;
-
-  onResolveDependencies = new Event<[ConfigContext, Driver<object, DriverOptions>[]]>(
-    'resolve-dependencies',
-  );
-
-  onRunConfig = new Event<[ConfigContext, string[]]>('run-config');
-
   onRunDriver = new Event<[DriverContext, Driver<object, DriverOptions>]>('run-driver');
 
   onRunScript = new Event<[ScriptContext]>('run-script');
@@ -79,40 +68,6 @@ export default class Beemo<T = any> extends Tool<BeemoPluginRegistry, BeemoConfi
     const footer = this.msg('app:poweredBy', { version });
 
     this.options.footer = `\n${this.isCI() ? '' : '🤖  '}${footer}`;
-  }
-
-  /**
-   * Create a configuration file for the specified driver names.
-   */
-  async createConfigFiles(
-    args: ConfigContext['args'],
-    driverNames: string[] = [],
-  ): Promise<unknown> {
-    const context = this.prepareContext(new ConfigContext(args));
-
-    // Create for all enabled drivers
-    if (driverNames.length === 0) {
-      this.getPlugins('driver').forEach((driver) => {
-        context.addDriverDependency(driver);
-        driverNames.push(driver.name);
-      });
-
-      this.debug('Running with all drivers');
-
-      // Create for one or many driver
-    } else {
-      driverNames.forEach((driverName) => {
-        context.addDriverDependency(this.getPlugin('driver', driverName));
-      });
-
-      this.debug('Running with %s driver(s)', driverNames.join(', '));
-    }
-
-    this.onRunConfig.emit([context, driverNames]);
-
-    return this.startPipeline(context)
-      .pipe(new ResolveConfigsRoutine('config', this.msg('app:configGenerate')))
-      .run();
   }
 
   /**

@@ -2,14 +2,14 @@ import ConfigContext from './ConfigContext';
 import Driver from '../Driver';
 import { Arguments, Argv, StdioType } from '../types';
 
-export interface DriverArgs {
+export interface DriverContextOptions {
   concurrency: number;
   graph: boolean;
   stdio: StdioType;
   workspaces: string;
 }
 
-export default class DriverContext<T = DriverArgs> extends ConfigContext<T> {
+export default class DriverContext extends ConfigContext<DriverContextOptions> {
   // Name defined on the plugin (kebab case)
   driverName: string = '';
 
@@ -19,7 +19,11 @@ export default class DriverContext<T = DriverArgs> extends ConfigContext<T> {
   // The primary driver that initiated the pipeline
   primaryDriver: Driver;
 
-  constructor(args: Arguments<T>, driver: Driver, parallelArgv: Argv[] = []) {
+  constructor(
+    args: Arguments<DriverContextOptions, Argv>,
+    driver: Driver,
+    parallelArgv: Argv[] = [],
+  ) {
     super(args);
 
     this.driverName = driver.name;
