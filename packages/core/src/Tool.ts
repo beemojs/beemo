@@ -9,14 +9,20 @@ import {
   requireModule,
 } from '@boost/common';
 import { Debugger, createDebugger } from '@boost/debug';
+import { Event } from '@boost/event';
+import { WaterfallPipeline } from '@boost/pipeline';
 import { Registry } from '@boost/plugin';
 import { Translator, createTranslator } from '@boost/translate';
 import ConfigManager from './ConfigManager';
 import Driver from './Driver';
 import Script from './Script';
-import { ConfigFile } from './types';
+import Context from './contexts/Context';
+import ScaffoldContext, { ScaffoldOptions, ScaffoldParams } from './contexts/ScaffoldContext';
+import ScaffoldRoutine from './routines/ScaffoldRoutine';
+import { ConfigFile, Arguments, Argv } from './types';
 
 interface ToolOptions {
+  argv: Argv;
   cwd?: string;
   projectName?: string;
   resourcePaths?: string[];
@@ -26,6 +32,8 @@ export default class Tool extends Contract<ToolOptions> {
   config!: ConfigFile;
 
   package!: PackageStructure;
+
+  readonly argv: Argv;
 
   readonly configManager = new ConfigManager('beemo');
 
@@ -39,6 +47,8 @@ export default class Tool extends Contract<ToolOptions> {
 
   readonly project: Project;
 
+  readonly onScaffold = new Event<[ScaffoldContext, string, string, string?]>('scaffold');
+
   readonly scriptRegistry: Registry<Script>;
 
   protected configModuleRoot?: Path;
@@ -46,6 +56,7 @@ export default class Tool extends Contract<ToolOptions> {
   constructor(options: ToolOptions) {
     super(options);
 
+    this.argv = this.options.argv;
     this.cwd = Path.create(this.options.cwd);
 
     this.debug = createDebugger('beemo');
@@ -68,6 +79,7 @@ export default class Tool extends Contract<ToolOptions> {
 
   blueprint({ array, string }: Predicates): Blueprint<ToolOptions> {
     return {
+      argv: array(string()),
       cwd: string(process.cwd()).notEmpty(),
       projectName: string('beemo')
         .kebabCase()
@@ -83,15 +95,23 @@ export default class Tool extends Contract<ToolOptions> {
     this.config = config;
     this.package = this.project.getPackage();
 
-    // Load drivers
+    // TODO Load drivers
+    // @ts-ignore
     await this.driverRegistry.loadMany(config.drivers);
 
-    // Load scripts
+    // TODO Load scripts
+    // @ts-ignore
     await this.scriptRegistry.loadMany(config.scripts);
+
+    // Log information
+    // eslint-disable-next-line global-require
+    const { version } = require('../package.json');
+
+    this.debug('Using beemo v%s', version);
   }
 
   /**
-   * If the configure module has an index export that is a function,
+   * If the config module has an index that exports a function,
    * execute it with the current tool instance.
    */
   async bootstrapConfigModule() {
@@ -162,5 +182,58 @@ export default class Tool extends Contract<ToolOptions> {
     this.configModuleRoot = rootPath;
 
     return rootPath;
+  }
+
+  createScaffoldPipeline(
+    args: Arguments<ScaffoldOptions, ScaffoldParams>,
+    generator: string,
+    action: string,
+    name: string = '',
+  ) {
+    const context = this.prepareContext(new ScaffoldContext(args, generator, action, name));
+
+    this.onScaffold.emit([context, generator, action, name]);
+
+    this.debug('Creating scaffold pipeline');
+
+    return new WaterfallPipeline(context).pipe(
+      new ScaffoldRoutine('scaffold', this.msg('app:scaffoldGenerate')),
+    );
+  }
+
+  /**
+   * Create and setup a fresh pipeline.
+   */
+  protected createPipeline<C extends Context, I>(context: C, input: I) {
+    // Delete config files on failure
+    // if (this.config.configure.cleanup) {
+    //   this.onExit.listen((code) => this.handleCleanupOnFailure(code, context));
+    // }
+
+    // // Silence console reporter to inherit stdio
+    // if (context.args.stdio === 'inherit') {
+    //   this.config.silent = true;
+    // }
+
+    return new WaterfallPipeline<C, I>(context, input);
+  }
+
+  /**
+   * Prepare the context object by setting default values for specific properties.
+   */
+  protected prepareContext<T extends Context>(context: T): T {
+    context.argv = this.argv;
+    context.cwd = this.cwd;
+    context.configModuleRoot = this.getConfigModuleRoot();
+    context.workspaceRoot = this.project.root;
+    context.workspaces = this.project.getWorkspaceGlobs();
+
+    // Make the tool available for all processes
+    process.beemo = {
+      context,
+      tool: this,
+    };
+
+    return context;
   }
 }

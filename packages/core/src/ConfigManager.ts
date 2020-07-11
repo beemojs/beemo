@@ -11,6 +11,7 @@ export default class ConfigManager extends Configuration<ConfigFile> {
         cleanup: bool(false),
         parallel: bool(true),
       }),
+      debug: bool(),
       drivers: createPluginsPredicate(predicates),
       execute: shape({
         concurrency: number().gt(0),

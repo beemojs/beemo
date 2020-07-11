@@ -2,14 +2,10 @@ import { Program, applyStyle } from '@boost/cli';
 // @ts-ignore
 import corePackage from '@beemo/core/package.json';
 import beemo from './beemo';
-import parseSpecialArgv from './parseSpecialArgv';
 import RunDriver from './commands/RunDriver';
 import CreateConfig from './commands/CreateConfig';
 import RunScript from './commands/RunScript';
 import Scaffold from './commands/Scaffold';
-
-// 0 node, 1 beemo, 2 command
-const { main, parallel } = parseSpecialArgv(process.argv.slice(2));
 
 const program = new Program({
   bin: 'beemo',
