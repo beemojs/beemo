@@ -1,43 +1,22 @@
-import { Task, ToolConfig, ToolPluginRegistry } from '@boost/core';
+import { Argv, Arguments, MapOptionConfig } from '@boost/args';
 import { PluginsSetting } from '@boost/config';
 import { Pluggable } from '@boost/plugin';
 import { ExecaReturnValue, ExecaError } from 'execa';
-import { Arguments, Options } from 'yargs';
-import Beemo from './Beemo';
-import Driver from './Driver';
-import Script from './Script';
 import Context from './contexts/Context';
+import Tool from './Tool';
 
-export { Arguments };
-
-// TODO
-export type Argv = string[];
+export { Argv, Arguments };
 
 // TODO
-export type BeemoTool = any;
+export type BeemoTool = Tool;
 
-export interface BeemoPluginRegistry extends ToolPluginRegistry {
-  driver: Driver;
-  script: Script;
+export interface BeemoProcess<C extends Context = Context> {
+  context: C;
+  tool: BeemoTool;
 }
 
 export interface UnknownSettings {
   [key: string]: unknown;
-}
-
-export interface BeemoConfig<T = UnknownSettings> extends Omit<ToolConfig, 'settings'> {
-  configure: {
-    cleanup: boolean;
-    parallel: boolean;
-  };
-  drivers: $FixMe;
-  execute: {
-    concurrency: number;
-    graph: boolean;
-  };
-  module: string;
-  scripts: $FixMe;
-  settings: T;
 }
 
 export interface ConfigFile<T extends object = UnknownSettings> {
@@ -45,6 +24,7 @@ export interface ConfigFile<T extends object = UnknownSettings> {
     cleanup: boolean;
     parallel: boolean;
   };
+  debug: boolean;
   drivers: PluginsSetting;
   execute: {
     concurrency: number;
@@ -55,38 +35,15 @@ export interface ConfigFile<T extends object = UnknownSettings> {
   settings: T;
 }
 
-export interface BeemoProcess<C extends Context = Context, T = UnknownSettings> {
-  context: C;
-  tool: Beemo<T>;
-}
-
 export type Execution = ExecaReturnValue;
 
 export type ExecutionError = ExecaError;
 
-export type ExecuteType = 'parallel' | 'pool' | 'serial' | 'sync';
-
-export interface ExecuteQueue<T extends Context> {
-  tasks: Task<T>[];
-  type: ExecuteType;
-}
-
 export type StdioType = 'buffer' | 'stream' | 'inherit';
-
-declare global {
-  // eslint-disable-next-line @typescript-eslint/no-namespace
-  namespace NodeJS {
-    interface Process {
-      beemo: BeemoProcess;
-    }
-  }
-}
 
 // DRIVERS
 
-export interface DriverCommandOptions {
-  [name: string]: Options;
-}
+export type DriverCommandOptions<T extends object = {}> = MapOptionConfig<T>;
 
 export type DriverStrategy = 'native' | 'create' | 'reference' | 'copy' | 'none';
 
@@ -122,4 +79,21 @@ export interface Driverable extends Pluggable<BeemoTool> {
 export interface Scriptable extends Pluggable<BeemoTool> {
   args: () => object;
   execute: (context: $FixMe, args: $FixMe) => Promise<unknown>;
+}
+
+// ROUTINES
+
+export interface RoutineOptions {
+  tool: BeemoTool;
+}
+
+// OTHER
+
+declare global {
+  // eslint-disable-next-line @typescript-eslint/no-namespace
+  namespace NodeJS {
+    interface Process {
+      beemo: BeemoProcess;
+    }
+  }
 }

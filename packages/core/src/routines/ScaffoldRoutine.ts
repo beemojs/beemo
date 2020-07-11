@@ -1,26 +1,32 @@
 import { engine } from 'hygen';
 // @ts-ignore
 import Logger from 'hygen/lib/logger';
-import { Path } from '@boost/common';
-import { Routine } from '@boost/core';
-import Beemo from '../Beemo';
+import { Path, Blueprint, Predicates } from '@boost/common';
+import { Routine } from '@boost/pipeline';
+import Tool from '../Tool';
 import ScaffoldContext from '../contexts/ScaffoldContext';
+import { RoutineOptions } from '../types';
 
-export default class ScaffoldRoutine extends Routine<ScaffoldContext, Beemo> {
-  bootstrap() {
-    this.task(this.tool.msg('app:scaffoldRunGenerator'), this.runGenerator);
+export default class ScaffoldRoutine extends Routine<unknown, unknown, RoutineOptions> {
+  blueprint({ instance }: Predicates): Blueprint<RoutineOptions> {
+    return {
+      tool: instance(Tool).notNullable(),
+    };
   }
 
   execute(context: ScaffoldContext) {
-    return this.serializeTasks(this.tool.config.module);
+    return this.createWaterfallPipeline(context)
+      .pipe(this.options.tool.msg('app:scaffoldRunGenerator'), this.runGenerator)
+      .run();
   }
 
   /**
    * Execute the hygen scaffolding generator.
    */
-  async runGenerator(context: ScaffoldContext, moduleName: string) {
-    const { tool } = this;
+  async runGenerator(context: ScaffoldContext) {
+    const { tool } = this.options;
     const args = [context.generator, context.action];
+    const moduleName = tool.config.module;
     const searchName = moduleName.includes('/') ? moduleName.split('/')[1] : moduleName;
     let modulePath = require.resolve(moduleName);
 
@@ -28,10 +34,10 @@ export default class ScaffoldRoutine extends Routine<ScaffoldContext, Beemo> {
     modulePath = modulePath.slice(0, modulePath.lastIndexOf(searchName) + searchName.length);
 
     try {
-      return await engine(context.argv, {
+      await engine(context.argv, {
         // @ts-ignore Broken upstream
         createPrompter: /* istanbul ignore next */ () => ({ prompt: this.handlePrompt }),
-        cwd: tool.options.root,
+        cwd: tool.cwd.path(),
         debug: tool.config.debug,
         exec: this.handleExec,
         logger: new Logger(this.handleLog),
@@ -40,7 +46,7 @@ export default class ScaffoldRoutine extends Routine<ScaffoldContext, Beemo> {
     } catch (error) {
       // Intercept hygen error to provide a better error message
       if (error.message.startsWith("I can't find action")) {
-        throw new Error(this.tool.msg('errors:scaffoldNoTemplates', { path: args.join('/') }));
+        throw new Error(tool.msg('errors:scaffoldNoTemplates', { path: args.join('/') }));
       }
 
       throw error;
@@ -61,7 +67,8 @@ export default class ScaffoldRoutine extends Routine<ScaffoldContext, Beemo> {
    */
   private handleLog = (message: string) => {
     if (message && message.trim()) {
-      this.tool.console.log(message);
+      // TODO log?
+      // this.tool.console.log(message);
     }
   };
 

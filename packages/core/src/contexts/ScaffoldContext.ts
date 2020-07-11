@@ -1,21 +1,25 @@
 import Context from './Context';
 import { Arguments } from '../types';
 
-export interface ScaffoldArgs {
-  action: string;
-  generator: string;
+export interface ScaffoldOptions {
   dry: boolean;
-  name: string;
 }
 
-export default class ScaffoldContext<T = ScaffoldArgs> extends Context<T> {
+export type ScaffoldParams = [string, string, string];
+
+export default class ScaffoldContext extends Context<ScaffoldOptions, ScaffoldParams> {
   action: string;
 
   generator: string;
 
   name: string;
 
-  constructor(args: Arguments<T>, generator: string, action: string, name: string = '') {
+  constructor(
+    args: Arguments<ScaffoldOptions, ScaffoldParams>,
+    generator: string,
+    action: string,
+    name: string = '',
+  ) {
     super(args);
 
     this.generator = generator;
