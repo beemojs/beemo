@@ -10,8 +10,11 @@ import Driver from './Driver';
 import Script from './Script';
 import Context from './contexts/Context';
 import ConfigContext, { ConfigArgs } from './contexts/ConfigContext';
-import DriverContext, { DriverArgs } from './contexts/DriverContext';
-import ScaffoldContext, { ScaffoldOptions, ScaffoldParams } from './contexts/ScaffoldContext';
+import DriverContext, { DriverContextOptions } from './contexts/DriverContext';
+import ScaffoldContext, {
+  ScaffoldContextOptions,
+  ScaffoldContextParams,
+} from './contexts/ScaffoldContext';
 import ScriptContext, { ScriptArgs } from './contexts/ScriptContext';
 
 import Tool from './Tool';
@@ -21,11 +24,11 @@ export {
   ConfigContext,
   Context,
   Driver,
-  DriverArgs,
   DriverContext,
+  DriverContextOptions,
   ScaffoldContext,
-  ScaffoldOptions,
-  ScaffoldParams,
+  ScaffoldContextOptions,
+  ScaffoldContextParams,
   Script,
   ScriptArgs,
   ScriptContext,

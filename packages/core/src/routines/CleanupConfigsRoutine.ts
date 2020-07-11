@@ -1,25 +1,37 @@
-import { Routine } from '@boost/core';
+import { Blueprint, Predicates } from '@boost/common';
+import { Routine } from '@boost/pipeline';
 import chalk from 'chalk';
 import fs from 'fs-extra';
-import Beemo from '../Beemo';
+import Tool from '../Tool';
 import DriverContext from '../contexts/DriverContext';
+import { RoutineOptions } from '../types';
 
-export default class CleanupConfigsRoutine extends Routine<DriverContext, Beemo> {
-  bootstrap() {
-    this.task(this.tool.msg('app:configCleanup'), this.deleteConfigFiles);
+export default class CleanupConfigsRoutine extends Routine<unknown, unknown, RoutineOptions> {
+  blueprint({ instance }: Predicates): Blueprint<RoutineOptions> {
+    return {
+      tool: instance(Tool).notNullable(),
+    };
+  }
+
+  execute(context: DriverContext) {
+    return this.createWaterfallPipeline(context)
+      .pipe(this.options.tool.msg('app:configCleanup'), this.deleteConfigFiles)
+      .run();
   }
 
   /**
    * Delete all temporary config files.
    */
-  async deleteConfigFiles(context: DriverContext): Promise<boolean[]> {
-    return Promise.all(
+  async deleteConfigFiles(context: DriverContext): Promise<void> {
+    await Promise.all(
       context.configPaths.map((config) => {
         this.debug('Deleting config file %s', chalk.cyan(config.path));
 
-        this.tool.driverRegistry.get(config.driver).onDeleteConfigFile.emit([context, config.path]);
+        this.options.tool.driverRegistry
+          .get(config.driver)
+          .onDeleteConfigFile.emit([context, config.path]);
 
-        return fs.remove(config.path.path()).then(() => true);
+        return fs.remove(config.path.path());
       }),
     );
   }

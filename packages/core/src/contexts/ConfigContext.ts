@@ -1,11 +1,7 @@
 import Context from './Context';
 import Driver from '../Driver';
 
-export interface ConfigArgs {
-  names?: string[];
-}
-
-export default class ConfigContext<T = ConfigArgs> extends Context<T> {
+export default class ConfigContext<O extends object = {}> extends Context<O, string[]> {
   // List of drivers involved in the current pipeline
   drivers: Set<Driver> = new Set();
 
@@ -16,6 +12,7 @@ export default class ConfigContext<T = ConfigArgs> extends Context<T> {
     if (driver instanceof Driver) {
       this.drivers.add(driver);
     } else {
+      // TODO
       throw new TypeError('Invalid driver. Must be an instance of `Driver`.');
     }
 
