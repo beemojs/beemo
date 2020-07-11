@@ -17,7 +17,12 @@ import ConfigManager from './ConfigManager';
 import Driver from './Driver';
 import Script from './Script';
 import Context from './contexts/Context';
-import ScaffoldContext, { ScaffoldOptions, ScaffoldParams } from './contexts/ScaffoldContext';
+import ConfigContext from './contexts/ConfigContext';
+import ResolveConfigsRoutine from './routines/ResolveConfigsRoutine';
+import ScaffoldContext, {
+  ScaffoldContextOptions,
+  ScaffoldContextParams,
+} from './contexts/ScaffoldContext';
 import ScaffoldRoutine from './routines/ScaffoldRoutine';
 import { ConfigFile, Arguments, Argv } from './types';
 
@@ -47,7 +52,11 @@ export default class Tool extends Contract<ToolOptions> {
 
   readonly project: Project;
 
-  readonly onScaffold = new Event<[ScaffoldContext, string, string, string?]>('scaffold');
+  readonly onResolveDependencies = new Event<[ConfigContext, Driver[]]>('resolve-dependencies');
+
+  readonly onRunCreateConfig = new Event<[ConfigContext, string[]]>('run-create-config');
+
+  readonly onRunScaffold = new Event<[ScaffoldContext, string, string, string?]>('run-scaffold');
 
   readonly scriptRegistry: Registry<Script>;
 
@@ -184,15 +193,49 @@ export default class Tool extends Contract<ToolOptions> {
     return rootPath;
   }
 
+  /**
+   * Create a pipeline to run the create config files flow.
+   */
+  createConfigFilesPipeline(args: Arguments<{}, string[]>, driverNames: string[] = []) {
+    const context = this.prepareContext(new ConfigContext(args));
+
+    // Create for all enabled drivers
+    if (driverNames.length === 0) {
+      this.driverRegistry.getAll().forEach((driver) => {
+        context.addDriverDependency(driver);
+        driverNames.push(driver.name);
+      });
+
+      this.debug('Running with all drivers');
+
+      // Create for one or many driver
+    } else {
+      driverNames.forEach((driverName) => {
+        context.addDriverDependency(this.driverRegistry.get(driverName));
+      });
+
+      this.debug('Running with %s driver(s)', driverNames.join(', '));
+    }
+
+    this.onRunCreateConfig.emit([context, driverNames]);
+
+    return new WaterfallPipeline(context).pipe(
+      new ResolveConfigsRoutine('config', this.msg('app:configGenerate')),
+    );
+  }
+
+  /**
+   * Create a pipeline to run the scaffolding flow.
+   */
   createScaffoldPipeline(
-    args: Arguments<ScaffoldOptions, ScaffoldParams>,
+    args: Arguments<ScaffoldContextOptions, ScaffoldContextParams>,
     generator: string,
     action: string,
     name: string = '',
   ) {
     const context = this.prepareContext(new ScaffoldContext(args, generator, action, name));
 
-    this.onScaffold.emit([context, generator, action, name]);
+    this.onRunScaffold.emit([context, generator, action, name]);
 
     this.debug('Creating scaffold pipeline');
 

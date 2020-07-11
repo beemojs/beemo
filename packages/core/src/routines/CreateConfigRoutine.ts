@@ -1,83 +1,89 @@
 import chalk from 'chalk';
 import fs from 'fs-extra';
 import camelCase from 'lodash/camelCase';
-import { Path, PathResolver, requireModule } from '@boost/common';
-import { Routine, Predicates } from '@boost/core';
-import Beemo from '../Beemo';
+import { Path, PathResolver, Predicates, requireModule, Blueprint } from '@boost/common';
+import { Routine } from '@boost/pipeline';
+import Tool from '../Tool';
 import Driver from '../Driver';
 import ConfigContext from '../contexts/ConfigContext';
 import { STRATEGY_COPY, STRATEGY_REFERENCE, STRATEGY_CREATE, STRATEGY_NATIVE } from '../constants';
+import { RoutineOptions } from '../types';
 
 export interface ConfigObject {
   [key: string]: unknown;
 }
 
-export interface CreateConfigOptions {
+export interface CreateConfigOptions extends RoutineOptions {
   driver: Driver;
 }
 
 export default class CreateConfigRoutine<Ctx extends ConfigContext> extends Routine<
-  Ctx,
-  Beemo,
+  Path,
+  unknown,
   CreateConfigOptions
 > {
-  blueprint({ instance }: Predicates) /* infer */ {
-    // eslint-disable-next-line
+  blueprint({ instance }: Predicates): Blueprint<CreateConfigOptions> {
     return {
-      driver: instance(Driver as $FixMe, true)
+      // @ts-ignore Errors because Driver is abstract
+      driver: instance(Driver)
         .required()
         .notNullable(),
-    } as $FixMe;
+      tool: instance(Tool)
+        .required()
+        .notNullable(),
+    };
   }
 
-  bootstrap() {
-    const { tool } = this;
-    const { metadata, options } = this.options.driver;
+  execute(context: Ctx): Promise<Path> {
+    const { driver, tool } = this.options;
+    const { metadata, options } = driver;
     const name = metadata.title;
     const strategy =
       options.strategy === STRATEGY_NATIVE ? metadata.configStrategy : options.strategy;
 
-    this.task(tool.msg('app:configSetEnvVars', { name }), this.setEnvVars);
-
     switch (strategy) {
       case STRATEGY_REFERENCE:
-        this.task(tool.msg('app:configReference', { name }), this.referenceConfigFile);
-        break;
+        return this.createWaterfallPipeline(context, [])
+          .pipe(tool.msg('app:configSetEnvVars', { name }), this.setEnvVars)
+          .pipe(tool.msg('app:configReference', { name }), this.referenceConfigFile)
+          .run();
 
       case STRATEGY_COPY:
-        this.task(tool.msg('app:configCopy', { name }), this.copyConfigFile);
-        break;
+        return this.createWaterfallPipeline(context, [])
+          .pipe(tool.msg('app:configSetEnvVars', { name }), this.setEnvVars)
+          .pipe(tool.msg('app:configCopy', { name }), this.copyConfigFile)
+          .run();
 
       case STRATEGY_CREATE:
-        this.task(tool.msg('app:configCreateLoadFile', { name }), this.loadConfigFromSources);
-        this.task(tool.msg('app:configCreateMerge', { name }), this.mergeConfigs);
-        this.task(tool.msg('app:configCreate', { name }), this.createConfigFile);
-        break;
+        return this.createWaterfallPipeline(context, [])
+          .pipe(tool.msg('app:configSetEnvVars', { name }), this.setEnvVars)
+          .pipe(tool.msg('app:configCreateLoadFile', { name }), this.loadConfigFromSources)
+          .pipe(tool.msg('app:configCreateMerge', { name }), this.mergeConfigs)
+          .pipe(tool.msg('app:configCreate', { name }), this.createConfigFile)
+          .run();
 
       default:
         this.skip(true);
         break;
     }
-  }
 
-  execute(): Promise<ConfigObject[]> {
-    return this.serializeTasks([]);
+    return Promise.resolve(new Path());
   }
 
   /**
    * Copy configuration file from module.
    */
   async copyConfigFile(context: Ctx): Promise<Path> {
-    const { driver } = this.options;
+    const { driver, tool } = this.options;
     const { metadata, name } = driver;
-    const sourcePath = this.getConfigPath();
+    const sourcePath = this.getConfigPath(context);
     const configPath = context.cwd.append(metadata.configName);
 
     if (!sourcePath) {
-      throw new Error(this.tool.msg('errors:configCopySourceMissing'));
+      throw new Error(tool.msg('errors:configCopySourceMissing'));
     }
 
-    const config = this.loadConfig(sourcePath);
+    const config = this.loadConfig(context, sourcePath);
 
     this.debug('Copying config file to %s', chalk.cyan(configPath));
 
@@ -96,7 +102,7 @@ export default class CreateConfigRoutine<Ctx extends ConfigContext> extends Rout
   /**
    * Create a temporary configuration file or pass as an option.
    */
-  async createConfigFile(context: Ctx, config: object): Promise<Path> {
+  async createConfigFile(context: Ctx, config: ConfigObject): Promise<Path> {
     const { driver } = this.options;
     const { metadata, name } = driver;
     const configPath = context.cwd.append(metadata.configName);
@@ -124,9 +130,8 @@ export default class CreateConfigRoutine<Ctx extends ConfigContext> extends Rout
    * Return absolute file path for config file within configuration module,
    * or an empty string if it does not exist.
    */
-  getConfigPath(forceLocal: boolean = false): Path | null {
-    const { cwd, workspaceRoot } = this.context;
-    const moduleName = this.tool.config.module;
+  getConfigPath({ cwd, workspaceRoot }: Ctx, forceLocal: boolean = false): Path | null {
+    const moduleName = this.options.tool.config.module;
     const { name } = this.options.driver;
     const configName = this.getConfigName(name);
     const isLocal = moduleName === '@local' || forceLocal;
@@ -191,14 +196,16 @@ export default class CreateConfigRoutine<Ctx extends ConfigContext> extends Rout
   /**
    * Load a config file with passing the args and tool to the file.
    */
-  loadConfig(filePath: Path): ConfigObject {
+  loadConfig(context: Ctx, filePath: Path): ConfigObject {
     const config: ConfigObject = requireModule(filePath);
 
     if (typeof config === 'function') {
-      throw new TypeError(this.tool.msg('errors:configNoFunction', { name: filePath.name() }));
+      throw new TypeError(
+        this.options.tool.msg('errors:configNoFunction', { name: filePath.name() }),
+      );
     }
 
-    this.options.driver.onLoadModuleConfig.emit([this.context, filePath, config]);
+    this.options.driver.onLoadModuleConfig.emit([context, filePath, config]);
 
     return config;
   }
@@ -208,18 +215,18 @@ export default class CreateConfigRoutine<Ctx extends ConfigContext> extends Rout
    * and from the local configs/ folder in the consumer.
    */
   loadConfigFromSources(context: Ctx, prevConfigs: ConfigObject[]): Promise<ConfigObject[]> {
-    const sourcePath = this.getConfigPath();
-    const localPath = this.getConfigPath(true);
+    const sourcePath = this.getConfigPath(context);
+    const localPath = this.getConfigPath(context, true);
     const configs = [...prevConfigs];
 
     if (sourcePath) {
-      configs.push(this.loadConfig(sourcePath));
+      configs.push(this.loadConfig(context, sourcePath));
     }
 
     // Local files should override anything defined in the configuration module above
     // Also don't double load files, so check against @local to avoid
     if (localPath && sourcePath && localPath.path() !== sourcePath.path()) {
-      configs.push(this.loadConfig(localPath));
+      configs.push(this.loadConfig(context, localPath));
     }
 
     return Promise.resolve(configs);
@@ -229,16 +236,16 @@ export default class CreateConfigRoutine<Ctx extends ConfigContext> extends Rout
    * Reference configuration file from module using a require statement.
    */
   referenceConfigFile(context: Ctx): Promise<Path> {
-    const { driver } = this.options;
+    const { driver, tool } = this.options;
     const { metadata, name } = driver;
-    const sourcePath = this.getConfigPath();
+    const sourcePath = this.getConfigPath(context);
     const configPath = context.cwd.append(metadata.configName);
 
     if (!sourcePath) {
-      throw new Error(this.tool.msg('errors:configReferenceSourceMissing'));
+      throw new Error(tool.msg('errors:configReferenceSourceMissing'));
     }
 
-    const config = this.loadConfig(sourcePath);
+    const config = this.loadConfig(context, sourcePath);
 
     this.debug('Referencing config file to %s', chalk.cyan(configPath));
 
@@ -260,7 +267,7 @@ export default class CreateConfigRoutine<Ctx extends ConfigContext> extends Rout
   setEnvVars(context: Ctx, configs: ConfigObject[]): Promise<ConfigObject[]> {
     const { env } = this.options.driver.options;
 
-    // TODO: This may cause collisions, isolate in a child process?
+    // TODO: This may cause collisions, isolate somehow?
     Object.keys(env).forEach((key) => {
       process.env[key] = env[key];
     });
