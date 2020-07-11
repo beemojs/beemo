@@ -1,7 +1,6 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
+import { PrimitiveType } from '@boost/args';
 import { Path, FilePath } from '@boost/common';
-import { Context as BaseContext } from '@boost/core';
+import { Context as BaseContext } from '@boost/pipeline';
 import camelCase from 'lodash/camelCase';
 import trim from 'lodash/trim';
 import { Arguments, Argv } from '../types';
@@ -11,18 +10,24 @@ export interface ConfigPath {
   path: Path;
 }
 
-export default class Context<T = {}> extends BaseContext {
-  args: Arguments<T>;
+export default class Context<
+  O extends object = {},
+  P extends PrimitiveType[] = PrimitiveType[]
+> extends BaseContext {
+  // Parsed command line arguments as an object
+  args: Arguments<O, P>;
 
-  argv: Argv = [];
+  // Raw command line arguments as a list of strings
+  argv: Argv;
 
+  // List of driver configs currently registered
   configPaths: ConfigPath[] = [];
 
   // Current working directory
   cwd!: Path;
 
   // Absolute path to the configuration module
-  moduleRoot!: Path;
+  configModuleRoot!: Path;
 
   // Absolute path to the folder containing `package.json` (Yarn workspaces) or `lerna.json`
   workspaceRoot!: Path;
@@ -30,31 +35,11 @@ export default class Context<T = {}> extends BaseContext {
   // List of paths (with trailing glob star) for each defined workspace
   workspaces: FilePath[] = [];
 
-  constructor(args: Arguments<T>) {
+  constructor(args: Arguments<O, P>, argv: Argv = []) {
     super();
 
     this.args = args;
-  }
-
-  /**
-   * Add a positional argument to the argv list.
-   */
-  addArg(arg: string): this {
-    this.args._.push(arg);
-    this.argv.push(arg);
-
-    return this;
-  }
-
-  /**
-   * Add multiple positional arguments.
-   */
-  addArgs(args: string[]): this {
-    args.forEach((arg) => {
-      this.addArg(arg);
-    });
-
-    return this;
+    this.argv = argv;
   }
 
   /**
@@ -72,7 +57,7 @@ export default class Context<T = {}> extends BaseContext {
   /**
    * Add an option argument to both the args object and argv list.
    */
-  addOption(arg: string, defaultValue: unknown = true, useEquals: boolean = false): this {
+  addOption(arg: string, defaultValue: PrimitiveType = true, useEquals: boolean = false): this {
     const list = [];
     let option = arg;
     let value = defaultValue;
@@ -89,8 +74,9 @@ export default class Context<T = {}> extends BaseContext {
       value = false;
     }
 
-    (this.args as any)[name] = value;
-    (this.args as any)[camelCase(name)] = value;
+    // TODO
+    // @ts-ignore
+    this.args.options[camelCase(name) as keyof O] = value;
 
     if (typeof value === 'boolean' || !value) {
       list.push(option);
@@ -117,6 +103,27 @@ export default class Context<T = {}> extends BaseContext {
   }
 
   /**
+   * Add a parameter to the argv list.
+   */
+  addParam(arg: string): this {
+    this.args.params.push(arg);
+    this.argv.push(arg);
+
+    return this;
+  }
+
+  /**
+   * Add multiple parameters.
+   */
+  addParams(args: string[]): this {
+    args.forEach((arg) => {
+      this.addParam(arg);
+    });
+
+    return this;
+  }
+
+  /**
    * Find a configuration path by file name.
    */
   findConfigByName(name: string): ConfigPath | undefined {
@@ -128,7 +135,7 @@ export default class Context<T = {}> extends BaseContext {
   /**
    * Return an argument or option value by name, or a fallback value if not found.
    */
-  getArg(name: string, fallback?: unknown): unknown {
-    return this.args[name] || fallback || null;
+  getOption<K extends keyof O>(name: K, fallback?: O[K]): O[K] | null {
+    return this.args.options[name] || fallback || null;
   }
 }

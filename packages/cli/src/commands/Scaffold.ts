@@ -1,14 +1,9 @@
 import { Arg, Config, Command, GlobalOptions } from '@boost/cli';
+import { ScaffoldOptions, ScaffoldParams } from '@beemo/core';
 import beemo from '../beemo';
 
-export interface ScaffoldOptions extends GlobalOptions {
-  dry: boolean;
-}
-
-export type ScaffoldParams = [string, string, string];
-
 @Config('scaffold', beemo.msg('app:cliCommandScaffold'))
-export default class Scaffold extends Command<ScaffoldOptions, ScaffoldParams> {
+export default class Scaffold extends Command<ScaffoldOptions & GlobalOptions, ScaffoldParams> {
   @Arg.Flag(beemo.msg('app:cliOptionDryRun'))
   dry: boolean = false;
 
@@ -28,9 +23,12 @@ export default class Scaffold extends Command<ScaffoldOptions, ScaffoldParams> {
     {
       description: beemo.msg('app:cliArgGeneratorName'),
       label: 'name',
-      required: true,
       type: 'string',
     },
   )
-  async run(generator: string, action: string, name: string) {}
+  async run(generator: string, action: string, name: string = '') {
+    const pipeline = beemo.createScaffoldPipeline(this.getArguments(), generator, action, name);
+
+    await pipeline.run();
+  }
 }

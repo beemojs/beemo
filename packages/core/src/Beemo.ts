@@ -56,8 +56,6 @@ export default class Beemo<T = any> extends Tool<BeemoPluginRegistry, BeemoConfi
 
   onRunScript = new Event<[ScriptContext]>('run-script');
 
-  onScaffold = new Event<[ScaffoldContext, string, string, string?]>('scaffold');
-
   constructor(argv: Argv, binName?: string, testingOnly: boolean = false) {
     super(
       {
@@ -70,13 +68,6 @@ export default class Beemo<T = any> extends Tool<BeemoPluginRegistry, BeemoConfi
       argv,
     );
 
-    // eslint-disable-next-line global-require
-    const { version } = require('../package.json');
-
-    this.debug('Using beemo v%s', version);
-    this.registerPlugin('driver', Driver as $FixMe);
-    this.registerPlugin('script', Script);
-
     // Abort early for testing purposes
     if (testingOnly) {
       return;
@@ -88,13 +79,6 @@ export default class Beemo<T = any> extends Tool<BeemoPluginRegistry, BeemoConfi
     const footer = this.msg('app:poweredBy', { version });
 
     this.options.footer = `\n${this.isCI() ? '' : '🤖  '}${footer}`;
-  }
-
-  /**
-   * Register global options within our CLI application.
-   */
-  bootstrapCLI(app: Yargv) {
-    CLI.registerGlobalOptions(app as $FixMe, this);
   }
 
   /**
@@ -190,65 +174,6 @@ export default class Beemo<T = any> extends Tool<BeemoPluginRegistry, BeemoConfi
         ),
       )
       .run();
-  }
-
-  /**
-   * Run the scaffold process to generate templates.
-   */
-  async scaffold(
-    args: ScaffoldContext['args'],
-    generator: string,
-    action: string,
-    name: string = '',
-  ): Promise<unknown> {
-    const context = this.prepareContext(new ScaffoldContext(args, generator, action, name));
-
-    this.onScaffold.emit([context, generator, action, name]);
-
-    this.debug('Running scaffold command');
-
-    return this.startPipeline(context)
-      .pipe(new ScaffoldRoutine('scaffold', this.msg('app:scaffoldGenerate')))
-      .run();
-  }
-
-  /**
-   * Setup and start a fresh pipeline.
-   */
-  startPipeline<C extends Context>(context: C): Pipeline<C, Beemo<T>> {
-    // Make the tool available to all processes
-    process.beemo = {
-      context,
-      // @ts-ignore
-      tool: this,
-    };
-
-    // Delete config files on failure
-    if (this.config.configure.cleanup) {
-      this.onExit.listen((code) => this.handleCleanupOnFailure(code, context));
-    }
-
-    // Silence console reporter to inherit stdio
-    if (context.args.stdio === 'inherit') {
-      this.config.silent = true;
-    }
-
-    this.pipeline = new Pipeline(this, context);
-
-    return this.pipeline;
-  }
-
-  /**
-   * Prepare the context object by setting default values for specific properties.
-   */
-  protected prepareContext<T extends Context>(context: T): T {
-    context.argv = this.argv;
-    context.cwd = Path.resolve(this.options.root);
-    context.moduleRoot = this.getConfigModuleRoot();
-    context.workspaceRoot = Path.resolve(this.options.workspaceRoot || this.options.root);
-    context.workspaces = this.getWorkspacePaths({ root: context.workspaceRoot.path() });
-
-    return context;
   }
 
   /**

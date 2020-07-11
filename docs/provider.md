@@ -116,7 +116,7 @@ module.exports = {
 ```
 
 > Command line arguments are parsed into an object using
-> [yargs-parser](https://www.npmjs.com/package/yargs-parser).
+> [@boost/args](https://milesj.gitbook.io/boost/args).
 
 ## Scripts
 
@@ -167,8 +167,8 @@ export default class InitProjectScript extends Script<Args> {
 ```
 
 The `args()` method is optional and can be used to define parsing rules for CLI options (powered by
-[yargs-parser](https://www.npmjs.com/package/yargs-parser#api)). If no rules are provided, Yargs
-default parsing rules will be used.
+[@boost/args](https://milesj.gitbook.io/boost/args)). If no rules are provided, default parsing
+rules will be used.
 
 The `execute()` method is required and is triggered when the `beemo run-script` command is ran. This
 method receives the current pipeline context as the 1st argument and options (parsed with `parse()`)
