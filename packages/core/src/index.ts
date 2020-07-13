@@ -3,24 +3,20 @@
  * @license     https://opensource.org/licenses/MIT
  */
 
-import { Path, PortablePath } from '@boost/common';
-import { Predicates } from '@boost/core';
-import Beemo from './Beemo';
+import { Path, PortablePath, Predicates } from '@boost/common';
+import Tool from './Tool';
 import Driver from './Driver';
 import Script from './Script';
 import Context from './contexts/Context';
-import ConfigContext, { ConfigArgs } from './contexts/ConfigContext';
+import ConfigContext from './contexts/ConfigContext';
 import DriverContext, { DriverContextOptions } from './contexts/DriverContext';
 import ScaffoldContext, {
   ScaffoldContextOptions,
   ScaffoldContextParams,
 } from './contexts/ScaffoldContext';
-import ScriptContext, { ScriptArgs } from './contexts/ScriptContext';
-
-import Tool from './Tool';
+import ScriptContext, { ScriptContextOptions, ScriptContextParams } from './contexts/ScriptContext';
 
 export {
-  ConfigArgs,
   ConfigContext,
   Context,
   Driver,
@@ -30,8 +26,9 @@ export {
   ScaffoldContextOptions,
   ScaffoldContextParams,
   Script,
-  ScriptArgs,
   ScriptContext,
+  ScriptContextOptions,
+  ScriptContextParams,
   Path,
   Predicates,
   PortablePath,
@@ -40,5 +37,3 @@ export {
 
 export * from './constants';
 export * from './types';
-
-export default Beemo;

@@ -8,7 +8,7 @@ export default class CreateConfig extends Command<GlobalOptions> {
   static allowVariadicParams = 'names';
 
   async run(...names: string[]) {
-    const pipeline = beemo.createConfigFilesPipeline(this.getArguments(), names);
+    const pipeline = beemo.createConfigurePipeline(this.getArguments(), names);
 
     await pipeline.run();
   }

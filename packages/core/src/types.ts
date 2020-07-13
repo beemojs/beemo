@@ -1,13 +1,13 @@
-import { Argv, Arguments, MapOptionConfig } from '@boost/args';
+import { Argv, Arguments, MapOptionConfig, ParserOptions, ArgList } from '@boost/args';
 import { PluginsSetting } from '@boost/config';
 import { Pluggable } from '@boost/plugin';
 import { ExecaReturnValue, ExecaError } from 'execa';
 import Context from './contexts/Context';
+import ScriptContext from './contexts/ScriptContext';
 import Tool from './Tool';
 
 export { Argv, Arguments };
 
-// TODO
 export type BeemoTool = Tool;
 
 export interface BeemoProcess<C extends Context = Context> {
@@ -35,6 +35,7 @@ export interface ConfigFile<T extends object = UnknownSettings> {
   settings: T;
 }
 
+// TODO
 export type Execution = ExecaReturnValue;
 
 export type ExecutionError = ExecaError;
@@ -76,9 +77,9 @@ export interface Driverable extends Pluggable<BeemoTool> {
 
 // SCRIPTS
 
-export interface Scriptable extends Pluggable<BeemoTool> {
-  args: () => object;
-  execute: (context: $FixMe, args: $FixMe) => Promise<unknown>;
+export interface Scriptable<O extends object> extends Pluggable<BeemoTool> {
+  parse: () => ParserOptions<O>;
+  execute: (context: ScriptContext, args: Arguments<O, ArgList>) => Promise<unknown>;
 }
 
 // ROUTINES

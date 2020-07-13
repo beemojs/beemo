@@ -1,12 +1,16 @@
-import { Routine, WorkspacePackageConfig } from '@boost/core';
+import { WorkspacePackage, PackageStructure, Predicates, Blueprint } from '@boost/common';
+import { Routine, PooledPipeline } from '@boost/pipeline';
+import { stripAnsi, style } from '@boost/terminal';
 import Graph from '@beemo/dependency-graph';
-import chalk from 'chalk';
-// eslint-disable-next-line
-import stripAnsi from 'strip-ansi';
-import Beemo from '../Beemo';
+import Tool from '../Tool';
 import Context from '../contexts/Context';
 import isPatternMatch from '../utils/isPatternMatch';
-import { ExecutionError } from '../types';
+import { ExecutionError, RoutineOptions } from '../types';
+
+export type WSP = WorkspacePackage<PackageStructure>;
+
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export type AnyRoutine = Routine<any, any>;
 
 export interface RunInWorkspacesContextArgs {
   concurrency: number;
@@ -18,45 +22,56 @@ const MAX_ERROR_LINES = 5;
 
 export default abstract class RunInWorkspacesRoutine<
   Ctx extends Context<RunInWorkspacesContextArgs>
-> extends Routine<Ctx, Beemo> {
-  workspacePackages: WorkspacePackageConfig[] = [];
+> extends Routine<unknown, unknown, RoutineOptions> {
+  protected routines: AnyRoutine[] = [];
 
-  bootstrap() {
-    const { args, workspaceRoot, workspaces } = this.context;
+  protected workspacePackages: WSP[] = [];
 
-    if (args.workspaces) {
-      if (!workspaces || workspaces.length === 0) {
-        throw new Error(this.tool.msg('errors:workspacesNotEnabled', { arg: args.workspaces }));
-      }
-
-      this.workspacePackages = this.tool.getWorkspacePackages({
-        root: workspaceRoot,
-      });
-
-      this.getFilteredWorkspacePackages().forEach((pkg) => {
-        this.pipeRoutine(pkg.workspace.packageName, pkg.workspace.packagePath);
-      });
-    } else {
-      this.pipeRoutine();
-    }
+  blueprint({ instance }: Predicates): Blueprint<RoutineOptions> {
+    return {
+      tool: instance(Tool)
+        .required()
+        .notNullable(),
+    };
   }
 
   async execute(context: Ctx): Promise<unknown> {
-    const value = await this.serializeTasks();
-    const batches = this.orderByWorkspacePriorityGraph();
+    const { args, workspaces } = context;
+    const { tool } = this.options;
+
+    // Determine packages to run plugins in
+    if (args.options.workspaces) {
+      if (!workspaces || workspaces.length === 0) {
+        throw new Error(tool.msg('errors:workspacesNotEnabled', { arg: args.options.workspaces }));
+      }
+
+      this.workspacePackages = tool.project.getWorkspacePackages();
+
+      this.getFilteredWorkspacePackages(context).forEach((pkg) => {
+        this.routines.push(
+          this.pipeRoutine(context, pkg.metadata.packageName, pkg.metadata.packagePath),
+        );
+      });
+    } else {
+      this.routines.push(this.pipeRoutine(context));
+    }
+
+    const value = await this.getInitialValue(context);
+    const batches = this.orderByWorkspacePriorityGraph(context);
     const allErrors: Error[] = [];
     const allResults: unknown[] = [];
-
-    const concurrency = context.args.concurrency || this.tool.config.execute.concurrency;
+    const concurrency =
+      context.args.options.concurrency || tool.config.execute.concurrency || undefined;
 
     // eslint-disable-next-line no-restricted-syntax
     for (const batch of batches) {
-      // eslint-disable-next-line no-await-in-loop
-      const { errors, results } = await this.poolRoutines(
-        value,
-        concurrency ? { concurrency } : {},
-        batch,
+      const pipeline = batch.reduce(
+        (pl, routine) => pl.add(routine),
+        new PooledPipeline(context, value, { concurrency }),
       );
+
+      // eslint-disable-next-line no-await-in-loop
+      const { errors, results } = await pipeline.run();
 
       allResults.push(...results);
 
@@ -70,14 +85,14 @@ export default abstract class RunInWorkspacesRoutine<
     }
 
     // Not running in workspaces, so return value directly
-    return context.args.workspaces ? allResults : allResults[0];
+    return context.args.options.workspaces ? allResults : allResults[0];
   }
 
   /**
    * When a list of errors are available, concatenate them and throw a new error.
    */
   formatAndThrowErrors(errors: Error[]) {
-    let message = this.tool.msg('errors:executeFailed');
+    let message = this.options.tool.msg('errors:executeFailed');
 
     (errors as ExecutionError[]).forEach((error) => {
       let content = stripAnsi(error.stderr || error.stdout || '')
@@ -90,16 +105,16 @@ export default abstract class RunInWorkspacesRoutine<
         content = content.slice(0, MAX_ERROR_LINES);
 
         if (count > 0) {
-          content.push(this.tool.msg('errors:executeFailedMoreLines', { count }));
+          content.push(this.options.tool.msg('errors:executeFailedMoreLines', { count }));
         }
       }
 
       message += '\n\n';
-      message += chalk.reset.yellow(error.message);
+      message += style.reset.yellow(error.message);
 
       if (content.length > 0) {
         message += '\n';
-        message += chalk.reset.gray(content.join('\n'));
+        message += style.reset.gray(content.join('\n'));
       }
     });
 
@@ -109,7 +124,10 @@ export default abstract class RunInWorkspacesRoutine<
 
     // Inherit stack for easier debugging.
     if (errors.length === 1) {
-      error.stack = String(errors[0].stack).split('\n').slice(1).join('\n');
+      error.stack = String(errors[0].stack)
+        .split('\n')
+        .slice(1)
+        .join('\n');
     }
 
     throw error;
@@ -118,29 +136,46 @@ export default abstract class RunInWorkspacesRoutine<
   /**
    * Return a list of workspaces optionally filtered.
    */
-  getFilteredWorkspacePackages(): WorkspacePackageConfig[] {
+  getFilteredWorkspacePackages(context: Ctx): WSP[] {
     return this.workspacePackages.filter((pkg) =>
-      isPatternMatch(pkg.name, this.context.args.workspaces),
+      isPatternMatch(pkg.package.name, context.args.options.workspaces),
     );
+  }
+
+  /**
+   * Return the initial value for the pipeline.
+   */
+  getInitialValue(context: Ctx): unknown {
+    return null;
   }
 
   /**
    * Group routines in order of which they are dependend on.
    */
-  orderByWorkspacePriorityGraph(): Routine<Ctx, Beemo>[][] {
-    const enabled = this.context.args.graph || this.tool.config.execute.graph;
+  orderByWorkspacePriorityGraph(context: Ctx): AnyRoutine[][] {
+    const enabled = context.args.options.graph || this.options.tool.config.execute.graph || false;
 
-    if (!enabled || !this.context.args.workspaces) {
+    if (!enabled || !context.args.options.workspaces) {
       return [this.routines];
     }
 
-    const batchList = new Graph(this.workspacePackages).resolveBatchList();
-    const batches: Routine<Ctx, Beemo>[][] = [];
+    // Create lookups
+    const packages: PackageStructure[] = []; // Without metadata
+    const metadata: { [name: string]: WSP['metadata'] } = {}; // By package name
+
+    this.workspacePackages.forEach((wsp) => {
+      packages.push(wsp.package);
+      metadata[wsp.package.name] = wsp.metadata;
+    });
+
+    // Batch based on packages
+    const batchList = new Graph(packages).resolveBatchList();
+    const batches: AnyRoutine[][] = [];
 
     batchList.forEach((batch) => {
       const routines = batch
-        .map((pkg) => this.routines.find((route) => route.key === pkg.workspace.packageName))
-        .filter(Boolean) as Routine<Ctx, Beemo>[];
+        .map((pkg) => this.routines.find((route) => route.key === metadata[pkg.name].packageName))
+        .filter(Boolean) as AnyRoutine[];
 
       if (routines.length > 0) {
         batches.push(routines);
@@ -153,5 +188,5 @@ export default abstract class RunInWorkspacesRoutine<
   /**
    * Pipe a routine for the entire project or a workspace package at the defined path.
    */
-  abstract pipeRoutine(packageName?: string, packageRoot?: string): void;
+  abstract pipeRoutine(context: Ctx, packageName?: string, packageRoot?: string): AnyRoutine;
 }

@@ -1,45 +1,44 @@
 import camelCase from 'lodash/camelCase';
 import upperFirst from 'lodash/upperFirst';
 import { PathResolver } from '@boost/common';
-import formatModuleName from '@boost/core/lib/helpers/formatModuleName';
 import Script from '../Script';
 import ScriptContext from '../contexts/ScriptContext';
 import filterArgs from '../utils/filterArgs';
 import { EXECUTE_OPTIONS } from '../constants';
 import ExecuteScriptRoutine from './script/ExecuteScriptRoutine';
-import RunInWorkspacesRoutine from './RunInWorkspacesRoutine';
+import RunInWorkspacesRoutine, { AnyRoutine } from './RunInWorkspacesRoutine';
 
 export default class RunScriptRoutine extends RunInWorkspacesRoutine<ScriptContext> {
-  errors: Error[] = [];
+  protected errors: Error[] = [];
 
-  bootstrap() {
-    super.bootstrap();
+  getInitialValue(context: ScriptContext): Promise<Script> {
+    const { tool } = this.options;
 
-    this.task(this.tool.msg('app:scriptLoad'), this.loadScriptFromTool);
-    this.task(this.tool.msg('app:scriptLoadModule'), this.loadScriptFromModule);
-    this.task(this.tool.msg('app:scriptLoadPost'), this.postLoad);
+    return this.createWaterfallPipeline(context)
+      .pipe(tool.msg('app:scriptLoad'), this.loadScriptFromTool)
+      .pipe(tool.msg('app:scriptLoadModule'), this.loadScriptFromModule)
+      .pipe(tool.msg('app:scriptLoadPost'), this.postLoad)
+      .run();
   }
 
-  pipeRoutine(packageName: string, packageRoot: string) {
-    const { argv, cwd, scriptName } = this.context;
+  pipeRoutine(context: ScriptContext, packageName: string, packageRoot: string): AnyRoutine {
+    const { argv, cwd, scriptName } = context;
     const { filteredArgv } = filterArgs(argv, {
       block: EXECUTE_OPTIONS,
     });
     const command = filteredArgv.join(' ');
 
     if (packageName) {
-      this.pipe(
-        new ExecuteScriptRoutine(packageName, command, {
-          packageRoot,
-        }),
-      );
-    } else {
-      this.pipe(
-        new ExecuteScriptRoutine(scriptName, command, {
-          packageRoot: cwd.path(),
-        }),
-      );
+      return new ExecuteScriptRoutine(packageName, command, {
+        packageRoot,
+        tool: this.options.tool,
+      });
     }
+
+    return new ExecuteScriptRoutine(scriptName, command, {
+      packageRoot: cwd.path(),
+      tool: this.options.tool,
+    });
   }
 
   /**
@@ -50,13 +49,13 @@ export default class RunScriptRoutine extends RunInWorkspacesRoutine<ScriptConte
     this.debug('Attempting to load script from tool');
 
     try {
-      const script = this.tool.scriptRegistry.get(context.scriptName);
+      const script = this.options.tool.scriptRegistry.get(context.scriptName);
 
-      context.setScript(script, script.name);
+      context.setScript(script);
 
       return script;
     } catch (error) {
-      error.message = this.tool.msg('app:fromTool', { message: error.message });
+      error.message = this.options.tool.msg('app:fromTool', { message: error.message });
 
       this.errors.push(error);
 
@@ -78,30 +77,31 @@ export default class RunScriptRoutine extends RunInWorkspacesRoutine<ScriptConte
 
     this.debug('Attempting to load script from configuration module or node module');
 
-    const moduleName = this.tool.config.module;
+    const { tool } = this.options;
+    const moduleName = tool.config.module;
     const fileName = upperFirst(camelCase(context.scriptName));
     const resolver = new PathResolver();
 
     if (moduleName === '@local') {
       resolver
-        .lookupFilePath(`lib/scripts/${fileName}.js`, context.moduleRoot)
-        .lookupFilePath(`scripts/${fileName}.js`, context.moduleRoot);
+        .lookupFilePath(`lib/scripts/${fileName}.js`, context.configModuleRoot)
+        .lookupFilePath(`scripts/${fileName}.js`, context.configModuleRoot);
     } else {
       resolver
         .lookupNodeModule(`${moduleName}/lib/scripts/${fileName}`)
         .lookupNodeModule(`${moduleName}/scripts/${fileName}`)
-        .lookupNodeModule(formatModuleName('beemo', 'script', context.scriptName, true))
-        .lookupNodeModule(formatModuleName('beemo', 'script', context.scriptName));
+        .lookupNodeModule(tool.scriptRegistry.formatModuleName(context.scriptName, true))
+        .lookupNodeModule(tool.scriptRegistry.formatModuleName(context.scriptName));
     }
 
     try {
       const { resolvedPath } = resolver.resolve();
 
-      script = await this.tool.scriptRegistry.load(resolvedPath.path());
+      script = await tool.scriptRegistry.load(resolvedPath.path());
 
-      context.setScript(script, resolvedPath.path());
+      context.setScript(script);
     } catch (error) {
-      error.message = this.tool.msg('app:fromModule', { message: error.message });
+      error.message = tool.msg('app:fromModule', { message: error.message });
 
       this.errors.push(error);
     }
@@ -117,10 +117,11 @@ export default class RunScriptRoutine extends RunInWorkspacesRoutine<ScriptConte
     if (!script) {
       const messages = this.errors.map((error) => `  - ${error.message}`).join('\n');
 
+      // TODO
       throw new Error(`Failed to load script from multiple sources:\n${messages}`);
     }
 
-    this.tool.scriptRegistry.load(script);
+    this.options.tool.scriptRegistry.load(script);
 
     return script;
   }
