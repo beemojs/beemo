@@ -1,24 +1,23 @@
-import { Path } from '@boost/common';
-import { Routine, Task, Predicates } from '@boost/core';
-import parseArgs, { Arguments } from 'yargs-parser';
-import Beemo from '../../Beemo';
+import { parse } from '@boost/args';
+import { Path, Predicates, Blueprint } from '@boost/common';
+import { Routine } from '@boost/pipeline';
+import Tool from '../../Tool';
 import Script from '../../Script';
 import formatExecReturn, { ExecLike } from '../../utils/formatExecReturn';
 import ScriptContext from '../../contexts/ScriptContext';
-import { ExecuteType, ExecuteQueue } from '../../types';
+import { RoutineOptions } from '../../types';
 
-export interface ExecuteScriptOptions {
+export interface ExecuteScriptOptions extends RoutineOptions {
   packageRoot?: string;
 }
 
-export default class ExecuteScriptRoutine extends Routine<
-  ScriptContext,
-  Beemo,
-  ExecuteScriptOptions
-> {
-  blueprint({ string }: Predicates) /* infer */ {
+export default class ExecuteScriptRoutine extends Routine<unknown, Script, ExecuteScriptOptions> {
+  blueprint({ instance, string }: Predicates): Blueprint<ExecuteScriptOptions> {
     return {
       packageRoot: string(),
+      tool: instance(Tool)
+        .required()
+        .notNullable(),
     };
   }
 
@@ -32,9 +31,6 @@ export default class ExecuteScriptRoutine extends Routine<
   async execute(oldContext: ScriptContext, script: Script): Promise<unknown> {
     const context = oldContext.clone();
 
-    // Set the context so tasks inherit it
-    this.setContext(context);
-
     // Update the cwd to point to the package root
     if (this.options.packageRoot) {
       context.cwd = new Path(this.options.packageRoot);
@@ -46,18 +42,11 @@ export default class ExecuteScriptRoutine extends Routine<
 
     await script.onBeforeExecute.emit([context, argv]);
 
-    const args = parseArgs(argv, script.args());
-    let result = null;
+    const args = parse(argv, script.parse());
+    let result;
 
     try {
       result = await script.execute(context, args);
-
-      // Queue and run sub-tasks
-      const queue = result as ExecuteQueue<ScriptContext>;
-
-      if (typeof queue === 'object' && queue && queue.type && Array.isArray(queue.tasks)) {
-        result = await this.runScriptTasks(args, queue.type, queue.tasks);
-      }
 
       this.debug('  Success: %o', formatExecReturn(result as ExecLike));
 
@@ -72,32 +61,5 @@ export default class ExecuteScriptRoutine extends Routine<
     }
 
     return result;
-  }
-
-  /**
-   * Add the enqueued tasks to the routine so they show in the console,
-   * and then run using the defined process.
-   */
-  async runScriptTasks(
-    args: Arguments,
-    type: ExecuteType,
-    tasks: Task<ScriptContext>[],
-  ): Promise<unknown> {
-    tasks.forEach((task) => {
-      this.task(task.title, task.action, this.context.script);
-    });
-
-    switch (type) {
-      case 'parallel':
-        return this.parallelizeTasks(args);
-      case 'pool':
-        return this.poolTasks(args);
-      case 'serial':
-        return this.serializeTasks(args);
-      case 'sync':
-        return this.synchronizeTasks(args);
-      default:
-        throw new Error(this.tool.msg('errors:executeTypeUnknown', { type }));
-    }
   }
 }
