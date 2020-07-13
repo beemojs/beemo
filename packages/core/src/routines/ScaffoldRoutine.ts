@@ -10,7 +10,9 @@ import { RoutineOptions } from '../types';
 export default class ScaffoldRoutine extends Routine<unknown, unknown, RoutineOptions> {
   blueprint({ instance }: Predicates): Blueprint<RoutineOptions> {
     return {
-      tool: instance(Tool).notNullable(),
+      tool: instance(Tool)
+        .required()
+        .notNullable(),
     };
   }
 

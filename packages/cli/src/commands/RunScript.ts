@@ -1,18 +1,12 @@
 import { Arg, Config, Command, GlobalOptions } from '@boost/cli';
-import { StdioType } from '@beemo/core';
+import { ScriptContextOptions, ScriptContextParams } from '@beemo/core';
 import beemo from '../beemo';
 
-export interface RunScriptOptions extends GlobalOptions {
-  concurrency: number;
-  graph: boolean;
-  stdio: StdioType;
-  workspaces: string;
-}
-
-export type RunScriptParams = [string];
-
 @Config('run-script', beemo.msg('app:cliCommandRunScript'))
-export default class RunScript extends Command<RunScriptOptions, RunScriptParams> {
+export default class RunScript extends Command<
+  ScriptContextOptions & GlobalOptions,
+  ScriptContextParams
+> {
   static aliases = ['run'];
 
   @Arg.Number(beemo.msg('app:cliOptionConcurrency'))
@@ -27,11 +21,15 @@ export default class RunScript extends Command<RunScriptOptions, RunScriptParams
   @Arg.String(beemo.msg('app:cliOptionWorkspaces'))
   workspaces: string = '';
 
-  @Arg.Params<RunScriptParams>({
+  @Arg.Params<ScriptContextParams>({
     description: beemo.msg('app:cliArgScriptName'),
     label: 'name',
     required: true,
     type: 'string',
   })
-  async run(name: string) {}
+  async run(name: string) {
+    const pipeline = beemo.createRunScriptPipeline(this.getArguments(), name);
+
+    await pipeline.run();
+  }
 }

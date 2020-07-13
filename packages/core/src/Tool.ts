@@ -1,4 +1,6 @@
 import chalk from 'chalk';
+import camelCase from 'lodash/camelCase';
+import upperFirst from 'lodash/upperFirst';
 import {
   Path,
   Project,
@@ -18,13 +20,13 @@ import Driver from './Driver';
 import Script from './Script';
 import Context from './contexts/Context';
 import ConfigContext from './contexts/ConfigContext';
+import ScaffoldContext from './contexts/ScaffoldContext';
+import ScriptContext from './contexts/ScriptContext';
 import ResolveConfigsRoutine from './routines/ResolveConfigsRoutine';
-import ScaffoldContext, {
-  ScaffoldContextOptions,
-  ScaffoldContextParams,
-} from './contexts/ScaffoldContext';
+import RunScriptRoutine from './routines/RunScriptRoutine';
 import ScaffoldRoutine from './routines/ScaffoldRoutine';
-import { ConfigFile, Arguments, Argv } from './types';
+import { ConfigFile, Argv } from './types';
+import { KEBAB_PATTERN } from './constants';
 
 interface ToolOptions {
   argv: Argv;
@@ -57,6 +59,8 @@ export default class Tool extends Contract<ToolOptions> {
   readonly onRunCreateConfig = new Event<[ConfigContext, string[]]>('run-create-config');
 
   readonly onRunScaffold = new Event<[ScaffoldContext, string, string, string?]>('run-scaffold');
+
+  readonly onRunScript = new Event<[ScriptContext]>('run-script');
 
   readonly scriptRegistry: Registry<Script>;
 
@@ -196,7 +200,7 @@ export default class Tool extends Contract<ToolOptions> {
   /**
    * Create a pipeline to run the create config files flow.
    */
-  createConfigFilesPipeline(args: Arguments<{}, string[]>, driverNames: string[] = []) {
+  createConfigurePipeline(args: ConfigContext['args'], driverNames: string[] = []) {
     const context = this.prepareContext(new ConfigContext(args));
 
     // Create for all enabled drivers
@@ -225,10 +229,33 @@ export default class Tool extends Contract<ToolOptions> {
   }
 
   /**
+   * Run a script found within the configuration module.
+   */
+  createRunScriptPipeline(args: ScriptContext['args'], scriptName: string) {
+    if (!scriptName || !scriptName.match(KEBAB_PATTERN)) {
+      throw new Error(this.msg('errors:scriptNameInvalidFormat'));
+    }
+
+    const context = this.prepareContext(new ScriptContext(args, scriptName));
+
+    this.onRunScript.emit([context], scriptName);
+
+    this.debug('Running with %s script', context.scriptName);
+
+    return new WaterfallPipeline(context).pipe(
+      new RunScriptRoutine(
+        'script',
+        // Try and match the name of the class
+        this.msg('app:scriptRun', { name: upperFirst(camelCase(context.scriptName)) }),
+      ),
+    );
+  }
+
+  /**
    * Create a pipeline to run the scaffolding flow.
    */
   createScaffoldPipeline(
-    args: Arguments<ScaffoldContextOptions, ScaffoldContextParams>,
+    args: ScaffoldContext['args'],
     generator: string,
     action: string,
     name: string = '',
@@ -248,6 +275,7 @@ export default class Tool extends Contract<ToolOptions> {
    * Create and setup a fresh pipeline.
    */
   protected createPipeline<C extends Context, I>(context: C, input: I) {
+    // TODO
     // Delete config files on failure
     // if (this.config.configure.cleanup) {
     //   this.onExit.listen((code) => this.handleCleanupOnFailure(code, context));

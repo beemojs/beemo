@@ -36,25 +36,27 @@ export default abstract class Driver<
   // Set after instantiation
   metadata!: DriverMetadata;
 
-  onLoadModuleConfig = new Event<[ConfigContext, Path, Config]>('load-module-config');
+  readonly onLoadModuleConfig = new Event<[ConfigContext, Path, Config]>('load-module-config');
 
-  onLoadPackageConfig = new Event<[ConfigContext, Config]>('load-package-config');
+  readonly onLoadPackageConfig = new Event<[ConfigContext, Config]>('load-package-config');
 
-  onMergeConfig = new Event<[ConfigContext, Config]>('merge-config');
+  readonly onMergeConfig = new Event<[ConfigContext, Config]>('merge-config');
 
-  onCreateConfigFile = new Event<[ConfigContext, Path, Config]>('create-config-file');
+  readonly onCreateConfigFile = new Event<[ConfigContext, Path, Config]>('create-config-file');
 
-  onCopyConfigFile = new Event<[ConfigContext, Path, Config]>('copy-config-file');
+  readonly onCopyConfigFile = new Event<[ConfigContext, Path, Config]>('copy-config-file');
 
-  onReferenceConfigFile = new Event<[ConfigContext, Path, Config]>('reference-config-file');
+  readonly onReferenceConfigFile = new Event<[ConfigContext, Path, Config]>(
+    'reference-config-file',
+  );
 
-  onDeleteConfigFile = new Event<[ConfigContext, Path]>('delete-config-file');
+  readonly onDeleteConfigFile = new Event<[ConfigContext, Path]>('delete-config-file');
 
-  onBeforeExecute = new ConcurrentEvent<[DriverContext, Argv]>('before-execute');
+  readonly onBeforeExecute = new ConcurrentEvent<[DriverContext, Argv]>('before-execute');
 
-  onAfterExecute = new ConcurrentEvent<[DriverContext, unknown]>('after-execute');
+  readonly onAfterExecute = new ConcurrentEvent<[DriverContext, unknown]>('after-execute');
 
-  onFailedExecute = new ConcurrentEvent<[DriverContext, Error]>('failed-execute');
+  readonly onFailedExecute = new ConcurrentEvent<[DriverContext, Error]>('failed-execute');
 
   static validate(driver: Driver) {
     if (!isObject(driver.metadata)) {

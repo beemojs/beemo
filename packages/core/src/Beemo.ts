@@ -1,26 +1,13 @@
-import chalk from 'chalk';
 import fs from 'fs-extra';
 import path from 'path';
-import camelCase from 'lodash/camelCase';
-import upperFirst from 'lodash/upperFirst';
-import { Argv as Yargv } from 'yargs';
 import { Event } from '@boost/event';
-import { Path, requireModule } from '@boost/common';
-import { CLI, Pipeline, Tool } from '@boost/core';
 import { bool, number, string, shape } from 'optimal';
 import CleanupConfigsRoutine from './routines/CleanupConfigsRoutine';
 import ResolveConfigsRoutine from './routines/ResolveConfigsRoutine';
 import RunDriverRoutine from './routines/RunDriverRoutine';
-import RunScriptRoutine from './routines/RunScriptRoutine';
-import ScaffoldRoutine from './routines/ScaffoldRoutine';
 import Driver from './Driver';
-import Script from './Script';
 import Context from './contexts/Context';
-import ConfigContext from './contexts/ConfigContext';
 import DriverContext from './contexts/DriverContext';
-import ScriptContext from './contexts/ScriptContext';
-import ScaffoldContext from './contexts/ScaffoldContext';
-import { KEBAB_PATTERN } from './constants';
 import { Argv, Execution, BeemoConfig, BeemoPluginRegistry, DriverOptions } from './types';
 
 export function configBlueprint() {
@@ -42,8 +29,6 @@ export function configBlueprint() {
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export default class Beemo<T = any> extends Tool<BeemoPluginRegistry, BeemoConfig<T>> {
   onRunDriver = new Event<[DriverContext, Driver<object, DriverOptions>]>('run-driver');
-
-  onRunScript = new Event<[ScriptContext]>('run-script');
 
   constructor(argv: Argv, binName?: string, testingOnly: boolean = false) {
     super(
@@ -104,31 +89,6 @@ export default class Beemo<T = any> extends Tool<BeemoPluginRegistry, BeemoConfi
     }
 
     return pipeline.run(driverName);
-  }
-
-  /**
-   * Run a script found within the configuration module.
-   */
-  async runScript(args: ScriptContext['args'], scriptName: string): Promise<Execution> {
-    if (!scriptName || !scriptName.match(KEBAB_PATTERN)) {
-      throw new Error(this.msg('errors:scriptNameInvalidFormat'));
-    }
-
-    const context = this.prepareContext(new ScriptContext(args, scriptName));
-
-    this.onRunScript.emit([context], scriptName);
-
-    this.debug('Running with %s script', context.scriptName);
-
-    return this.startPipeline(context)
-      .pipe(
-        new RunScriptRoutine(
-          'script',
-          // Try and match the name of the class
-          this.msg('app:scriptRun', { name: upperFirst(camelCase(context.scriptName)) }),
-        ),
-      )
-      .run();
   }
 
   /**
