@@ -1,5 +1,13 @@
-import { Arg, Config, Command, GlobalOptions, Argv } from '@boost/cli';
-import { Driver, StdioType } from '@beemo/core';
+import {
+  Arg,
+  Config,
+  Command,
+  GlobalOptions,
+  Argv,
+  CommandMetadata,
+  ParserOptions,
+} from '@boost/cli';
+import { Driver, DriverContextOptions } from '@beemo/core';
 import beemo from '../beemo';
 
 export interface RunDriverConfig {
@@ -7,17 +15,12 @@ export interface RunDriverConfig {
   parallelArgv: Argv[];
 }
 
-export interface RunDriverOptions extends GlobalOptions {
-  concurrency: number;
-  graph: boolean;
-  stdio: StdioType;
-  workspaces: string;
-}
-
-export type RunDriverParams = [];
-
 @Config('run-driver', beemo.msg('app:cliCommandRunDriver'))
-export default class RunDriver extends Command<RunDriverOptions, RunDriverParams, RunDriverConfig> {
+export default class RunDriver extends Command<
+  DriverContextOptions & GlobalOptions,
+  [],
+  RunDriverConfig
+> {
   static allowUnknownOptions = true;
 
   static allowVariadicParams = true;
@@ -34,25 +37,33 @@ export default class RunDriver extends Command<RunDriverOptions, RunDriverParams
   @Arg.String(beemo.msg('app:cliOptionWorkspaces'))
   workspaces: string = '';
 
-  constructor(options: RunDriverConfig) {
-    super(options);
-
-    // Add custom options to the command
-    Object.entries(this.options.driver.command).forEach(([opt, config]) => {
-      // TODO
-    });
-  }
-
-  getMetadata() {
+  getMetadata(): CommandMetadata {
     const { driver } = this.options;
 
     return {
       ...super.getMetadata(),
       description:
         driver.metadata.description || beemo.msg('app:run', { title: driver.metadata.title }),
-      name: driver.name,
+      path: driver.name,
     };
   }
 
-  async run() {}
+  getParserOptions(): ParserOptions<DriverContextOptions & GlobalOptions> {
+    const { driver } = this.options;
+    const parent = super.getParserOptions();
+
+    return {
+      ...parent,
+      options: {
+        ...parent.options,
+        ...driver.command,
+      },
+    };
+  }
+
+  async run() {
+    const pipeline = beemo.createRunDriverPipeline(this.getArguments(), this.options.driver.name);
+
+    await pipeline.run();
+  }
 }

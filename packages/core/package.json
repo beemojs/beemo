@@ -28,15 +28,15 @@
   },
   "dependencies": {
     "@beemo/dependency-graph": "^2.0.0-alpha.0",
-    "@boost/args": "^2.0.0-alpha.1",
-    "@boost/common": "^2.0.0-alpha.1",
-    "@boost/config": "^2.0.0-alpha.2",
-    "@boost/debug": "^2.0.0-alpha.1",
-    "@boost/event": "^2.0.0-alpha.1",
-    "@boost/pipeline": "^2.0.0-alpha.2",
-    "@boost/plugin": "^2.0.0-alpha.1",
+    "@boost/args": "^2.0.0-alpha.2",
+    "@boost/common": "^2.0.0-alpha.2",
+    "@boost/config": "^2.0.0-alpha.4",
+    "@boost/debug": "^2.0.0-alpha.3",
+    "@boost/event": "^2.0.0-alpha.2",
+    "@boost/pipeline": "^2.0.0-alpha.3",
+    "@boost/plugin": "^2.0.0-alpha.3",
     "@boost/terminal": "^2.0.0-alpha.1",
-    "@boost/translate": "^2.0.0-alpha.1",
+    "@boost/translate": "^2.0.0-alpha.3",
     "@types/micromatch": "^4.0.1",
     "chalk": "^4.1.0",
     "execa": "^4.0.3",
@@ -45,10 +45,10 @@
     "hygen": "^6.0.4",
     "is-glob": "^4.0.1",
     "lodash": "^4.17.15",
-    "micromatch": "^4.0.2",
-    "optimal": "^4.2.0"
+    "micromatch": "^4.0.2"
   },
   "devDependencies": {
-    "@boost/test-utils": "^2.0.0-alpha.0"
+    "@boost/test-utils": "^2.0.0-alpha.0",
+    "@types/micromatch": "^4.0.1"
   }
 }

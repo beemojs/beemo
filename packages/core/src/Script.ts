@@ -1,4 +1,4 @@
-import { ParserOptions, Arguments, ArgList } from '@boost/args';
+import { ParserOptions, Arguments } from '@boost/args';
 import { ConcurrentEvent } from '@boost/event';
 import { Plugin } from '@boost/plugin';
 import execa, { Options as ExecaOptions } from 'execa';
@@ -44,5 +44,5 @@ export default abstract class Script<O extends object = {}, Options extends obje
   /**
    * Execute the script with the context and parsed args.
    */
-  abstract async execute(context: ScriptContext, args: Arguments<O, ArgList>): Promise<unknown>;
+  abstract async execute(context: ScriptContext, args: Arguments<O>): Promise<unknown>;
 }

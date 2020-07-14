@@ -5,14 +5,14 @@ import filterArgs from '../utils/filterArgs';
 import { EXECUTE_OPTIONS } from '../constants';
 
 export default class ExecuteDriverRoutine extends RunInWorkspacesRoutine<DriverContext> {
-  pipeRoutine(packageName?: string, packageRoot?: string) {
+  pipeRoutine(context: DriverContext, packageName?: string, packageRoot?: string) {
     if (packageName) {
-      this.pipeParallelBuilds(packageName, {
+      this.pipeParallelBuilds(context, packageName, {
         forceConfigOption: true,
         packageRoot,
       });
     } else {
-      this.pipeParallelBuilds(this.context.primaryDriver.name);
+      this.pipeParallelBuilds(context, context.primaryDriver.name);
     }
   }
 
@@ -20,26 +20,32 @@ export default class ExecuteDriverRoutine extends RunInWorkspacesRoutine<DriverC
    * When a parallel pipe "//" is defined, we need to create an additional routine
    * for each instance.
    */
-  pipeParallelBuilds(key: string, options: Partial<ExecuteCommandOptions> = {}) {
-    const { argv, parallelArgv, primaryDriver } = this.context;
+  pipeParallelBuilds(
+    context: DriverContext,
+    key: string,
+    options: Partial<ExecuteCommandOptions> = {},
+  ) {
+    const { argv, parallelArgv, primaryDriver } = context;
     const { filteredArgv } = filterArgs(argv, {
       block: EXECUTE_OPTIONS,
     });
     const command = `${primaryDriver.metadata.bin} ${filteredArgv.join(' ')}`.trim();
 
-    this.pipe(
+    this.routines.push(
       new ExecuteCommandRoutine(key, command, {
         ...options,
         argv: filteredArgv,
+        tool: this.options.tool,
       }),
     );
 
     parallelArgv.forEach((pargv) => {
-      this.pipe(
+      this.routines.push(
         new ExecuteCommandRoutine(key, `${command} ${pargv.join(' ')}`.trim(), {
           ...options,
           additionalArgv: pargv,
           argv: filteredArgv,
+          tool: this.options.tool,
         }),
       );
     });
