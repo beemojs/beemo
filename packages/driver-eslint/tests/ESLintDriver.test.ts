@@ -1,6 +1,6 @@
 import fs from 'fs';
 import { DriverContext, Path } from '@beemo/core';
-import { mockTool, stubDriverContext, stubExecResult } from '@beemo/core/lib/testUtils';
+import { mockTool, stubDriverContext, stubExecResult } from '@beemo/core/lib/testing';
 import ESLintDriver from '../src/ESLintDriver';
 
 describe('ESLintDriver', () => {
@@ -99,8 +99,8 @@ describe('ESLintDriver', () => {
 
   describe('processFailure()', () => {
     it('outputs stderr and stdout', () => {
-      const logSpy = jest.spyOn(driver.tool.console, 'log');
-      const errorSpy = jest.spyOn(driver.tool.console, 'logError');
+      const logSpy = jest.spyOn(console, 'log').mockImplementation();
+      const errorSpy = jest.spyOn(console, 'error').mockImplementation();
 
       driver.processFailure(
         stubExecResult({
@@ -112,6 +112,9 @@ describe('ESLintDriver', () => {
 
       expect(logSpy).toHaveBeenCalledWith('Warning');
       expect(errorSpy).toHaveBeenCalledWith('Error');
+
+      logSpy.mockRestore();
+      errorSpy.mockRestore();
     });
   });
 

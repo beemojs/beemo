@@ -1,5 +1,5 @@
 import { ParserOptions, Arguments } from '@boost/args';
-import { Predicates, Blueprint } from '@boost/common';
+import { Predicates, Blueprint, isObject } from '@boost/common';
 import { ConcurrentEvent } from '@boost/event';
 import { Plugin } from '@boost/plugin';
 import execa, { Options as ExecaOptions } from 'execa';
@@ -20,12 +20,14 @@ export default abstract class Script<O extends object = {}, Options extends obje
   readonly onFailedExecute = new ConcurrentEvent<[ScriptContext, Error]>('failed-execute');
 
   static validate(script: Script) {
+    const name = isObject(script) ? script.constructor.name : 'Script';
+
     if (typeof script.parse !== 'function') {
-      throw new TypeError('`Script`s require an `parse()` method.');
+      throw new TypeError(`\`${name}\` requires a \`parse()\` method.`);
     }
 
     if (typeof script.execute !== 'function') {
-      throw new TypeError('`Script`s require an `execute()` method.');
+      throw new TypeError(`\`${name}\` requires an \`execute()\` method.`);
     }
   }
 

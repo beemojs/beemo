@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/camelcase */
 
-import { mockTool, stubExecResult } from '@beemo/core/lib/testUtils';
+import { mockTool, stubExecResult } from '@beemo/core/lib/testing';
 import FlowDriver from '../src/FlowDriver';
 
 describe('FlowDriver', () => {
@@ -217,7 +217,7 @@ describe('FlowDriver', () => {
 
   describe('processFailure()', () => {
     it('logs stdout on error code 2', () => {
-      const spy = jest.spyOn(driver.tool.console, 'logError');
+      const spy = jest.spyOn(console, 'error').mockImplementation();
 
       driver.processFailure(
         stubExecResult({
@@ -228,10 +228,12 @@ describe('FlowDriver', () => {
       );
 
       expect(spy).toHaveBeenCalledWith('Out');
+
+      spy.mockRestore();
     });
 
     it('logs stderr on other error codes', () => {
-      const spy = jest.spyOn(driver.tool.console, 'logError');
+      const spy = jest.spyOn(console, 'error').mockImplementation();
 
       driver.processFailure(
         stubExecResult({
@@ -242,6 +244,8 @@ describe('FlowDriver', () => {
       );
 
       expect(spy).toHaveBeenCalledWith('Err');
+
+      spy.mockRestore();
     });
   });
 });

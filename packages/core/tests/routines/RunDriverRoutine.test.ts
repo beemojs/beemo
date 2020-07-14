@@ -1,35 +1,46 @@
 /* eslint-disable jest/expect-expect */
 
-import { Path } from '@boost/common';
+import { Path, Project } from '@boost/common';
 import { getFixturePath } from '@boost/test-utils';
 import RunDriverRoutine from '../../src/routines/RunDriverRoutine';
 import { ExecuteCommandOptions } from '../../src/routines/driver/ExecuteCommandRoutine';
+import DriverContext from '../../src/contexts/DriverContext';
+import { AnyRoutine } from '../../src/routines/RunInWorkspacesRoutine';
 import Driver from '../../src/Driver';
-import { mockDebugger, mockTool, mockDriver, stubDriverContext } from '../../src/testUtils';
+import { mockDebugger, mockTool, mockDriver, stubDriverContext } from '../../src/testing';
+
+jest.mock('execa');
 
 describe('RunDriverRoutine', () => {
   let routine: RunDriverRoutine;
+  let context: DriverContext;
   let driver: Driver;
 
   function expectPipedRoutines(
-    mock: jest.SpyInstance,
-    tests: ({ key?: string; title: string } & ExecuteCommandOptions)[],
+    routines: AnyRoutine[],
+    tests: ({ key?: string; title: string } & Partial<ExecuteCommandOptions>)[],
   ) {
-    expect(mock).toHaveBeenCalledTimes(tests.length);
+    expect(routines).toHaveLength(tests.length);
 
-    tests.forEach((test, index) => {
-      const { key = expect.anything(), title, ...options } = test;
+    tests.forEach((test, i) => {
+      const { key, title, ...options } = test;
 
-      expect(mock).toHaveBeenCalledWith(
-        expect.objectContaining({
-          key,
-          title,
-          options: expect.objectContaining({
-            argv: ['-a', '--foo', 'bar', 'baz'],
-            ...options,
+      if (key) {
+        expect(routines[i]).toEqual(
+          expect.objectContaining({
+            key,
+            title,
+            options: expect.objectContaining(options),
           }),
-        }),
-      );
+        );
+      } else {
+        expect(routines[i]).toEqual(
+          expect.objectContaining({
+            title,
+            options: expect.objectContaining(options),
+          }),
+        );
+      }
     });
   }
 
@@ -37,65 +48,60 @@ describe('RunDriverRoutine', () => {
     const tool = mockTool();
 
     driver = mockDriver('primary', tool);
+    context = stubDriverContext(driver);
 
-    routine = new RunDriverRoutine('driver', 'Executing driver');
-    routine.context = stubDriverContext(driver);
-    routine.tool = tool;
+    routine = new RunDriverRoutine('driver', 'Executing driver', { tool });
+    // @ts-ignore
     routine.debug = mockDebugger();
   });
 
   describe('bootstrap()', () => {
-    it('adds a routine for the primary driver', () => {
-      const spy = jest.spyOn(routine, 'pipe').mockImplementation();
+    it('adds a routine for the primary driver', async () => {
+      await routine.execute(context);
 
-      routine.bootstrap();
-
-      expectPipedRoutines(spy, [{ title: 'primary -a --foo bar baz' }]);
+      expectPipedRoutines(routine.routines, [{ title: 'primary -a --foo bar baz' }]);
     });
 
-    it('adds multiple routines when parallel is used', () => {
-      routine.context.parallelArgv = [
+    it('adds multiple routines when parallel is used', async () => {
+      context.parallelArgv = [
         ['--one', '--two=2'],
         ['--three', '-f'],
       ];
 
-      const spy = jest.spyOn(routine, 'pipe').mockImplementation();
+      await routine.execute(context);
 
-      routine.bootstrap();
-
-      expectPipedRoutines(spy, [
+      expectPipedRoutines(routine.routines, [
         { title: 'primary -a --foo bar baz' },
         { title: 'primary -a --foo bar baz --one --two=2', additionalArgv: ['--one', '--two=2'] },
         { title: 'primary -a --foo bar baz --three -f', additionalArgv: ['--three', '-f'] },
       ]);
     });
 
-    it('adds a routine if parallel is empty', () => {
-      routine.context.parallelArgv = [];
+    it('adds a routine if parallel is empty', async () => {
+      context.parallelArgv = [];
 
-      const spy = jest.spyOn(routine, 'pipe').mockImplementation();
+      await routine.execute(context);
 
-      routine.bootstrap();
-
-      expectPipedRoutines(spy, [{ title: 'primary -a --foo bar baz' }]);
+      expectPipedRoutines(routine.routines, [{ title: 'primary -a --foo bar baz' }]);
     });
 
     describe('workspaces', () => {
       const fixturePath = new Path(getFixturePath('workspaces-driver'));
 
       beforeEach(() => {
-        routine.context.args.workspaces = '*';
-        routine.context.workspaces = ['packages/*'];
-        routine.context.workspaceRoot = fixturePath;
-        routine.context.cwd = fixturePath;
+        context.args.options.workspaces = '*';
+        context.workspaces = ['packages/*'];
+        context.workspaceRoot = fixturePath;
+        context.cwd = fixturePath;
+
+        // @ts-ignore
+        routine.options.tool.project = new Project(fixturePath);
       });
 
-      it('adds a routine for each', () => {
-        const spy = jest.spyOn(routine, 'pipe').mockImplementation();
+      it('adds a routine for each', async () => {
+        await routine.execute(context);
 
-        routine.bootstrap();
-
-        expectPipedRoutines(spy, [
+        expectPipedRoutines(routine.routines, [
           {
             key: 'bar',
             title: 'primary -a --foo bar baz',
@@ -117,37 +123,15 @@ describe('RunDriverRoutine', () => {
         ]);
       });
 
-      it('adds a routine for each when parallel is used', () => {
-        routine.context.parallelArgv = [
+      it('adds a routine for each when parallel is used', async () => {
+        context.parallelArgv = [
           ['--one', '--two=2'],
           ['--three', '-f'],
         ];
 
-        const spy = jest.spyOn(routine, 'pipe').mockImplementation();
+        await routine.execute(context);
 
-        routine.bootstrap();
-
-        expectPipedRoutines(spy, [
-          {
-            key: 'foo',
-            title: 'primary -a --foo bar baz',
-            forceConfigOption: true,
-            packageRoot: fixturePath.append('./packages/foo').path(),
-          },
-          {
-            key: 'foo',
-            title: 'primary -a --foo bar baz --one --two=2',
-            additionalArgv: ['--one', '--two=2'],
-            forceConfigOption: true,
-            packageRoot: fixturePath.append('./packages/foo').path(),
-          },
-          {
-            key: 'foo',
-            title: 'primary -a --foo bar baz --three -f',
-            additionalArgv: ['--three', '-f'],
-            forceConfigOption: true,
-            packageRoot: fixturePath.append('./packages/foo').path(),
-          },
+        expectPipedRoutines(routine.routines, [
           {
             key: 'bar',
             title: 'primary -a --foo bar baz',
@@ -187,22 +171,36 @@ describe('RunDriverRoutine', () => {
             additionalArgv: ['--three', '-f'],
             forceConfigOption: true,
             packageRoot: fixturePath.append('./packages/baz').path(),
+          },
+          {
+            key: 'foo',
+            title: 'primary -a --foo bar baz',
+            forceConfigOption: true,
+            packageRoot: fixturePath.append('./packages/foo').path(),
+          },
+          {
+            key: 'foo',
+            title: 'primary -a --foo bar baz --one --two=2',
+            additionalArgv: ['--one', '--two=2'],
+            forceConfigOption: true,
+            packageRoot: fixturePath.append('./packages/foo').path(),
+          },
+          {
+            key: 'foo',
+            title: 'primary -a --foo bar baz --three -f',
+            additionalArgv: ['--three', '-f'],
+            forceConfigOption: true,
+            packageRoot: fixturePath.append('./packages/foo').path(),
           },
         ]);
       });
 
-      it('errors if workspaces config is not set', () => {
-        expect(() => {
-          delete routine.context.workspaces;
-          routine.bootstrap();
-        }).toThrowErrorMatchingSnapshot();
-      });
+      it('errors if workspaces config is empty', async () => {
+        await expect(() => {
+          context.workspaces = [];
 
-      it('errors if workspaces config is empty', () => {
-        expect(() => {
-          routine.context.workspaces = [];
-          routine.bootstrap();
-        }).toThrowErrorMatchingSnapshot();
+          return routine.execute(context);
+        }).rejects.toThrowErrorMatchingSnapshot();
       });
     });
   });

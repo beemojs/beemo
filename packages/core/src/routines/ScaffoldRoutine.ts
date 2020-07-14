@@ -1,7 +1,5 @@
 import { engine } from 'hygen';
-// @ts-ignore
-import Logger from 'hygen/lib/logger';
-import { Path, Blueprint, Predicates } from '@boost/common';
+import { Path, Blueprint, Predicates, Bind } from '@boost/common';
 import { Routine } from '@boost/pipeline';
 import Tool from '../Tool';
 import ScaffoldContext from '../contexts/ScaffoldContext';
@@ -25,6 +23,7 @@ export default class ScaffoldRoutine extends Routine<unknown, unknown, RoutineOp
   /**
    * Execute the hygen scaffolding generator.
    */
+  @Bind()
   async runGenerator(context: ScaffoldContext) {
     const { tool } = this.options;
     const args = [context.generator, context.action];
@@ -42,7 +41,7 @@ export default class ScaffoldRoutine extends Routine<unknown, unknown, RoutineOp
         cwd: tool.cwd.path(),
         debug: tool.config.debug,
         exec: this.handleExec,
-        logger: new Logger(this.handleLog),
+        // logger: new Logger(this.handleLog),
         templates: new Path(modulePath, 'templates').path(),
       });
     } catch (error) {
@@ -69,8 +68,7 @@ export default class ScaffoldRoutine extends Routine<unknown, unknown, RoutineOp
    */
   private handleLog = (message: string) => {
     if (message && message.trim()) {
-      // TODO log?
-      // this.tool.console.log(message);
+      console.log(message);
     }
   };
 

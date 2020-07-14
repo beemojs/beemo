@@ -28,14 +28,15 @@ export default class ESLintDriver extends Driver<ESLintConfig> {
    * both stdout and stderr on failure.
    */
   processFailure(error: Execution) {
-    // TODO
-    // const { stderr, stdout } = error;
-    // if (stderr) {
-    //   this.tool.console.logError(stderr);
-    // }
-    // if (stdout) {
-    //   this.tool.console.log(stdout);
-    // }
+    const { stderr, stdout } = error;
+
+    if (stderr) {
+      console.error(stderr);
+    }
+
+    if (stdout) {
+      console.log(stdout);
+    }
   }
 
   /**

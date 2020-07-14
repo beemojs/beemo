@@ -136,18 +136,18 @@ export default class JestDriver extends Driver<JestConfig> {
   }
 
   processSuccess(response: Execution) {
-    // TODO
-    // const out = response.stdout.trim();
-    // const err = response.stderr.trim();
-    // if (response.command && response.command.includes('--coverage')) {
-    //   if (err) {
-    //     this.tool.console.log(err);
-    //   }
-    //   if (out) {
-    //     this.tool.console.log(out);
-    //   }
-    // } else if (err) {
-    //   this.tool.console.log(err);
-    // }
+    const out = response.stdout.trim();
+    const err = response.stderr.trim();
+
+    if (response.command && response.command.includes('--coverage')) {
+      if (err) {
+        console.log(err);
+      }
+      if (out) {
+        console.log(out);
+      }
+    } else if (err) {
+      console.log(err);
+    }
   }
 }

@@ -13,4 +13,4 @@ if (process.env.DEBUG === 'timing') {
   debug.enable('beemo:*');
 }
 
-require('../lib/CLI');
+require('../lib');

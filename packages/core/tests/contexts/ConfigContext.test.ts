@@ -1,18 +1,18 @@
 import ConfigContext from '../../src/contexts/ConfigContext';
-import { stubConfigArgs, mockDriver } from '../../src/testUtils';
+import { stubArgs, mockDriver } from '../../src/testing';
 
 describe('ConfigContext', () => {
   let context: ConfigContext;
 
   beforeEach(() => {
-    context = new ConfigContext(stubConfigArgs());
+    context = new ConfigContext(stubArgs({}));
   });
 
   describe('constructor()', () => {
     it('sets args', () => {
-      context = new ConfigContext(stubConfigArgs({ names: ['*'] }));
+      context = new ConfigContext(stubArgs({ names: ['*'] }));
 
-      expect(context.args).toEqual(stubConfigArgs({ names: ['*'] }));
+      expect(context.args).toEqual(stubArgs({ names: ['*'] }));
     });
   });
 

@@ -1,4 +1,4 @@
-import { mockTool, stubExecResult } from '@beemo/core/lib/testUtils';
+import { mockTool, stubExecResult } from '@beemo/core/lib/testing';
 import JestDriver from '../src/JestDriver';
 
 describe('JestDriver', () => {
@@ -44,7 +44,7 @@ describe('JestDriver', () => {
 
   describe('processSuccess()', () => {
     it('outputs stderr', () => {
-      const spy = jest.spyOn(driver.tool.console, 'log');
+      const spy = jest.spyOn(console, 'log').mockImplementation();
 
       driver.processSuccess(
         stubExecResult({
@@ -55,10 +55,12 @@ describe('JestDriver', () => {
       );
 
       expect(spy).toHaveBeenCalledWith('Why???');
+
+      spy.mockRestore();
     });
 
     it('outputs nothing if empty strings', () => {
-      const spy = jest.spyOn(driver.tool.console, 'log');
+      const spy = jest.spyOn(console, 'log').mockImplementation();
 
       driver.processSuccess(
         stubExecResult({
@@ -69,10 +71,12 @@ describe('JestDriver', () => {
       );
 
       expect(spy).not.toHaveBeenCalled();
+
+      spy.mockRestore();
     });
 
     it('outputs stdout and stderr when running coverage', () => {
-      const spy = jest.spyOn(driver.tool.console, 'log');
+      const spy = jest.spyOn(console, 'log').mockImplementation();
 
       driver.processSuccess(
         stubExecResult({
@@ -84,10 +88,12 @@ describe('JestDriver', () => {
 
       expect(spy).toHaveBeenCalledWith('Tests');
       expect(spy).toHaveBeenCalledWith('Coverage');
+
+      spy.mockRestore();
     });
 
     it('outputs nothing if empty strings when running coverage', () => {
-      const spy = jest.spyOn(driver.tool.console, 'log');
+      const spy = jest.spyOn(console, 'log').mockImplementation();
 
       driver.processSuccess(
         stubExecResult({
@@ -98,6 +104,8 @@ describe('JestDriver', () => {
       );
 
       expect(spy).not.toHaveBeenCalled();
+
+      spy.mockRestore();
     });
   });
 });

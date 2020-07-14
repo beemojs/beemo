@@ -1,5 +1,5 @@
 import { parse } from '@boost/args';
-import { Path, Predicates, Blueprint, ExitError } from '@boost/common';
+import { Path, Predicates, Blueprint, ExitError, Bind } from '@boost/common';
 import { Routine, WaterfallPipeline, AnyWorkUnit } from '@boost/pipeline';
 import chalk from 'chalk';
 import glob from 'fast-glob';
@@ -35,7 +35,9 @@ export default class ExecuteCommandRoutine extends Routine<
       argv: array(string()),
       forceConfigOption: bool(),
       packageRoot: string(),
-      tool: instance(Tool).required().notNullable(),
+      tool: instance(Tool)
+        .required()
+        .notNullable(),
     };
   }
 
@@ -73,14 +75,17 @@ export default class ExecuteCommandRoutine extends Routine<
   /**
    * Capture live output via `--stdio=pipe` or `--watch`.
    */
-  captureOutput = (context: DriverContext, stream: execa.ExecaChildProcess) => {
+  @Bind()
+  captureOutput(context: DriverContext, stream: execa.ExecaChildProcess) {
     const { args, primaryDriver } = context;
     const { watchOptions } = primaryDriver.metadata;
     const isWatching = watchOptions.some((option) => {
       // Option
       if (option.startsWith('-')) {
+        const name = option.replace(/^-{1,2}/u, '');
+
         // @ts-ignore Allow this
-        return !!args.options[option.replace(/^-{1,2}/u, '')];
+        return !!(args.options[name] || args.unknown[name]);
       }
 
       // Param
@@ -112,12 +117,13 @@ export default class ExecuteCommandRoutine extends Routine<
     stream.stderr!.on('data', handler);
 
     return stdio || 'buffer';
-  };
+  }
 
   /**
    * When workspaces are enabled, some drivers require the config to be within each workspace,
    * instead of being referenced from the root, so we need to copy it.
    */
+  @Bind()
   copyConfigToWorkspacePackage(context: DriverContext, argv: Argv): Argv {
     const { packageRoot } = this.options;
 
@@ -133,6 +139,7 @@ export default class ExecuteCommandRoutine extends Routine<
   /**
    * Expand arguments that look like globs.
    */
+  @Bind()
   expandGlobPatterns(context: DriverContext, argv: Argv): Argv {
     const nextArgv: Argv = [];
 
@@ -209,6 +216,7 @@ export default class ExecuteCommandRoutine extends Routine<
    * Filter unknown and or unsupported CLI options from the arguments passed to the CLI.
    * Utilize the driver's help option/command to determine accurate options.
    */
+  @Bind()
   async filterUnknownOptions(context: DriverContext, argv: Argv): Promise<Argv> {
     this.debug('Filtering unknown command line options');
 
@@ -227,6 +235,7 @@ export default class ExecuteCommandRoutine extends Routine<
   /**
    * Gather arguments from all sources to pass to the driver.
    */
+  @Bind()
   gatherArgs(context: DriverContext): Argv {
     this.debug('Gathering arguments to pass to driver');
 
@@ -245,8 +254,8 @@ export default class ExecuteCommandRoutine extends Routine<
     context.args = merge(
       {},
       parse(argv, {
+        loose: true,
         options: {},
-        unknown: true,
       }),
       context.args,
     );
@@ -295,6 +304,7 @@ export default class ExecuteCommandRoutine extends Routine<
   /**
    * Include --config option if driver requires it (instead of auto-lookup resolution).
    */
+  @Bind()
   includeConfigOption(context: DriverContext, prevArgv: Argv): Argv {
     const { primaryDriver } = context;
     const configPath = context.findConfigByName(primaryDriver.metadata.configName);
@@ -313,6 +323,7 @@ export default class ExecuteCommandRoutine extends Routine<
    * Execute the driver's command with the filtered arguments and handle the
    * success and failures with the driver itself.
    */
+  @Bind()
   async runCommandWithArgs(
     context: DriverContext,
     argv: Argv,

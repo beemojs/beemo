@@ -1,6 +1,6 @@
 import camelCase from 'lodash/camelCase';
 import upperFirst from 'lodash/upperFirst';
-import { PathResolver } from '@boost/common';
+import { Bind, PathResolver } from '@boost/common';
 import Script from '../Script';
 import ScriptContext from '../contexts/ScriptContext';
 import filterArgs from '../utils/filterArgs';
@@ -9,7 +9,7 @@ import ExecuteScriptRoutine from './script/ExecuteScriptRoutine';
 import RunInWorkspacesRoutine from './RunInWorkspacesRoutine';
 
 export default class RunScriptRoutine extends RunInWorkspacesRoutine<ScriptContext> {
-  protected errors: Error[] = [];
+  errors: Error[] = [];
 
   getInitialValue(context: ScriptContext): Promise<Script> {
     const { tool } = this.options;
@@ -49,6 +49,7 @@ export default class RunScriptRoutine extends RunInWorkspacesRoutine<ScriptConte
    * If the script has been loaded into the tool, return that directly.
    * Scripts can be preloaded from a configuration file or the command line.
    */
+  @Bind()
   loadScriptFromTool(context: ScriptContext): Script | null {
     this.debug('Attempting to load script from tool');
 
@@ -59,9 +60,9 @@ export default class RunScriptRoutine extends RunInWorkspacesRoutine<ScriptConte
 
       return script;
     } catch (error) {
-      error.message = this.options.tool.msg('app:fromTool', { message: error.message });
-
-      this.errors.push(error);
+      this.errors.push(
+        new Error(this.options.tool.msg('app:fromTool', { message: error.message })),
+      );
 
       return null;
     }
@@ -71,6 +72,7 @@ export default class RunScriptRoutine extends RunInWorkspacesRoutine<ScriptConte
    * Attempt to load a script from the configuration module's `scripts/` folder,
    * or a standard Node modules folder.
    */
+  @Bind()
   async loadScriptFromModule(
     context: ScriptContext,
     script: Script | null,
@@ -105,9 +107,7 @@ export default class RunScriptRoutine extends RunInWorkspacesRoutine<ScriptConte
 
       context.setScript(script);
     } catch (error) {
-      error.message = tool.msg('app:fromModule', { message: error.message });
-
-      this.errors.push(error);
+      this.errors.push(new Error(tool.msg('app:fromModule', { message: error.message })));
     }
 
     return script || null;
@@ -117,11 +117,11 @@ export default class RunScriptRoutine extends RunInWorkspacesRoutine<ScriptConte
    * If all of the loading patterns have failed, thrown an error,
    * otherwise add the script and continue.
    */
+  @Bind()
   postLoad(context: ScriptContext, script: Script | null): Script {
     if (!script) {
       const messages = this.errors.map((error) => `  - ${error.message}`).join('\n');
 
-      // TODO
       throw new Error(`Failed to load script from multiple sources:\n${messages}`);
     }
 

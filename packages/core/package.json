@@ -28,15 +28,15 @@
   },
   "dependencies": {
     "@beemo/dependency-graph": "^2.0.0-alpha.0",
-    "@boost/args": "^2.0.0",
-    "@boost/common": "^2.0.0",
-    "@boost/config": "^2.0.0",
-    "@boost/debug": "^2.0.0",
-    "@boost/event": "^2.0.0",
-    "@boost/pipeline": "^2.0.0",
-    "@boost/plugin": "^2.0.0",
-    "@boost/terminal": "^2.0.0",
-    "@boost/translate": "^2.0.0",
+    "@boost/args": "^2.2.0",
+    "@boost/common": "^2.2.1",
+    "@boost/config": "^2.2.1",
+    "@boost/debug": "^2.1.1",
+    "@boost/event": "^2.1.0",
+    "@boost/pipeline": "^2.1.1",
+    "@boost/plugin": "^2.1.1",
+    "@boost/terminal": "^2.1.0",
+    "@boost/translate": "^2.1.1",
     "chalk": "^4.1.0",
     "execa": "^4.0.3",
     "fast-glob": "^3.2.4",
@@ -47,7 +47,7 @@
     "micromatch": "^4.0.2"
   },
   "devDependencies": {
-    "@boost/test-utils": "^2.0.0",
+    "@boost/test-utils": "^2.1.0",
     "@types/micromatch": "^4.0.1"
   }
 }

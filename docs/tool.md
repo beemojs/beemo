@@ -18,25 +18,6 @@ While the `package` property is the loaded consumer `package.json`.
 tool.package.name;
 ```
 
-## Logging
-
-Standard messages can be logged with `log(message)` and will be displayed on success (stdout), while
-error messages can be logged with `log.error(message)` and will be displayed on failure (stderr).
-
-```js
-tool.log('Something happened!');
-tool.log.error('Oops, something is broken!');
-```
-
-Debug messages that will only be displayed during `--debug` or `DEBUG` can be logged with
-`debug(message, ...params)`. Furthermore, `debug.invariant(condition, message, pass, fail)` can be
-used to conditionally log successful and failure debug messages.
-
-```js
-tool.debug(var);
-tool.debug.invariant(loaded, 'Has it loaded?', 'Yes', 'No');
-```
-
 > Messages (excluding invariant) are formatted with
 > [util.format](https://nodejs.org/api/util.html#util_util_format_format_args) and can interpolate
 > variables.
