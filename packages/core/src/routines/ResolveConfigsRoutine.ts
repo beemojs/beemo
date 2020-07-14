@@ -11,9 +11,7 @@ export default class ResolveConfigsRoutine<
 > extends Routine<Path[], unknown, RoutineOptions> {
   blueprint({ instance }: Predicates): Blueprint<RoutineOptions> {
     return {
-      tool: instance(Tool)
-        .required()
-        .notNullable(),
+      tool: instance(Tool).required().notNullable(),
     };
   }
 
@@ -24,11 +22,10 @@ export default class ResolveConfigsRoutine<
 
     // Parallel
     if (this.options.tool.config.configure.parallel) {
-      const pipeline = this.createConcurrentPipeline<Ctx, unknown, Path>(context);
-
-      routines.forEach((routine) => {
-        pipeline.add(routine);
-      });
+      const pipeline = routines.reduce(
+        (pl, routine) => pl.add(routine),
+        this.createConcurrentPipeline<Ctx, unknown, Path>(context),
+      );
 
       return pipeline.run();
     }
@@ -39,9 +36,7 @@ export default class ResolveConfigsRoutine<
       this.createWaterfallPipeline<Ctx, Path>(context),
     );
 
-    const configPath = await pipeline.run();
-
-    return [configPath];
+    return [await pipeline.run()];
   }
 
   /**

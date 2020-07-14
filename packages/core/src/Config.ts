@@ -2,7 +2,7 @@ import { Blueprint, Predicates } from '@boost/common';
 import { Configuration, createPluginsPredicate } from '@boost/config';
 import { ConfigFile } from './types';
 
-export default class ConfigManager extends Configuration<ConfigFile> {
+export default class Config extends Configuration<ConfigFile> {
   blueprint(predicates: Predicates): Blueprint<ConfigFile> {
     const { bool, number, object, shape, string } = predicates;
 

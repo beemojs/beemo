@@ -11,6 +11,7 @@ export const EXECUTE_OPTIONS = {
   '--concurrency': true,
   '--graph': true,
   '--reference-workspaces': true,
+  '--referenceWorkspaces': true,
   '--stdio': true,
   '--workspaces': true,
 };
