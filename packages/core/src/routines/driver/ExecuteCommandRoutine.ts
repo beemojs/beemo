@@ -1,23 +1,23 @@
-import { Path } from '@boost/common';
-import { Routine, Task, Predicates, SignalError, ExitError } from '@boost/core';
+import { parse } from '@boost/args';
+import { Path, Predicates, Blueprint, ExitError } from '@boost/common';
+import { Routine, WaterfallPipeline, AnyWorkUnit } from '@boost/pipeline';
 import chalk from 'chalk';
 import glob from 'fast-glob';
 import fs from 'fs-extra';
 import isGlob from 'is-glob';
 import merge from 'lodash/merge';
-import execa from 'execa';
-import parseArgs from 'yargs-parser';
-import Beemo from '../../Beemo';
+import execa, { ExecaError } from 'execa';
+import Tool from '../../Tool';
 import DriverContext from '../../contexts/DriverContext';
 import BatchStream from '../../streams/BatchStream';
 import formatExecReturn from '../../utils/formatExecReturn';
 import filterArgs, { OptionMap } from '../../utils/filterArgs';
 import { STRATEGY_COPY } from '../../constants';
-import { Argv, Execution } from '../../types';
+import { Argv, Execution, RoutineOptions } from '../../types';
 
 const OPTION_PATTERN = /-?-[a-z0-9-]+(,|\s)/giu;
 
-export interface ExecuteCommandOptions {
+export interface ExecuteCommandOptions extends RoutineOptions {
   additionalArgv?: Argv;
   argv?: Argv;
   forceConfigOption?: boolean;
@@ -25,60 +25,66 @@ export interface ExecuteCommandOptions {
 }
 
 export default class ExecuteCommandRoutine extends Routine<
-  DriverContext,
-  Beemo,
+  unknown,
+  unknown,
   ExecuteCommandOptions
 > {
-  blueprint({ array, bool, string }: Predicates) /* infer */ {
+  blueprint({ array, bool, instance, string }: Predicates): Blueprint<ExecuteCommandOptions> {
     return {
       additionalArgv: array(string()),
       argv: array(string()),
       forceConfigOption: bool(),
       packageRoot: string(),
+      tool: instance(Tool).required().notNullable(),
     };
   }
 
-  bootstrap() {
-    const { tool } = this;
+  execute(context: DriverContext) {
+    const { tool } = this.options;
     const { forceConfigOption, packageRoot } = this.options;
-    const { metadata } = this.context.primaryDriver;
+    const { metadata } = context.primaryDriver;
 
-    this.task(tool.msg('app:driverExecuteGatherArgs'), this.gatherArgs);
+    let pipeline = new WaterfallPipeline(context)
+      .pipe(tool.msg('app:driverExecuteGatherArgs'), this.gatherArgs)
+      .pipe(tool.msg('app:driverExecuteExpandGlob'), this.expandGlobPatterns);
 
-    this.task(tool.msg('app:driverExecuteExpandGlob'), this.expandGlobPatterns);
-
-    this.task(tool.msg('app:driverExecuteFilterOptions'), this.filterUnknownOptions).skip(
-      !metadata.filterOptions,
-    );
-
-    if (packageRoot && metadata.workspaceStrategy === STRATEGY_COPY) {
-      this.task(
-        tool.msg('app:driverExecuteCopyWorkspaceConfig'),
-        this.copyConfigToWorkspacePackage,
-      );
-    } else {
-      this.task(tool.msg('app:driverExecuteIncludeConfigOption'), this.includeConfigOption).skip(
-        !metadata.useConfigOption && !forceConfigOption,
+    if (metadata.filterOptions) {
+      pipeline = pipeline.pipe(
+        tool.msg('app:driverExecuteFilterOptions'),
+        this.filterUnknownOptions,
       );
     }
 
-    this.task(tool.msg('app:driverExecute'), this.runCommandWithArgs);
+    if (packageRoot && metadata.workspaceStrategy === STRATEGY_COPY) {
+      pipeline = pipeline.pipe(
+        tool.msg('app:driverExecuteCopyWorkspaceConfig'),
+        this.copyConfigToWorkspacePackage,
+      );
+    } else if (metadata.useConfigOption || forceConfigOption) {
+      pipeline = pipeline.pipe(
+        tool.msg('app:driverExecuteIncludeConfigOption'),
+        this.includeConfigOption,
+      );
+    }
+
+    return pipeline.pipe(tool.msg('app:driverExecute'), this.runCommandWithArgs).run();
   }
 
   /**
-   * Capture live output via `--stdio=pipe` or `--watch`. Buffer the output incase ctrl+c is entered.
+   * Capture live output via `--stdio=pipe` or `--watch`.
    */
-  captureOutput = (stream: execa.ExecaChildProcess) => {
-    const { args, primaryDriver } = this.context;
+  captureOutput = (context: DriverContext, stream: execa.ExecaChildProcess) => {
+    const { args, primaryDriver } = context;
     const { watchOptions } = primaryDriver.metadata;
     const isWatching = watchOptions.some((option) => {
       // Option
       if (option.startsWith('-')) {
-        return !!args[option.replace(/^-{1,2}/u, '')];
+        // @ts-ignore Allow this
+        return !!args.options[option.replace(/^-{1,2}/u, '')];
       }
 
-      // Argument
-      return args._.includes(option);
+      // Param
+      return args.params.includes(option);
     });
 
     if (isWatching) {
@@ -93,36 +99,19 @@ export default class ExecuteCommandRoutine extends Routine<
       return 'watch';
     }
 
-    let buffer = '';
+    // When streaming or inheriting, output immediately, otherwise swallow.
+    const { stdio } = args.options;
 
-    // When cmd/ctrl + c is pressed, write out the current buffer
-    if (args.stdio === 'buffer') {
-      this.tool.console.onError.listen((error) => {
-        if (
-          (error instanceof SignalError || error.name === 'SignalError') &&
-          // @ts-ignore Temporary fix
-          (error.signal === 'SIGINT' || error.signal === 'SIGTERM')
-        ) {
-          process.stdout.write(chalk.gray(this.tool.msg('app:signalBufferMessage')));
-          process.stdout.write(`\n\n${buffer}`);
-        }
-      });
-    }
-
-    // When streaming or inheriting, output immediately,
-    // otherwise buffer for the reporter.
     const handler = (chunk: Buffer) => {
-      if (args.stdio === 'stream' || args.stdio === 'inherit') {
+      if (stdio === 'stream' || stdio === 'inherit') {
         process.stdout.write(String(chunk));
-      } else {
-        buffer += String(chunk);
       }
     };
 
     stream.stdout!.on('data', handler);
     stream.stderr!.on('data', handler);
 
-    return args.stdio || 'buffer';
+    return stdio || 'buffer';
   };
 
   /**
@@ -163,7 +152,7 @@ export default class ExecuteCommandRoutine extends Routine<
           '  %s %s %s',
           arg,
           chalk.gray('->'),
-          paths.length > 0 ? paths.join(', ') : chalk.gray(this.tool.msg('app:noMatch')),
+          paths.length > 0 ? paths.join(', ') : chalk.gray(this.options.tool.msg('app:noMatch')),
         );
 
         nextArgv.push(...paths);
@@ -178,8 +167,8 @@ export default class ExecuteCommandRoutine extends Routine<
   /**
    * Extract native supported options and flags from driver help output.
    */
-  async extractNativeOptions(): Promise<OptionMap> {
-    const driver = this.context.primaryDriver;
+  async extractNativeOptions(context: DriverContext): Promise<OptionMap> {
+    const driver = context.primaryDriver;
     const { env } = driver.options;
     const options = driver.getSupportedOptions();
 
@@ -223,7 +212,7 @@ export default class ExecuteCommandRoutine extends Routine<
   async filterUnknownOptions(context: DriverContext, argv: Argv): Promise<Argv> {
     this.debug('Filtering unknown command line options');
 
-    const nativeOptions = await this.extractNativeOptions();
+    const nativeOptions = await this.extractNativeOptions(context);
     const { filteredArgv, unknownArgv } = filterArgs(argv, {
       allow: nativeOptions,
     });
@@ -243,7 +232,7 @@ export default class ExecuteCommandRoutine extends Routine<
 
     const argv = [
       // Passed by the driver
-      ...this.getDriverArgs(),
+      ...this.getDriverArgs(context),
       // Passed on the command line
       ...this.getCommandLineArgs(),
       // Passed with parallel "//" operator
@@ -253,7 +242,14 @@ export default class ExecuteCommandRoutine extends Routine<
     // Since we combine multiple args, we need to rebuild this.
     // And we need to set this before we filter them.
     // And we need to be sure not to remove existing args.
-    context.args = merge({}, parseArgs(argv), context.args);
+    context.args = merge(
+      {},
+      parse(argv, {
+        options: {},
+        unknown: true,
+      }),
+      context.args,
+    );
 
     return argv;
   }
@@ -283,8 +279,8 @@ export default class ExecuteCommandRoutine extends Routine<
   /**
    * Return args from the primary driver.
    */
-  getDriverArgs(): Argv {
-    const argv = this.context.primaryDriver.getArgs();
+  getDriverArgs(context: DriverContext): Argv {
+    const argv = context.primaryDriver.getArgs();
 
     this.debug.invariant(
       argv.length > 0,
@@ -320,11 +316,10 @@ export default class ExecuteCommandRoutine extends Routine<
   async runCommandWithArgs(
     context: DriverContext,
     argv: Argv,
-    task: Task<DriverContext>,
+    workUnit?: AnyWorkUnit,
   ): Promise<Execution> {
     const driver = context.primaryDriver;
     const cwd = String(this.options.packageRoot || context.cwd);
-    let result = null;
 
     this.debug(
       'Executing command "%s %s" in %s',
@@ -336,11 +331,11 @@ export default class ExecuteCommandRoutine extends Routine<
     await driver.onBeforeExecute.emit([context, argv]);
 
     try {
-      result = await this.executeCommand(driver.metadata.bin, argv, {
+      const result = await this.executeCommand(driver.metadata.bin, argv, {
         cwd,
         env: driver.options.env,
-        task,
-        wrap: this.captureOutput,
+        workUnit,
+        wrap: (stream) => this.captureOutput(context, stream),
       });
 
       this.debug('  Success: %o', formatExecReturn(result));
@@ -348,8 +343,10 @@ export default class ExecuteCommandRoutine extends Routine<
       driver.processSuccess(result);
 
       await driver.onAfterExecute.emit([context, result]);
+
+      return result;
     } catch (error) {
-      result = error as execa.ExecaError;
+      const result = error as ExecaError;
 
       this.debug('  Failure: %o', formatExecReturn(result));
       this.debug('  Error message: %s', chalk.gray(result.message));
@@ -376,7 +373,5 @@ export default class ExecuteCommandRoutine extends Routine<
 
       throw newError;
     }
-
-    return result;
   }
 }

@@ -9,6 +9,8 @@ export default class RunScript extends Command<
 > {
   static aliases = ['run'];
 
+  static allowVariadicParams = true;
+
   @Arg.Number(beemo.msg('app:cliOptionConcurrency'))
   concurrency: number = 0;
 

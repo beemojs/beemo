@@ -6,7 +6,7 @@ import ScriptContext from '../contexts/ScriptContext';
 import filterArgs from '../utils/filterArgs';
 import { EXECUTE_OPTIONS } from '../constants';
 import ExecuteScriptRoutine from './script/ExecuteScriptRoutine';
-import RunInWorkspacesRoutine, { AnyRoutine } from './RunInWorkspacesRoutine';
+import RunInWorkspacesRoutine from './RunInWorkspacesRoutine';
 
 export default class RunScriptRoutine extends RunInWorkspacesRoutine<ScriptContext> {
   protected errors: Error[] = [];
@@ -21,7 +21,7 @@ export default class RunScriptRoutine extends RunInWorkspacesRoutine<ScriptConte
       .run();
   }
 
-  pipeRoutine(context: ScriptContext, packageName: string, packageRoot: string): AnyRoutine {
+  pipeRoutine(context: ScriptContext, packageName: string, packageRoot: string): void {
     const { argv, cwd, scriptName } = context;
     const { filteredArgv } = filterArgs(argv, {
       block: EXECUTE_OPTIONS,
@@ -29,16 +29,20 @@ export default class RunScriptRoutine extends RunInWorkspacesRoutine<ScriptConte
     const command = filteredArgv.join(' ');
 
     if (packageName) {
-      return new ExecuteScriptRoutine(packageName, command, {
-        packageRoot,
-        tool: this.options.tool,
-      });
+      this.routines.push(
+        new ExecuteScriptRoutine(packageName, command, {
+          packageRoot,
+          tool: this.options.tool,
+        }),
+      );
+    } else {
+      this.routines.push(
+        new ExecuteScriptRoutine(scriptName, command, {
+          packageRoot: cwd.path(),
+          tool: this.options.tool,
+        }),
+      );
     }
-
-    return new ExecuteScriptRoutine(scriptName, command, {
-      packageRoot: cwd.path(),
-      tool: this.options.tool,
-    });
   }
 
   /**

@@ -1,4 +1,4 @@
-import { WorkspacePackage, PackageStructure, Predicates, Blueprint } from '@boost/common';
+import { WorkspacePackage, Predicates, Blueprint, PackageStructure } from '@boost/common';
 import { Routine, PooledPipeline } from '@boost/pipeline';
 import { stripAnsi, style } from '@boost/terminal';
 import Graph from '@beemo/dependency-graph';
@@ -7,10 +7,8 @@ import Context from '../contexts/Context';
 import isPatternMatch from '../utils/isPatternMatch';
 import { ExecutionError, RoutineOptions } from '../types';
 
-export type WSP = WorkspacePackage<PackageStructure>;
-
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-export type AnyRoutine = Routine<any, any>;
+type AnyRoutine = Routine<any, any>;
 
 export interface RunInWorkspacesContextArgs {
   concurrency: number;
@@ -25,13 +23,11 @@ export default abstract class RunInWorkspacesRoutine<
 > extends Routine<unknown, unknown, RoutineOptions> {
   protected routines: AnyRoutine[] = [];
 
-  protected workspacePackages: WSP[] = [];
+  protected workspacePackages: WorkspacePackage[] = [];
 
   blueprint({ instance }: Predicates): Blueprint<RoutineOptions> {
     return {
-      tool: instance(Tool)
-        .required()
-        .notNullable(),
+      tool: instance(Tool).required().notNullable(),
     };
   }
 
@@ -48,12 +44,10 @@ export default abstract class RunInWorkspacesRoutine<
       this.workspacePackages = tool.project.getWorkspacePackages();
 
       this.getFilteredWorkspacePackages(context).forEach((pkg) => {
-        this.routines.push(
-          this.pipeRoutine(context, pkg.metadata.packageName, pkg.metadata.packagePath),
-        );
+        this.pipeRoutine(context, pkg.metadata.packageName, pkg.metadata.packagePath);
       });
     } else {
-      this.routines.push(this.pipeRoutine(context));
+      this.pipeRoutine(context);
     }
 
     const value = await this.getInitialValue(context);
@@ -124,10 +118,7 @@ export default abstract class RunInWorkspacesRoutine<
 
     // Inherit stack for easier debugging.
     if (errors.length === 1) {
-      error.stack = String(errors[0].stack)
-        .split('\n')
-        .slice(1)
-        .join('\n');
+      error.stack = String(errors[0].stack).split('\n').slice(1).join('\n');
     }
 
     throw error;
@@ -136,7 +127,7 @@ export default abstract class RunInWorkspacesRoutine<
   /**
    * Return a list of workspaces optionally filtered.
    */
-  getFilteredWorkspacePackages(context: Ctx): WSP[] {
+  getFilteredWorkspacePackages(context: Ctx): WorkspacePackage[] {
     return this.workspacePackages.filter((pkg) =>
       isPatternMatch(pkg.package.name, context.args.options.workspaces),
     );
@@ -161,7 +152,7 @@ export default abstract class RunInWorkspacesRoutine<
 
     // Create lookups
     const packages: PackageStructure[] = []; // Without metadata
-    const metadata: { [name: string]: WSP['metadata'] } = {}; // By package name
+    const metadata: { [name: string]: WorkspacePackage['metadata'] } = {}; // By package name
 
     this.workspacePackages.forEach((wsp) => {
       packages.push(wsp.package);
@@ -188,5 +179,5 @@ export default abstract class RunInWorkspacesRoutine<
   /**
    * Pipe a routine for the entire project or a workspace package at the defined path.
    */
-  abstract pipeRoutine(context: Ctx, packageName?: string, packageRoot?: string): AnyRoutine;
+  abstract pipeRoutine(context: Ctx, packageName?: string, packageRoot?: string): void;
 }

@@ -15,20 +15,23 @@ import { Event } from '@boost/event';
 import { WaterfallPipeline } from '@boost/pipeline';
 import { Registry } from '@boost/plugin';
 import { Translator, createTranslator } from '@boost/translate';
-import ConfigManager from './ConfigManager';
+import Config from './Config';
 import Driver from './Driver';
 import Script from './Script';
 import Context from './contexts/Context';
 import ConfigContext from './contexts/ConfigContext';
+import DriverContext from './contexts/DriverContext';
 import ScaffoldContext from './contexts/ScaffoldContext';
 import ScriptContext from './contexts/ScriptContext';
+import CleanupConfigsRoutine from './routines/CleanupConfigsRoutine';
 import ResolveConfigsRoutine from './routines/ResolveConfigsRoutine';
+import RunDriverRoutine from './routines/RunDriverRoutine';
 import RunScriptRoutine from './routines/RunScriptRoutine';
 import ScaffoldRoutine from './routines/ScaffoldRoutine';
 import { ConfigFile, Argv } from './types';
 import { KEBAB_PATTERN } from './constants';
 
-interface ToolOptions {
+export interface ToolOptions {
   argv: Argv;
   cwd?: string;
   projectName?: string;
@@ -42,7 +45,7 @@ export default class Tool extends Contract<ToolOptions> {
 
   readonly argv: Argv;
 
-  readonly configManager = new ConfigManager('beemo');
+  readonly configManager = new Config('beemo');
 
   readonly cwd: Path;
 
@@ -57,6 +60,8 @@ export default class Tool extends Contract<ToolOptions> {
   readonly onResolveDependencies = new Event<[ConfigContext, Driver[]]>('resolve-dependencies');
 
   readonly onRunCreateConfig = new Event<[ConfigContext, string[]]>('run-create-config');
+
+  readonly onRunDriver = new Event<[DriverContext, Driver]>('run-driver');
 
   readonly onRunScaffold = new Event<[ScaffoldContext, string, string, string?]>('run-scaffold');
 
@@ -94,9 +99,7 @@ export default class Tool extends Contract<ToolOptions> {
     return {
       argv: array(string()),
       cwd: string(process.cwd()).notEmpty(),
-      projectName: string('beemo')
-        .kebabCase()
-        .notEmpty(),
+      projectName: string('beemo').kebabCase().notEmpty(),
       resourcePaths: array(string().notEmpty()),
     };
   }
@@ -108,12 +111,10 @@ export default class Tool extends Contract<ToolOptions> {
     this.config = config;
     this.package = this.project.getPackage();
 
-    // TODO Load drivers
-    // @ts-ignore
+    // Load drivers
     await this.driverRegistry.loadMany(config.drivers);
 
-    // TODO Load scripts
-    // @ts-ignore
+    // Load scripts
     await this.scriptRegistry.loadMany(config.scripts);
 
     // Log information
@@ -229,6 +230,40 @@ export default class Tool extends Contract<ToolOptions> {
   }
 
   /**
+   * Execute all routines for the chosen driver.
+   */
+  createRunDriverPipeline(
+    args: DriverContext['args'],
+    driverName: string,
+    parallelArgv: Argv[] = [],
+  ) {
+    const driver = this.driverRegistry.get(driverName);
+    const context = this.prepareContext(new DriverContext(args, driver, parallelArgv));
+    const version = driver.getVersion();
+
+    this.onRunDriver.emit([context, driver], driverName);
+
+    this.debug('Running with %s v%s driver', driverName, version);
+
+    return new WaterfallPipeline(context, driverName)
+      .pipe(new ResolveConfigsRoutine('config', this.msg('app:configGenerate')))
+      .pipe(
+        new RunDriverRoutine(
+          'driver',
+          this.msg('app:driverRun', {
+            name: driver.metadata.title,
+            version,
+          }),
+        ),
+      )
+      .pipe(
+        new CleanupConfigsRoutine('cleanup', this.msg('app:cleanup'))
+          // Only add cleanup routine if we need it
+          .skip(!this.config.configure.cleanup),
+      );
+  }
+
+  /**
    * Run a script found within the configuration module.
    */
   createRunScriptPipeline(args: ScriptContext['args'], scriptName: string) {
@@ -306,5 +341,21 @@ export default class Tool extends Contract<ToolOptions> {
     };
 
     return context;
+  }
+
+  /**
+   * Delete config files if a process fails.
+   */
+  // TODO
+  private handleCleanupOnFailure(code: number, context: Context) {
+    // if (code === 0) {
+    //   return;
+    // }
+    // // Must not be async!
+    // if (Array.isArray(context.configPaths)) {
+    //   context.configPaths.forEach((config) => {
+    //     fs.removeSync(config.path.path());
+    //   });
+    // }
   }
 }

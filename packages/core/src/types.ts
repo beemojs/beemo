@@ -1,4 +1,4 @@
-import { Argv, Arguments, MapOptionConfig, ParserOptions, ArgList } from '@boost/args';
+import { Argv, Arguments, ParserOptions, OptionConfigMap } from '@boost/args';
 import { PluginsSetting } from '@boost/config';
 import { Pluggable } from '@boost/plugin';
 import { ExecaReturnValue, ExecaError } from 'execa';
@@ -35,7 +35,6 @@ export interface ConfigFile<T extends object = UnknownSettings> {
   settings: T;
 }
 
-// TODO
 export type Execution = ExecaReturnValue;
 
 export type ExecutionError = ExecaError;
@@ -44,7 +43,7 @@ export type StdioType = 'buffer' | 'stream' | 'inherit';
 
 // DRIVERS
 
-export type DriverCommandOptions<T extends object = {}> = MapOptionConfig<T>;
+export type DriverCommandOptions = OptionConfigMap;
 
 export type DriverStrategy = 'native' | 'create' | 'reference' | 'copy' | 'none';
 
@@ -79,7 +78,7 @@ export interface Driverable extends Pluggable<BeemoTool> {
 
 export interface Scriptable<O extends object> extends Pluggable<BeemoTool> {
   parse: () => ParserOptions<O>;
-  execute: (context: ScriptContext, args: Arguments<O, ArgList>) => Promise<unknown>;
+  execute: (context: ScriptContext, args: Arguments<O>) => Promise<unknown>;
 }
 
 // ROUTINES

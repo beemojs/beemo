@@ -19,11 +19,7 @@ export default class DriverContext extends ConfigContext<DriverContextOptions> {
   // The primary driver that initiated the pipeline
   primaryDriver: Driver;
 
-  constructor(
-    args: Arguments<DriverContextOptions, Argv>,
-    driver: Driver,
-    parallelArgv: Argv[] = [],
-  ) {
+  constructor(args: Arguments<DriverContextOptions>, driver: Driver, parallelArgv: Argv[] = []) {
     super(args);
 
     this.driverName = driver.name;
