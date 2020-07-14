@@ -11,6 +11,7 @@ export type TargetSetting =
   | 'es2018'
   | 'es2019'
   | 'es2020'
+  | 'es2021'
   | 'esnext'
   | 'json'
   | 'latest';
@@ -29,6 +30,7 @@ export type LibSetting =
   | 'es2018'
   | 'es2019'
   | 'es2020'
+  | 'es2021'
   | 'esnext'
   | 'dom'
   | 'dom.iterable'

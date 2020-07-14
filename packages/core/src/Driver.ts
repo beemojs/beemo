@@ -63,8 +63,10 @@ export default abstract class Driver<
   readonly onFailedExecute = new ConcurrentEvent<[DriverContext, Error]>('failed-execute');
 
   static validate(driver: Driver) {
-    if (!isObject(driver.metadata)) {
-      throw new Error('`Driver`s require a metadata object.');
+    const name = isObject(driver) ? driver.constructor.name : 'Driver';
+
+    if (!isObject(driver.options)) {
+      throw new Error(`\`${name}\` requires an options object.`);
     }
   }
 
@@ -167,30 +169,24 @@ export default abstract class Driver<
   /**
    * Handle command failures according to this driver.
    */
-  // TODO
   processFailure(error: Execution) {
-    // const { stderr, stdout } = error;
-    // const out = (stderr || stdout).trim();
-    // Integration debugging
-    // this.tool.console.logError('STDERR', JSON.stringify(error));
-    // Use console to by pass silent
-    // if (out) {
-    //   this.tool.console.logError(out);
-    // }
+    const { stderr, stdout } = error;
+    const out = (stderr || stdout).trim();
+
+    if (out) {
+      console.error(out);
+    }
   }
 
   /**
    * Handle successful commands according to this driver.
    */
-  // TODO
   processSuccess(response: Execution) {
-    // const out = response.stdout.trim();
-    // // Integration debugging
-    // // this.tool.console.log('STDOUT', JSON.stringify(response));
-    // // Use console to by pass silent
-    // if (out) {
-    //   this.tool.console.log(out);
-    // }
+    const out = response.stdout.trim();
+
+    if (out) {
+      console.log(out);
+    }
   }
 
   /**
@@ -202,7 +198,9 @@ export default abstract class Driver<
 
     Object.keys(options).forEach((key) => {
       blueprint[key] = shape({
-        description: string().notEmpty().required(),
+        description: string()
+          .notEmpty()
+          .required(),
         type: string().oneOf<'string' | 'number' | 'boolean'>(['string', 'number', 'boolean']),
       });
     });

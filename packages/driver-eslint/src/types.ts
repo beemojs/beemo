@@ -31,7 +31,22 @@ export type EnvType =
 
 export type GlobalSetting = 'readonly' | 'readable' | 'writable' | 'writeable' | 'off' | boolean;
 
-export type EcmaVersion = 3 | 5 | 6 | 7 | 8 | 9 | 10 | 11 | 2015 | 2016 | 2017 | 2018 | 2019 | 2020;
+export type EcmaVersion =
+  | 3
+  | 5
+  | 6
+  | 7
+  | 8
+  | 9
+  | 10
+  | 11
+  | 2015
+  | 2016
+  | 2017
+  | 2018
+  | 2019
+  | 2020
+  | 2021;
 
 export type RuleSetting = 0 | 1 | 2 | '0' | '1' | '2' | 'off' | 'warn' | 'error';
 

@@ -1,42 +1,19 @@
 import { Path } from '@boost/common';
 import Context from '../../src/contexts/Context';
-import { stubArgs } from '../../src/testUtils';
+import { stubArgs } from '../../src/testing';
 
 describe('Context', () => {
-  let context: Context;
+  let context: Context<{ foo: string }>;
 
   beforeEach(() => {
-    context = new Context(stubArgs());
+    context = new Context(stubArgs({ foo: '' }));
   });
 
   describe('constructor()', () => {
     it('sets args', () => {
-      context = new Context(stubArgs({ stdio: 'pipe' }));
+      const ctx = new Context(stubArgs({ stdio: 'pipe' }));
 
-      expect(context.args).toEqual(stubArgs({ stdio: 'pipe' }));
-    });
-  });
-
-  describe('addArg()', () => {
-    it('can add positional args', () => {
-      context.addArg('./foo');
-
-      expect(context.argv).toEqual(['./foo']);
-      expect(context.args['./foo']).toBeUndefined();
-    });
-
-    it('adds positional arg to yargs list', () => {
-      context.addArg('./foo');
-
-      expect(context.args._).toEqual(['./foo']);
-    });
-  });
-
-  describe('addArgs()', () => {
-    it('adds multiple arguments', () => {
-      context.addArgs(['./foo', './bar']);
-
-      expect(context.args._).toEqual(['./foo', './bar']);
+      expect(ctx.args).toEqual(stubArgs({ stdio: 'pipe' }));
     });
   });
 
@@ -57,49 +34,49 @@ describe('Context', () => {
       context.addOption('--foo');
 
       expect(context.argv).toEqual(['--foo']);
-      expect(context.args).toEqual(expect.objectContaining({ foo: true }));
+      expect(context.args.options).toEqual({ foo: true });
     });
 
     it('camel cases arg', () => {
       context.addOption('--foo-bar');
 
       expect(context.argv).toEqual(['--foo-bar']);
-      expect(context.args).toEqual(expect.objectContaining({ 'foo-bar': true, fooBar: true }));
+      expect(context.args.unknown).toEqual({ fooBar: 'true' });
     });
 
     it('supports single dashed', () => {
       context.addOption('-f');
 
       expect(context.argv).toEqual(['-f']);
-      expect(context.args).toEqual(expect.objectContaining({ f: true }));
+      expect(context.args.unknown).toEqual({ f: 'true' });
     });
 
     it('supports values', () => {
       context.addOption('--foo', 123);
 
       expect(context.argv).toEqual(['--foo', '123']);
-      expect(context.args).toEqual(expect.objectContaining({ foo: 123 }));
+      expect(context.args.options).toEqual({ foo: 123 });
     });
 
     it('supports values (joins with equals)', () => {
       context.addOption('--foo', 123, true);
 
       expect(context.argv).toEqual(['--foo=123']);
-      expect(context.args).toEqual(expect.objectContaining({ foo: 123 }));
+      expect(context.args.options).toEqual({ foo: 123 });
     });
 
     it('supports equal sign values', () => {
       context.addOption('--foo=123', true);
 
       expect(context.argv).toEqual(['--foo=123']);
-      expect(context.args).toEqual(expect.objectContaining({ foo: '123' }));
+      expect(context.args.options).toEqual({ foo: '123' });
     });
 
     it('supports negated options', () => {
       context.addOption('--no-foo');
 
       expect(context.argv).toEqual(['--no-foo']);
-      expect(context.args).toEqual(expect.objectContaining({ foo: false }));
+      expect(context.args.options).toEqual({ foo: false });
     });
   });
 
@@ -108,7 +85,8 @@ describe('Context', () => {
       context.addOptions(['--foo', '--bar']);
 
       expect(context.argv).toEqual(['--foo', '--bar']);
-      expect(context.args).toEqual(expect.objectContaining({ foo: true, bar: true }));
+      expect(context.args.options).toEqual({ foo: true });
+      expect(context.args.unknown).toEqual({ bar: 'true' });
     });
   });
 
@@ -141,19 +119,55 @@ describe('Context', () => {
     });
   });
 
-  describe('getArg()', () => {
+  describe('addParam()', () => {
+    it('can add positional args', () => {
+      context.addParam('./foo');
+
+      expect(context.argv).toEqual(['./foo']);
+      expect(context.args.params).toEqual(['./foo']);
+    });
+  });
+
+  describe('addParams()', () => {
+    it('adds multiple arguments', () => {
+      context.addParams(['./foo', './bar']);
+
+      expect(context.args.params).toEqual(['./foo', './bar']);
+    });
+  });
+
+  describe('getOption()', () => {
     it('returns null if arg doesnt exist', () => {
-      expect(context.getArg('foo')).toBeNull();
+      expect(context.getOption('foo')).toBeNull();
     });
 
     it('can customize fallback value', () => {
-      expect(context.getArg('foo', 123)).toBe(123);
+      expect(context.getOption('foo', '123')).toBe('123');
     });
 
     it('returns value if it exists', () => {
-      context.args.foo = 'abc';
+      context.args.options.foo = 'abc';
 
-      expect(context.getArg('foo', 123)).toBe('abc');
+      expect(context.getOption('foo', '123')).toBe('abc');
+    });
+  });
+
+  describe('getRiskyOption()', () => {
+    it('returns null if arg doesnt exist', () => {
+      expect(context.getRiskyOption('bar')).toBeNull();
+    });
+
+    it('returns configured option if it exists', () => {
+      // @ts-ignore Allow
+      context.args.options.bar = 'abc';
+
+      expect(context.getRiskyOption('bar')).toBe('abc');
+    });
+
+    it('returns unknown option if it exists', () => {
+      context.args.unknown.bar = 'xyz';
+
+      expect(context.getRiskyOption('bar')).toBe('xyz');
     });
   });
 });

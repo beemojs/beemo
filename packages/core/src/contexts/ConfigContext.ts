@@ -12,7 +12,6 @@ export default class ConfigContext<O extends object = {}> extends Context<O, str
     if (driver instanceof Driver) {
       this.drivers.add(driver);
     } else {
-      // TODO
       throw new TypeError('Invalid driver. Must be an instance of `Driver`.');
     }
 

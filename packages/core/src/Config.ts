@@ -14,12 +14,10 @@ export default class Config extends Configuration<ConfigFile> {
       debug: bool(),
       drivers: createPluginsPredicate(predicates),
       execute: shape({
-        concurrency: number().gt(0),
+        concurrency: number(3).gt(0),
         graph: bool(true),
       }),
-      module: process.env.BEEMO_CONFIG_MODULE
-        ? string(process.env.BEEMO_CONFIG_MODULE)
-        : string().required(),
+      module: process.env.BEEMO_CONFIG_MODULE ? string(process.env.BEEMO_CONFIG_MODULE) : string(), // .required(),
       scripts: createPluginsPredicate(predicates),
       settings: object(),
     };

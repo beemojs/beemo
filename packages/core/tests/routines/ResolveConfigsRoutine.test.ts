@@ -1,63 +1,66 @@
-import Beemo from '../../src/Beemo';
-import ResolveConfigsRoutine from '../../src/routines/ResolveConfigsRoutine';
+import fs from 'fs-extra';
+import Tool from '../../src/Tool';
 import Driver from '../../src/Driver';
-import { mockTool, mockDebugger, mockDriver, stubConfigContext } from '../../src/testUtils';
+import ConfigContext from '../../src/contexts/ConfigContext';
+import ResolveConfigsRoutine from '../../src/routines/ResolveConfigsRoutine';
+import { mockTool, mockDebugger, mockDriver, stubConfigContext } from '../../src/testing';
 
 describe('ResolveConfigsRoutine', () => {
+  let writeSpy: jest.SpyInstance;
+  let copySpy: jest.SpyInstance;
   let routine: ResolveConfigsRoutine;
   let plugins: { [name: string]: Driver };
-  let tool: Beemo;
+  let tool: Tool;
   let driver: Driver;
+  let context: ConfigContext;
 
   beforeEach(() => {
     plugins = {};
     tool = mockTool();
     driver = mockDriver('foo', tool);
+    context = stubConfigContext();
 
-    routine = new ResolveConfigsRoutine('config', 'Generating configurations');
-    routine.tool = tool;
-    routine.context = stubConfigContext();
+    routine = new ResolveConfigsRoutine('config', 'Generating configurations', { tool });
+    // @ts-ignore
     routine.debug = mockDebugger();
 
-    routine.context.addDriverDependency(driver);
+    context.addDriverDependency(driver);
 
     jest
-      .spyOn(routine.tool, 'getPlugin')
-      .mockImplementation((type, name) => plugins[name] || mockDriver(name, tool));
+      .spyOn(tool.driverRegistry, 'get')
+      .mockImplementation((name) => plugins[name] || mockDriver(name, tool));
+
+    // eslint-disable-next-line @typescript-eslint/no-misused-promises
+    writeSpy = jest.spyOn(fs, 'writeFile').mockImplementation(() => Promise.resolve());
+
+    // eslint-disable-next-line @typescript-eslint/no-misused-promises
+    copySpy = jest.spyOn(fs, 'copy').mockImplementation(() => Promise.resolve());
   });
 
-  describe('bootstrap()', () => {
-    it('bootstraps pipeline in order', async () => {
-      const resSpy = jest.spyOn(routine, 'resolveDependencies');
-      const confSpy = jest.spyOn(routine, 'setupConfigFiles');
-
-      await routine.bootstrap();
-
-      expect(resSpy).toHaveBeenCalled();
-      expect(confSpy).toHaveBeenCalled();
-    });
+  afterEach(() => {
+    writeSpy.mockRestore();
+    copySpy.mockRestore();
   });
 
   describe('execute()', () => {
-    beforeEach(() => {
-      jest.spyOn(routine, 'serializeRoutines').mockImplementation();
-      jest.spyOn(routine, 'parallelizeRoutines').mockImplementation();
-    });
-
     it('serializes if `parallel` config is false', async () => {
-      routine.tool.config.configure.parallel = false;
+      const spy = jest.spyOn(routine, 'createConcurrentPipeline');
 
-      await routine.execute();
+      tool.config.configure.parallel = false;
 
-      expect(routine.serializeRoutines).toHaveBeenCalled();
-      expect(routine.parallelizeRoutines).not.toHaveBeenCalled();
+      const result = await routine.execute(context);
+
+      expect(spy).not.toHaveBeenCalled();
+      expect(result).toHaveLength(1);
     });
 
     it('parallelizes if `parallel` config is true', async () => {
-      await routine.execute();
+      const spy = jest.spyOn(routine, 'createConcurrentPipeline');
 
-      expect(routine.serializeRoutines).not.toHaveBeenCalled();
-      expect(routine.parallelizeRoutines).toHaveBeenCalled();
+      const result = await routine.execute(context);
+
+      expect(spy).toHaveBeenCalled();
+      expect(result).toHaveLength(1);
     });
   });
 
@@ -67,39 +70,37 @@ describe('ResolveConfigsRoutine', () => {
       const bar = mockDriver('bar', tool);
       const baz = mockDriver('baz', tool);
 
-      expect(routine.routines).toHaveLength(0);
+      context.drivers = new Set([foo, bar, baz]);
 
-      routine.context.drivers = new Set([foo, bar, baz]);
+      const routines = await routine.setupConfigFiles(context);
 
-      await routine.setupConfigFiles();
+      expect(routines).toHaveLength(3);
 
-      expect(routine.routines).toHaveLength(3);
-
-      expect(routine.routines[0].key).toBe('baz');
+      expect(routines[0].key).toBe('baz');
       // @ts-ignore
-      expect(routine.routines[0].options.driver).toBe(baz);
-      expect(routine.routines[1].key).toBe('bar');
+      expect(routines[0].options.driver).toBe(baz);
+      expect(routines[1].key).toBe('bar');
       // @ts-ignore
-      expect(routine.routines[1].options.driver).toBe(bar);
-      expect(routine.routines[2].key).toBe('foo');
+      expect(routines[1].options.driver).toBe(bar);
+      expect(routines[2].key).toBe('foo');
       // @ts-ignore
-      expect(routine.routines[2].options.driver).toBe(foo);
+      expect(routines[2].options.driver).toBe(foo);
     });
   });
 
   describe('resolveDependencies()', () => {
     it('adds primary driver when no dependencies', async () => {
-      await routine.resolveDependencies();
+      await routine.resolveDependencies(context);
 
-      expect(Array.from(routine.context.drivers)).toEqual([driver]);
+      expect(Array.from(context.drivers)).toEqual([driver]);
     });
 
     it('adds dependency to driver list', async () => {
       driver.metadata.dependencies = ['bar'];
 
-      await routine.resolveDependencies();
+      await routine.resolveDependencies(context);
 
-      expect(Array.from(routine.context.drivers)).toEqual([driver, mockDriver('bar', tool)]);
+      expect(Array.from(context.drivers)).toEqual([driver, mockDriver('bar', tool)]);
     });
 
     it('handles sub-dependencies', async () => {
@@ -110,9 +111,9 @@ describe('ResolveConfigsRoutine', () => {
 
       driver.metadata.dependencies = ['bar'];
 
-      await routine.resolveDependencies();
+      await routine.resolveDependencies(context);
 
-      expect(Array.from(routine.context.drivers)).toEqual([
+      expect(Array.from(context.drivers)).toEqual([
         driver,
         plugins.bar,
         plugins.baz,
@@ -124,13 +125,13 @@ describe('ResolveConfigsRoutine', () => {
     it('emits `onResolveDependencies` event', async () => {
       const spy = jest.fn();
 
-      routine.tool.onResolveDependencies.listen(spy);
+      tool.onResolveDependencies.listen(spy);
 
       driver.metadata.dependencies = ['bar'];
 
-      await routine.resolveDependencies();
+      await routine.resolveDependencies(context);
 
-      expect(spy).toHaveBeenCalledWith(routine.context, Array.from(routine.context.drivers));
+      expect(spy).toHaveBeenCalledWith(context, Array.from(context.drivers));
     });
   });
 });

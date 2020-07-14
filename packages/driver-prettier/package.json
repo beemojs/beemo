@@ -33,7 +33,7 @@
     "prettier": "^1.0.0 || ^2.0.0"
   },
   "dependencies": {
-    "@boost/event": "^2.0.0",
+    "@boost/event": "^2.1.0",
     "@types/prettier": "*"
   }
 }

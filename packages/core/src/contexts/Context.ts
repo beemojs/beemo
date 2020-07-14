@@ -56,9 +56,9 @@ export default class Context<
 
   /**
    * Add an option argument to both the args object and argv list.
+   * If the option is not supported, it will be added to the unknown options object.
    */
   addOption(arg: string, defaultValue: PrimitiveType = true, useEquals: boolean = false): this {
-    const list = [];
     let option = arg;
     let value = defaultValue;
 
@@ -74,19 +74,22 @@ export default class Context<
       value = false;
     }
 
-    // TODO
-    // @ts-ignore
-    this.args.options[camelCase(name) as keyof O] = value;
+    const optName = camelCase(name);
 
-    if (typeof value === 'boolean' || !value) {
-      list.push(option);
-    } else if (useEquals) {
-      list.push(`${option}=${value}`);
+    if (optName in this.args.options) {
+      // @ts-ignore Allow this
+      this.args.options[optName] = value;
     } else {
-      list.push(option, String(value));
+      this.args.unknown[optName] = String(value);
     }
 
-    this.argv.push(...list);
+    if (typeof value === 'boolean' || !value) {
+      this.argv.push(option);
+    } else if (useEquals) {
+      this.argv.push(`${option}=${value}`);
+    } else {
+      this.argv.push(option, String(value));
+    }
 
     return this;
   }

@@ -1,10 +1,11 @@
 import fs from 'fs-extra';
 import chalk from 'chalk';
 import execa from 'execa';
-import { Path } from '@boost/common';
-import { Task, SignalError, ExitError } from '@boost/core';
+import { ExitError, Path } from '@boost/common';
 import Driver from '../../../src/Driver';
+import Tool from '../../../src/Tool';
 import ExecuteCommandRoutine from '../../../src/routines/driver/ExecuteCommandRoutine';
+import DriverContext from '../../../src/contexts/DriverContext';
 import {
   mockTool,
   stubDriverContext,
@@ -12,54 +13,14 @@ import {
   prependRoot,
   getRoot,
   mockDriver,
-} from '../../../src/testUtils';
+} from '../../../src/testing';
 import { StdioType } from '../../../src/types';
-import DriverContext from '../../../lib/contexts/DriverContext';
-
-const BABEL_HELP = `
-Usage: babel [options] <files ...>
-
-
-Options:
-
-  -f, --filename [filename]            filename to use when reading from stdin - this will be used in source-maps, errors etc
-  --retain-lines                       retain line numbers - will result in really ugly code
-  --no-highlight-code                  enable/disable ANSI syntax highlighting of code frames (on by default) (default: true)
-  --presets [list]
-  --plugins [list]
-  --ignore [list]                      list of glob paths to **not** compile
-  --only [list]                        list of glob paths to **only** compile
-  --no-comments                        write comments to generated output (true by default) (default: true)
-  --compact [booleanString]            do not include superfluous whitespace characters and line terminators [true|false|auto]
-  --minified                           save as much bytes when printing [true|false]
-  -s, --source-maps [booleanString]    [true|false|inline]
-  --source-map-target [string]         set \`file\` on returned source map
-  --source-file-name [string]          set \`sources[0]\` on returned source map
-  --source-root [filename]             the root from which all sources are relative
-  --no-babelrc                         Whether or not to look up .babelrc and .babelignore files (default: true)
-  --source-type [string]
-  --auxiliary-comment-before [string]  print a comment before any injected non-user code
-  --auxiliary-comment-after [string]   print a comment after any injected non-user code
-  --module-root [filename]             optional prefix for the AMD module formatter that will be prepend to the filename on module definitions
-  -M, --module-ids                     insert an explicit id for modules
-  --module-id [string]                 specify a custom name for module ids
-  --parser-opts [string]               Options to pass into the parser, or to change parsers (parserOpts.parser)
-  --generator-opts [string]            Options to pass into the generator, or to change generators (generatorOpts.generator)
-  -x, --extensions [extensions]        List of extensions to compile when a directory has been input [.es6,.js,.es,.jsx]
-  -w, --watch                          Recompile files on changes
-  --skip-initial-build                 Do not compile files before watching
-  -o, --out-file [out]                 Compile all input files into a single file
-  -d, --out-dir [out]                  Compile an input directory of modules into an output directory
-  -D, --copy-files                     When compiling a directory copy over non-compilable files
-  -q, --quiet                          Don't log anything
-  -V, --version                        output the version number
-  -h, --help                           output usage information
-`;
 
 describe('ExecuteCommandRoutine', () => {
   let routine: ExecuteCommandRoutine;
+  let context: DriverContext;
   let driver: Driver;
-  let tool;
+  let tool: Tool;
 
   beforeEach(() => {
     tool = mockTool();
@@ -69,15 +30,15 @@ describe('ExecuteCommandRoutine', () => {
       args: ['--qux'],
       env: { DEV: 'true' },
     });
-    driver.bootstrap();
+
+    context = stubDriverContext(driver);
 
     routine = new ExecuteCommandRoutine('babel', 'Run babel', {
       argv: ['-a', '--foo', 'bar', 'baz'],
+      tool,
     });
-    routine.tool = tool;
-    routine.context = stubDriverContext(driver);
+    // @ts-ignore
     routine.debug = mockDebugger();
-    routine.bootstrap();
   });
 
   describe('constructor()', () => {
@@ -101,8 +62,7 @@ describe('ExecuteCommandRoutine', () => {
   });
 
   describe('captureOutput()', () => {
-    const oldWrite = process.stdout.write;
-    let writeSpy: jest.Mock;
+    let writeSpy: jest.SpyInstance;
     let stream: execa.ExecaChildProcess;
 
     class MockStream {
@@ -132,54 +92,52 @@ describe('ExecuteCommandRoutine', () => {
         // @ts-ignore
         stderr: new MockStream(),
       };
-      writeSpy = jest.fn();
-      process.stdout.write = writeSpy;
+      writeSpy = jest.spyOn(process.stdout, 'write');
     });
 
     afterEach(() => {
-      process.stdout.write = oldWrite;
+      writeSpy.mockRestore();
     });
 
     describe('watch', () => {
       it('enables if args option matches watch option', () => {
         driver.metadata.watchOptions = ['--watch'];
-        routine.context.args.watch = true;
+        context.args.unknown.watch = 'true';
 
-        expect(routine.captureOutput(stream)).toBe('watch');
+        expect(routine.captureOutput(context, stream)).toBe('watch');
       });
 
       it('enables if args option matches short watch option', () => {
         driver.metadata.watchOptions = ['-w'];
-        routine.context.args.w = true;
+        context.args.unknown.w = 'true';
 
-        expect(routine.captureOutput(stream)).toBe('watch');
+        expect(routine.captureOutput(context, stream)).toBe('watch');
       });
 
       it('enables if positional args includes watch option', () => {
         driver.metadata.watchOptions = ['watch'];
-        routine.context.args._ = ['watch'];
+        context.args.params = ['watch'];
 
-        expect(routine.captureOutput(stream)).toBe('watch');
+        expect(routine.captureOutput(context, stream)).toBe('watch');
       });
 
       it('disables if args option doesnt match watch option', () => {
         driver.metadata.watchOptions = ['--watch'];
 
-        expect(routine.captureOutput(stream)).toBe('buffer');
+        expect(routine.captureOutput(context, stream)).toBe('buffer');
       });
 
       it('disables if positional args doesnt include watch option', () => {
         driver.metadata.watchOptions = ['--watch'];
-        routine.context.args._ = ['--notWatch'];
+        context.args.params = ['--notWatch'];
 
-        expect(routine.captureOutput(stream)).toBe('buffer');
+        expect(routine.captureOutput(context, stream)).toBe('buffer');
       });
 
       it('disables if args option is falsy', () => {
         driver.metadata.watchOptions = ['--watch'];
-        routine.context.args.watch = false;
 
-        expect(routine.captureOutput(stream)).toBe('buffer');
+        expect(routine.captureOutput(context, stream)).toBe('buffer');
       });
 
       it('pipes a batch stream when enabled', () => {
@@ -187,9 +145,9 @@ describe('ExecuteCommandRoutine', () => {
         const errSpy = jest.spyOn(stream.stderr!, 'pipe');
 
         driver.metadata.watchOptions = ['--watch'];
-        routine.context.args.watch = true;
+        context.args.unknown.watch = 'true';
 
-        routine.captureOutput(stream);
+        routine.captureOutput(context, stream);
 
         expect(outSpy).toHaveBeenCalled();
         expect(errSpy).toHaveBeenCalled();
@@ -200,9 +158,9 @@ describe('ExecuteCommandRoutine', () => {
         const errSpy = jest.spyOn(stream.stderr!, 'on');
 
         driver.metadata.watchOptions = ['--watch'];
-        routine.context.args.watch = true;
+        context.args.unknown.watch = 'true';
 
-        routine.captureOutput(stream);
+        routine.captureOutput(context, stream);
 
         expect(outSpy).toHaveBeenCalledWith('data', expect.anything());
         expect(errSpy).toHaveBeenCalledWith('data', expect.anything());
@@ -210,9 +168,9 @@ describe('ExecuteCommandRoutine', () => {
 
       it('writes chunk to `process.stdout`', () => {
         driver.metadata.watchOptions = ['--watch'];
-        routine.context.args.watch = true;
+        context.args.unknown.watch = 'true';
 
-        routine.captureOutput(stream);
+        routine.captureOutput(context, stream);
 
         stream.stdout!.emit('data');
 
@@ -223,18 +181,18 @@ describe('ExecuteCommandRoutine', () => {
     ['stream', 'inherit'].forEach((stdio) => {
       describe(`${stdio}`, () => {
         beforeEach(() => {
-          routine.context.args.stdio = stdio as StdioType;
+          context.args.options.stdio = stdio as StdioType;
         });
 
         it('enables if `stdio` option is set', () => {
-          expect(routine.captureOutput(stream)).toBe(stdio);
+          expect(routine.captureOutput(context, stream)).toBe(stdio);
         });
 
         it('doesnt pipe a batch stream when using `stdio`', () => {
           const outSpy = jest.spyOn(stream.stdout!, 'pipe');
           const errSpy = jest.spyOn(stream.stderr!, 'pipe');
 
-          routine.captureOutput(stream);
+          routine.captureOutput(context, stream);
 
           expect(outSpy).not.toHaveBeenCalled();
           expect(errSpy).not.toHaveBeenCalled();
@@ -244,14 +202,14 @@ describe('ExecuteCommandRoutine', () => {
           const outSpy = jest.spyOn(stream.stdout!, 'on');
           const errSpy = jest.spyOn(stream.stderr!, 'on');
 
-          routine.captureOutput(stream);
+          routine.captureOutput(context, stream);
 
           expect(outSpy).toHaveBeenCalledWith('data', expect.anything());
           expect(errSpy).toHaveBeenCalledWith('data', expect.anything());
         });
 
         it('writes chunk to `process.stdout`', () => {
-          routine.captureOutput(stream);
+          routine.captureOutput(context, stream);
 
           stream.stdout!.emit('data');
 
@@ -262,67 +220,27 @@ describe('ExecuteCommandRoutine', () => {
 
     describe('buffer', () => {
       beforeEach(() => {
-        routine.context.args.stdio = 'buffer';
+        context.args.options.stdio = 'buffer';
       });
 
       it('defaults to buffer if no `stdio` option or not watching', () => {
-        expect(routine.captureOutput(stream)).toBe('buffer');
+        expect(routine.captureOutput(context, stream)).toBe('buffer');
       });
 
       it('registers a data handler when buffering', () => {
         const outSpy = jest.spyOn(stream.stdout!, 'on');
         const errSpy = jest.spyOn(stream.stderr!, 'on');
 
-        routine.captureOutput(stream);
+        routine.captureOutput(context, stream);
 
         expect(outSpy).toHaveBeenCalledWith('data', expect.anything());
         expect(errSpy).toHaveBeenCalledWith('data', expect.anything());
-      });
-
-      it('writes buffered chunk to `process.stdout` when a signal error occurs', () => {
-        routine.captureOutput(stream);
-
-        stream.stdout!.emit('data');
-        stream.stdout!.emit('data');
-        stream.stdout!.emit('data');
-
-        routine.tool.console.onError.emit([new SignalError('Error', 'SIGINT')]);
-
-        expect(writeSpy).toHaveBeenCalledWith('\n\nbufferedbufferedbuffered');
-      });
-
-      it('doesnt write buffered chunk if a non-supported signal error occurs', () => {
-        routine.captureOutput(stream);
-
-        stream.stdout!.emit('data');
-        stream.stdout!.emit('data');
-        stream.stdout!.emit('data');
-
-        routine.tool.console.onError.emit([new SignalError('Error', 'SIGABRT')]);
-
-        expect(writeSpy).not.toHaveBeenCalled();
-      });
-
-      it('doesnt write buffered chunk if a non-signal error occurs', () => {
-        routine.captureOutput(stream);
-
-        stream.stdout!.emit('data');
-        stream.stdout!.emit('data');
-        stream.stdout!.emit('data');
-
-        routine.tool.console.onError.emit([new Error('Error')]);
-
-        expect(writeSpy).not.toHaveBeenCalled();
       });
     });
   });
 
   describe('execute()', () => {
     beforeEach(() => {
-      jest
-        .spyOn(routine, 'executeCommand')
-        .mockImplementation(() => Promise.resolve({ stdout: BABEL_HELP } as $FixMe));
-
       driver.metadata.filterOptions = true;
     });
 
@@ -335,33 +253,32 @@ describe('ExecuteCommandRoutine', () => {
       const optSpy = jest.spyOn(routine, 'includeConfigOption');
       const runSpy = jest.spyOn(routine, 'runCommandWithArgs');
 
-      routine.bootstrap();
+      const response = await routine.execute(context);
 
-      const response = await routine.execute(routine.context, null);
-
-      expect(argSpy).toHaveBeenCalledWith(routine.context, expect.anything(), expect.anything());
+      expect(argSpy).toHaveBeenCalledWith(context, undefined, expect.anything());
       expect(globSpy).toHaveBeenCalledWith(
-        routine.context,
+        context,
         ['--qux', '-a', '--foo', 'bar', 'baz', '--out-dir', './lib'],
         expect.anything(),
       );
       expect(filterSpy).toHaveBeenCalledWith(
-        routine.context,
+        context,
         ['--qux', '-a', '--foo', 'bar', 'baz', '--out-dir', './lib'],
         expect.anything(),
       );
       expect(optSpy).not.toHaveBeenCalled();
       expect(runSpy).toHaveBeenCalledWith(
-        routine.context,
+        context,
         ['baz', '--out-dir', './lib'],
         expect.anything(),
       );
-      expect(response).toEqual({ stdout: BABEL_HELP });
+      expect(response).toEqual({ stdout: '' });
     });
 
     it('includes config option if `useConfigOption` is true', async () => {
       driver.metadata.useConfigOption = true;
-      routine.context.configPaths.push({
+
+      context.configPaths.push({
         driver: 'babel',
         path: prependRoot(driver.metadata.configName),
       });
@@ -369,13 +286,11 @@ describe('ExecuteCommandRoutine', () => {
       const optSpy = jest.spyOn(routine, 'includeConfigOption');
       const runSpy = jest.spyOn(routine, 'runCommandWithArgs');
 
-      routine.bootstrap();
+      await routine.execute(context);
 
-      await routine.execute(routine.context, null);
-
-      expect(optSpy).toHaveBeenCalledWith(routine.context, ['baz'], expect.anything());
+      expect(optSpy).toHaveBeenCalledWith(context, ['baz'], expect.anything());
       expect(runSpy).toHaveBeenCalledWith(
-        routine.context,
+        context,
         ['baz', '--config', prependRoot(driver.metadata.configName).path()],
         expect.anything(),
       );
@@ -386,34 +301,32 @@ describe('ExecuteCommandRoutine', () => {
 
       const filterSpy = jest.spyOn(routine, 'filterUnknownOptions');
 
-      routine.bootstrap();
-
-      await routine.execute(routine.context, null);
+      await routine.execute(context);
 
       expect(filterSpy).not.toHaveBeenCalled();
     });
 
     it('calls `copyConfigToWorkspace` when driver is workspaces enabled', async () => {
       driver.metadata.workspaceStrategy = 'copy';
-      routine.options.packageRoot = '/some/root';
+      routine.configure({
+        packageRoot: '/some/root',
+      });
 
       const copySpy = jest.spyOn(routine, 'copyConfigToWorkspacePackage');
 
-      routine.bootstrap();
+      await routine.execute(context);
 
-      await routine.execute(routine.context, null);
-
-      expect(copySpy).toHaveBeenCalledWith(routine.context, ['baz'], expect.anything());
+      expect(copySpy).toHaveBeenCalledWith(context, ['baz'], expect.anything());
     });
 
     it('doesnt call `copyConfigToWorkspace` when driver is not workspaces enabled', async () => {
-      routine.options.packageRoot = '/some/root';
+      routine.configure({
+        packageRoot: '/some/root',
+      });
 
       const copySpy = jest.spyOn(routine, 'copyConfigToWorkspacePackage');
 
-      routine.bootstrap();
-
-      await routine.execute(routine.context, null);
+      await routine.execute(context);
 
       expect(copySpy).not.toHaveBeenCalled();
     });
@@ -423,9 +336,7 @@ describe('ExecuteCommandRoutine', () => {
 
       const copySpy = jest.spyOn(routine, 'copyConfigToWorkspacePackage');
 
-      routine.bootstrap();
-
-      await routine.execute(routine.context, null);
+      await routine.execute(context);
 
       expect(copySpy).not.toHaveBeenCalled();
     });
@@ -435,13 +346,16 @@ describe('ExecuteCommandRoutine', () => {
     it('copies each config into workspace root', async () => {
       const copySpy = jest.spyOn(fs, 'copyFileSync').mockImplementation(() => true);
 
-      routine.options.packageRoot = '/some/root';
-      routine.context.configPaths = [
+      routine.configure({
+        packageRoot: '/some/root',
+      });
+
+      context.configPaths = [
         { driver: 'babel', path: new Path('.babelrc') },
         { driver: 'jest', path: new Path('jest.json') },
       ];
 
-      const args = await routine.copyConfigToWorkspacePackage(routine.context, ['foo', '--bar']);
+      const args = await routine.copyConfigToWorkspacePackage(context, ['foo', '--bar']);
 
       expect(args).toEqual(['foo', '--bar']);
       expect(copySpy).toHaveBeenCalledWith('.babelrc', '/some/root/.babelrc');
@@ -453,17 +367,13 @@ describe('ExecuteCommandRoutine', () => {
 
   describe('expandGlobPatterns()', () => {
     it('passes through if no globs', async () => {
-      const args = await routine.expandGlobPatterns(routine.context, ['--foo', 'bar', '-z']);
+      const args = await routine.expandGlobPatterns(context, ['--foo', 'bar', '-z']);
 
       expect(args).toEqual(['--foo', 'bar', '-z']);
     });
 
     it('converts globs to paths', async () => {
-      const args = await routine.expandGlobPatterns(routine.context, [
-        '--foo',
-        '../types/*',
-        'bar',
-      ]);
+      const args = await routine.expandGlobPatterns(context, ['--foo', '../types/*', 'bar']);
 
       // Make testing easier
       args.sort();
@@ -472,7 +382,7 @@ describe('ExecuteCommandRoutine', () => {
     });
 
     it('handles missing paths', async () => {
-      const args = await routine.expandGlobPatterns(routine.context, ['../some-fake-path/*.js']);
+      const args = await routine.expandGlobPatterns(context, ['../some-fake-path/*.js']);
 
       expect(args).toEqual([]);
     });
@@ -480,7 +390,7 @@ describe('ExecuteCommandRoutine', () => {
 
   describe('extractNativeOptions()', () => {
     it('extracts all types of options', async () => {
-      const options = await routine.extractNativeOptions();
+      const options = await routine.extractNativeOptions(context);
 
       expect(options).toEqual(
         expect.objectContaining({
@@ -497,7 +407,7 @@ describe('ExecuteCommandRoutine', () => {
 
       const spy = jest.spyOn(routine, 'executeCommand');
 
-      await routine.extractNativeOptions();
+      await routine.extractNativeOptions(context);
 
       expect(spy).toHaveBeenCalledWith('babel', ['--help', '--all'], { env: { DEV: 'true' } });
     });
@@ -505,9 +415,9 @@ describe('ExecuteCommandRoutine', () => {
     it('supports uppercased options', async () => {
       driver.getSupportedOptions = () => ['-u', '--all', '--changedFiles', '--watch-only'];
 
-      routine.context.primaryDriver = driver;
+      context.primaryDriver = driver;
 
-      const options = await routine.extractNativeOptions();
+      const options = await routine.extractNativeOptions(context);
 
       expect(options).toEqual(
         expect.objectContaining({
@@ -521,14 +431,8 @@ describe('ExecuteCommandRoutine', () => {
   });
 
   describe('filterUnknownOptions()', () => {
-    beforeEach(() => {
-      jest
-        .spyOn(routine, 'executeCommand')
-        .mockImplementation(() => Promise.resolve({ stdout: BABEL_HELP } as $FixMe));
-    });
-
     it('returns supported options', async () => {
-      const args = await routine.filterUnknownOptions(routine.context, [
+      const args = await routine.filterUnknownOptions(context, [
         './src',
         '-o',
         './lib',
@@ -541,7 +445,7 @@ describe('ExecuteCommandRoutine', () => {
     });
 
     it('filters unsupported options', async () => {
-      const args = await routine.filterUnknownOptions(routine.context, [
+      const args = await routine.filterUnknownOptions(context, [
         './src',
         '--foo',
         '-o',
@@ -561,7 +465,7 @@ describe('ExecuteCommandRoutine', () => {
     });
 
     it('skips unsupported option setters', async () => {
-      const args = await routine.filterUnknownOptions(routine.context, [
+      const args = await routine.filterUnknownOptions(context, [
         '--foo',
         '123',
         '--bar=456',
@@ -581,28 +485,32 @@ describe('ExecuteCommandRoutine', () => {
 
   describe('gatherArgs()', () => {
     it('merges driver and command line args', async () => {
-      const args = await routine.gatherArgs(routine.context);
+      const args = await routine.gatherArgs(context);
 
       expect(args).toEqual(['--qux', '-a', '--foo', 'bar', 'baz']);
     });
 
-    it('rebuilds context yargs', async () => {
-      expect(routine.context.args).toEqual(
+    it('rebuilds context args object', async () => {
+      expect(context.args).toEqual(
         expect.objectContaining({
-          _: ['baz'],
-          a: true,
-          foo: 'bar',
+          params: ['baz'],
+          options: {
+            a: true,
+            foo: 'bar',
+          },
         }),
       );
 
-      await routine.gatherArgs(routine.context);
+      await routine.gatherArgs(context);
 
-      expect(routine.context.args).toEqual(
+      expect(context.args).toEqual(
         expect.objectContaining({
-          _: ['baz'],
-          a: true,
-          foo: 'bar',
-          qux: true,
+          params: ['baz'],
+          options: {
+            a: true,
+            foo: 'bar',
+            qux: true,
+          },
         }),
       );
     });
@@ -610,25 +518,25 @@ describe('ExecuteCommandRoutine', () => {
 
   describe('includeConfigOption()', () => {
     it('does nothing if a config path doesnt match', async () => {
-      const args = await routine.includeConfigOption(routine.context, ['--foo']);
+      const args = await routine.includeConfigOption(context, ['--foo']);
 
       expect(args).toEqual(['--foo']);
     });
 
     it('appends config path for a match', async () => {
-      routine.context.configPaths.push({
+      context.configPaths.push({
         driver: 'babel',
         path: prependRoot(driver.metadata.configName),
       });
 
-      const args = await routine.includeConfigOption(routine.context, ['--foo']);
+      const args = await routine.includeConfigOption(context, ['--foo']);
 
       expect(args).toEqual(['--foo', '--config', prependRoot(driver.metadata.configName).path()]);
     });
   });
 
   describe('runCommandWithArgs()', () => {
-    const task = new Task<DriverContext>('Task', () => {});
+    const task = expect.anything(); // new Task<DriverContext>('Task', () => {});
 
     beforeEach(() => {
       jest
@@ -639,18 +547,18 @@ describe('ExecuteCommandRoutine', () => {
     });
 
     it('executes command with correct args', async () => {
-      await routine.runCommandWithArgs(routine.context, ['--wtf'], task);
+      await routine.runCommandWithArgs(context, ['--wtf'], task);
 
       expect(routine.executeCommand).toHaveBeenCalledWith('babel', ['--wtf'], {
         cwd: getRoot().path(),
         env: { DEV: 'true' },
-        task,
-        wrap: routine.captureOutput,
+        workUnit: task,
+        wrap: expect.any(Function),
       });
     });
 
     it('handles success using driver', async () => {
-      const response = await routine.runCommandWithArgs(routine.context, ['--wtf'], task);
+      const response = await routine.runCommandWithArgs(context, ['--wtf'], task);
 
       expect(response).toEqual({ success: true });
       expect(driver.processSuccess).toHaveBeenCalledWith({ success: true });
@@ -662,7 +570,7 @@ describe('ExecuteCommandRoutine', () => {
       );
 
       try {
-        await routine.runCommandWithArgs(routine.context, ['--wtf'], task);
+        await routine.runCommandWithArgs(context, ['--wtf'], task);
       } catch (error) {
         expect(driver.processFailure).toHaveBeenCalledWith(error);
       }
@@ -678,7 +586,7 @@ describe('ExecuteCommandRoutine', () => {
       });
 
       try {
-        await routine.runCommandWithArgs(routine.context, ['--wtf'], task);
+        await routine.runCommandWithArgs(context, ['--wtf'], task);
       } catch (error) {
         expect(error).toBeInstanceOf(ExitError);
         expect(error.code).toBe(3);
@@ -692,7 +600,7 @@ describe('ExecuteCommandRoutine', () => {
       );
 
       try {
-        await routine.runCommandWithArgs(routine.context, ['--wtf'], task);
+        await routine.runCommandWithArgs(context, ['--wtf'], task);
       } catch (error) {
         expect(error).toEqual(new ExitError('Out of memory!', 1));
       }
@@ -705,7 +613,7 @@ describe('ExecuteCommandRoutine', () => {
       (routine.executeCommand as jest.Mock).mockImplementation(() => Promise.reject(error));
 
       try {
-        await routine.runCommandWithArgs(routine.context, ['--wtf'], task);
+        await routine.runCommandWithArgs(context, ['--wtf'], task);
       } catch {
         expect(driver.processFailure).not.toHaveBeenCalled();
       }
@@ -716,9 +624,9 @@ describe('ExecuteCommandRoutine', () => {
 
       driver.onBeforeExecute.listen(spy);
 
-      await routine.runCommandWithArgs(routine.context, ['--wtf'], task);
+      await routine.runCommandWithArgs(context, ['--wtf'], task);
 
-      expect(spy).toHaveBeenCalledWith(routine.context, ['--wtf']);
+      expect(spy).toHaveBeenCalledWith(context, ['--wtf']);
     });
 
     it('emits `onAfterExecute` event on success', async () => {
@@ -726,9 +634,9 @@ describe('ExecuteCommandRoutine', () => {
 
       driver.onAfterExecute.listen(spy);
 
-      await routine.runCommandWithArgs(routine.context, ['--wtf'], task);
+      await routine.runCommandWithArgs(context, ['--wtf'], task);
 
-      expect(spy).toHaveBeenCalledWith(routine.context, { success: true });
+      expect(spy).toHaveBeenCalledWith(context, { success: true });
     });
 
     it('emits `onFailedExecute` event on failure', async () => {
@@ -741,9 +649,9 @@ describe('ExecuteCommandRoutine', () => {
       );
 
       try {
-        await routine.runCommandWithArgs(routine.context, ['--wtf'], task);
+        await routine.runCommandWithArgs(context, ['--wtf'], task);
       } catch (error) {
-        expect(spy).toHaveBeenCalledWith(routine.context, error);
+        expect(spy).toHaveBeenCalledWith(context, error);
       }
     });
   });

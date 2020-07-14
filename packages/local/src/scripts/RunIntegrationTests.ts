@@ -1,5 +1,5 @@
 import { Script, ScriptContext, PackageStructure, Arguments, ParserOptions } from '@beemo/core';
-// import chalk from 'chalk';
+import chalk from 'chalk';
 import fs from 'fs-extra';
 import execa from 'execa';
 
@@ -33,8 +33,7 @@ export default class RunIntegrationTestsScript extends Script<RunIntegrationTest
       );
     }
 
-    // TODO
-    // this.tool.log('Testing %s - %s', chalk.yellow(pkg.name), script);
+    console.log('Testing %s - %s', chalk.yellow(pkg.name), script);
 
     return Promise.all(
       script.split('&&').map((command) => {

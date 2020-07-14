@@ -1,4 +1,4 @@
-import { mockTool } from '@beemo/core/lib/testUtils';
+import { mockTool } from '@beemo/core/lib/testing';
 import MochaDriver from '../src/MochaDriver';
 
 describe('MochaDriver', () => {

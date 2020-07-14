@@ -1,5 +1,5 @@
 import Driver from '../src/Driver';
-import { mockDriver } from '../src/testUtils';
+import { mockDriver } from '../src/testing';
 
 describe('Driver', () => {
   let driver: Driver;
@@ -214,12 +214,14 @@ describe('Driver', () => {
       driver.setCommandOptions({
         foo: {
           description: 'Foo',
+          type: 'string',
         },
       });
 
       expect(driver.command).toEqual({
         foo: {
           description: 'Foo',
+          type: 'string',
         },
       });
     });
@@ -240,6 +242,7 @@ describe('Driver', () => {
         driver.setCommandOptions({
           foo: {
             description: '',
+            type: 'string',
           },
         });
       }).toThrowErrorMatchingSnapshot();
@@ -248,6 +251,7 @@ describe('Driver', () => {
     it('requires a description', () => {
       expect(() => {
         driver.setCommandOptions({
+          // @ts-ignore
           foo: {},
         });
       }).toThrowErrorMatchingSnapshot();
