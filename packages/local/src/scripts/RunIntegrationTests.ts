@@ -1,48 +1,40 @@
-import { Script, ScriptContext } from '@beemo/core';
-import { PackageConfig } from '@boost/core';
-import chalk from 'chalk';
+import { Script, ScriptContext, PackageStructure, Arguments, ParserOptions } from '@beemo/core';
+// import chalk from 'chalk';
 import fs from 'fs-extra';
 import execa from 'execa';
 
-export interface Args {
-  fail: boolean;
-  pass: boolean;
+export interface RunIntegrationTestsOptions {
+  type: 'fail' | 'pass';
 }
 
-export default class RunIntegrationTestsScript extends Script<Args> {
-  args() {
+export default class RunIntegrationTestsScript extends Script<RunIntegrationTestsOptions> {
+  parse(): ParserOptions<RunIntegrationTestsOptions> {
     return {
-      boolean: ['pass', 'fail'],
-      default: {
-        fail: false,
-        pass: false,
+      options: {
+        type: {
+          choices: ['pass', 'fail'] as 'pass'[],
+          default: 'pass',
+          description: 'Type of integration to run',
+          type: 'string',
+        },
       },
     };
   }
 
-  blueprint() {
-    return {};
-  }
-
-  execute(context: ScriptContext, args: Args) {
-    // eslint-disable-next-line no-nested-ternary
-    const key = args.pass ? 'pass' : args.fail ? 'fail' : '';
-
-    if (!key) {
-      throw new Error('Please pass one of --fail or --pass.');
-    }
-
-    const pkg: PackageConfig = fs.readJsonSync(context.cwd.append('package.json').path());
+  execute(context: ScriptContext, args: Arguments<RunIntegrationTestsOptions>) {
+    const { type } = args.options;
+    const pkg: PackageStructure = fs.readJsonSync(context.cwd.append('package.json').path());
     const name = pkg.name.split('/')[1];
-    const script = pkg.scripts && pkg.scripts[`integration:${key}`];
+    const script = pkg.scripts && pkg.scripts[`integration:${type}`];
 
     if (!script) {
       return Promise.reject(
-        new Error(`Script "integration:${key}" has not been defined for ${name}.`),
+        new Error(`Script "integration:${type}" has not been defined for ${name}.`),
       );
     }
 
-    this.tool.log('Testing %s - %s', chalk.yellow(pkg.name), script);
+    // TODO
+    // this.tool.log('Testing %s - %s', chalk.yellow(pkg.name), script);
 
     return Promise.all(
       script.split('&&').map((command) => {
@@ -51,24 +43,28 @@ export default class RunIntegrationTestsScript extends Script<Args> {
         return (
           execa(cmd, cmdArgs, { cwd: context.cwd.path(), preferLocal: true })
             // Handles everything else
-            .then((response) => this.handleResult(name, args, response))
+            .then((response) => this.handleResult(name, type, response))
             // Handles syntax errors
-            .catch((error) => this.handleResult(name, args, error))
+            .catch((error) => this.handleResult(name, type, error))
         );
       }),
     );
   }
 
-  handleResult(name: string, options: Args, response: execa.ExecaReturnValue) {
+  handleResult(
+    name: string,
+    type: RunIntegrationTestsOptions['type'],
+    response: execa.ExecaReturnValue,
+  ) {
     const output = response.stdout || response.stderr;
 
     // console.log(name.toUpperCase());
     // console.log(response);
 
-    if (options.fail && !response.failed) {
-      throw new Error(`${name} should of failed when running --fail.\n\n${output}`);
-    } else if (options.pass && response.failed) {
-      throw new Error(`${name} should of passed when running --pass.\n\n${output}`);
+    if (type === 'fail' && !response.failed) {
+      throw new Error(`${name} should of failed when running --type=fail.\n\n${output}`);
+    } else if (type === 'pass' && response.failed) {
+      throw new Error(`${name} should of passed when running --type=pass.\n\n${output}`);
     }
 
     return response;

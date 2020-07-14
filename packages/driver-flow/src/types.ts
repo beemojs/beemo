@@ -100,5 +100,3 @@ export interface FlowArgs {
   unicode?: ToggleSetting;
   version?: boolean;
 }
-
-export type FlowDriverArgs = FlowArgs;

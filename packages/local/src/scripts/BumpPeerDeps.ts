@@ -1,50 +1,51 @@
-import { Script, ScriptContext } from '@beemo/core';
-import { PackageConfig } from '@boost/core';
-import chalk from 'chalk';
+import { Script, ScriptContext, PackageStructure, ParserOptions, Arguments } from '@beemo/core';
+// import chalk from 'chalk';
 import fs from 'fs-extra';
 import glob from 'fast-glob';
 import semver from 'semver';
 
-export interface Args {
+export interface BumpPeerDepsOptions {
   release: 'major' | 'minor' | 'patch';
 }
 
-const RELEASE_TYPES: Args['release'][] = ['major', 'minor', 'patch'];
+const RELEASE_TYPES: BumpPeerDepsOptions['release'][] = ['major', 'minor', 'patch'];
 
-export default class BumpPeerDepsScript extends Script<Args> {
-  args() {
+export default class BumpPeerDepsScript extends Script<BumpPeerDepsOptions> {
+  parse(): ParserOptions<BumpPeerDepsOptions> {
     return {
-      default: {
-        release: 'minor',
+      options: {
+        release: {
+          default: 'minor',
+          description: 'Release type',
+          type: 'string',
+        },
       },
-      string: ['release'],
     };
   }
 
-  blueprint() {
-    return {};
-  }
-
-  execute(context: ScriptContext, args: Args) {
-    const { release } = args;
+  execute(context: ScriptContext, args: Arguments<BumpPeerDepsOptions>) {
+    const { release } = args.options;
 
     if (!RELEASE_TYPES.includes(release)) {
       throw new Error('Please pass one of major, minor, or patch to --release.');
     }
 
-    this.tool.log('Loading packages and incrementing versions');
+    // TODO
+    // this.tool.log('Loading packages and incrementing versions');
 
     const versions: { [name: string]: string } = {};
-    const packages: { [name: string]: PackageConfig } = {};
+    const packages: { [name: string]: PackageStructure } = {};
     const packagePaths: { [name: string]: string } = {};
 
-    glob.sync('./packages/*/package.json', { cwd: this.tool.options.root }).forEach((path) => {
-      const data = fs.readJsonSync(path);
+    glob
+      .sync('./packages/*/package.json', { cwd: this.tool.project.root.path() })
+      .forEach((path) => {
+        const data = fs.readJsonSync(path);
 
-      versions[data.name] = semver.inc(data.version, release)!;
-      packages[data.name] = data;
-      packagePaths[data.name] = path;
-    });
+        versions[data.name] = semver.inc(data.version, release)!;
+        packages[data.name] = data;
+        packagePaths[data.name] = path;
+      });
 
     return Promise.all(
       Object.entries(packages).map(([name, data]) => {
@@ -56,13 +57,14 @@ export default class BumpPeerDepsScript extends Script<Args> {
 
             const nextVersion = `^${versions[peerName]}`;
 
-            this.tool.log(
-              `Bumping %s peer %s from %s to %s`,
-              chalk.yellow(name),
-              chalk.cyan(peerName),
-              chalk.gray(data.peerDependencies![peerName]),
-              chalk.green(nextVersion),
-            );
+            // TODO
+            // this.tool.log(
+            //   `Bumping %s peer %s from %s to %s`,
+            //   chalk.yellow(name),
+            //   chalk.cyan(peerName),
+            //   chalk.gray(data.peerDependencies![peerName]),
+            //   chalk.green(nextVersion),
+            // );
 
             data.peerDependencies![peerName] = nextVersion;
           });
