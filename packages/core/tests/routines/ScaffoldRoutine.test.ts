@@ -1,18 +1,24 @@
 import * as hygen from 'hygen';
 import { Path } from '@boost/common';
+import ScaffoldContext from '../../src/contexts/ScaffoldContext';
 import ScaffoldRoutine from '../../src/routines/ScaffoldRoutine';
-import { mockTool, mockDebugger, stubScaffoldContext } from '../../src/testUtils';
+import Tool from '../../src/Tool';
+import { mockTool, mockDebugger, mockConsole, stubScaffoldContext } from '../../src/testing';
 
 jest.mock('hygen');
 
 describe('ScaffoldRoutine', () => {
+  let tool: Tool;
+  let context: ScaffoldContext;
   let routine: ScaffoldRoutine;
 
   beforeEach(() => {
-    routine = new ScaffoldRoutine('scaffold', 'Scaffolding templates');
-    routine.context = stubScaffoldContext();
-    routine.tool = mockTool();
-    routine.tool.config.module = '@beemo/local';
+    tool = mockTool();
+    tool.config.module = '@beemo/local';
+    context = stubScaffoldContext();
+
+    routine = new ScaffoldRoutine('scaffold', 'Scaffolding templates', { tool });
+    // @ts-ignore
     routine.debug = mockDebugger();
   });
 
@@ -20,7 +26,7 @@ describe('ScaffoldRoutine', () => {
     it('executes command internally', () => {
       const spy = jest.spyOn(routine, 'executeCommand').mockImplementation();
 
-      // @ts-ignore Allow access
+      // @ts-ignore
       routine.handleExec('babel', 'const foo = {};');
 
       expect(spy).toHaveBeenCalledWith('babel', [], {
@@ -31,51 +37,40 @@ describe('ScaffoldRoutine', () => {
   });
 
   describe('handleLog()', () => {
-    it('logs to tool', () => {
-      const spy = jest.spyOn(routine.tool.console, 'log');
+    it('logs to console', () => {
+      const spy = mockConsole('log');
 
-      // @ts-ignore Allow access
+      // @ts-ignore
       routine.handleLog('foo');
 
       expect(spy).toHaveBeenCalledWith('foo');
+
+      spy.mockRestore();
     });
   });
 
   describe('execute()', () => {
-    it('passes module name to tasks', async () => {
-      jest.spyOn(routine, 'serializeTasks').mockImplementation();
-
-      routine.bootstrap();
-
-      await routine.execute(routine.context);
-
-      expect(routine.serializeTasks).toHaveBeenCalledWith('@beemo/local');
-    });
-
     it('executes pipeline in order', async () => {
       const runSpy = jest.spyOn(routine, 'runGenerator');
 
-      routine.bootstrap();
+      await routine.execute(context);
 
-      await routine.execute(routine.context);
-
-      expect(runSpy).toHaveBeenCalledWith(routine.context, '@beemo/local', expect.anything());
+      expect(runSpy).toHaveBeenCalledWith(context, undefined, expect.anything());
     });
   });
 
   describe('runGenerator()', () => {
     it('executes hygen engine', async () => {
-      await routine.runGenerator(routine.context, '@beemo/local');
+      await routine.runGenerator(context);
 
-      expect(hygen.engine).toHaveBeenCalledWith(['-a', '--foo', 'bar', 'baz'], {
-        createPrompter: expect.anything(),
-        cwd: routine.tool.options.root,
-        debug: false,
-        // @ts-ignore Allow access
-        exec: routine.handleExec,
-        logger: expect.anything(),
-        templates: new Path(process.cwd(), 'packages/local/templates').path(),
-      });
+      expect(hygen.engine).toHaveBeenCalledWith(
+        ['-a', '--foo', 'bar', 'baz'],
+        expect.objectContaining({
+          cwd: tool.cwd.path(),
+          debug: false,
+          templates: new Path(process.cwd(), 'packages/local/templates').path(),
+        }),
+      );
     });
 
     it('rethrows error', async () => {
@@ -86,7 +81,7 @@ describe('ScaffoldRoutine', () => {
       });
 
       try {
-        await routine.runGenerator(routine.context, '@beemo/local');
+        await routine.runGenerator(context);
       } catch (error) {
         expect(error).toBe(baseError);
       }
@@ -98,7 +93,7 @@ describe('ScaffoldRoutine', () => {
       });
 
       try {
-        await routine.runGenerator(routine.context, '@beemo/local');
+        await routine.runGenerator(context);
       } catch (error) {
         expect(error).toMatchSnapshot();
       }

@@ -2,7 +2,7 @@ import fs from 'fs';
 import rimraf from 'rimraf';
 import { getFixturePath } from '@boost/test-utils';
 import { DriverContext, Path } from '@beemo/core';
-import { mockTool, stubDriverContext } from '@beemo/core/lib/testUtils';
+import { mockTool, stubDriverContext } from '@beemo/core/lib/testing';
 import TypeScriptDriver from '../src/TypeScriptDriver';
 
 jest.mock('rimraf');
@@ -492,7 +492,7 @@ describe('TypeScriptDriver', () => {
     });
 
     it('doesnt run if no outDir param', () => {
-      context.args.clean = true;
+      context.args.unknown.clean = 'true';
       driver.config.compilerOptions = {};
       // @ts-ignore Allow private access
       driver.handleCleanTarget(context);
@@ -501,7 +501,7 @@ describe('TypeScriptDriver', () => {
     });
 
     it('runs if both params', () => {
-      context.args.clean = true;
+      context.args.unknown.clean = 'true';
       driver.config.compilerOptions = { outDir: './lib' };
       // @ts-ignore Allow private access
       driver.handleCleanTarget(context);
@@ -525,7 +525,7 @@ describe('TypeScriptDriver', () => {
     });
 
     it('prepares configs if --reference-workspaces is passed', () => {
-      context.args.referenceWorkspaces = true;
+      context.args.options.referenceWorkspaces = true;
       context.workspaceRoot = PROJECT_REFS_FIXTURE_PATH;
 
       // @ts-ignore Allow private access
@@ -558,9 +558,9 @@ describe('TypeScriptDriver', () => {
     });
 
     it('errors if --reference-workspaces and --workspaces are passed', () => {
-      context.args.build = true;
-      context.args.referenceWorkspaces = true;
-      context.args.workspaces = '*';
+      context.args.unknown.build = 'true';
+      context.args.options.referenceWorkspaces = true;
+      context.args.options.workspaces = '*';
 
       expect(() => {
         // @ts-ignore Allow private access
@@ -569,7 +569,7 @@ describe('TypeScriptDriver', () => {
     });
 
     it('errors if --build isnt passed with --reference-workspaces', () => {
-      context.args.referenceWorkspaces = true;
+      context.args.options.referenceWorkspaces = true;
 
       expect(() => {
         // @ts-ignore Allow private access
@@ -578,8 +578,8 @@ describe('TypeScriptDriver', () => {
     });
 
     it('creates configs if --reference-workspaces is passed', () => {
-      context.args.build = true;
-      context.args.referenceWorkspaces = true;
+      context.args.unknown.build = 'true';
+      context.args.options.referenceWorkspaces = true;
       context.workspaceRoot = PROJECT_REFS_FIXTURE_PATH;
 
       // @ts-ignore Allow private access
@@ -589,8 +589,8 @@ describe('TypeScriptDriver', () => {
     });
 
     it('works with -b flag', () => {
-      context.args.b = true;
-      context.args.referenceWorkspaces = true;
+      context.args.unknown.b = 'true';
+      context.args.options.referenceWorkspaces = true;
       context.workspaceRoot = PROJECT_REFS_FIXTURE_PATH;
 
       // @ts-ignore Allow private access

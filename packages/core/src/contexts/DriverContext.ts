@@ -5,6 +5,7 @@ import { Arguments, Argv, StdioType } from '../types';
 export interface DriverContextOptions {
   concurrency: number;
   graph: boolean;
+  referenceWorkspaces: boolean;
   stdio: StdioType;
   workspaces: string;
 }

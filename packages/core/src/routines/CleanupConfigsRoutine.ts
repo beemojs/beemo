@@ -1,4 +1,4 @@
-import { Blueprint, Predicates } from '@boost/common';
+import { Bind, Blueprint, Predicates } from '@boost/common';
 import { Routine } from '@boost/pipeline';
 import chalk from 'chalk';
 import fs from 'fs-extra';
@@ -24,6 +24,7 @@ export default class CleanupConfigsRoutine extends Routine<unknown, unknown, Rou
   /**
    * Delete all temporary config files.
    */
+  @Bind()
   async deleteConfigFiles(context: DriverContext): Promise<void> {
     await Promise.all(
       context.configPaths.map((config) => {

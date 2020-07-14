@@ -1,6 +1,6 @@
 import rimraf from 'rimraf';
 import { DriverContext, Path } from '@beemo/core';
-import { mockTool, stubDriverContext } from '@beemo/core/lib/testUtils';
+import { mockTool, stubDriverContext } from '@beemo/core/lib/testing';
 import BabelDriver from '../src/BabelDriver';
 
 jest.mock('rimraf');
@@ -50,7 +50,7 @@ describe('BabelDriver', () => {
 
   describe('handleCleanTarget()', () => {
     it('doesnt run if no clean param', () => {
-      context.args.outDir = './lib';
+      context.args.unknown.outDir = './lib';
 
       driver.onBeforeExecute.emit([context, []]);
 
@@ -58,7 +58,7 @@ describe('BabelDriver', () => {
     });
 
     it('doesnt run if no outDir param', () => {
-      context.args.clean = true;
+      context.args.unknown.clean = 'true';
 
       driver.onBeforeExecute.emit([context, []]);
 
@@ -66,8 +66,8 @@ describe('BabelDriver', () => {
     });
 
     it('runs if both params', () => {
-      context.args.outDir = './lib';
-      context.args.clean = true;
+      context.args.unknown.outDir = './lib';
+      context.args.unknown.clean = 'true';
 
       driver.onBeforeExecute.emit([context, []]);
 

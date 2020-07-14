@@ -1,5 +1,5 @@
 import { Script, ScriptContext, PackageStructure, ParserOptions, Arguments } from '@beemo/core';
-// import chalk from 'chalk';
+import chalk from 'chalk';
 import fs from 'fs-extra';
 import glob from 'fast-glob';
 import semver from 'semver';
@@ -30,8 +30,7 @@ export default class BumpPeerDepsScript extends Script<BumpPeerDepsOptions> {
       throw new Error('Please pass one of major, minor, or patch to --release.');
     }
 
-    // TODO
-    // this.tool.log('Loading packages and incrementing versions');
+    console.log('Loading packages and incrementing versions');
 
     const versions: { [name: string]: string } = {};
     const packages: { [name: string]: PackageStructure } = {};
@@ -57,14 +56,13 @@ export default class BumpPeerDepsScript extends Script<BumpPeerDepsOptions> {
 
             const nextVersion = `^${versions[peerName]}`;
 
-            // TODO
-            // this.tool.log(
-            //   `Bumping %s peer %s from %s to %s`,
-            //   chalk.yellow(name),
-            //   chalk.cyan(peerName),
-            //   chalk.gray(data.peerDependencies![peerName]),
-            //   chalk.green(nextVersion),
-            // );
+            console.log(
+              `Bumping %s peer %s from %s to %s`,
+              chalk.yellow(name),
+              chalk.cyan(peerName),
+              chalk.gray(data.peerDependencies![peerName]),
+              chalk.green(nextVersion),
+            );
 
             data.peerDependencies![peerName] = nextVersion;
           });

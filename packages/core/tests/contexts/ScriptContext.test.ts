@@ -1,5 +1,5 @@
 import ScriptContext from '../../src/contexts/ScriptContext';
-import { mockScript, stubScriptArgs } from '../../src/testUtils';
+import { mockScript, stubScriptArgs } from '../../src/testing';
 
 describe('ScriptContext', () => {
   let context: ScriptContext;
@@ -30,10 +30,9 @@ describe('ScriptContext', () => {
     it('sets script object, name, and path', () => {
       const script = mockScript('foo');
 
-      context.setScript(script, './foo.js');
+      context.setScript(script);
 
       expect(context.script).toBe(script);
-      expect(context.path).toBe('./foo.js');
     });
   });
 });

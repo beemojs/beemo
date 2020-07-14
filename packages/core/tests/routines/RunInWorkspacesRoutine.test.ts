@@ -1,26 +1,52 @@
-import { Routine } from '@boost/core';
+import { Predicates } from '@boost/common';
+import { Routine } from '@boost/pipeline';
+import Tool from '../../src/Tool';
 import Driver from '../../src/Driver';
+import Context from '../../src/contexts/Context';
 import RunInWorkspacesRoutine, {
   RunInWorkspacesContextArgs,
 } from '../../src/routines/RunInWorkspacesRoutine';
-import { mockTool, mockDriver, stubDriverContext, mockDebugger } from '../../src/testUtils';
-import Context from '../../src/contexts/Context';
-import Beemo from '../../src/Beemo';
+import { mockTool, mockDriver, stubDriverContext, mockDebugger } from '../../src/testing';
 
-class PipedRoutine extends Routine<Context<$FixMe>, Beemo> {
+type Ctx = Context<RunInWorkspacesContextArgs>;
+
+class PipedRoutine extends Routine<unknown, unknown, { error?: Error; type?: string }> {
+  blueprint({ instance, string }: Predicates) {
+    return {
+      error: instance(Error).nullable(),
+      type: string(),
+    };
+  }
+
   execute() {
+    const { error } = this.options;
+
+    if (error) {
+      if (this.options.type === 'stderr') {
+        // @ts-ignore
+        error.stderr = 'Stderr message!';
+      } else {
+        // @ts-ignore
+        error.stdout = 'Stdout info...';
+      }
+
+      throw error;
+    }
+
     return Promise.resolve(this.key);
   }
 }
 
-class ExecuteRoutine extends RunInWorkspacesRoutine<Context<$FixMe>> {
-  pipeRoutine(packageName?: string, packageRoot?: string) {
-    this.pipe(new PipedRoutine(packageName || 'root', packageRoot || ''));
+class ExecuteRoutine extends RunInWorkspacesRoutine<Ctx> {
+  pipeRoutine(context: Ctx, packageName?: string, packageRoot?: string) {
+    this.routines.push(new PipedRoutine(packageName || 'root', packageRoot || 'description'));
   }
 }
 
 describe('RunInWorkspacesRoutine', () => {
-  let routine: RunInWorkspacesRoutine<Context<RunInWorkspacesContextArgs>>;
+  let context: Ctx;
+  let tool: Tool;
+  let routine: RunInWorkspacesRoutine<Ctx>;
   let driver: Driver;
   let primary: PipedRoutine;
   let foo: PipedRoutine;
@@ -29,13 +55,12 @@ describe('RunInWorkspacesRoutine', () => {
   let qux: PipedRoutine;
 
   beforeEach(() => {
-    const tool = mockTool();
-
+    tool = mockTool();
+    context = stubDriverContext(driver);
     driver = mockDriver('primary', tool);
 
-    routine = new ExecuteRoutine('driver', 'Executing driver');
-    routine.context = stubDriverContext(driver);
-    routine.tool = tool;
+    routine = new ExecuteRoutine('driver', 'Executing driver', { tool });
+    // @ts-ignore
     routine.debug = mockDebugger();
 
     // Setup packages
@@ -45,210 +70,153 @@ describe('RunInWorkspacesRoutine', () => {
     baz = new PipedRoutine('baz', 'baz');
     qux = new PipedRoutine('qux', 'qux');
 
-    routine.pipe(primary);
-    routine.pipe(foo);
-    routine.pipe(bar);
-    routine.pipe(baz);
-    routine.pipe(qux);
+    routine.routines.push(primary);
+    routine.routines.push(foo);
+    routine.routines.push(bar);
+    routine.routines.push(baz);
+    routine.routines.push(qux);
 
-    routine.workspacePackages = [
+    const packages = [
       {
-        name: '@scope/primary',
-        version: '0.0.0',
-        workspace: tool.createWorkspaceMetadata('./packages/primary/package.json'),
+        package: { name: '@scope/primary', version: '0.0.0' },
+        metadata: tool.project.createWorkspaceMetadata('./packages/primary/package.json'),
       },
       {
-        name: '@scope/foo',
-        version: '0.0.0',
-        workspace: tool.createWorkspaceMetadata('./packages/foo/package.json'),
+        package: { name: '@scope/foo', version: '0.0.0' },
+        metadata: tool.project.createWorkspaceMetadata('./packages/foo/package.json'),
       },
       {
-        name: '@scope/bar',
-        version: '0.0.0',
-        workspace: tool.createWorkspaceMetadata('./packages/bar/package.json'),
+        package: { name: '@scope/bar', version: '0.0.0' },
+        metadata: tool.project.createWorkspaceMetadata('./packages/bar/package.json'),
       },
       {
-        name: '@scope/baz',
-        version: '0.0.0',
-        workspace: tool.createWorkspaceMetadata('./packages/baz/package.json'),
+        package: { name: '@scope/baz', version: '0.0.0' },
+        metadata: tool.project.createWorkspaceMetadata('./packages/baz/package.json'),
       },
       {
-        name: '@scope/qux',
-        version: '0.0.0',
-        workspace: tool.createWorkspaceMetadata('./packages/qux/package.json'),
+        package: { name: '@scope/qux', version: '0.0.0' },
+        metadata: tool.project.createWorkspaceMetadata('./packages/qux/package.json'),
       },
     ];
+
+    routine.workspacePackages = packages;
+    jest.spyOn(tool.project, 'getWorkspacePackages').mockImplementation(() => packages);
   });
 
   describe('execute()', () => {
-    it('pools each routine', async () => {
-      const spy = jest
-        .spyOn(routine, 'poolRoutines')
-        .mockImplementation(() => Promise.resolve({ errors: [], results: [] }));
-
-      await routine.execute(routine.context);
-
-      expect(spy).toHaveBeenCalledWith(undefined, {}, routine.routines);
-    });
-
-    it('passes concurrency to pooler', async () => {
-      const spy = jest
-        .spyOn(routine, 'poolRoutines')
-        .mockImplementation(() => Promise.resolve({ errors: [], results: [] }));
-
-      routine.context.args.concurrency = 2;
-
-      await routine.execute(routine.context);
-
-      expect(spy).toHaveBeenCalledWith(undefined, { concurrency: 2 }, routine.routines);
-    });
-
-    it('passes concurrency option to pooler', async () => {
-      const spy = jest
-        .spyOn(routine, 'poolRoutines')
-        .mockImplementation(() => Promise.resolve({ errors: [], results: [] }));
-
-      routine.tool.config.execute.concurrency = 3;
-
-      await routine.execute(routine.context);
-
-      expect(spy).toHaveBeenCalledWith(undefined, { concurrency: 3 }, routine.routines);
-    });
-
     it('throws an error if any failures', async () => {
-      jest.spyOn(routine, 'poolRoutines').mockImplementation(() => {
-        const a = new Error('Failed');
-        // @ts-ignore
-        a.stdout = 'Stdout info...';
-
-        const b = new Error('Oops');
-        // @ts-ignore
-        b.stderr = 'Stderr message!';
-
-        return Promise.resolve({ errors: [a, b], results: [] });
-      });
+      routine.routines = [
+        new PipedRoutine('out', 'Out', { error: new Error('Failed'), type: 'stdout' }),
+        new PipedRoutine('err', 'Err', { error: new Error('Oops'), type: 'stderr' }),
+      ];
 
       try {
-        await routine.execute(routine.context);
+        await routine.execute(context);
       } catch (error) {
         expect(error).toMatchSnapshot();
       }
     });
 
     it('returns a result for a single routine', async () => {
-      jest
-        .spyOn(routine, 'poolRoutines')
-        .mockImplementation(() => Promise.resolve({ errors: [], results: [123] }));
+      routine.routines = [foo];
 
-      const response = await routine.execute(routine.context);
+      const response = await routine.execute(context);
 
-      expect(response).toEqual(123);
+      expect(response).toEqual('foo');
     });
 
     describe('workspaces', () => {
       beforeEach(() => {
-        routine.context.args.graph = true;
-        routine.context.args.workspaces = '*';
+        context.args.options.graph = true;
+        context.args.options.workspaces = '*';
+        context.workspaces = ['packages/*'];
       });
 
       it('returns an array of results for multiple routines', async () => {
-        const response = await routine.execute(routine.context);
+        const response = await routine.execute(context);
 
         expect((response as string[]).sort()).toEqual(['bar', 'baz', 'foo', 'primary', 'qux']);
       });
 
       it('serializes priority routines before pooling other routines', async () => {
-        const spy = jest
-          .spyOn(routine, 'poolRoutines')
-          .mockImplementation(() => Promise.resolve({ errors: [], results: [] }));
+        const spy = jest.spyOn(routine, 'orderByWorkspacePriorityGraph');
 
         // primary -> foo
-        routine.workspacePackages[0].peerDependencies = {
+        routine.workspacePackages[0].package.peerDependencies = {
           '@scope/foo': '1.0.0',
         };
 
-        await routine.execute(routine.context);
+        await routine.execute(context);
 
-        expect(spy).toHaveBeenCalledWith(undefined, {}, [foo, bar, baz, qux]);
-        expect(spy).toHaveBeenCalledWith(undefined, {}, [primary]);
+        expect(spy).toHaveReturnedWith([[foo, bar, baz, qux], [primary]]);
       });
     });
   });
 
   describe('getFilteredWorkspaces()', () => {
     it('returns none for empty string', () => {
-      routine.context.args.workspaces = '';
+      context.args.options.workspaces = '';
 
-      expect(routine.getFilteredWorkspacePackages()).toEqual([]);
+      expect(routine.getFilteredWorkspacePackages(context)).toEqual([]);
     });
 
     it('returns all for wildcard `*`', () => {
-      routine.context.args.workspaces = '*';
+      context.args.options.workspaces = '*';
 
-      expect(routine.getFilteredWorkspacePackages()).toEqual([
+      expect(routine.getFilteredWorkspacePackages(context)).toEqual([
         {
-          name: '@scope/primary',
-          version: '0.0.0',
-          workspace: routine.tool.createWorkspaceMetadata('./packages/primary/package.json'),
+          package: { name: '@scope/primary', version: '0.0.0' },
+          metadata: tool.project.createWorkspaceMetadata('./packages/primary/package.json'),
         },
         {
-          name: '@scope/foo',
-          version: '0.0.0',
-          workspace: routine.tool.createWorkspaceMetadata('./packages/foo/package.json'),
+          package: { name: '@scope/foo', version: '0.0.0' },
+          metadata: tool.project.createWorkspaceMetadata('./packages/foo/package.json'),
         },
         {
-          name: '@scope/bar',
-          version: '0.0.0',
-          workspace: routine.tool.createWorkspaceMetadata('./packages/bar/package.json'),
+          package: { name: '@scope/bar', version: '0.0.0' },
+          metadata: tool.project.createWorkspaceMetadata('./packages/bar/package.json'),
         },
         {
-          name: '@scope/baz',
-          version: '0.0.0',
-          workspace: routine.tool.createWorkspaceMetadata('./packages/baz/package.json'),
+          package: { name: '@scope/baz', version: '0.0.0' },
+          metadata: tool.project.createWorkspaceMetadata('./packages/baz/package.json'),
         },
         {
-          name: '@scope/qux',
-          version: '0.0.0',
-          workspace: routine.tool.createWorkspaceMetadata('./packages/qux/package.json'),
+          package: { name: '@scope/qux', version: '0.0.0' },
+          metadata: tool.project.createWorkspaceMetadata('./packages/qux/package.json'),
         },
       ]);
     });
 
     it('filters by package name', () => {
-      routine.context.args.workspaces = '@scope/(foo|bar)';
+      context.args.options.workspaces = '@scope/(foo|bar)';
 
-      expect(routine.getFilteredWorkspacePackages()).toEqual([
+      expect(routine.getFilteredWorkspacePackages(context)).toEqual([
         {
-          name: '@scope/foo',
-          version: '0.0.0',
-          workspace: routine.tool.createWorkspaceMetadata('./packages/foo/package.json'),
+          package: { name: '@scope/foo', version: '0.0.0' },
+          metadata: tool.project.createWorkspaceMetadata('./packages/foo/package.json'),
         },
         {
-          name: '@scope/bar',
-          version: '0.0.0',
-          workspace: routine.tool.createWorkspaceMetadata('./packages/bar/package.json'),
+          package: { name: '@scope/bar', version: '0.0.0' },
+          metadata: tool.project.createWorkspaceMetadata('./packages/bar/package.json'),
         },
       ]);
     });
 
     it('filters by negation', () => {
-      routine.context.args.workspaces = '@scope/!(foo|baz)';
+      context.args.options.workspaces = '@scope/!(foo|baz)';
 
-      expect(routine.getFilteredWorkspacePackages()).toEqual([
+      expect(routine.getFilteredWorkspacePackages(context)).toEqual([
         {
-          name: '@scope/primary',
-          version: '0.0.0',
-          workspace: routine.tool.createWorkspaceMetadata('./packages/primary/package.json'),
+          package: { name: '@scope/primary', version: '0.0.0' },
+          metadata: tool.project.createWorkspaceMetadata('./packages/primary/package.json'),
         },
         {
-          name: '@scope/bar',
-          version: '0.0.0',
-          workspace: routine.tool.createWorkspaceMetadata('./packages/bar/package.json'),
+          package: { name: '@scope/bar', version: '0.0.0' },
+          metadata: tool.project.createWorkspaceMetadata('./packages/bar/package.json'),
         },
         {
-          name: '@scope/qux',
-          version: '0.0.0',
-          workspace: routine.tool.createWorkspaceMetadata('./packages/qux/package.json'),
+          package: { name: '@scope/qux', version: '0.0.0' },
+          metadata: tool.project.createWorkspaceMetadata('./packages/qux/package.json'),
         },
       ]);
     });
@@ -256,62 +224,78 @@ describe('RunInWorkspacesRoutine', () => {
 
   describe('orderByWorkspacePriorityGraph()', () => {
     beforeEach(() => {
-      routine.context.args.graph = true;
-      routine.context.args.workspaces = '*';
+      context.args.options.graph = true;
+      context.args.options.workspaces = '*';
     });
 
     it('returns all in single batch if graph is false', () => {
-      routine.context.args.graph = false;
-      routine.tool.config.execute.graph = false;
+      context.args.options.graph = false;
+      tool.config.execute.graph = false;
 
-      expect(routine.orderByWorkspacePriorityGraph()).toEqual([[primary, foo, bar, baz, qux]]);
+      expect(routine.orderByWorkspacePriorityGraph(context)).toEqual([
+        [primary, foo, bar, baz, qux],
+      ]);
     });
 
     it('returns all in single batch if workspaces is empty', () => {
-      routine.context.args.workspaces = '';
+      context.args.options.workspaces = '';
 
-      expect(routine.orderByWorkspacePriorityGraph()).toEqual([[primary, foo, bar, baz, qux]]);
+      expect(routine.orderByWorkspacePriorityGraph(context)).toEqual([
+        [primary, foo, bar, baz, qux],
+      ]);
     });
 
     it('returns all in single batch if no dependents', () => {
-      expect(routine.orderByWorkspacePriorityGraph()).toEqual([[bar, baz, foo, primary, qux]]);
+      expect(routine.orderByWorkspacePriorityGraph(context)).toEqual([
+        [bar, baz, foo, primary, qux],
+      ]);
     });
 
     it('prioritizes based on peerDependencies', () => {
       // foo -> bar
-      routine.workspacePackages[1].peerDependencies = {
+      routine.workspacePackages[1].package.peerDependencies = {
         '@scope/bar': '1.0.0',
       };
 
-      expect(routine.orderByWorkspacePriorityGraph()).toEqual([[bar, baz, primary, qux], [foo]]);
+      expect(routine.orderByWorkspacePriorityGraph(context)).toEqual([
+        [bar, baz, primary, qux],
+        [foo],
+      ]);
     });
 
     it('prioritizes based on dependencies', () => {
       // foo -> bar
-      routine.workspacePackages[1].dependencies = {
+      routine.workspacePackages[1].package.dependencies = {
         '@scope/bar': '1.0.0',
       };
 
-      expect(routine.orderByWorkspacePriorityGraph()).toEqual([[bar, baz, primary, qux], [foo]]);
+      expect(routine.orderByWorkspacePriorityGraph(context)).toEqual([
+        [bar, baz, primary, qux],
+        [foo],
+      ]);
     });
 
     it('sorts priority based on dependency count', () => {
       // bar -> primary
-      routine.workspacePackages[2].peerDependencies = {
+      routine.workspacePackages[2].package.peerDependencies = {
         '@scope/primary': '2.0.0',
       };
 
       // foo -> bar
-      routine.workspacePackages[1].dependencies = {
+      routine.workspacePackages[1].package.dependencies = {
         '@scope/bar': '1.0.0',
       };
 
       // qux -> bar
-      routine.workspacePackages[4].peerDependencies = {
+      routine.workspacePackages[4].package.peerDependencies = {
         '@scope/bar': '1.0.0',
       };
 
-      expect(routine.orderByWorkspacePriorityGraph()).toEqual([[primary, baz], [bar], [foo, qux]]);
+      expect(routine.orderByWorkspacePriorityGraph(context)).toEqual([
+        [primary, baz],
+        [bar],
+        [foo, qux],
+      ]);
     });
   });
 });

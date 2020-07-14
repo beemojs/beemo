@@ -2,13 +2,12 @@ import { WorkspacePackage, Predicates, Blueprint, PackageStructure } from '@boos
 import { Routine, PooledPipeline } from '@boost/pipeline';
 import { stripAnsi, style } from '@boost/terminal';
 import Graph from '@beemo/dependency-graph';
-import Tool from '../Tool';
 import Context from '../contexts/Context';
 import isPatternMatch from '../utils/isPatternMatch';
 import { ExecutionError, RoutineOptions } from '../types';
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-type AnyRoutine = Routine<any, any>;
+export type AnyRoutine = Routine<any, any>;
 
 export interface RunInWorkspacesContextArgs {
   concurrency: number;
@@ -21,13 +20,16 @@ const MAX_ERROR_LINES = 5;
 export default abstract class RunInWorkspacesRoutine<
   Ctx extends Context<RunInWorkspacesContextArgs>
 > extends Routine<unknown, unknown, RoutineOptions> {
-  protected routines: AnyRoutine[] = [];
+  routines: AnyRoutine[] = [];
 
-  protected workspacePackages: WorkspacePackage[] = [];
+  workspacePackages: WorkspacePackage[] = [];
 
   blueprint({ instance }: Predicates): Blueprint<RoutineOptions> {
     return {
-      tool: instance(Tool).required().notNullable(),
+      // @ts-ignore We cant import Tool because of cycles
+      tool: instance()
+        .required()
+        .notNullable(),
     };
   }
 
@@ -118,7 +120,10 @@ export default abstract class RunInWorkspacesRoutine<
 
     // Inherit stack for easier debugging.
     if (errors.length === 1) {
-      error.stack = String(errors[0].stack).split('\n').slice(1).join('\n');
+      error.stack = String(errors[0].stack)
+        .split('\n')
+        .slice(1)
+        .join('\n');
     }
 
     throw error;

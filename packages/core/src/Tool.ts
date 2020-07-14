@@ -9,6 +9,7 @@ import {
   Predicates,
   PackageStructure,
   requireModule,
+  PortablePath,
 } from '@boost/common';
 import { Debugger, createDebugger } from '@boost/debug';
 import { Event } from '@boost/event';
@@ -33,7 +34,7 @@ import { KEBAB_PATTERN } from './constants';
 
 export interface ToolOptions {
   argv: Argv;
-  cwd?: string;
+  cwd?: PortablePath;
   projectName?: string;
   resourcePaths?: string[];
 }
@@ -95,10 +96,10 @@ export default class Tool extends Contract<ToolOptions> {
     this.project = new Project(this.cwd);
   }
 
-  blueprint({ array, string }: Predicates): Blueprint<ToolOptions> {
+  blueprint({ array, instance, string, union }: Predicates): Blueprint<ToolOptions> {
     return {
       argv: array(string()),
-      cwd: string(process.cwd()).notEmpty(),
+      cwd: union([instance(Path).notNullable(), string().notEmpty()], process.cwd()),
       projectName: string('beemo').kebabCase().notEmpty(),
       resourcePaths: array(string().notEmpty()),
     };

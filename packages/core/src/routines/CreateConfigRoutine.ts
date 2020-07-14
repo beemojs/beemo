@@ -1,7 +1,7 @@
 import chalk from 'chalk';
 import fs from 'fs-extra';
 import camelCase from 'lodash/camelCase';
-import { Path, PathResolver, Predicates, requireModule, Blueprint } from '@boost/common';
+import { Path, PathResolver, Predicates, requireModule, Blueprint, Bind } from '@boost/common';
 import { Routine } from '@boost/pipeline';
 import Tool from '../Tool';
 import Driver from '../Driver';
@@ -25,12 +25,8 @@ export default class CreateConfigRoutine<Ctx extends ConfigContext> extends Rout
   blueprint({ instance }: Predicates): Blueprint<CreateConfigOptions> {
     return {
       // @ts-ignore Errors because Driver is abstract
-      driver: instance(Driver)
-        .required()
-        .notNullable(),
-      tool: instance(Tool)
-        .required()
-        .notNullable(),
+      driver: instance(Driver).required().notNullable(),
+      tool: instance(Tool).required().notNullable(),
     };
   }
 
@@ -73,6 +69,7 @@ export default class CreateConfigRoutine<Ctx extends ConfigContext> extends Rout
   /**
    * Copy configuration file from module.
    */
+  @Bind()
   async copyConfigFile(context: Ctx): Promise<Path> {
     const { driver, tool } = this.options;
     const { metadata, name } = driver;
@@ -92,16 +89,17 @@ export default class CreateConfigRoutine<Ctx extends ConfigContext> extends Rout
 
     context.addConfigPath(name, configPath);
 
-    return fs
-      .copy(sourcePath.path(), configPath.path(), {
-        overwrite: true,
-      })
-      .then(() => configPath);
+    await fs.copy(sourcePath.path(), configPath.path(), {
+      overwrite: true,
+    });
+
+    return configPath;
   }
 
   /**
    * Create a temporary configuration file or pass as an option.
    */
+  @Bind()
   async createConfigFile(context: Ctx, config: ConfigObject): Promise<Path> {
     const { driver } = this.options;
     const { metadata, name } = driver;
@@ -109,14 +107,14 @@ export default class CreateConfigRoutine<Ctx extends ConfigContext> extends Rout
 
     this.debug('Creating config file %s', chalk.cyan(configPath));
 
-    driver.config = config as $FixMe;
+    driver.config = config;
     driver.onCreateConfigFile.emit([context, configPath, config]);
 
     context.addConfigPath(name, configPath);
 
-    return fs
-      .writeFile(configPath.path(), this.options.driver.formatConfig(config))
-      .then(() => configPath);
+    await fs.writeFile(configPath.path(), this.options.driver.formatConfig(config));
+
+    return configPath;
   }
 
   /**
@@ -177,6 +175,7 @@ export default class CreateConfigRoutine<Ctx extends ConfigContext> extends Rout
   /**
    * Merge multiple configuration sources using the current driver.
    */
+  @Bind()
   mergeConfigs(context: Ctx, configs: ConfigObject[]): Promise<ConfigObject> {
     const { driver } = this.options;
     const { name } = driver;
@@ -214,6 +213,7 @@ export default class CreateConfigRoutine<Ctx extends ConfigContext> extends Rout
    * Load config from the provider configuration module
    * and from the local configs/ folder in the consumer.
    */
+  @Bind()
   loadConfigFromSources(context: Ctx, prevConfigs: ConfigObject[]): Promise<ConfigObject[]> {
     const sourcePath = this.getConfigPath(context);
     const localPath = this.getConfigPath(context, true);
@@ -235,7 +235,8 @@ export default class CreateConfigRoutine<Ctx extends ConfigContext> extends Rout
   /**
    * Reference configuration file from module using a require statement.
    */
-  referenceConfigFile(context: Ctx): Promise<Path> {
+  @Bind()
+  async referenceConfigFile(context: Ctx): Promise<Path> {
     const { driver, tool } = this.options;
     const { metadata, name } = driver;
     const sourcePath = this.getConfigPath(context);
@@ -256,14 +257,15 @@ export default class CreateConfigRoutine<Ctx extends ConfigContext> extends Rout
 
     const requirePath = context.cwd.relativeTo(sourcePath);
 
-    return fs
-      .writeFile(configPath.path(), `module.exports = require('./${requirePath}');`)
-      .then(() => configPath);
+    await fs.writeFile(configPath.path(), `module.exports = require('./${requirePath}');`);
+
+    return configPath;
   }
 
   /**
    * Set environment variables defined by the driver.
    */
+  @Bind()
   setEnvVars(context: Ctx, configs: ConfigObject[]): Promise<ConfigObject[]> {
     const { env } = this.options.driver.options;
 

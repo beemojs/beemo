@@ -10,7 +10,7 @@ cliCommandConfig: Create a configuration file for all or the specified drivers
 cliCommandRunDriver: Run a configured driver
 cliCommandRunScript: Run a configuration module or Node module script
 cliCommandScaffold: Generate files with templates from configuration module
-cliEpilogue: For more information, view the manual: '{{manualURL}}'
+cliEpilogue: 'For more information, view the manual: {{manualURL}}'
 cliOptionConcurrency: Number of builds to run in parallel
 cliOptionDryRun: Execute a dry run
 cliOptionStdio: Customize how output is displayed
@@ -34,7 +34,7 @@ driverExecuteGatherArgs: Gathering arguments
 driverExecuteIncludeConfigOption: Including config option
 eslintDescription: Lint files with ESLint
 flowDescription: Type check files with Flow
-fromTool: From tool instance: '{{message}}'
+fromTool: 'From tool instance: {{message}}'
 fromModule: From configuration or node module. {{message}}
 jestDescription: Unit test files with Jest
 mochaDriver: Unit test files with Mocha
