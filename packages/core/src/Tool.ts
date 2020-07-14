@@ -112,10 +112,10 @@ export default class Tool extends Contract<ToolOptions> {
     this.package = this.project.getPackage();
 
     // Load drivers
-    await this.driverRegistry.loadMany(config.drivers);
+    await this.driverRegistry.loadMany(config.drivers, { tool: this });
 
     // Load scripts
-    await this.scriptRegistry.loadMany(config.scripts);
+    await this.scriptRegistry.loadMany(config.scripts, { tool: this });
 
     // Log information
     // eslint-disable-next-line global-require

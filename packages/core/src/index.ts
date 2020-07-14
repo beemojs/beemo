@@ -2,8 +2,7 @@
  * @copyright   2017-2019, Miles Johnson
  * @license     https://opensource.org/licenses/MIT
  */
-
-import { Path, PortablePath, Predicates } from '@boost/common';
+import { Path, PortablePath, Predicates, Blueprint, PackageStructure } from '@boost/common';
 import Tool from './Tool';
 import Driver from './Driver';
 import Script from './Script';
@@ -17,6 +16,7 @@ import ScaffoldContext, {
 import ScriptContext, { ScriptContextOptions, ScriptContextParams } from './contexts/ScriptContext';
 
 export {
+  Blueprint,
   ConfigContext,
   Context,
   Driver,
@@ -29,6 +29,7 @@ export {
   ScriptContext,
   ScriptContextOptions,
   ScriptContextParams,
+  PackageStructure,
   Path,
   Predicates,
   PortablePath,

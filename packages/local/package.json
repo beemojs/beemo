@@ -12,8 +12,7 @@
     "@beemo/driver-mocha": "*",
     "@beemo/driver-prettier": "*",
     "@beemo/driver-typescript": "*",
-    "@beemo/driver-webpack": "*",
-    "@boost/core": "*"
+    "@beemo/driver-webpack": "*"
   },
   "devDependencies": {
     "chalk": "^4.1.0",

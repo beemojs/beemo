@@ -111,7 +111,3 @@ export interface BabelArgs {
   watch?: boolean;
   x?: string;
 }
-
-export interface BabelDriverArgs extends BabelArgs {
-  clean?: boolean;
-}

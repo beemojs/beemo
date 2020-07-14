@@ -120,7 +120,8 @@ export default class FlowDriver extends Driver<FlowConfig> {
   // https://github.com/facebook/flow/blob/e466b0ee519622a8977e89708be156a73e570ef0/src/common/flowExitStatus.ml#L54
   processFailure(error: Execution) {
     if (error.exitCode === 2) {
-      this.tool.console.logError(error.stdout); // Command failures
+      // TODO
+      // this.tool.console.logError(error.stdout); // Command failures
     } else {
       super.processFailure(error);
     }

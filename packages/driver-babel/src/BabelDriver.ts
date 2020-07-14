@@ -1,6 +1,6 @@
 import rimraf from 'rimraf';
-import { Driver, DriverArgs, DriverContext, Path, ExecutionError } from '@beemo/core';
-import { BabelDriverArgs, BabelConfig } from './types';
+import { Driver, DriverContext, Path, ExecutionError } from '@beemo/core';
+import { BabelConfig } from './types';
 
 // Success: Writes file list to stdout
 // Failure: Throws SyntaxError to stderr
@@ -19,9 +19,9 @@ export default class BabelDriver extends Driver<BabelConfig> {
 
     this.setCommandOptions({
       clean: {
-        boolean: true,
         default: false,
         description: this.tool.msg('app:babelCleanOption'),
+        type: 'boolean',
       },
     });
 
@@ -39,9 +39,11 @@ export default class BabelDriver extends Driver<BabelConfig> {
   /**
    * Automatically clean the target folder if --out-dir is used.
    */
-  private handleCleanTarget = ({ args }: DriverContext<DriverArgs & BabelDriverArgs>) => {
-    if (args.clean && args.outDir) {
-      rimraf.sync(Path.resolve(args.outDir).path());
+  private handleCleanTarget = (context: DriverContext) => {
+    const outDir = context.getRiskyOption('outDir');
+
+    if (context.getRiskyOption('clean') && typeof outDir === 'string' && outDir) {
+      rimraf.sync(Path.resolve(outDir).path());
     }
 
     return Promise.resolve();

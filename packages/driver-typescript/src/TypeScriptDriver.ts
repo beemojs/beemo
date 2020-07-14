@@ -4,14 +4,14 @@ import ts from 'typescript';
 import { Event } from '@boost/event';
 import {
   Driver,
-  DriverArgs,
   DriverContext,
   Path,
   Predicates,
   ConfigContext,
-  ConfigArgs,
+  Blueprint,
+  PackageStructure,
 } from '@beemo/core';
-import { TypeScriptDriverArgs, TypeScriptConfig, TypeScriptOptions } from './types';
+import { TypeScriptConfig, TypeScriptOptions } from './types';
 
 function join(...parts: string[]): string {
   return new Path(...parts).path();
@@ -22,11 +22,11 @@ function join(...parts: string[]): string {
 export default class TypeScriptDriver extends Driver<TypeScriptConfig, TypeScriptOptions> {
   name = '@beemo/driver-typescript';
 
-  onCreateProjectConfigFile = new Event<[ConfigContext, Path, TypeScriptConfig, boolean]>(
+  readonly onCreateProjectConfigFile = new Event<[ConfigContext, Path, TypeScriptConfig, boolean]>(
     'create-project-config-file',
   );
 
-  blueprint(preds: Predicates) /* infer */ {
+  blueprint(preds: Predicates): Blueprint<TypeScriptOptions> {
     const { bool, string } = preds;
 
     return {
@@ -55,9 +55,9 @@ export default class TypeScriptDriver extends Driver<TypeScriptConfig, TypeScrip
 
     this.setCommandOptions({
       clean: {
-        boolean: true,
         default: false,
         description: this.tool.msg('app:typescriptCleanOption'),
+        type: 'boolean',
       },
     });
 
@@ -71,7 +71,7 @@ export default class TypeScriptDriver extends Driver<TypeScriptConfig, TypeScrip
    * together using project references. Attempt to handle source and test folders.
    */
   async createProjectRefConfigsInWorkspaces(
-    context: DriverContext<DriverArgs & TypeScriptDriverArgs>,
+    context: DriverContext,
     workspaceRoot: Path,
   ): Promise<unknown> {
     const {
@@ -86,11 +86,11 @@ export default class TypeScriptDriver extends Driver<TypeScriptConfig, TypeScrip
     const optionsConfigPath = workspaceRoot.append('tsconfig.options.json');
     const globalTypesPath = workspaceRoot.append(typesFolder, '**/*');
     const namesToPaths: { [key: string]: string } = {};
-    const workspacePackages = this.tool.getWorkspacePackages<{
-      tsconfig: Pick<TypeScriptConfig, 'compilerOptions' | 'include' | 'exclude'>;
-    }>({
-      root: workspaceRoot,
-    });
+    const workspacePackages = this.tool.project.getWorkspacePackages<
+      PackageStructure & {
+        tsconfig: Pick<TypeScriptConfig, 'compilerOptions' | 'include' | 'exclude'>;
+      }
+    >();
 
     // Helper to write a file and return a promise
     const writeFile = (filePath: Path, config: TypeScriptConfig, isTests: boolean) => {
@@ -111,7 +111,7 @@ export default class TypeScriptDriver extends Driver<TypeScriptConfig, TypeScrip
 
     // Map package name to absolute paths
     workspacePackages.forEach((wsPkg) => {
-      namesToPaths[wsPkg.name] = wsPkg.workspace.packagePath;
+      namesToPaths[wsPkg.package.name] = wsPkg.metadata.packagePath;
     });
 
     // Create a config file in each package
@@ -119,11 +119,13 @@ export default class TypeScriptDriver extends Driver<TypeScriptConfig, TypeScrip
       workspacePackages.map(
         // eslint-disable-next-line complexity
         ({
-          dependencies = {},
-          devDependencies = {},
-          peerDependencies = {},
-          tsconfig = {},
-          workspace,
+          package: {
+            dependencies = {},
+            devDependencies = {},
+            peerDependencies = {},
+            tsconfig = {},
+          },
+          metadata: workspace,
         }) => {
           const pkgPath = new Path(workspace.packagePath);
           const srcPath = pkgPath.append(srcFolder);
@@ -254,8 +256,8 @@ export default class TypeScriptDriver extends Driver<TypeScriptConfig, TypeScrip
     config.files = [];
     config.references = [];
 
-    this.tool.getWorkspacePackages({ root: workspaceRoot }).forEach(({ workspace }) => {
-      const pkgPath = new Path(workspace.packagePath);
+    this.tool.project.getWorkspacePackages().forEach(({ metadata }) => {
+      const pkgPath = new Path(metadata.packagePath);
       const srcPath = pkgPath.append(srcFolder);
       const testsPath = pkgPath.append(testsFolder);
 
@@ -280,11 +282,12 @@ export default class TypeScriptDriver extends Driver<TypeScriptConfig, TypeScrip
   /**
    * Automatically clean the target folder if `outDir` and `--clean` is used.
    */
-  private handleCleanTarget = ({ args }: DriverContext<DriverArgs & TypeScriptDriverArgs>) => {
+  private handleCleanTarget = (context: DriverContext) => {
     const outDir =
-      args.outDir || (this.config.compilerOptions && this.config.compilerOptions.outDir);
+      context.getRiskyOption('outDir') ||
+      (this.config.compilerOptions && this.config.compilerOptions.outDir);
 
-    if (args.clean && outDir) {
+    if (context.getRiskyOption('outDir') && typeof outDir === 'string' && outDir) {
       rimraf.sync(Path.resolve(outDir).path());
     }
 
@@ -295,20 +298,18 @@ export default class TypeScriptDriver extends Driver<TypeScriptConfig, TypeScrip
    * Define references and compiler options when `--reference-workspaces` option is passed.
    */
   private handlePrepareConfigs = (
-    context: ConfigContext<ConfigArgs & TypeScriptDriverArgs>,
+    context: ConfigContext,
     configPath: Path,
     config: TypeScriptConfig,
   ) => {
-    const { args, workspaceRoot } = context;
-
-    if (!args.referenceWorkspaces) {
+    if (!context.getRiskyOption('referenceWorkspaces')) {
       return;
     }
 
     // Add to context so that it can be automatically cleaned up
     context.addConfigPath(
       'typescript',
-      this.prepareProjectRefsRootConfigs(workspaceRoot, configPath, config),
+      this.prepareProjectRefsRootConfigs(context.workspaceRoot, configPath, config),
     );
   };
 
@@ -316,17 +317,15 @@ export default class TypeScriptDriver extends Driver<TypeScriptConfig, TypeScrip
    * Automatically create `tsconfig.json` files in each workspace package with project
    * references linked correctly. Requires the `--reference-workspaces` option.
    */
-  private handleProjectReferences = (context: DriverContext<DriverArgs & TypeScriptDriverArgs>) => {
-    const { args, workspaceRoot } = context;
-
-    if (!args.referenceWorkspaces) {
+  private handleProjectReferences = (context: DriverContext) => {
+    if (!context.getRiskyOption('referenceWorkspaces')) {
       return Promise.resolve();
-    } else if (!args.build && !args.b) {
+    } else if (!context.getRiskyOption('build') && !context.getRiskyOption('b')) {
       throw new Error(this.tool.msg('errors:workspacesProjectRefsBuildRequired'));
-    } else if (args.workspaces) {
+    } else if (context.getOption('workspaces')) {
       throw new Error(this.tool.msg('errors:workspacesProjectRefsMixed'));
     }
 
-    return this.createProjectRefConfigsInWorkspaces(context, workspaceRoot);
+    return this.createProjectRefConfigsInWorkspaces(context, context.workspaceRoot);
   };
 }

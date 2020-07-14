@@ -1,16 +1,16 @@
 import fs from 'fs';
 import { Event } from '@boost/event';
-import { Driver, ConfigContext, ConfigArgs, Execution, Path } from '@beemo/core';
-import { ESLintDriverArgs, ESLintConfig } from './types';
+import { Driver, ConfigContext, Execution, Path } from '@beemo/core';
+import { ESLintConfig } from './types';
 
 // Success: Writes warnings to stdout
 // Failure: Writes to stdout and stderr
 export default class ESLintDriver extends Driver<ESLintConfig> {
   name = '@beemo/driver-eslint';
 
-  onCreateIgnoreFile = new Event<
-    [ConfigContext<ConfigArgs & ESLintDriverArgs>, Path, { ignore: string[] }]
-  >('create-ignore-file');
+  readonly onCreateIgnoreFile = new Event<[ConfigContext, Path, { ignore: string[] }]>(
+    'create-ignore-file',
+  );
 
   bootstrap() {
     this.setMetadata({
@@ -28,22 +28,21 @@ export default class ESLintDriver extends Driver<ESLintConfig> {
    * both stdout and stderr on failure.
    */
   processFailure(error: Execution) {
-    const { stderr, stdout } = error;
-
-    if (stderr) {
-      this.tool.console.logError(stderr);
-    }
-
-    if (stdout) {
-      this.tool.console.log(stdout);
-    }
+    // TODO
+    // const { stderr, stdout } = error;
+    // if (stderr) {
+    //   this.tool.console.logError(stderr);
+    // }
+    // if (stdout) {
+    //   this.tool.console.log(stdout);
+    // }
   }
 
   /**
    * If an "ignore" property exists in the ESLint config, create an ".eslintignore" file.
    */
   private handleCreateIgnoreFile = (
-    context: ConfigContext<ConfigArgs & ESLintDriverArgs>,
+    context: ConfigContext,
     configPath: Path,
     config: ESLintConfig,
   ) => {
