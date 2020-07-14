@@ -21,7 +21,7 @@
     "access": "public"
   },
   "dependencies": {
-    "@boost/cli": "^2.0.0-alpha.3",
+    "@boost/cli": "^2.0.0",
     "ink": "^3.0.0-6",
     "react": "^16.13.1"
   },
