@@ -1,13 +1,18 @@
 import { ParserOptions, Arguments } from '@boost/args';
+import { Predicates, Blueprint } from '@boost/common';
 import { ConcurrentEvent } from '@boost/event';
 import { Plugin } from '@boost/plugin';
 import execa, { Options as ExecaOptions } from 'execa';
+import Tool from './Tool';
 import ScriptContext from './contexts/ScriptContext';
 import { Argv, Scriptable, BeemoTool } from './types';
 
 export default abstract class Script<O extends object = {}, Options extends object = {}>
   extends Plugin<BeemoTool, Options>
   implements Scriptable<O> {
+  // Set within a life-cycle
+  tool!: Tool;
+
   readonly onBeforeExecute = new ConcurrentEvent<[ScriptContext, Argv]>('before-execute');
 
   readonly onAfterExecute = new ConcurrentEvent<[ScriptContext, unknown]>('after-execute');
@@ -22,6 +27,14 @@ export default abstract class Script<O extends object = {}, Options extends obje
     if (typeof script.execute !== 'function') {
       throw new TypeError('`Script`s require an `execute()` method.');
     }
+  }
+
+  blueprint(preds: Predicates): Blueprint<object> {
+    return {};
+  }
+
+  startup(tool: Tool) {
+    this.tool = tool;
   }
 
   /**

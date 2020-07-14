@@ -269,11 +269,6 @@ export interface TypeScriptArgs {
   watch?: boolean;
 }
 
-export interface TypeScriptDriverArgs extends TypeScriptArgs {
-  clean?: boolean;
-  referenceWorkspaces?: boolean;
-}
-
 export interface TypeScriptOptions extends DriverOptions {
   buildFolder?: string;
   declarationOnly?: boolean;

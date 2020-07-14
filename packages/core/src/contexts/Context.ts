@@ -133,9 +133,17 @@ export default class Context<
   }
 
   /**
-   * Return an argument or option value by name, or a fallback value if not found.
+   * Return a configured option value by name, or a fallback value if not found.
    */
   getOption<K extends keyof O>(name: K, fallback?: O[K]): O[K] | null {
     return this.args.options[name] || fallback || null;
+  }
+
+  /**
+   * Return either a configured option value, or an unknown option value,
+   * or null if not found.
+   */
+  getRiskyOption(name: string): unknown {
+    return this.getOption(name as keyof O) || this.args.unknown[name] || null;
   }
 }

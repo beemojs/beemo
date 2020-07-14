@@ -3,6 +3,7 @@ import { Event, ConcurrentEvent } from '@boost/event';
 import { Plugin } from '@boost/plugin';
 import mergeWith from 'lodash/mergeWith';
 import execa from 'execa';
+import Tool from './Tool';
 import DriverContext from './contexts/DriverContext';
 import ConfigContext from './contexts/ConfigContext';
 import {
@@ -35,6 +36,9 @@ export default abstract class Driver<
 
   // Set after instantiation
   metadata!: DriverMetadata;
+
+  // Set within a life-cycle
+  tool!: Tool;
 
   readonly onLoadModuleConfig = new Event<[ConfigContext, Path, Config]>('load-module-config');
 
@@ -77,6 +81,10 @@ export default abstract class Driver<
         STRATEGY_NONE,
       ]),
     };
+  }
+
+  startup(tool: Tool) {
+    this.tool = tool;
   }
 
   /**

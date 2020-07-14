@@ -121,5 +121,3 @@ export interface ESLintArgs {
   v?: boolean;
   version?: boolean;
 }
-
-export type ESLintDriverArgs = ESLintArgs;

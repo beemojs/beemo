@@ -9,7 +9,9 @@ export interface DriverContextOptions {
   workspaces: string;
 }
 
-export default class DriverContext extends ConfigContext<DriverContextOptions> {
+export default class DriverContext<
+  O extends DriverContextOptions = DriverContextOptions
+> extends ConfigContext<O> {
   // Name defined on the plugin (kebab case)
   driverName: string = '';
 
@@ -19,7 +21,7 @@ export default class DriverContext extends ConfigContext<DriverContextOptions> {
   // The primary driver that initiated the pipeline
   primaryDriver: Driver;
 
-  constructor(args: Arguments<DriverContextOptions>, driver: Driver, parallelArgv: Argv[] = []) {
+  constructor(args: Arguments<O>, driver: Driver, parallelArgv: Argv[] = []) {
     super(args);
 
     this.driverName = driver.name;
