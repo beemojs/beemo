@@ -26,11 +26,11 @@
   },
   "devDependencies": {
     "@boost/test-utils": "^1.4.1",
-    "typescript": "^3.7.5"
+    "typescript": "^4.0.0"
   },
   "peerDependencies": {
     "@beemo/core": "^1.0.0",
-    "typescript": "^2.0.0 || ^3.0.0"
+    "typescript": "^2.0.0 || ^3.0.0 || ^4.0.0"
   },
   "dependencies": {
     "@boost/event": "^1.3.1",
