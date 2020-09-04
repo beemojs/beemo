@@ -3,6 +3,18 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+### 1.4.1 - 2020-09-04
+
+#### 📦 Dependencies
+
+- Support TypeScript v4. ([67bb1bb](https://github.com/beemojs/beemo/commit/67bb1bb))
+
+**Note:** Version bump only for package @beemo/driver-typescript
+
+
+
+
+
 ## 1.4.0 - 2020-06-22
 
 #### 🚀 Updates

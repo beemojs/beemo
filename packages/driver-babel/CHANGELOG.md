@@ -3,6 +3,18 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+### 1.2.6 - 2020-09-04
+
+#### 📦 Dependencies
+
+- **[babel]** Update to v7.11. ([573af87](https://github.com/beemojs/beemo/commit/573af87))
+
+**Note:** Version bump only for package @beemo/driver-babel
+
+
+
+
+
 ### 1.2.5 - 2020-05-21
 
 #### 📦 Dependencies
