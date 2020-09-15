@@ -22,7 +22,7 @@
   },
   "dependencies": {
     "chalk": "^4.1.0",
-    "semver": "^6.3.0",
+    "semver": "^7.3.2",
     "yargs": "^16.0.3"
   },
   "peerDependencies": {
