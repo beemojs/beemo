@@ -16,7 +16,7 @@
     "@boost/core": "*"
   },
   "devDependencies": {
-    "chalk": "^3.0.0",
+    "chalk": "^4.1.0",
     "execa": "^3.4.0",
     "fast-glob": "^3.0.4",
     "fs-extra": "^8.1.0",
