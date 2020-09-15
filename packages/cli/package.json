@@ -21,7 +21,7 @@
     "access": "public"
   },
   "dependencies": {
-    "chalk": "^3.0.0",
+    "chalk": "^4.1.0",
     "semver": "^6.3.0",
     "yargs": "^15.3.1"
   },
