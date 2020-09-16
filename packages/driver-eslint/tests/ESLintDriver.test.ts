@@ -99,9 +99,6 @@ describe('ESLintDriver', () => {
 
   describe('processFailure()', () => {
     it('outputs stderr and stdout', () => {
-      const logSpy = jest.spyOn(console, 'log').mockImplementation();
-      const errorSpy = jest.spyOn(console, 'error').mockImplementation();
-
       driver.processFailure(
         stubExecResult({
           command: 'eslint',
@@ -110,11 +107,8 @@ describe('ESLintDriver', () => {
         }),
       );
 
-      expect(logSpy).toHaveBeenCalledWith('Warning');
-      expect(errorSpy).toHaveBeenCalledWith('Error');
-
-      logSpy.mockRestore();
-      errorSpy.mockRestore();
+      expect(driver.output.stdout).toBe('Warning');
+      expect(driver.output.stderr).toBe('Error');
     });
   });
 

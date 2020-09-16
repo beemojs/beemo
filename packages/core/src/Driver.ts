@@ -23,6 +23,7 @@ import {
   ExecutionError,
   DriverStrategy,
   BeemoTool,
+  DriverOutput,
 } from './types';
 
 export default abstract class Driver<
@@ -39,6 +40,11 @@ export default abstract class Driver<
 
   // Set within a life-cycle
   tool!: Tool;
+
+  output: DriverOutput = {
+    stderr: '',
+    stdout: '',
+  };
 
   readonly onLoadModuleConfig = new Event<[ConfigContext, Path, Config]>('load-module-config');
 
@@ -174,7 +180,7 @@ export default abstract class Driver<
     const out = (stderr || stdout).trim();
 
     if (out) {
-      console.error(out);
+      this.setOutput('stderr', out);
     }
   }
 
@@ -185,7 +191,7 @@ export default abstract class Driver<
     const out = response.stdout.trim();
 
     if (out) {
-      console.log(out);
+      this.setOutput('stdout', out);
     }
   }
 
@@ -246,6 +252,15 @@ export default abstract class Driver<
         name: this.constructor.name,
       },
     );
+
+    return this;
+  }
+
+  /**
+   * Store the raw output of the driver's execution.
+   */
+  setOutput(type: keyof DriverOutput, value: string): this {
+    this.output[type] = value.trim();
 
     return this;
   }

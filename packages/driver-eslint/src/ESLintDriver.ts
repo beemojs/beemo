@@ -31,11 +31,11 @@ export default class ESLintDriver extends Driver<ESLintConfig> {
     const { stderr, stdout } = error;
 
     if (stderr) {
-      console.error(stderr);
+      this.setOutput('stderr', stderr);
     }
 
     if (stdout) {
-      console.log(stdout);
+      this.setOutput('stdout', stdout);
     }
   }
 

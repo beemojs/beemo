@@ -217,8 +217,6 @@ describe('FlowDriver', () => {
 
   describe('processFailure()', () => {
     it('logs stdout on error code 2', () => {
-      const spy = jest.spyOn(console, 'error').mockImplementation();
-
       driver.processFailure(
         stubExecResult({
           exitCode: 2,
@@ -227,14 +225,10 @@ describe('FlowDriver', () => {
         }),
       );
 
-      expect(spy).toHaveBeenCalledWith('Out');
-
-      spy.mockRestore();
+      expect(driver.output.stderr).toBe('Out');
     });
 
     it('logs stderr on other error codes', () => {
-      const spy = jest.spyOn(console, 'error').mockImplementation();
-
       driver.processFailure(
         stubExecResult({
           exitCode: 1,
@@ -243,9 +237,7 @@ describe('FlowDriver', () => {
         }),
       );
 
-      expect(spy).toHaveBeenCalledWith('Err');
-
-      spy.mockRestore();
+      expect(driver.output.stderr).toBe('Err');
     });
   });
 });
