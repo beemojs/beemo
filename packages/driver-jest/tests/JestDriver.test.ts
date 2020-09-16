@@ -44,8 +44,6 @@ describe('JestDriver', () => {
 
   describe('processSuccess()', () => {
     it('outputs stderr', () => {
-      const spy = jest.spyOn(console, 'log').mockImplementation();
-
       driver.processSuccess(
         stubExecResult({
           command: 'jest',
@@ -54,14 +52,10 @@ describe('JestDriver', () => {
         }),
       );
 
-      expect(spy).toHaveBeenCalledWith('Why???');
-
-      spy.mockRestore();
+      expect(driver.output.stdout).toBe('Why???');
     });
 
     it('outputs nothing if empty strings', () => {
-      const spy = jest.spyOn(console, 'log').mockImplementation();
-
       driver.processSuccess(
         stubExecResult({
           command: 'jest',
@@ -70,14 +64,10 @@ describe('JestDriver', () => {
         }),
       );
 
-      expect(spy).not.toHaveBeenCalled();
-
-      spy.mockRestore();
+      expect(driver.output.stdout).toBe('');
     });
 
     it('outputs stdout and stderr when running coverage', () => {
-      const spy = jest.spyOn(console, 'log').mockImplementation();
-
       driver.processSuccess(
         stubExecResult({
           command: 'jest --coverage',
@@ -86,15 +76,10 @@ describe('JestDriver', () => {
         }),
       );
 
-      expect(spy).toHaveBeenCalledWith('Tests');
-      expect(spy).toHaveBeenCalledWith('Coverage');
-
-      spy.mockRestore();
+      expect(driver.output.stdout).toBe('Tests\nCoverage');
     });
 
     it('outputs nothing if empty strings when running coverage', () => {
-      const spy = jest.spyOn(console, 'log').mockImplementation();
-
       driver.processSuccess(
         stubExecResult({
           command: 'jest --coverage',
@@ -103,9 +88,8 @@ describe('JestDriver', () => {
         }),
       );
 
-      expect(spy).not.toHaveBeenCalled();
-
-      spy.mockRestore();
+      expect(driver.output.stderr).toBe('');
+      expect(driver.output.stdout).toBe('');
     });
   });
 });

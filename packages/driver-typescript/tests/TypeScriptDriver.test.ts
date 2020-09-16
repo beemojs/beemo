@@ -20,6 +20,8 @@ describe('TypeScriptDriver', () => {
   beforeEach(() => {
     driver = new TypeScriptDriver();
     driver.tool = mockTool();
+    // @ts-ignore
+    driver.tool.project.root = PROJECT_REFS_FIXTURE_PATH;
     driver.bootstrap();
     driver.config = {
       compilerOptions: {},

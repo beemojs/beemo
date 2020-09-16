@@ -283,11 +283,9 @@ export default class TypeScriptDriver extends Driver<TypeScriptConfig, TypeScrip
    * Automatically clean the target folder if `outDir` and `--clean` is used.
    */
   private handleCleanTarget = (context: DriverContext) => {
-    const outDir =
-      context.getRiskyOption('outDir') ||
-      (this.config.compilerOptions && this.config.compilerOptions.outDir);
+    const outDir = context.getRiskyOption('outDir') || this.config.compilerOptions?.outDir;
 
-    if (context.getRiskyOption('outDir') && typeof outDir === 'string' && outDir) {
+    if (context.getRiskyOption('clean') && typeof outDir === 'string' && outDir) {
       rimraf.sync(Path.resolve(outDir).path());
     }
 
