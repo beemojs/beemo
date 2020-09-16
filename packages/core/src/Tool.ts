@@ -1,3 +1,4 @@
+import fs from 'fs-extra';
 import chalk from 'chalk';
 import camelCase from 'lodash/camelCase';
 import upperFirst from 'lodash/upperFirst';
@@ -10,6 +11,8 @@ import {
   PackageStructure,
   requireModule,
   PortablePath,
+  Deprecate,
+  Bind,
 } from '@boost/common';
 import { Debugger, createDebugger } from '@boost/debug';
 import { Event } from '@boost/event';
@@ -72,6 +75,8 @@ export default class Tool extends Contract<ToolOptions> {
 
   protected configModuleRoot?: Path;
 
+  protected context?: Context;
+
   constructor(options: ToolOptions) {
     super(options);
 
@@ -100,7 +105,9 @@ export default class Tool extends Contract<ToolOptions> {
     return {
       argv: array(string()),
       cwd: union([instance(Path).notNullable(), string().notEmpty()], process.cwd()),
-      projectName: string('beemo').kebabCase().notEmpty(),
+      projectName: string('beemo')
+        .kebabCase()
+        .notEmpty(),
       resourcePaths: array(string().notEmpty()),
     };
   }
@@ -197,6 +204,25 @@ export default class Tool extends Contract<ToolOptions> {
     this.configModuleRoot = rootPath;
 
     return rootPath;
+  }
+
+  /**
+   * Delete config files if a process fails.
+   */
+  @Bind()
+  cleanupOnFailure(error?: Error) {
+    const { context } = this;
+
+    if (!error || !context) {
+      return;
+    }
+
+    // Must not be async!
+    if (Array.isArray(context.configPaths)) {
+      context.configPaths.forEach((config) => {
+        fs.removeSync(config.path.path());
+      });
+    }
   }
 
   /**
@@ -307,21 +333,19 @@ export default class Tool extends Contract<ToolOptions> {
     );
   }
 
+  @Deprecate()
+  isPluginEnabled(type: 'driver' | 'script', name: string): boolean {
+    if (type === 'driver') {
+      return this.driverRegistry.isRegistered(name);
+    }
+
+    return this.scriptRegistry.isRegistered(name);
+  }
+
   /**
    * Create and setup a fresh pipeline.
    */
   protected createPipeline<C extends Context, I>(context: C, input: I) {
-    // TODO
-    // Delete config files on failure
-    // if (this.config.configure.cleanup) {
-    //   this.onExit.listen((code) => this.handleCleanupOnFailure(code, context));
-    // }
-
-    // // Silence console reporter to inherit stdio
-    // if (context.args.stdio === 'inherit') {
-    //   this.config.silent = true;
-    // }
-
     return new WaterfallPipeline<C, I>(context, input);
   }
 
@@ -341,22 +365,9 @@ export default class Tool extends Contract<ToolOptions> {
       tool: this,
     };
 
-    return context;
-  }
+    // Set the current class to the tool instance
+    this.context = context;
 
-  /**
-   * Delete config files if a process fails.
-   */
-  // TODO
-  private handleCleanupOnFailure(code: number, context: Context) {
-    // if (code === 0) {
-    //   return;
-    // }
-    // // Must not be async!
-    // if (Array.isArray(context.configPaths)) {
-    //   context.configPaths.forEach((config) => {
-    //     fs.removeSync(config.path.path());
-    //   });
-    // }
+    return context;
   }
 }
