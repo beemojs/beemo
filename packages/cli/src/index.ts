@@ -47,6 +47,9 @@ async function run() {
     .register(new RunScript())
     .register(new Scaffold());
 
+  // Listen to events
+  program.onAfterRun.listen(beemo.cleanupOnFailure);
+
   // Run the program!
   await program.runAndExit(argv);
 }
