@@ -1,5 +1,5 @@
 import Driver from '../src/Driver';
-import { mockDriver } from '../src/testing';
+import { mockDriver, stubExecResult } from '../src/testing';
 
 describe('Driver', () => {
   let driver: Driver;
@@ -66,113 +66,81 @@ describe('Driver', () => {
     });
   });
 
-  // TODO
-  // describe('processFailure()', () => {
-  //   let spy: jest.SpyInstance;
+  describe('processFailure()', () => {
+    it('logs stdout', () => {
+      driver.processFailure(
+        stubExecResult({
+          stdout: 'out',
+        }),
+      );
 
-  //   beforeEach(() => {
-  //     spy = jest.spyOn(driver.tool.console, 'logError');
-  //   });
+      expect(driver.output.stderr).toBe('out');
+    });
 
-  //   afterEach(() => {
-  //     spy.mockRestore();
-  //   });
+    it('logs stderr', () => {
+      driver.processFailure(
+        stubExecResult({
+          stderr: 'error',
+        }),
+      );
 
-  //   it('logs stdout', () => {
-  //     driver.processFailure(
-  //       stubExecResult({
-  //         stdout: 'out',
-  //       }),
-  //     );
+      expect(driver.output.stderr).toBe('error');
+    });
 
-  //     expect(spy).toHaveBeenCalledWith('out');
-  //   });
+    it('logs stderr over stdout', () => {
+      driver.processFailure(
+        stubExecResult({
+          stderr: 'error',
+          stdout: 'out',
+        }),
+      );
 
-  //   it('logs stderr', () => {
-  //     driver.processFailure(
-  //       stubExecResult({
-  //         stderr: 'error',
-  //       }),
-  //     );
+      expect(driver.output.stderr).toBe('error');
+    });
 
-  //     expect(spy).toHaveBeenCalledWith('error');
-  //   });
+    it('doesnt log if empty', () => {
+      driver.processFailure(
+        stubExecResult({
+          stderr: '',
+          stdout: '',
+        }),
+      );
 
-  //   it('logs stderr over stdout', () => {
-  //     driver.processFailure(
-  //       stubExecResult({
-  //         stderr: 'error',
-  //         stdout: 'out',
-  //       }),
-  //     );
+      expect(driver.output.stdout).toBe('');
+    });
+  });
 
-  //     expect(spy).toHaveBeenCalledWith('error');
-  //   });
+  describe('processSuccess()', () => {
+    it('logs stdout', () => {
+      driver.processSuccess(
+        stubExecResult({
+          stdout: 'out',
+        }),
+      );
 
-  //   it('doesnt log if empty', () => {
-  //     driver.processFailure(
-  //       stubExecResult({
-  //         stderr: '',
-  //         stdout: '',
-  //       }),
-  //     );
+      expect(driver.output.stdout).toBe('out');
+    });
 
-  //     expect(spy).not.toHaveBeenCalled();
-  //   });
-  // });
+    it('doesnt log stdout if empty', () => {
+      driver.processSuccess(
+        stubExecResult({
+          stdout: '',
+        }),
+      );
 
-  // describe('processSuccess()', () => {
-  //   let spy: jest.SpyInstance;
+      expect(driver.output.stdout).toBe('');
+    });
 
-  //   beforeEach(() => {
-  //     spy = jest.spyOn(driver.tool.console, 'log');
-  //   });
+    it('doesnt log stderr', () => {
+      driver.processSuccess(
+        stubExecResult({
+          stderr: 'error',
+        }),
+      );
 
-  //   afterEach(() => {
-  //     spy.mockRestore();
-  //   });
-
-  //   it('logs stdout', () => {
-  //     driver.processSuccess(
-  //       stubExecResult({
-  //         stdout: 'out',
-  //       }),
-  //     );
-
-  //     expect(spy).toHaveBeenCalledWith('out');
-  //   });
-
-  //   it('doesnt log stdout if empty', () => {
-  //     driver.processSuccess(
-  //       stubExecResult({
-  //         stdout: '',
-  //       }),
-  //     );
-
-  //     expect(spy).not.toHaveBeenCalledWith();
-  //   });
-
-  //   it('doesnt log stderr', () => {
-  //     driver.processFailure(
-  //       stubExecResult({
-  //         stderr: 'error',
-  //       }),
-  //     );
-
-  //     expect(spy).not.toHaveBeenCalled();
-  //   });
-
-  //   it('doesnt log if empty', () => {
-  //     driver.processFailure(
-  //       stubExecResult({
-  //         stderr: '',
-  //         stdout: '',
-  //       }),
-  //     );
-
-  //     expect(spy).not.toHaveBeenCalled();
-  //   });
-  // });
+      expect(driver.output.stderr).toBe('');
+    });
+  });
 
   describe('mergeConfig()', () => {
     it('deep merges objects', () => {

@@ -140,14 +140,9 @@ export default class JestDriver extends Driver<JestConfig> {
     const err = response.stderr.trim();
 
     if (response.command && response.command.includes('--coverage')) {
-      if (err) {
-        console.log(err);
-      }
-      if (out) {
-        console.log(out);
-      }
+      this.setOutput('stdout', `${err}\n${out}`);
     } else if (err) {
-      console.log(err);
+      this.setOutput('stdout', err);
     }
   }
 }

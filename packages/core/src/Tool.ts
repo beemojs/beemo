@@ -11,7 +11,6 @@ import {
   PackageStructure,
   requireModule,
   PortablePath,
-  Deprecate,
   Bind,
 } from '@boost/common';
 import { Debugger, createDebugger } from '@boost/debug';
@@ -331,15 +330,6 @@ export default class Tool extends Contract<ToolOptions> {
     return new WaterfallPipeline(context).pipe(
       new ScaffoldRoutine('scaffold', this.msg('app:scaffoldGenerate')),
     );
-  }
-
-  @Deprecate()
-  isPluginEnabled(type: 'driver' | 'script', name: string): boolean {
-    if (type === 'driver') {
-      return this.driverRegistry.isRegistered(name);
-    }
-
-    return this.scriptRegistry.isRegistered(name);
   }
 
   /**

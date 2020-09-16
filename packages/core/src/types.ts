@@ -70,6 +70,11 @@ export interface DriverMetadata {
   workspaceStrategy: 'reference' | 'copy';
 }
 
+export interface DriverOutput {
+  stderr: string;
+  stdout: string;
+}
+
 export interface Driverable extends Pluggable<BeemoTool> {
   metadata: DriverMetadata;
 }
