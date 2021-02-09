@@ -25,6 +25,7 @@ import {
   BeemoTool,
   DriverOutput,
 } from './types';
+import isClassInstance from './helpers/isClassInstance';
 
 export default abstract class Driver<
   Config extends object = {},
@@ -69,7 +70,7 @@ export default abstract class Driver<
   readonly onFailedExecute = new ConcurrentEvent<[DriverContext, Error]>('failed-execute');
 
   static validate(driver: Driver) {
-    const name = isObject(driver) ? driver.constructor.name : 'Driver';
+    const name = (isClassInstance(driver) && driver.constructor.name) || 'Driver';
 
     if (!isObject(driver.options)) {
       throw new Error(`\`${name}\` requires an options object.`);
@@ -91,8 +92,11 @@ export default abstract class Driver<
     };
   }
 
+  bootstrap() {}
+
   startup(tool: Tool) {
     this.tool = tool;
+    this.bootstrap();
   }
 
   /**
@@ -124,6 +128,13 @@ export default abstract class Driver<
     }
 
     return content;
+  }
+
+  /**
+   * Return the module name without the Beemo namespace.
+   */
+  getAlias(): string {
+    return this.name.split('-').pop()!;
   }
 
   /**
@@ -159,7 +170,7 @@ export default abstract class Driver<
    */
   getVersion(): string {
     const { bin, versionOption } = this.metadata;
-    const version = execa.sync(bin, [versionOption]).stdout.trim();
+    const version = (execa.sync(bin, [versionOption])?.stdout || '').trim();
     const match = version.match(/(\d+)\.(\d+)\.(\d+)/u);
 
     return match ? match[0] : '0.0.0';

@@ -1,17 +1,16 @@
 import fs from 'fs-extra';
 import chalk from 'chalk';
-import camelCase from 'lodash/camelCase';
-import upperFirst from 'lodash/upperFirst';
 import {
   Path,
   Project,
   Contract,
   Blueprint,
   Predicates,
-  PackageStructure,
   requireModule,
   PortablePath,
   Bind,
+  PackageStructure,
+  Memoize,
 } from '@boost/common';
 import { Debugger, createDebugger } from '@boost/debug';
 import { Event } from '@boost/event';
@@ -44,11 +43,13 @@ export interface ToolOptions {
 export default class Tool extends Contract<ToolOptions> {
   config!: ConfigFile;
 
+  context?: Context;
+
   package!: PackageStructure;
 
   readonly argv: Argv;
 
-  readonly configManager = new Config('beemo');
+  readonly configManager: Config;
 
   readonly cwd: Path;
 
@@ -64,17 +65,13 @@ export default class Tool extends Contract<ToolOptions> {
 
   readonly onRunCreateConfig = new Event<[ConfigContext, string[]]>('run-create-config');
 
-  readonly onRunDriver = new Event<[DriverContext, Driver]>('run-driver');
+  readonly onRunDriver = new Event<[DriverContext, Driver, string]>('run-driver');
 
   readonly onRunScaffold = new Event<[ScaffoldContext, string, string, string?]>('run-scaffold');
 
-  readonly onRunScript = new Event<[ScriptContext]>('run-script');
+  readonly onRunScript = new Event<[ScriptContext, string]>('run-script');
 
   readonly scriptRegistry: Registry<Script>;
-
-  protected configModuleRoot?: Path;
-
-  protected context?: Context;
 
   constructor(options: ToolOptions) {
     super(options);
@@ -98,6 +95,13 @@ export default class Tool extends Contract<ToolOptions> {
     });
 
     this.project = new Project(this.cwd);
+    this.configManager = new Config(this.options.projectName);
+
+    // TODO MIGRATE
+    // @ts-ignore
+    this.getWorkspacePaths = this.project.getWorkspacePackagePaths.bind(this.project);
+    // @ts-ignore
+    this.getWorkspaceGlobs = this.project.getWorkspaceGlobs.bind(this.project);
   }
 
   blueprint({ array, instance, string, union }: Predicates): Blueprint<ToolOptions> {
@@ -105,7 +109,7 @@ export default class Tool extends Contract<ToolOptions> {
       argv: array(string()),
       cwd: union([instance(Path).notNullable(), string().notEmpty()], process.cwd()),
       projectName: string('beemo')
-        .kebabCase()
+        .camelCase()
         .notEmpty(),
       resourcePaths: array(string().notEmpty()),
     };
@@ -126,9 +130,7 @@ export default class Tool extends Contract<ToolOptions> {
 
     // Log information
     // eslint-disable-next-line global-require
-    const { version } = require('../package.json');
-
-    this.debug('Using beemo v%s', version);
+    this.debug('Using beemo v%s', require('../package.json').version);
   }
 
   /**
@@ -142,13 +144,9 @@ export default class Tool extends Contract<ToolOptions> {
     let bootstrap: Function | null = null;
 
     try {
-      if (module === '@local') {
-        bootstrap = requireModule(this.getConfigModuleRoot().append('index.js'));
-      } else {
-        bootstrap = requireModule(module);
-      }
+      bootstrap = requireModule(module === '@local' ? this.getConfigModuleRoot() : module);
     } catch {
-      this.debug('No index.js file detected, aborting bootstrap');
+      this.debug('No entry point file detected, aborting bootstrap');
 
       return this;
     }
@@ -165,13 +163,10 @@ export default class Tool extends Contract<ToolOptions> {
   }
 
   /**
-   * Validate the configuration module and return its absolute path.
+   * Validate the configuration module and return an absolute path to its root folder.
    */
+  @Memoize()
   getConfigModuleRoot(): Path {
-    if (this.configModuleRoot) {
-      return this.configModuleRoot;
-    }
-
     const { module } = this.config;
 
     this.debug('Locating configuration module root');
@@ -184,23 +179,19 @@ export default class Tool extends Contract<ToolOptions> {
     if (module === '@local') {
       this.debug('Using %s configuration module', chalk.yellow('@local'));
 
-      this.configModuleRoot = new Path(process.cwd());
-
-      return this.configModuleRoot;
+      return new Path(this.options.cwd);
     }
 
     // Reference a node module
     let rootPath: Path;
 
     try {
-      rootPath = Path.resolve(require.resolve(module));
+      rootPath = Path.resolve(require.resolve(`${module}/package.json`)).parent();
     } catch {
       throw new Error(this.msg('errors:moduleMissing', { module }));
     }
 
     this.debug('Found configuration module root path: %s', chalk.cyan(rootPath));
-
-    this.configModuleRoot = rootPath;
 
     return rootPath;
   }
@@ -251,7 +242,9 @@ export default class Tool extends Contract<ToolOptions> {
     this.onRunCreateConfig.emit([context, driverNames]);
 
     return new WaterfallPipeline(context).pipe(
-      new ResolveConfigsRoutine('config', this.msg('app:configGenerate')),
+      new ResolveConfigsRoutine('config', this.msg('app:configGenerate'), {
+        tool: this,
+      }),
     );
   }
 
@@ -267,12 +260,16 @@ export default class Tool extends Contract<ToolOptions> {
     const context = this.prepareContext(new DriverContext(args, driver, parallelArgv));
     const version = driver.getVersion();
 
-    this.onRunDriver.emit([context, driver], driverName);
+    this.onRunDriver.emit([context, driver, driverName]);
 
     this.debug('Running with %s v%s driver', driverName, version);
 
     return new WaterfallPipeline(context, driverName)
-      .pipe(new ResolveConfigsRoutine('config', this.msg('app:configGenerate')))
+      .pipe(
+        new ResolveConfigsRoutine('config', this.msg('app:configGenerate'), {
+          tool: this,
+        }),
+      )
       .pipe(
         new RunDriverRoutine(
           'driver',
@@ -280,10 +277,13 @@ export default class Tool extends Contract<ToolOptions> {
             name: driver.metadata.title,
             version,
           }),
+          { tool: this },
         ),
       )
       .pipe(
-        new CleanupConfigsRoutine('cleanup', this.msg('app:cleanup'))
+        new CleanupConfigsRoutine('cleanup', this.msg('app:cleanup'), {
+          tool: this,
+        })
           // Only add cleanup routine if we need it
           .skip(!this.config.configure.cleanup),
       );
@@ -299,16 +299,14 @@ export default class Tool extends Contract<ToolOptions> {
 
     const context = this.prepareContext(new ScriptContext(args, scriptName));
 
-    this.onRunScript.emit([context], scriptName);
+    this.onRunScript.emit([context, scriptName]);
 
     this.debug('Running with %s script', context.scriptName);
 
     return new WaterfallPipeline(context).pipe(
-      new RunScriptRoutine(
-        'script',
-        // Try and match the name of the class
-        this.msg('app:scriptRun', { name: upperFirst(camelCase(context.scriptName)) }),
-      ),
+      new RunScriptRoutine('script', this.msg('app:scriptRun', { name: scriptName }), {
+        tool: this,
+      }),
     );
   }
 
@@ -328,15 +326,10 @@ export default class Tool extends Contract<ToolOptions> {
     this.debug('Creating scaffold pipeline');
 
     return new WaterfallPipeline(context).pipe(
-      new ScaffoldRoutine('scaffold', this.msg('app:scaffoldGenerate')),
+      new ScaffoldRoutine('scaffold', this.msg('app:scaffoldGenerate'), {
+        tool: this,
+      }),
     );
-  }
-
-  /**
-   * Create and setup a fresh pipeline.
-   */
-  protected createPipeline<C extends Context, I>(context: C, input: I) {
-    return new WaterfallPipeline<C, I>(context, input);
   }
 
   /**
@@ -359,5 +352,22 @@ export default class Tool extends Contract<ToolOptions> {
     this.context = context;
 
     return context;
+  }
+
+  // TODO MIGRATE
+  /* eslint-disable @typescript-eslint/member-ordering, no-dupe-class-members */
+
+  getPlugin(type: 'driver', name: string): Driver;
+
+  getPlugin(type: 'script', name: string): Script;
+
+  getPlugin(type: 'driver' | 'script', name: string): unknown {
+    return type === 'driver' ? this.driverRegistry.get(name) : this.scriptRegistry.get(name);
+  }
+
+  isPluginEnabled(type: 'driver' | 'script', name: string): boolean {
+    return type === 'driver'
+      ? this.driverRegistry.isRegistered(name)
+      : this.scriptRegistry.isRegistered(name);
   }
 }

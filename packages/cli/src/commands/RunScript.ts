@@ -1,6 +1,6 @@
 import { Arg, Config, Command, GlobalOptions } from '@boost/cli';
 import { ScriptContextOptions, ScriptContextParams } from '@beemo/core';
-import beemo from '../beemo';
+import { beemo } from '../beemo';
 
 @Config('run-script', beemo.msg('app:cliCommandRunScript'))
 export default class RunScript extends Command<

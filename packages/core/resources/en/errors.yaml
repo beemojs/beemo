@@ -12,7 +12,7 @@ eslintIgnoreInvalid: Ignore configuration must be an array of strings.
 moduleConfigMissing:
   Beemo requires a `module` property within your configuration. This property is the name of a
   module that houses your configuration files.
-moduleMissing: Module {{module}} defined in `module` could not be found.
+moduleMissing: Module "{{module}}" defined in `module` could not be found.
 prettierIgnoreInvalid: Ignore configuration must be an array of strings.
 scaffoldNoTemplates: Failed to find scaffolding templates "{{path}}/*.ejs" in configuration module.
 scriptNameInvalidFormat: Script name must be in kebab case (alphanumeric characters and dashes).

@@ -16,9 +16,9 @@
   },
   "devDependencies": {
     "chalk": "^4.1.0",
-    "execa": "^4.0.3",
-    "fast-glob": "^3.0.4",
-    "fs-extra": "^9.0.1",
+    "execa": "^5.0.0",
+    "fast-glob": "^3.2.5",
+    "fs-extra": "^9.1.0",
     "semver": "^7.3.2"
   }
 }

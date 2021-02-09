@@ -11,7 +11,9 @@ export default class ResolveConfigsRoutine<
 > extends Routine<Path[], unknown, RoutineOptions> {
   blueprint({ instance }: Predicates): Blueprint<RoutineOptions> {
     return {
-      tool: instance(Tool).required().notNullable(),
+      tool: instance(Tool)
+        .required()
+        .notNullable(),
     };
   }
 

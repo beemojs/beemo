@@ -1,6 +1,6 @@
 import { Arg, Config, Command, GlobalOptions } from '@boost/cli';
 import { ScaffoldContextOptions, ScaffoldContextParams } from '@beemo/core';
-import beemo from '../beemo';
+import { beemo } from '../beemo';
 
 @Config('scaffold', beemo.msg('app:cliCommandScaffold'))
 export default class Scaffold extends Command<

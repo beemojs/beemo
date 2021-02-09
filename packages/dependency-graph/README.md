@@ -77,6 +77,3 @@ graph.resolveTree().nodes.forEach((node) => {
   }
 });
 ```
-
-> Will only resolve and return packages that have been defined. Will _not_ return non-defined
-> packages found in `dependencies` and `peerDependencies`.
