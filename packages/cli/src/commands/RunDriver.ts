@@ -8,7 +8,7 @@ import {
   ParserOptions,
 } from '@boost/cli';
 import { Driver, DriverContextOptions } from '@beemo/core';
-import beemo from '../beemo';
+import { beemo } from '../beemo';
 
 export interface RunDriverConfig {
   driver: Driver;

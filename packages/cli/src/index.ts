@@ -1,7 +1,7 @@
 import { Program, applyStyle } from '@boost/cli';
 // @ts-ignore
 import corePackage from '@beemo/core/package.json';
-import beemo, { argv, parallelArgv } from './beemo';
+import { beemo, argv, parallelArgv } from './beemo';
 import RunDriver from './commands/RunDriver';
 import CreateConfig from './commands/CreateConfig';
 import RunScript from './commands/RunScript';

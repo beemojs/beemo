@@ -1,7 +1,8 @@
 /**
- * @copyright   2017-2019, Miles Johnson
+ * @copyright   2021, Miles Johnson
  * @license     https://opensource.org/licenses/MIT
  */
+
 import { Path, PortablePath, Predicates, Blueprint, PackageStructure } from '@boost/common';
 import Tool from './Tool';
 import Driver from './Driver';

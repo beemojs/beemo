@@ -10,8 +10,8 @@ import execa, { ExecaError } from 'execa';
 import Tool from '../../Tool';
 import DriverContext from '../../contexts/DriverContext';
 import BatchStream from '../../streams/BatchStream';
-import formatExecReturn from '../../utils/formatExecReturn';
-import filterArgs, { OptionMap } from '../../utils/filterArgs';
+import formatExecReturn from '../../helpers/formatExecReturn';
+import filterArgs, { OptionMap } from '../../helpers/filterArgs';
 import { STRATEGY_COPY } from '../../constants';
 import { Argv, Execution, RoutineOptions } from '../../types';
 

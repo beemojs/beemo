@@ -387,6 +387,16 @@ describe('CreateConfigRoutine', () => {
     });
   });
 
+  describe('loadConfig()', () => {
+    it('errors if a config file returns a function', () => {
+      expect(() => {
+        routine.loadConfig(context, new Path(__dirname, '__fixtures__/config-export-function.js'));
+      }).toThrow(
+        'Configuration file `config-export-function.js` returned a function. Only plain objects are supported.',
+      );
+    });
+  });
+
   describe('loadConfigFromSources()', () => {
     it('loads config if it exists', async () => {
       tool.config.module = 'from-config-module';

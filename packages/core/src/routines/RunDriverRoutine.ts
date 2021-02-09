@@ -1,7 +1,7 @@
 import DriverContext from '../contexts/DriverContext';
 import ExecuteCommandRoutine, { ExecuteCommandOptions } from './driver/ExecuteCommandRoutine';
 import RunInWorkspacesRoutine from './RunInWorkspacesRoutine';
-import filterArgs from '../utils/filterArgs';
+import filterArgs from '../helpers/filterArgs';
 import { EXECUTE_OPTIONS } from '../constants';
 
 export default class ExecuteDriverRoutine extends RunInWorkspacesRoutine<DriverContext> {

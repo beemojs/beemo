@@ -3,7 +3,7 @@ import upperFirst from 'lodash/upperFirst';
 import { Bind, PathResolver } from '@boost/common';
 import Script from '../Script';
 import ScriptContext from '../contexts/ScriptContext';
-import filterArgs from '../utils/filterArgs';
+import filterArgs from '../helpers/filterArgs';
 import { EXECUTE_OPTIONS } from '../constants';
 import ExecuteScriptRoutine from './script/ExecuteScriptRoutine';
 import RunInWorkspacesRoutine from './RunInWorkspacesRoutine';

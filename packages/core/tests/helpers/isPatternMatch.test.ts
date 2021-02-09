@@ -1,4 +1,4 @@
-import isPatternMatch from '../../src/utils/isPatternMatch';
+import isPatternMatch from '../../src/helpers/isPatternMatch';
 
 describe('isPatternMatch()', () => {
   it('returns false for empty value', () => {

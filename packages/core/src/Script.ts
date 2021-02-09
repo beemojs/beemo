@@ -1,11 +1,12 @@
 import { ParserOptions, Arguments } from '@boost/args';
-import { Predicates, Blueprint, isObject } from '@boost/common';
+import { Predicates, Blueprint } from '@boost/common';
 import { ConcurrentEvent } from '@boost/event';
 import { Plugin } from '@boost/plugin';
 import execa, { Options as ExecaOptions } from 'execa';
 import Tool from './Tool';
 import ScriptContext from './contexts/ScriptContext';
 import { Argv, Scriptable, BeemoTool } from './types';
+import isClassInstance from './helpers/isClassInstance';
 
 export default abstract class Script<O extends object = {}, Options extends object = {}>
   extends Plugin<BeemoTool, Options>
@@ -20,7 +21,7 @@ export default abstract class Script<O extends object = {}, Options extends obje
   readonly onFailedExecute = new ConcurrentEvent<[ScriptContext, Error]>('failed-execute');
 
   static validate(script: Script) {
-    const name = isObject(script) ? script.constructor.name : 'Script';
+    const name = (isClassInstance(script) && script.constructor.name) || 'Script';
 
     if (typeof script.parse !== 'function') {
       throw new TypeError(`\`${name}\` requires a \`parse()\` method.`);

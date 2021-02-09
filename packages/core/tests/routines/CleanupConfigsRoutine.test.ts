@@ -11,6 +11,7 @@ describe('CleanupConfigsRoutine', () => {
   let driver: Driver;
   let context: DriverContext;
   let routine: CleanupConfigsRoutine;
+  let removeSpy: jest.SpyInstance;
 
   beforeEach(() => {
     tool = mockTool();
@@ -23,20 +24,26 @@ describe('CleanupConfigsRoutine', () => {
 
     tool.driverRegistry.load(driver);
     tool.driverRegistry.load(mockDriver('other-driver', tool));
+
+    // eslint-disable-next-line @typescript-eslint/no-misused-promises
+    removeSpy = jest.spyOn(fs, 'remove').mockImplementation(() => Promise.resolve());
+  });
+
+  afterEach(() => {
+    removeSpy.mockRestore();
+  });
+
+  describe('execute()', () => {
+    it('attempts to delete files', async () => {
+      context.configPaths = [{ driver: 'test-driver', path: new Path('./foo.json') }];
+
+      await routine.execute(context);
+
+      expect(removeSpy).toHaveBeenCalled();
+    });
   });
 
   describe('deleteConfigFiles()', () => {
-    let removeSpy: jest.SpyInstance;
-
-    beforeEach(() => {
-      // eslint-disable-next-line @typescript-eslint/no-misused-promises
-      removeSpy = jest.spyOn(fs, 'remove').mockImplementation(() => Promise.resolve());
-    });
-
-    afterEach(() => {
-      removeSpy.mockRestore();
-    });
-
     it('does nothing when no config paths', async () => {
       await routine.deleteConfigFiles(context);
 
