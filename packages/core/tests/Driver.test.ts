@@ -1,5 +1,8 @@
+import execa from 'execa';
 import Driver from '../src/Driver';
 import { mockDriver, stubExecResult } from '../src/testing';
+
+jest.mock('execa');
 
 describe('Driver', () => {
   let driver: Driver;
@@ -15,6 +18,15 @@ describe('Driver', () => {
         args: true,
       });
     }).toThrowErrorMatchingSnapshot();
+  });
+
+  describe('.validate()', () => {
+    it('errors if no options object', () => {
+      expect(() => {
+        // @ts-ignore
+        Driver.validate({});
+      }).toThrow('`Driver` requires an options object.');
+    });
   });
 
   describe('formatConfig()', () => {
@@ -63,6 +75,21 @@ describe('Driver', () => {
   describe('getSupportedOptions()', () => {
     it('returns an array of fields', () => {
       expect(driver.getSupportedOptions()).toEqual([]);
+    });
+  });
+
+  describe('getVersion()', () => {
+    it('returns 0.0.0 for an invalid response', () => {
+      (execa.sync as jest.Mock).mockImplementation(() => ({ stdout: '' }));
+
+      expect(driver.getVersion()).toBe('0.0.0');
+      expect(execa.sync).toHaveBeenCalledWith('foo', ['--version']);
+    });
+
+    it('returns valid version from response', () => {
+      (execa.sync as jest.Mock).mockImplementation(() => ({ stdout: '1.2.3' }));
+
+      expect(driver.getVersion()).toBe('1.2.3');
     });
   });
 

@@ -2,12 +2,12 @@
 
 import { Arguments, Argv, ArgList } from '@boost/args';
 import { Path } from '@boost/common';
-import { mockDebugger } from '@boost/debug/lib/testing';
+import { mockDebugger } from '@boost/debug/test';
 import execa from 'execa';
 import Driver from './Driver';
 import Script from './Script';
 import Tool from './Tool';
-import { DriverMetadata } from './types';
+import { DriverMetadata, ConfigFile } from './types';
 import Context from './contexts/Context';
 import ConfigContext from './contexts/ConfigContext';
 import DriverContext, { DriverContextOptions } from './contexts/DriverContext';
@@ -16,7 +16,7 @@ import ScriptContext, { ScriptContextOptions } from './contexts/ScriptContext';
 
 export { mockDebugger };
 
-export const BEEMO_TEST_ROOT = Path.resolve('../../../tests', __dirname);
+const TEST_ROOT = new Path(process.env.BEEMO_TEST_ROOT || process.cwd());
 
 export class TestDriver<O extends object = {}> extends Driver<O> {
   name = 'test-driver';
@@ -34,16 +34,8 @@ export function mockConsole<K extends keyof Console>(name: K): jest.SpyInstance 
   return jest.spyOn(console, name as 'log').mockImplementation(() => {});
 }
 
-export function mockTool(argv: Argv = []): Tool {
-  const tool = new Tool({
-    argv,
-    cwd: BEEMO_TEST_ROOT,
-  });
-
-  // @ts-ignore
-  tool.debug = mockDebugger();
-
-  tool.config = {
+export function mockToolConfig(): ConfigFile {
+  return {
     configure: {
       cleanup: false,
       parallel: true,
@@ -58,11 +50,18 @@ export function mockTool(argv: Argv = []): Tool {
     scripts: [],
     settings: {},
   };
+}
 
-  tool.package = {
-    name: 'beemo-test',
-    version: '0.0.0',
-  };
+export function mockTool(argv: Argv = []): Tool {
+  const tool = new Tool({
+    argv,
+    cwd: TEST_ROOT,
+  });
+
+  // @ts-ignore Allow readonly
+  tool.debug = mockDebugger();
+
+  tool.config = mockToolConfig();
 
   return tool;
 }
@@ -107,6 +106,10 @@ export function stubArgs<T extends object>(options: T, params: ArgList = []): Ar
   };
 }
 
+export function stubConfigArgs(): Arguments<{}> {
+  return stubArgs({});
+}
+
 export function stubDriverArgs(
   fields?: Partial<DriverContextOptions>,
 ): Arguments<DriverContextOptions> {
@@ -144,9 +147,9 @@ export function stubScriptArgs(
 export function applyContext<T extends Context>(context: T): T {
   context.args = stubArgs({ a: true, foo: 'bar' }, ['baz']);
   context.argv = ['-a', '--foo', 'bar', 'baz'];
-  context.cwd = BEEMO_TEST_ROOT;
-  context.configModuleRoot = BEEMO_TEST_ROOT;
-  context.workspaceRoot = BEEMO_TEST_ROOT;
+  context.cwd = TEST_ROOT;
+  context.configModuleRoot = TEST_ROOT;
+  context.workspaceRoot = TEST_ROOT;
   context.workspaces = [];
 
   return context;
@@ -179,11 +182,11 @@ export function stubScaffoldContext(
 }
 
 export function prependRoot(part: string): Path {
-  return BEEMO_TEST_ROOT.append(part);
+  return TEST_ROOT.append(part);
 }
 
 export function getRoot(): Path {
-  return BEEMO_TEST_ROOT;
+  return TEST_ROOT;
 }
 
 export function stubExecResult(fields?: Partial<execa.ExecaReturnValue>): execa.ExecaReturnValue {

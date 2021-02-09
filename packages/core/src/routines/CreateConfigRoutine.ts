@@ -25,8 +25,12 @@ export default class CreateConfigRoutine<Ctx extends ConfigContext> extends Rout
   blueprint({ instance }: Predicates): Blueprint<CreateConfigOptions> {
     return {
       // @ts-ignore Errors because Driver is abstract
-      driver: instance(Driver).required().notNullable(),
-      tool: instance(Tool).required().notNullable(),
+      driver: instance(Driver)
+        .required()
+        .notNullable(),
+      tool: instance(Tool)
+        .required()
+        .notNullable(),
     };
   }
 
@@ -130,8 +134,8 @@ export default class CreateConfigRoutine<Ctx extends ConfigContext> extends Rout
    */
   getConfigPath({ cwd, workspaceRoot }: Ctx, forceLocal: boolean = false): Path | null {
     const moduleName = this.options.tool.config.module;
-    const { name } = this.options.driver;
-    const configName = this.getConfigName(name);
+    const driverName = this.options.driver.getAlias();
+    const configName = this.getConfigName(driverName);
     const isLocal = moduleName === '@local' || forceLocal;
     const resolver = new PathResolver();
 
@@ -157,8 +161,8 @@ export default class CreateConfigRoutine<Ctx extends ConfigContext> extends Rout
     this.debug.invariant(
       !!configPath,
       isLocal
-        ? `Loading ${chalk.green(name)} config from local consumer`
-        : `Loading ${chalk.green(name)} config from configuration module ${chalk.yellow(
+        ? `Loading ${chalk.green(driverName)} config from local consumer`
+        : `Loading ${chalk.green(driverName)} config from configuration module ${chalk.yellow(
             moduleName,
           )}`,
       'Exists, loading',
@@ -200,7 +204,9 @@ export default class CreateConfigRoutine<Ctx extends ConfigContext> extends Rout
 
     if (typeof config === 'function') {
       throw new TypeError(
-        this.options.tool.msg('errors:configNoFunction', { name: filePath.name() }),
+        this.options.tool.msg('errors:configNoFunction', {
+          name: filePath.name(),
+        }),
       );
     }
 

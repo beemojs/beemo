@@ -3,7 +3,7 @@ import { Path, Predicates, Blueprint } from '@boost/common';
 import { Routine } from '@boost/pipeline';
 import Tool from '../../Tool';
 import Script from '../../Script';
-import formatExecReturn, { ExecLike } from '../../utils/formatExecReturn';
+import formatExecReturn, { ExecLike } from '../../helpers/formatExecReturn';
 import ScriptContext from '../../contexts/ScriptContext';
 import { RoutineOptions } from '../../types';
 

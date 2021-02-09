@@ -3,7 +3,7 @@ import { Routine, PooledPipeline } from '@boost/pipeline';
 import { stripAnsi, style } from '@boost/terminal';
 import Graph from '@beemo/dependency-graph';
 import Context from '../contexts/Context';
-import isPatternMatch from '../utils/isPatternMatch';
+import isPatternMatch from '../helpers/isPatternMatch';
 import { ExecutionError, RoutineOptions } from '../types';
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -95,6 +95,7 @@ export default abstract class RunInWorkspacesRoutine<
         .trim()
         .split('\n');
 
+      // istanbul ignore next
       if (content.length >= MAX_ERROR_LINES) {
         const count = content.length - MAX_ERROR_LINES;
 

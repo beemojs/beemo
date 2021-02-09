@@ -17,6 +17,7 @@ export default class Config extends Configuration<ConfigFile> {
         concurrency: number(3).gt(0),
         graph: bool(true),
       }),
+      // Config is validated on instantiation, so using required here wont work
       module: process.env.BEEMO_CONFIG_MODULE ? string(process.env.BEEMO_CONFIG_MODULE) : string(), // .required(),
       scripts: createPluginsPredicate(predicates),
       settings: object(),
