@@ -27,9 +27,7 @@ export default abstract class RunInWorkspacesRoutine<
   blueprint({ instance }: Predicates): Blueprint<RoutineOptions> {
     return {
       // @ts-ignore We cant import Tool because of cycles
-      tool: instance()
-        .required()
-        .notNullable(),
+      tool: instance().required().notNullable(),
     };
   }
 
@@ -121,10 +119,7 @@ export default abstract class RunInWorkspacesRoutine<
 
     // Inherit stack for easier debugging.
     if (errors.length === 1) {
-      error.stack = String(errors[0].stack)
-        .split('\n')
-        .slice(1)
-        .join('\n');
+      error.stack = String(errors[0].stack).split('\n').slice(1).join('\n');
     }
 
     throw error;

@@ -73,10 +73,7 @@ export default class FlowDriver extends Driver<FlowConfig> {
 
     // http://caml.inria.fr/pub/docs/manual-ocaml/libref/Str.html#TYPEregexp
     if (value instanceof RegExp) {
-      option = value.source
-        .replace(/\|/gu, '\\|')
-        .replace(/\(/gu, '\\(')
-        .replace(/\)/gu, '\\)');
+      option = value.source.replace(/\|/gu, '\\|').replace(/\(/gu, '\\(').replace(/\)/gu, '\\)');
     } else {
       option = String(value);
     }

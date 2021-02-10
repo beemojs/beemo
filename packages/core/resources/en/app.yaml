@@ -2,13 +2,14 @@ babelCleanOption: Clean the target folder
 babelDescription: Transpile files with Babel
 cleanup: Cleaning up
 cliArgConfigNames: List of driver names to create config files for
+cliArgDriverName: Name of driver (if not running explicitly)
 cliArgGenerator: Name of scaffolding generator
 cliArgGeneratorAction: Type of action to scaffold
 cliArgGeneratorName: Name to interpolate within scaffold templates (optional)
 cliArgScriptName: Name of script (in kebab case) to run
 cliCommandConfig: Create a configuration file for all or the specified drivers
 cliCommandRunDriver: Run a configured driver
-cliCommandRunScript: Run a configuration module or Node module script
+cliCommandRunScript: Run a configured or a module script
 cliCommandScaffold: Generate files with templates from configuration module
 cliEpilogue: 'For more information, view the manual: {{manualURL}}'
 cliOptionConcurrency: Number of builds to run in parallel

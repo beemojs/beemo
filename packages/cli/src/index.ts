@@ -26,15 +26,13 @@ const program = new Program({
 
 async function run() {
   // Run this in middleware so we can utilize error handling
-  program.middleware(async (v, parse) => {
-    // Load config and plugins
-    await beemo.bootstrap();
+  // program.middleware(async (v, parse) => {});
 
-    // Bootstrap config module
-    await beemo.bootstrapConfigModule();
+  // Load config and plugins
+  await beemo.bootstrap();
 
-    return parse(v);
-  });
+  // Bootstrap config module
+  await beemo.bootstrapConfigModule();
 
   // Add a command for each driver
   beemo.driverRegistry.getAll().forEach((driver) => {
@@ -44,8 +42,16 @@ async function run() {
   // Add normal commands
   program
     .register(new CreateConfig())
+    .register(new RunDriver())
     .register(new RunScript())
     .register(new Scaffold());
+
+  // Add categories
+  program.categories({
+    core: 'Core',
+    driver: 'Drivers',
+    script: 'Scripts',
+  });
 
   // Listen to events
   program.onAfterRun.listen(beemo.cleanupOnFailure);

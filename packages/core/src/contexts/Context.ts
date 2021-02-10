@@ -40,6 +40,12 @@ export default class Context<
 
     this.args = args;
     this.argv = argv;
+
+    // TODO MIGRATE
+    // @ts-ignore
+    this.addArg = this.addParam.bind(this);
+    // @ts-ignore
+    this.addArgs = this.addParams.bind(this);
   }
 
   /**
@@ -146,7 +152,8 @@ export default class Context<
    * Return either a configured option value, or an unknown option value,
    * or null if not found.
    */
-  getRiskyOption(name: string): unknown {
-    return this.getOption(name as keyof O) || this.args.unknown[name] || null;
+  getRiskyOption(name: string): PrimitiveType | null {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    return (this.getOption(name as keyof O) ?? this.args.unknown[name] ?? null) as any;
   }
 }

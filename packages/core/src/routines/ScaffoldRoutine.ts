@@ -8,9 +8,7 @@ import { RoutineOptions } from '../types';
 export default class ScaffoldRoutine extends Routine<unknown, unknown, RoutineOptions> {
   blueprint({ instance }: Predicates): Blueprint<RoutineOptions> {
     return {
-      tool: instance(Tool)
-        .required()
-        .notNullable(),
+      tool: instance(Tool).required().notNullable(),
     };
   }
 
@@ -68,6 +66,7 @@ export default class ScaffoldRoutine extends Routine<unknown, unknown, RoutineOp
    */
   private handleLog = (message: string) => {
     if (message && message.trim()) {
+      // eslint-disable-next-line no-console
       console.log(message);
     }
   };

@@ -9,7 +9,7 @@ import Driver from './Driver';
 import Script from './Script';
 import Context from './contexts/Context';
 import ConfigContext from './contexts/ConfigContext';
-import DriverContext, { DriverContextOptions } from './contexts/DriverContext';
+import DriverContext, { DriverContextOptions, DriverContextParams } from './contexts/DriverContext';
 import ScaffoldContext, {
   ScaffoldContextOptions,
   ScaffoldContextParams,
@@ -23,6 +23,7 @@ export {
   Driver,
   DriverContext,
   DriverContextOptions,
+  DriverContextParams,
   ScaffoldContext,
   ScaffoldContextOptions,
   ScaffoldContextParams,
