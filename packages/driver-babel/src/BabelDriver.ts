@@ -42,7 +42,7 @@ export default class BabelDriver extends Driver<BabelConfig> {
   private handleCleanTarget = (context: DriverContext) => {
     const outDir = context.getRiskyOption('outDir');
 
-    if (context.getRiskyOption('clean') && typeof outDir === 'string' && outDir) {
+    if (context.getRiskyOption('clean') !== null && typeof outDir === 'string' && outDir) {
       rimraf.sync(Path.resolve(outDir).path());
     }
 

@@ -12,7 +12,7 @@ export default class ExecuteDriverRoutine extends RunInWorkspacesRoutine<DriverC
         packageRoot,
       });
     } else {
-      this.pipeParallelBuilds(context, context.primaryDriver.name);
+      this.pipeParallelBuilds(context, context.primaryDriver.getName());
     }
   }
 
@@ -29,6 +29,13 @@ export default class ExecuteDriverRoutine extends RunInWorkspacesRoutine<DriverC
     const { filteredArgv } = filterArgs(argv, {
       block: EXECUTE_OPTIONS,
     });
+
+    // Remove the driver name from `beemo <name>` since it
+    // gets passed through and will crash the child process
+    if (filteredArgv[0] === primaryDriver.getName()) {
+      filteredArgv.shift();
+    }
+
     const command = `${primaryDriver.metadata.bin} ${filteredArgv.join(' ')}`.trim();
 
     this.routines.push(

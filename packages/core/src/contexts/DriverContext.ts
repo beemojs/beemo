@@ -10,6 +10,8 @@ export interface DriverContextOptions {
   workspaces: string;
 }
 
+export type DriverContextParams = [string];
+
 export default class DriverContext<
   O extends DriverContextOptions = DriverContextOptions
 > extends ConfigContext<O> {
@@ -25,7 +27,7 @@ export default class DriverContext<
   constructor(args: Arguments<O>, driver: Driver, parallelArgv: Argv[] = []) {
     super(args);
 
-    this.driverName = driver.name;
+    this.driverName = driver.getName();
     this.parallelArgv = parallelArgv;
     this.primaryDriver = driver;
 

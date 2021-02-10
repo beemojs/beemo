@@ -65,11 +65,11 @@ export default class Tool extends Contract<ToolOptions> {
 
   readonly onRunCreateConfig = new Event<[ConfigContext, string[]]>('run-create-config');
 
-  readonly onRunDriver = new Event<[DriverContext, Driver, string]>('run-driver');
+  readonly onRunDriver = new Event<[DriverContext, Driver]>('run-driver');
 
   readonly onRunScaffold = new Event<[ScaffoldContext, string, string, string?]>('run-scaffold');
 
-  readonly onRunScript = new Event<[ScriptContext, string]>('run-script');
+  readonly onRunScript = new Event<[ScriptContext]>('run-script');
 
   readonly scriptRegistry: Registry<Script>;
 
@@ -79,7 +79,9 @@ export default class Tool extends Contract<ToolOptions> {
     this.argv = this.options.argv;
     this.cwd = Path.create(this.options.cwd);
 
-    this.debug = createDebugger('beemo');
+    this.debug = createDebugger('core');
+    // eslint-disable-next-line global-require
+    this.debug('Using beemo v%s', require('../package.json').version);
 
     this.msg = createTranslator(
       ['app', 'common', 'errors'],
@@ -108,9 +110,7 @@ export default class Tool extends Contract<ToolOptions> {
     return {
       argv: array(string()),
       cwd: union([instance(Path).notNullable(), string().notEmpty()], process.cwd()),
-      projectName: string('beemo')
-        .camelCase()
-        .notEmpty(),
+      projectName: string('beemo').camelCase().notEmpty(),
       resourcePaths: array(string().notEmpty()),
     };
   }
@@ -127,10 +127,6 @@ export default class Tool extends Contract<ToolOptions> {
 
     // Load scripts
     await this.scriptRegistry.loadMany(config.scripts, { tool: this });
-
-    // Log information
-    // eslint-disable-next-line global-require
-    this.debug('Using beemo v%s', require('../package.json').version);
   }
 
   /**
@@ -225,7 +221,7 @@ export default class Tool extends Contract<ToolOptions> {
     if (driverNames.length === 0) {
       this.driverRegistry.getAll().forEach((driver) => {
         context.addDriverDependency(driver);
-        driverNames.push(driver.name);
+        driverNames.push(driver.getName());
       });
 
       this.debug('Running with all drivers');
@@ -260,7 +256,7 @@ export default class Tool extends Contract<ToolOptions> {
     const context = this.prepareContext(new DriverContext(args, driver, parallelArgv));
     const version = driver.getVersion();
 
-    this.onRunDriver.emit([context, driver, driverName]);
+    this.onRunDriver.emit([context, driver], driverName);
 
     this.debug('Running with %s v%s driver', driverName, version);
 
@@ -299,7 +295,7 @@ export default class Tool extends Contract<ToolOptions> {
 
     const context = this.prepareContext(new ScriptContext(args, scriptName));
 
-    this.onRunScript.emit([context, scriptName]);
+    this.onRunScript.emit([context], scriptName);
 
     this.debug('Running with %s script', context.scriptName);
 

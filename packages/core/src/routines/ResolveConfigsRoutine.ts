@@ -11,9 +11,7 @@ export default class ResolveConfigsRoutine<
 > extends Routine<Path[], unknown, RoutineOptions> {
   blueprint({ instance }: Predicates): Blueprint<RoutineOptions> {
     return {
-      tool: instance(Tool)
-        .required()
-        .notNullable(),
+      tool: instance(Tool).required().notNullable(),
     };
   }
 
@@ -48,9 +46,9 @@ export default class ResolveConfigsRoutine<
   setupConfigFiles(context: Ctx) {
     const names: string[] = [];
     const routines = [...context.drivers].reverse().map((driver) => {
-      names.push(driver.name);
+      names.push(driver.getName());
 
-      return new CreateConfigRoutine(driver.name, driver.metadata.configName, {
+      return new CreateConfigRoutine(driver.getName(), driver.metadata.configName, {
         driver,
         tool: this.options.tool,
       });
@@ -78,7 +76,7 @@ export default class ResolveConfigsRoutine<
       const driver = queue.shift()!;
       const deps = new Set(driver.getDependencies());
 
-      this.debug('Resolving %s', driver.name);
+      this.debug('Resolving "%s"', driver.getName());
 
       deps.forEach((name) => {
         this.debug('  Including dependency %s', chalk.green(name));

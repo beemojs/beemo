@@ -285,7 +285,7 @@ export default class TypeScriptDriver extends Driver<TypeScriptConfig, TypeScrip
   private handleCleanTarget = (context: DriverContext) => {
     const outDir = context.getRiskyOption('outDir') || this.config.compilerOptions?.outDir;
 
-    if (context.getRiskyOption('clean') && typeof outDir === 'string' && outDir) {
+    if (context.getRiskyOption('clean') !== null && typeof outDir === 'string' && outDir) {
       rimraf.sync(Path.resolve(outDir).path());
     }
 
@@ -300,7 +300,7 @@ export default class TypeScriptDriver extends Driver<TypeScriptConfig, TypeScrip
     configPath: Path,
     config: TypeScriptConfig,
   ) => {
-    if (!context.getRiskyOption('referenceWorkspaces')) {
+    if (context.getRiskyOption('referenceWorkspaces') === null) {
       return;
     }
 
@@ -316,9 +316,9 @@ export default class TypeScriptDriver extends Driver<TypeScriptConfig, TypeScrip
    * references linked correctly. Requires the `--reference-workspaces` option.
    */
   private handleProjectReferences = (context: DriverContext) => {
-    if (!context.getRiskyOption('referenceWorkspaces')) {
+    if (context.getRiskyOption('referenceWorkspaces') === null) {
       return Promise.resolve();
-    } else if (!context.getRiskyOption('build') && !context.getRiskyOption('b')) {
+    } else if (context.getRiskyOption('build') === null && context.getRiskyOption('b') === null) {
       throw new Error(this.tool.msg('errors:workspacesProjectRefsBuildRequired'));
     } else if (context.getOption('workspaces')) {
       throw new Error(this.tool.msg('errors:workspacesProjectRefsMixed'));

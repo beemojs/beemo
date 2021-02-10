@@ -2,15 +2,15 @@ import { Arg, Config, Command, GlobalOptions } from '@boost/cli';
 import { ScriptContextOptions, ScriptContextParams } from '@beemo/core';
 import { beemo } from '../beemo';
 
-@Config('run-script', beemo.msg('app:cliCommandRunScript'))
+@Config('run-script', beemo.msg('app:cliCommandRunScript'), {
+  aliases: ['run'],
+  allowVariadicParams: true,
+  category: 'core',
+})
 export default class RunScript extends Command<
   ScriptContextOptions & GlobalOptions,
   ScriptContextParams
 > {
-  static aliases = ['run'];
-
-  static allowVariadicParams = true;
-
   @Arg.Number(beemo.msg('app:cliOptionConcurrency'))
   concurrency: number = 0;
 
