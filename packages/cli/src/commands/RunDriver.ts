@@ -7,24 +7,30 @@ import {
   CommandMetadata,
   ParserOptions,
 } from '@boost/cli';
-import { Driver, DriverContextOptions } from '@beemo/core';
+import {
+  Driver,
+  DriverContextOptions,
+  DriverContextParams,
+  Predicates,
+  Blueprint,
+} from '@beemo/core';
 import { beemo } from '../beemo';
 
 export interface RunDriverConfig {
-  driver: Driver;
-  parallelArgv: Argv[];
+  driver?: Driver;
+  parallelArgv?: Argv[];
 }
 
-@Config('run-driver', beemo.msg('app:cliCommandRunDriver'))
+@Config('run-driver', beemo.msg('app:cliCommandRunDriver'), {
+  allowUnknownOptions: true,
+  allowVariadicParams: true,
+  category: 'core',
+})
 export default class RunDriver extends Command<
   DriverContextOptions & GlobalOptions,
   [],
   RunDriverConfig
 > {
-  static allowUnknownOptions = true;
-
-  static allowVariadicParams = true;
-
   @Arg.Number(beemo.msg('app:cliOptionConcurrency'))
   concurrency: number = 0;
 
@@ -37,20 +43,39 @@ export default class RunDriver extends Command<
   @Arg.String(beemo.msg('app:cliOptionWorkspaces'))
   workspaces: string = '';
 
+  blueprint({ instance, array, string }: Predicates): Blueprint<RunDriverConfig> {
+    return {
+      // @ts-ignore Because Driver is abstract
+      driver: instance(Driver),
+      parallelArgv: array(array(string())),
+    };
+  }
+
   getMetadata(): CommandMetadata {
     const { driver } = this.options;
+    const parent = super.getMetadata();
+
+    if (!driver) {
+      return parent;
+    }
 
     return {
       ...super.getMetadata(),
+      category: 'driver',
       description:
         driver.metadata.description || beemo.msg('app:run', { title: driver.metadata.title }),
-      path: driver.name,
+      params: [],
+      path: driver.getName(),
     };
   }
 
   getParserOptions(): ParserOptions<DriverContextOptions & GlobalOptions> {
     const { driver } = this.options;
     const parent = super.getParserOptions();
+
+    if (!driver) {
+      return parent;
+    }
 
     return {
       ...parent,
@@ -61,8 +86,17 @@ export default class RunDriver extends Command<
     };
   }
 
-  async run() {
-    const pipeline = beemo.createRunDriverPipeline(this.getArguments(), this.options.driver.name);
+  @Arg.Params<DriverContextParams>({
+    description: beemo.msg('app:cliArgDriverName'),
+    label: 'name',
+    required: true,
+    type: 'string',
+  })
+  async run(name: string = '') {
+    const pipeline = beemo.createRunDriverPipeline(
+      this.getArguments(),
+      this.options.driver?.getName() || name,
+    );
 
     await pipeline.run();
   }

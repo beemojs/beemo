@@ -35,9 +35,7 @@ export default class ExecuteCommandRoutine extends Routine<
       argv: array(string()),
       forceConfigOption: bool(),
       packageRoot: string(),
-      tool: instance(Tool)
-        .required()
-        .notNullable(),
+      tool: instance(Tool).required().notNullable(),
     };
   }
 

@@ -15,9 +15,7 @@ export default class ExecuteScriptRoutine extends Routine<unknown, Script, Execu
   blueprint({ instance, string }: Predicates): Blueprint<ExecuteScriptOptions> {
     return {
       packageRoot: string(),
-      tool: instance(Tool)
-        .required()
-        .notNullable(),
+      tool: instance(Tool).required().notNullable(),
     };
   }
 

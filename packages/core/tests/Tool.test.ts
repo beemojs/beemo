@@ -1,5 +1,6 @@
 import fs from 'fs-extra';
 import { Path } from '@boost/common';
+import { getFixturePath } from '@boost/test-utils';
 import Tool from '../src/Tool';
 import {
   mockToolConfig,
@@ -17,7 +18,6 @@ import RunScriptRoutine from '../src/routines/RunScriptRoutine';
 import ResolveConfigsRoutine from '../src/routines/ResolveConfigsRoutine';
 import CleanupConfigsRoutine from '../src/routines/CleanupConfigsRoutine';
 import Context from '../src/contexts/Context';
-import { getFixturePath } from '@boost/test-utils';
 
 jest.mock('execa');
 
@@ -29,11 +29,11 @@ describe('Tool', () => {
   const barDriver = mockDriver('bar');
   const bazDriver = mockDriver('baz');
 
-  function spyTool(tool: Tool) {
-    driverSpy = jest.spyOn(tool.driverRegistry, 'loadMany').mockImplementation();
-    scriptSpy = jest.spyOn(tool.scriptRegistry, 'loadMany').mockImplementation();
+  function spyTool(inst: Tool) {
+    driverSpy = jest.spyOn(inst.driverRegistry, 'loadMany').mockImplementation();
+    scriptSpy = jest.spyOn(inst.scriptRegistry, 'loadMany').mockImplementation();
 
-    return tool;
+    return inst;
   }
 
   beforeEach(() => {
@@ -227,7 +227,7 @@ describe('Tool', () => {
       tool.config.module = '@boost/common';
 
       expect(tool.getConfigModuleRoot().path()).toEqual(
-        expect.stringMatching(/node_modules\/@boost\/common$/),
+        expect.stringMatching(/node_modules\/@boost\/common$/u),
       );
       expect(tool.getConfigModuleRoot()).toBe(tool.getConfigModuleRoot());
     });
@@ -357,29 +357,23 @@ describe('Tool', () => {
       it('emits `onRunDriver` event', () => {
         const spy = jest.fn();
 
-        tool.onRunDriver.listen(spy);
+        tool.onRunDriver.listen(spy, 'foo');
         tool.createRunDriverPipeline(stubDriverArgs(), 'foo');
 
-        expect(spy).toHaveBeenCalledWith(tool.context, fooDriver, 'foo');
+        expect(spy).toHaveBeenCalledWith(tool.context, fooDriver);
       });
 
       it('skips cleanup based on `configure.cleanup` option', () => {
         tool.config.configure.cleanup = false;
 
         expect(
-          tool
-            .createRunDriverPipeline(stubDriverArgs(), 'foo')
-            .getWorkUnits()[2]
-            .isSkipped(),
+          tool.createRunDriverPipeline(stubDriverArgs(), 'foo').getWorkUnits()[2].isSkipped(),
         ).toBe(true);
 
         tool.config.configure.cleanup = true;
 
         expect(
-          tool
-            .createRunDriverPipeline(stubDriverArgs(), 'foo')
-            .getWorkUnits()[2]
-            .isSkipped(),
+          tool.createRunDriverPipeline(stubDriverArgs(), 'foo').getWorkUnits()[2].isSkipped(),
         ).toBe(false);
       });
     });
@@ -423,10 +417,10 @@ describe('Tool', () => {
     it('emits `onRunScript` event', () => {
       const spy = jest.fn();
 
-      tool.onRunScript.listen(spy);
+      tool.onRunScript.listen(spy, 'script-name');
       tool.createRunScriptPipeline(stubScriptArgs(), 'script-name');
 
-      expect(spy).toHaveBeenCalledWith(tool.context, 'script-name');
+      expect(spy).toHaveBeenCalledWith(tool.context);
     });
   });
 

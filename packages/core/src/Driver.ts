@@ -133,7 +133,7 @@ export default abstract class Driver<
   /**
    * Return the module name without the Beemo namespace.
    */
-  getAlias(): string {
+  getName(): string {
     return this.name.split('-').pop()!;
   }
 
@@ -215,9 +215,7 @@ export default abstract class Driver<
 
     Object.keys(options).forEach((key) => {
       blueprint[key] = shape({
-        description: string()
-          .notEmpty()
-          .required(),
+        description: string().notEmpty().required(),
         type: string().oneOf<'string' | 'number' | 'boolean'>(['string', 'number', 'boolean']),
       });
     });
