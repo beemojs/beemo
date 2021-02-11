@@ -10,7 +10,9 @@ export interface BumpPeerDepsOptions {
 
 const RELEASE_TYPES: BumpPeerDepsOptions['release'][] = ['major', 'minor', 'patch'];
 
-export default class BumpPeerDepsScript extends Script<BumpPeerDepsOptions> {
+class BumpPeerDepsScript extends Script<BumpPeerDepsOptions> {
+  name = '@beemo/script-bump-peer-deps';
+
   parse(): ParserOptions<BumpPeerDepsOptions> {
     return {
       options: {
@@ -72,4 +74,8 @@ export default class BumpPeerDepsScript extends Script<BumpPeerDepsOptions> {
       }),
     );
   }
+}
+
+export default function bumpPeerDeps() {
+  return new BumpPeerDepsScript();
 }
