@@ -22,7 +22,7 @@
   },
   "dependencies": {
     "@boost/cli": "^2.9.1",
-    "ink": "^3.0.5",
+    "ink": "^3.0.8",
     "react": "^16.13.1"
   },
   "peerDependencies": {

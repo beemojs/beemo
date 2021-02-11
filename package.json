@@ -31,7 +31,7 @@
     "@types/semver": "^7.3.4",
     "@types/webpack": "^4.41.26",
     "conventional-changelog-beemo": "^2.1.0",
-    "lerna": "^3.21.0"
+    "lerna": "^3.22.1"
   },
   "resolutions": {
     "chalk": "^4.0.0",
