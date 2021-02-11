@@ -1,5 +1,5 @@
 import rimraf from 'rimraf';
-import { Driver, DriverContext, ExecutionError,Path } from '@beemo/core';
+import { Driver, DriverContext, ExecutionError, Path } from '@beemo/core';
 import { BabelConfig } from './types';
 
 // Success: Writes file list to stdout

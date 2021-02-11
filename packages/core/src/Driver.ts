@@ -1,7 +1,7 @@
 import execa from 'execa';
 import mergeWith from 'lodash/mergeWith';
-import { Blueprint, isObject,optimal, Path, Predicates, predicates } from '@boost/common';
-import { ConcurrentEvent,Event } from '@boost/event';
+import { Blueprint, isObject, optimal, Path, Predicates, predicates } from '@boost/common';
+import { ConcurrentEvent, Event } from '@boost/event';
 import { Plugin } from '@boost/plugin';
 import {
   STRATEGY_COPY,
@@ -28,9 +28,11 @@ import {
 } from './types';
 
 export default abstract class Driver<
-  Config extends object = {},
-  Options extends DriverOptions = DriverOptions
-> extends Plugin<BeemoTool, Options> implements Driverable {
+    Config extends object = {},
+    Options extends DriverOptions = DriverOptions
+  >
+  extends Plugin<BeemoTool, Options>
+  implements Driverable {
   command: DriverCommandOptions = {};
 
   // Set after instantiation

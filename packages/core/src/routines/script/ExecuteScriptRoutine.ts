@@ -1,5 +1,5 @@
 import { parse } from '@boost/args';
-import { Blueprint,Path, Predicates } from '@boost/common';
+import { Blueprint, Path, Predicates } from '@boost/common';
 import { Routine } from '@boost/pipeline';
 import ScriptContext from '../../contexts/ScriptContext';
 import formatExecReturn, { ExecLike } from '../../helpers/formatExecReturn';

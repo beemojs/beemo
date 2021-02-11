@@ -1,12 +1,12 @@
 import execa, { Options as ExecaOptions } from 'execa';
-import { Arguments,ParserOptions } from '@boost/args';
-import { Blueprint,Predicates } from '@boost/common';
+import { Arguments, ParserOptions } from '@boost/args';
+import { Blueprint, Predicates } from '@boost/common';
 import { ConcurrentEvent } from '@boost/event';
 import { Plugin } from '@boost/plugin';
 import ScriptContext from './contexts/ScriptContext';
 import isClassInstance from './helpers/isClassInstance';
 import Tool from './Tool';
-import { Argv, BeemoTool,Scriptable } from './types';
+import { Argv, BeemoTool, Scriptable } from './types';
 
 export default abstract class Script<O extends object = {}, Options extends object = {}>
   extends Plugin<BeemoTool, Options>

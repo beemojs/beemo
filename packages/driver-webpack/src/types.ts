@@ -4,7 +4,13 @@ import webpack from 'webpack';
 export interface WebpackConfig extends webpack.Configuration {}
 
 export type DisplaySetting =
-  '' | 'detailed' | 'errors-only' | 'minimal' | 'none' | 'normal' | 'verbose';
+  | ''
+  | 'detailed'
+  | 'errors-only'
+  | 'minimal'
+  | 'none'
+  | 'normal'
+  | 'verbose';
 
 export type VerbositySetting = 'info' | 'none' | 'verbose';
 

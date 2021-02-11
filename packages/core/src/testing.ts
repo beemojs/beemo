@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any, max-classes-per-file */
 
 import execa from 'execa';
-import { ArgList,Arguments, Argv } from '@boost/args';
+import { ArgList, Arguments, Argv } from '@boost/args';
 import { Path } from '@boost/common';
 import { mockDebugger } from '@boost/debug/test';
 import ConfigContext from './contexts/ConfigContext';
@@ -12,7 +12,7 @@ import ScriptContext, { ScriptContextOptions } from './contexts/ScriptContext';
 import Driver from './Driver';
 import Script from './Script';
 import Tool from './Tool';
-import { ConfigFile,DriverMetadata } from './types';
+import { ConfigFile, DriverMetadata } from './types';
 
 export { mockDebugger };
 
