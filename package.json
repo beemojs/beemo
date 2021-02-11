@@ -34,7 +34,8 @@
     "lerna": "^3.21.0"
   },
   "resolutions": {
-    "chalk": "^4.0.0"
+    "chalk": "^4.0.0",
+    "debug": "^4.3.1"
   },
   "workspaces": [
     "packages/*"
