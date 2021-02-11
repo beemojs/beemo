@@ -1,5 +1,5 @@
 import chalk from 'chalk';
-import { Blueprint, Path,Predicates } from '@boost/common';
+import { Blueprint, Path, Predicates } from '@boost/common';
 import { Routine } from '@boost/pipeline';
 import ConfigContext from '../contexts/ConfigContext';
 import Tool from '../Tool';

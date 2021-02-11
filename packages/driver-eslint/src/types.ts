@@ -1,7 +1,33 @@
 /* eslint-disable no-magic-numbers */
 
 export type EnvType =
-  'amd' | 'applescript' | 'atomtest' | 'browser' | 'commonjs' | 'embertest' | 'es6' | 'es2017' | 'es2020' | 'greasemonkey' | 'jasmine' | 'jest' | 'jquery' | 'meteor' | 'mocha' | 'mongo' | 'nashorn' | 'node' | 'phantomjs' | 'prototypejs' | 'protractor' | 'qunit' | 'serviceworker' | 'shared-node-browser' | 'shelljs' | 'webextensions' | 'worker';
+  | 'amd'
+  | 'applescript'
+  | 'atomtest'
+  | 'browser'
+  | 'commonjs'
+  | 'embertest'
+  | 'es6'
+  | 'es2017'
+  | 'es2020'
+  | 'greasemonkey'
+  | 'jasmine'
+  | 'jest'
+  | 'jquery'
+  | 'meteor'
+  | 'mocha'
+  | 'mongo'
+  | 'nashorn'
+  | 'node'
+  | 'phantomjs'
+  | 'prototypejs'
+  | 'protractor'
+  | 'qunit'
+  | 'serviceworker'
+  | 'shared-node-browser'
+  | 'shelljs'
+  | 'webextensions'
+  | 'worker';
 
 export type GlobalSetting = boolean | 'off' | 'readable' | 'readonly' | 'writable' | 'writeable';
 

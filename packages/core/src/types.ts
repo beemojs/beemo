@@ -1,5 +1,5 @@
-import { ExecaError,ExecaReturnValue } from 'execa';
-import { Arguments, Argv, OptionConfigMap,ParserOptions } from '@boost/args';
+import { ExecaError, ExecaReturnValue } from 'execa';
+import { Arguments, Argv, OptionConfigMap, ParserOptions } from '@boost/args';
 import { PluginsSetting } from '@boost/config';
 import { Pluggable } from '@boost/plugin';
 import Context from './contexts/Context';

@@ -1,7 +1,7 @@
 import camelCase from 'lodash/camelCase';
 import trim from 'lodash/trim';
 import { PrimitiveType } from '@boost/args';
-import { FilePath,Path } from '@boost/common';
+import { FilePath, Path } from '@boost/common';
 import { Context as BaseContext } from '@boost/pipeline';
 import { Arguments, Argv } from '../types';
 
