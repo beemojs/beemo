@@ -29,7 +29,6 @@ export interface MochaConfig {
   invert?: boolean;
   noExit?: boolean;
   noTimeout?: boolean;
-  opts?: string;
   package?: string;
   recursive?: boolean;
   reporter?: string;
@@ -38,7 +37,7 @@ export interface MochaConfig {
   retries?: number;
   slow?: number;
   sort?: boolean;
-  spec?: string;
+  spec?: string[];
   timeout?: number;
   traceWarnings?: boolean;
   ui?: UISetting;
@@ -84,7 +83,6 @@ export interface MochaArgs {
   interfaces?: boolean;
   invert?: boolean;
   O?: string[];
-  opts?: string;
   package?: string;
   r?: string[];
   R?: string;
