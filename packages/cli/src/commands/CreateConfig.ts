@@ -1,4 +1,4 @@
-import { Config, Command, GlobalOptions } from '@boost/cli';
+import { Command, Config, GlobalOptions } from '@boost/cli';
 import { beemo } from '../beemo';
 
 @Config('create-config', beemo.msg('app:cliCommandConfig'), {

@@ -1,18 +1,19 @@
-import { parse } from '@boost/args';
-import { Path, Predicates, Blueprint, ExitError, Bind } from '@boost/common';
-import { Routine, WaterfallPipeline, AnyWorkUnit } from '@boost/pipeline';
+/* eslint-disable @typescript-eslint/member-ordering */
 import chalk from 'chalk';
+import execa, { ExecaError } from 'execa';
 import glob from 'fast-glob';
 import fs from 'fs-extra';
 import isGlob from 'is-glob';
 import merge from 'lodash/merge';
-import execa, { ExecaError } from 'execa';
-import Tool from '../../Tool';
-import DriverContext from '../../contexts/DriverContext';
-import BatchStream from '../../streams/BatchStream';
-import formatExecReturn from '../../helpers/formatExecReturn';
-import filterArgs, { OptionMap } from '../../helpers/filterArgs';
+import { parse } from '@boost/args';
+import { Bind, Blueprint, ExitError, Path, Predicates } from '@boost/common';
+import { AnyWorkUnit, Routine, WaterfallPipeline } from '@boost/pipeline';
 import { STRATEGY_COPY } from '../../constants';
+import DriverContext from '../../contexts/DriverContext';
+import filterArgs, { OptionMap } from '../../helpers/filterArgs';
+import formatExecReturn from '../../helpers/formatExecReturn';
+import BatchStream from '../../streams/BatchStream';
+import Tool from '../../Tool';
 import { Argv, Execution, RoutineOptions } from '../../types';
 
 const OPTION_PATTERN = /-?-[a-z0-9-]+(,|\s)/giu;
@@ -82,7 +83,7 @@ export default class ExecuteCommandRoutine extends Routine<
       if (option.startsWith('-')) {
         const name = option.replace(/^-{1,2}/u, '');
 
-        // @ts-ignore Allow this
+        // @ts-expect-error Allow this
         return !!(args.options[name] || args.unknown[name]);
       }
 
@@ -367,16 +368,15 @@ export default class ExecuteCommandRoutine extends Routine<
       await driver.onFailedExecute.emit([context, result]);
 
       // Throw a new formatted error with the old stack trace
-      let newError: ExitError;
 
       // https://nodejs.org/api/child_process.html#child_process_event_exit
-      if (result.exitCode === null && result.signal === 'SIGKILL') {
-        newError = new ExitError('Out of memory!', 1);
-      } else {
-        newError = new ExitError((driver.extractErrorMessage(result) || '').trim(), error.exitCode);
-      }
+      const newError =
+        result.exitCode === null && result.signal === 'SIGKILL'
+          ? new ExitError('Out of memory!', 1)
+          : new ExitError((driver.extractErrorMessage(result) || '').trim(), error.exitCode);
 
       if (error.stack) {
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
         newError.stack = error.stack;
       }
 

@@ -1,6 +1,6 @@
-import ConfigContext from './ConfigContext';
 import Driver from '../Driver';
 import { Arguments, Argv, StdioType } from '../types';
+import ConfigContext from './ConfigContext';
 
 export interface DriverContextOptions {
   concurrency: number;

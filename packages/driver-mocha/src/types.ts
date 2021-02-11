@@ -1,4 +1,4 @@
-export type UISetting = 'bdd' | 'tdd' | 'qunit' | 'exports';
+export type UISetting = 'bdd' | 'exports' | 'qunit' | 'tdd';
 
 export interface ReporterOptions {
   [key: string]: unknown;
@@ -15,16 +15,16 @@ export interface MochaConfig {
   delay?: boolean;
   diff?: boolean;
   exit?: boolean;
-  extension?: string | string[];
+  extension?: string[] | string;
   fgrep?: string;
-  file?: string | string[];
+  file?: string[] | string;
   forbidOnly?: boolean;
   forbidPending?: boolean;
   fullTrace?: boolean;
-  global?: string | string[];
+  global?: string[] | string;
   grep?: string;
   growl?: boolean;
-  ignore?: string | string[];
+  ignore?: string[] | string;
   inlineDiffs?: boolean;
   invert?: boolean;
   noExit?: boolean;
@@ -33,8 +33,8 @@ export interface MochaConfig {
   package?: string;
   recursive?: boolean;
   reporter?: string;
-  reporterOption?: string | string[];
-  require?: string | string[];
+  reporterOption?: string[] | string;
+  require?: string[] | string;
   retries?: number;
   slow?: number;
   sort?: boolean;
@@ -44,8 +44,8 @@ export interface MochaConfig {
   ui?: UISetting;
   v8StackTraceLimit?: number;
   watch?: boolean;
-  watchFiles?: string | string[];
-  watchIgnore?: string | string[];
+  watchFiles?: string[] | string;
+  watchIgnore?: string[] | string;
 }
 
 export interface MochaArgs {

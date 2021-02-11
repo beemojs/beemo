@@ -1,37 +1,39 @@
-import fs from 'fs-extra';
+/* eslint-disable @typescript-eslint/member-ordering */
+
 import chalk from 'chalk';
+import fs from 'fs-extra';
 import {
-  Path,
-  Project,
-  Contract,
-  Blueprint,
-  Predicates,
-  requireModule,
-  PortablePath,
   Bind,
-  PackageStructure,
+  Blueprint,
+  Contract,
   Memoize,
+  PackageStructure,
+  Path,
+  PortablePath,
+  Predicates,
+  Project,
+  requireModule,
 } from '@boost/common';
-import { Debugger, createDebugger } from '@boost/debug';
+import { createDebugger, Debugger } from '@boost/debug';
 import { Event } from '@boost/event';
 import { WaterfallPipeline } from '@boost/pipeline';
 import { Registry } from '@boost/plugin';
-import { Translator, createTranslator } from '@boost/translate';
+import { createTranslator, Translator } from '@boost/translate';
 import Config from './Config';
-import Driver from './Driver';
-import Script from './Script';
-import Context from './contexts/Context';
+import { KEBAB_PATTERN } from './constants';
 import ConfigContext from './contexts/ConfigContext';
+import Context from './contexts/Context';
 import DriverContext from './contexts/DriverContext';
 import ScaffoldContext from './contexts/ScaffoldContext';
 import ScriptContext from './contexts/ScriptContext';
+import Driver from './Driver';
 import CleanupConfigsRoutine from './routines/CleanupConfigsRoutine';
 import ResolveConfigsRoutine from './routines/ResolveConfigsRoutine';
 import RunDriverRoutine from './routines/RunDriverRoutine';
 import RunScriptRoutine from './routines/RunScriptRoutine';
 import ScaffoldRoutine from './routines/ScaffoldRoutine';
-import { ConfigFile, Argv } from './types';
-import { KEBAB_PATTERN } from './constants';
+import Script from './Script';
+import { Argv, ConfigFile } from './types';
 
 export interface ToolOptions {
   argv: Argv;
@@ -100,9 +102,9 @@ export default class Tool extends Contract<ToolOptions> {
     this.configManager = new Config(this.options.projectName);
 
     // TODO MIGRATE
-    // @ts-ignore
+    // @ts-expect-error
     this.getWorkspacePaths = this.project.getWorkspacePackagePaths.bind(this.project);
-    // @ts-ignore
+    // @ts-expect-error
     this.getWorkspaceGlobs = this.project.getWorkspaceGlobs.bind(this.project);
   }
 

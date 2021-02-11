@@ -1,35 +1,9 @@
 /* eslint-disable no-magic-numbers */
 
 export type EnvType =
-  | 'browser'
-  | 'node'
-  | 'commonjs'
-  | 'shared-node-browser'
-  | 'es6'
-  | 'es2017'
-  | 'es2020'
-  | 'worker'
-  | 'amd'
-  | 'mocha'
-  | 'jasmine'
-  | 'jest'
-  | 'phantomjs'
-  | 'protractor'
-  | 'qunit'
-  | 'jquery'
-  | 'prototypejs'
-  | 'shelljs'
-  | 'meteor'
-  | 'mongo'
-  | 'applescript'
-  | 'nashorn'
-  | 'serviceworker'
-  | 'atomtest'
-  | 'embertest'
-  | 'webextensions'
-  | 'greasemonkey';
+  'amd' | 'applescript' | 'atomtest' | 'browser' | 'commonjs' | 'embertest' | 'es6' | 'es2017' | 'es2020' | 'greasemonkey' | 'jasmine' | 'jest' | 'jquery' | 'meteor' | 'mocha' | 'mongo' | 'nashorn' | 'node' | 'phantomjs' | 'prototypejs' | 'protractor' | 'qunit' | 'serviceworker' | 'shared-node-browser' | 'shelljs' | 'webextensions' | 'worker';
 
-export type GlobalSetting = 'readonly' | 'readable' | 'writable' | 'writeable' | 'off' | boolean;
+export type GlobalSetting = boolean | 'off' | 'readable' | 'readonly' | 'writable' | 'writeable';
 
 export type EcmaVersion =
   | 3
@@ -48,9 +22,9 @@ export type EcmaVersion =
   | 2020
   | 2021;
 
-export type RuleSetting = 0 | 1 | 2 | '0' | '1' | '2' | 'off' | 'warn' | 'error';
+export type RuleSetting = '0' | '1' | '2' | 'error' | 'off' | 'warn' | 0 | 1 | 2;
 
-export type RuleOptions = string | number | boolean | { [option: string]: unknown };
+export type RuleOptions = boolean | number | string | { [option: string]: unknown };
 
 export interface Rules {
   [rule: string]: RuleSetting | [RuleSetting, ...RuleOptions[]];
@@ -59,7 +33,7 @@ export interface Rules {
 export interface ParserOptions {
   [option: string]: unknown;
   ecmaVersion?: EcmaVersion;
-  sourceType?: 'script' | 'module';
+  sourceType?: 'module' | 'script';
   ecmaFeatures?: {
     globalReturn?: boolean;
     impliedStrict?: boolean;
@@ -68,8 +42,8 @@ export interface ParserOptions {
 }
 
 export interface CommonConfig {
-  env?: { [K in EnvType]?: boolean } & { [env: string]: boolean };
-  extends?: string | string[];
+  env?: { [env: string]: boolean } & { [K in EnvType]?: boolean };
+  extends?: string[] | string;
   globals?: { [global: string]: GlobalSetting };
   ignore?: string[];
   parser?: string;
@@ -87,7 +61,7 @@ export interface OverrideConfig extends CommonConfig {
 }
 
 export interface ESLintConfig extends CommonConfig {
-  extends?: string | string[];
+  extends?: string[] | string;
   noInlineConfig?: boolean;
   overrides?: OverrideConfig[];
   reportUnusedDisableDirectives?: boolean;

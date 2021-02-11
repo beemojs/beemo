@@ -1,5 +1,5 @@
-import Context from './Context';
 import { Arguments } from '../types';
+import Context from './Context';
 
 export interface ScaffoldContextOptions {
   dry: boolean;

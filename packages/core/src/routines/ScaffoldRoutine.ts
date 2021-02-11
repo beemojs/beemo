@@ -1,8 +1,10 @@
+/* eslint-disable @typescript-eslint/member-ordering */
+
 import { engine } from 'hygen';
-import { Path, Blueprint, Predicates, Bind } from '@boost/common';
+import { Bind, Blueprint, Path, Predicates } from '@boost/common';
 import { Routine } from '@boost/pipeline';
-import Tool from '../Tool';
 import ScaffoldContext from '../contexts/ScaffoldContext';
+import Tool from '../Tool';
 import { RoutineOptions } from '../types';
 
 export default class ScaffoldRoutine extends Routine<unknown, unknown, RoutineOptions> {
@@ -34,7 +36,7 @@ export default class ScaffoldRoutine extends Routine<unknown, unknown, RoutineOp
 
     try {
       await engine(context.argv, {
-        // @ts-ignore Broken upstream
+        // @ts-expect-error Broken upstream
         createPrompter: /* istanbul ignore next */ () => ({ prompt: this.handlePrompt }),
         cwd: tool.cwd.path(),
         debug: tool.config.debug,
@@ -65,7 +67,7 @@ export default class ScaffoldRoutine extends Routine<unknown, unknown, RoutineOp
    * Pipe a message from hygen to boost.
    */
   private handleLog = (message: string) => {
-    if (message && message.trim()) {
+    if (message?.trim()) {
       // eslint-disable-next-line no-console
       console.log(message);
     }

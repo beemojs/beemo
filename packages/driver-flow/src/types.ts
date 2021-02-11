@@ -1,20 +1,20 @@
-export type LintSetting = 0 | 1 | 2 | 'off' | 'warn' | 'error';
+export type LintSetting = 'error' | 'off' | 'warn' | 0 | 1 | 2;
 
 export interface LintsConfig {
   [rule: string]: LintSetting;
 }
 
-export type ToggleSetting = 'never' | 'always' | 'auto';
+export type ToggleSetting = 'always' | 'auto' | 'never';
 
 export type OptionSetting = 'enable' | 'ignore' | 'warn';
 
-export type MatchPattern = string | RegExp;
+export type MatchPattern = RegExp | string;
 
-export type LazyMode = 'fs' | 'ide' | 'watchman' | 'none';
+export type LazyMode = 'fs' | 'ide' | 'none' | 'watchman';
 
-export type ModuleSystem = 'node' | 'haste';
+export type ModuleSystem = 'haste' | 'node';
 
-export type MismatchType = 'choose-newest' | 'stop-server' | 'restart-client' | 'error-client';
+export type MismatchType = 'choose-newest' | 'error-client' | 'restart-client' | 'stop-server';
 
 export interface OptionsConfig {
   all?: boolean;
@@ -80,7 +80,7 @@ export interface FlowArgs {
   lazyMode?: LazyMode;
   maxWarnings?: number;
   messageWidth?: number;
-  offsetStyle?: 'utf8-bytes' | 'js-indices';
+  offsetStyle?: 'js-indices' | 'utf8-bytes';
   oneLine?: boolean;
   onMismatch?: MismatchType;
   pretty?: boolean;

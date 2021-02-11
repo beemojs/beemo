@@ -1,6 +1,6 @@
 import fs from 'fs';
+import { ConfigContext, Driver, ExecutionError,Path } from '@beemo/core';
 import { Event } from '@boost/event';
-import { Driver, ConfigContext, Path, ExecutionError } from '@beemo/core';
 import { PrettierConfig } from './types';
 
 // Success: Writes file list to stdout

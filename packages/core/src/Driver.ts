@@ -1,31 +1,31 @@
-import { Path, Predicates, Blueprint, optimal, predicates, isObject } from '@boost/common';
-import { Event, ConcurrentEvent } from '@boost/event';
-import { Plugin } from '@boost/plugin';
-import mergeWith from 'lodash/mergeWith';
 import execa from 'execa';
-import Tool from './Tool';
-import DriverContext from './contexts/DriverContext';
-import ConfigContext from './contexts/ConfigContext';
+import mergeWith from 'lodash/mergeWith';
+import { Blueprint, isObject,optimal, Path, Predicates, predicates } from '@boost/common';
+import { ConcurrentEvent,Event } from '@boost/event';
+import { Plugin } from '@boost/plugin';
 import {
   STRATEGY_COPY,
   STRATEGY_CREATE,
-  STRATEGY_REFERENCE,
   STRATEGY_NATIVE,
   STRATEGY_NONE,
+  STRATEGY_REFERENCE,
 } from './constants';
+import ConfigContext from './contexts/ConfigContext';
+import DriverContext from './contexts/DriverContext';
+import isClassInstance from './helpers/isClassInstance';
+import Tool from './Tool';
 import {
   Argv,
+  BeemoTool,
   Driverable,
   DriverCommandOptions,
-  DriverOptions,
   DriverMetadata,
+  DriverOptions,
+  DriverOutput,
+  DriverStrategy,
   Execution,
   ExecutionError,
-  DriverStrategy,
-  BeemoTool,
-  DriverOutput,
 } from './types';
-import isClassInstance from './helpers/isClassInstance';
 
 export default abstract class Driver<
   Config extends object = {},
@@ -216,7 +216,7 @@ export default abstract class Driver<
     Object.keys(options).forEach((key) => {
       blueprint[key] = shape({
         description: string().notEmpty().required(),
-        type: string().oneOf<'string' | 'number' | 'boolean'>(['string', 'number', 'boolean']),
+        type: string().oneOf<'boolean' | 'number' | 'string'>(['string', 'number', 'boolean']),
       });
     });
 

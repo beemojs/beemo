@@ -16,54 +16,16 @@ export type TargetSetting =
   | 'json'
   | 'latest';
 
-export type ModuleSetting = 'none' | 'commonjs' | 'amd' | 'umd' | 'system' | 'es2015' | 'esnext';
+export type ModuleSetting = 'amd' | 'commonjs' | 'es2015' | 'esnext' | 'none' | 'system' | 'umd';
 
-export type ModuleResolutionSetting = 'node' | 'classic';
+export type ModuleResolutionSetting = 'classic' | 'node';
 
 export type LibSetting =
-  | 'es5'
-  | 'es6'
-  | 'es7'
-  | 'es2015'
-  | 'es2016'
-  | 'es2017'
-  | 'es2018'
-  | 'es2019'
-  | 'es2020'
-  | 'es2021'
-  | 'esnext'
-  | 'dom'
-  | 'dom.iterable'
-  | 'webworker'
-  | 'webworker.importscripts'
-  | 'scripthost'
-  | 'es2015.core'
-  | 'es2015.collection'
-  | 'es2015.generator'
-  | 'es2015.iterable'
-  | 'es2015.promise'
-  | 'es2015.proxy'
-  | 'es2015.reflect'
-  | 'es2015.symbol'
-  | 'es2015.symbol.wellknown'
-  | 'es2016.array.include'
-  | 'es2017.object'
-  | 'es2017.sharedmemory'
-  | 'es2017.string'
-  | 'es2017.intl'
-  | 'es2017.typedarrays'
-  | 'es2018.intl'
-  | 'es2018.promise'
-  | 'es2018.regexp'
-  | 'esnext.array'
-  | 'esnext.symbol'
-  | 'esnext.asynciterable'
-  | 'esnext.intl'
-  | 'esnext.bigint';
+  'dom.iterable' | 'dom' | 'es5' | 'es6' | 'es7' | 'es2015.collection' | 'es2015.core' | 'es2015.generator' | 'es2015.iterable' | 'es2015.promise' | 'es2015.proxy' | 'es2015.reflect' | 'es2015.symbol.wellknown' | 'es2015.symbol' | 'es2015' | 'es2016.array.include' | 'es2016' | 'es2017.intl' | 'es2017.object' | 'es2017.sharedmemory' | 'es2017.string' | 'es2017.typedarrays' | 'es2017' | 'es2018.intl' | 'es2018.promise' | 'es2018.regexp' | 'es2018' | 'es2019' | 'es2020' | 'es2021' | 'esnext.array' | 'esnext.asynciterable' | 'esnext.bigint' | 'esnext.intl' | 'esnext.symbol' | 'esnext' | 'scripthost' | 'webworker.importscripts' | 'webworker';
 
-export type JSXSetting = 'preserve' | 'react-native' | 'react' | 'none';
+export type JSXSetting = 'none' | 'preserve' | 'react-native' | 'react';
 
-export type NewLineSetting = 'lf' | 'crlf';
+export type NewLineSetting = 'crlf' | 'lf';
 
 export interface CompilerOptions {
   allowJs?: boolean;
