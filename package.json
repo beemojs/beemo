@@ -12,7 +12,7 @@
     "test": "yarn run jest",
     "test:int:fail": "beemo run-script run-integration-tests --type=fail --workspaces=\"@beemo/driver-*\"",
     "test:int:pass": "beemo run-script run-integration-tests --type=pass --workspaces=\"@beemo/driver-*\"",
-    "prettier": "beemo prettier",
+    "format": "beemo prettier",
     "prerelease": "yarn test",
     "release": "lerna version --conventional-commits --changelog-preset conventional-changelog-beemo --create-release github --push && lerna publish from-git",
     "release:bump": "beemo run-script bump-peer-deps",
@@ -20,17 +20,17 @@
     "task:args": "node ./packages/local/lib/bins/extractOptionList.js"
   },
   "devDependencies": {
-    "@milesj/build-tool-config": "1.0.1",
-    "@types/fs-extra": "^9.0.1",
+    "@milesj/build-tool-config": "2.17.1",
+    "@types/fs-extra": "^9.0.6",
     "@types/is-glob": "^4.0.1",
-    "@types/lodash": "^4.14.161",
-    "@types/node": "^14.10.1",
+    "@types/lodash": "^4.14.168",
+    "@types/node": "^14.14.25",
     "@types/prettier": "^2.1.1",
     "@types/react": "^16.9.49",
     "@types/rimraf": "^3.0.0",
     "@types/semver": "^7.3.4",
-    "@types/webpack": "^4.41.22",
-    "conventional-changelog-beemo": "^1.6.0",
+    "@types/webpack": "^4.41.26",
+    "conventional-changelog-beemo": "^2.1.0",
     "lerna": "^3.21.0"
   },
   "resolutions": {
