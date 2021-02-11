@@ -32,12 +32,12 @@ describe('Graph', () => {
       pkgs['@beemo/driver-babel'],
       pkgs['@beemo/driver-eslint'],
       pkgs['@beemo/driver-flow'],
+      pkgs['@beemo/driver-jest'],
       pkgs['@beemo/driver-mocha'],
       pkgs['@beemo/driver-prettier'],
       pkgs['@beemo/driver-typescript'],
       pkgs['@beemo/driver-webpack'],
       pkgs['@beemo/cli'],
-      pkgs['@beemo/driver-jest'],
       pkgs['@beemo/local'],
     ]);
 
@@ -48,65 +48,15 @@ describe('Graph', () => {
         pkgs['@beemo/driver-babel'],
         pkgs['@beemo/driver-eslint'],
         pkgs['@beemo/driver-flow'],
+        pkgs['@beemo/driver-jest'],
         pkgs['@beemo/driver-mocha'],
         pkgs['@beemo/driver-prettier'],
         pkgs['@beemo/driver-typescript'],
         pkgs['@beemo/driver-webpack'],
         pkgs['@beemo/cli'],
       ],
-      [pkgs['@beemo/driver-jest']],
       [pkgs['@beemo/local']],
     ]);
-
-    expect(graph.resolveTree()).toEqual({
-      root: true,
-      nodes: [
-        {
-          package: pkgs['@beemo/dependency-graph'],
-          nodes: [
-            {
-              package: pkgs['@beemo/core'],
-              nodes: [
-                {
-                  package: pkgs['@beemo/driver-babel'],
-                  nodes: [
-                    {
-                      package: pkgs['@beemo/driver-jest'],
-                      nodes: [
-                        {
-                          package: pkgs['@beemo/local'],
-                        },
-                      ],
-                    },
-                  ],
-                },
-                {
-                  package: pkgs['@beemo/driver-eslint'],
-                },
-                {
-                  package: pkgs['@beemo/driver-flow'],
-                },
-                {
-                  package: pkgs['@beemo/driver-mocha'],
-                },
-                {
-                  package: pkgs['@beemo/driver-prettier'],
-                },
-                {
-                  package: pkgs['@beemo/driver-typescript'],
-                },
-                {
-                  package: pkgs['@beemo/driver-webpack'],
-                },
-                {
-                  package: pkgs['@beemo/cli'],
-                },
-              ],
-            },
-          ],
-        },
-      ],
-    });
   });
 
   it('returns an empty array when no packages are defined', () => {

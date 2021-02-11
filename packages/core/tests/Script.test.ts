@@ -14,14 +14,14 @@ describe('Script', () => {
   describe('.validate()', () => {
     it('errors if no parse function', () => {
       expect(() => {
-        // @ts-ignore
+        // @ts-expect-error
         Script.validate({});
       }).toThrow('`Script` requires a `parse()` method.');
     });
 
     it('errors if no execute function', () => {
       expect(() => {
-        // @ts-ignore
+        // @ts-expect-error
         Script.validate({ parse() {} });
       }).toThrow('`Script` requires an `execute()` method.');
     });

@@ -68,7 +68,7 @@ describe('PrettierDriver', () => {
           context,
           new Path('/some/path/prettier.config.js'),
           {
-            // @ts-ignore
+            // @ts-expect-error
             ignore: 'foo',
           },
         ]);

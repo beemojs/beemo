@@ -1,4 +1,3 @@
-// @ts-expect-error
 import corePackage from '@beemo/core/package.json';
 import { applyStyle, Program } from '@boost/cli';
 import { argv, beemo, parallelArgv } from './beemo';

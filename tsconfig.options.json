@@ -7,7 +7,6 @@
     "experimentalDecorators": true,
     "forceConsistentCasingInFileNames": true,
     "lib": [
-      "dom",
       "esnext"
     ],
     "module": "commonjs",
@@ -15,9 +14,11 @@
     "noImplicitReturns": true,
     "pretty": true,
     "removeComments": false,
+    "resolveJsonModule": true,
+    "skipLibCheck": true,
     "sourceMap": false,
     "strict": true,
-    "target": "es2016",
+    "target": "es2018",
     "useDefineForClassFields": false,
     "composite": true,
     "declarationMap": true
