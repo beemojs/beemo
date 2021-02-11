@@ -12,9 +12,7 @@ export interface FilterArgOptions {
 export default function filterArgs(argv: Argv, { allow, block }: FilterArgOptions) {
   const filteredArgv: Argv = [];
   const unknownArgv: Argv = [];
-  const isInvalid = (option: string) => {
-    return (allow && !allow[option]) || (block && block[option]);
-  };
+  const isInvalid = (option: string) => (allow && !allow[option]) || block?.[option];
   let skipNext = false;
 
   argv.forEach((arg, i) => {

@@ -1,10 +1,10 @@
-import { Blueprint, Predicates, Path } from '@boost/common';
-import { Routine } from '@boost/pipeline';
 import chalk from 'chalk';
-import Tool from '../Tool';
+import { Blueprint, Path,Predicates } from '@boost/common';
+import { Routine } from '@boost/pipeline';
 import ConfigContext from '../contexts/ConfigContext';
-import CreateConfigRoutine from './CreateConfigRoutine';
+import Tool from '../Tool';
 import { RoutineOptions } from '../types';
+import CreateConfigRoutine from './CreateConfigRoutine';
 
 export default class ResolveConfigsRoutine<
   Ctx extends ConfigContext = ConfigContext

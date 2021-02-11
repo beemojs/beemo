@@ -1,5 +1,5 @@
-import { Arg, Config, Command, GlobalOptions } from '@boost/cli';
 import { ScriptContextOptions, ScriptContextParams } from '@beemo/core';
+import { Arg, Command, Config, GlobalOptions } from '@boost/cli';
 import { beemo } from '../beemo';
 
 @Config('run-script', beemo.msg('app:cliCommandRunScript'), {
@@ -8,7 +8,7 @@ import { beemo } from '../beemo';
   category: 'core',
 })
 export default class RunScript extends Command<
-  ScriptContextOptions & GlobalOptions,
+  GlobalOptions & ScriptContextOptions,
   ScriptContextParams
 > {
   @Arg.Number(beemo.msg('app:cliOptionConcurrency'))

@@ -1,6 +1,6 @@
-import Context from './Context';
 import Script from '../Script';
 import { Arguments, StdioType } from '../types';
+import Context from './Context';
 
 export interface ScriptContextOptions {
   concurrency: number;

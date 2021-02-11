@@ -1,10 +1,10 @@
 import { parse } from '@boost/args';
-import { Path, Predicates, Blueprint } from '@boost/common';
+import { Blueprint,Path, Predicates } from '@boost/common';
 import { Routine } from '@boost/pipeline';
-import Tool from '../../Tool';
-import Script from '../../Script';
-import formatExecReturn, { ExecLike } from '../../helpers/formatExecReturn';
 import ScriptContext from '../../contexts/ScriptContext';
+import formatExecReturn, { ExecLike } from '../../helpers/formatExecReturn';
+import Script from '../../Script';
+import Tool from '../../Tool';
 import { RoutineOptions } from '../../types';
 
 export interface ExecuteScriptOptions extends RoutineOptions {

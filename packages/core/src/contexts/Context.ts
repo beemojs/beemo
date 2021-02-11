@@ -1,8 +1,8 @@
-import { PrimitiveType } from '@boost/args';
-import { Path, FilePath } from '@boost/common';
-import { Context as BaseContext } from '@boost/pipeline';
 import camelCase from 'lodash/camelCase';
 import trim from 'lodash/trim';
+import { PrimitiveType } from '@boost/args';
+import { FilePath,Path } from '@boost/common';
+import { Context as BaseContext } from '@boost/pipeline';
 import { Arguments, Argv } from '../types';
 
 export interface ConfigPath {
@@ -42,9 +42,9 @@ export default class Context<
     this.argv = argv;
 
     // TODO MIGRATE
-    // @ts-ignore
+    // @ts-expect-error
     this.addArg = this.addParam.bind(this);
-    // @ts-ignore
+    // @ts-expect-error
     this.addArgs = this.addParams.bind(this);
   }
 
@@ -83,7 +83,7 @@ export default class Context<
     const optName = camelCase(name);
 
     if (optName in this.args.options) {
-      // @ts-ignore Allow this
+      // @ts-expect-error Allow this
       this.args.options[optName] = value;
     } else {
       this.args.unknown[optName] = String(value);

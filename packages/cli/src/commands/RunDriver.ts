@@ -1,19 +1,19 @@
 import {
-  Arg,
-  Config,
-  Command,
-  GlobalOptions,
-  Argv,
-  CommandMetadata,
-  ParserOptions,
-} from '@boost/cli';
-import {
+  Blueprint,
   Driver,
   DriverContextOptions,
   DriverContextParams,
   Predicates,
-  Blueprint,
 } from '@beemo/core';
+import {
+  Arg,
+  Argv,
+  Command,
+  CommandMetadata,
+  Config,
+  GlobalOptions,
+  ParserOptions,
+} from '@boost/cli';
 import { beemo } from '../beemo';
 
 export interface RunDriverConfig {
@@ -43,9 +43,24 @@ export default class RunDriver extends Command<
   @Arg.String(beemo.msg('app:cliOptionWorkspaces'))
   workspaces: string = '';
 
+  @Arg.Params<DriverContextParams>({
+    description: beemo.msg('app:cliArgDriverName'),
+    label: 'name',
+    required: true,
+    type: 'string',
+  })
+  async run(name: string = '') {
+    const pipeline = beemo.createRunDriverPipeline(
+      this.getArguments(),
+      this.options.driver?.getName() || name,
+    );
+
+    await pipeline.run();
+  }
+
   blueprint({ instance, array, string }: Predicates): Blueprint<RunDriverConfig> {
     return {
-      // @ts-ignore Because Driver is abstract
+      // @ts-expect-error Because Driver is abstract
       driver: instance(Driver),
       parallelArgv: array(array(string())),
     };
@@ -84,20 +99,5 @@ export default class RunDriver extends Command<
         ...driver.command,
       },
     };
-  }
-
-  @Arg.Params<DriverContextParams>({
-    description: beemo.msg('app:cliArgDriverName'),
-    label: 'name',
-    required: true,
-    type: 'string',
-  })
-  async run(name: string = '') {
-    const pipeline = beemo.createRunDriverPipeline(
-      this.getArguments(),
-      this.options.driver?.getName() || name,
-    );
-
-    await pipeline.run();
   }
 }

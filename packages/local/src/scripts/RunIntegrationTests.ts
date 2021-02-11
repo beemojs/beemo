@@ -1,7 +1,7 @@
-import { Script, ScriptContext, PackageStructure, Arguments, ParserOptions } from '@beemo/core';
 import chalk from 'chalk';
-import fs from 'fs-extra';
 import execa from 'execa';
+import fs from 'fs-extra';
+import { Arguments, PackageStructure, ParserOptions, Script, ScriptContext } from '@beemo/core';
 
 export interface RunIntegrationTestsOptions {
   type: 'fail' | 'pass';
@@ -23,9 +23,9 @@ export default class RunIntegrationTestsScript extends Script<RunIntegrationTest
 
   execute(context: ScriptContext, args: Arguments<RunIntegrationTestsOptions>) {
     const { type } = args.options;
-    const pkg: PackageStructure = fs.readJsonSync(context.cwd.append('package.json').path());
+    const pkg = fs.readJsonSync(context.cwd.append('package.json').path()) as PackageStructure;
     const name = pkg.name.split('/')[1];
-    const script = pkg.scripts && pkg.scripts[`integration:${type}`];
+    const script = pkg.scripts?.[`integration:${type}`];
 
     if (!script) {
       return Promise.reject(

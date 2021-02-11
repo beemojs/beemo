@@ -1,18 +1,19 @@
-import { Program, applyStyle } from '@boost/cli';
-// @ts-ignore
+// @ts-expect-error
 import corePackage from '@beemo/core/package.json';
-import { beemo, argv, parallelArgv } from './beemo';
-import RunDriver from './commands/RunDriver';
+import { applyStyle, Program } from '@boost/cli';
+import { argv, beemo, parallelArgv } from './beemo';
 import CreateConfig from './commands/CreateConfig';
+import RunDriver from './commands/RunDriver';
 import RunScript from './commands/RunScript';
 import Scaffold from './commands/Scaffold';
 
+const version = String(corePackage.version);
 const footer = applyStyle(
   [
     beemo.msg('app:cliEpilogue', {
       manualURL: process.env.BEEMO_MANUAL_URL || 'https://milesj.gitbook.io/beemo',
     }),
-    beemo.msg('app:poweredBy', { version: corePackage.version }),
+    beemo.msg('app:poweredBy', { version }),
   ].join('\n'),
   'muted',
 );
@@ -21,7 +22,7 @@ const program = new Program({
   bin: 'beemo',
   footer,
   name: 'Beemo',
-  version: corePackage.version,
+  version,
 });
 
 async function run() {
@@ -60,4 +61,4 @@ async function run() {
   await program.runAndExit(argv);
 }
 
-run();
+void run();

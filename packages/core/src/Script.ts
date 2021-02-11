@@ -1,12 +1,12 @@
-import { ParserOptions, Arguments } from '@boost/args';
-import { Predicates, Blueprint } from '@boost/common';
+import execa, { Options as ExecaOptions } from 'execa';
+import { Arguments,ParserOptions } from '@boost/args';
+import { Blueprint,Predicates } from '@boost/common';
 import { ConcurrentEvent } from '@boost/event';
 import { Plugin } from '@boost/plugin';
-import execa, { Options as ExecaOptions } from 'execa';
-import Tool from './Tool';
 import ScriptContext from './contexts/ScriptContext';
-import { Argv, Scriptable, BeemoTool } from './types';
 import isClassInstance from './helpers/isClassInstance';
+import Tool from './Tool';
+import { Argv, BeemoTool,Scriptable } from './types';
 
 export default abstract class Script<O extends object = {}, Options extends object = {}>
   extends Plugin<BeemoTool, Options>
@@ -45,7 +45,7 @@ export default abstract class Script<O extends object = {}, Options extends obje
    */
   parse(): ParserOptions<O> {
     return {
-      // @ts-ignore Allow this
+      // @ts-expect-error Allow this
       options: {},
     };
   }
