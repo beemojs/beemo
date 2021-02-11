@@ -1,5 +1,5 @@
 import fs from 'fs';
-import { ConfigContext, Driver, ExecutionError,Path } from '@beemo/core';
+import { ConfigContext, Driver, ExecutionError, Path } from '@beemo/core';
 import { Event } from '@boost/event';
 import { PrettierConfig } from './types';
 

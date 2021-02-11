@@ -3,7 +3,7 @@
  * @license     https://opensource.org/licenses/MIT
  */
 
-import { Blueprint, PackageStructure,Path, PortablePath, Predicates } from '@boost/common';
+import { Blueprint, PackageStructure, Path, PortablePath, Predicates } from '@boost/common';
 import ConfigContext from './contexts/ConfigContext';
 import Context from './contexts/Context';
 import DriverContext, { DriverContextOptions, DriverContextParams } from './contexts/DriverContext';
