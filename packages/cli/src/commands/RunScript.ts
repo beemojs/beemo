@@ -4,6 +4,7 @@ import { beemo } from '../beemo';
 
 @Config('run-script', beemo.msg('app:cliCommandRunScript'), {
   aliases: ['run'],
+  allowUnknownOptions: true,
   allowVariadicParams: true,
   category: 'core',
 })
