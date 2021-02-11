@@ -1,5 +1,5 @@
 import ConfigContext from '../../src/contexts/ConfigContext';
-import { mockDriver,stubArgs } from '../../src/testing';
+import { mockDriver, stubArgs } from '../../src/testing';
 
 describe('ConfigContext', () => {
   let context: ConfigContext;

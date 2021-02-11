@@ -7,7 +7,9 @@ export interface RunIntegrationTestsOptions {
   type: 'fail' | 'pass';
 }
 
-export default class RunIntegrationTestsScript extends Script<RunIntegrationTestsOptions> {
+class RunIntegrationTestsScript extends Script<RunIntegrationTestsOptions> {
+  name = '@beemo/script-run-integration-tests';
+
   parse(): ParserOptions<RunIntegrationTestsOptions> {
     return {
       options: {
@@ -68,4 +70,8 @@ export default class RunIntegrationTestsScript extends Script<RunIntegrationTest
 
     return response;
   }
+}
+
+export default function runIntegrationTests() {
+  return new RunIntegrationTestsScript();
 }

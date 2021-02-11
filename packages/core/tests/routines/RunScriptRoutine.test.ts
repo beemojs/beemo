@@ -1,7 +1,7 @@
 /* eslint-disable jest/expect-expect */
 
 import { Path, Project } from '@boost/common';
-import { copyFixtureToNodeModule,getFixturePath } from '@boost/test-utils';
+import { copyFixtureToNodeModule, getFixturePath } from '@boost/test-utils';
 import ScriptContext from '../../src/contexts/ScriptContext';
 import { AnyRoutine } from '../../src/routines/RunInWorkspacesRoutine';
 import RunScriptRoutine from '../../src/routines/RunScriptRoutine';
