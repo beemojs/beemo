@@ -30,7 +30,6 @@
   },
   "peerDependencies": {
     "@beemo/core": "^2.0.0-alpha.0",
-    "@beemo/driver-babel": "^2.0.0-alpha.0",
     "jest": "^26.0.0"
   },
   "dependencies": {
