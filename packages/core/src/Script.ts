@@ -60,5 +60,5 @@ export default abstract class Script<O extends object = {}, Options extends obje
   /**
    * Execute the script with the context and parsed args.
    */
-  abstract async execute(context: ScriptContext, args: Arguments<O>): Promise<unknown>;
+  abstract execute(context: ScriptContext, args: Arguments<O>): Promise<unknown>;
 }
