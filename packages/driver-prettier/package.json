@@ -30,7 +30,7 @@
   },
   "peerDependencies": {
     "@beemo/core": "^2.0.0-alpha.0",
-    "prettier": "^1.0.0 || ^2.0.0"
+    "prettier": "^2.0.0"
   },
   "dependencies": {
     "@boost/event": "^2.3.1",
