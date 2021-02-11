@@ -9,7 +9,7 @@ yarn add @beemo/driver-webpack webpack webpack-cli
 
 ## Requirements
 
-- Webpack ^4.0.0
+- Webpack ^4.0.0 || ^5.0.0
 
 ## Usage
 
