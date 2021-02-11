@@ -1,18 +1,18 @@
 /* eslint-disable @typescript-eslint/no-explicit-any, max-classes-per-file */
 
-import { Arguments, Argv, ArgList } from '@boost/args';
+import execa from 'execa';
+import { ArgList,Arguments, Argv } from '@boost/args';
 import { Path } from '@boost/common';
 import { mockDebugger } from '@boost/debug/test';
-import execa from 'execa';
-import Driver from './Driver';
-import Script from './Script';
-import Tool from './Tool';
-import { DriverMetadata, ConfigFile } from './types';
-import Context from './contexts/Context';
 import ConfigContext from './contexts/ConfigContext';
+import Context from './contexts/Context';
 import DriverContext, { DriverContextOptions } from './contexts/DriverContext';
 import ScaffoldContext, { ScaffoldContextOptions } from './contexts/ScaffoldContext';
 import ScriptContext, { ScriptContextOptions } from './contexts/ScriptContext';
+import Driver from './Driver';
+import Script from './Script';
+import Tool from './Tool';
+import { ConfigFile,DriverMetadata } from './types';
 
 export { mockDebugger };
 
@@ -58,7 +58,7 @@ export function mockTool(argv: Argv = []): Tool {
     cwd: TEST_ROOT,
   });
 
-  // @ts-ignore Allow readonly
+  // @ts-expect-error Allow readonly
   tool.debug = mockDebugger();
 
   tool.config = mockToolConfig();

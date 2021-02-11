@@ -1,12 +1,14 @@
+/* eslint-disable @typescript-eslint/member-ordering */
+
 import camelCase from 'lodash/camelCase';
 import upperFirst from 'lodash/upperFirst';
 import { Bind, PathResolver } from '@boost/common';
-import Script from '../Script';
+import { EXECUTE_OPTIONS } from '../constants';
 import ScriptContext from '../contexts/ScriptContext';
 import filterArgs from '../helpers/filterArgs';
-import { EXECUTE_OPTIONS } from '../constants';
-import ExecuteScriptRoutine from './script/ExecuteScriptRoutine';
+import Script from '../Script';
 import RunInWorkspacesRoutine from './RunInWorkspacesRoutine';
+import ExecuteScriptRoutine from './script/ExecuteScriptRoutine';
 
 export default class RunScriptRoutine extends RunInWorkspacesRoutine<ScriptContext> {
   errors: Error[] = [];
@@ -125,7 +127,7 @@ export default class RunScriptRoutine extends RunInWorkspacesRoutine<ScriptConte
       throw new Error(`Failed to load script from multiple sources:\n${messages}`);
     }
 
-    this.options.tool.scriptRegistry.load(script);
+    void this.options.tool.scriptRegistry.load(script);
 
     return script;
   }

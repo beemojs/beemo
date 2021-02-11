@@ -1,6 +1,6 @@
 import fs from 'fs';
+import { ConfigContext, Driver, Execution, Path } from '@beemo/core';
 import { Event } from '@boost/event';
-import { Driver, ConfigContext, Execution, Path } from '@beemo/core';
 import { ESLintConfig } from './types';
 
 // Success: Writes warnings to stdout

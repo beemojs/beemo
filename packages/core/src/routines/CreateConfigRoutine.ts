@@ -1,12 +1,14 @@
+/* eslint-disable @typescript-eslint/member-ordering */
+
 import chalk from 'chalk';
 import fs from 'fs-extra';
 import camelCase from 'lodash/camelCase';
-import { Path, PathResolver, Predicates, requireModule, Blueprint, Bind } from '@boost/common';
+import { Bind, Blueprint, Path, PathResolver, Predicates, requireModule } from '@boost/common';
 import { Routine } from '@boost/pipeline';
-import Tool from '../Tool';
-import Driver from '../Driver';
+import { STRATEGY_COPY, STRATEGY_CREATE, STRATEGY_NATIVE, STRATEGY_REFERENCE } from '../constants';
 import ConfigContext from '../contexts/ConfigContext';
-import { STRATEGY_COPY, STRATEGY_REFERENCE, STRATEGY_CREATE, STRATEGY_NATIVE } from '../constants';
+import Driver from '../Driver';
+import Tool from '../Tool';
 import { RoutineOptions } from '../types';
 
 export interface ConfigObject {
@@ -24,7 +26,7 @@ export default class CreateConfigRoutine<Ctx extends ConfigContext> extends Rout
 > {
   blueprint({ instance }: Predicates): Blueprint<CreateConfigOptions> {
     return {
-      // @ts-ignore Errors because Driver is abstract
+      // @ts-expect-error Errors because Driver is abstract
       driver: instance(Driver).required().notNullable(),
       tool: instance(Tool).required().notNullable(),
     };

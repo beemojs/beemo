@@ -3,7 +3,7 @@ import { RequiredOptions } from 'prettier';
 export type CommonConfig = Partial<RequiredOptions>;
 
 export interface OverrideConfig {
-  files: string | string[];
+  files: string[] | string;
   options: CommonConfig;
 }
 
@@ -18,15 +18,15 @@ export interface PrettierArgs {
   c?: boolean;
   check?: boolean;
   color?: boolean;
-  config?: string | boolean;
+  config?: boolean | string;
   configPrecedence?: 'cli-override' | 'file-override' | 'prefer-file';
   cursorOffset?: number;
   editorconfig?: boolean;
   endOfLine?: PrettierConfig['endOfLine'];
   fileInfo?: string;
   findConfigPath?: string;
-  h?: string | boolean;
-  help?: string | boolean;
+  h?: boolean | string;
+  help?: boolean | string;
   htmlWhitespaceSensitivity?: PrettierConfig['htmlWhitespaceSensitivity'];
   ignorePath?: string;
   insertPragma?: boolean;
@@ -34,7 +34,7 @@ export interface PrettierArgs {
   jsxSingleQuote?: boolean;
   l?: boolean;
   listDifferent?: boolean;
-  loglevel?: 'silent' | 'error' | 'warn' | 'log' | 'debug';
+  loglevel?: 'debug' | 'error' | 'log' | 'silent' | 'warn';
   parser?: PrettierConfig['parser'];
   plugin?: string;
   pluginSearchDir?: string;

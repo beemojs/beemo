@@ -1,5 +1,5 @@
-import { WebpackConfig } from '@beemo/driver-webpack';
 import webpack from 'webpack';
+import { WebpackConfig } from '@beemo/driver-webpack';
 
 const config: WebpackConfig = {
   devtool: 'cheap-source-map',

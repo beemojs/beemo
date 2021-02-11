@@ -1,16 +1,16 @@
 import fs from 'fs';
 import rimraf from 'rimraf';
 import ts from 'typescript';
-import { Event } from '@boost/event';
 import {
+  Blueprint,
+  ConfigContext,
   Driver,
   DriverContext,
+  PackageStructure,
   Path,
   Predicates,
-  ConfigContext,
-  Blueprint,
-  PackageStructure,
 } from '@beemo/core';
+import { Event } from '@boost/event';
 import { TypeScriptConfig, TypeScriptOptions } from './types';
 
 function join(...parts: string[]): string {
@@ -88,7 +88,7 @@ export default class TypeScriptDriver extends Driver<TypeScriptConfig, TypeScrip
     const namesToPaths: { [key: string]: string } = {};
     const workspacePackages = this.tool.project.getWorkspacePackages<
       PackageStructure & {
-        tsconfig: Pick<TypeScriptConfig, 'compilerOptions' | 'include' | 'exclude'>;
+        tsconfig: Pick<TypeScriptConfig, 'compilerOptions' | 'exclude' | 'include'>;
       }
     >();
 

@@ -1,9 +1,11 @@
-import { Bind, Blueprint, Predicates } from '@boost/common';
-import { Routine } from '@boost/pipeline';
+/* eslint-disable @typescript-eslint/member-ordering */
+
 import chalk from 'chalk';
 import fs from 'fs-extra';
-import Tool from '../Tool';
+import { Bind, Blueprint, Predicates } from '@boost/common';
+import { Routine } from '@boost/pipeline';
 import DriverContext from '../contexts/DriverContext';
+import Tool from '../Tool';
 import { RoutineOptions } from '../types';
 
 export default class CleanupConfigsRoutine extends Routine<unknown, unknown, RoutineOptions> {

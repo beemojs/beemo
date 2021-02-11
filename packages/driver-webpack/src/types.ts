@@ -4,15 +4,9 @@ import webpack from 'webpack';
 export interface WebpackConfig extends webpack.Configuration {}
 
 export type DisplaySetting =
-  | ''
-  | 'verbose'
-  | 'detailed'
-  | 'normal'
-  | 'minimal'
-  | 'errors-only'
-  | 'none';
+  '' | 'detailed' | 'errors-only' | 'minimal' | 'none' | 'normal' | 'verbose';
 
-export type VerbositySetting = 'none' | 'info' | 'verbose';
+export type VerbositySetting = 'info' | 'none' | 'verbose';
 
 export interface WebpackArgs {
   bail?: boolean;

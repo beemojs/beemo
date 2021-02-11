@@ -4,9 +4,9 @@ import { PackageConfig, Tree, TreeNode } from './types';
 export default class Graph<T extends PackageConfig = PackageConfig> {
   protected mapped: boolean = false;
 
-  protected nodes: Map<string, Node> = new Map();
+  protected nodes = new Map<string, Node>();
 
-  protected packages: Map<string, T> = new Map();
+  protected packages = new Map<string, T>();
 
   constructor(packages: T[] = []) {
     this.addPackages(packages);
@@ -96,7 +96,7 @@ export default class Graph<T extends PackageConfig = PackageConfig> {
       root: true,
     };
 
-    this.sortByDependedOn(this.getRootNodes()).forEach((node) => resolve(node, trunk));
+    this.sortByDependedOn(this.getRootNodes()).forEach((node) => void resolve(node, trunk));
 
     // Some nodes are missing, so they must be a cycle
     if (seen.size !== this.nodes.size) {
@@ -116,13 +116,12 @@ export default class Graph<T extends PackageConfig = PackageConfig> {
     const batches: T[][] = [];
     const seen: Set<Node> = new Set();
     const addBatch = () => {
-      const nextBatch = Array.from(this.nodes.values()).filter((node) => {
-        return (
+      const nextBatch = Array.from(this.nodes.values()).filter(
+        (node) =>
           !seen.has(node) &&
           (node.requirements.size === 0 ||
-            Array.from(node.requirements.values()).filter((dep) => !seen.has(dep)).length === 0)
-        );
-      });
+            Array.from(node.requirements.values()).filter((dep) => !seen.has(dep)).length === 0),
+      );
 
       // Some nodes are missing, so they must be a cycle
       if (nextBatch.length === 0) {
@@ -164,10 +163,10 @@ export default class Graph<T extends PackageConfig = PackageConfig> {
 
       cycle.add(node);
 
-      node.dependents.forEach((child) => dig(child, new Set(cycle)));
+      node.dependents.forEach((child) => void dig(child, new Set(cycle)));
     };
 
-    this.nodes.forEach((node) => dig(node, new Set()));
+    this.nodes.forEach((node) => void dig(node, new Set()));
   }
 
   /**
@@ -235,7 +234,7 @@ export default class Graph<T extends PackageConfig = PackageConfig> {
    */
   protected resetNodes() {
     this.mapped = false;
-    this.nodes = new Map();
+    this.nodes.clear();
     this.packages.forEach((pkg) => {
       this.addNode(pkg.name);
     });
@@ -244,7 +243,7 @@ export default class Graph<T extends PackageConfig = PackageConfig> {
   /**
    * Sort a set of nodes by most depended on, fall back to alpha sort as tie breaker
    */
-  protected sortByDependedOn(nodes: Set<Node> | Node[]): Node[] {
+  protected sortByDependedOn(nodes: Node[] | Set<Node>): Node[] {
     return Array.from(nodes).sort((a, b) => {
       const diff = b.dependents.size - a.dependents.size;
 

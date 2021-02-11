@@ -1,7 +1,7 @@
-import { WorkspacePackage, Predicates, Blueprint, PackageStructure } from '@boost/common';
-import { Routine, PooledPipeline } from '@boost/pipeline';
-import { stripAnsi, style } from '@boost/terminal';
 import Graph from '@beemo/dependency-graph';
+import { Blueprint, PackageStructure,Predicates, WorkspacePackage } from '@boost/common';
+import { PooledPipeline,Routine } from '@boost/pipeline';
+import { stripAnsi, style } from '@boost/terminal';
 import Context from '../contexts/Context';
 import isPatternMatch from '../helpers/isPatternMatch';
 import { ExecutionError, RoutineOptions } from '../types';
@@ -26,7 +26,7 @@ export default abstract class RunInWorkspacesRoutine<
 
   blueprint({ instance }: Predicates): Blueprint<RoutineOptions> {
     return {
-      // @ts-ignore We cant import Tool because of cycles
+      // @ts-expect-error We cant import Tool because of cycles
       tool: instance().required().notNullable(),
     };
   }

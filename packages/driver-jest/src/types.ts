@@ -11,13 +11,13 @@ export type CommonConfig = Partial<
   Omit<Config.InitialOptions, 'coverageThreshold' | 'notifyMode' | 'projects'>
 > & {
   coverageThreshold?: { [key: string]: CoverageThreshold };
-  notifyMode?: 'always' | 'failure' | 'success' | 'change' | 'success-change' | 'failure-change';
+  notifyMode?: 'always' | 'change' | 'failure-change' | 'failure' | 'success-change' | 'success';
 };
 
 export type ProjectConfig = Partial<Config.ProjectConfig>;
 
 export interface JestConfig extends CommonConfig {
-  projects?: (string | ProjectConfig)[];
+  projects?: (ProjectConfig | string)[];
 }
 
 export interface JestArgs {
@@ -30,7 +30,7 @@ export interface JestArgs {
   cache?: boolean;
   cacheDirectory?: string;
   changedFilesWithAncestor?: boolean;
-  changedSince?: string | number;
+  changedSince?: number | string;
   ci?: boolean;
   clearCache?: boolean;
   clearMocks?: boolean;
@@ -106,13 +106,13 @@ export interface JestArgs {
   t?: string;
   testEnvironment?: string;
   testEnvironmentOptions?: string;
-  testFailureExitCode?: string | number;
+  testFailureExitCode?: number | string;
   testLocationInResults?: boolean;
   testMatch?: string[];
   testNamePattern?: string;
   testPathIgnorePatterns?: string[];
   testPathPattern?: string[];
-  testRegex?: string | string[];
+  testRegex?: string[] | string;
   testResultsProcessor?: string;
   testRunner?: string;
   testURL?: string;

@@ -1,12 +1,12 @@
-import { Argv, Arguments, ParserOptions, OptionConfigMap } from '@boost/args';
+import { ExecaError,ExecaReturnValue } from 'execa';
+import { Arguments, Argv, OptionConfigMap,ParserOptions } from '@boost/args';
 import { PluginsSetting } from '@boost/config';
 import { Pluggable } from '@boost/plugin';
-import { ExecaReturnValue, ExecaError } from 'execa';
 import Context from './contexts/Context';
 import ScriptContext from './contexts/ScriptContext';
 import Tool from './Tool';
 
-export { Argv, Arguments, ParserOptions };
+export { Arguments, Argv, ParserOptions };
 
 export type BeemoTool = Tool;
 
@@ -39,13 +39,13 @@ export type Execution = ExecaReturnValue;
 
 export type ExecutionError = ExecaError;
 
-export type StdioType = 'buffer' | 'stream' | 'inherit';
+export type StdioType = 'buffer' | 'inherit' | 'stream';
 
 // DRIVERS
 
 export type DriverCommandOptions = OptionConfigMap;
 
-export type DriverStrategy = 'native' | 'create' | 'reference' | 'copy' | 'none';
+export type DriverStrategy = 'copy' | 'create' | 'native' | 'none' | 'reference';
 
 export interface DriverOptions {
   args?: string[];
@@ -58,7 +58,7 @@ export interface DriverMetadata {
   bin: string;
   configName: string;
   configOption: string;
-  configStrategy: 'create' | 'reference' | 'copy';
+  configStrategy: 'copy' | 'create' | 'reference';
   dependencies: string[];
   description: string;
   filterOptions: boolean;
@@ -67,7 +67,7 @@ export interface DriverMetadata {
   useConfigOption: boolean;
   versionOption: string;
   watchOptions: string[];
-  workspaceStrategy: 'reference' | 'copy';
+  workspaceStrategy: 'copy' | 'reference';
 }
 
 export interface DriverOutput {

@@ -1,8 +1,8 @@
-import { Script, ScriptContext, PackageStructure, ParserOptions, Arguments } from '@beemo/core';
 import chalk from 'chalk';
-import fs from 'fs-extra';
 import glob from 'fast-glob';
+import fs from 'fs-extra';
 import semver from 'semver';
+import { Arguments, PackageStructure, ParserOptions, Script, ScriptContext } from '@beemo/core';
 
 export interface BumpPeerDepsOptions {
   release: 'major' | 'minor' | 'patch';
@@ -39,7 +39,7 @@ export default class BumpPeerDepsScript extends Script<BumpPeerDepsOptions> {
     glob
       .sync('./packages/*/package.json', { cwd: this.tool.project.root.path() })
       .forEach((path) => {
-        const data = fs.readJsonSync(path);
+        const data = fs.readJsonSync(path) as { name: string; version: string };
 
         versions[data.name] = semver.inc(data.version, release)!;
         packages[data.name] = data;
