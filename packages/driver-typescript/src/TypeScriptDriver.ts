@@ -103,7 +103,7 @@ export default class TypeScriptDriver extends Driver<TypeScriptConfig, TypeScrip
           if (error) {
             reject(error);
           } else {
-            resolve();
+            resolve(undefined);
           }
         });
       });

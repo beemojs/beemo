@@ -60,6 +60,7 @@ describe('CreateConfigRoutine', () => {
   });
 
   afterEach(() => {
+    // @ts-ignore
     delete process.beemo;
 
     writeSpy.mockRestore();
