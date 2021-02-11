@@ -1,14 +1,14 @@
 /* eslint-disable jest/expect-expect */
 
 import { Path, Project } from '@boost/common';
-import { getFixturePath, copyFixtureToNodeModule } from '@boost/test-utils';
-import Script from '../../src/Script';
-import Tool from '../../src/Tool';
+import { copyFixtureToNodeModule,getFixturePath } from '@boost/test-utils';
 import ScriptContext from '../../src/contexts/ScriptContext';
-import RunScriptRoutine from '../../src/routines/RunScriptRoutine';
 import { AnyRoutine } from '../../src/routines/RunInWorkspacesRoutine';
+import RunScriptRoutine from '../../src/routines/RunScriptRoutine';
 import { ExecuteScriptOptions } from '../../src/routines/script/ExecuteScriptRoutine';
-import { mockDebugger, mockTool, mockScript, stubScriptContext } from '../../src/testing';
+import Script from '../../src/Script';
+import { mockDebugger, mockScript, mockTool, stubScriptContext } from '../../src/testing';
+import Tool from '../../src/Tool';
 
 describe('RunScriptRoutine', () => {
   let fixtures: Function[] = [];
@@ -19,7 +19,7 @@ describe('RunScriptRoutine', () => {
 
   function expectPipedRoutines(
     routines: AnyRoutine[],
-    tests: ({ key: string } & Partial<ExecuteScriptOptions>)[],
+    tests: (Partial<ExecuteScriptOptions> & { key: string })[],
   ) {
     expect(routines).toHaveLength(tests.length);
 
@@ -43,7 +43,7 @@ describe('RunScriptRoutine', () => {
     context.scriptName = 'build';
 
     routine = new RunScriptRoutine('script', 'Executing script', { tool });
-    // @ts-ignore
+    // @ts-expect-error
     routine.debug = mockDebugger();
 
     fixtures = [];
@@ -73,7 +73,7 @@ describe('RunScriptRoutine', () => {
         context.workspaceRoot = fixturePath;
         context.cwd = fixturePath;
 
-        // @ts-ignore
+        // @ts-expect-error
         tool.project = new Project(fixturePath);
       });
 

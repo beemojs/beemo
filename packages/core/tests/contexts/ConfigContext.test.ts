@@ -1,5 +1,5 @@
 import ConfigContext from '../../src/contexts/ConfigContext';
-import { stubArgs, mockDriver } from '../../src/testing';
+import { mockDriver,stubArgs } from '../../src/testing';
 
 describe('ConfigContext', () => {
   let context: ConfigContext;
@@ -29,7 +29,7 @@ describe('ConfigContext', () => {
 
     it('errors when not a driver', () => {
       expect(() => {
-        // @ts-ignore Allow invalid type
+        // @ts-expect-error Allow invalid type
         context.addDriverDependency(true);
       }).toThrowErrorMatchingSnapshot();
     });

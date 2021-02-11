@@ -11,7 +11,7 @@ export default class JestDriver extends Driver<JestConfig> {
     this.setMetadata({
       bin: 'jest',
       configName: 'jest.config.js',
-      dependencies: ['babel'],
+      dependencies: this.tool.driverRegistry.isRegistered('babel') ? ['babel'] : [],
       description: this.tool.msg('app:jestDescription'),
       title: 'Jest',
       watchOptions: ['--watch', '--watchAll'],

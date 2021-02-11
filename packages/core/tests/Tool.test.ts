@@ -1,23 +1,23 @@
 import fs from 'fs-extra';
 import { Path } from '@boost/common';
 import { getFixturePath } from '@boost/test-utils';
-import Tool from '../src/Tool';
-import {
-  mockToolConfig,
-  stubScaffoldArgs,
-  stubScriptArgs,
-  stubDriverArgs,
-  mockDriver,
-  stubConfigArgs,
-  stubConfigContext,
-  mockConsole,
-} from '../src/testing';
-import ScaffoldRoutine from '../src/routines/ScaffoldRoutine';
+import Context from '../src/contexts/Context';
+import CleanupConfigsRoutine from '../src/routines/CleanupConfigsRoutine';
+import ResolveConfigsRoutine from '../src/routines/ResolveConfigsRoutine';
 import RunDriverRoutine from '../src/routines/RunDriverRoutine';
 import RunScriptRoutine from '../src/routines/RunScriptRoutine';
-import ResolveConfigsRoutine from '../src/routines/ResolveConfigsRoutine';
-import CleanupConfigsRoutine from '../src/routines/CleanupConfigsRoutine';
-import Context from '../src/contexts/Context';
+import ScaffoldRoutine from '../src/routines/ScaffoldRoutine';
+import {
+  mockConsole,
+  mockDriver,
+  mockToolConfig,
+  stubConfigArgs,
+  stubConfigContext,
+  stubDriverArgs,
+  stubScaffoldArgs,
+  stubScriptArgs,
+} from '../src/testing';
+import Tool from '../src/Tool';
 
 jest.mock('execa');
 
@@ -249,14 +249,14 @@ describe('Tool', () => {
     });
 
     it('does nothing if no context', () => {
-      tool.cleanupOnFailure(new Error());
+      tool.cleanupOnFailure(new Error('Fail'));
 
       expect(removeSpy).not.toHaveBeenCalled();
     });
 
     it('does nothing if no config paths', () => {
       tool.context = context;
-      tool.cleanupOnFailure(new Error());
+      tool.cleanupOnFailure(new Error('Fail'));
 
       expect(removeSpy).not.toHaveBeenCalled();
     });
@@ -267,7 +267,7 @@ describe('Tool', () => {
         { driver: 'bar', path: new Path('bar') },
       ];
       tool.context = context;
-      tool.cleanupOnFailure(new Error());
+      tool.cleanupOnFailure(new Error('Fail'));
 
       expect(removeSpy).toHaveBeenCalledWith('foo');
       expect(removeSpy).toHaveBeenCalledWith('bar');

@@ -1,7 +1,7 @@
-import webpack from 'webpack';
+import { Configuration } from 'webpack';
 
 // eslint-disable-next-line @typescript-eslint/no-empty-interface
-export interface WebpackConfig extends webpack.Configuration {}
+export interface WebpackConfig extends Configuration {}
 
 export type DisplaySetting =
   | ''
@@ -66,7 +66,7 @@ export interface WebpackArgs {
   outputFilename?: string;
   outputJsonpFunction?: string;
   outputLibrary?: string[];
-  outputLibraryTarget?: webpack.LibraryTarget;
+  outputLibraryTarget?: string;
   outputPath?: string;
   outputPathinfo?: boolean;
   outputPublicPath?: string;

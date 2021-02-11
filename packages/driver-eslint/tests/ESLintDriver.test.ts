@@ -127,7 +127,7 @@ describe('ESLintDriver', () => {
           context,
           new Path('/some/path/.eslintrc.js'),
           {
-            // @ts-ignore
+            // @ts-expect-error
             ignore: 'foo',
           },
         ]);

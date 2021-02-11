@@ -13,7 +13,7 @@ describe('Driver', () => {
 
   it('validates fields', () => {
     expect(() => {
-      // @ts-ignore Test invalid type
+      // @ts-expect-error Test invalid type
       driver = new Driver({
         args: true,
       });
@@ -23,7 +23,7 @@ describe('Driver', () => {
   describe('.validate()', () => {
     it('errors if no options object', () => {
       expect(() => {
-        // @ts-ignore
+        // @ts-expect-error
         Driver.validate({});
       }).toThrow('`Driver` requires an options object.');
     });
@@ -225,7 +225,7 @@ describe('Driver', () => {
       expect(() => {
         driver.setCommandOptions({
           foo: {
-            // @ts-ignore
+            // @ts-expect-error
             description: 123,
           },
         });
@@ -246,7 +246,7 @@ describe('Driver', () => {
     it('requires a description', () => {
       expect(() => {
         driver.setCommandOptions({
-          // @ts-ignore
+          // @ts-expect-error
           foo: {},
         });
       }).toThrowErrorMatchingSnapshot();
@@ -316,7 +316,7 @@ describe('Driver', () => {
         expect(() => {
           driver.setMetadata({
             ...options,
-            // @ts-ignore
+            // @ts-expect-error
             configName: 123,
           });
         }).toThrowErrorMatchingSnapshot();
@@ -337,7 +337,7 @@ describe('Driver', () => {
         expect(() => {
           driver.setMetadata({
             ...options,
-            // @ts-ignore
+            // @ts-expect-error
             title: 123,
           });
         }).toThrowErrorMatchingSnapshot();

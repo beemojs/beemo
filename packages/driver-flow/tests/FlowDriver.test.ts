@@ -1,5 +1,3 @@
-/* eslint-disable @typescript-eslint/camelcase */
-
 import { mockTool, stubExecResult } from '@beemo/core/lib/testing';
 import FlowDriver from '../src/FlowDriver';
 

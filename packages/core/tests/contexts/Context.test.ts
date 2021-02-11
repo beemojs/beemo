@@ -158,7 +158,7 @@ describe('Context', () => {
     });
 
     it('returns configured option if it exists', () => {
-      // @ts-ignore Allow
+      // @ts-expect-error Allow
       context.args.options.bar = 'abc';
 
       expect(context.getRiskyOption('bar')).toBe('abc');

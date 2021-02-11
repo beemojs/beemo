@@ -1,9 +1,11 @@
+/* eslint-disable @typescript-eslint/no-confusing-void-expression */
+
 import fs from 'fs-extra';
-import Tool from '../../src/Tool';
-import Driver from '../../src/Driver';
 import ConfigContext from '../../src/contexts/ConfigContext';
+import Driver from '../../src/Driver';
 import ResolveConfigsRoutine from '../../src/routines/ResolveConfigsRoutine';
-import { mockTool, mockDebugger, mockDriver, stubConfigContext } from '../../src/testing';
+import { mockDebugger, mockDriver, mockTool, stubConfigContext } from '../../src/testing';
+import Tool from '../../src/Tool';
 
 describe('ResolveConfigsRoutine', () => {
   let writeSpy: jest.SpyInstance;
@@ -21,7 +23,7 @@ describe('ResolveConfigsRoutine', () => {
     context = stubConfigContext();
 
     routine = new ResolveConfigsRoutine('config', 'Generating configurations', { tool });
-    // @ts-ignore
+    // @ts-expect-error
     routine.debug = mockDebugger();
 
     context.addDriverDependency(driver);
@@ -77,13 +79,10 @@ describe('ResolveConfigsRoutine', () => {
       expect(routines).toHaveLength(3);
 
       expect(routines[0].key).toBe('baz');
-      // @ts-ignore
       expect(routines[0].options.driver).toBe(baz);
       expect(routines[1].key).toBe('bar');
-      // @ts-ignore
       expect(routines[1].options.driver).toBe(bar);
       expect(routines[2].key).toBe('foo');
-      // @ts-ignore
       expect(routines[2].options.driver).toBe(foo);
     });
   });
