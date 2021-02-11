@@ -2,12 +2,12 @@
 
 import { Path, Project } from '@boost/common';
 import { getFixturePath } from '@boost/test-utils';
-import RunDriverRoutine from '../../src/routines/RunDriverRoutine';
-import { ExecuteCommandOptions } from '../../src/routines/driver/ExecuteCommandRoutine';
 import DriverContext from '../../src/contexts/DriverContext';
-import { AnyRoutine } from '../../src/routines/RunInWorkspacesRoutine';
 import Driver from '../../src/Driver';
-import { mockDebugger, mockTool, mockDriver, stubDriverContext } from '../../src/testing';
+import { ExecuteCommandOptions } from '../../src/routines/driver/ExecuteCommandRoutine';
+import RunDriverRoutine from '../../src/routines/RunDriverRoutine';
+import { AnyRoutine } from '../../src/routines/RunInWorkspacesRoutine';
+import { mockDebugger, mockDriver, mockTool, stubDriverContext } from '../../src/testing';
 
 jest.mock('execa');
 
@@ -18,7 +18,7 @@ describe('RunDriverRoutine', () => {
 
   function expectPipedRoutines(
     routines: AnyRoutine[],
-    tests: ({ key?: string; title: string } & Partial<ExecuteCommandOptions>)[],
+    tests: (Partial<ExecuteCommandOptions> & { key?: string; title: string })[],
   ) {
     expect(routines).toHaveLength(tests.length);
 
@@ -51,7 +51,7 @@ describe('RunDriverRoutine', () => {
     context = stubDriverContext(driver);
 
     routine = new RunDriverRoutine('driver', 'Executing driver', { tool });
-    // @ts-ignore
+    // @ts-expect-error
     routine.debug = mockDebugger();
   });
 
@@ -94,7 +94,7 @@ describe('RunDriverRoutine', () => {
         context.workspaceRoot = fixturePath;
         context.cwd = fixturePath;
 
-        // @ts-ignore
+        // @ts-expect-error
         routine.options.tool.project = new Project(fixturePath);
       });
 

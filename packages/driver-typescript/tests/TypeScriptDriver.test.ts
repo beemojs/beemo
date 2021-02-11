@@ -1,8 +1,8 @@
 import fs from 'fs';
 import rimraf from 'rimraf';
-import { getFixturePath } from '@boost/test-utils';
 import { DriverContext, Path } from '@beemo/core';
 import { mockTool, stubDriverContext } from '@beemo/core/lib/testing';
+import { getFixturePath } from '@boost/test-utils';
 import TypeScriptDriver from '../src/TypeScriptDriver';
 
 jest.mock('rimraf');
@@ -20,7 +20,7 @@ describe('TypeScriptDriver', () => {
   beforeEach(() => {
     driver = new TypeScriptDriver();
     driver.tool = mockTool();
-    // @ts-ignore
+    // @ts-expect-error
     driver.tool.project.root = PROJECT_REFS_FIXTURE_PATH;
     driver.bootstrap();
     driver.config = {
@@ -31,8 +31,7 @@ describe('TypeScriptDriver', () => {
 
     writeSyncSpy = jest.spyOn(fs, 'writeFileSync').mockImplementation(() => null);
     writeSpy = jest.spyOn(fs, 'writeFile').mockImplementation((fp, config, cb) => {
-      // @ts-ignore
-      cb(null);
+      (cb as Function)(null);
     });
   });
 
@@ -334,7 +333,7 @@ describe('TypeScriptDriver', () => {
             emitDeclarationOnly: false,
             noEmit: true,
             rootDir: '.',
-            // @ts-ignore Testing purposes
+            // @ts-expect-error Testing purposes
             testsOnly: true,
           },
           extends: '../../../tsconfig.options.json',
@@ -351,7 +350,7 @@ describe('TypeScriptDriver', () => {
             declarationDir: 'lib',
             outDir: 'lib',
             rootDir: 'src',
-            // @ts-ignore Testing purposes
+            // @ts-expect-error Testing purposes
             srcOnly: true,
           },
           exclude: ['lib', 'tests'],
@@ -479,7 +478,7 @@ describe('TypeScriptDriver', () => {
   describe('handleCleanTarget()', () => {
     it('doesnt run if no config', () => {
       driver.config = {};
-      // @ts-ignore Allow private access
+      // @ts-expect-error Allow private access
       driver.handleCleanTarget(context);
 
       expect(rimraf.sync).not.toHaveBeenCalled();
@@ -487,7 +486,7 @@ describe('TypeScriptDriver', () => {
 
     it('doesnt run if no --clean param', () => {
       driver.config.compilerOptions = { outDir: './lib' };
-      // @ts-ignore Allow private access
+      // @ts-expect-error Allow private access
       driver.handleCleanTarget(context);
 
       expect(rimraf.sync).not.toHaveBeenCalled();
@@ -496,7 +495,7 @@ describe('TypeScriptDriver', () => {
     it('doesnt run if no outDir param', () => {
       context.args.unknown.clean = 'true';
       driver.config.compilerOptions = {};
-      // @ts-ignore Allow private access
+      // @ts-expect-error Allow private access
       driver.handleCleanTarget(context);
 
       expect(rimraf.sync).not.toHaveBeenCalled();
@@ -505,7 +504,7 @@ describe('TypeScriptDriver', () => {
     it('runs if both params', () => {
       context.args.unknown.clean = 'true';
       driver.config.compilerOptions = { outDir: './lib' };
-      // @ts-ignore Allow private access
+      // @ts-expect-error Allow private access
       driver.handleCleanTarget(context);
 
       expect(rimraf.sync).toHaveBeenCalledWith(Path.resolve('./lib').path());
@@ -520,7 +519,7 @@ describe('TypeScriptDriver', () => {
     });
 
     it('doesnt prepare configs if --reference-workspaces is not passed', () => {
-      // @ts-ignore Allow private access
+      // @ts-expect-error Allow private access
       driver.handlePrepareConfigs(context, PROJECT_REFS_ROOT_CONFIG, {});
 
       expect(spy).not.toHaveBeenCalled();
@@ -530,7 +529,7 @@ describe('TypeScriptDriver', () => {
       context.args.options.referenceWorkspaces = true;
       context.workspaceRoot = PROJECT_REFS_FIXTURE_PATH;
 
-      // @ts-ignore Allow private access
+      // @ts-expect-error Allow private access
       driver.handlePrepareConfigs(context, PROJECT_REFS_ROOT_CONFIG, {});
 
       expect(spy).toHaveBeenCalledWith(
@@ -553,7 +552,7 @@ describe('TypeScriptDriver', () => {
     });
 
     it('doesnt create configs if --reference-workspaces is not passed', () => {
-      // @ts-ignore Allow private access
+      // @ts-expect-error Allow private access
       driver.handleProjectReferences(context);
 
       expect(spy).not.toHaveBeenCalled();
@@ -565,7 +564,7 @@ describe('TypeScriptDriver', () => {
       context.args.options.workspaces = '*';
 
       expect(() => {
-        // @ts-ignore Allow private access
+        // @ts-expect-error Allow private access
         driver.handleProjectReferences(context);
       }).toThrowErrorMatchingSnapshot();
     });
@@ -574,7 +573,7 @@ describe('TypeScriptDriver', () => {
       context.args.options.referenceWorkspaces = true;
 
       expect(() => {
-        // @ts-ignore Allow private access
+        // @ts-expect-error Allow private access
         driver.handleProjectReferences(context);
       }).toThrowErrorMatchingSnapshot();
     });
@@ -584,7 +583,7 @@ describe('TypeScriptDriver', () => {
       context.args.options.referenceWorkspaces = true;
       context.workspaceRoot = PROJECT_REFS_FIXTURE_PATH;
 
-      // @ts-ignore Allow private access
+      // @ts-expect-error Allow private access
       driver.handleProjectReferences(context);
 
       expect(spy).toHaveBeenCalledWith(context, PROJECT_REFS_FIXTURE_PATH);
@@ -595,7 +594,7 @@ describe('TypeScriptDriver', () => {
       context.args.options.referenceWorkspaces = true;
       context.workspaceRoot = PROJECT_REFS_FIXTURE_PATH;
 
-      // @ts-ignore Allow private access
+      // @ts-expect-error Allow private access
       driver.handleProjectReferences(context);
 
       expect(spy).toHaveBeenCalledWith(context, PROJECT_REFS_FIXTURE_PATH);

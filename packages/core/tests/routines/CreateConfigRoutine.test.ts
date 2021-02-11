@@ -1,25 +1,25 @@
 import fs from 'fs-extra';
 import { Path } from '@boost/common';
 import { copyFixtureToNodeModule, getFixturePath } from '@boost/test-utils';
-import Tool from '../../src/Tool';
-import CreateConfigRoutine from '../../src/routines/CreateConfigRoutine';
-import Driver from '../../src/Driver';
 import {
   STRATEGY_COPY,
-  STRATEGY_REFERENCE,
   STRATEGY_CREATE,
-  STRATEGY_NONE,
   STRATEGY_NATIVE,
+  STRATEGY_NONE,
+  STRATEGY_REFERENCE,
 } from '../../src/constants';
+import ConfigContext from '../../src/contexts/ConfigContext';
+import Driver from '../../src/Driver';
+import CreateConfigRoutine from '../../src/routines/CreateConfigRoutine';
 import {
-  stubConfigContext,
+  getRoot,
   mockDebugger,
+  mockDriver,
   mockTool,
   prependRoot,
-  mockDriver,
-  getRoot,
+  stubConfigContext,
 } from '../../src/testing';
-import ConfigContext from '../../src/contexts/ConfigContext';
+import Tool from '../../src/Tool';
 
 describe('CreateConfigRoutine', () => {
   let writeSpy: jest.SpyInstance;
@@ -42,7 +42,7 @@ describe('CreateConfigRoutine', () => {
     driver.configure({ args: ['--qux'] });
 
     routine = new CreateConfigRoutine('babel', 'Configure Babel', { driver, tool });
-    // @ts-ignore
+    // @ts-expect-error
     routine.debug = mockDebugger();
 
     // eslint-disable-next-line @typescript-eslint/no-misused-promises
@@ -60,7 +60,7 @@ describe('CreateConfigRoutine', () => {
   });
 
   afterEach(() => {
-    // @ts-ignore
+    // @ts-expect-error
     delete process.beemo;
 
     writeSpy.mockRestore();

@@ -1,12 +1,12 @@
 import { Predicates } from '@boost/common';
 import { Routine } from '@boost/pipeline';
-import Tool from '../../src/Tool';
-import Driver from '../../src/Driver';
 import Context from '../../src/contexts/Context';
+import Driver from '../../src/Driver';
 import RunInWorkspacesRoutine, {
   RunInWorkspacesContextArgs,
 } from '../../src/routines/RunInWorkspacesRoutine';
-import { mockTool, mockDriver, stubDriverContext, mockDebugger } from '../../src/testing';
+import { mockDebugger,mockDriver, mockTool, stubDriverContext } from '../../src/testing';
+import Tool from '../../src/Tool';
 
 type Ctx = Context<RunInWorkspacesContextArgs>;
 
@@ -23,10 +23,10 @@ class PipedRoutine extends Routine<unknown, unknown, { error?: Error; type?: str
 
     if (error) {
       if (this.options.type === 'stderr') {
-        // @ts-ignore
+        // @ts-expect-error
         error.stderr = 'Stderr message!';
       } else {
-        // @ts-ignore
+        // @ts-expect-error
         error.stdout = 'Stdout info...';
       }
 
@@ -60,7 +60,7 @@ describe('RunInWorkspacesRoutine', () => {
     driver = mockDriver('primary', tool);
 
     routine = new ExecuteRoutine('driver', 'Executing driver', { tool });
-    // @ts-ignore
+    // @ts-expect-error
     routine.debug = mockDebugger();
 
     // Setup packages

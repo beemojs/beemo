@@ -2,8 +2,8 @@ import * as hygen from 'hygen';
 import { Path } from '@boost/common';
 import ScaffoldContext from '../../src/contexts/ScaffoldContext';
 import ScaffoldRoutine from '../../src/routines/ScaffoldRoutine';
+import { mockConsole, mockDebugger, mockTool, stubScaffoldContext } from '../../src/testing';
 import Tool from '../../src/Tool';
-import { mockTool, mockDebugger, mockConsole, stubScaffoldContext } from '../../src/testing';
 
 jest.mock('hygen');
 
@@ -18,7 +18,7 @@ describe('ScaffoldRoutine', () => {
     context = stubScaffoldContext();
 
     routine = new ScaffoldRoutine('scaffold', 'Scaffolding templates', { tool });
-    // @ts-ignore
+    // @ts-expect-error
     routine.debug = mockDebugger();
   });
 
@@ -26,7 +26,7 @@ describe('ScaffoldRoutine', () => {
     it('executes command internally', () => {
       const spy = jest.spyOn(routine, 'executeCommand').mockImplementation();
 
-      // @ts-ignore
+      // @ts-expect-error
       routine.handleExec('babel', 'const foo = {};');
 
       expect(spy).toHaveBeenCalledWith('babel', [], {
@@ -40,7 +40,7 @@ describe('ScaffoldRoutine', () => {
     it('logs to console', () => {
       const spy = mockConsole('log');
 
-      // @ts-ignore
+      // @ts-expect-error
       routine.handleLog('foo');
 
       expect(spy).toHaveBeenCalledWith('foo');

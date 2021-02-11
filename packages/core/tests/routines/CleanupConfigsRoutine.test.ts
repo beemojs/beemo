@@ -1,10 +1,10 @@
 import fs from 'fs-extra';
 import { Path } from '@boost/common';
-import Tool from '../../src/Tool';
-import Driver from '../../src/Driver';
 import DriverContext from '../../src/contexts/DriverContext';
+import Driver from '../../src/Driver';
 import CleanupConfigsRoutine from '../../src/routines/CleanupConfigsRoutine';
-import { mockTool, mockDebugger, mockDriver, stubDriverContext } from '../../src/testing';
+import { mockDebugger, mockDriver, mockTool, stubDriverContext } from '../../src/testing';
+import Tool from '../../src/Tool';
 
 describe('CleanupConfigsRoutine', () => {
   let tool: Tool;
@@ -19,7 +19,7 @@ describe('CleanupConfigsRoutine', () => {
     context = stubDriverContext(driver);
 
     routine = new CleanupConfigsRoutine('cleanup', 'Cleaning up', { tool });
-    // @ts-ignore
+    // @ts-expect-error
     routine.debug = mockDebugger();
 
     tool.driverRegistry.load(driver);

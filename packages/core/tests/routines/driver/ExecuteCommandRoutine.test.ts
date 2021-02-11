@@ -1,19 +1,19 @@
-import fs from 'fs-extra';
 import chalk from 'chalk';
 import execa from 'execa';
+import fs from 'fs-extra';
 import { ExitError, Path } from '@boost/common';
-import Driver from '../../../src/Driver';
-import Tool from '../../../src/Tool';
-import ExecuteCommandRoutine from '../../../src/routines/driver/ExecuteCommandRoutine';
 import DriverContext from '../../../src/contexts/DriverContext';
+import Driver from '../../../src/Driver';
+import ExecuteCommandRoutine from '../../../src/routines/driver/ExecuteCommandRoutine';
 import {
-  mockTool,
-  stubDriverContext,
-  mockDebugger,
-  prependRoot,
   getRoot,
+  mockDebugger,
   mockDriver,
+  mockTool,
+  prependRoot,
+  stubDriverContext,
 } from '../../../src/testing';
+import Tool from '../../../src/Tool';
 import { StdioType } from '../../../src/types';
 
 describe('ExecuteCommandRoutine', () => {
@@ -37,7 +37,7 @@ describe('ExecuteCommandRoutine', () => {
       argv: ['-a', '--foo', 'bar', 'baz'],
       tool,
     });
-    // @ts-ignore
+    // @ts-expect-error
     routine.debug = mockDebugger();
   });
 
@@ -45,7 +45,7 @@ describe('ExecuteCommandRoutine', () => {
     it('errors if `forceConfigOption` is not a boolean', () => {
       expect(() => {
         routine = new ExecuteCommandRoutine('test', 'test', {
-          // @ts-ignore
+          // @ts-expect-error
           forceConfigOption: 'foo',
         });
       }).toThrowErrorMatchingSnapshot();
@@ -54,7 +54,7 @@ describe('ExecuteCommandRoutine', () => {
     it('errors if `packageRoot` is not a string', () => {
       expect(() => {
         routine = new ExecuteCommandRoutine('test', 'test', {
-          // @ts-ignore
+          // @ts-expect-error
           packageRoot: 123,
         });
       }).toThrowErrorMatchingSnapshot();
@@ -87,9 +87,9 @@ describe('ExecuteCommandRoutine', () => {
 
     beforeEach(() => {
       stream = {
-        // @ts-ignore
+        // @ts-expect-error
         stdout: new MockStream(),
-        // @ts-ignore
+        // @ts-expect-error
         stderr: new MockStream(),
       };
       writeSpy = jest.spyOn(process.stdout, 'write');
@@ -579,7 +579,7 @@ describe('ExecuteCommandRoutine', () => {
     it('persists exit code when a failure', async () => {
       (routine.executeCommand as jest.Mock).mockImplementation(() => {
         const error = new Error('Oops');
-        // @ts-ignore
+        // @ts-expect-error
         error.exitCode = 3;
 
         return Promise.reject(error);

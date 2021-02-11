@@ -1,8 +1,7 @@
 import { Path } from '@boost/common';
-import Tool from '../../../src/Tool';
-import Script from '../../../src/Script';
 import ScriptContext from '../../../src/contexts/ScriptContext';
 import ExecuteScriptRoutine from '../../../src/routines/script/ExecuteScriptRoutine';
+import Script from '../../../src/Script';
 import {
   mockDebugger,
   mockScript,
@@ -10,6 +9,7 @@ import {
   stubScriptContext,
   TestScript,
 } from '../../../src/testing';
+import Tool from '../../../src/Tool';
 
 describe('ExecuteScriptRoutine', () => {
   let routine: ExecuteScriptRoutine;
@@ -23,7 +23,7 @@ describe('ExecuteScriptRoutine', () => {
     context = stubScriptContext();
 
     routine = new ExecuteScriptRoutine('script', 'Run script', { tool });
-    // @ts-ignore
+    // @ts-expect-error
     routine.debug = mockDebugger();
   });
 

@@ -11,7 +11,7 @@ export interface BatchStreamOptions {
 export default class BatchStream extends Transform {
   bufferedBatch: Buffer | null = null;
 
-  timeout: unknown | null = null;
+  timeout: NodeJS.Timeout | null = null;
 
   waitThreshold: number = 0;
 
@@ -28,7 +28,7 @@ export default class BatchStream extends Transform {
     }
 
     if (this.timeout) {
-      clearTimeout(this.timeout as number);
+      clearTimeout(this.timeout);
       this.timeout = null;
     }
   }
@@ -41,7 +41,7 @@ export default class BatchStream extends Transform {
     }
 
     if (this.timeout) {
-      clearTimeout(this.timeout as number);
+      clearTimeout(this.timeout);
     }
 
     this.timeout = setTimeout(() => {
