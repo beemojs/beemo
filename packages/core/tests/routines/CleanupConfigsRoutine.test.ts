@@ -3,7 +3,7 @@ import { Path } from '@boost/common';
 import DriverContext from '../../src/contexts/DriverContext';
 import Driver from '../../src/Driver';
 import CleanupConfigsRoutine from '../../src/routines/CleanupConfigsRoutine';
-import { mockDebugger, mockDriver, mockTool, stubDriverContext } from '../../src/testing';
+import { mockDebugger, mockDriver, mockTool, stubDriverContext } from '../../src/test';
 import Tool from '../../src/Tool';
 
 describe('CleanupConfigsRoutine', () => {

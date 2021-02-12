@@ -4,7 +4,7 @@ import fs from 'fs-extra';
 import ConfigContext from '../../src/contexts/ConfigContext';
 import Driver from '../../src/Driver';
 import ResolveConfigsRoutine from '../../src/routines/ResolveConfigsRoutine';
-import { mockDebugger, mockDriver, mockTool, stubConfigContext } from '../../src/testing';
+import { mockDebugger, mockDriver, mockTool, stubConfigContext } from '../../src/test';
 import Tool from '../../src/Tool';
 
 describe('ResolveConfigsRoutine', () => {

@@ -2,7 +2,7 @@ import * as hygen from 'hygen';
 import { Path } from '@boost/common';
 import ScaffoldContext from '../../src/contexts/ScaffoldContext';
 import ScaffoldRoutine from '../../src/routines/ScaffoldRoutine';
-import { mockConsole, mockDebugger, mockTool, stubScaffoldContext } from '../../src/testing';
+import { mockConsole, mockDebugger, mockTool, stubScaffoldContext } from '../../src/test';
 import Tool from '../../src/Tool';
 
 jest.mock('hygen');

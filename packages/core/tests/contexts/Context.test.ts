@@ -1,6 +1,6 @@
 import { Path } from '@boost/common';
 import Context from '../../src/contexts/Context';
-import { stubArgs } from '../../src/testing';
+import { stubArgs } from '../../src/test';
 
 describe('Context', () => {
   let context: Context<{ foo: string }>;

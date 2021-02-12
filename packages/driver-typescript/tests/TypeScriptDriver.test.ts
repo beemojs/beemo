@@ -1,7 +1,7 @@
 import fs from 'fs';
 import rimraf from 'rimraf';
 import { DriverContext, Path } from '@beemo/core';
-import { mockTool, stubDriverContext } from '@beemo/core/lib/testing';
+import { mockTool, stubDriverContext } from '@beemo/core/test';
 import { getFixturePath } from '@boost/test-utils';
 import TypeScriptDriver from '../src/TypeScriptDriver';
 

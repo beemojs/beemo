@@ -1,5 +1,5 @@
 import ScaffoldContext from '../../src/contexts/ScaffoldContext';
-import { stubScaffoldArgs } from '../../src/testing';
+import { stubScaffoldArgs } from '../../src/test';
 
 describe('ScaffoldContext', () => {
   let context: ScaffoldContext;

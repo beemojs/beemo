@@ -1,6 +1,6 @@
 import rimraf from 'rimraf';
 import { DriverContext, Path } from '@beemo/core';
-import { mockTool, stubDriverContext } from '@beemo/core/lib/testing';
+import { mockTool, stubDriverContext } from '@beemo/core/test';
 import BabelDriver from '../src/BabelDriver';
 
 jest.mock('rimraf');

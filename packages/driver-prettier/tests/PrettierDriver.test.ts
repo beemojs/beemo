@@ -1,6 +1,6 @@
 import fs from 'fs';
 import { DriverContext, Path } from '@beemo/core';
-import { mockTool, stubDriverContext } from '@beemo/core/lib/testing';
+import { mockTool, stubDriverContext } from '@beemo/core/test';
 import PrettierDriver from '../src/PrettierDriver';
 
 describe('PrettierDriver', () => {

@@ -189,7 +189,7 @@ export default class Tool extends Contract<ToolOptions> {
       throw new Error(this.msg('errors:moduleMissing', { module }));
     }
 
-    this.debug('Found configuration module root path: %s', chalk.cyan(rootPath));
+    this.debug('Found configuration module root at path: %s', chalk.cyan(rootPath));
 
     return rootPath;
   }

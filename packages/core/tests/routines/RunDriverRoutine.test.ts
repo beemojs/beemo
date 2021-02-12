@@ -7,7 +7,7 @@ import Driver from '../../src/Driver';
 import { ExecuteCommandOptions } from '../../src/routines/driver/ExecuteCommandRoutine';
 import RunDriverRoutine from '../../src/routines/RunDriverRoutine';
 import { AnyRoutine } from '../../src/routines/RunInWorkspacesRoutine';
-import { mockDebugger, mockDriver, mockTool, stubDriverContext } from '../../src/testing';
+import { mockDebugger, mockDriver, mockTool, stubDriverContext } from '../../src/test';
 
 jest.mock('execa');
 

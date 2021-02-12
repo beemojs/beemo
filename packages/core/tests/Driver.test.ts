@@ -1,6 +1,6 @@
 import execa from 'execa';
 import Driver from '../src/Driver';
-import { mockDriver, stubExecResult } from '../src/testing';
+import { mockDriver, stubExecResult } from '../src/test';
 
 jest.mock('execa');
 

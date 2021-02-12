@@ -14,14 +14,14 @@ import {
   GlobalOptions,
   ParserOptions,
 } from '@boost/cli';
-import { beemo } from '../beemo';
+import { tool } from '../setup';
 
 export interface RunDriverConfig {
   driver?: Driver;
   parallelArgv?: Argv[];
 }
 
-@Config('run-driver', beemo.msg('app:cliCommandRunDriver'), {
+@Config('run-driver', tool.msg('app:cliCommandRunDriver'), {
   allowUnknownOptions: true,
   allowVariadicParams: true,
   category: 'core',
@@ -31,26 +31,26 @@ export default class RunDriver extends Command<
   [],
   RunDriverConfig
 > {
-  @Arg.Number(beemo.msg('app:cliOptionConcurrency'))
+  @Arg.Number(tool.msg('app:cliOptionConcurrency'))
   concurrency: number = 0;
 
-  @Arg.Flag(beemo.msg('app:cliOptionGraph'))
+  @Arg.Flag(tool.msg('app:cliOptionGraph'))
   graph: boolean = true;
 
-  @Arg.String(beemo.msg('app:cliOptionStdio'), { choices: ['buffer', 'stream', 'inherit'] })
+  @Arg.String(tool.msg('app:cliOptionStdio'), { choices: ['buffer', 'stream', 'inherit'] })
   stdio: string = 'buffer';
 
-  @Arg.String(beemo.msg('app:cliOptionWorkspaces'))
+  @Arg.String(tool.msg('app:cliOptionWorkspaces'))
   workspaces: string = '';
 
   @Arg.Params<DriverContextParams>({
-    description: beemo.msg('app:cliArgDriverName'),
+    description: tool.msg('app:cliArgDriverName'),
     label: 'name',
     required: true,
     type: 'string',
   })
   async run(name: string = '') {
-    const pipeline = beemo.createRunDriverPipeline(
+    const pipeline = tool.createRunDriverPipeline(
       this.getArguments(),
       this.options.driver?.getName() || name,
     );
@@ -78,7 +78,7 @@ export default class RunDriver extends Command<
       ...super.getMetadata(),
       category: 'driver',
       description:
-        driver.metadata.description || beemo.msg('app:run', { title: driver.metadata.title }),
+        driver.metadata.description || tool.msg('app:run', { title: driver.metadata.title }),
       params: [],
       path: driver.getName(),
     };

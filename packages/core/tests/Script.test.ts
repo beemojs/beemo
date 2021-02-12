@@ -1,6 +1,6 @@
 import execa from 'execa';
 import Script from '../src/Script';
-import { mockScript } from '../src/testing';
+import { mockScript } from '../src/test';
 
 jest.mock('execa');
 
