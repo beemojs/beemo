@@ -1,9 +1,9 @@
-# ESLint Driver
+# ESLint driver
 
 Provides [ESLint](https://github.com/eslint/eslint) support by dynamically generating a
 `.eslintrc.js` config file.
 
-```
+```bash
 yarn add @beemo/driver-eslint eslint
 ```
 
@@ -14,17 +14,16 @@ yarn add @beemo/driver-eslint eslint
 ## Usage
 
 In your configuration module, install the driver, ESLint, and any plugins. Create a file at
-`configs/eslint.js` or `lib/configs/eslint.js` in which to house your ESLint configuration.
+`<config-module>/configs/eslint.(js|ts)` in which to house your ESLint configuration.
 
 In your consuming project, enable the driver by adding `eslint` to your `drivers` config.
 
-```json
-{
-  "beemo": {
-    "module": "@<username>/dev-tools",
-    "drivers": ["eslint"]
-  }
-}
+```js
+// .config/beemo.js
+module.exports = {
+  module: '<config-module>',
+  drivers: ['eslint'],
+};
 ```
 
 ## Events
@@ -33,10 +32,10 @@ In your consuming project, enable the driver by adding `eslint` to your `drivers
 | -------------------- | ------------------------------------------------------------------ | ----------------------------------------- |
 | `onCreateIgnoreFile` | `context: ConfigContext, path: Path, config: { ignore: string[] }` | Called before the ignore file is written. |
 
-## Ignoring Paths
+## Ignoring paths
 
-Instead of using an `.eslintignore` dotfile, you can define an `ignore` property in your
-`configs/eslint.js` file. This property accepts an array of strings. For example:
+Instead of using an `.eslintignore` dotfile, you can define an `ignore` property in your config
+file. This property accepts an array of strings. For example:
 
 ```bash
 # .eslintignore
@@ -48,7 +47,7 @@ lib/
 Becomes...
 
 ```js
-// configs/eslint.js
+// .config/beemo/eslint.js
 module.exports = {
   // ...
   ignore: ['lib/', '*.min.js', '*.map'],

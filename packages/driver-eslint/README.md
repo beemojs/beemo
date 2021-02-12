@@ -9,7 +9,7 @@ Provides [ESLint](https://github.com/eslint/eslint) support for
 
 ## Installation
 
-```
+```bash
 yarn add @beemo/driver-eslint eslint
 // Or
 npm install @beemo/driver-eslint eslint --save

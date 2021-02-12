@@ -1,7 +1,7 @@
 # Summary
 
-- [Repository Setup](./provider.md)
-- [Consumer Setup](./consumer.md)
+- [Provider setup](./provider.md)
+- [Consumer setup](./consumer.md)
 - [Drivers](./driver.md)
   - [Babel](./drivers/babel.md)
   - [ESLint](./drivers/eslint.md)
@@ -11,10 +11,10 @@
   - [Prettier](./drivers/prettier.md)
   - [TypeScript](./drivers/typescript.md)
   - [Webpack](./drivers/webpack.md)
-- [Tool Instance](./tool.md)
-  - [Listening To Events](./events.md)
+- [Tool](./tool.md)
+  - [Listening to events](./events.md)
 - [Workspaces](./workspaces.md)
 - [Scaffolding](./scaffolding.md)
-- [Pro Tips](./tips.md)
+- [Tips](./tips.md)
 - [Conventions](./conventions.md)
 - [Changelog](https://github.com/beemojs/beemo/blob/master/CHANGELOG.md)

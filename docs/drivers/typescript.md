@@ -1,9 +1,9 @@
-# TypeScript Driver
+# TypeScript driver
 
 Provides [TypeScript](https://github.com/microsoft/typescript) support by dynamically generating a
 `tsconfig.json` config file.
 
-```
+```bash
 yarn add @beemo/driver-typescript typescript
 ```
 
@@ -14,21 +14,19 @@ yarn add @beemo/driver-typescript typescript
 ## Usage
 
 In your configuration module, install the driver and TypeScript. Create a file at
-`configs/typescript.js` or `lib/configs/typescript.js` in which to house your TypeScript
-configuration.
+`<config-module>/configs/typescript.(js|ts)` in which to house your TypeScript configuration.
 
 In your consuming project, enable the driver by adding `typescript` to your `drivers` config.
 
-```json
-{
-  "beemo": {
-    "module": "@<username>/dev-tools",
-    "drivers": ["typescript"]
-  }
-}
+```js
+// .config/beemo.js
+module.exports = {
+  module: '<config-module>',
+  drivers: ['typescript'],
+};
 ```
 
-### CLI Options
+### CLI options
 
 - `--[no-]clean` (bool) - Clean the target `outDir` before transpiling. Defaults to `true`.
 - `--reference-workspaces` (bool) - Automatically generate project references based on workspace
@@ -40,13 +38,13 @@ In your consuming project, enable the driver by adding `typescript` to your `dri
 | --------------------------- | -------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------- |
 | `onCreateProjectConfigFile` | `context: DriverContext, path: Path, config: TypeScriptConfig, isTests: boolean` | Called before a workspace package config file is written when using project references. |
 
-## Workspaces Support
+## Workspaces support
 
 TypeScript supports 2 forms of workspaces, the 1st with native
 [project references](https://www.typescriptlang.org/docs/handbook/project-references.html), and the
 2nd with the [Beemo --workspaces](../workspaces.md) implementation.
 
-### Project References
+### Project references
 
 Managing project references manually can be tedious, and honestly, quite hard. Beemo mitigates this
 process by automating the creation of `tsconfig.json` files, with correct project references (based
@@ -77,34 +75,31 @@ tsconfig.json # Created with refs that point to each package
 
 To customize this process, the following options are available.
 
-- `buildFolder` (string) - Name of output directory relative to package root. Defaults to `lib`.
-- `declarationOnly` (bool) - Only emit declaration files for all packages instead of source files.
-  Defaults to `false`.
-- `globalTypes` (bool) - Include global types defined in the root (usually cwd). Defaults to
+- `buildFolder` (`string`) - Name of output directory relative to package root. Defaults to `lib`.
+- `declarationOnly` (`boolean`) - Only emit declaration files for all packages instead of source
+  files. Defaults to `false`.
+- `globalTypes` (`boolean`) - Include global types defined in the root (usually cwd). Defaults to
   `false`.
-- `srcFolder` (string) - Name of source directory relative to package root. Defaults to `src`.
-- `testsFolder` (string) - Name of tests directory relative to package root. Defaults to `tests`.
-- `typesFolder` (string) - Name of local and global types directory. Defaults to `types`.
+- `srcFolder` (`string`) - Name of source directory relative to package root. Defaults to `src`.
+- `testsFolder` (`string`) - Name of tests directory relative to package root. Defaults to `tests`.
+- `typesFolder` (`string`) - Name of local and global types directory. Defaults to `types`.
 
-```json
-{
-  "beemo": {
-    "module": "@<username>/dev-tools",
-    "drivers": [
-      {
-        "driver": "typescript",
-        "globalTypes": true,
-        "testsFolder": "test"
-      }
-    ]
-  }
-}
+```js
+module.exports = {
+  module: '<config-module>',
+  drivers: {
+    typescript: {
+      globalTypes: true,
+      testsFolder: 'test',
+    },
+  },
+};
 ```
 
 > If your tests are co-located with your source files, the tests specific `tsconfig.json` file will
 > be skipped.
 
-### Beemo Workspaces
+### Beemo workspaces
 
 When using Beemo workspaces, the TypeScript driver will copy the `tsconfig.json` from the root into
 each package, instead of referencing with a `--project` option, or using `extends` (which has many
@@ -112,11 +107,11 @@ issues with relative paths). It will then execute a child process in each packag
 order, based on the dependency graph.
 
 This works great if the root config is never used, but the situations where _it may be_ (for
-example, with Jest), then custom logic will need to be added to your `configs/typescript.js` file to
-handle both cases. Something like the following.
+example, with Jest), then custom logic will need to be added to your config file to handle both
+cases. Something like the following.
 
 ```js
-// configs/typescript.js
+// .config/beemo/typescript.js
 module.exports = function typescript(args, tool) {
   // The --workspaces option is not passed, but the project uses workspaces.
   const runningInWorkspaceEnabledRoot = !args.workspaces && !!tool.package.workspaces;

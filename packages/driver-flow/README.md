@@ -9,7 +9,7 @@ Provides [Flow](https://github.com/facebook/flow) support for
 
 ## Installation
 
-```
+```bash
 yarn add @beemo/driver-flow flow-bin
 // Or
 npm install @beemo/driver-flow flow-bin --save

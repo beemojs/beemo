@@ -9,7 +9,7 @@ manager.
 
 ## Installation
 
-```
+```bash
 yarn add @beemo/cli
 // Or
 npm install @beemo/cli --save

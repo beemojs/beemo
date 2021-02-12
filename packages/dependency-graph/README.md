@@ -9,7 +9,7 @@ Generate a dependency graph for a list of packages, based on their defined `depe
 
 ## Installation
 
-```
+```bash
 yarn add @beemo/dependency-graph
 // Or
 npm install @beemo/dependency-graph --save

@@ -1,9 +1,9 @@
-# Webpack Driver
+# Webpack driver
 
 Provides [Webpack](https://github.com/webpack/webpack) support by dynamically generating a
 `webpack.config.js` config file.
 
-```
+```bash
 yarn add @beemo/driver-webpack webpack webpack-cli
 ```
 
@@ -14,15 +14,14 @@ yarn add @beemo/driver-webpack webpack webpack-cli
 ## Usage
 
 In your configuration module, install the driver, Webpack, and any loaders or plugins. Create a file
-at `configs/webpack.js` or `lib/configs/webpack.js` in which to house your Webpack configuration.
+at `<config-module>/configs/webpack.(js|ts)` in which to house your Webpack configuration.
 
 In your consuming project, enable the driver by adding `webpack` to your `drivers` config.
 
-```json
-{
-  "beemo": {
-    "module": "@<username>/dev-tools",
-    "drivers": ["webpack"]
-  }
-}
+```js
+// .config/beemo.js
+module.exports = {
+  module: '<config-module>',
+  drivers: ['webpack'],
+};
 ```

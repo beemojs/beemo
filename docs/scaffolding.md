@@ -4,7 +4,7 @@ Beemo can scaffold projects through the amazing [hygen](https://github.com/jondo
 Hygen separates templates into groupings of "generators" and "actions", coupling a front matter
 concept with [ejs](http://ejs.co/), to deliver a powerful and convenient experience.
 
-## Creating Templates
+## Creating templates
 
 To make use of scaffolds, create `.ejs` files within your configuration module, located at
 `./templates/<generator>/<action>`. For example, if I wanted to scaffold dotfiles, I may create the
