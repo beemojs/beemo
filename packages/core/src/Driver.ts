@@ -193,6 +193,7 @@ export default abstract class Driver<
     const out = (stderr || stdout).trim();
 
     if (out) {
+      console.log(out);
       this.setOutput('stderr', out);
     }
   }
@@ -204,6 +205,7 @@ export default abstract class Driver<
     const out = response.stdout.trim();
 
     if (out) {
+      console.log(out);
       this.setOutput('stdout', out);
     }
   }
