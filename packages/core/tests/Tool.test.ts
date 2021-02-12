@@ -60,7 +60,15 @@ describe('Tool', () => {
       await tool.bootstrap();
 
       expect(driverSpy).toHaveBeenCalledWith(
-        ['babel', 'eslint', 'jest', 'mocha', 'prettier', 'typescript', 'webpack'],
+        {
+          babel: true,
+          eslint: true,
+          jest: true,
+          mocha: true,
+          prettier: true,
+          typescript: { buildFolder: 'dts', declarationOnly: true },
+          webpack: true,
+        },
         { tool },
       );
       expect(scriptSpy).toHaveBeenCalledWith({}, { tool });

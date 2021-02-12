@@ -378,7 +378,7 @@ describe('ExecuteCommandRoutine', () => {
       // Make testing easier
       args.sort();
 
-      expect(args).toEqual(['--foo', '../types/global.d.ts', '../types/milesj.d.ts', 'bar']);
+      expect(args).toEqual(['--foo', '../types/milesj.d.ts', 'bar']);
     });
 
     it('handles missing paths', async () => {
