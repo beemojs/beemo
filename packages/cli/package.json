@@ -8,6 +8,7 @@
     "command"
   ],
   "main": "./lib/index.js",
+  "types": "./dts/index.d.ts",
   "bin": {
     "beemo": "./lib/bin.js"
   },
@@ -15,7 +16,11 @@
     "node": ">=10.3.0",
     "npm": ">=6.1.0"
   },
-  "repository": "https://github.com/beemojs/beemo/tree/master/packages/cli",
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:beemojs/beemo.git",
+    "directory": "packages/cli"
+  },
   "author": "Miles Johnson",
   "license": "MIT",
   "publishConfig": {

@@ -15,12 +15,16 @@
     "integration:pass": "prettier ./integration/pass.js"
   },
   "main": "./lib/index.js",
-  "types": "./lib/index.d.ts",
+  "types": "./dts/index.d.ts",
   "engines": {
     "node": ">=10.3.0",
     "npm": ">=6.1.0"
   },
-  "repository": "https://github.com/beemojs/beemo/tree/master/packages/driver-prettier",
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:beemojs/beemo.git",
+    "directory": "packages/driver-prettier"
+  },
   "author": "Miles Johnson",
   "license": "MIT",
   "publishConfig": {
