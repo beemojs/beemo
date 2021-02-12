@@ -18,7 +18,8 @@
   "main": "./lib/index.js",
   "types": "./lib/index.d.ts",
   "engines": {
-    "node": ">=10.17.0"
+    "node": ">=10.3.0",
+    "npm": ">=6.1.0"
   },
   "repository": "https://github.com/beemojs/beemo/tree/master/packages/core",
   "author": "Miles Johnson",
@@ -28,14 +29,14 @@
   },
   "dependencies": {
     "@boost/args": "^2.3.1",
-    "@boost/common": "^2.5.1",
-    "@boost/config": "^2.3.1",
-    "@boost/debug": "^2.2.1",
+    "@boost/common": "^2.6.0",
+    "@boost/config": "^2.3.2",
+    "@boost/debug": "^2.2.2",
     "@boost/event": "^2.3.1",
-    "@boost/pipeline": "^2.2.1",
-    "@boost/plugin": "^2.2.1",
+    "@boost/pipeline": "^2.2.2",
+    "@boost/plugin": "^2.2.2",
     "@boost/terminal": "^2.2.0",
-    "@boost/translate": "^2.2.1",
+    "@boost/translate": "^2.2.2",
     "chalk": "^4.1.0",
     "execa": "^5.0.0",
     "fast-glob": "^3.2.5",

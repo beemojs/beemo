@@ -1,5 +1,6 @@
 module.exports = {
   module: '@beemo/local',
+  // drivers: ['babel', 'eslint', 'jest', 'mocha', 'prettier', 'typescript', 'webpack'],
   drivers: {
     babel: true,
     eslint: true,
@@ -15,6 +16,5 @@ module.exports = {
   settings: {
     decorators: true,
     node: true,
-    react: true,
   },
 };

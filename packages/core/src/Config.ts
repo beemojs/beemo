@@ -3,8 +3,11 @@ import { Configuration, createPluginsPredicate } from '@boost/config';
 import { ConfigFile } from './types';
 
 export default class Config extends Configuration<ConfigFile> {
-  blueprint(predicates: Predicates): Blueprint<ConfigFile> {
+  blueprint(predicates: Predicates, onConstruction: boolean): Blueprint<ConfigFile> {
     const { bool, number, object, shape, string } = predicates;
+    const moduleSchema = process.env.BEEMO_CONFIG_MODULE
+      ? string(process.env.BEEMO_CONFIG_MODULE)
+      : string();
 
     return {
       configure: shape({
@@ -17,8 +20,7 @@ export default class Config extends Configuration<ConfigFile> {
         concurrency: number(3).gt(0),
         graph: bool(true),
       }),
-      // Config is validated on instantiation, so using required here wont work
-      module: process.env.BEEMO_CONFIG_MODULE ? string(process.env.BEEMO_CONFIG_MODULE) : string(), // .required(),
+      module: onConstruction ? moduleSchema : moduleSchema.required(),
       scripts: createPluginsPredicate(predicates),
       settings: object(),
     };

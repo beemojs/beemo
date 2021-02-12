@@ -1,18 +1,18 @@
 import corePackage from '@beemo/core/package.json';
 import { applyStyle, Program } from '@boost/cli';
-import { argv, beemo, parallelArgv } from './setup';
 import CreateConfig from './commands/CreateConfig';
 import RunDriver from './commands/RunDriver';
 import RunScript from './commands/RunScript';
 import Scaffold from './commands/Scaffold';
+import { argv, parallelArgv, tool } from './setup';
 
 const version = String(corePackage.version);
 const footer = applyStyle(
   [
-    beemo.msg('app:cliEpilogue', {
+    tool.msg('app:cliEpilogue', {
       manualURL: process.env.BEEMO_MANUAL_URL || 'https://milesj.gitbook.io/beemo',
     }),
-    beemo.msg('app:poweredBy', { version }),
+    tool.msg('app:poweredBy', { version }),
   ].join('\n'),
   'muted',
 );
@@ -25,20 +25,6 @@ const program = new Program({
 });
 
 async function run() {
-  // Run this in middleware so we can utilize error handling
-  // program.middleware(async (v, parse) => {});
-
-  // Load config and plugins
-  await beemo.bootstrap();
-
-  // Bootstrap config module
-  await beemo.bootstrapConfigModule();
-
-  // Add a command for each driver
-  beemo.driverRegistry.getAll().forEach((driver) => {
-    program.register(new RunDriver({ driver, parallelArgv }));
-  });
-
   // Add normal commands
   program
     .register(new CreateConfig())
@@ -54,10 +40,21 @@ async function run() {
   });
 
   // Listen to events
-  program.onAfterRun.listen(beemo.cleanupOnFailure);
+  // program.onAfterRun.listen(beemo.cleanupOnFailure);
 
   // Run the program!
-  await program.runAndExit(argv);
+  await program.runAndExit(argv, async () => {
+    // Load config and plugins
+    await tool.bootstrap();
+
+    // Bootstrap config module
+    await tool.bootstrapConfigModule();
+
+    // Add a command for each driver
+    tool.driverRegistry.getAll().forEach((driver) => {
+      program.register(new RunDriver({ driver, parallelArgv }));
+    });
+  });
 }
 
 void run();
