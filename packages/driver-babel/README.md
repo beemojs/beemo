@@ -9,7 +9,7 @@ Provides [Babel](https://github.com/babel/babel) support for
 
 ## Installation
 
-```
+```bash
 yarn add @beemo/driver-babel @babel/core
 // Or
 npm install @beemo/driver-babel @babel/core --save

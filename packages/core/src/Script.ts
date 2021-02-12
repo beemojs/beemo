@@ -36,8 +36,11 @@ export default abstract class Script<O extends object = {}, Options extends obje
     return {};
   }
 
+  bootstrap() {}
+
   startup(tool: Tool) {
     this.tool = tool;
+    this.bootstrap();
   }
 
   /**

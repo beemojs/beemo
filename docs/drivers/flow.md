@@ -1,9 +1,9 @@
-# Flow Driver
+# Flow driver
 
 Provides [Flow](https://github.com/facebook/flow) support by dynamically generating a `.flowconfig`
 config file.
 
-```
+```bash
 yarn add @beemo/driver-flow flow-bin
 ```
 
@@ -13,21 +13,20 @@ yarn add @beemo/driver-flow flow-bin
 
 ## Usage
 
-In your configuration module, install the driver and Flow. Create a file at `configs/flow.js` or
-`lib/configs/flow.js` in which to house your Flow configuration.
+In your configuration module, install the driver and Flow. Create a file at
+`<config-module>/configs/flow.(js|ts)` in which to house your Flow configuration.
 
 In your consuming project, enable the driver by adding `flow` to your `drivers` config.
 
-```json
-{
-  "beemo": {
-    "module": "@<username>/dev-tools",
-    "drivers": ["flow"]
-  }
-}
+```js
+// .config/beemo.js
+module.exports = {
+  module: '<config-module>',
+  drivers: ['flow'],
+};
 ```
 
-## Config Format
+## Config format
 
 In Beemo, Flow is configured using a JavaScript file, and not the `.flowconfig` file. To support
 this, the following conventions must be followed.
@@ -42,7 +41,7 @@ this, the following conventions must be followed.
 An example:
 
 ```js
-// configs/flow.js
+// .config/beemo/flow.js
 module.exports = {
   ignore: ['.*/node_modules/.*', '.*/tests/.*', '.*\\.test\\.js'],
   include: ['./src'],

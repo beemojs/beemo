@@ -1,23 +1,28 @@
-# Tool Instance
+# Tool
 
 A Beemo Tool instance is a representation of the current running process. It provides loaded
-configuration, utility methods, and more.
+configuration, driver and script plugins, utility methods, and more.
 
 ## Configuration
 
-The loaded consumer configuration can be found under the `config` property. This is usually the
-"beemo" block in `package.json`.
+The loaded consumer configuration can be found under the `config` property.
 
-```js
-tool.config.module; // @<username>/dev-tools
+```ts
+tool.config.module;
 ```
 
 While the `package` property is the loaded consumer `package.json`.
 
-```js
+```ts
 tool.package.name;
 ```
 
-> Messages (excluding invariant) are formatted with
-> [util.format](https://nodejs.org/api/util.html#util_util_format_format_args) and can interpolate
-> variables.
+## Plugins
+
+Drivers and scripts are managed on the Tool instance through a registry based pattern, and can be
+accessed with `driverRegistry` and `scriptRegistry` respectively.
+
+```ts
+tool.driverRegistry.isRegistered('babel');
+tool.driverRegistry.load('@beemo/driver-jest'); // Fully qualified
+```

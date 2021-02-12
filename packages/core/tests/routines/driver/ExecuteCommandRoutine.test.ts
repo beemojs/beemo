@@ -541,7 +541,7 @@ describe('ExecuteCommandRoutine', () => {
     beforeEach(() => {
       jest
         .spyOn(routine, 'executeCommand')
-        .mockImplementation(() => Promise.resolve({ success: true } as $FixMe));
+        .mockImplementation(() => Promise.resolve({ success: true } as any));
       jest.spyOn(driver, 'processSuccess').mockImplementation();
       jest.spyOn(driver, 'processFailure').mockImplementation();
     });

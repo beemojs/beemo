@@ -1,18 +1,17 @@
-# Repository Setup
+# Provider setup
 
 To begin, create and clone a new repository on GitHub (or another VCS). This repository will be
-known as your "configuration module" going forward. I suggest naming it `dev-tools`, or
-`dev-tool-config`, `build-tools`, etc, as it's straight forward, easy to understand, and defines
-intent.
+known as your "configuration module" going forward. I suggest naming it `dev`, or `dev-configs`,
+`build-tools`, etc, as it's straight forward, easy to understand, and defines intent.
 
 ```bash
-git clone git@github.com:<username>/dev-tools.git
-cd dev-tools/
+git clone git@github.com:<username>/dev.git
+cd dev/
 ```
 
-Once cloned, initialize a new NPM package, and provide the name `dev-tools` with a username scope,
-like `@beemo/dev-tools`. Why a scope? Because we don't want to clutter NPM with common named
-packages. It also avoids collisions and easily announces ownership.
+Once cloned, initialize a new NPM package, and provide the package name with a username scope, like
+`@beemo/dev`. Why a scope? Because we don't want to clutter NPM with common named packages. It also
+avoids collisions and easily announces ownership.
 
 ```bash
 npm init --scope=<username>
@@ -28,8 +27,8 @@ Now that we have a repository, we can install and setup Beemo. It's as easy as..
 yarn add @beemo/core @beemo/cli
 ```
 
-This will only install the core functionality. To support different dev tools like Babel, ESLint,
-and Jest, we need to install packages known as "drivers"
+This will only install the core functionality. To support different developer tools like Babel,
+ESLint, and Jest, we need to install packages known as "drivers"
 ([view all available drivers](https://www.npmjs.com/search?q=beemo-driver)).
 
 ```bash
@@ -42,9 +41,9 @@ yarn add @beemo/driver-jest jest
 
 ## Drivers
 
-For each driver you install, there should be an associated `.js` configuration file within a
-`configs/` or `lib/configs/` folder, named after the camel-cased package name (excluding "driver-").
-Using the example above, we'd have the following:
+For each driver you install, there should be an associated configuration file within a `configs/`
+(or `lib/configs/`) folder, named after the camel-cased package name (excluding "driver-"). Using
+the example above, we'd have the following:
 
 ```
 configs/
@@ -53,8 +52,9 @@ configs/
   jest.js
 ```
 
-> The benefit of Beemo is that we can avoid dev tool conventions and standardize on a single
-> implementation. No more `.foorc`, `.foorc.js`, or `.foorc.json` nonsense. Just `configs/foo.js`.
+> The benefit of Beemo is that we can avoid different tooling conventions and standardize on a
+> single implementation. No more `.foorc`, `.foorc.js`, or `.foorc.json` nonsense. Just
+> `configs/<driver>.js`.
 
 Each configuration file should return a JavaScript object. Easy enough.
 
@@ -65,15 +65,17 @@ module.exports = {
     [
       '@babel/preset-env',
       {
-        targets: { node: '6.5' },
+        targets: { node: 'current' },
       },
     ],
   ],
 };
 ```
 
+TypeScript configuration files are also supported.
+
 ```ts
-// src/configs/babel.ts -> lib/configs/babel.js
+// configs/babel.ts
 import { BabelConfig } from '@beemo/driver-babel';
 
 const config: BabelConfig = {
@@ -81,7 +83,7 @@ const config: BabelConfig = {
     [
       '@babel/preset-env',
       {
-        targets: { node: '6.5' },
+        targets: { node: 'current' },
       },
     ],
   ],
@@ -101,7 +103,7 @@ const presets = [
   [
     '@babel/preset-env',
     {
-      targets: { node: '6.5' },
+      targets: { node: 'current' },
     },
   ],
 ];
@@ -121,17 +123,22 @@ module.exports = {
 ## Scripts
 
 Beemo supports executing custom scripts found within your configuration module. To utilize a script,
-create a JavaScript file (in PascalCase) within the `scripts/` or `lib/scripts/` folder, extend the
-`Script` class provided by Beemo, and define the `execute()` and `args()` methods.
+create a JavaScript file (in PascalCase) within the `scripts/` (or `lib/scripts/`) folder, extend
+the `Script` class provided by Beemo, and define the `execute()` and `parse()` methods.
 
 ```js
 // scripts/InitProject.js
 const { Script } = require('@beemo/core');
 
-module.exports = class InitProjectScript extends Script {
-  args() {
+class InitProjectScript extends Script {
+  name = 'init-project';
+
+  parse() {
     return {
-      boolean: ['dryRun'],
+      dryRun: {
+        description: 'Execute a dry run',
+        type: 'boolean',
+      },
     };
   }
 
@@ -140,33 +147,44 @@ module.exports = class InitProjectScript extends Script {
       // Do something
     }
   }
-};
+}
+
+module.exports = () => new InitProjectScript();
 ```
 
-```ts
-// src/scripts/InitProject.ts -> lib/scripts/InitProject.js
-import { Script, ScriptContext } from '@beemo/core';
+Like configuration files, scripts can also be written in TypeScript.
 
-interface Args {
+```ts
+// scripts/InitProject.ts
+import { Arguments, ParserOptions, Script, ScriptContext } from '@beemo/core';
+
+interface InitProjectOptions {
   dryRun: boolean;
 }
 
-export default class InitProjectScript extends Script<Args> {
-  args() {
+class InitProjectScript extends Script<InitProjectOptions> {
+  name = 'init-project';
+
+  parse(): ParserOptions<InitProjectOptions> {
     return {
-      boolean: ['dryRun'],
+      dryRun: {
+        description: 'Execute a dry run',
+        type: 'boolean',
+      },
     };
   }
 
-  execute(context: ScriptContext, args: Args) {
+  execute(context: ScriptContext, args: Arguments<InitProjectOptions>) {
     if (args.dryRun) {
       // Do something
     }
   }
 }
+
+export default () => new InitProjectScript();
 ```
 
-The `args()` method is optional and can be used to define parsing rules for CLI options (powered by
+The `parse()` method is optional but can be used to define parsing rules for CLI options (powered by
 [@boost/args](https://milesj.gitbook.io/boost/args)). If no rules are provided, default parsing
 rules will be used.
 
@@ -181,7 +199,7 @@ as the 2nd argument. The [Beemo Tool instance](./tool.md) is available under `th
 Now that Beemo and its drivers are installed, let's move forward by publishing your configuration
 module to NPM with public access. This is mandatory if using a scope.
 
-```
+```bash
 npm version minor
 npm publish --access=public
 ```

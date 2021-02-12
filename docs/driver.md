@@ -3,7 +3,7 @@
 A driver is a pluggable interface for an individual development or build tool. It provides a custom
 implementation for interoperability with the primary Beemo process.
 
-## Config Strategies
+## Config strategies
 
 Each driver is designed and built differently, as is their configuration patterns. To work around
 this, multiple strategies are in play when generating a config file at the root.
@@ -34,6 +34,6 @@ The default strategies for each tool are as follows:
 > Default strategies can be overwritten with a driver's `strategy` option, which accepts `create`,
 > `reference`, `copy`, `native`, and `none`.
 
-## Creating A Driver
+## Creating a driver
 
 Will be available after release!

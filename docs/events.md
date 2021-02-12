@@ -1,12 +1,12 @@
-# Listening To Events
+# Listening to events
 
 What kind of tool would Beemo be without the ability to listen to events? A terrible one, and as
 such, Beemo totally supports them! Events provide an easy mechanism for hooking into the lifecycle
 of a Beemo process.
 
-To begin, create an `index.js` file in the root of your configuration module that exports a
-function, or use the `package.json` `main` entry. This function will receive a
-[Beemo Tool instance](./tool.md) for the current process, in which listeners can be registered.
+To begin, create a `main` entry point in your configuration module that exports a function. This
+function will receive a [Beemo Tool instance](./tool.md) for the current process, in which listeners
+can be registered.
 
 ```ts
 // src/index.ts -> lib/index.js
@@ -61,7 +61,7 @@ The following list of events, and their arguments, can be listened to.
 | `onBeforeExecute` | `context: ScriptContext, argv: string[]`    | Concurrent | Called before the `Script#execute` method is ran.       |
 | `onFailedExecute` | `context: ScriptContext, error: Error`      | Concurrent | Called after the script has failed to execute.          |
 
-## Type Declarations
+## Type declarations
 
 - `Driver` - An instance of the
   [Driver](https://github.com/beemojs/beemo/blob/master/packages/core/src/Driver.ts) class.

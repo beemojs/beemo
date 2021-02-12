@@ -9,7 +9,7 @@ workspace package folders.
 This option requires a pattern to match package names against (the name in `package.json`), or `*`
 to match all packages. Patterns may need to be quoted.
 
-```
+```bash
 yarn beemo typescript --workspaces=*
 
 // Only in packages that wildcard contain "driver-"
@@ -20,21 +20,21 @@ yarn beemo typescript --workspaces=driver-*
 
 ![Beemo](https://raw.githubusercontent.com/beemojs/beemo/master/docs/img/workspaces.gif)
 
-## Priority Packages
+## Priority packages
 
 There are situations where a single package or multiple packages need to be executed before all
 other packages, for example, a core/common/main package. This is very common for typed languages
 like Flow or TypeScript. By default, Beemo will automatically resolve a priority order based on the
 workspaces dependency graph. To disable this process, pass a `--no-graph` option.
 
-```
+```bash
 yarn beemo typescript --workspaces=* --no-graph
 ```
 
 Highly depended on packages will be executed in parallel batches, based on the order of dependency,
 followed by all remaining packages being executed in parallel batches as well.
 
-## Driver Support
+## Driver support
 
 Each driver is designed and built differently, so getting a consistent pattern for workspace support
 is quite difficult. Because of this, per driver usage is broken down into 1 of the following 4

@@ -8,7 +8,7 @@ Provides [Prettier](https://github.com/prettier/prettier) support.
 
 ## Installation
 
-```
+```bash
 yarn add @beemo/driver-prettier prettier
 // Or
 npm install @beemo/driver-prettier prettier --save

@@ -9,7 +9,7 @@ Provides [TypeScript](https://github.com/microsoft/typescript) support for
 
 ## Installation
 
-```
+```bash
 yarn add @beemo/driver-typescript typescript
 // Or
 npm install @beemo/driver-typescript typescript --save
