@@ -1,11 +1,12 @@
 {
   "compilerOptions": {
-    "declarationDir": "lib",
-    "outDir": "lib",
-    "rootDir": "src"
+    "declarationDir": "dts",
+    "outDir": "dts",
+    "rootDir": "src",
+    "emitDeclarationOnly": true
   },
   "exclude": [
-    "lib",
+    "dts",
     "tests"
   ],
   "extends": "../../tsconfig.options.json",

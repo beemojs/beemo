@@ -2,7 +2,15 @@
   "private": true,
   "name": "@beemo/local",
   "version": "0.1.4",
-  "main": "./index.js",
+  "main": "./lib/index.js",
+  "types": "./dts/index.d.ts",
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:beemojs/beemo.git",
+    "directory": "packages/local"
+  },
+  "author": "Miles Johnson",
+  "license": "MIT",
   "peerDependencies": {
     "@beemo/core": "*",
     "@beemo/driver-babel": "*",
@@ -20,5 +28,12 @@
     "fast-glob": "^3.2.5",
     "fs-extra": "^9.1.0",
     "semver": "^7.3.2"
+  },
+  "packemon": {
+    "platform": "node"
+  },
+  "engines": {
+    "node": ">=10.3.0",
+    "npm": ">=6.1.0"
   }
 }

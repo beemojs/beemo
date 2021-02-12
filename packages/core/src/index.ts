@@ -17,25 +17,28 @@ import Script from './Script';
 import Tool from './Tool';
 
 export {
-  Blueprint,
   ConfigContext,
   Context,
   Driver,
   DriverContext,
+  Path,
+  ScaffoldContext,
+  Script,
+  ScriptContext,
+  Tool,
+};
+
+export type {
+  Blueprint,
   DriverContextOptions,
   DriverContextParams,
   PackageStructure,
-  Path,
   PortablePath,
   Predicates,
-  ScaffoldContext,
   ScaffoldContextOptions,
   ScaffoldContextParams,
-  Script,
-  ScriptContext,
   ScriptContextOptions,
   ScriptContextParams,
-  Tool,
 };
 
 export * from './constants';

@@ -5,7 +5,7 @@ import Driver from '../../src/Driver';
 import RunInWorkspacesRoutine, {
   RunInWorkspacesContextArgs,
 } from '../../src/routines/RunInWorkspacesRoutine';
-import { mockDebugger, mockDriver, mockTool, stubDriverContext } from '../../src/testing';
+import { mockDebugger, mockDriver, mockTool, stubDriverContext } from '../../src/test';
 import Tool from '../../src/Tool';
 
 type Ctx = Context<RunInWorkspacesContextArgs>;

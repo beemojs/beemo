@@ -15,21 +15,26 @@
     "integration:pass": "babel ./integration/pass.js"
   },
   "main": "./lib/index.js",
-  "types": "./lib/index.d.ts",
+  "types": "./dts/index.d.ts",
   "engines": {
-    "node": ">=10.17.0"
+    "node": ">=10.3.0",
+    "npm": ">=6.1.0"
   },
-  "repository": "https://github.com/beemojs/beemo/tree/master/packages/driver-babel",
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:beemojs/beemo.git",
+    "directory": "packages/driver-babel"
+  },
   "author": "Miles Johnson",
   "license": "MIT",
   "publishConfig": {
     "access": "public"
   },
   "devDependencies": {
-    "@babel/cli": "^7.12.13",
-    "@babel/core": "^7.12.13",
+    "@babel/cli": "^7.12.16",
+    "@babel/core": "^7.12.16",
     "@babel/plugin-proposal-class-properties": "^7.12.13",
-    "@babel/preset-env": "^7.12.13"
+    "@babel/preset-env": "^7.12.16"
   },
   "peerDependencies": {
     "@babel/core": "^7.0.0",
@@ -37,5 +42,8 @@
   },
   "dependencies": {
     "rimraf": "^3.0.2"
+  },
+  "packemon": {
+    "platform": "node"
   }
 }

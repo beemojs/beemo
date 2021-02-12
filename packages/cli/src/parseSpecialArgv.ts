@@ -1,8 +1,8 @@
 import { Argv } from '@beemo/core';
 
 export interface ParsedArgv {
-  main: Argv;
-  parallel: Argv[];
+  argv: Argv;
+  parallelArgv: Argv[];
 }
 
 /**
@@ -27,5 +27,5 @@ export default function parseSpecialArgv(argv: Argv): ParsedArgv {
     }
   });
 
-  return { main, parallel };
+  return { argv: main, parallelArgv: parallel };
 }

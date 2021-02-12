@@ -15,21 +15,29 @@
     "integration:pass": "mocha ./integration/pass.js"
   },
   "main": "./lib/index.js",
-  "types": "./lib/index.d.ts",
+  "types": "./dts/index.d.ts",
   "engines": {
-    "node": ">=10.17.0"
+    "node": ">=10.3.0",
+    "npm": ">=6.1.0"
   },
-  "repository": "https://github.com/beemojs/beemo/tree/master/packages/driver-mocha",
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:beemojs/beemo.git",
+    "directory": "packages/driver-mocha"
+  },
   "author": "Miles Johnson",
   "license": "MIT",
   "publishConfig": {
     "access": "public"
   },
   "devDependencies": {
-    "mocha": "^8.2.1"
+    "mocha": "^8.3.0"
   },
   "peerDependencies": {
     "@beemo/core": "^2.0.0-alpha.0",
     "mocha": "^8.0.0"
+  },
+  "packemon": {
+    "platform": "node"
   }
 }

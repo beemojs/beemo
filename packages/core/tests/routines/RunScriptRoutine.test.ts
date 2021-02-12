@@ -7,7 +7,7 @@ import { AnyRoutine } from '../../src/routines/RunInWorkspacesRoutine';
 import RunScriptRoutine from '../../src/routines/RunScriptRoutine';
 import { ExecuteScriptOptions } from '../../src/routines/script/ExecuteScriptRoutine';
 import Script from '../../src/Script';
-import { mockDebugger, mockScript, mockTool, stubScriptContext } from '../../src/testing';
+import { mockDebugger, mockScript, mockTool, stubScriptContext } from '../../src/test';
 import Tool from '../../src/Tool';
 
 describe('RunScriptRoutine', () => {

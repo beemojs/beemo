@@ -1,6 +1,6 @@
 import fs from 'fs';
 import { DriverContext, Path } from '@beemo/core';
-import { mockTool, stubDriverContext, stubExecResult } from '@beemo/core/lib/testing';
+import { mockTool, stubDriverContext, stubExecResult } from '@beemo/core/test';
 import ESLintDriver from '../src/ESLintDriver';
 
 describe('ESLintDriver', () => {

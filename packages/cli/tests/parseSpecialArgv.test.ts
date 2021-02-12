@@ -3,15 +3,15 @@ import parseSpecialArgv from '../src/parseSpecialArgv';
 describe('parseSpecialArgv()', () => {
   it('passes args through', () => {
     expect(parseSpecialArgv(['--foo', '-v', '--bar=123', 'baz'])).toEqual({
-      main: ['--foo', '-v', '--bar=123', 'baz'],
-      parallel: [],
+      argv: ['--foo', '-v', '--bar=123', 'baz'],
+      parallelArgv: [],
     });
   });
 
   it('separates // into multiple commands', () => {
     expect(parseSpecialArgv(['--foo', '-v', '//', '--bar', 'bar', '//', 'baz'])).toEqual({
-      main: ['--foo', '-v'],
-      parallel: [['--bar', 'bar'], ['baz']],
+      argv: ['--foo', '-v'],
+      parallelArgv: [['--bar', 'bar'], ['baz']],
     });
   });
 });
