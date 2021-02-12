@@ -11,11 +11,21 @@ export default class JestDriver extends Driver<JestConfig> {
     this.setMetadata({
       bin: 'jest',
       configName: 'jest.config.js',
-      dependencies: this.tool.driverRegistry.isRegistered('babel') ? ['babel'] : [],
+      dependencies: [],
       description: this.tool.msg('app:jestDescription'),
       title: 'Jest',
       watchOptions: ['--watch', '--watchAll'],
     });
+  }
+
+  getDependencies(): string[] {
+    const deps = super.getDependencies();
+
+    if (this.tool.driverRegistry.isRegistered('babel') && !deps.includes('babel')) {
+      deps.push('babel');
+    }
+
+    return deps;
   }
 
   // https://github.com/nodejs/node/issues/19218
