@@ -1,5 +1,10 @@
-import Graph from '@beemo/dependency-graph';
-import { Blueprint, PackageStructure, Predicates, WorkspacePackage } from '@boost/common';
+import {
+  Blueprint,
+  PackageGraph,
+  PackageStructure,
+  Predicates,
+  WorkspacePackage,
+} from '@boost/common';
 import { PooledPipeline, Routine } from '@boost/pipeline';
 import { stripAnsi, style } from '@boost/terminal';
 import Context from '../contexts/Context';
@@ -161,7 +166,7 @@ export default abstract class RunInWorkspacesRoutine<
     });
 
     // Batch based on packages
-    const batchList = new Graph(packages).resolveBatchList();
+    const batchList = new PackageGraph(packages).resolveBatchList();
     const batches: AnyRoutine[][] = [];
 
     batchList.forEach((batch) => {

@@ -15,12 +15,6 @@
       "path": "packages/core/tests"
     },
     {
-      "path": "packages/dependency-graph"
-    },
-    {
-      "path": "packages/dependency-graph/tests"
-    },
-    {
       "path": "packages/driver-babel"
     },
     {

@@ -14,9 +14,5 @@
     "types/**/*",
     "../../types/**/*"
   ],
-  "references": [
-    {
-      "path": "../dependency-graph"
-    }
-  ]
+  "references": []
 }

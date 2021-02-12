@@ -27,7 +27,6 @@
     "access": "public"
   },
   "dependencies": {
-    "@beemo/dependency-graph": "^2.0.0-alpha.0",
     "@boost/args": "^2.3.1",
     "@boost/common": "^2.5.1",
     "@boost/config": "^2.3.1",
