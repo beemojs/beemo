@@ -48,5 +48,8 @@
   "devDependencies": {
     "@boost/test-utils": "^2.2.0",
     "@types/micromatch": "^4.0.1"
+  },
+  "packemon": {
+    "platform": "node"
   }
 }

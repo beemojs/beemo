@@ -16,7 +16,8 @@
   "main": "./lib/index.js",
   "types": "./lib/index.d.ts",
   "engines": {
-    "node": ">=10.17.0"
+    "node": ">=10.3.0",
+    "npm": ">=6.1.0"
   },
   "repository": "https://github.com/beemojs/beemo/tree/master/packages/driver-typescript",
   "author": "Miles Johnson",
@@ -40,5 +41,8 @@
     "exclude": [
       "integration/**/*"
     ]
+  },
+  "packemon": {
+    "platform": "node"
   }
 }

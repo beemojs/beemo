@@ -5,6 +5,7 @@
     "declaration": true,
     "esModuleInterop": true,
     "experimentalDecorators": true,
+    "emitDeclarationOnly": true,
     "forceConsistentCasingInFileNames": true,
     "lib": [
       "esnext"

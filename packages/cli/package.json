@@ -7,12 +7,13 @@
     "cli",
     "command"
   ],
-  "main": "index.js",
+  "main": "./lib/index.js",
   "bin": {
-    "beemo": "./bin/beemo.js"
+    "beemo": "./lib/bin.js"
   },
   "engines": {
-    "node": ">=10.17.0"
+    "node": ">=10.3.0",
+    "npm": ">=6.1.0"
   },
   "repository": "https://github.com/beemojs/beemo/tree/master/packages/cli",
   "author": "Miles Johnson",
@@ -29,6 +30,14 @@
     "@beemo/core": "^2.0.0-alpha.0"
   },
   "devDependencies": {
+    "debug": "^4.3.1",
     "time-require": "^0.1.2"
+  },
+  "packemon": {
+    "inputs": {
+      "index": "src/index.ts",
+      "bin": "src/bin.ts"
+    },
+    "platform": "node"
   }
 }

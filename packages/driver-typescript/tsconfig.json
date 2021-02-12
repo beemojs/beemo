@@ -1,11 +1,11 @@
 {
   "compilerOptions": {
-    "declarationDir": "lib",
-    "outDir": "lib",
+    "declarationDir": "dts",
+    "outDir": "dts",
     "rootDir": "src"
   },
   "exclude": [
-    "lib",
+    "dts",
     "tests",
     "integration/**/*"
   ],
