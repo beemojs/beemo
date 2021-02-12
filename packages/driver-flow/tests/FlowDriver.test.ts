@@ -1,4 +1,4 @@
-import { mockTool, stubExecResult } from '@beemo/core/lib/testing';
+import { mockTool, stubExecResult } from '@beemo/core/test';
 import FlowDriver from '../src/FlowDriver';
 
 describe('FlowDriver', () => {

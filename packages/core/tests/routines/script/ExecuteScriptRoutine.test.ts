@@ -8,7 +8,7 @@ import {
   mockTool,
   stubScriptContext,
   TestScript,
-} from '../../../src/testing';
+} from '../../../src/test';
 import Tool from '../../../src/Tool';
 
 describe('ExecuteScriptRoutine', () => {

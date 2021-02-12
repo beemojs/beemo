@@ -18,7 +18,7 @@ import {
   mockTool,
   prependRoot,
   stubConfigContext,
-} from '../../src/testing';
+} from '../../src/test';
 import Tool from '../../src/Tool';
 
 describe('CreateConfigRoutine', () => {

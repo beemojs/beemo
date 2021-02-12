@@ -51,6 +51,10 @@
     "@types/micromatch": "^4.0.1"
   },
   "packemon": {
+    "inputs": {
+      "index": "src/index.ts",
+      "test": "src/test.ts"
+    },
     "platform": "node"
   }
 }

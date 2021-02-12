@@ -16,7 +16,7 @@ import {
   stubDriverArgs,
   stubScaffoldArgs,
   stubScriptArgs,
-} from '../src/testing';
+} from '../src/test';
 import Tool from '../src/Tool';
 
 jest.mock('execa');

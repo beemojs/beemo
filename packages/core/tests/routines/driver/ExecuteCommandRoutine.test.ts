@@ -12,7 +12,7 @@ import {
   mockTool,
   prependRoot,
   stubDriverContext,
-} from '../../../src/testing';
+} from '../../../src/test';
 import Tool from '../../../src/Tool';
 import { StdioType } from '../../../src/types';
 

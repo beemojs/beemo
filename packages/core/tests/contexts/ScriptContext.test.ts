@@ -1,5 +1,5 @@
 import ScriptContext from '../../src/contexts/ScriptContext';
-import { mockScript, stubScriptArgs } from '../../src/testing';
+import { mockScript, stubScriptArgs } from '../../src/test';
 
 describe('ScriptContext', () => {
   let context: ScriptContext;
