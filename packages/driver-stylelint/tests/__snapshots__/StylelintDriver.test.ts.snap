@@ -1,0 +1,3 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`StylelintDriver handleCreateIgnoreFile() errors if not an array or string 1`] = `"Ignore configuration must be an array of strings."`;

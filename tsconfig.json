@@ -51,6 +51,12 @@
       "path": "packages/driver-prettier/tests"
     },
     {
+      "path": "packages/driver-stylelint"
+    },
+    {
+      "path": "packages/driver-stylelint/tests"
+    },
+    {
       "path": "packages/driver-typescript"
     },
     {
