@@ -3,10 +3,6 @@ import baseConfig from '@milesj/build-tool-config/lib/configs/typescript';
 
 const config: TypeScriptConfig = {
   ...baseConfig,
-  compilerOptions: {
-    ...baseConfig.compilerOptions,
-    useDefineForClassFields: false,
-  },
 };
 
 export default config;

@@ -16,6 +16,7 @@ with a `module` property that matches the name of your configuration module, or 
 module (if you don't want to manage your own provider).
 
 ```js
+// .config/beemo.js
 module.exports = {
   module: '<config-module>',
 };
@@ -47,6 +48,7 @@ This property accepts an array of strings, or objects, with the names of each dr
 enable. For example, if we want to use Babel, ESLint, and Jest, we would have the following.
 
 ```js
+// .config/beemo.js
 module.exports = {
   module: '<config-module>',
   drivers: ['babel', 'eslint', 'jest'],
@@ -57,6 +59,7 @@ Furthermore, drivers can be configured with options by using an object. If a dri
 options, either pass an empty object, or a boolean `true`.
 
 ```js
+// .config/beemo.js
 module.exports = {
   module: '@<username>/dev-tools',
   drivers: {
@@ -163,9 +166,9 @@ yarn beemo create-config babel jest
 
 ## Overriding config
 
-Your configuration module may now house all configuration, but that doesn't mean it's applicable to
-_all_ projects. So because of that, Beemo does allow overriding of driver config. To do so, create a
-driver specific `.config/beemo/<driver>.js` file.
+Your configuration module may now house and provide all configurations, but that doesn't mean it's
+applicable to _all_ consuming projects. To accomodate this, Beemo supports overriding of driver
+config on a project-by-project basis through a local `.config/beemo/<driver>.(js|ts)` file.
 
 ```js
 // .config/beemo/eslint.js

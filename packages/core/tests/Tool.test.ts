@@ -127,13 +127,12 @@ describe('Tool', () => {
             parallel: false,
           },
           debug: false,
-          drivers: ['babel'],
-          // drivers: {
-          //   babel: false,
-          //   jest: {
-          //     env: { NODE_ENV: 'test' },
-          //   },
-          // },
+          drivers: {
+            babel: false,
+            jest: {
+              env: { NODE_ENV: 'test' },
+            },
+          },
           execute: {
             concurrency: 3,
             graph: true,
