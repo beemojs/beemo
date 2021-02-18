@@ -5,7 +5,7 @@ import { JestConfig } from './types';
 // Success: Writes coverage to stdout
 // Failure: Writes failed tests to stderr
 export default class JestDriver extends Driver<JestConfig> {
-  name = '@beemo/driver-jest';
+  readonly name = '@beemo/driver-jest';
 
   bootstrap() {
     this.setMetadata({
@@ -53,6 +53,7 @@ export default class JestDriver extends Driver<JestConfig> {
       '--coverage',
       '--coverageDirectory',
       '--coveragePathIgnorePatterns',
+      '--coverageProvider',
       '--coverageReporters',
       '--coverageThreshold',
       '--debug',
@@ -74,11 +75,13 @@ export default class JestDriver extends Driver<JestConfig> {
       '--help',
       '-i',
       '--init',
+      '--injectGlobals',
       '--json',
       '--lastCommit',
       '--listTests',
       '--logHeapUsage',
       '--mapCoverage',
+      '--maxConcurrency',
       '--maxWorkers',
       '--moduleDirectories',
       '--moduleFileExtensions',
@@ -108,6 +111,7 @@ export default class JestDriver extends Driver<JestConfig> {
       '--runInBand',
       '--runner',
       '--runTestsByPath',
+      '--selectProjects',
       '--setupFiles',
       '--setupFilesAfterEnv',
       '--showConfig',
@@ -126,6 +130,8 @@ export default class JestDriver extends Driver<JestConfig> {
       '--testRegex',
       '--testResultsProcessor',
       '--testRunner',
+      '--testSequencer',
+      '--testTimeout',
       '--testURL',
       '--timers',
       '--transform',
