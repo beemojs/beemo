@@ -1,8 +1,6 @@
 export type LintSetting = 'error' | 'off' | 'warn' | 0 | 1 | 2;
 
-export interface LintsConfig {
-  [rule: string]: LintSetting;
-}
+export type LintsConfig = Record<string, LintSetting>;
 
 export type ToggleSetting = 'always' | 'auto' | 'never';
 
@@ -16,12 +14,15 @@ export type ModuleSystem = 'haste' | 'node';
 
 export type MismatchType = 'choose-newest' | 'error-client' | 'restart-client' | 'stop-server';
 
+export type ReactRuntime = 'automatic' | 'classic';
+
 export interface OptionsConfig {
   all?: boolean;
+  babel_loose_array_spread?: boolean;
   emoji?: boolean;
   'esproposal.class_instance_fields'?: OptionSetting;
   'esproposal.class_static_fields'?: OptionSetting;
-  'esproposal.decorators'?: OptionSetting;
+  'esproposal.decorators'?: Exclude<OptionSetting, 'enable'>;
   'esproposal.export_star_as'?: OptionSetting;
   'esproposal.optional_chaining'?: OptionSetting;
   'esproposal.nullish_coalescing'?: OptionSetting;
@@ -33,26 +34,30 @@ export interface OptionsConfig {
   max_header_tokens?: number;
   'module.file_ext'?: string[];
   'module.ignore_non_literal_requires'?: boolean;
-  'module.name_mapper'?: { [regex: string]: string };
-  'module.name_mapper.extension'?: { [ext: string]: string };
+  'module.name_mapper'?: Record<string, string>;
+  'module.name_mapper.extension'?: Record<string, string>;
   'module.system'?: ModuleSystem;
-  'module.system.node.main_field'?: string;
-  'module.system.node.resolve_dirname'?: string[];
+  'module.system.node.main_field'?: string[] | string;
+  'module.system.node.resolve_dirname'?: string[] | string;
   'module.use_strict'?: boolean;
   munge_underscores?: boolean;
   no_flowlib?: boolean;
+  'react.runtime'?: ReactRuntime;
   'server.max_workers'?: number;
-  'sharedmemory.dirs'?: string;
-  'sharedmemory.minimum_available'?: number;
   'sharedmemory.dep_table_pow'?: number;
+  'sharedmemory.dirs'?: string[] | string;
   'sharedmemory.hash_table_pow'?: number;
   'sharedmemory.heap_size'?: number;
   'sharedmemory.log_level'?: number;
+  'sharedmemory.minimum_available'?: number;
   strip_root?: boolean;
-  suppress_comment?: MatchPattern;
-  suppress_type?: string;
+  suppress_comment?: MatchPattern | MatchPattern[];
+  suppress_type?: string[] | string;
   temp_dir?: string;
   traces?: number;
+  types_first?: boolean;
+  well_formed_exports?: boolean;
+  'well_formed_exports.includes'?: string[];
 }
 
 export interface FlowConfig {
@@ -87,11 +92,9 @@ export interface FlowArgs {
   quiet?: boolean;
   retries?: number;
   retryIfInit?: boolean;
-  sharedmemoryDepTablePow?: number;
-  sharedmemoryDirs?: string;
   sharedmemoryHashTablePow?: number;
+  sharedmemoryHeapSize?: number;
   sharedmemoryLogLevel?: 0 | 1;
-  sharedmemoryMinimumAvailable?: number;
   showAllBranches?: boolean;
   showAllErrors?: boolean;
   stripRoot?: boolean;
