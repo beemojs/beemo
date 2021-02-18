@@ -1,5 +1,5 @@
 import fs from 'fs';
-import { ConfigContext, Driver, Execution, Path } from '@beemo/core';
+import { ConfigContext, Driver, Path } from '@beemo/core';
 import { Event } from '@boost/event';
 import { StylelintConfig } from './types';
 
@@ -21,22 +21,6 @@ export default class StylelintDriver extends Driver<StylelintConfig> {
     });
 
     this.onCreateConfigFile.listen(this.handleCreateIgnoreFile);
-  }
-
-  /**
-   * stylelint writes warnings to stdout, so we need to display
-   * both stdout and stderr on failure.
-   */
-  processFailure(error: Execution) {
-    const { stderr, stdout } = error;
-
-    if (stderr) {
-      this.setOutput('stderr', stderr);
-    }
-
-    if (stdout) {
-      this.setOutput('stdout', stdout);
-    }
   }
 
   /**
