@@ -126,14 +126,14 @@ Configuration files are looked for and resolved in the following order:
 
 - `configs/<driver>.ts`
 - `configs/<driver>.js`
-- `configs/src/<driver>.ts`
-- `configs/lib/<driver>.js`
+- `src/configs/<driver>.ts`
+- `lib/configs/<driver>.js`
 
 ## Scripts
 
 Beemo supports executing custom scripts found within your configuration module. To utilize a script,
-create a JavaScript file (in PascalCase) within the `scripts/` (or `lib/scripts/`) folder, extend
-the `Script` class provided by Beemo, and define the `execute()` and `parse()` methods.
+create a file (in PascalCase) within the `scripts/` folder, extend the `Script` class provided by
+Beemo, and define the `execute()` and `parse()` methods.
 
 ```js
 // scripts/InitProject.js
@@ -209,8 +209,8 @@ Script files are looked for and resolved in the following order:
 
 - `scripts/<script>.ts`
 - `scripts/<script>.js`
-- `scripts/src/<script>.ts`
-- `scripts/lib/<script>.js`
+- `src/scripts/<script>.ts`
+- `lib/scripts/<script>.js`
 - `@beemo/script-<script>`
 - `beemo-script-<script>`
 
