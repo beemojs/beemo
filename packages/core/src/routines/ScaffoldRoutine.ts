@@ -1,7 +1,8 @@
-/* eslint-disable @typescript-eslint/member-ordering */
+/* eslint-disable no-console, @typescript-eslint/member-ordering */
 
-import { engine } from 'hygen';
-import { Bind, Blueprint, Path, Predicates } from '@boost/common';
+import { engine, Logger } from 'hygen';
+import { Bind, Blueprint, Predicates } from '@boost/common';
+import { color } from '@boost/internal';
 import { Routine } from '@boost/pipeline';
 import ScaffoldContext from '../contexts/ScaffoldContext';
 import Tool from '../Tool';
@@ -27,24 +28,26 @@ export default class ScaffoldRoutine extends Routine<unknown, unknown, RoutineOp
   async runGenerator(context: ScaffoldContext) {
     const { tool } = this.options;
     const args = [context.generator, context.action];
-    const moduleName = tool.config.module;
-    const searchName = moduleName.includes('/') ? moduleName.split('/')[1] : moduleName;
-    let modulePath = require.resolve(moduleName);
+    const templates = tool.getConfigModuleRoot().append('templates').path();
 
-    // Index files may be nested, so we need to slice and work around it
-    modulePath = modulePath.slice(0, modulePath.lastIndexOf(searchName) + searchName.length);
+    this.debug(
+      'Scaffolding %s:%s templates from %s',
+      color.symbol(context.generator),
+      color.symbol(context.action),
+      color.filePath(templates),
+    );
 
     try {
-      await engine(context.argv, {
-        // @ts-expect-error Broken upstream
-        createPrompter: /* istanbul ignore next */ () => ({ prompt: this.handlePrompt }),
+      await engine(args, {
+        createPrompter: this.handlePrompter,
         cwd: tool.cwd.path(),
         debug: tool.config.debug,
         exec: this.handleExec,
-        // logger: new Logger(this.handleLog),
-        templates: new Path(modulePath, 'templates').path(),
+        logger: new Logger(console.log),
+        templates,
       });
     } catch (error) {
+      console.log(error);
       // Intercept hygen error to provide a better error message
       if (error.message.startsWith("I can't find action")) {
         throw new Error(tool.msg('errors:scaffoldNoTemplates', { path: args.join('/') }));
@@ -64,17 +67,11 @@ export default class ScaffoldRoutine extends Routine<unknown, unknown, RoutineOp
     });
 
   /**
-   * Pipe a message from hygen to boost.
-   */
-  private handleLog = (message: string) => {
-    if (message?.trim()) {
-      // eslint-disable-next-line no-console
-      console.log(message);
-    }
-  };
-
-  /**
    * Temporary solution until boost supports prompts.
    */
-  private handlePrompt = /* istanbul ignore next */ () => Promise.resolve({ overwrite: true });
+  // istanbul ignore next
+  private handlePrompter = () => ({
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    prompt: () => Promise.resolve({ overwrite: true } as any),
+  });
 }
