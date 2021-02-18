@@ -1,12 +1,12 @@
 import fs from 'fs';
 import { ConfigContext, Driver, Execution, Path } from '@beemo/core';
 import { Event } from '@boost/event';
-import { ESLintConfig } from './types';
+import { ESLintArgs, ESLintConfig } from './types';
 
 // Success: Writes warnings to stdout
 // Failure: Writes to stdout and stderr
 export default class ESLintDriver extends Driver<ESLintConfig> {
-  name = '@beemo/driver-eslint';
+  readonly name = '@beemo/driver-eslint';
 
   readonly onCreateIgnoreFile = new Event<[ConfigContext, Path, { ignore: string[] }]>(
     'create-ignore-file',
@@ -43,7 +43,7 @@ export default class ESLintDriver extends Driver<ESLintConfig> {
    * If an "ignore" property exists in the ESLint config, create an ".eslintignore" file.
    */
   private handleCreateIgnoreFile = (
-    context: ConfigContext,
+    context: ConfigContext<ESLintArgs>,
     configPath: Path,
     config: ESLintConfig,
   ) => {
