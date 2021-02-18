@@ -22,6 +22,7 @@ export interface PrettierArgs {
   configPrecedence?: 'cli-override' | 'file-override' | 'prefer-file';
   cursorOffset?: number;
   editorconfig?: boolean;
+  embeddedLanguageFormatting?: PrettierConfig['embeddedLanguageFormatting'];
   endOfLine?: PrettierConfig['endOfLine'];
   fileInfo?: string;
   findConfigPath?: string;
@@ -29,6 +30,7 @@ export interface PrettierArgs {
   help?: boolean | string;
   htmlWhitespaceSensitivity?: PrettierConfig['htmlWhitespaceSensitivity'];
   ignorePath?: string;
+  ignoreUnknown?: boolean;
   insertPragma?: boolean;
   jsxBracketSameLine?: boolean;
   jsxSingleQuote?: boolean;
@@ -36,8 +38,8 @@ export interface PrettierArgs {
   listDifferent?: boolean;
   loglevel?: 'debug' | 'error' | 'log' | 'silent' | 'warn';
   parser?: PrettierConfig['parser'];
-  plugin?: string;
-  pluginSearchDir?: string;
+  plugin?: string[] | string;
+  pluginSearchDir?: string[] | string;
   printWidth?: number;
   proseWrap?: PrettierConfig['proseWrap'];
   quoteProps?: PrettierConfig['quoteProps'];
@@ -46,15 +48,16 @@ export interface PrettierArgs {
   requirePragma?: boolean;
   semi?: boolean;
   singleQuote?: boolean;
-  stdin?: boolean;
   stdinFilepath?: string;
   supportInfo?: boolean;
   tabWidth?: number;
   trailingComma?: PrettierConfig['trailingComma'];
+  u?: boolean;
   useTabs?: boolean;
   v?: boolean;
   version?: boolean;
   vueIndentScriptAndStyle?: boolean;
+  w?: boolean;
   withNodeModules?: boolean;
   write?: boolean;
 }
