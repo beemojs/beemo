@@ -11,6 +11,7 @@ describe('ScaffoldRoutine', () => {
   let tool: Tool;
   let context: ScaffoldContext;
   let routine: ScaffoldRoutine;
+  let logSpy: jest.SpyInstance;
 
   beforeEach(() => {
     tool = mockTool();
@@ -20,6 +21,12 @@ describe('ScaffoldRoutine', () => {
     routine = new ScaffoldRoutine('scaffold', 'Scaffolding templates', { tool });
     // @ts-expect-error
     routine.debug = mockDebugger();
+
+    logSpy = mockConsole('log');
+  });
+
+  afterEach(() => {
+    logSpy.mockRestore();
   });
 
   describe('handleExec()', () => {
@@ -33,19 +40,6 @@ describe('ScaffoldRoutine', () => {
         input: 'const foo = {};',
         shell: true,
       });
-    });
-  });
-
-  describe('handleLog()', () => {
-    it('logs to console', () => {
-      const spy = mockConsole('log');
-
-      // @ts-expect-error
-      routine.handleLog('foo');
-
-      expect(spy).toHaveBeenCalledWith('foo');
-
-      spy.mockRestore();
     });
   });
 
@@ -64,7 +58,7 @@ describe('ScaffoldRoutine', () => {
       await routine.runGenerator(context);
 
       expect(hygen.engine).toHaveBeenCalledWith(
-        ['-a', '--foo', 'bar', 'baz'],
+        ['generator', 'action'],
         expect.objectContaining({
           cwd: tool.cwd.path(),
           debug: false,
