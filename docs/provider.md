@@ -42,8 +42,8 @@ yarn add @beemo/driver-jest jest
 ## Drivers
 
 For each driver you install, there should be an associated configuration file within a `configs/`
-(or `lib/configs/`) folder, named after the camel-cased package name (excluding "driver-"). Using
-the example above, we'd have the following:
+folder, named after the camel-cased package name (excluding "driver-"). Using the example above,
+we'd have the following:
 
 ```
 configs/
@@ -120,11 +120,20 @@ module.exports = {
 > Command line arguments are parsed into an object using
 > [@boost/args](https://milesj.gitbook.io/boost/args).
 
+### Config resolution
+
+Configuration files are looked for and resolved in the following order:
+
+- `configs/<driver>.ts`
+- `configs/<driver>.js`
+- `src/configs/<driver>.ts`
+- `lib/configs/<driver>.js`
+
 ## Scripts
 
 Beemo supports executing custom scripts found within your configuration module. To utilize a script,
-create a JavaScript file (in PascalCase) within the `scripts/` (or `lib/scripts/`) folder, extend
-the `Script` class provided by Beemo, and define the `execute()` and `parse()` methods.
+create a file (in PascalCase) within the `scripts/` folder, extend the `Script` class provided by
+Beemo, and define the `execute()` and `parse()` methods.
 
 ```js
 // scripts/InitProject.js
@@ -193,6 +202,17 @@ method receives the current pipeline context as the 1st argument and options (pa
 as the 2nd argument. The [Beemo Tool instance](./tool.md) is available under `this.tool`.
 
 > Returning a promise in `execute()` is preferred.
+
+### Source resolution
+
+Script files are looked for and resolved in the following order:
+
+- `scripts/<script>.ts`
+- `scripts/<script>.js`
+- `src/scripts/<script>.ts`
+- `lib/scripts/<script>.js`
+- `@beemo/script-<script>`
+- `beemo-script-<script>`
 
 ## Publishing
 
