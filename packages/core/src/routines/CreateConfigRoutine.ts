@@ -139,13 +139,19 @@ export default class CreateConfigRoutine<Ctx extends ConfigContext> extends Rout
 
     // Allow for local development
     if (isLocal) {
+      const root = workspaceRoot || cwd;
+
       resolver
-        .lookupFilePath(`lib/configs/${configName}.js`, workspaceRoot || cwd)
-        .lookupFilePath(`configs/${configName}.js`, workspaceRoot || cwd);
+        .lookupFilePath(`configs/${configName}.ts`, root)
+        .lookupFilePath(`configs/${configName}.js`, root)
+        .lookupFilePath(`src/configs/${configName}.ts`, root)
+        .lookupFilePath(`lib/configs/${configName}.js`, root);
     } else {
       resolver
-        .lookupNodeModule(`${moduleName}/lib/configs/${configName}`)
-        .lookupNodeModule(`${moduleName}/configs/${configName}`);
+        .lookupNodeModule(`${moduleName}/configs/${configName}.ts`)
+        .lookupNodeModule(`${moduleName}/configs/${configName}.js`)
+        .lookupNodeModule(`${moduleName}/src/configs/${configName}.ts`)
+        .lookupNodeModule(`${moduleName}/lib/configs/${configName}.js`);
     }
 
     let configPath = null;
