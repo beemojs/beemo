@@ -53,15 +53,13 @@ export default class CreateConfigRoutine<Ctx extends ConfigContext> extends Rout
           .run();
 
       case STRATEGY_CREATE:
-        return (
-          this.createWaterfallPipeline(context, [])
-            .pipe(tool.msg('app:configSetEnvVars', { name }), this.setEnvVars)
-            .pipe(tool.msg('app:configCreateLoadProvider', { name }), this.loadConfigFromProvider)
-            // .pipe(tool.msg('app:configCreateLoadConsumer', { name }), this.loadConfigFromConsumer)
-            .pipe(tool.msg('app:configCreateMerge', { name }), this.mergeConfigs)
-            .pipe(tool.msg('app:configCreate', { name }), this.createConfigFile)
-            .run()
-        );
+        return this.createWaterfallPipeline(context, [])
+          .pipe(tool.msg('app:configSetEnvVars', { name }), this.setEnvVars)
+          .pipe(tool.msg('app:configCreateLoadProvider', { name }), this.loadConfigFromProvider)
+          .pipe(tool.msg('app:configCreateLoadConsumer', { name }), this.loadConfigFromConsumer)
+          .pipe(tool.msg('app:configCreateMerge', { name }), this.mergeConfigs)
+          .pipe(tool.msg('app:configCreate', { name }), this.createConfigFile)
+          .run();
 
       default:
         this.skip(true);
@@ -123,37 +121,49 @@ export default class CreateConfigRoutine<Ctx extends ConfigContext> extends Rout
   }
 
   /**
-   * Return file name camel cased.
+   * Return an absolute file path for a config file in either the consumer or provider.
    */
-  getConfigName(name: string): string {
-    return camelCase(name);
-  }
-
-  /**
-   * Return absolute file path for config file within configuration module,
-   * or an empty string if it does not exist.
-   */
-  getConfigPath({ cwd, workspaceRoot }: Ctx): Path | null {
+  getConfigPath({ cwd, workspaceRoot }: Ctx, fromConsumer: boolean = false): Path | null {
     const moduleName = this.options.tool.config.module;
     const driverName = this.options.driver.getName();
-    const configName = this.getConfigName(driverName);
+    const configName = camelCase(driverName);
     const resolver = new PathResolver();
+    const root = workspaceRoot || cwd;
+    let debugMessage = '';
 
-    // Allow for local development
-    if (moduleName === '@local') {
-      const root = workspaceRoot || cwd;
+    // When loading from the consumer (project in which beemo is running),
+    // we look for config files in a `beemo` folder relative to the root
+    // `.config/beemo.js` config file.
+    if (fromConsumer) {
+      debugMessage = `Loading ${chalk.green(driverName)} config from local project as an override`;
 
       resolver
-        .lookupFilePath(`configs/${configName}.ts`, root)
-        .lookupFilePath(`configs/${configName}.js`, root)
-        .lookupFilePath(`src/configs/${configName}.ts`, root)
-        .lookupFilePath(`lib/configs/${configName}.js`, root);
+        .lookupFilePath(`.config/beemo/${configName}.ts`, root)
+        .lookupFilePath(`.config/beemo/${configName}.js`, root);
+
+      // When loading from the provider (upstream configuratiob module),
+      // we look for a config file in multiple places, in an attempt to
+      // support both source and pre-built formats.
     } else {
-      resolver
-        .lookupNodeModule(`${moduleName}/configs/${configName}.ts`)
-        .lookupNodeModule(`${moduleName}/configs/${configName}.js`)
-        .lookupNodeModule(`${moduleName}/src/configs/${configName}.ts`)
-        .lookupNodeModule(`${moduleName}/lib/configs/${configName}.js`);
+      debugMessage = `Loading ${chalk.green(
+        driverName,
+      )} config from configuration module ${chalk.yellow(moduleName)}`;
+
+      // If module name is @local, allow for local development
+      // by looking for config files in the current project.
+      if (moduleName === '@local') {
+        resolver
+          .lookupFilePath(`configs/${configName}.ts`, root)
+          .lookupFilePath(`configs/${configName}.js`, root)
+          .lookupFilePath(`src/configs/${configName}.ts`, root)
+          .lookupFilePath(`lib/configs/${configName}.js`, root);
+      } else {
+        resolver
+          .lookupNodeModule(`${moduleName}/configs/${configName}.ts`)
+          .lookupNodeModule(`${moduleName}/configs/${configName}.js`)
+          .lookupNodeModule(`${moduleName}/src/configs/${configName}.ts`)
+          .lookupNodeModule(`${moduleName}/lib/configs/${configName}.js`);
+      }
     }
 
     let configPath = null;
@@ -164,16 +174,7 @@ export default class CreateConfigRoutine<Ctx extends ConfigContext> extends Rout
       // Ignore
     }
 
-    this.debug.invariant(
-      !!configPath,
-      moduleName === '@local'
-        ? `Loading ${chalk.green(driverName)} config from @local`
-        : `Loading ${chalk.green(driverName)} config from configuration module ${chalk.yellow(
-            moduleName,
-          )}`,
-      'Exists, loading',
-      'Does not exist, skipping',
-    );
+    this.debug.invariant(!!configPath, debugMessage, 'Exists, loading', 'Does not exist, skipping');
 
     if (configPath) {
       this.debug('Found at %s', chalk.cyan(configPath));
@@ -216,6 +217,25 @@ export default class CreateConfigRoutine<Ctx extends ConfigContext> extends Rout
     }
 
     return config;
+  }
+
+  /**
+   * Load config from the consumer / local overrides.
+   */
+  @Bind()
+  loadConfigFromConsumer(context: Ctx, prevConfigs: ConfigObject[]): Promise<ConfigObject[]> {
+    const sourcePath = this.getConfigPath(context, true);
+    const configs = [...prevConfigs];
+
+    if (sourcePath) {
+      const config = this.loadConfigAtPath(sourcePath);
+
+      configs.push(config);
+
+      this.options.driver.onLoadConsumerConfig.emit([context, config]);
+    }
+
+    return Promise.resolve(configs);
   }
 
   /**
