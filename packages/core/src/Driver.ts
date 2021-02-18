@@ -49,9 +49,9 @@ export default abstract class Driver<
     stdout: '',
   };
 
-  readonly onLoadModuleConfig = new Event<[ConfigContext, Path, Config]>('load-module-config');
+  readonly onLoadProviderConfig = new Event<[ConfigContext, Path, Config]>('load-provider-config');
 
-  readonly onLoadPackageConfig = new Event<[ConfigContext, Config]>('load-package-config');
+  readonly onLoadConsumerConfig = new Event<[ConfigContext, Config]>('load-consumer-config');
 
   readonly onMergeConfig = new Event<[ConfigContext, Config]>('merge-config');
 

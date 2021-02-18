@@ -87,7 +87,7 @@ describe('CreateConfigRoutine', () => {
         driver.metadata.configStrategy = STRATEGY_CREATE;
 
         const envSpy = jest.spyOn(routine, 'setEnvVars');
-        const loadSpy = jest.spyOn(routine, 'loadConfigFromSources');
+        const loadSpy = jest.spyOn(routine, 'loadConfigFromProvider');
         const mergeSpy = jest.spyOn(routine, 'mergeConfigs');
         const createSpy = jest.spyOn(routine, 'createConfigFile');
 
@@ -108,7 +108,7 @@ describe('CreateConfigRoutine', () => {
         driver.configure({ strategy: STRATEGY_CREATE });
 
         const envSpy = jest.spyOn(routine, 'setEnvVars');
-        const loadSpy = jest.spyOn(routine, 'loadConfigFromSources');
+        const loadSpy = jest.spyOn(routine, 'loadConfigFromProvider');
         const mergeSpy = jest.spyOn(routine, 'mergeConfigs');
         const createSpy = jest.spyOn(routine, 'createConfigFile');
 
@@ -388,23 +388,23 @@ describe('CreateConfigRoutine', () => {
     });
   });
 
-  describe('loadConfig()', () => {
+  describe('loadConfigAtPath()', () => {
     it('errors if a config file returns a function', () => {
       expect(() => {
-        routine.loadConfig(context, new Path(__dirname, '__fixtures__/config-export-function.js'));
+        routine.loadConfigAtPath(new Path(__dirname, '__fixtures__/config-export-function.js'));
       }).toThrow(
         'Configuration file `config-export-function.js` returned a function. Only plain objects are supported.',
       );
     });
   });
 
-  describe('loadConfigFromSources()', () => {
+  describe('loadConfigFromProvider()', () => {
     it('loads config if it exists', async () => {
       tool.config.module = 'from-config-module';
 
       fixtures.push(copyFixtureToNodeModule('config-module', 'from-config-module'));
 
-      const configs = await routine.loadConfigFromSources(context, []);
+      const configs = await routine.loadConfigFromProvider(context, []);
 
       expect(configs).toEqual([{ babel: true, lib: false }, { babel: true }]);
     });
@@ -412,13 +412,13 @@ describe('CreateConfigRoutine', () => {
     it('does nothing if config does not exist', async () => {
       tool.config.module = 'unknown-module';
 
-      const configs = await routine.loadConfigFromSources(context, []);
+      const configs = await routine.loadConfigFromProvider(context, []);
 
       expect(configs).toEqual([]);
     });
 
     it('uses local path when using @local config', async () => {
-      const configs = await routine.loadConfigFromSources(context, []);
+      const configs = await routine.loadConfigFromProvider(context, []);
 
       expect(configs).toEqual([{ babel: true }]);
     });
@@ -426,9 +426,9 @@ describe('CreateConfigRoutine', () => {
     it('emits `onLoadModuleConfig` event', async () => {
       const spy = jest.fn();
 
-      driver.onLoadModuleConfig.listen(spy);
+      driver.onLoadProviderConfig.listen(spy);
 
-      await routine.loadConfigFromSources(context, []);
+      await routine.loadConfigFromProvider(context, []);
 
       expect(spy).toHaveBeenCalledWith(context, getRoot().append('/configs/babel.js'), {
         babel: true,
@@ -440,9 +440,9 @@ describe('CreateConfigRoutine', () => {
 
       const spy = jest.fn();
 
-      driver.onLoadModuleConfig.listen(spy);
+      driver.onLoadProviderConfig.listen(spy);
 
-      await routine.loadConfigFromSources(context, []);
+      await routine.loadConfigFromProvider(context, []);
 
       expect(spy).not.toHaveBeenCalled();
     });

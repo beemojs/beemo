@@ -53,12 +53,15 @@ export default class CreateConfigRoutine<Ctx extends ConfigContext> extends Rout
           .run();
 
       case STRATEGY_CREATE:
-        return this.createWaterfallPipeline(context, [])
-          .pipe(tool.msg('app:configSetEnvVars', { name }), this.setEnvVars)
-          .pipe(tool.msg('app:configCreateLoadFile', { name }), this.loadConfigFromSources)
-          .pipe(tool.msg('app:configCreateMerge', { name }), this.mergeConfigs)
-          .pipe(tool.msg('app:configCreate', { name }), this.createConfigFile)
-          .run();
+        return (
+          this.createWaterfallPipeline(context, [])
+            .pipe(tool.msg('app:configSetEnvVars', { name }), this.setEnvVars)
+            .pipe(tool.msg('app:configCreateLoadProvider', { name }), this.loadConfigFromProvider)
+            // .pipe(tool.msg('app:configCreateLoadConsumer', { name }), this.loadConfigFromConsumer)
+            .pipe(tool.msg('app:configCreateMerge', { name }), this.mergeConfigs)
+            .pipe(tool.msg('app:configCreate', { name }), this.createConfigFile)
+            .run()
+        );
 
       default:
         this.skip(true);
@@ -82,7 +85,7 @@ export default class CreateConfigRoutine<Ctx extends ConfigContext> extends Rout
       throw new Error(tool.msg('errors:configCopySourceMissing'));
     }
 
-    const config = this.loadConfig(context, sourcePath);
+    const config = this.loadConfigAtPath(sourcePath);
 
     this.debug('Copying config file to %s', chalk.cyan(configPath));
 
@@ -130,15 +133,14 @@ export default class CreateConfigRoutine<Ctx extends ConfigContext> extends Rout
    * Return absolute file path for config file within configuration module,
    * or an empty string if it does not exist.
    */
-  getConfigPath({ cwd, workspaceRoot }: Ctx, forceLocal: boolean = false): Path | null {
+  getConfigPath({ cwd, workspaceRoot }: Ctx): Path | null {
     const moduleName = this.options.tool.config.module;
     const driverName = this.options.driver.getName();
     const configName = this.getConfigName(driverName);
-    const isLocal = moduleName === '@local' || forceLocal;
     const resolver = new PathResolver();
 
     // Allow for local development
-    if (isLocal) {
+    if (moduleName === '@local') {
       const root = workspaceRoot || cwd;
 
       resolver
@@ -164,8 +166,8 @@ export default class CreateConfigRoutine<Ctx extends ConfigContext> extends Rout
 
     this.debug.invariant(
       !!configPath,
-      isLocal
-        ? `Loading ${chalk.green(driverName)} config from local consumer`
+      moduleName === '@local'
+        ? `Loading ${chalk.green(driverName)} config from @local`
         : `Loading ${chalk.green(driverName)} config from configuration module ${chalk.yellow(
             moduleName,
           )}`,
@@ -202,7 +204,7 @@ export default class CreateConfigRoutine<Ctx extends ConfigContext> extends Rout
   /**
    * Load a config file with passing the args and tool to the file.
    */
-  loadConfig(context: Ctx, filePath: Path): ConfigObject {
+  loadConfigAtPath(filePath: Path): ConfigObject {
     const config: ConfigObject = requireModule(filePath);
 
     if (typeof config === 'function') {
@@ -213,29 +215,23 @@ export default class CreateConfigRoutine<Ctx extends ConfigContext> extends Rout
       );
     }
 
-    this.options.driver.onLoadModuleConfig.emit([context, filePath, config]);
-
     return config;
   }
 
   /**
-   * Load config from the provider configuration module
-   * and from the local configs/ folder in the consumer.
+   * Load config from the provider / configuration module.
    */
   @Bind()
-  loadConfigFromSources(context: Ctx, prevConfigs: ConfigObject[]): Promise<ConfigObject[]> {
+  loadConfigFromProvider(context: Ctx, prevConfigs: ConfigObject[]): Promise<ConfigObject[]> {
     const sourcePath = this.getConfigPath(context);
-    const localPath = this.getConfigPath(context, true);
     const configs = [...prevConfigs];
 
     if (sourcePath) {
-      configs.push(this.loadConfig(context, sourcePath));
-    }
+      const config = this.loadConfigAtPath(sourcePath);
 
-    // Local files should override anything defined in the configuration module above
-    // Also don't double load files, so check against @local to avoid
-    if (localPath && sourcePath && localPath.path() !== sourcePath.path()) {
-      configs.push(this.loadConfig(context, localPath));
+      configs.push(config);
+
+      this.options.driver.onLoadProviderConfig.emit([context, sourcePath, config]);
     }
 
     return Promise.resolve(configs);
@@ -255,7 +251,7 @@ export default class CreateConfigRoutine<Ctx extends ConfigContext> extends Rout
       throw new Error(tool.msg('errors:configReferenceSourceMissing'));
     }
 
-    const config = this.loadConfig(context, sourcePath);
+    const config = this.loadConfigAtPath(sourcePath);
 
     this.debug('Referencing config file to %s', chalk.cyan(configPath));
 
