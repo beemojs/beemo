@@ -1,12 +1,12 @@
 import fs from 'fs';
 import { ConfigContext, Driver, Path } from '@beemo/core';
 import { Event } from '@boost/event';
-import { StylelintConfig } from './types';
+import { StylelintArgs, StylelintConfig } from './types';
 
 // Success: Writes warnings to stderr
 // Failure: Writes to stderr
 export default class StylelintDriver extends Driver<StylelintConfig> {
-  name = '@beemo/driver-stylelint';
+  readonly name = '@beemo/driver-stylelint';
 
   readonly onCreateIgnoreFile = new Event<[ConfigContext, Path, { ignore: string[] }]>(
     'create-ignore-file',
@@ -27,7 +27,7 @@ export default class StylelintDriver extends Driver<StylelintConfig> {
    * If an "ignore" property exists in the stylelint config, create a ".sylelintignore" file.
    */
   private handleCreateIgnoreFile = (
-    context: ConfigContext,
+    context: ConfigContext<StylelintArgs>,
     configPath: Path,
     config: StylelintConfig,
   ) => {
