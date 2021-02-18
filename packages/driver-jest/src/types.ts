@@ -7,11 +7,19 @@ export interface CoverageThreshold {
   statements?: number;
 }
 
+export type NotifyMode =
+  | 'always'
+  | 'change'
+  | 'failure-change'
+  | 'failure'
+  | 'success-change'
+  | 'success';
+
 export type CommonConfig = Partial<
   Omit<Config.InitialOptions, 'coverageThreshold' | 'notifyMode' | 'projects'>
 > & {
-  coverageThreshold?: { [key: string]: CoverageThreshold };
-  notifyMode?: 'always' | 'change' | 'failure-change' | 'failure' | 'success-change' | 'success';
+  coverageThreshold?: Record<string, CoverageThreshold>;
+  notifyMode?: NotifyMode;
 };
 
 export type ProjectConfig = Partial<Config.ProjectConfig>;
@@ -43,6 +51,7 @@ export interface JestArgs {
   coverage?: boolean;
   coverageDirectory?: string;
   coveragePathIgnorePatterns?: string[];
+  coverageProvider?: 'babel' | 'v8';
   coverageReporters?: string[];
   coverageThreshold?: string;
   debug?: boolean;
@@ -56,29 +65,30 @@ export interface JestArgs {
   filter?: string;
   findRelatedTests?: boolean;
   forceExit?: boolean;
+  globals?: string;
   globalSetup?: string;
   globalTeardown?: string;
-  globals?: string;
-  haste?: string;
   h?: boolean;
+  haste?: string;
   help?: boolean;
   i?: boolean;
   init?: boolean;
+  injectGlobals?: boolean;
   json?: boolean;
   lastCommit?: boolean;
   listTests?: boolean;
   logHeapUsage?: boolean;
   mapCoverage?: boolean;
+  maxConcurrency?: number;
   maxWorkers?: number;
   moduleDirectories?: string[];
   moduleFileExtensions?: string[];
   moduleNameMapper?: string;
   modulePathIgnorePatterns?: string[];
   modulePaths?: string[];
-  watchman?: string;
   noStackTrace?: boolean;
   notify?: boolean;
-  notifyMode?: string;
+  notifyMode?: NotifyMode;
   o?: boolean;
   onlyChanged?: boolean;
   onlyFailures?: boolean;
@@ -97,6 +107,7 @@ export interface JestArgs {
   runInBand?: boolean;
   runner?: string;
   runTestsByPath?: string;
+  selectProjects?: string[];
   setupFiles?: string[];
   setupFilesAfterEnv?: string[];
   showConfig?: boolean;
@@ -112,9 +123,11 @@ export interface JestArgs {
   testNamePattern?: string;
   testPathIgnorePatterns?: string[];
   testPathPattern?: string[];
-  testRegex?: string[] | string;
+  testRegex?: string[];
   testResultsProcessor?: string;
   testRunner?: string;
+  testSequencer?: string;
+  testTimeout?: number;
   testURL?: string;
   timers?: string;
   transform?: string;
@@ -129,5 +142,6 @@ export interface JestArgs {
   w?: number;
   watch?: boolean;
   watchAll?: boolean;
+  watchman?: string;
   watchPathIgnorePatterns?: string[];
 }
