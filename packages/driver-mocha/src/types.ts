@@ -1,47 +1,84 @@
 export type UISetting = 'bdd' | 'exports' | 'qunit' | 'tdd';
 
-export interface ReporterOptions {
-  [key: string]: unknown;
-}
+export type ReporterSetting =
+  | 'doc'
+  | 'dot'
+  | 'json-stream'
+  | 'json'
+  | 'landing'
+  | 'list'
+  | 'markdown'
+  | 'min'
+  | 'nyan'
+  | 'progress'
+  | 'spec'
+  | 'tap'
+  | 'xunit';
 
 export interface MochaConfig {
   // Dashed and alias names
   [key: string]: unknown;
+  A?: boolean;
   allowUncaught?: boolean;
   asyncOnly?: boolean;
+  b?: boolean;
   bail?: boolean;
+  c?: boolean;
   checkLeaks?: boolean;
   color?: boolean;
+  colors?: boolean;
+  config?: string;
   delay?: boolean;
   diff?: boolean;
+  exclude?: string[] | string;
   exit?: boolean;
   extension?: string[] | string;
+  f?: string;
   fgrep?: string;
   file?: string[] | string;
   forbidOnly?: boolean;
   forbidPending?: boolean;
   fullTrace?: boolean;
+  g?: string;
+  G?: boolean;
   global?: string[] | string;
+  globals?: string[] | string;
   grep?: string;
   growl?: boolean;
+  h?: boolean;
+  help?: boolean;
+  i?: boolean;
   ignore?: string[] | string;
   inlineDiffs?: boolean;
   invert?: boolean;
-  noExit?: boolean;
-  noTimeout?: boolean;
+  j?: number;
+  jobs?: number;
+  listInterfaces?: boolean;
+  listReporters?: boolean;
+  O?: string[];
+  p?: boolean;
   package?: string;
+  parallel?: boolean;
+  r?: string[];
+  R?: ReporterSetting;
   recursive?: boolean;
-  reporter?: string;
+  reporter?: ReporterSetting;
   reporterOption?: string[] | string;
+  reporterOptions?: string[] | string;
   require?: string[] | string;
   retries?: number;
-  slow?: number;
+  s?: number | string;
+  S?: boolean;
+  slow?: number | string;
   sort?: boolean;
-  spec?: string[];
-  timeout?: number;
-  traceWarnings?: boolean;
+  t?: number | string;
+  timeout?: number | string;
+  timeouts?: number | string;
+  u?: UISetting;
   ui?: UISetting;
-  v8StackTraceLimit?: number;
+  V?: boolean;
+  version?: boolean;
+  w?: boolean;
   watch?: boolean;
   watchFiles?: string[] | string;
   watchIgnore?: string[] | string;
@@ -80,31 +117,36 @@ export interface MochaArgs {
   i?: boolean;
   ignore?: string[];
   inlineDiffs?: boolean;
-  interfaces?: boolean;
   invert?: boolean;
+  j?: number;
+  jobs?: number;
+  listInterfaces?: boolean;
+  listReporters?: boolean;
   O?: string[];
+  p?: boolean;
   package?: string;
+  parallel?: boolean;
   r?: string[];
-  R?: string;
+  R?: ReporterSetting;
   recursive?: boolean;
-  reporter?: string;
+  reporter?: ReporterSetting;
   reporterOption?: string[];
   reporterOptions?: string[];
-  reporters?: boolean;
   require?: string[];
   retries?: number;
-  s?: string;
+  s?: number | string;
   S?: boolean;
-  slow?: string;
+  slow?: number | string;
   sort?: boolean;
-  t?: string;
-  timeout?: string;
-  timeouts?: string;
+  t?: number | string;
+  timeout?: number | string;
+  timeouts?: number | string;
   u?: UISetting;
   ui?: UISetting;
   V?: boolean;
   version?: boolean;
   w?: boolean;
   watch?: boolean;
-  watchExtensions?: string[];
+  watchFiles?: string[];
+  watchIgnore?: string[];
 }
