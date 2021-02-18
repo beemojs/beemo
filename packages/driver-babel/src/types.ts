@@ -1,65 +1,14 @@
-export interface MatchContext {
-  callee?: { name: string };
-  envName: string;
-}
+import { MatchPattern, PluginItem, TransformOptions } from '@babel/core';
 
-export type MatchPattern = RegExp | string | ((fileName: string, context: MatchContext) => boolean);
+export type { MatchPattern, PluginItem };
 
-export type SourceMaps = boolean | 'both' | 'inline';
+export type SourceMaps = NonNullable<TransformOptions['sourceMaps']>;
 
-export type SourceType = 'module' | 'script' | 'unambiguous';
+export type SourceType = NonNullable<TransformOptions['sourceType']>;
 
-export type PluginEntry = [string, { [option: string]: unknown }, string?];
+export type RootMode = NonNullable<TransformOptions['rootMode']>;
 
-export type PresetEntry = [string, { [option: string]: unknown }, string?];
-
-export type RootMode = 'root' | 'upward-optional' | 'upward';
-
-export interface BabelConfig {
-  ast?: boolean;
-  auxiliaryCommentAfter?: string;
-  auxiliaryCommentBefore?: string;
-  babelrc?: boolean;
-  babelrcRoots?: MatchPattern | MatchPattern[] | boolean;
-  caller?: { [key: string]: unknown; name: string };
-  code?: boolean;
-  comments?: boolean;
-  compact?: boolean | 'auto';
-  configFile?: boolean | string;
-  cwd?: string;
-  env?: { [env: string]: BabelConfig };
-  envName?: string;
-  exclude?: MatchPattern | MatchPattern[];
-  extends?: string;
-  filename?: string;
-  filenameRelative?: string;
-  generatorOpts?: { [option: string]: unknown };
-  getModuleId?: (name: string) => string;
-  highlightCode?: boolean;
-  ignore?: MatchPattern[];
-  include?: MatchPattern | MatchPattern[];
-  inputSourceMap?: boolean | object;
-  minified?: boolean;
-  moduleId?: string;
-  moduleIds?: boolean;
-  moduleRoot?: string;
-  only?: MatchPattern[];
-  overrides?: BabelConfig[];
-  parserOpts?: { [option: string]: unknown };
-  passPerPreset?: boolean;
-  plugins?: (PluginEntry | string)[];
-  presets?: (PresetEntry | string)[];
-  retainLines?: boolean;
-  root?: string;
-  rootMode?: RootMode;
-  shouldPrintComment?: (value: string) => boolean;
-  sourceFileName?: string;
-  sourceMaps?: SourceMaps;
-  sourceRoot?: string;
-  sourceType?: SourceType;
-  test?: MatchPattern | MatchPattern[];
-  wrapPluginVisitorMethod?: (key: string, nodeType: string, fn: Function) => Function;
-}
+export type BabelConfig = TransformOptions;
 
 export interface BabelArgs {
   auxiliaryCommentAfter?: string;
@@ -69,6 +18,7 @@ export interface BabelArgs {
   compact?: boolean | 'auto';
   configFile?: string;
   copyFiles?: boolean;
+  copyIgnored?: boolean;
   d?: string;
   D?: boolean;
   deleteDirOnStart?: boolean;
@@ -91,6 +41,7 @@ export interface BabelArgs {
   only?: string[];
   outDir?: string;
   outFile?: string;
+  outFileExtension?: string;
   plugins?: string[];
   presets?: string[];
   quiet?: boolean;
