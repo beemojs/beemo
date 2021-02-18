@@ -47,7 +47,6 @@ export default class ScaffoldRoutine extends Routine<unknown, unknown, RoutineOp
         templates,
       });
     } catch (error) {
-      console.log(error);
       // Intercept hygen error to provide a better error message
       if (error.message.startsWith("I can't find action")) {
         throw new Error(tool.msg('errors:scaffoldNoTemplates', { path: args.join('/') }));

@@ -58,7 +58,7 @@ describe('ScaffoldRoutine', () => {
       await routine.runGenerator(context);
 
       expect(hygen.engine).toHaveBeenCalledWith(
-        ['-a', '--foo', 'bar', 'baz'],
+        ['generator', 'action'],
         expect.objectContaining({
           cwd: tool.cwd.path(),
           debug: false,
