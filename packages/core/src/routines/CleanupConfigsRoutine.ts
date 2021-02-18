@@ -1,8 +1,8 @@
 /* eslint-disable @typescript-eslint/member-ordering */
 
-import chalk from 'chalk';
 import fs from 'fs-extra';
 import { Bind, Blueprint, Predicates } from '@boost/common';
+import { color } from '@boost/internal';
 import { Routine } from '@boost/pipeline';
 import DriverContext from '../contexts/DriverContext';
 import Tool from '../Tool';
@@ -28,7 +28,7 @@ export default class CleanupConfigsRoutine extends Routine<unknown, unknown, Rou
   async deleteConfigFiles(context: DriverContext): Promise<void> {
     await Promise.all(
       context.configPaths.map((config) => {
-        this.debug('Deleting config file %s', chalk.cyan(config.path));
+        this.debug('Deleting config file %s', color.filePath(config.path));
 
         this.options.tool.driverRegistry
           .get(config.driver)

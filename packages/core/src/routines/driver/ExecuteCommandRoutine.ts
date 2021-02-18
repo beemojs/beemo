@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/member-ordering */
-import chalk from 'chalk';
+
 import execa, { ExecaError } from 'execa';
 import glob from 'fast-glob';
 import fs from 'fs-extra';
@@ -7,6 +7,7 @@ import isGlob from 'is-glob';
 import merge from 'lodash/merge';
 import { parse } from '@boost/args';
 import { Bind, Blueprint, ExitError, Path, Predicates } from '@boost/common';
+import { color } from '@boost/internal';
 import { AnyWorkUnit, Routine, WaterfallPipeline } from '@boost/pipeline';
 import { STRATEGY_COPY } from '../../constants';
 import DriverContext from '../../contexts/DriverContext';
@@ -157,8 +158,8 @@ export default class ExecuteCommandRoutine extends Routine<
         this.debug(
           '  %s %s %s',
           arg,
-          chalk.gray('->'),
-          paths.length > 0 ? paths.join(', ') : chalk.gray(this.options.tool.msg('app:noMatch')),
+          color.mute('->'),
+          paths.length > 0 ? paths.join(', ') : color.mute(this.options.tool.msg('app:noMatch')),
         );
 
         nextArgv.push(...paths);
@@ -225,7 +226,7 @@ export default class ExecuteCommandRoutine extends Routine<
     });
 
     if (unknownArgv.length > 0) {
-      this.debug('Filtered args: %s', chalk.gray(unknownArgv.join(', ')));
+      this.debug('Filtered args: %s', color.mute(unknownArgv.join(', ')));
     }
 
     return filteredArgv;
@@ -333,9 +334,9 @@ export default class ExecuteCommandRoutine extends Routine<
 
     this.debug(
       'Executing command "%s %s" in %s',
-      chalk.magenta(driver.metadata.bin),
+      color.symbol(driver.metadata.bin),
       argv.join(' '),
-      chalk.cyan(cwd),
+      color.filePath(cwd),
     );
 
     await driver.onBeforeExecute.emit([context, argv]);
@@ -359,7 +360,7 @@ export default class ExecuteCommandRoutine extends Routine<
       const result = error as ExecaError;
 
       this.debug('  Failure: %o', formatExecReturn(result));
-      this.debug('  Error message: %s', chalk.gray(result.message));
+      this.debug('  Error message: %s', color.fail(result.message));
 
       if (result.name !== 'MaxBufferError') {
         driver.processFailure(result);

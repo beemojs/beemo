@@ -1,9 +1,9 @@
 /* eslint-disable @typescript-eslint/member-ordering */
 
-import chalk from 'chalk';
 import fs from 'fs-extra';
 import camelCase from 'lodash/camelCase';
 import { Bind, Blueprint, Path, PathResolver, Predicates, requireModule } from '@boost/common';
+import { color } from '@boost/internal';
 import { Routine } from '@boost/pipeline';
 import { STRATEGY_COPY, STRATEGY_CREATE, STRATEGY_NATIVE, STRATEGY_REFERENCE } from '../constants';
 import ConfigContext from '../contexts/ConfigContext';
@@ -85,7 +85,7 @@ export default class CreateConfigRoutine<Ctx extends ConfigContext> extends Rout
 
     const config = this.loadConfigAtPath(sourcePath);
 
-    this.debug('Copying config file to %s', chalk.cyan(configPath));
+    this.debug('Copying config file to %s', color.filePath(configPath));
 
     driver.config = config;
     driver.onCopyConfigFile.emit([context, configPath, config]);
@@ -108,7 +108,7 @@ export default class CreateConfigRoutine<Ctx extends ConfigContext> extends Rout
     const { metadata } = driver;
     const configPath = context.cwd.append(metadata.configName);
 
-    this.debug('Creating config file %s', chalk.cyan(configPath));
+    this.debug('Creating config file %s', color.filePath(configPath));
 
     driver.config = config;
     driver.onCreateConfigFile.emit([context, configPath, config]);
@@ -135,7 +135,7 @@ export default class CreateConfigRoutine<Ctx extends ConfigContext> extends Rout
     // we look for config files in a `beemo` folder relative to the root
     // `.config/beemo.js` config file.
     if (fromConsumer) {
-      debugMessage = `Loading ${chalk.green(driverName)} config from local project as an override`;
+      debugMessage = `Loading ${color.symbol(driverName)} config from local project as an override`;
 
       resolver
         .lookupFilePath(`.config/beemo/${configName}.ts`, root)
@@ -145,9 +145,9 @@ export default class CreateConfigRoutine<Ctx extends ConfigContext> extends Rout
       // we look for a config file in multiple places, in an attempt to
       // support both source and pre-built formats.
     } else {
-      debugMessage = `Loading ${chalk.green(
+      debugMessage = `Loading ${color.symbol(
         driverName,
-      )} config from configuration module ${chalk.yellow(moduleName)}`;
+      )} config from configuration module ${color.moduleName(moduleName)}`;
 
       // If module name is @local, allow for local development
       // by looking for config files in the current project.
@@ -177,7 +177,7 @@ export default class CreateConfigRoutine<Ctx extends ConfigContext> extends Rout
     this.debug.invariant(!!configPath, debugMessage, 'Exists, loading', 'Does not exist, skipping');
 
     if (configPath) {
-      this.debug('Found at %s', chalk.cyan(configPath));
+      this.debug('Found at %s', color.filePath(configPath));
     }
 
     return configPath;
@@ -190,7 +190,7 @@ export default class CreateConfigRoutine<Ctx extends ConfigContext> extends Rout
   mergeConfigs(context: Ctx, configs: ConfigObject[]): Promise<ConfigObject> {
     const { driver } = this.options;
 
-    this.debug('Merging %s config from %d sources', chalk.green(driver.getName()), configs.length);
+    this.debug('Merging %s config from %d sources', color.symbol(driver.getName()), configs.length);
 
     const config = configs.reduce(
       (masterConfig, cfg) => this.options.driver.mergeConfig(masterConfig, cfg),
@@ -273,7 +273,7 @@ export default class CreateConfigRoutine<Ctx extends ConfigContext> extends Rout
 
     const config = this.loadConfigAtPath(sourcePath);
 
-    this.debug('Referencing config file to %s', chalk.cyan(configPath));
+    this.debug('Referencing config file to %s', color.filePath(configPath));
 
     driver.config = config;
     driver.onReferenceConfigFile.emit([context, configPath, config]);

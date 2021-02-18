@@ -1,7 +1,7 @@
-import chalk from 'chalk';
 import execa from 'execa';
 import fs from 'fs-extra';
 import { ExitError, Path } from '@boost/common';
+import { color } from '@boost/internal';
 import DriverContext from '../../../src/contexts/DriverContext';
 import Driver from '../../../src/Driver';
 import ExecuteCommandRoutine from '../../../src/routines/driver/ExecuteCommandRoutine';
@@ -460,7 +460,7 @@ describe('ExecuteCommandRoutine', () => {
       expect(args).toEqual(['./src', '-o', './lib', '--out-dir', './dist', '--minified']);
       expect(routine.debug).toHaveBeenCalledWith(
         'Filtered args: %s',
-        chalk.gray('--foo, -X, --bar'),
+        color.mute('--foo, -X, --bar'),
       );
     });
 
@@ -478,7 +478,7 @@ describe('ExecuteCommandRoutine', () => {
       expect(args).toEqual(['-w']);
       expect(routine.debug).toHaveBeenCalledWith(
         'Filtered args: %s',
-        chalk.gray('--foo, 123, --bar=456, -c, 789, -c=666'),
+        color.mute('--foo, 123, --bar=456, -c, 789, -c=666'),
       );
     });
   });

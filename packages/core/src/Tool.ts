@@ -1,6 +1,5 @@
 /* eslint-disable @typescript-eslint/member-ordering */
 
-import chalk from 'chalk';
 import fs from 'fs-extra';
 import {
   Bind,
@@ -16,6 +15,7 @@ import {
 } from '@boost/common';
 import { createDebugger, Debugger } from '@boost/debug';
 import { Event } from '@boost/event';
+import { color } from '@boost/internal';
 import { WaterfallPipeline } from '@boost/pipeline';
 import { Registry } from '@boost/plugin';
 import { createTranslator, Translator } from '@boost/translate';
@@ -175,7 +175,7 @@ export default class Tool extends Contract<ToolOptions> {
 
     // Allow for local development
     if (module === '@local') {
-      this.debug('Using %s configuration module', chalk.yellow('@local'));
+      this.debug('Using %s configuration module', color.moduleName('@local'));
 
       return new Path(this.options.cwd);
     }
@@ -189,7 +189,7 @@ export default class Tool extends Contract<ToolOptions> {
       throw new Error(this.msg('errors:moduleMissing', { module }));
     }
 
-    this.debug('Found configuration module root at path: %s', chalk.cyan(rootPath));
+    this.debug('Found configuration module root at path: %s', color.filePath(rootPath));
 
     return rootPath;
   }

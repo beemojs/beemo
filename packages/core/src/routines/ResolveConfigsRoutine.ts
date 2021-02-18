@@ -1,5 +1,5 @@
-import chalk from 'chalk';
 import { Blueprint, Path, Predicates } from '@boost/common';
+import { color } from '@boost/internal';
 import { Routine } from '@boost/pipeline';
 import ConfigContext from '../contexts/ConfigContext';
 import Tool from '../Tool';
@@ -56,7 +56,7 @@ export default class ResolveConfigsRoutine<
 
     this.debug(
       'Creating config files for the following drivers: %s',
-      chalk.green(names.join(', ')),
+      color.symbol(names.join(', ')),
     );
 
     return routines;
@@ -79,7 +79,7 @@ export default class ResolveConfigsRoutine<
       this.debug('Resolving "%s"', driver.getName());
 
       deps.forEach((name) => {
-        this.debug('  Including dependency %s', chalk.green(name));
+        this.debug('  Including dependency %s', color.symbol(name));
 
         queue.push(tool.driverRegistry.get(name));
       });

@@ -1078,16 +1078,16 @@
     "@boost/translate" "^2.2.3"
     chalk "^4.1.0"
 
-"@boost/pipeline@^2.2.2":
-  version "2.2.2"
-  resolved "https://registry.yarnpkg.com/@boost/pipeline/-/pipeline-2.2.2.tgz#7f391dbb9a6dfc2a474ce746f55270af48362dee"
-  integrity sha512-EAV5lQWUnHwkie6iamG0Xz+q3u3ZVz5IbaGa1w5u9b2FzqmdUg3MZ82u5yjaH4lfSHL/4GWZc1RjOyuhWrTNnQ==
+"@boost/pipeline@^2.2.2", "@boost/pipeline@^2.2.3":
+  version "2.2.3"
+  resolved "https://registry.yarnpkg.com/@boost/pipeline/-/pipeline-2.2.3.tgz#c3581aa57afbc46548955c47bb03f6627577d2c8"
+  integrity sha512-D46Qt4hiJcFE1MRPhKg+d6PChpoTF8ZaHwFDSQ5mVuXoy0MwwIfa4IbYYXln36XZbw59/JuoqiAh2G2eFmDEIA==
   dependencies:
-    "@boost/common" "^2.6.0"
-    "@boost/debug" "^2.2.2"
+    "@boost/common" "^2.7.0"
+    "@boost/debug" "^2.2.3"
     "@boost/event" "^2.3.1"
     "@boost/internal" "^2.2.1"
-    "@boost/translate" "^2.2.2"
+    "@boost/translate" "^2.2.3"
     execa "^5.0.0"
     lodash "^4.17.20"
     split "^1.0.1"
@@ -1128,7 +1128,7 @@
   dependencies:
     fs-extra "^9.0.1"
 
-"@boost/translate@^2.2.2", "@boost/translate@^2.2.3":
+"@boost/translate@^2.2.3":
   version "2.2.3"
   resolved "https://registry.yarnpkg.com/@boost/translate/-/translate-2.2.3.tgz#747f75ec63e085507d301df104d515d464243d9a"
   integrity sha512-4fAEWbHjBlF87iE4Q7PvSu9QWfWIln/Z9gxCkHrvgNe3l+VatMyDGu2Tse0neaL7bGjXmBrwqmni/2fnsKL+jQ==
@@ -3741,15 +3741,10 @@ camelcase@^6.0.0:
   resolved "https://registry.yarnpkg.com/camelcase/-/camelcase-6.2.0.tgz#924af881c9d525ac9d87f40d964e5cea982a1809"
   integrity sha512-c7wVvbw3f37nuobQNtgsgG9POC9qMbNuMQmTCqZv23b6MIz0fcYpBiOlv9gEN/hdLdnZTDQhg6e9Dq5M1vKvfg==
 
-caniuse-lite@^1.0.30001109:
+caniuse-lite@^1.0.30001109, caniuse-lite@^1.0.30001166, caniuse-lite@^1.0.30001181:
   version "1.0.30001187"
   resolved "https://registry.yarnpkg.com/caniuse-lite/-/caniuse-lite-1.0.30001187.tgz#5706942631f83baa5a0218b7dfa6ced29f845438"
   integrity sha512-w7/EP1JRZ9552CyrThUnay2RkZ1DXxKe/Q2swTC4+LElLh9RRYrL1Z+27LlakB8kzY0fSmHw9mc7XYDUKAKWMA==
-
-caniuse-lite@^1.0.30001166, caniuse-lite@^1.0.30001181:
-  version "1.0.30001185"
-  resolved "https://registry.yarnpkg.com/caniuse-lite/-/caniuse-lite-1.0.30001185.tgz#3482a407d261da04393e2f0d61eefbc53be43b95"
-  integrity sha512-Fpi4kVNtNvJ15H0F6vwmXtb3tukv3Zg3qhKkOGUq7KJ1J6b9kf4dnNgtEAFXhRsJo0gNj9W60+wBvn0JcTvdTg==
 
 capture-exit@^2.0.0:
   version "2.0.0"
@@ -11371,17 +11366,7 @@ write-file-atomic@^2.0.0, write-file-atomic@^2.3.0, write-file-atomic@^2.4.2:
     imurmurhash "^0.1.4"
     signal-exit "^3.0.2"
 
-write-file-atomic@^3.0.0:
-  version "3.0.1"
-  resolved "https://registry.npmjs.org/write-file-atomic/-/write-file-atomic-3.0.1.tgz#558328352e673b5bb192cf86500d60b230667d4b"
-  integrity sha512-JPStrIyyVJ6oCSz/691fAjFtefZ6q+fP6tm+OS4Qw6o+TGQxNp1ziY2PgS+X/m0V8OWhZiO/m4xSj+Pr4RrZvw==
-  dependencies:
-    imurmurhash "^0.1.4"
-    is-typedarray "^1.0.0"
-    signal-exit "^3.0.2"
-    typedarray-to-buffer "^3.1.5"
-
-write-file-atomic@^3.0.3:
+write-file-atomic@^3.0.0, write-file-atomic@^3.0.3:
   version "3.0.3"
   resolved "https://registry.yarnpkg.com/write-file-atomic/-/write-file-atomic-3.0.3.tgz#56bd5c5a5c70481cd19c571bd39ab965a5de56e8"
   integrity sha512-AvHcyZ5JnSfq3ioSyjrBkH9yW4m7Ayk8/9My/DD9onKeu/94fwrMocemO2QAJFAlnnDN+ZDS+ZjAR5ua1/PV/Q==
