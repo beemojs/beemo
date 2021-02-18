@@ -20,7 +20,7 @@
     "release": "lerna version --conventional-commits --changelog-preset conventional-changelog-beemo --create-release github --push && lerna publish from-git",
     "release:bump": "yarn run beemo run-script bump-peer-deps",
     "type": "yarn run beemo typescript --build --reference-workspaces",
-    "task:args": "node ./packages/local/lib/bins/extractOptionList.js"
+    "task:args": "ts-node packages/local/src/bins/extractOptionList.ts"
   },
   "devDependencies": {
     "@types/fs-extra": "^9.0.7",
@@ -33,7 +33,8 @@
     "@types/semver": "^7.3.4",
     "conventional-changelog-beemo": "^2.1.0",
     "lerna": "^3.22.1",
-    "packemon": "^0.12.0"
+    "packemon": "^0.12.0",
+    "ts-node": "^9.1.1"
   },
   "resolutions": {
     "chalk": "^4.0.0",

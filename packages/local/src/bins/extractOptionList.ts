@@ -8,7 +8,7 @@ if (!bin) {
 
 const OPTION_PATTERN = /\s+-?-[a-z0-9-]+(,|\s)/giu;
 const IS_STRING = /\[?string\]?\b/iu;
-const IS_STRING_NAMED = /\[\w+\]\b/iu;
+const IS_STRING_NAMED = /\[(\w+)\]\b/iu;
 const IS_NUMBER = /\[?(number|int)\]?\b/iu;
 const IS_OBJECT = /\[?object\]?\b/iu;
 const IS_ARRAY = /\[?(array|list)\]?\b/iu;
