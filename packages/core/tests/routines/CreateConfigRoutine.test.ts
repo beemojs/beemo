@@ -152,6 +152,53 @@ describe('CreateConfigRoutine', () => {
           `module.exports = ${JSON.stringify({ babel: true, local: true }, null, 2)};`,
         );
       });
+
+      it('merges provider and consumer configs', async () => {
+        driver.configure({ strategy: STRATEGY_CREATE });
+
+        context.workspaceRoot = new Path(getFixturePath('consumer-override'));
+        tool.config.module = 'from-config-module';
+
+        fixtures.push(copyFixtureToNodeModule('config-module', 'from-config-module'));
+
+        const envSpy = jest.spyOn(routine, 'setEnvVars');
+        const providerSpy = jest.spyOn(routine, 'loadConfigFromProvider');
+        const consumerSpy = jest.spyOn(routine, 'loadConfigFromConsumer');
+        const mergeSpy = jest.spyOn(routine, 'mergeConfigs');
+        const createSpy = jest.spyOn(routine, 'createConfigFile');
+
+        const path = await routine.run(context, []);
+
+        expect(envSpy).toHaveBeenCalledWith(context, [], expect.anything());
+        expect(providerSpy).toHaveBeenCalledWith(context, [], expect.anything());
+        expect(consumerSpy).toHaveBeenCalledWith(
+          context,
+          [{ babel: true, lib: false }],
+          expect.anything(),
+        );
+        expect(mergeSpy).toHaveBeenCalledWith(
+          context,
+          [
+            { babel: true, lib: false },
+            { babel: true, override: true },
+          ],
+          expect.anything(),
+        );
+        expect(createSpy).toHaveBeenCalledWith(
+          context,
+          { babel: true, lib: false, override: true },
+          expect.anything(),
+        );
+        expect(path).toEqual(prependRoot('/babel.config.js'));
+        expect(writeSpy).toHaveBeenCalledWith(
+          prependRoot('/babel.config.js').path(),
+          `module.exports = ${JSON.stringify(
+            { babel: true, lib: false, override: true },
+            null,
+            2,
+          )};`,
+        );
+      });
     });
 
     describe('copy strategy', () => {

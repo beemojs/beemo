@@ -1,6 +1,5 @@
-module.exports = {
+export default {
   module: '@beemo/local',
-  // drivers: ['babel', 'eslint', 'jest', 'mocha', 'prettier', 'typescript', 'webpack'],
   drivers: {
     babel: true,
     eslint: true,
