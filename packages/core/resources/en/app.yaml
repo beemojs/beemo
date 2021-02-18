@@ -50,6 +50,7 @@ scriptLoadPost: Preparing script tasks
 scriptLoadModule: Loading script from configuration or node module
 scriptRun: Running {{name}} script
 signalBufferMessage: 'The following output was buffered before being interrupted:'
+stylelintDescription: Lint styles with stylelint
 typescriptCleanOption: Clean the target folder
 typescriptDescription: Type check files with TypeScript
 webpackDescription: Bundle source files with Webpack

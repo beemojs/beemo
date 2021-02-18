@@ -1,0 +1,54 @@
+import fs from 'fs';
+import { ConfigContext, Driver, Path } from '@beemo/core';
+import { Event } from '@boost/event';
+import { StylelintConfig } from './types';
+
+// Success: Writes warnings to stderr
+// Failure: Writes to stderr
+export default class StylelintDriver extends Driver<StylelintConfig> {
+  name = '@beemo/driver-stylelint';
+
+  readonly onCreateIgnoreFile = new Event<[ConfigContext, Path, { ignore: string[] }]>(
+    'create-ignore-file',
+  );
+
+  bootstrap() {
+    this.setMetadata({
+      bin: 'stylelint',
+      configName: '.stylelintrc.js',
+      description: this.tool.msg('app:stylelintDescription'),
+      title: 'stylelint',
+    });
+
+    this.onCreateConfigFile.listen(this.handleCreateIgnoreFile);
+  }
+
+  /**
+   * If an "ignore" property exists in the stylelint config, create a ".sylelintignore" file.
+   */
+  private handleCreateIgnoreFile = (
+    context: ConfigContext,
+    configPath: Path,
+    config: StylelintConfig,
+  ) => {
+    if (!config.ignore) {
+      return;
+    }
+
+    if (!Array.isArray(config.ignore)) {
+      throw new TypeError(this.tool.msg('errors:stylelintIgnoreInvalid'));
+    }
+
+    const ignorePath = configPath.parent().append('.stylelintignore');
+    const { ignore } = config;
+
+    this.onCreateIgnoreFile.emit([context, ignorePath, { ignore }]);
+
+    fs.writeFileSync(ignorePath.path(), ignore.join('\n'));
+
+    // Add to context so that it can be automatically cleaned up
+    context.addConfigPath('stylelint', ignorePath);
+
+    delete config.ignore;
+  };
+}

@@ -1,0 +1,50 @@
+{
+  "name": "@beemo/driver-stylelint",
+  "version": "2.0.0-alpha.0",
+  "description": "Stylelint driver for Beemo.",
+  "keywords": [
+    "beemo",
+    "beemo-driver",
+    "driver",
+    "stylelint",
+    "lint",
+    "linter"
+  ],
+  "scripts": {
+    "integration:fail": "stylelint --config ./integration/.stylelintrc.js ./integration/fail.css ./integration/fail-syntax.css && stylelint --invalid-option",
+    "integration:pass": "stylelint --config ./integration/.stylelintrc.js ./integration/pass.css"
+  },
+  "main": "./lib/index.js",
+  "types": "./dts/index.d.ts",
+  "engines": {
+    "node": ">=10.3.0",
+    "npm": ">=6.1.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:beemojs/beemo.git",
+    "directory": "packages/driver-stylelint"
+  },
+  "author": "Miles Johnson",
+  "contributors": [
+    "Michael Hayes"
+  ],
+  "license": "MIT",
+  "publishConfig": {
+    "access": "public"
+  },
+  "devDependencies": {
+    "stylelint": "^13.10.0"
+  },
+  "peerDependencies": {
+    "@beemo/core": "^2.0.0-alpha.0",
+    "stylelint": "^13.0.0"
+  },
+  "dependencies": {
+    "@boost/event": "^2.3.1",
+    "@types/stylelint": "*"
+  },
+  "packemon": {
+    "platform": "node"
+  }
+}
