@@ -4,6 +4,8 @@ import { FlowConfig, LintsConfig, OptionsConfig } from './types';
 // Success: Writes no errors message to stdout and server output to stderr
 // Failure: Writes file list to stdout and server output to stderr
 export default class FlowDriver extends Driver<FlowConfig> {
+  readonly name = '@beemo/driver-flow';
+
   bootstrap() {
     this.setMetadata({
       bin: 'flow',
