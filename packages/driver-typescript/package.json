@@ -30,7 +30,7 @@
     "access": "public"
   },
   "devDependencies": {
-    "@boost/test-utils": "^2.2.0",
+    "@boost/test-utils": "^2.3.0",
     "typescript": "^4.1.5"
   },
   "peerDependencies": {

@@ -23,18 +23,17 @@
     "task:args": "node ./packages/local/lib/bins/extractOptionList.js"
   },
   "devDependencies": {
-    "@milesj/build-tool-config": "2.17.1",
     "@types/fs-extra": "^9.0.7",
     "@types/is-glob": "^4.0.1",
     "@types/lodash": "^4.14.168",
-    "@types/node": "^14.14.26",
-    "@types/prettier": "^2.1.1",
+    "@types/node": "^14.14.28",
+    "@types/prettier": "^2.2.1",
     "@types/react": "^16.9.49",
     "@types/rimraf": "^3.0.0",
     "@types/semver": "^7.3.4",
     "conventional-changelog-beemo": "^2.1.0",
     "lerna": "^3.22.1",
-    "packemon": "^0.11.1"
+    "packemon": "^0.12.0"
   },
   "resolutions": {
     "chalk": "^4.0.0",

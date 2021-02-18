@@ -25,7 +25,6 @@ describe('CleanupConfigsRoutine', () => {
     tool.driverRegistry.load(driver);
     tool.driverRegistry.load(mockDriver('other-driver', tool));
 
-    // eslint-disable-next-line @typescript-eslint/no-misused-promises
     removeSpy = jest.spyOn(fs, 'remove').mockImplementation(() => Promise.resolve());
   });
 
