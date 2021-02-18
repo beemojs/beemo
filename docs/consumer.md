@@ -28,7 +28,7 @@ module.exports = {
 - `configure.cleanup` (`boolean`) - Remove generated config files after execution. Defaults to
   `false`.
 - `configure.parallel` (`boolean`) - Create configuration files in parallel. Defaults to `true`.
-- `execute.concurrency` (`number`) - Number of builds to run in parallel. Defaults to the amount of
+- `execute.concurrency` (`number`) - Number of builds to run in parallel. Defaults to the number of
   CPUs.
 - `execute.graph` (`boolean`) - Prioritize workspace builds based on
   [dependency graph](./workspaces.md#priority-packages).

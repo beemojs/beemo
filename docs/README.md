@@ -24,5 +24,5 @@ development dependencies, continuous copy and paste, and more.
 
 ## Requirements
 
-- Node 10.17+
+- Node 10.3+
 - GitHub, Bitbucket, or another VCS
