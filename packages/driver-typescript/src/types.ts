@@ -16,10 +16,19 @@ export type TargetSetting =
   | 'json'
   | 'latest';
 
-export type ModuleSetting = 'amd' | 'commonjs' | 'es2015' | 'esnext' | 'none' | 'system' | 'umd';
+export type ModuleSetting =
+  | 'amd'
+  | 'commonjs'
+  | 'es2015'
+  | 'es2020'
+  | 'esnext'
+  | 'none'
+  | 'system'
+  | 'umd';
 
 export type ModuleResolutionSetting = 'classic' | 'node';
 
+// https://github.com/microsoft/TypeScript/tree/master/lib
 export type LibSetting =
   | 'dom.iterable'
   | 'dom'
@@ -37,31 +46,54 @@ export type LibSetting =
   | 'es2015.symbol'
   | 'es2015'
   | 'es2016.array.include'
+  | 'es2016.full'
   | 'es2016'
+  | 'es2017.full'
   | 'es2017.intl'
   | 'es2017.object'
   | 'es2017.sharedmemory'
   | 'es2017.string'
   | 'es2017.typedarrays'
   | 'es2017'
+  | 'es2018.asyncgenerator'
+  | 'es2018.asynciterable'
+  | 'es2018.full'
   | 'es2018.intl'
   | 'es2018.promise'
   | 'es2018.regexp'
   | 'es2018'
+  | 'es2019.full'
+  | 'es2019.object'
+  | 'es2019.string'
+  | 'es2019.symbol'
   | 'es2019'
+  | 'es2020.bigint'
+  | 'es2020.full'
+  | 'es2020.intl'
+  | 'es2020.promise'
+  | 'es2020.sharedmemory'
+  | 'es2020.string'
+  | 'es2020.symbol.wellknown'
   | 'es2020'
   | 'es2021'
-  | 'esnext.array'
-  | 'esnext.asynciterable'
-  | 'esnext.bigint'
+  | 'esnext.full'
   | 'esnext.intl'
-  | 'esnext.symbol'
+  | 'esnext.promise'
+  | 'esnext.string'
+  | 'esnext.weakref'
   | 'esnext'
   | 'scripthost'
   | 'webworker.importscripts'
+  | 'webworker.iterable'
   | 'webworker';
 
-export type JSXSetting = 'none' | 'preserve' | 'react-native' | 'react';
+export type JSXSetting =
+  | 'none'
+  | 'preserve'
+  | 'react-jsx-dev'
+  | 'react-jsx'
+  | 'react-native'
+  | 'react';
 
 export type NewLineSetting = 'crlf' | 'lf';
 
@@ -72,6 +104,7 @@ export interface CompilerOptions {
   allowUnreachableCode?: boolean;
   allowUnusedLabels?: boolean;
   alwaysStrict?: boolean;
+  assumeChangesOnlyAffectDirectDependencies?: boolean;
   baseUrl?: string;
   charset?: string;
   checkJs?: boolean;
@@ -79,8 +112,10 @@ export interface CompilerOptions {
   declaration?: boolean;
   declarationDir?: string;
   declarationMap?: boolean;
-  diagnostics?: boolean;
+  disableReferencedProjectLoad?: boolean;
   disableSizeLimit?: boolean;
+  disableSolutionSearching?: boolean;
+  disableSourceOfProjectReferenceRedirect?: boolean;
   downlevelIteration?: boolean;
   emitBOM?: boolean;
   emitDeclarationOnly?: boolean;
@@ -89,14 +124,17 @@ export interface CompilerOptions {
   experimentalDecorators?: boolean;
   forceConsistentCasingInFileNames?: boolean;
   importHelpers?: boolean;
+  importsNotUsedAsValues?: 'error' | 'preserve' | 'remove';
   incremental?: boolean;
   inlineSourceMap?: boolean;
   inlineSources?: boolean;
   isolatedModules?: boolean;
   jsx?: JSXSetting;
   jsxFactory?: string;
+  jsxFragmentFactory?: string;
+  jsxImportSource?: string;
   keyofStringsOnly?: boolean;
-  lib?: string[];
+  lib?: LibSetting[];
   locale?: string;
   mapRoot?: string;
   maxNodeModuleJsDepth?: number;
@@ -115,15 +153,15 @@ export interface CompilerOptions {
   noLib?: boolean;
   noResolve?: boolean;
   noStrictGenericChecks?: boolean;
+  noUncheckedIndexedAccess?: boolean;
   noUnusedLocals?: boolean;
   noUnusedParameters?: boolean;
   out?: string;
   outDir?: string;
   outFile?: string;
-  paths?: { [key: string]: string[] };
+  paths?: Record<string, string[]>;
   preserveConstEnums?: boolean;
   preserveSymlinks?: boolean;
-  preserveWatchOutput?: boolean;
   pretty?: boolean;
   project?: string;
   reactNamespace?: string;
@@ -170,6 +208,7 @@ export interface TypeScriptArgs {
   allowUnreachableCode?: boolean;
   allowUnusedLabels?: boolean;
   alwaysStrict?: boolean;
+  assumeChangesOnlyAffectDirectDependencies?: boolean;
   b?: boolean;
   baseUrl?: string;
   build?: boolean;
@@ -181,7 +220,9 @@ export interface TypeScriptArgs {
   declarationDir?: string;
   declarationMap?: boolean;
   diagnostics?: boolean;
+  disableReferencedProjectLoad?: boolean;
   disableSizeLimit?: boolean;
+  disableSolutionSearching?: boolean;
   disableSourceOfProjectReferenceRedirect?: boolean;
   downlevelIteration?: boolean;
   emitBOM?: boolean;
@@ -192,10 +233,12 @@ export interface TypeScriptArgs {
   extendedDiagnostics?: boolean;
   forceConsistentCasingInFileNames?: boolean;
   generateCpuProfile?: string;
+  generateTrace?: string;
   h?: boolean;
   help?: boolean;
   i?: boolean;
   importHelpers?: boolean;
+  importsNotUsedAsValues?: boolean;
   incremental?: boolean;
   init?: boolean;
   inlineSourceMap?: boolean;
@@ -203,8 +246,10 @@ export interface TypeScriptArgs {
   isolatedModules?: boolean;
   jsx?: JSXSetting;
   jsxFactory?: string;
+  jsxFragmentFactory?: string;
+  jsxImportSource?: string;
   keyofStringsOnly?: boolean;
-  lib?: LibSetting;
+  lib?: LibSetting | LibSetting[];
   listEmittedFiles?: number;
   listFiles?: number;
   listFilesOnly?: number;
@@ -227,6 +272,7 @@ export interface TypeScriptArgs {
   noLib?: boolean;
   noResolve?: boolean;
   noStrictGenericChecks?: boolean;
+  noUncheckedIndexedAccess?: boolean;
   noUnusedLocals?: boolean;
   noUnusedParameters?: boolean;
   out?: string;
