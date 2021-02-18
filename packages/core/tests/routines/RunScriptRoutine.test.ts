@@ -253,8 +253,10 @@ describe('RunScriptRoutine', () => {
       expect(routine.errors).toEqual([
         new Error(
           `From configuration or node module. Failed to resolve a path using the following lookups (in order):
-  - beemo-test/lib/scripts/Missing (NODE_MODULE)
-  - beemo-test/scripts/Missing (NODE_MODULE)
+  - beemo-test/scripts/Missing.ts (NODE_MODULE)
+  - beemo-test/scripts/Missing.js (NODE_MODULE)
+  - beemo-test/src/scripts/Missing.ts (NODE_MODULE)
+  - beemo-test/lib/scripts/Missing.js (NODE_MODULE)
   - @beemo/script-missing (NODE_MODULE)
   - beemo-script-missing (NODE_MODULE)
  [CMN:PATH_RESOLVE_LOOKUPS]`,

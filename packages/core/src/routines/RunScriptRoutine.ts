@@ -91,13 +91,19 @@ export default class RunScriptRoutine extends RunInWorkspacesRoutine<ScriptConte
     const resolver = new PathResolver();
 
     if (moduleName === '@local') {
+      const root = context.configModuleRoot;
+
       resolver
-        .lookupFilePath(`lib/scripts/${fileName}.js`, context.configModuleRoot)
-        .lookupFilePath(`scripts/${fileName}.js`, context.configModuleRoot);
+        .lookupFilePath(`scripts/${fileName}.ts`, root)
+        .lookupFilePath(`scripts/${fileName}.js`, root)
+        .lookupFilePath(`src/scripts/${fileName}.ts`, root)
+        .lookupFilePath(`lib/scripts/${fileName}.js`, root);
     } else {
       resolver
-        .lookupNodeModule(`${moduleName}/lib/scripts/${fileName}`)
-        .lookupNodeModule(`${moduleName}/scripts/${fileName}`)
+        .lookupNodeModule(`${moduleName}/scripts/${fileName}.ts`)
+        .lookupNodeModule(`${moduleName}/scripts/${fileName}.js`)
+        .lookupNodeModule(`${moduleName}/src/scripts/${fileName}.ts`)
+        .lookupNodeModule(`${moduleName}/lib/scripts/${fileName}.js`)
         .lookupNodeModule(tool.scriptRegistry.formatModuleName(context.scriptName, true))
         .lookupNodeModule(tool.scriptRegistry.formatModuleName(context.scriptName));
     }
