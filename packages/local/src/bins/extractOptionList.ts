@@ -20,7 +20,7 @@ function determineType(line: string): string {
     return `string${brackets}`;
   }
 
-  if (line.match(IS_NUMBER)) {
+  if (line.match(IS_NUMBER) && !line.includes('version')) {
     return `number${brackets}`;
   }
 
