@@ -1,4 +1,4 @@
-import { RollupOptions, ModuleFormat, OutputOptions } from 'rollup';
+import { ModuleFormat, OutputOptions, RollupOptions } from 'rollup';
 
 export type RollupConfig = RollupOptions;
 

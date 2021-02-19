@@ -51,6 +51,12 @@
       "path": "packages/driver-prettier/tests"
     },
     {
+      "path": "packages/driver-rollup"
+    },
+    {
+      "path": "packages/driver-rollup/tests"
+    },
+    {
       "path": "packages/driver-stylelint"
     },
     {
