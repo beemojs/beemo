@@ -1,0 +1,42 @@
+{
+  "name": "@beemo/driver-rollup",
+  "version": "2.0.0-alpha.0",
+  "description": "Rollup driver for Beemo.",
+  "keywords": [
+    "beemo",
+    "beemo-driver",
+    "driver",
+    "rollup",
+    "bundler"
+  ],
+  "scripts": {
+    "integration:fail": "rollup ./integration/fail.js",
+    "integration:pass": "rollup ./integration/pass.js"
+  },
+  "main": "./lib/index.js",
+  "types": "./dts/index.d.ts",
+  "engines": {
+    "node": ">=10.3.0",
+    "npm": ">=6.1.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:beemojs/beemo.git",
+    "directory": "packages/driver-rollup"
+  },
+  "author": "Miles Johnson",
+  "license": "MIT",
+  "publishConfig": {
+    "access": "public"
+  },
+  "devDependencies": {
+    "rollup": "^2.39.0"
+  },
+  "peerDependencies": {
+    "@beemo/core": "^2.0.0-alpha.0",
+    "rollup": "^2.0.0"
+  },
+  "packemon": {
+    "platform": "node"
+  }
+}

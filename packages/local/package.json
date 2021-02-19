@@ -19,6 +19,8 @@
     "@beemo/driver-jest": "*",
     "@beemo/driver-mocha": "*",
     "@beemo/driver-prettier": "*",
+    "@beemo/driver-rollup": "*",
+    "@beemo/driver-stylelint": "*",
     "@beemo/driver-typescript": "*",
     "@beemo/driver-webpack": "*"
   },

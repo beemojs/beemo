@@ -28,6 +28,7 @@ The default strategies for each tool are as follows:
 | Jest       | Created    |
 | Mocha      | Created    |
 | Prettier   | Created    |
+| Rollup     | Referenced |
 | Stylelint  | Created    |
 | TypeScript | Created    |
 | Webpack    | Referenced |

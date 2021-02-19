@@ -56,5 +56,6 @@ strategies.
 | Jest       | Root only (preferred), Referenced using `--config`           |
 | Mocha      | Root only                                                    |
 | Prettier   | Root only (preferred), Referenced using `--config`           |
+| Rollup     | N/A                                                          |
 | TypeScript | Use project references instead with `--reference-workspaces` |
 | Webpack    | N/A                                                          |

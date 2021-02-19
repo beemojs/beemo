@@ -27,10 +27,12 @@ dist/
 .eslintrc.js
 .mocharc.js
 .prettierignore
+.stylelintrc.js
 babel.config.js
 jest.config.js
 mocha.opts
 prettier.config.js
+rollup.config.js
 webpack.config.js
 tsconfig.eslint.json
 *.tsbuildinfo

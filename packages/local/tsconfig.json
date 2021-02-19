@@ -38,6 +38,12 @@
       "path": "../driver-prettier"
     },
     {
+      "path": "../driver-rollup"
+    },
+    {
+      "path": "../driver-stylelint"
+    },
+    {
       "path": "../driver-typescript"
     },
     {
