@@ -11,9 +11,7 @@ import Driver from '../Driver';
 import Tool from '../Tool';
 import { RoutineOptions } from '../types';
 
-export interface ConfigObject {
-  [key: string]: unknown;
-}
+export type ConfigObject = Record<string, unknown>;
 
 export interface CreateConfigOptions extends RoutineOptions {
   driver: Driver;
@@ -124,6 +122,7 @@ export default class CreateConfigRoutine<Ctx extends ConfigContext> extends Rout
    * Return an absolute file path for a config file in either the consumer or provider.
    */
   getConfigPath({ cwd, workspaceRoot }: Ctx, fromConsumer: boolean = false): Path | null {
+    const { projectName } = this.options.tool.options;
     const moduleName = this.options.tool.config.module;
     const driverName = this.options.driver.getName();
     const configName = camelCase(driverName);
@@ -138,8 +137,8 @@ export default class CreateConfigRoutine<Ctx extends ConfigContext> extends Rout
       debugMessage = `Loading ${color.symbol(driverName)} config from local project as an override`;
 
       resolver
-        .lookupFilePath(`.config/beemo/${configName}.ts`, root)
-        .lookupFilePath(`.config/beemo/${configName}.js`, root);
+        .lookupFilePath(`.config/${projectName}/${configName}.ts`, root)
+        .lookupFilePath(`.config/${projectName}/${configName}.js`, root);
 
       // When loading from the provider (upstream configuratiob module),
       // we look for a config file in multiple places, in an attempt to

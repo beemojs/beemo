@@ -341,7 +341,7 @@ export default class Tool extends Contract<ToolOptions> {
     context.workspaces = this.project.getWorkspaceGlobs();
 
     // Make the tool available for all processes
-    process.beemo = {
+    process[this.options.projectName as 'beemo'] = {
       context,
       tool: this,
     };

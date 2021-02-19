@@ -118,20 +118,32 @@ These settings can then be access through the [tool instance](./tool.md).
 tool.config.settings.coolRight; // boolean
 ```
 
-## Custom executable & config name
+## Branded tooling
 
-The Beemo command line executable can be renamed to offer a better and more immersive branding
-experience, especially when used at a large company. To start, create a new executable in your
-configuration module at `bin/<name>.js` (name must be camel-case), with the following contents
+The Beemo command line and configuration can be renamed to offer a better and more immersive
+branding experience, especially when used at a large company. To start, create a new executable in
+your configuration module at `bin/<name>.js` (name must be camel-case), with the following contents
 (which simply runs Beemo's console).
+
+In the upcoming examples, we will use "BMO" as the brand, but feel free to plug in whatever you'd
+like.
 
 ```js
 #!/usr/bin/env node
 
-process.env.BEEMO_CONFIG_MODULE = '<config-module>';
-process.env.BEEMO_MANUAL_URL = 'http://custom/manual/url';
+// Name of your company, project, etc in a human-readable format
+process.env.BEEMO_BRAND_NAME = 'BMO';
 
-require('@beemo/cli');
+// Name of the command line binary in camel-case
+process.env.BEEMO_BRAND_BINARY = 'bmo';
+
+// NPM configuration module that houses shared configs and the binary itself
+process.env.BEEMO_CONFIG_MODULE = '@bmo/dev';
+
+// Custom documentation website to display in help output
+process.env.BEEMO_MANUAL_URL = 'https://custom/manual/url';
+
+require('@beemo/cli/bin');
 ```
 
 Be sure to reference your new executable in your configuration module's `package.json`.
@@ -139,21 +151,31 @@ Be sure to reference your new executable in your configuration module's `package
 ```json
 {
   "bin": {
-    "<name>": "./bin/<name>.js"
+    "bmo": "./bin/bmo.js"
   }
 }
 ```
 
-If `BEEMO_CONFIG_MODULE` is not defined in your custom binary, you'll need to manually define the
-`module` property in the consumer config.
+If `BEEMO_CONFIG_MODULE` is not defined in your custom binary (above), each consumer will need to
+manually configure it.
 
-```json
-{
-  "<custom-binary-name>": {
-    "module": "<config-module>"
-  }
-}
+```js
+// .config/bmo.js
+module.exports = {
+  module: '@bmo/dev',
+};
 ```
+
+### Does change
+
+- Binary executable name and project title: `bmo run-driver babel`
+- Config file names: `.config/bmo.js`, `.config/bmo/babel.js`
+- Beemo process global: `process.bmo`
+- Debug namespace: `DEBUG=bmo:*`
+
+### Does not change
+
+- Driver and script package names: `@beemo/driver-babel`, `beemo-script-build`, etc
 
 ## CLI themes
 

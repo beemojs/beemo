@@ -13,6 +13,7 @@
     "posttest": "yarn run lint",
     "pretest": "yarn run type",
     "test": "yarn run jest",
+    "test:cli:brand": "node packages/cli/tests/brandedBinary.js",
     "test:int:fail": "yarn run beemo run-script run-integration-tests --type=fail --workspaces=\"@beemo/driver-*\"",
     "test:int:pass": "yarn run beemo run-script run-integration-tests --type=pass --workspaces=\"@beemo/driver-*\"",
     "format": "yarn run beemo prettier",
