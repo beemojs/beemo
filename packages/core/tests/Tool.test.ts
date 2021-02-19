@@ -66,6 +66,8 @@ describe('Tool', () => {
           jest: true,
           mocha: true,
           prettier: true,
+          rollup: true,
+          stylelint: true,
           typescript: { buildFolder: 'dts', declarationOnly: true },
           webpack: true,
         },
