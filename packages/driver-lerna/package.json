@@ -1,0 +1,42 @@
+{
+  "name": "@beemo/driver-lerna",
+  "version": "2.0.0-alpha.0",
+  "description": "Lerna driver for Beemo.",
+  "keywords": [
+    "beemo",
+    "beemo-driver",
+    "driver",
+    "lerna",
+    "monorepo"
+  ],
+  "scripts": {
+    "integration:fail": "lerna --invalid-option",
+    "integration:pass": "lerna info"
+  },
+  "main": "./lib/index.js",
+  "types": "./dts/index.d.ts",
+  "engines": {
+    "node": ">=10.3.0",
+    "npm": ">=6.1.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:beemojs/beemo.git",
+    "directory": "packages/driver-lerna"
+  },
+  "author": "Miles Johnson",
+  "license": "MIT",
+  "publishConfig": {
+    "access": "public"
+  },
+  "devDependencies": {
+    "lerna": "^3.22.1"
+  },
+  "peerDependencies": {
+    "@beemo/core": "^2.0.0-alpha.0",
+    "lerna": "^3.0.0"
+  },
+  "packemon": {
+    "platform": "node"
+  }
+}

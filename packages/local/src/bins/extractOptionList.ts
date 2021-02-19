@@ -1,6 +1,6 @@
 import execa from 'execa';
 
-const bin = process.argv[2];
+const [bin, ...args] = process.argv.slice(2);
 
 if (!bin) {
   throw new Error('Please pass a NPM binary name.');
@@ -8,7 +8,7 @@ if (!bin) {
 
 const OPTION_PATTERN = /(^|\s)+-?-[.a-z0-9-]+(,|\s)/giu;
 const IS_STRING = /\[?string\]?\b/iu;
-const IS_STRING_NAMED = /\[(\w+)\]/iu;
+const IS_STRING_NAMED = /\[[^boolean]\]/iu;
 const IS_STRING_NAMED_CARETS = /<(\w+)>/iu;
 const IS_NUMBER = /\[?(number|int)\]?\b/iu;
 const IS_OBJECT = /\[?object\]?\b/iu;
@@ -17,16 +17,16 @@ const IS_ARRAY = /\[?(array|list)\]?\b/iu;
 function determineType(line: string): string {
   const brackets = line.match(IS_ARRAY) ? '[]' : '';
 
-  if (line.match(IS_STRING) || line.match(IS_STRING_NAMED) || line.match(IS_STRING_NAMED_CARETS)) {
-    return `string${brackets}`;
-  }
-
   if (line.match(IS_NUMBER) && !line.includes('version')) {
     return `number${brackets}`;
   }
 
   if (line.match(IS_OBJECT)) {
     return `object${brackets}`;
+  }
+
+  if (line.match(IS_STRING) || line.match(IS_STRING_NAMED) || line.match(IS_STRING_NAMED_CARETS)) {
+    return `string${brackets}`;
   }
 
   if (brackets) {
@@ -38,7 +38,7 @@ function determineType(line: string): string {
 
 const binArgs = bin === 'tsc' ? ['--help', '--all'] : ['--help'];
 
-execa('npx', [bin, ...binArgs])
+execa('npx', [bin, ...args, ...binArgs])
   .then(({ stdout }) => {
     const optionTypes = new Map<string, string>();
 
@@ -72,15 +72,13 @@ execa('npx', [bin, ...binArgs])
       });
     });
 
-    const args = Array.from(optionTypes.entries());
+    Array.from(optionTypes.entries())
+      .sort((a, b) => a[0].localeCompare(b[0]))
+      .forEach((arg) => {
+        const opt = arg[0].includes('.') ? `'${arg[0]}'` : arg[0];
 
-    args.sort((a, b) => a[0].localeCompare(b[0]));
-
-    args.forEach((arg) => {
-      const opt = arg[0].includes('.') ? `'${arg[0]}'` : arg[0];
-
-      console.log(`${opt}?: ${arg[1]};`);
-    });
+        console.log(`${opt}?: ${arg[1]};`);
+      });
 
     return true;
   })

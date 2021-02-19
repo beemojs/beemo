@@ -7,6 +7,7 @@
 - [@beemo/driver-eslint](./packages/driver-eslint/CHANGELOG.md)
 - [@beemo/driver-flow](./packages/driver-flow/CHANGELOG.md)
 - [@beemo/driver-jest](./packages/driver-jest/CHANGELOG.md)
+- [@beemo/driver-lerna](./packages/driver-lerna/CHANGELOG.md)
 - [@beemo/driver-mocha](./packages/driver-mocha/CHANGELOG.md)
 - [@beemo/driver-prettier](./packages/driver-prettier/CHANGELOG.md)
 - [@beemo/driver-rollup](./packages/driver-rollup/CHANGELOG.md)

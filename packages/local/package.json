@@ -17,6 +17,7 @@
     "@beemo/driver-eslint": "*",
     "@beemo/driver-flow": "*",
     "@beemo/driver-jest": "*",
+    "@beemo/driver-lerna": "*",
     "@beemo/driver-mocha": "*",
     "@beemo/driver-prettier": "*",
     "@beemo/driver-rollup": "*",
