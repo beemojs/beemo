@@ -32,6 +32,9 @@
       "path": "../driver-jest"
     },
     {
+      "path": "../driver-lerna"
+    },
+    {
       "path": "../driver-mocha"
     },
     {

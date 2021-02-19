@@ -1,7 +1,7 @@
 export interface LernaConfig {
   command?: {
     bootstrap?: {
-      ignore?: string | string[];
+      ignore?: string[] | string;
       npmClientArgs?: string[];
       scope?: string[];
     };

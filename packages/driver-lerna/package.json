@@ -9,6 +9,10 @@
     "lerna",
     "monorepo"
   ],
+  "scripts": {
+    "integration:fail": "lerna --invalid-option",
+    "integration:pass": "lerna info"
+  },
   "main": "./lib/index.js",
   "types": "./dts/index.d.ts",
   "engines": {

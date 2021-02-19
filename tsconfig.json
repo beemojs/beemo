@@ -39,6 +39,12 @@
       "path": "packages/driver-jest/tests"
     },
     {
+      "path": "packages/driver-lerna"
+    },
+    {
+      "path": "packages/driver-lerna/tests"
+    },
+    {
       "path": "packages/driver-mocha"
     },
     {

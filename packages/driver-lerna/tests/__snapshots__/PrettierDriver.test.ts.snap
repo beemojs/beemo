@@ -1,3 +1,0 @@
-// Jest Snapshot v1, https://goo.gl/fbAQLP
-
-exports[`PrettierDriver handleCreateIgnoreFile() errors if not an array 1`] = `"Ignore configuration must be an array of strings."`;
