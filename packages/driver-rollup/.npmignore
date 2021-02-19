@@ -1,0 +1,8 @@
+*.log
+dist/
+integration/
+src/
+tests/
+tsconfig.json
+*.tsbuildinfo
+.DS_Store

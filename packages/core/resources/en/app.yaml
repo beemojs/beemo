@@ -43,6 +43,7 @@ noMatch: (no match)
 poweredBy: Powered by Beemo v{{version}}
 prettierDescription: Format code with Prettier
 run: Run {{tile}}
+rollupDescription: Bundle source files with Rollup
 scaffoldGenerate: Generating from templates
 scaffoldRunGenerator: Running generator
 scriptLoad: Loading script

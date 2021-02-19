@@ -6,9 +6,10 @@ if (!bin) {
   throw new Error('Please pass a NPM binary name.');
 }
 
-const OPTION_PATTERN = /\s+-?-[a-z0-9-]+(,|\s)/giu;
+const OPTION_PATTERN = /(^|\s)+-?-[.a-z0-9-]+(,|\s)/giu;
 const IS_STRING = /\[?string\]?\b/iu;
-const IS_STRING_NAMED = /\[(\w+)\]\b/iu;
+const IS_STRING_NAMED = /\[(\w+)\]/iu;
+const IS_STRING_NAMED_CARETS = /<(\w+)>/iu;
 const IS_NUMBER = /\[?(number|int)\]?\b/iu;
 const IS_OBJECT = /\[?object\]?\b/iu;
 const IS_ARRAY = /\[?(array|list)\]?\b/iu;
@@ -16,7 +17,7 @@ const IS_ARRAY = /\[?(array|list)\]?\b/iu;
 function determineType(line: string): string {
   const brackets = line.match(IS_ARRAY) ? '[]' : '';
 
-  if (line.match(IS_STRING) || line.match(IS_STRING_NAMED)) {
+  if (line.match(IS_STRING) || line.match(IS_STRING_NAMED) || line.match(IS_STRING_NAMED_CARETS)) {
     return `string${brackets}`;
   }
 
@@ -76,7 +77,9 @@ execa('npx', [bin, ...binArgs])
     args.sort((a, b) => a[0].localeCompare(b[0]));
 
     args.forEach((arg) => {
-      console.log(`${arg[0]}?: ${arg[1]};`);
+      const opt = arg[0].includes('.') ? `'${arg[0]}'` : arg[0];
+
+      console.log(`${opt}?: ${arg[1]};`);
     });
 
     return true;
