@@ -5,9 +5,7 @@ import { ConfigFile } from './types';
 export default class Config extends Configuration<ConfigFile> {
   blueprint(predicates: Predicates, onConstruction: boolean): Blueprint<ConfigFile> {
     const { bool, number, object, shape, string } = predicates;
-    const moduleSchema = process.env.BEEMO_CONFIG_MODULE
-      ? string(process.env.BEEMO_CONFIG_MODULE)
-      : string();
+    const moduleSchema = string(process.env.BEEMO_CONFIG_MODULE);
 
     return {
       configure: shape({

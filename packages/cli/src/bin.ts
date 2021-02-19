@@ -18,9 +18,9 @@ const footer = applyStyle(
 );
 
 const program = new Program({
-  bin: 'beemo',
+  bin: tool.options.projectName,
   footer,
-  name: 'Beemo',
+  name: process.env.BEEMO_BRAND_NAME || 'Beemo',
   version,
 });
 
@@ -38,9 +38,6 @@ async function run() {
     driver: 'Drivers',
     script: 'Scripts',
   });
-
-  // Listen to events
-  // program.onAfterRun.listen(beemo.cleanupOnFailure);
 
   // Run the program!
   await program.runAndExit(argv, async () => {

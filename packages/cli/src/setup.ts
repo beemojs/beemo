@@ -4,7 +4,7 @@ import debug from 'debug';
 import { Tool } from '@beemo/core';
 import parseSpecialArgv from './parseSpecialArgv';
 
-const projectName = process.env.BEEMO_BRAND_NAME || 'beemo';
+const projectName = process.env.BEEMO_BRAND_BINARY || 'beemo';
 
 process.env.BOOSTJS_DEBUG_NAMESPACE = projectName;
 
