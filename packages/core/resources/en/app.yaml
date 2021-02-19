@@ -38,6 +38,7 @@ flowDescription: Type check files with Flow
 fromTool: 'From tool instance: {{message}}'
 fromModule: From configuration or node module. {{message}}
 jestDescription: Unit test files with Jest
+lernaDescription: Manage monorepos with Lerna
 mochaDriver: Unit test files with Mocha
 noMatch: (no match)
 poweredBy: Powered by Beemo v{{version}}
