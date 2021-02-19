@@ -151,8 +151,8 @@ describe('Tool', () => {
       it('can support a custom config name', async () => {
         tool = new Tool({
           argv: [],
-          cwd: getFixturePath('consumer-custom-name'),
-          projectName: 'miles',
+          cwd: getFixturePath('consumer-branded'),
+          projectName: 'bmo',
         });
 
         await spyTool(tool).bootstrap();

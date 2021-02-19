@@ -11,9 +11,7 @@ import Driver from '../Driver';
 import Tool from '../Tool';
 import { RoutineOptions } from '../types';
 
-export interface ConfigObject {
-  [key: string]: unknown;
-}
+export type ConfigObject = Record<string, unknown>;
 
 export interface CreateConfigOptions extends RoutineOptions {
   driver: Driver;

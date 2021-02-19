@@ -1,28 +1,8 @@
-import corePackage from '@beemo/core/package.json';
-import { applyStyle, Program } from '@boost/cli';
 import CreateConfig from './commands/CreateConfig';
 import RunDriver from './commands/RunDriver';
 import RunScript from './commands/RunScript';
 import Scaffold from './commands/Scaffold';
-import { argv, parallelArgv, tool } from './setup';
-
-const version = String(corePackage.version);
-const footer = applyStyle(
-  [
-    tool.msg('app:cliEpilogue', {
-      manualURL: process.env.BEEMO_MANUAL_URL || 'https://milesj.gitbook.io/beemo',
-    }),
-    tool.msg('app:poweredBy', { version }),
-  ].join('\n'),
-  'muted',
-);
-
-const program = new Program({
-  bin: tool.options.projectName,
-  footer,
-  name: process.env.BEEMO_BRAND_NAME || 'Beemo',
-  version,
-});
+import { argv, parallelArgv, program, tool } from './setup';
 
 async function run() {
   // Add normal commands

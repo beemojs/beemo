@@ -169,8 +169,9 @@ module.exports = {
 ### Does change
 
 - Binary executable name and project title: `bmo run-driver babel`
-- Config file name: `.config/bmo.js`, `.config/bmo/babel.js`
+- Config file names: `.config/bmo.js`, `.config/bmo/babel.js`
 - Beemo process global: `process.bmo`
+- Debug namespace: `DEBUG=bmo:*`
 
 ### Does not change
 

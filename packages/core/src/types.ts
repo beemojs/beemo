@@ -15,9 +15,7 @@ export interface BeemoProcess<C extends Context = Context> {
   tool: BeemoTool;
 }
 
-export interface UnknownSettings {
-  [key: string]: unknown;
-}
+export type UnknownSettings = Record<string, unknown>;
 
 export interface ConfigFile<T extends object = UnknownSettings> {
   configure: {
@@ -50,7 +48,7 @@ export type DriverStrategy = 'copy' | 'create' | 'native' | 'none' | 'reference'
 export interface DriverOptions {
   args?: string[];
   dependencies?: string[];
-  env?: { [key: string]: string };
+  env?: Record<string, string>;
   strategy?: DriverStrategy;
 }
 
