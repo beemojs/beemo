@@ -6,6 +6,7 @@ export default {
     jest: true,
     mocha: true,
     prettier: true,
+    rollup: true,
     typescript: {
       buildFolder: 'dts',
       declarationOnly: true,

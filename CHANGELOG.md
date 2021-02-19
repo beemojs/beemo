@@ -9,5 +9,7 @@
 - [@beemo/driver-jest](./packages/driver-jest/CHANGELOG.md)
 - [@beemo/driver-mocha](./packages/driver-mocha/CHANGELOG.md)
 - [@beemo/driver-prettier](./packages/driver-prettier/CHANGELOG.md)
+- [@beemo/driver-rollup](./packages/driver-rollup/CHANGELOG.md)
+- [@beemo/driver-stylelint](./packages/driver-stylelint/CHANGELOG.md)
 - [@beemo/driver-typescript](./packages/driver-typescript/CHANGELOG.md)
 - [@beemo/driver-webpack](./packages/driver-webpack/CHANGELOG.md)

@@ -9,6 +9,7 @@
   - [Jest](./drivers/jest.md)
   - [Mocha](./drivers/mocha.md)
   - [Prettier](./drivers/prettier.md)
+  - [Rollup](./drivers/rollup.md)
   - [Stylelint](./drivers/stylelint.md)
   - [TypeScript](./drivers/typescript.md)
   - [Webpack](./drivers/webpack.md)
