@@ -10,7 +10,7 @@
     "bundler"
   ],
   "scripts": {
-    "integration:fail": "rollup ./integration/fail.js && rollup --invalid-option",
+    "integration:fail": "rollup ./integration/fail.js",
     "integration:pass": "rollup ./integration/pass.js"
   },
   "main": "./lib/index.js",
