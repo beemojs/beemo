@@ -1,7 +1,7 @@
 export interface LernaConfig {
   command?: {
     bootstrap?: {
-      ignore?: string[];
+      ignore?: string | string[];
       npmClientArgs?: string[];
       scope?: string[];
     };
@@ -13,6 +13,7 @@ export interface LernaConfig {
   };
   npmClient?: 'npm' | 'yarn';
   packages?: string[];
+  useWorkspaces?: boolean;
   version?: string;
 }
 

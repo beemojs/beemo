@@ -54,6 +54,7 @@ strategies.
 | ESLint     | Root only (preferred), Referenced using `--config`           |
 | Flow       | Root only                                                    |
 | Jest       | Root only (preferred), Referenced using `--config`           |
+| Lerna      | Root only                                                    |
 | Mocha      | Root only                                                    |
 | Prettier   | Root only (preferred), Referenced using `--config`           |
 | Rollup     | N/A                                                          |

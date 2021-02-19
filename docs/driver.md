@@ -26,6 +26,7 @@ The default strategies for each tool are as follows:
 | ESLint     | Created    |
 | Flow       | Created    |
 | Jest       | Created    |
+| Lerna      | Created    |
 | Mocha      | Created    |
 | Prettier   | Created    |
 | Rollup     | Referenced |

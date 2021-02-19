@@ -1,7 +1,7 @@
 # Mocha driver
 
-Provides [Mocha](https://github.com/facebook/mocha) support by dynamically generating a `mocha.opts`
-config file.
+Provides [Mocha](https://github.com/facebook/mocha) support by dynamically generating a
+`.mocharc.js` config file.
 
 ```bash
 yarn add @beemo/driver-mocha mocha

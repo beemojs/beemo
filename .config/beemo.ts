@@ -4,6 +4,7 @@ export default {
     babel: true,
     eslint: true,
     jest: true,
+    lerna: true,
     mocha: true,
     prettier: true,
     rollup: true,
