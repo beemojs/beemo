@@ -1,5 +1,5 @@
 import { Blueprint, Predicates } from '@boost/common';
-import { Configuration, createPluginsPredicate } from '@boost/config';
+import { Configuration, createPluginsPredicate, mergePlugins } from '@boost/config';
 import { ConfigFile } from './types';
 
 export default class Config extends Configuration<ConfigFile> {
@@ -22,5 +22,10 @@ export default class Config extends Configuration<ConfigFile> {
       scripts: createPluginsPredicate(predicates),
       settings: object(),
     };
+  }
+
+  bootstrap() {
+    this.addProcessHandler('drivers', mergePlugins);
+    this.addProcessHandler('scripts', mergePlugins);
   }
 }

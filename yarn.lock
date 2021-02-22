@@ -1011,38 +1011,38 @@
     levenary "^1.1.1"
     semver "^7.3.4"
 
-"@boost/common@^2.6.0", "@boost/common@^2.7.0":
-  version "2.7.0"
-  resolved "https://registry.yarnpkg.com/@boost/common/-/common-2.7.0.tgz#62e9717d8811a25f515ace6fc4c9e6b6d2a55d8d"
-  integrity sha512-zUUuZWlAzCpbr2vuL5Lkke8U0Kj0V8adh55t3gItqZm9Ucc9oqQg+cET1lcaM1XLGcjic55qa7cfRkNk7ESrDQ==
+"@boost/common@^2.6.0", "@boost/common@^2.7.0", "@boost/common@^2.7.1":
+  version "2.7.1"
+  resolved "https://registry.yarnpkg.com/@boost/common/-/common-2.7.1.tgz#ef121eef2bfcd7a41235c1c5404cb1169e4a37e5"
+  integrity sha512-GE5rH3RlpB4sqRvmR1qPIpVpVv0VUSZYjU+beLSe1jZgSVQgHwx2+1w6nfiS5tqdDx+ZJGIC5u9QinkGkMq0Hw==
   dependencies:
     "@boost/decorators" "^2.1.1"
     "@boost/internal" "^2.2.1"
     fast-glob "^3.2.4"
     json5 "^2.2.0"
-    optimal "^4.2.1"
+    optimal "^4.3.0"
     pretty-ms "^7.0.1"
     yaml "^1.10.0"
   optionalDependencies:
     typescript "^4.0.0"
 
-"@boost/config@^2.3.3":
-  version "2.3.3"
-  resolved "https://registry.yarnpkg.com/@boost/config/-/config-2.3.3.tgz#b3a9ad90332228e6b7388414813cb50cb61b84da"
-  integrity sha512-+Na/N0z4rQbWuGKSI6QyG1mt2Fzgp7SBIGHRrUwBmbewfXY6EUyo99gm7IlgqV52A9S6Ji0DGIaicKC/leNCOA==
+"@boost/config@^2.4.1":
+  version "2.4.1"
+  resolved "https://registry.yarnpkg.com/@boost/config/-/config-2.4.1.tgz#c01e9fe55701632fc9cf11f1929fad19e92a2d6b"
+  integrity sha512-r7G9tR82XDFkplRbTO7gnF+VTXyOR8vSgVLuwx45iiEnCfItPGrofo2dOIIijKfxOJx6vDzgWlz5RWT4oFtuSg==
   dependencies:
-    "@boost/common" "^2.7.0"
-    "@boost/debug" "^2.2.3"
+    "@boost/common" "^2.7.1"
+    "@boost/debug" "^2.2.4"
     "@boost/event" "^2.3.1"
     "@boost/internal" "^2.2.1"
     minimatch "^3.0.4"
 
-"@boost/debug@^2.2.2", "@boost/debug@^2.2.3":
-  version "2.2.3"
-  resolved "https://registry.yarnpkg.com/@boost/debug/-/debug-2.2.3.tgz#e68e0a64f3c9e485dc82807aa04da3ee404498b5"
-  integrity sha512-9mFr5ZTlzKzepitSeOq9UzJDH/I/EM7Y5hc8DSTPDhiIi+hnlm4whBxirW0BtCxB74jWREUQfFIlQeCz+gJL1A==
+"@boost/debug@^2.2.2", "@boost/debug@^2.2.4":
+  version "2.2.4"
+  resolved "https://registry.yarnpkg.com/@boost/debug/-/debug-2.2.4.tgz#e9219ff1177bb76f5472f4ac61296d8ce5107b62"
+  integrity sha512-yHa3bCx5D9/q1gcdH1zdU+5EiQR9+mdufOAjwWzsyawLlZC268TolAIuEbnqXBskcibicGWsUYKKTS8i2227xA==
   dependencies:
-    "@boost/common" "^2.7.0"
+    "@boost/common" "^2.7.1"
     "@boost/internal" "^2.2.1"
     "@types/debug" "^4.1.5"
     debug "^4.3.1"
@@ -1078,27 +1078,27 @@
     "@boost/translate" "^2.2.3"
     chalk "^4.1.0"
 
-"@boost/pipeline@^2.2.2", "@boost/pipeline@^2.2.3":
-  version "2.2.3"
-  resolved "https://registry.yarnpkg.com/@boost/pipeline/-/pipeline-2.2.3.tgz#c3581aa57afbc46548955c47bb03f6627577d2c8"
-  integrity sha512-D46Qt4hiJcFE1MRPhKg+d6PChpoTF8ZaHwFDSQ5mVuXoy0MwwIfa4IbYYXln36XZbw59/JuoqiAh2G2eFmDEIA==
+"@boost/pipeline@^2.2.2", "@boost/pipeline@^2.2.4":
+  version "2.2.4"
+  resolved "https://registry.yarnpkg.com/@boost/pipeline/-/pipeline-2.2.4.tgz#21bf364cfdae1bcad9abff3f8904e4e27ce0aee0"
+  integrity sha512-pszHy/Z8HdklrdVZdCo/vzA8By2p/PfGQ0LtjoAXvAlQXyVC9uTAjygAVx8w2nrIrHxvwfTWl/HQ0ZvvdiETJg==
   dependencies:
-    "@boost/common" "^2.7.0"
-    "@boost/debug" "^2.2.3"
+    "@boost/common" "^2.7.1"
+    "@boost/debug" "^2.2.4"
     "@boost/event" "^2.3.1"
     "@boost/internal" "^2.2.1"
-    "@boost/translate" "^2.2.3"
+    "@boost/translate" "^2.2.4"
     execa "^5.0.0"
     lodash "^4.17.20"
     split "^1.0.1"
 
-"@boost/plugin@^2.2.3":
-  version "2.2.3"
-  resolved "https://registry.yarnpkg.com/@boost/plugin/-/plugin-2.2.3.tgz#25b98d711cfd1c4ca0c0ef97b55474aa71303b88"
-  integrity sha512-cQtl7h45WmRTm9qKD1jExUKt1pFOBe9uRV3DsrcEScTMlM3xBxcab4uBFGVD95kaqvuKnW5R792dqHaRL7Qg3A==
+"@boost/plugin@^2.3.2":
+  version "2.3.2"
+  resolved "https://registry.yarnpkg.com/@boost/plugin/-/plugin-2.3.2.tgz#f91e60e435b2e30cf380081f08319032e3d50579"
+  integrity sha512-/jPYF9Q6MlkdkdMiqXOp/A3DHv6C9CU6v/8y0jjHRsG/B5WWAN2fVysGwzzKrctHedo2f2Eb7qTagMjQqnXBMA==
   dependencies:
-    "@boost/common" "^2.7.0"
-    "@boost/debug" "^2.2.3"
+    "@boost/common" "^2.7.1"
+    "@boost/debug" "^2.2.4"
     "@boost/event" "^2.3.1"
     "@boost/internal" "^2.2.1"
     lodash "^4.17.20"
@@ -1128,12 +1128,12 @@
   dependencies:
     fs-extra "^9.0.1"
 
-"@boost/translate@^2.2.3":
-  version "2.2.3"
-  resolved "https://registry.yarnpkg.com/@boost/translate/-/translate-2.2.3.tgz#747f75ec63e085507d301df104d515d464243d9a"
-  integrity sha512-4fAEWbHjBlF87iE4Q7PvSu9QWfWIln/Z9gxCkHrvgNe3l+VatMyDGu2Tse0neaL7bGjXmBrwqmni/2fnsKL+jQ==
+"@boost/translate@^2.2.3", "@boost/translate@^2.2.4":
+  version "2.2.4"
+  resolved "https://registry.yarnpkg.com/@boost/translate/-/translate-2.2.4.tgz#af00a014eaabf9a051c466cf1bac8208d611d51d"
+  integrity sha512-IlppPNMOwLmaoXQptMmcxvFAnbHBxmWUnKodRr+dVyEH45lVAiqEGL40Gn5Mf0FwCAq8roQQ8/w2MHtVcSHRIA==
   dependencies:
-    "@boost/common" "^2.7.0"
+    "@boost/common" "^2.7.1"
     "@boost/internal" "^2.2.1"
     i18next "^19.8.4"
     os-locale "^5.0.0"
@@ -8397,10 +8397,10 @@ open@^7.0.3:
     is-docker "^2.0.0"
     is-wsl "^2.1.1"
 
-optimal@^4.2.1:
-  version "4.2.1"
-  resolved "https://registry.yarnpkg.com/optimal/-/optimal-4.2.1.tgz#099378c98c6128406bbafa371effda9f5adfde2d"
-  integrity sha512-iczdusOzH5u7axlK5BBMTVZQGr5bzkIaN9rpjYgWNsCLn+dSH8TpsWyVnrvaOj1w1v9CmBNUVNiDYmJYLrbkFw==
+optimal@^4.3.0:
+  version "4.3.0"
+  resolved "https://registry.yarnpkg.com/optimal/-/optimal-4.3.0.tgz#b0c0e646f4c64f35f1f3f57412ec0a3a51a29789"
+  integrity sha512-WzIbrg0hR3rZPspTIhYlTI2pFXo0+vsderjkJ4nuYj3FsHrdY6Q8EBaC5xhAb9vzwofZADLdSLqju+SlfxBD5w==
 
 optionator@^0.8.1:
   version "0.8.3"

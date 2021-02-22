@@ -1,5 +1,5 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`ExecuteCommandRoutine constructor() errors if \`forceConfigOption\` is not a boolean 1`] = `"Invalid ExecuteCommandRoutine field \\"forceConfigOption\\". Must be a boolean."`;
+exports[`ExecuteCommandRoutine constructor() errors if \`forceConfigOption\` is not a boolean 1`] = `"Invalid ExecuteCommandRoutine field \\"forceConfigOption\\". Must be a boolean, received \\"foo\\"."`;
 
-exports[`ExecuteCommandRoutine constructor() errors if \`packageRoot\` is not a string 1`] = `"Invalid ExecuteCommandRoutine field \\"packageRoot\\". Must be a string."`;
+exports[`ExecuteCommandRoutine constructor() errors if \`packageRoot\` is not a string 1`] = `"Invalid ExecuteCommandRoutine field \\"packageRoot\\". Must be a string, received 123."`;

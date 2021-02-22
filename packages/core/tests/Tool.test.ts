@@ -141,7 +141,10 @@ describe('Tool', () => {
             graph: true,
           },
           module: '@beemo/dev',
-          scripts: ['build', 'init'],
+          scripts: {
+            build: true,
+            init: true,
+          },
           settings: {
             customValue: true,
           },

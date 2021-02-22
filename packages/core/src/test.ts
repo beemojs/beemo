@@ -25,11 +25,11 @@ export { mockDebugger };
 const TEST_ROOT = new Path(process.env.BEEMO_TEST_ROOT || process.cwd());
 
 export class TestDriver<O extends object = {}> extends Driver<O> {
-  name = 'test-driver';
+  readonly name = 'test-driver';
 }
 
 export class TestScript<O extends object = {}> extends Script<O> {
-  name = 'test-script';
+  readonly name = 'test-script';
 
   execute(): any {
     return Promise.resolve();
@@ -79,6 +79,7 @@ export function mockDriver<C extends object = {}>(
 ): Driver<C> {
   const driver = new TestDriver<C>();
 
+  // @ts-expect-error For testing purposes
   driver.name = name;
   driver.tool = tool || mockTool();
 
@@ -95,6 +96,7 @@ export function mockDriver<C extends object = {}>(
 export function mockScript(name: string, tool: Tool | null = null): Script<{}> {
   const script = new TestScript<{}>();
 
+  // @ts-expect-error For testing purposes
   script.name = name;
   script.tool = tool || mockTool();
 

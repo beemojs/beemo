@@ -1,20 +1,23 @@
 export default {
   module: '@beemo/local',
-  drivers: {
-    babel: true,
-    eslint: true,
-    jest: true,
-    lerna: true,
-    mocha: true,
-    prettier: true,
-    rollup: true,
-    stylelint: true,
-    typescript: {
-      buildFolder: 'dts',
-      declarationOnly: true,
-    },
-    webpack: true,
-  },
+  drivers: [
+    'babel',
+    'eslint',
+    'jest',
+    'lerna',
+    'mocha',
+    'prettier',
+    'rollup',
+    'stylelint',
+    [
+      'typescript',
+      {
+        buildFolder: 'dts',
+        declarationOnly: true,
+      },
+    ],
+    'webpack',
+  ],
   settings: {
     decorators: true,
     node: true,
