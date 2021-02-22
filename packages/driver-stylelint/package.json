@@ -11,7 +11,8 @@
     "linter"
   ],
   "scripts": {
-    "integration:fail": "stylelint --config ./integration/.stylelintrc.js ./integration/fail.css ./integration/fail-syntax.css && stylelint --invalid-option",
+    "integration:cli": "stylelint --invalid-option",
+    "integration:fail": "stylelint --config ./integration/.stylelintrc.js ./integration/fail.css ./integration/fail-syntax.css",
     "integration:pass": "stylelint --config ./integration/.stylelintrc.js ./integration/pass.css"
   },
   "main": "./lib/index.js",

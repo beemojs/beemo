@@ -14,7 +14,7 @@ class RunIntegrationTestsScript extends Script<RunIntegrationTestsOptions> {
     return {
       options: {
         type: {
-          choices: ['pass', 'fail'] as 'pass'[],
+          choices: ['cli', 'pass', 'fail'] as 'pass'[],
           default: 'pass',
           description: 'Type of integration to run',
           type: 'string',
@@ -30,9 +30,9 @@ class RunIntegrationTestsScript extends Script<RunIntegrationTestsOptions> {
     const script = pkg.scripts?.[`integration:${type}`];
 
     if (!script) {
-      return Promise.reject(
-        new Error(`Script "integration:${type}" has not been defined for ${name}.`),
-      );
+      console.warn(`Script "integration:${type}" has not been defined for ${name}, skipping.`);
+
+      return Promise.resolve();
     }
 
     console.log('Testing %s - %s', chalk.yellow(pkg.name), script);

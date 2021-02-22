@@ -10,6 +10,7 @@
     "bundler"
   ],
   "scripts": {
+    "integration:cli": "rollup ./integration/pass.js --invalid-option",
     "integration:fail": "rollup ./integration/fail.js",
     "integration:pass": "rollup ./integration/pass.js"
   },

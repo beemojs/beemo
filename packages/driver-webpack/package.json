@@ -10,7 +10,8 @@
     "bundler"
   ],
   "scripts": {
-    "integration:fail": "webpack --mode development ./integration/fail.js && webpack --invalid-option",
+    "integration:cli": "webpack --invalid-option",
+    "integration:fail": "webpack --mode development ./integration/fail.js",
     "integration:pass": "webpack --mode development ./integration/pass.js"
   },
   "main": "./lib/index.js",
