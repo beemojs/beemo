@@ -4,7 +4,7 @@ import { Event } from '@boost/event';
 import { ESLintArgs, ESLintConfig } from './types';
 
 // Success: Writes warnings to stdout
-// Failure: Writes to stdout and stderr
+// Failure: Writes failures to stderr
 export default class ESLintDriver extends Driver<ESLintConfig> {
   readonly name = '@beemo/driver-eslint';
 

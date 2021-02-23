@@ -1,5 +1,5 @@
 import rimraf from 'rimraf';
-import { Driver, DriverContext, DriverContextOptions, ExecutionError, Path } from '@beemo/core';
+import { Driver, DriverContext, DriverContextOptions, Path } from '@beemo/core';
 import { BabelArgs, BabelConfig } from './types';
 
 // Success: Writes file list to stdout
@@ -28,9 +28,9 @@ export default class BabelDriver extends Driver<BabelConfig> {
     this.onBeforeExecute.listen(this.handleCleanTarget);
   }
 
-  extractErrorMessage(error: ExecutionError): string {
+  extractErrorMessage(error: { message: string }): string {
     if (error.message.includes('SyntaxError')) {
-      return error.message.split(/|\s+at/u, 1)[0];
+      return error.message.split(/\s+at/u, 1)[0].trim();
     }
 
     return super.extractErrorMessage(error);

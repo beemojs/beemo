@@ -1,8 +1,9 @@
 import { Driver, Execution } from '@beemo/core';
 import { JestConfig } from './types';
 
-// Success: Writes passed tests to stderr (Bug? https://github.com/facebook/jest/issues/5064)
-// Success: Writes coverage to stdout
+// Success:
+//  Writes passed tests to stderr (Bug? https://github.com/facebook/jest/issues/5064)
+//  Writes coverage to stdout
 // Failure: Writes failed tests to stderr
 export default class JestDriver extends Driver<JestConfig> {
   readonly name = '@beemo/driver-jest';
@@ -29,6 +30,7 @@ export default class JestDriver extends Driver<JestConfig> {
   }
 
   // https://github.com/nodejs/node/issues/19218
+  // istanbul ignore next
   getSupportedOptions(): string[] {
     return [
       '--all',

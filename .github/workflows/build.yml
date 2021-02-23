@@ -40,6 +40,7 @@ jobs:
       - run: yarn run type
       - run: yarn run test:int:pass
       - run: yarn run test:int:fail
+      - run: yarn run test:int:cli
   pack:
     name: Pack
     runs-on: ubuntu-latest

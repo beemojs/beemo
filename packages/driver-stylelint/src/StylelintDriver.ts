@@ -3,8 +3,8 @@ import { ConfigContext, Driver, Path } from '@beemo/core';
 import { Event } from '@boost/event';
 import { StylelintArgs, StylelintConfig } from './types';
 
-// Success: Writes warnings to stderr
-// Failure: Writes to stderr
+// Success: Writes warnings to stdout
+// Failure: Writes failures to stdout
 export default class StylelintDriver extends Driver<StylelintConfig> {
   readonly name = '@beemo/driver-stylelint';
 

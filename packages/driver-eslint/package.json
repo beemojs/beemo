@@ -11,7 +11,8 @@
     "linter"
   ],
   "scripts": {
-    "integration:fail": "eslint ./integration/fail.js ./integration/fail-syntax.js && eslint --invalid-option",
+    "integration:cli": "eslint --invalid-option",
+    "integration:fail": "eslint ./integration/fail.js ./integration/fail-syntax.js",
     "integration:pass": "eslint ./integration/pass.js"
   },
   "main": "./lib/index.js",

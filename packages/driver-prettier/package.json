@@ -11,7 +11,8 @@
     "formatter"
   ],
   "scripts": {
-    "integration:fail": "prettier ./integration/fail.js && prettier ./integration/fail.js --invalid-option",
+    "integration:cli": "prettier ./integration/fail.js --invalid-option",
+    "integration:fail": "prettier ./integration/fail.js",
     "integration:pass": "prettier ./integration/pass.js"
   },
   "main": "./lib/index.js",

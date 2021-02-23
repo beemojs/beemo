@@ -11,7 +11,8 @@
     "type"
   ],
   "scripts": {
-    "integration:fail": "flow check --flowconfig-name .flowconfig.fail && flow --invalid-option",
+    "integration:cli": "flow --invalid-option",
+    "integration:fail": "flow check --flowconfig-name .flowconfig.fail",
     "integration:pass": "flow check --flowconfig-name .flowconfig.pass"
   },
   "main": "./lib/index.js",

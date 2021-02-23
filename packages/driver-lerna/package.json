@@ -10,7 +10,7 @@
     "monorepo"
   ],
   "scripts": {
-    "integration:fail": "lerna --invalid-option",
+    "integration:cli": "lerna --invalid-option",
     "integration:pass": "lerna info"
   },
   "main": "./lib/index.js",

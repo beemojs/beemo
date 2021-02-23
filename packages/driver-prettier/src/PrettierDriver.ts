@@ -1,9 +1,9 @@
 import fs from 'fs';
-import { ConfigContext, Driver, ExecutionError, Path } from '@beemo/core';
+import { ConfigContext, Driver, Path } from '@beemo/core';
 import { Event } from '@boost/event';
 import { PrettierArgs, PrettierConfig } from './types';
 
-// Success: Writes file list to stdout
+// Success: Writes formatted files to stdout
 // Failure: Writes to stderr for no files found and syntax errors
 export default class PrettierDriver extends Driver<PrettierConfig> {
   readonly name = '@beemo/driver-prettier';
@@ -21,14 +21,6 @@ export default class PrettierDriver extends Driver<PrettierConfig> {
     });
 
     this.onCreateConfigFile.listen(this.handleCreateIgnoreFile);
-  }
-
-  extractErrorMessage(error: ExecutionError): string {
-    if (error.message.includes('SyntaxError')) {
-      return error.message.split(/|\s+$/u, 1)[0];
-    }
-
-    return super.extractErrorMessage(error);
   }
 
   /**
