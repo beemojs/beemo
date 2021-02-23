@@ -3,6 +3,50 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## 0.2.0-alpha.0 - 2021-02-23
+
+#### 🚀 Updates
+
+- Add `@beemo/driver-lerna` package. (#109) ([162bedc](https://github.com/beemojs/beemo/commit/162bedc)), closes [#109](https://github.com/beemojs/beemo/issues/109)
+- Add `@beemo/driver-rollup` package. (#108) ([7601559](https://github.com/beemojs/beemo/commit/7601559)), closes [#108](https://github.com/beemojs/beemo/issues/108)
+- Add support for local driver config overrides. (#105) ([e4bf0e9](https://github.com/beemojs/beemo/commit/e4bf0e9)), closes [#105](https://github.com/beemojs/beemo/issues/105)
+- Improve Hygen integration. (#107) ([89b2655](https://github.com/beemojs/beemo/commit/89b2655)), closes [#107](https://github.com/beemojs/beemo/issues/107)
+- Support driver configs and scripts as TypeScript files. (#104) ([684a62c](https://github.com/beemojs/beemo/commit/684a62c)), closes [#104](https://github.com/beemojs/beemo/issues/104)
+
+#### 🎨 Styles
+
+- Run prettier. ([682e394](https://github.com/beemojs/beemo/commit/682e394))
+
+#### ⚙️ Types
+
+- Update config and args to inherit from `@babel/core`. ([3eed85d](https://github.com/beemojs/beemo/commit/3eed85d))
+- Update config and args to inherit from `eslint`. ([2a2d33b](https://github.com/beemojs/beemo/commit/2a2d33b))
+
+#### 📦 Dependencies
+
+- **[chalk]** Update to v4. ([a69686f](https://github.com/beemojs/beemo/commit/a69686f))
+- **[execa]** Update to v4. ([77baaae](https://github.com/beemojs/beemo/commit/77baaae))
+- **[fs-extra]** Update to v9. ([829a5fa](https://github.com/beemojs/beemo/commit/829a5fa))
+- **[semver]** Update to v7. ([bf91982](https://github.com/beemojs/beemo/commit/bf91982))
+
+#### 🛠 Internals
+
+- Improve build output based on recent changes. ([850ce7e](https://github.com/beemojs/beemo/commit/850ce7e))
+- Improve CLI performance and fix edge cases. ([c2afb9e](https://github.com/beemojs/beemo/commit/c2afb9e))
+- Increase Boost code coverage. ([e30f13f](https://github.com/beemojs/beemo/commit/e30f13f))
+- Migrate to Packemon for package building. (#102) ([e9d5f89](https://github.com/beemojs/beemo/commit/e9d5f89)), closes [#102](https://github.com/beemojs/beemo/issues/102)
+- Rewrite built-in drivers and scripts. ([19a2cd5](https://github.com/beemojs/beemo/commit/19a2cd5))
+- Run linter and auto-fix. Sort imports/exports. ([b86f69e](https://github.com/beemojs/beemo/commit/b86f69e))
+- Update integration tests. ([115a09e](https://github.com/beemojs/beemo/commit/115a09e))
+- Update tests to new APIs. ([f47067d](https://github.com/beemojs/beemo/commit/f47067d))
+- Verify and improve driver piped output. (#111) ([518a9ae](https://github.com/beemojs/beemo/commit/518a9ae)), closes [#111](https://github.com/beemojs/beemo/issues/111)
+
+**Note:** Version bump only for package @beemo/local
+
+
+
+
+
 ### 0.1.4 - 2020-04-22
 
 #### ⚙️ Types

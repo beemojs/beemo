@@ -3,6 +3,51 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# 2.0.0-alpha.1 - 2021-02-23
+
+#### 💥 Breaking
+
+- Migrate to new `@boost/cli` system. ([9dad217](https://github.com/beemojs/beemo/commit/9dad217))
+- Update Node.js requirement to v10.17. ([6e688c8](https://github.com/beemojs/beemo/commit/6e688c8))
+
+#### 🚀 Updates
+
+- Improve branding experience. (#110) ([2a1ac12](https://github.com/beemojs/beemo/commit/2a1ac12)), closes [#110](https://github.com/beemojs/beemo/issues/110)
+- Support driver configs and scripts as TypeScript files. (#104) ([684a62c](https://github.com/beemojs/beemo/commit/684a62c)), closes [#104](https://github.com/beemojs/beemo/issues/104)
+
+#### 📦 Dependencies
+
+- **[boost]** Update all to v2. ([83cf57b](https://github.com/beemojs/beemo/commit/83cf57b))
+- **[chalk]** Update to v4. ([a69686f](https://github.com/beemojs/beemo/commit/a69686f))
+- **[lerna]** Reinstall for security issues. ([e8e972e](https://github.com/beemojs/beemo/commit/e8e972e))
+- **[semver]** Update to v7. ([bf91982](https://github.com/beemojs/beemo/commit/bf91982))
+- Migrate packages to v2 alpha. ([598a1f1](https://github.com/beemojs/beemo/commit/598a1f1))
+
+#### 📘 Docs
+
+- Rework and expand examples. ([37ca795](https://github.com/beemojs/beemo/commit/37ca795))
+
+#### 🛠 Internals
+
+- Cleanup on CLI failure. ([7a3073b](https://github.com/beemojs/beemo/commit/7a3073b))
+- Improve build output based on recent changes. ([850ce7e](https://github.com/beemojs/beemo/commit/850ce7e))
+- Improve CLI performance and fix edge cases. ([c2afb9e](https://github.com/beemojs/beemo/commit/c2afb9e))
+- Increase Boost code coverage. ([e30f13f](https://github.com/beemojs/beemo/commit/e30f13f))
+- Migrate to Packemon for package building. (#102) ([e9d5f89](https://github.com/beemojs/beemo/commit/e9d5f89)), closes [#102](https://github.com/beemojs/beemo/issues/102)
+- Rewrite create config flow. ([a002a1a](https://github.com/beemojs/beemo/commit/a002a1a))
+- Rewrite run driver flow. ([82d4110](https://github.com/beemojs/beemo/commit/82d4110))
+- Rewrite run script flow. ([05a1fa2](https://github.com/beemojs/beemo/commit/05a1fa2))
+- Rewrite scaffolding flow. ([2522766](https://github.com/beemojs/beemo/commit/2522766))
+- Run linter and auto-fix. Sort imports/exports. ([b86f69e](https://github.com/beemojs/beemo/commit/b86f69e))
+- Update integration tests. ([115a09e](https://github.com/beemojs/beemo/commit/115a09e))
+- Update tests to new APIs. ([f47067d](https://github.com/beemojs/beemo/commit/f47067d))
+
+**Note:** Version bump only for package @beemo/cli
+
+
+
+
+
 ### 1.0.11 - 2020-04-22
 
 #### 🛠 Internals

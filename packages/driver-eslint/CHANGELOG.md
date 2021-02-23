@@ -3,6 +3,49 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# 2.0.0-alpha.1 - 2021-02-23
+
+#### 💥 Breaking
+
+- Drop ESLint support below v7. ([116bed9](https://github.com/beemojs/beemo/commit/116bed9))
+- Migrate to new `@boost/plugin` system. ([4e90dab](https://github.com/beemojs/beemo/commit/4e90dab))
+- Update Node.js requirement to v10.17. ([6e688c8](https://github.com/beemojs/beemo/commit/6e688c8))
+
+#### 🎨 Styles
+
+- Run prettier. ([682e394](https://github.com/beemojs/beemo/commit/682e394))
+
+#### ⚙️ Types
+
+- Update config and args to inherit from `eslint`. ([2a2d33b](https://github.com/beemojs/beemo/commit/2a2d33b))
+
+#### 📦 Dependencies
+
+- **[boost]** Update all to v2. ([83cf57b](https://github.com/beemojs/beemo/commit/83cf57b))
+- Migrate packages to v2 alpha. ([598a1f1](https://github.com/beemojs/beemo/commit/598a1f1))
+
+#### 📘 Docs
+
+- Rework and expand examples. ([37ca795](https://github.com/beemojs/beemo/commit/37ca795))
+
+#### 🛠 Internals
+
+- Improve build output based on recent changes. ([850ce7e](https://github.com/beemojs/beemo/commit/850ce7e))
+- Increase Boost code coverage. ([e30f13f](https://github.com/beemojs/beemo/commit/e30f13f))
+- Migrate to Packemon for package building. (#102) ([e9d5f89](https://github.com/beemojs/beemo/commit/e9d5f89)), closes [#102](https://github.com/beemojs/beemo/issues/102)
+- Rework how driver output is passed around. ([b3bd946](https://github.com/beemojs/beemo/commit/b3bd946))
+- Rewrite built-in drivers and scripts. ([19a2cd5](https://github.com/beemojs/beemo/commit/19a2cd5))
+- Rewrite run driver flow. ([82d4110](https://github.com/beemojs/beemo/commit/82d4110))
+- Run linter and auto-fix. Sort imports/exports. ([b86f69e](https://github.com/beemojs/beemo/commit/b86f69e))
+- Update tests to new APIs. ([f47067d](https://github.com/beemojs/beemo/commit/f47067d))
+- Verify and improve driver piped output. (#111) ([518a9ae](https://github.com/beemojs/beemo/commit/518a9ae)), closes [#111](https://github.com/beemojs/beemo/issues/111)
+
+**Note:** Version bump only for package @beemo/driver-eslint
+
+
+
+
+
 ### 1.2.3 - 2020-05-21
 
 #### 📦 Dependencies

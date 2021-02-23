@@ -3,6 +3,41 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# 2.0.0-alpha.1 - 2021-02-23
+
+#### 💥 Breaking
+
+- Drop Mocha support below v8. ([493a496](https://github.com/beemojs/beemo/commit/493a496))
+- Migrate to new `@boost/plugin` system. ([4e90dab](https://github.com/beemojs/beemo/commit/4e90dab))
+- Update Node.js requirement to v10.17. ([6e688c8](https://github.com/beemojs/beemo/commit/6e688c8))
+
+#### ⚙️ Types
+
+- Update config and args types. ([4378497](https://github.com/beemojs/beemo/commit/4378497))
+
+#### 📦 Dependencies
+
+- **[mocha]** Update to v8. ([59b0a31](https://github.com/beemojs/beemo/commit/59b0a31))
+- Migrate packages to v2 alpha. ([598a1f1](https://github.com/beemojs/beemo/commit/598a1f1))
+
+#### 📘 Docs
+
+- Rework and expand examples. ([37ca795](https://github.com/beemojs/beemo/commit/37ca795))
+
+#### 🛠 Internals
+
+- Migrate to Packemon for package building. (#102) ([e9d5f89](https://github.com/beemojs/beemo/commit/e9d5f89)), closes [#102](https://github.com/beemojs/beemo/issues/102)
+- Rewrite built-in drivers and scripts. ([19a2cd5](https://github.com/beemojs/beemo/commit/19a2cd5))
+- Run linter and auto-fix. Sort imports/exports. ([b86f69e](https://github.com/beemojs/beemo/commit/b86f69e))
+- Update tests to new APIs. ([f47067d](https://github.com/beemojs/beemo/commit/f47067d))
+- Verify and improve driver piped output. (#111) ([518a9ae](https://github.com/beemojs/beemo/commit/518a9ae)), closes [#111](https://github.com/beemojs/beemo/issues/111)
+
+**Note:** Version bump only for package @beemo/driver-mocha
+
+
+
+
+
 ### 1.3.4 - 2020-05-21
 
 #### 📦 Dependencies

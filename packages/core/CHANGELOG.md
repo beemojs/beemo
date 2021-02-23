@@ -3,6 +3,74 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# 2.0.0-alpha.1 - 2021-02-23
+
+#### 💥 Breaking
+
+- Deprecate @beemo/dependency-graph package. ([c2d7c37](https://github.com/beemojs/beemo/commit/c2d7c37))
+- Integrate new `@boost/config` system. Move config file and change plugin settings. ([0ace673](https://github.com/beemojs/beemo/commit/0ace673))
+- Migrate to new `@boost/cli` system. ([9dad217](https://github.com/beemojs/beemo/commit/9dad217))
+- Migrate to new `@boost/debug` system. ([42a3fa4](https://github.com/beemojs/beemo/commit/42a3fa4))
+- Migrate to new `@boost/plugin` system. ([4e90dab](https://github.com/beemojs/beemo/commit/4e90dab))
+- Migrate to new `@boost/translate` system. ([fb9fb59](https://github.com/beemojs/beemo/commit/fb9fb59))
+- Update Node.js requirement to v10.17. ([6e688c8](https://github.com/beemojs/beemo/commit/6e688c8))
+
+#### 🚀 Updates
+
+- Add `@beemo/driver-lerna` package. (#109) ([162bedc](https://github.com/beemojs/beemo/commit/162bedc)), closes [#109](https://github.com/beemojs/beemo/issues/109)
+- Add `@beemo/driver-rollup` package. (#108) ([7601559](https://github.com/beemojs/beemo/commit/7601559)), closes [#108](https://github.com/beemojs/beemo/issues/108)
+- Add `@beemo/driver-stylelint` package. (#103) ([be62dbc](https://github.com/beemojs/beemo/commit/be62dbc)), closes [#103](https://github.com/beemojs/beemo/issues/103)
+- Add support for local driver config overrides. (#105) ([e4bf0e9](https://github.com/beemojs/beemo/commit/e4bf0e9)), closes [#105](https://github.com/beemojs/beemo/issues/105)
+- Improve branding experience. (#110) ([2a1ac12](https://github.com/beemojs/beemo/commit/2a1ac12)), closes [#110](https://github.com/beemojs/beemo/issues/110)
+- Improve Hygen integration. (#107) ([89b2655](https://github.com/beemojs/beemo/commit/89b2655)), closes [#107](https://github.com/beemojs/beemo/issues/107)
+- Support driver configs and scripts as TypeScript files. (#104) ([684a62c](https://github.com/beemojs/beemo/commit/684a62c)), closes [#104](https://github.com/beemojs/beemo/issues/104)
+- Support tuples for plugin configurations. ([79d1c04](https://github.com/beemojs/beemo/commit/79d1c04))
+
+#### 🎨 Styles
+
+- Run prettier. ([682e394](https://github.com/beemojs/beemo/commit/682e394))
+
+#### 📦 Dependencies
+
+- **[boost]** Update all to v2. ([83cf57b](https://github.com/beemojs/beemo/commit/83cf57b))
+- **[chalk]** Update to v4. ([a69686f](https://github.com/beemojs/beemo/commit/a69686f))
+- **[execa]** Update to v4. ([77baaae](https://github.com/beemojs/beemo/commit/77baaae))
+- **[fs-extra]** Update to v9. ([829a5fa](https://github.com/beemojs/beemo/commit/829a5fa))
+- **[hygen]** Update to v6. ([1a31d39](https://github.com/beemojs/beemo/commit/1a31d39))
+- Migrate packages to v2 alpha. ([598a1f1](https://github.com/beemojs/beemo/commit/598a1f1))
+
+#### 📘 Docs
+
+- Rework and expand examples. ([37ca795](https://github.com/beemojs/beemo/commit/37ca795))
+- Update NodeJS version in readmes. ([edd09d9](https://github.com/beemojs/beemo/commit/edd09d9))
+
+#### 🛠 Internals
+
+- Cleanup on CLI failure. ([7a3073b](https://github.com/beemojs/beemo/commit/7a3073b))
+- Improve build output based on recent changes. ([850ce7e](https://github.com/beemojs/beemo/commit/850ce7e))
+- Improve CLI performance and fix edge cases. ([c2afb9e](https://github.com/beemojs/beemo/commit/c2afb9e))
+- Increase Boost code coverage. ([e30f13f](https://github.com/beemojs/beemo/commit/e30f13f))
+- Migrate to Packemon for package building. (#102) ([e9d5f89](https://github.com/beemojs/beemo/commit/e9d5f89)), closes [#102](https://github.com/beemojs/beemo/issues/102)
+- Rework how driver output is passed around. ([b3bd946](https://github.com/beemojs/beemo/commit/b3bd946))
+- Rewrite built-in drivers and scripts. ([19a2cd5](https://github.com/beemojs/beemo/commit/19a2cd5))
+- Rewrite create config flow. ([a002a1a](https://github.com/beemojs/beemo/commit/a002a1a))
+- Rewrite run driver flow. ([82d4110](https://github.com/beemojs/beemo/commit/82d4110))
+- Rewrite run script flow. ([05a1fa2](https://github.com/beemojs/beemo/commit/05a1fa2))
+- Rewrite scaffolding flow. ([2522766](https://github.com/beemojs/beemo/commit/2522766))
+- Run linter and auto-fix. Sort imports/exports. ([b86f69e](https://github.com/beemojs/beemo/commit/b86f69e))
+- Update developer tooling. ([32665ae](https://github.com/beemojs/beemo/commit/32665ae))
+- Update integration tests. ([115a09e](https://github.com/beemojs/beemo/commit/115a09e))
+- Update tests to new APIs. ([f47067d](https://github.com/beemojs/beemo/commit/f47067d))
+- Update workflows. Test against Node 14. ([3c2839c](https://github.com/beemojs/beemo/commit/3c2839c))
+- Use Boost utilities for debug message styling. ([33067d6](https://github.com/beemojs/beemo/commit/33067d6))
+- Verify and improve driver piped output. (#111) ([518a9ae](https://github.com/beemojs/beemo/commit/518a9ae)), closes [#111](https://github.com/beemojs/beemo/issues/111)
+
+**Note:** Version bump only for package @beemo/core
+
+
+
+
+
 ### 1.1.8 - 2020-05-21
 
 #### 📦 Dependencies
