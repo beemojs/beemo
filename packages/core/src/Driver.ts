@@ -24,7 +24,6 @@ import {
   DriverOutput,
   DriverStrategy,
   Execution,
-  ExecutionError,
 } from './types';
 
 export default abstract class Driver<
@@ -115,7 +114,7 @@ export default abstract class Driver<
   /**
    * Extract the error message when the driver fails to execute.
    */
-  extractErrorMessage(error: ExecutionError): string {
+  extractErrorMessage(error: { message: string }): string {
     return error.message.split('\n', 1)[0] || '';
   }
 
@@ -189,7 +188,7 @@ export default abstract class Driver<
    * Handle command failures according to this driver.
    */
   processFailure(error: Execution) {
-    const { stderr, stdout } = error;
+    const { stderr = '', stdout = '' } = error;
     const out = (stderr || stdout).trim();
 
     if (out) {
@@ -201,16 +200,10 @@ export default abstract class Driver<
    * Handle successful commands according to this driver.
    */
   processSuccess(response: Execution) {
-    const err = response.stderr.trim();
-    const out = response.stdout.trim();
+    const { stderr = '', stdout = '' } = response;
 
-    if (err) {
-      this.setOutput('stderr', err);
-    }
-
-    if (out) {
-      this.setOutput('stdout', out);
-    }
+    this.setOutput('stderr', stderr.trim());
+    this.setOutput('stdout', stdout.trim());
   }
 
   /**

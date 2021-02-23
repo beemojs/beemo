@@ -48,6 +48,18 @@ describe('BabelDriver', () => {
     );
   });
 
+  describe('extractErrorMessage()', () => {
+    it('removes stack trace at the end', () => {
+      expect(
+        driver.extractErrorMessage({
+          message: `SyntaxError: /Users/milesj/Projects/beemo/packages/driver-babel/integration/fail.js: Support for the experimental syntax 'classPrivateProperties' isn't currently enabled (3:3):\n\n  1 | // Proposal requires plugin\n  2 | class Foo {\n> 3 |   #id = 123;\n    |   ^\n  4 | }\n  5 |\n\nAdd @babel/plugin-proposal-class-properties (https://git.io/vb4SL) to the 'plugins' section of your Babel config to enable transformation.\nIf you want to leave it as-is, add @babel/plugin-syntax-class-properties (https://git.io/vb4yQ) to the 'plugins' section to enable parsing.\n    at Parser._raise`,
+        }),
+      ).toBe(
+        `SyntaxError: /Users/milesj/Projects/beemo/packages/driver-babel/integration/fail.js: Support for the experimental syntax 'classPrivateProperties' isn't currently enabled (3:3):\n\n  1 | // Proposal requires plugin\n  2 | class Foo {\n> 3 |   #id = 123;\n    |   ^\n  4 | }\n  5 |\n\nAdd @babel/plugin-proposal-class-properties (https://git.io/vb4SL) to the 'plugins' section of your Babel config to enable transformation.\nIf you want to leave it as-is, add @babel/plugin-syntax-class-properties (https://git.io/vb4yQ) to the 'plugins' section to enable parsing.`,
+      );
+    });
+  });
+
   describe('handleCleanTarget()', () => {
     it('doesnt run if no clean param', () => {
       context.args.unknown.outDir = './lib';

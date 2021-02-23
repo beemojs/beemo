@@ -369,7 +369,6 @@ export default class ExecuteCommandRoutine extends Routine<
       await driver.onFailedExecute.emit([context, result]);
 
       // Throw a new formatted error with the old stack trace
-
       // https://nodejs.org/api/child_process.html#child_process_event_exit
       const newError =
         result.exitCode === null && result.signal === 'SIGKILL'

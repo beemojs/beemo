@@ -148,24 +148,14 @@ describe('Driver', () => {
       expect(driver.output.stdout).toBe('out');
     });
 
-    it('doesnt log stdout if empty', () => {
+    it('logs stderr', () => {
       driver.processSuccess(
         stubExecResult({
-          stdout: '',
+          stderr: 'err',
         }),
       );
 
-      expect(driver.output.stdout).toBe('');
-    });
-
-    it('doesnt log stderr', () => {
-      driver.processSuccess(
-        stubExecResult({
-          stderr: 'error',
-        }),
-      );
-
-      expect(driver.output.stderr).toBe('');
+      expect(driver.output.stderr).toBe('err');
     });
   });
 

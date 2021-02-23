@@ -1,10 +1,11 @@
-import { Driver, Execution, ExecutionError, STRATEGY_REFERENCE } from '@beemo/core';
+import { Driver, STRATEGY_REFERENCE } from '@beemo/core';
 import { RollupConfig } from './types';
 
 // Success:
-//    Writes bundle contents to stdout if no `-o/--file`
-//    Writes input -> output file list to stderr
+//  Writes bundle contents to stdout if no `-o/--file`
+//  Writes input -> output file list to stderr
 // Failure:
+//  Writes input -> output file list to stderr with syntax/error
 export default class RollupDriver extends Driver<RollupConfig> {
   readonly name = '@beemo/driver-rollup';
 
@@ -17,24 +18,5 @@ export default class RollupDriver extends Driver<RollupConfig> {
       title: 'Rollup',
       watchOptions: ['-w', '--watch'],
     });
-  }
-
-  extractErrorMessage(error: ExecutionError): string {
-    if (error.message.indexOf('|') > 0) {
-      return error.message.split(/|\s+at$/u, 1)[0];
-    }
-
-    return super.extractErrorMessage(error);
-  }
-
-  processSuccess(response: Execution) {
-    const out = response.stdout.trim();
-    const err = response.stderr.trim();
-
-    if (response.command?.includes('--coverage')) {
-      this.setOutput('stdout', `${err}\n${out}`);
-    } else if (err) {
-      this.setOutput('stdout', err);
-    }
   }
 }
