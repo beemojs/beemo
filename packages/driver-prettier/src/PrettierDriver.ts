@@ -3,7 +3,7 @@ import { ConfigContext, Driver, ExecutionError, Path } from '@beemo/core';
 import { Event } from '@boost/event';
 import { PrettierArgs, PrettierConfig } from './types';
 
-// Success: Writes file list to stdout
+// Success: Writes formatted files to stdout
 // Failure: Writes to stderr for no files found and syntax errors
 export default class PrettierDriver extends Driver<PrettierConfig> {
   readonly name = '@beemo/driver-prettier';

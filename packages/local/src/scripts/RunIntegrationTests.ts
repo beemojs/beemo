@@ -1,7 +1,14 @@
 import chalk from 'chalk';
 import execa from 'execa';
 import fs from 'fs-extra';
-import { Arguments, PackageStructure, ParserOptions, Script, ScriptContext } from '@beemo/core';
+import {
+  Arguments,
+  PackageStructure,
+  ParserOptions,
+  Path,
+  Script,
+  ScriptContext,
+} from '@beemo/core';
 
 export interface RunIntegrationTestsOptions {
   type: 'fail' | 'pass';
@@ -38,29 +45,38 @@ class RunIntegrationTestsScript extends Script<RunIntegrationTestsOptions> {
     console.log('Testing %s - %s', chalk.yellow(pkg.name), script);
 
     return Promise.all(
-      script.split('&&').map((command) => {
+      script.split('&&').map((command, index) => {
         const [cmd, ...cmdArgs] = command.trim().split(' ');
 
         return (
           execa(cmd, cmdArgs, { cwd: context.cwd.path(), preferLocal: true })
             // Handles everything else
-            .then((response) => this.handleResult(name, type, response))
+            .then((response) => this.handleResult(name, type, response, index))
             // Handles syntax errors
-            .catch((error) => this.handleResult(name, type, error))
+            .catch((error) => this.handleResult(name, type, error, index))
         );
       }),
     );
   }
 
-  handleResult(
+  async handleResult(
     name: string,
     type: RunIntegrationTestsOptions['type'],
     response: execa.ExecaReturnValue,
+    index: number,
   ) {
     const output = response.stdout || response.stderr;
 
-    // console.log(name.toUpperCase());
-    // console.log(response);
+    if (!process.env.CI) {
+      const reportPath = new Path(process.cwd()).append('reports', name);
+
+      await fs.ensureDir(reportPath.path());
+
+      await fs.writeFile(
+        reportPath.append(`${type}.${index + 1}.json`).path(),
+        JSON.stringify(response, null, 2),
+      );
+    }
 
     if (type === 'fail' && !response.failed) {
       throw new Error(`${name} should of failed when running --type=fail.\n\n${output}`);

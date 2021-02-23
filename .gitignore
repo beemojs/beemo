@@ -17,6 +17,7 @@ esm/
 lib/
 node_modules/
 dist/
+reports/
 
 # Custom
 *.min.js

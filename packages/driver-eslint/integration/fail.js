@@ -1,3 +1,3 @@
-/* eslint-enable no-unused-vars */
+/* eslint no-unused-vars: 2, camelcase: 1 */
 
-function foo() {}
+function foo_bar() {}

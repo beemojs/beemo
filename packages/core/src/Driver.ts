@@ -201,7 +201,12 @@ export default abstract class Driver<
    * Handle successful commands according to this driver.
    */
   processSuccess(response: Execution) {
+    const err = response.stderr.trim();
     const out = response.stdout.trim();
+
+    if (err) {
+      this.setOutput('stderr', err);
+    }
 
     if (out) {
       this.setOutput('stdout', out);

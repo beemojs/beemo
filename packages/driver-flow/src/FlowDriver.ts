@@ -1,7 +1,7 @@
 import { Driver, Execution } from '@beemo/core';
 import { FlowConfig, LintsConfig, OptionsConfig } from './types';
 
-// Success: Writes no errors message to stdout and server output to stderr
+// Success: Writes "Found 0 errors" to stdout and server output to stderr
 // Failure: Writes file list to stdout and server output to stderr
 export default class FlowDriver extends Driver<FlowConfig> {
   readonly name = '@beemo/driver-flow';

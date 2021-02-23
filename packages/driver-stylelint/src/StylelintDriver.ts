@@ -4,7 +4,7 @@ import { Event } from '@boost/event';
 import { StylelintArgs, StylelintConfig } from './types';
 
 // Success: Writes warnings to stderr
-// Failure: Writes to stderr
+// Failure: Writes errors to stderr
 export default class StylelintDriver extends Driver<StylelintConfig> {
   readonly name = '@beemo/driver-stylelint';
 
