@@ -1,4 +1,3 @@
-import { Tool } from '@beemo/core';
 import { mockDriver, mockTool, stubExecResult } from '@beemo/core/test';
 import JestDriver from '../src/JestDriver';
 
