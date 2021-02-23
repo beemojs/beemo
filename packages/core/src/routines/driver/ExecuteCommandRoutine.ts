@@ -364,23 +364,23 @@ export default class ExecuteCommandRoutine extends Routine<
 
       if (result.name !== 'MaxBufferError') {
         driver.processFailure(result);
+
+        // TODO: Remove this temporary output once the CLI is finished
+        if (driver.output.stdout) {
+          console.log(driver.output.stdout);
+        }
+
+        if (driver.output.stderr) {
+          console.error(driver.output.stderr);
+        }
       }
 
       await driver.onFailedExecute.emit([context, result]);
 
-      // Throw a new formatted error with the old stack trace
       // https://nodejs.org/api/child_process.html#child_process_event_exit
-      const newError =
-        result.exitCode === null && result.signal === 'SIGKILL'
-          ? new ExitError('Out of memory!', 1)
-          : new ExitError((driver.extractErrorMessage(result) || '').trim(), error.exitCode);
-
-      if (error.stack) {
-        // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-        newError.stack = error.stack;
-      }
-
-      throw newError;
+      throw result.exitCode === null && result.signal === 'SIGKILL'
+        ? new ExitError('Out of memory!', 1)
+        : new ExitError((driver.extractErrorMessage(result) || '').trim(), error.exitCode);
     }
   }
 }

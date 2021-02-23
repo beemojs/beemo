@@ -49,6 +49,10 @@ describe('BabelDriver', () => {
   });
 
   describe('extractErrorMessage()', () => {
+    it('returns an errors message', () => {
+      expect(driver.extractErrorMessage(new Error('Oops'))).toBe('Oops');
+    });
+
     it('removes stack trace at the end', () => {
       expect(
         driver.extractErrorMessage({

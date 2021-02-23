@@ -120,7 +120,7 @@ export default abstract class RunInWorkspacesRoutine<
 
     message += '\n';
 
-    const error = new Error(message);
+    const error = new Error(message.trim());
 
     // Inherit stack for easier debugging.
     if (errors.length === 1) {

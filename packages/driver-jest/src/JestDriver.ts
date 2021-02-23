@@ -30,6 +30,7 @@ export default class JestDriver extends Driver<JestConfig> {
   }
 
   // https://github.com/nodejs/node/issues/19218
+  // istanbul ignore next
   getSupportedOptions(): string[] {
     return [
       '--all',

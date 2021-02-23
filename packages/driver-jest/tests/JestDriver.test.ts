@@ -1,4 +1,5 @@
-import { mockTool, stubExecResult } from '@beemo/core/test';
+import { Tool } from '@beemo/core';
+import { mockDriver, mockTool, stubExecResult } from '@beemo/core/test';
 import JestDriver from '../src/JestDriver';
 
 describe('JestDriver', () => {
@@ -40,6 +41,26 @@ describe('JestDriver', () => {
         watchOptions: ['--watch', '--watchAll'],
       }),
     );
+  });
+
+  describe('getDependencies()', () => {
+    it('returns empty array by default', () => {
+      expect(driver.getDependencies()).toEqual([]);
+    });
+
+    it('returns deps from config', () => {
+      driver.configure({
+        dependencies: ['typescript'],
+      });
+
+      expect(driver.getDependencies()).toEqual(['typescript']);
+    });
+
+    it('automatically includes babel if driver is loaded', async () => {
+      await driver.tool.driverRegistry.register('babel', mockDriver('babel'));
+
+      expect(driver.getDependencies()).toEqual(['babel']);
+    });
   });
 
   describe('processSuccess()', () => {
