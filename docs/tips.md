@@ -112,7 +112,7 @@ module.exports = {
 };
 ```
 
-These settings can then be access through the [tool instance](./tool.md).
+These settings can then be accessed through the [tool instance](./tool.md).
 
 ```js
 tool.config.settings.coolRight; // boolean
