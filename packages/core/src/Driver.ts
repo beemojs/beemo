@@ -91,6 +91,7 @@ export default abstract class Driver<
         STRATEGY_COPY,
         STRATEGY_NONE,
       ]),
+      template: string(),
     };
   }
 
