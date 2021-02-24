@@ -3,6 +3,18 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+### 2.0.0-alpha.2 - 2021-02-24
+
+#### 📦 Dependencies
+
+- Add missing [@types](https://github.com/types) package. ([8d4bdda](https://github.com/beemojs/beemo/commit/8d4bdda))
+
+**Note:** Version bump only for package @beemo/driver-eslint
+
+
+
+
+
 # 2.0.0-alpha.1 - 2021-02-23
 
 #### 💥 Breaking
