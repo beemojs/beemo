@@ -10,11 +10,11 @@ can be registered.
 
 ```ts
 // src/index.ts -> lib/index.js
-import Beemo from '@beemo/core';
+import {Tool} from '@beemo/core';
 
-export default function (beemo: Beemo) {
+export default function (tool: Tool) {
   // Add command line args to every execution
-  beemo.driverRegistry.get('eslint').onBeforeExecute.listen((context) => {
+  tool.driverRegistry.get('eslint').onBeforeExecute.listen((context) => {
     context.argv.push('--color', '--report-unused-disable-directives');
   });
 }
