@@ -74,7 +74,7 @@ describe('BabelDriver', () => {
     });
 
     it('doesnt run if no outDir param', () => {
-      context.args.unknown.clean = 'true';
+      context.args.unknown.clean = '';
 
       driver.onBeforeExecute.emit([context, []]);
 
@@ -83,7 +83,7 @@ describe('BabelDriver', () => {
 
     it('runs if both params', () => {
       context.args.unknown.outDir = './lib';
-      context.args.unknown.clean = 'true';
+      context.args.unknown.clean = '';
 
       driver.onBeforeExecute.emit([context, []]);
 

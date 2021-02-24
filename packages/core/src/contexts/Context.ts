@@ -144,16 +144,31 @@ export default class Context<
   /**
    * Return a configured option value by name, or a fallback value if not found.
    */
-  getOption<K extends keyof O>(name: K, fallback?: O[K]): O[K] | null {
-    return this.args.options[name] || fallback || null;
+  getOption<K extends keyof O>(name: K): O[K] | null {
+    return this.args.options[name] ?? null;
   }
 
   /**
    * Return either a configured option value, or an unknown option value,
    * or null if not found.
    */
-  getRiskyOption(name: string): PrimitiveType | null {
+  getRiskyOption(name: string, raw: boolean = false): PrimitiveType | null {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    return (this.getOption(name as keyof O) ?? this.args.unknown[name] ?? null) as any;
+    let opt: any = this.getOption(name as keyof O);
+
+    if (opt !== null) {
+      return opt;
+    }
+
+    opt = this.args.unknown[name];
+
+    // Unknown options without a value (`--foo`) are set with an empty string.
+    // Technically the option exists and is truthy, but to avoid falsy checks,
+    // let's convert an empty string to true since it's equivalent to a flag.
+    if ((opt === '' || opt === 'true') && !raw) {
+      opt = true;
+    }
+
+    return opt ?? null;
   }
 }

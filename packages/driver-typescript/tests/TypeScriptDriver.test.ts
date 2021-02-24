@@ -493,7 +493,7 @@ describe('TypeScriptDriver', () => {
     });
 
     it('doesnt run if no outDir param', () => {
-      context.args.unknown.clean = 'true';
+      context.args.unknown.clean = '';
       driver.config.compilerOptions = {};
       // @ts-expect-error Allow private access
       driver.handleCleanTarget(context);
@@ -502,7 +502,7 @@ describe('TypeScriptDriver', () => {
     });
 
     it('runs if both params', () => {
-      context.args.unknown.clean = 'true';
+      context.args.unknown.clean = '';
       driver.config.compilerOptions = { outDir: './lib' };
       // @ts-expect-error Allow private access
       driver.handleCleanTarget(context);
@@ -526,7 +526,7 @@ describe('TypeScriptDriver', () => {
     });
 
     it('prepares configs if --reference-workspaces is passed', () => {
-      context.args.options.referenceWorkspaces = true;
+      context.args.unknown.referenceWorkspaces = '';
       context.workspaceRoot = PROJECT_REFS_FIXTURE_PATH;
 
       // @ts-expect-error Allow private access
@@ -559,8 +559,8 @@ describe('TypeScriptDriver', () => {
     });
 
     it('errors if --reference-workspaces and --workspaces are passed', () => {
-      context.args.unknown.build = 'true';
-      context.args.options.referenceWorkspaces = true;
+      context.args.unknown.build = '';
+      context.args.unknown.referenceWorkspaces = '';
       context.args.options.workspaces = '*';
 
       expect(() => {
@@ -570,7 +570,7 @@ describe('TypeScriptDriver', () => {
     });
 
     it('errors if --build isnt passed with --reference-workspaces', () => {
-      context.args.options.referenceWorkspaces = true;
+      context.args.unknown.referenceWorkspaces = '';
 
       expect(() => {
         // @ts-expect-error Allow private access
@@ -579,8 +579,8 @@ describe('TypeScriptDriver', () => {
     });
 
     it('creates configs if --reference-workspaces is passed', () => {
-      context.args.unknown.build = 'true';
-      context.args.options.referenceWorkspaces = true;
+      context.args.unknown.build = '';
+      context.args.unknown.referenceWorkspaces = '';
       context.workspaceRoot = PROJECT_REFS_FIXTURE_PATH;
 
       // @ts-expect-error Allow private access
@@ -590,8 +590,8 @@ describe('TypeScriptDriver', () => {
     });
 
     it('works with -b flag', () => {
-      context.args.unknown.b = 'true';
-      context.args.options.referenceWorkspaces = true;
+      context.args.unknown.b = '';
+      context.args.unknown.referenceWorkspaces = '';
       context.workspaceRoot = PROJECT_REFS_FIXTURE_PATH;
 
       // @ts-expect-error Allow private access

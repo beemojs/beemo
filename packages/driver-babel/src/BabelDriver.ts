@@ -40,9 +40,9 @@ export default class BabelDriver extends Driver<BabelConfig> {
    * Automatically clean the target folder if --out-dir is used.
    */
   private handleCleanTarget = (context: DriverContext<BabelArgs & DriverContextOptions>) => {
-    const outDir = context.getRiskyOption('outDir');
+    const outDir = context.getRiskyOption('outDir', true);
 
-    if (context.getRiskyOption('clean') !== null && typeof outDir === 'string' && outDir) {
+    if (context.getRiskyOption('clean') && typeof outDir === 'string' && outDir) {
       rimraf.sync(Path.resolve(outDir).path());
     }
 
