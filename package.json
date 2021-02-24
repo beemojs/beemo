@@ -25,6 +25,7 @@
     "task:args": "ts-node packages/local/src/bins/extractOptionList.ts"
   },
   "devDependencies": {
+    "@types/eslint": "^7.2.6",
     "@types/fs-extra": "^9.0.7",
     "@types/is-glob": "^4.0.1",
     "@types/lodash": "^4.14.168",
