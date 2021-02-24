@@ -17,6 +17,12 @@ export interface BeemoProcess<C extends Context = Context> {
 
 export type UnknownSettings = Record<string, unknown>;
 
+export interface BootstrapFile {
+  bootstrap?: (tool: BeemoTool) => Promise<void> | void;
+  default?: (tool: BeemoTool) => Promise<void> | void;
+  (tool: BeemoTool): Promise<void> | void;
+}
+
 export interface ConfigFile<T extends object = UnknownSettings> {
   configure: {
     cleanup: boolean;

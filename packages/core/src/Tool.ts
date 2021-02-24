@@ -33,7 +33,7 @@ import RunDriverRoutine from './routines/RunDriverRoutine';
 import RunScriptRoutine from './routines/RunScriptRoutine';
 import ScaffoldRoutine from './routines/ScaffoldRoutine';
 import Script from './Script';
-import { Argv, ConfigFile } from './types';
+import { Argv, BootstrapFile, ConfigFile } from './types';
 
 export interface ToolOptions {
   argv: Argv;
@@ -139,16 +139,17 @@ export default class Tool extends Contract<ToolOptions> {
     this.debug('Bootstrapping configuration module');
 
     const { module } = this.config;
-    let bootstrap: Function | null = null;
+    let bootstrapModule: BootstrapFile | null = null;
 
     try {
-      bootstrap = requireModule(module === '@local' ? this.getConfigModuleRoot() : module);
+      bootstrapModule = requireModule(module === '@local' ? this.getConfigModuleRoot() : module);
     } catch {
       this.debug('No entry point file detected, aborting bootstrap');
 
       return this;
     }
 
+    const bootstrap = bootstrapModule?.bootstrap || bootstrapModule?.default || bootstrapModule;
     const isFunction = typeof bootstrap === 'function';
 
     this.debug.invariant(isFunction, 'Executing bootstrap function', 'Found', 'Not found');
