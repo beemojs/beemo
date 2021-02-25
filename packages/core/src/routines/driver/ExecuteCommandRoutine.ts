@@ -44,11 +44,15 @@ export default class ExecuteCommandRoutine extends Routine<
   execute(context: DriverContext) {
     const { tool } = this.options;
     const { forceConfigOption, packageRoot } = this.options;
-    const { metadata } = context.primaryDriver;
+    const { metadata, options } = context.primaryDriver;
 
     let pipeline = new WaterfallPipeline(context)
-      .pipe(tool.msg('app:driverExecuteGatherArgs'), this.gatherArgs)
-      .pipe(tool.msg('app:driverExecuteExpandGlob'), this.expandGlobPatterns);
+      .pipe(tool.msg('app:driverExecuteGatherArgs'), this.gatherArgs);
+
+
+    if (options.expandGlobs) {
+      pipeline = pipeline.pipe(tool.msg('app:driverExecuteExpandGlob'), this.expandGlobPatterns);
+    }
 
     if (metadata.filterOptions) {
       pipeline = pipeline.pipe(

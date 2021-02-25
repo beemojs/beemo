@@ -55,6 +55,7 @@ export interface DriverOptions {
   args?: string[];
   dependencies?: string[];
   env?: Record<string, string>;
+  expandGlobs?: boolean;
   strategy?: DriverStrategy;
 }
 
