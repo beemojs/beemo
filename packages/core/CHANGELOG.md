@@ -3,6 +3,18 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+### 2.0.0-alpha.3 - 2021-02-25
+
+#### 🐞 Fixes
+
+- Rebuild for prerelease. ([f73ee76](https://github.com/beemojs/beemo/commit/f73ee76))
+
+**Note:** Version bump only for package @beemo/core
+
+
+
+
+
 ## 2.0.0-alpha.2 - 2021-02-24
 
 #### 🚀 Updates

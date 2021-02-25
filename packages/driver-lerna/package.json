@@ -1,6 +1,6 @@
 {
   "name": "@beemo/driver-lerna",
-  "version": "2.0.0-alpha.1",
+  "version": "2.0.0-alpha.2",
   "release": "1614239076609",
   "description": "Lerna driver for Beemo.",
   "keywords": [
