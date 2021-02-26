@@ -82,6 +82,8 @@ Options can also be set through the [bootstrap and event system](./events.md).
 - `dependencies` (`string[]`) - Other drivers that are required for this driver to run.
 - `env` (`object`) - Environment variables to pass when executing the driver binary with
   [execa](https://github.com/sindresorhus/execa).
+- `expandGlobs` (`boolean`) - Controls whether or not glob patterns in args are automatically
+  expanded before being passed to the driver binary. Defaults to `true`.
 - `strategy` (`create | copy | reference | native | none`) - Type of
   [strategy](./driver.md#config-strategies) to use when generating a config file. Default is
   different per driver.

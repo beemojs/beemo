@@ -46,9 +46,10 @@ export default class ExecuteCommandRoutine extends Routine<
     const { forceConfigOption, packageRoot } = this.options;
     const { metadata, options } = context.primaryDriver;
 
-    let pipeline = new WaterfallPipeline(context)
-      .pipe(tool.msg('app:driverExecuteGatherArgs'), this.gatherArgs);
-
+    let pipeline = new WaterfallPipeline(context).pipe(
+      tool.msg('app:driverExecuteGatherArgs'),
+      this.gatherArgs,
+    );
 
     if (options.expandGlobs) {
       pipeline = pipeline.pipe(tool.msg('app:driverExecuteExpandGlob'), this.expandGlobPatterns);

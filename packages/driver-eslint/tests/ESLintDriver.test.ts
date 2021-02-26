@@ -33,6 +33,7 @@ describe('ESLintDriver', () => {
       args: ['--foo', '--bar=1'],
       dependencies: ['babel'],
       env: { DEV: 'true' },
+      expandGlobs: true,
       strategy: 'native',
     });
   });

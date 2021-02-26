@@ -340,6 +340,16 @@ describe('ExecuteCommandRoutine', () => {
 
       expect(copySpy).not.toHaveBeenCalled();
     });
+
+    it('doesnt call `expandGlobPatterns` when expandGlobs is `false`', async () => {
+      driver.configure({ expandGlobs: false });
+
+      const expandGlobsSpy = jest.spyOn(routine, 'expandGlobPatterns');
+
+      await routine.execute(context);
+
+      expect(expandGlobsSpy).not.toHaveBeenCalled();
+    });
   });
 
   describe('copyConfigToWorkspacePackage()', () => {

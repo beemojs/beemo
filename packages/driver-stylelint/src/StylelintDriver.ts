@@ -1,5 +1,5 @@
 import fs from 'fs';
-import { Blueprint, ConfigContext, Driver, DriverOptions, Path, Predicates } from '@beemo/core';
+import { ConfigContext, Driver, Path } from '@beemo/core';
 import { Event } from '@boost/event';
 import { StylelintArgs, StylelintConfig } from './types';
 
@@ -11,13 +11,6 @@ export default class StylelintDriver extends Driver<StylelintConfig> {
   readonly onCreateIgnoreFile = new Event<[ConfigContext, Path, { ignore: string[] }]>(
     'create-ignore-file',
   );
-
-  blueprint(preds: Predicates): Blueprint<DriverOptions> {
-    return {
-      ...super.blueprint(preds),
-      expandGlobs: preds.bool(false),
-    };
-  }
 
   bootstrap() {
     this.setMetadata({
