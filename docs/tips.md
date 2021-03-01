@@ -77,9 +77,8 @@ yarn beemo eslint "./packages/*/{src,tests}"
 > This approach has an additional benefit of not cluttering `stdout`.
 
 In some cases, a glob pattern can match too many files, and exceed the maximum size for arguments
-passed to a command. To work around this by setting `expandGlobs` to `false` in the Driver options.
-For this to work correctly, the underlying tool must correctly handle the glob patterns you passing
-in.
+passed to a command. To work around this set `expandGlobs` to `false` in the Driver options. For
+this to work correctly, the underlying tool must correctly handle the glob patterns you pass in.
 
 ## Parallel commands
 
