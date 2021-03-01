@@ -78,11 +78,12 @@ export default abstract class Driver<
     }
   }
 
-  blueprint({ array, object, string }: Predicates): Blueprint<DriverOptions> {
+  blueprint({ array, object, string, bool }: Predicates): Blueprint<DriverOptions> {
     return {
       args: array(string()),
       dependencies: array(string()),
       env: object(string()),
+      expandGlobs: bool(true),
       strategy: string(STRATEGY_NATIVE).oneOf<DriverStrategy>([
         STRATEGY_NATIVE,
         STRATEGY_CREATE,

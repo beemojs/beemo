@@ -10,7 +10,7 @@ can be registered.
 
 ```ts
 // src/index.ts -> lib/index.js
-import {Tool} from '@beemo/core';
+import { Tool } from '@beemo/core';
 
 export default function (tool: Tool) {
   // Add command line args to every execution
