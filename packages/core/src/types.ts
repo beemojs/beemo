@@ -1,6 +1,6 @@
 import { ExecaError, ExecaReturnValue } from 'execa';
 import { Arguments, Argv, OptionConfigMap, ParserOptions } from '@boost/args';
-import { Path } from '@boost/common';
+import { Path, PortablePath } from '@boost/common';
 import { PluginsSetting } from '@boost/config';
 import { Pluggable } from '@boost/plugin';
 import Context from './contexts/Context';
@@ -115,10 +115,15 @@ export interface ConfigTemplateOptions {
   tool: BeemoTool;
 }
 
+export interface ConfigTemplateResult {
+  config: ConfigObject | string;
+  path?: PortablePath;
+}
+
 export type ConfigTemplate = (
   configs: ConfigObject[],
   options: ConfigTemplateOptions,
-) => ConfigObject | string;
+) => ConfigTemplateResult;
 
 // OTHER
 

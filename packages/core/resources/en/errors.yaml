@@ -18,7 +18,7 @@ scaffoldNoTemplates: Failed to find scaffolding templates "{{path}}/*.ejs" in co
 scriptNameInvalidFormat: Script name must be in kebab case (alphanumeric characters and dashes).
 stylelintIgnoreInvalid: Ignore configuration must be an array of strings.
 templatePathMissing: Failed to load configuration strategy template from "{{path}}".
-templateTypeInvalid: Configuration strategy template must be a function, found {{type}}.
+templateTypeInvalid: Configuration strategy template must export a function, found {{type}}.
 templateRequired: Driver `template` option is required when `strategy` is "template".
 workspacesNotEnabled: Option --workspaces={{arg}} provided but project is not workspaces enabled.
 workspacesProjectRefsBuildRequired:

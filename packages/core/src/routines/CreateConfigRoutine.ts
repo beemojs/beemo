@@ -141,8 +141,8 @@ export default class CreateConfigRoutine<Ctx extends ConfigContext> extends Rout
   async createConfigFileFromTemplate(context: Ctx, configs: ConfigObject[]): Promise<Path> {
     const { driver, tool } = this.options;
     const { metadata } = driver;
-    const configPath = context.cwd.append(metadata.configName);
-    const templatePath = context.cwd.append(driver.options.template);
+    const driverConfigPath = context.cwd.append(metadata.configName);
+    const templatePath = Path.resolve(driver.options.template, context.cwd);
     let template: ConfigTemplate;
 
     if (!driver.options.template) {
@@ -167,19 +167,25 @@ export default class CreateConfigRoutine<Ctx extends ConfigContext> extends Rout
       );
     }
 
-    const config = template(configs, {
+    const { config, path = driverConfigPath } = template(configs, {
       configModule: tool.config.module,
       consumerConfigPath: this.getConfigPath(context, true),
       context,
       driver,
-      driverConfigPath: configPath,
+      driverConfigPath,
       driverName: driver.getName(),
       providerConfigPath: this.getConfigPath(context),
       templatePath,
       tool,
     });
 
+    // Allow the config path to be altered
+    const configPath = Path.resolve(path, context.cwd);
+
     context.addConfigPath(driver.getName(), configPath);
+
+    driver.config = typeof config === 'string' ? {} : config;
+    driver.onTemplateConfigFile.emit([context, configPath, config]);
 
     await fs.writeFile(
       configPath.path(),

@@ -9,6 +9,7 @@ import {
   STRATEGY_NATIVE,
   STRATEGY_NONE,
   STRATEGY_REFERENCE,
+  STRATEGY_TEMPLATE,
 } from './constants';
 import ConfigContext from './contexts/ConfigContext';
 import DriverContext from './contexts/DriverContext';
@@ -17,6 +18,7 @@ import Tool from './Tool';
 import {
   Argv,
   BeemoTool,
+  ConfigObject,
   Driverable,
   DriverCommandOptions,
   DriverMetadata,
@@ -62,6 +64,10 @@ export default abstract class Driver<
     'reference-config-file',
   );
 
+  readonly onTemplateConfigFile = new Event<[ConfigContext, Path, ConfigObject | string]>(
+    'template-config-file',
+  );
+
   readonly onDeleteConfigFile = new Event<[ConfigContext, Path]>('delete-config-file');
 
   readonly onBeforeExecute = new ConcurrentEvent<[DriverContext, Argv]>('before-execute');
@@ -88,6 +94,7 @@ export default abstract class Driver<
         STRATEGY_NATIVE,
         STRATEGY_CREATE,
         STRATEGY_REFERENCE,
+        STRATEGY_TEMPLATE,
         STRATEGY_COPY,
         STRATEGY_NONE,
       ]),
