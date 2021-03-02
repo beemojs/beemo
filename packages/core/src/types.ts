@@ -1,5 +1,6 @@
 import { ExecaError, ExecaReturnValue } from 'execa';
 import { Arguments, Argv, OptionConfigMap, ParserOptions } from '@boost/args';
+import { Path, PortablePath } from '@boost/common';
 import { PluginsSetting } from '@boost/config';
 import { Pluggable } from '@boost/plugin';
 import Context from './contexts/Context';
@@ -23,22 +24,6 @@ export interface BootstrapFile {
   (tool: BeemoTool): Promise<void> | void;
 }
 
-export interface ConfigFile<T extends object = UnknownSettings> {
-  configure: {
-    cleanup: boolean;
-    parallel: boolean;
-  };
-  debug: boolean;
-  drivers: PluginsSetting;
-  execute: {
-    concurrency: number;
-    graph: boolean;
-  };
-  module: string;
-  scripts: PluginsSetting;
-  settings: T;
-}
-
 export type Execution = ExecaReturnValue;
 
 export type ExecutionError = ExecaError;
@@ -49,7 +34,7 @@ export type StdioType = 'buffer' | 'inherit' | 'stream';
 
 export type DriverCommandOptions = OptionConfigMap;
 
-export type DriverStrategy = 'copy' | 'create' | 'native' | 'none' | 'reference';
+export type DriverStrategy = 'copy' | 'create' | 'native' | 'none' | 'reference' | 'template';
 
 export interface DriverOptions {
   args?: string[];
@@ -57,13 +42,14 @@ export interface DriverOptions {
   env?: Record<string, string>;
   expandGlobs?: boolean;
   strategy?: DriverStrategy;
+  template?: string;
 }
 
 export interface DriverMetadata {
   bin: string;
   configName: string;
   configOption: string;
-  configStrategy: 'copy' | 'create' | 'reference';
+  configStrategy: 'copy' | 'create' | 'reference' | 'template';
   dependencies: string[];
   description: string;
   filterOptions: boolean;
@@ -96,6 +82,48 @@ export interface Scriptable<O extends object> extends Pluggable<BeemoTool> {
 export interface RoutineOptions {
   tool: BeemoTool;
 }
+
+// CONFIG
+
+export interface ConfigFile<T extends object = UnknownSettings> {
+  configure: {
+    cleanup: boolean;
+    parallel: boolean;
+  };
+  debug: boolean;
+  drivers: PluginsSetting;
+  execute: {
+    concurrency: number;
+    graph: boolean;
+  };
+  module: string;
+  scripts: PluginsSetting;
+  settings: T;
+}
+
+export type ConfigObject = Record<string, unknown>;
+
+export interface ConfigTemplateOptions {
+  configModule: string;
+  consumerConfigPath: Path | null;
+  context: Context;
+  driver: Driverable;
+  driverConfigPath: Path;
+  driverName: string;
+  providerConfigPath: Path | null;
+  templatePath: Path;
+  tool: BeemoTool;
+}
+
+export interface ConfigTemplateResult {
+  config: ConfigObject | string;
+  path?: PortablePath;
+}
+
+export type ConfigTemplate = (
+  configs: ConfigObject[],
+  options: ConfigTemplateOptions,
+) => ConfigTemplateResult;
 
 // OTHER
 

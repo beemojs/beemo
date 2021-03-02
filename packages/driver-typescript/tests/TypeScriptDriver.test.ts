@@ -61,6 +61,7 @@ describe('TypeScriptDriver', () => {
       srcFolder: 'src',
       testsFolder: 'tests',
       typesFolder: 'types',
+      template: '',
     });
   });
 

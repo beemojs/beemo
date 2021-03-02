@@ -380,6 +380,120 @@ describe('CreateConfigRoutine', () => {
     });
   });
 
+  describe('createConfigFileFromTemplate()', () => {
+    beforeEach(() => {
+      driver.configure({
+        strategy: 'template',
+        template: new Path(__dirname, './__fixtures__/template.js').path(),
+      });
+    });
+
+    it('errors if `template` option is empty', async () => {
+      driver.configure({
+        template: '',
+      });
+
+      await expect(routine.createConfigFileFromTemplate(context, [])).rejects.toThrow(
+        'Driver `template` option is required when `strategy` is "template".',
+      );
+    });
+
+    it('errors if `template` file path does not exist', async () => {
+      driver.configure({
+        template: 'unknown-template.js',
+      });
+
+      await expect(routine.createConfigFileFromTemplate(context, [])).rejects.toThrow(
+        'Failed to load configuration strategy template from "unknown-template.js".',
+      );
+    });
+
+    it('errors if `template` file does not export a function', async () => {
+      driver.configure({
+        template: new Path(__dirname, './__fixtures__/template-export-non-function.js').path(),
+      });
+
+      await expect(routine.createConfigFileFromTemplate(context, [])).rejects.toThrow(
+        'Configuration strategy template must export a function, found number.',
+      );
+    });
+
+    describe('default', () => {
+      it('adds default path to context', async () => {
+        await routine.createConfigFileFromTemplate(context, [{ foo: 'bar' }]);
+
+        expect(context.configPaths).toEqual([
+          { driver: 'babel', path: prependRoot('/babel.config.js') },
+        ]);
+      });
+
+      it('when template config is an object, formats it as json/js', async () => {
+        await routine.createConfigFileFromTemplate(context, [{ foo: 'bar' }]);
+
+        expect(writeSpy).toHaveBeenCalledWith(
+          prependRoot('/babel.config.js').path(),
+          'module.exports = {\n  "foo": "bar"\n};',
+        );
+      });
+
+      it('emits `onTemplateConfigFile` event', async () => {
+        const spy = jest.fn();
+
+        driver.onTemplateConfigFile.listen(spy);
+
+        await routine.createConfigFileFromTemplate(context, [
+          { foo: 'bar' },
+          { foo: 'qux' },
+          { bar: 123 },
+        ]);
+
+        expect(spy).toHaveBeenCalledWith(context, prependRoot('/babel.config.js'), {
+          foo: 'qux',
+          bar: 123,
+        });
+      });
+    });
+
+    describe('custom', () => {
+      beforeEach(() => {
+        driver.configure({
+          template: new Path(__dirname, './__fixtures__/template-custom.js').path(),
+        });
+      });
+
+      const yamlConfig = `
+foo: bar
+list:
+  - 1
+  - 2
+  - 3`.trim();
+
+      it('adds custom path to context', async () => {
+        await routine.createConfigFileFromTemplate(context, [{ foo: 'bar' }]);
+
+        expect(context.configPaths).toEqual([
+          { driver: 'babel', path: prependRoot('/babel.yaml') },
+        ]);
+      });
+
+      it('when template config is a string, writes it as-is', async () => {
+        await routine.createConfigFileFromTemplate(context, [{ foo: 'bar' }]);
+
+        expect(writeSpy).toHaveBeenCalledWith(prependRoot('/babel.yaml').path(), yamlConfig);
+      });
+
+      it('emits `onTemplateConfigFile` event', async () => {
+        const spy = jest.fn();
+
+        driver.onTemplateConfigFile.listen(spy);
+
+        await routine.createConfigFileFromTemplate(context, [{ foo: 'bar' }]);
+
+        expect(spy).toHaveBeenCalledWith(context, prependRoot('/babel.yaml'), yamlConfig);
+      });
+    });
+  });
+
   describe('getConfigPath()', () => {
     describe('consumer', () => {
       it('returns `.configs/beemo/file.js`', () => {

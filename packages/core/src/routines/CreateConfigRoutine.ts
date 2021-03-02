@@ -5,13 +5,17 @@ import camelCase from 'lodash/camelCase';
 import { Bind, Blueprint, Path, PathResolver, Predicates, requireModule } from '@boost/common';
 import { color } from '@boost/internal';
 import { Routine } from '@boost/pipeline';
-import { STRATEGY_COPY, STRATEGY_CREATE, STRATEGY_NATIVE, STRATEGY_REFERENCE } from '../constants';
+import {
+  STRATEGY_COPY,
+  STRATEGY_CREATE,
+  STRATEGY_NATIVE,
+  STRATEGY_REFERENCE,
+  STRATEGY_TEMPLATE,
+} from '../constants';
 import ConfigContext from '../contexts/ConfigContext';
 import Driver from '../Driver';
 import Tool from '../Tool';
-import { RoutineOptions } from '../types';
-
-export type ConfigObject = Record<string, unknown>;
+import { ConfigObject, ConfigTemplate, RoutineOptions } from '../types';
 
 export interface CreateConfigOptions extends RoutineOptions {
   driver: Driver;
@@ -57,6 +61,17 @@ export default class CreateConfigRoutine<Ctx extends ConfigContext> extends Rout
           .pipe(tool.msg('app:configCreateLoadConsumer', { name }), this.loadConfigFromConsumer)
           .pipe(tool.msg('app:configCreateMerge', { name }), this.mergeConfigs)
           .pipe(tool.msg('app:configCreate', { name }), this.createConfigFile)
+          .run();
+
+      case STRATEGY_TEMPLATE:
+        return this.createWaterfallPipeline(context, [])
+          .pipe(tool.msg('app:configSetEnvVars', { name }), this.setEnvVars)
+          .pipe(tool.msg('app:configCreateLoadProvider', { name }), this.loadConfigFromProvider)
+          .pipe(tool.msg('app:configCreateLoadConsumer', { name }), this.loadConfigFromConsumer)
+          .pipe(
+            tool.msg('app:configCreateFromTemplate', { name }),
+            this.createConfigFileFromTemplate,
+          )
           .run();
 
       default:
@@ -114,6 +129,68 @@ export default class CreateConfigRoutine<Ctx extends ConfigContext> extends Rout
     context.addConfigPath(driver.getName(), configPath);
 
     await fs.writeFile(configPath.path(), this.options.driver.formatConfig(config));
+
+    return configPath;
+  }
+
+  /**
+   * Create a configuration file for the defined driver based on a custom template
+   * provided by the consumer.
+   */
+  @Bind()
+  async createConfigFileFromTemplate(context: Ctx, configs: ConfigObject[]): Promise<Path> {
+    const { driver, tool } = this.options;
+    const { metadata } = driver;
+    const driverConfigPath = context.cwd.append(metadata.configName);
+    const templatePath = Path.resolve(driver.options.template, context.cwd.append('.config'));
+    let template: ConfigTemplate;
+
+    if (!driver.options.template) {
+      throw new Error(tool.msg('errors:templateRequired'));
+    }
+
+    try {
+      template = requireModule(templatePath);
+    } catch {
+      throw new Error(
+        tool.msg('errors:templatePathMissing', {
+          path: templatePath.name(),
+        }),
+      );
+    }
+
+    if (typeof template !== 'function') {
+      throw new TypeError(
+        tool.msg('errors:templateTypeInvalid', {
+          type: typeof template,
+        }),
+      );
+    }
+
+    const { config, path = driverConfigPath } = template(configs, {
+      configModule: tool.config.module,
+      consumerConfigPath: this.getConfigPath(context, true),
+      context,
+      driver,
+      driverConfigPath,
+      driverName: driver.getName(),
+      providerConfigPath: this.getConfigPath(context),
+      templatePath,
+      tool,
+    });
+
+    // Allow the config path to be altered
+    const configPath = Path.resolve(path, context.cwd);
+
+    context.addConfigPath(driver.getName(), configPath);
+
+    driver.config = typeof config === 'string' ? {} : config;
+    driver.onTemplateConfigFile.emit([context, configPath, config]);
+
+    await fs.writeFile(
+      configPath.path(),
+      typeof config === 'string' ? config : this.options.driver.formatConfig(config),
+    );
 
     return configPath;
   }

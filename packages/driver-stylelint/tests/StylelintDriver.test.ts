@@ -35,6 +35,7 @@ describe('StylelintDriver', () => {
       env: { DEV: 'true' },
       expandGlobs: true,
       strategy: 'native',
+      template: '',
     });
   });
 

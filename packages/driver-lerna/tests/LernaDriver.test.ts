@@ -23,6 +23,7 @@ describe('LernaDriver', () => {
       env: { DEV: 'true' },
       expandGlobs: true,
       strategy: 'native',
+      template: '',
     });
   });
 

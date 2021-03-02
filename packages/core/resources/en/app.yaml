@@ -20,6 +20,7 @@ cliOptionWorkspaces: Run command in each workspace (supports regex)
 configCleanup: Deleting config files
 configCopy: Copying {{name}} config file
 configCreate: Creating {{name}} config file
+configCreateFromTemplate: Creating {{name}} config file from custom template
 configCreateLoadProvider: Loading {{name}} config from configuration module
 configCreateLoadConsumer: Loading {{name}} config from local overrides
 configCreateMerge: Merging {{name}} config objects

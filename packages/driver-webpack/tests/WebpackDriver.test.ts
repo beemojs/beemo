@@ -23,6 +23,7 @@ describe('WebpackDriver', () => {
       env: { DEV: 'true' },
       expandGlobs: true,
       strategy: 'native',
+      template: '',
     });
   });
 
