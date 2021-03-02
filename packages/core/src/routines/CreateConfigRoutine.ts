@@ -142,7 +142,7 @@ export default class CreateConfigRoutine<Ctx extends ConfigContext> extends Rout
     const { driver, tool } = this.options;
     const { metadata } = driver;
     const driverConfigPath = context.cwd.append(metadata.configName);
-    const templatePath = Path.resolve(driver.options.template, context.cwd);
+    const templatePath = Path.resolve(driver.options.template, context.cwd.append('.config'));
     let template: ConfigTemplate;
 
     if (!driver.options.template) {

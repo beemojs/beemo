@@ -84,9 +84,11 @@ Options can also be set through the [bootstrap and event system](./events.md).
   [execa](https://github.com/sindresorhus/execa).
 - `expandGlobs` (`boolean`) - Controls whether or not glob patterns in args are automatically
   expanded before being passed to the driver binary. Defaults to `true`.
-- `strategy` (`create | copy | reference | native | none`) - Type of
+- `strategy` (`create | copy | reference | template | native | none`) - Type of
   [strategy](./driver.md#config-strategies) to use when generating a config file. Default is
   different per driver.
+- `template` (`string`) - File path (relative to cwd) to a template function for generating custom
+  config files and paths. Is required when `strategy` is "template".
 
 ## Executing drivers
 
@@ -145,7 +147,7 @@ A script within your configuration module can be executed using `yarn beemo run-
 
 > All arguments passed to Beemo are passed to the script's `run()` method.
 
-## Creating config
+## Creating config files
 
 Executing a driver will dynamically create a configuration file at runtime. If you'd like to create
 the config manually outside of executing a driver, you can use the `yarn beemo create-config` (or
@@ -166,7 +168,7 @@ yarn beemo create-config babel jest
 > If a driver has a dependency on another driver, it will create a config file for the dependency as
 > well.
 
-## Overriding config
+## Overriding configs
 
 Your configuration module may now house and provide all configurations, but that doesn't mean it's
 applicable to _all_ consuming projects. To accomodate this, Beemo supports overriding of driver
@@ -183,3 +185,75 @@ module.exports = {
 
 > Some dev tools support `package.json` overrides like this, but it's preferred to use the Beemo
 > approach for interoperability.
+
+## Custom configs with templates
+
+Beemo provides sane defaults for all official drivers and attempts to standardize the configuration
+process as much as possible. However, it's not perfect, and may not work for all consumers. To
+mitigate this problem, each driver supports a template based strategy, in which a custom template
+function can be used to handle the config generation (custom merging, etc), and the destination file
+path.
+
+To use templates, set the driver `strategy` option to "template", and the `template` option to a
+file path for the template function (relative to the `.config` folder).
+
+```js
+// .config/beemo.js
+module.exports = {
+  module: '<config-module>',
+  drivers: [
+    [
+      'eslint',
+      {
+        strategy: 'template',
+        template: './path/to/custom/template.ts',
+      },
+    ],
+  ],
+};
+```
+
+The template is merely a function that receives a list of config objects from multiple sources, and
+must return a single config object (or string), and an optional destination path. It also receives
+an options object with helpful information about the current process.
+
+To demonstrate the power of templates, let's write a custom template that generates a YAML
+configuration file for ESLint.
+
+```ts
+import { yaml } from '@boost/common';
+import { ConfigObject, ConfigTemplateResult, ConfigTemplateOptions } from '@beemo/core';
+
+export default function customTemplate(
+  configs: ConfigObject[],
+  options: ConfigTemplateOptions,
+): ConfigTemplateResult {
+  // Manually merge the list of configs into a single config object
+  // using the rules of the driver, or ones unique to your project.
+  const config = mergeConfigs(configs);
+
+  // A template must return a `config` property, which can be an object
+  // that will be formatted as JSON/JS, or a string which will be written as-is.
+  // It can also return an optional `path` property, allowing the destination
+  // config file path to be customized.
+  return {
+    config: yaml.stringify(config),
+    path: options.context.cwd.append('.eslintrc.yaml'),
+  };
+}
+```
+
+The list of available options are:
+
+- `configModule` (`string`) - Name of the configuration module.
+- `consumerConfigPath` (`Path | null`) - Path to the driver's config file in the configuration
+  module. For example, `configs/eslint.ts`. Is `null` if not found.
+- `context` (`Context`) - Current pipeline context.
+- `driver` (`Driver`) - Current instance for the driver being processed.
+- `driverConfigPath` (`Path`) - Path to the driver's default config file destination. For example,
+  `.eslintrc.js` in the root.
+- `driverName` (`string`) - Name of the driver being processed. For example, `eslint`.
+- `providerConfigPath` (`Path | null`) - Path to the driver's config file in the current project.
+  For example, `.config/beemo/eslint.ts`. Is `null` if not found.
+- `templatePath` (`Path`) - Path to the template file (itself).
+- `tool` (`Tool`) - Current [tool instance](./tool.md).
