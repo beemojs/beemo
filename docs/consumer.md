@@ -87,8 +87,8 @@ Options can also be set through the [bootstrap and event system](./events.md).
 - `strategy` (`create | copy | reference | template | native | none`) - Type of
   [strategy](./driver.md#config-strategies) to use when generating a config file. Default is
   different per driver.
-- `template` (`string`) - File path (relative to cwd) to a template function for generating custom
-  config files and paths. Is required when `strategy` is "template".
+- `template` (`string`) - File path to a template function for generating custom config files and
+  paths. Is required when `strategy` is "template".
 
 ## Executing drivers
 
