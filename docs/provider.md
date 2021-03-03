@@ -203,7 +203,7 @@ as the 2nd argument. The [Beemo Tool instance](./tool.md) is available under `th
 
 > Returning a promise in `execute()` is preferred.
 
-### Source resolution
+### Script resolution
 
 Script files are looked for and resolved in the following order:
 

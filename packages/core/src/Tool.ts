@@ -8,6 +8,7 @@ import {
   Memoize,
   PackageStructure,
   Path,
+  PathResolver,
   PortablePath,
   Predicates,
   Project,
@@ -142,9 +143,22 @@ export default class Tool extends Contract<ToolOptions> {
     let bootstrapModule: BootstrapFile | null = null;
 
     try {
-      bootstrapModule = requireModule(module === '@local' ? this.getConfigModuleRoot() : module);
+      const root = this.getConfigModuleRoot();
+      const resolver = new PathResolver()
+        .lookupFilePath('index.ts', root)
+        .lookupFilePath('index.js', root)
+        .lookupFilePath('src/index.ts', root)
+        .lookupFilePath('lib/index.js', root);
+
+      if (module !== '@local') {
+        resolver.lookupNodeModule(module);
+      }
+
+      const { resolvedPath } = resolver.resolve();
+
+      bootstrapModule = requireModule(resolvedPath);
     } catch {
-      this.debug('No entry point file detected, aborting bootstrap');
+      this.debug('No bootstrap file detected, aborting bootstrap');
 
       return this;
     }

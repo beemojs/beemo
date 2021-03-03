@@ -4,23 +4,33 @@ What kind of tool would Beemo be without the ability to listen to events? A terr
 such, Beemo totally supports them! Events provide an easy mechanism for hooking into the lifecycle
 of a Beemo process.
 
-To begin, create a `main` entry point in your configuration module that exports a function. This
-function will receive a [Beemo Tool instance](./tool.md) for the current process, in which listeners
-can be registered.
+To begin, create an index file in your configuration module that exports a function, either as a
+default export or as a named `bootstrap` export. This function will receive a
+[Beemo Tool instance](./tool.md) for the current process, in which listeners can be registered.
 
 ```ts
-// src/index.ts -> lib/index.js
+// index.ts
 import { Tool } from '@beemo/core';
 
-export default function (tool: Tool) {
+export default function bootstrap(tool: Tool) {
   // Add command line args to every execution
   tool.driverRegistry.get('eslint').onBeforeExecute.listen((context) => {
-    context.argv.push('--color', '--report-unused-disable-directives');
+    context.addOptions(['--color', '--report-unused-disable-directives']);
   });
 }
 ```
 
 > The bootstrap function supports async/await.
+
+### Bootstrap resolution
+
+The bootstrap file is looked for and resolved in the following order:
+
+- `index.ts`
+- `index.js`
+- `src/index.ts`
+- `lib/index.js`
+- `main` field in `package.json`
 
 ## Supported Events
 
@@ -28,15 +38,14 @@ The following list of events, and their arguments, can be listened to.
 
 ### Tool
 
-| Event                   | Arguments                                                                    | Type    | Description                                                                                 |
-| ----------------------- | ---------------------------------------------------------------------------- | ------- | ------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------- |
-| `onExit`                | `code: number`                                                               | Normal  | Called when the process exits, either successfully, or with an error.                       |
-| `onLoadPlugin`          | `plugin: Driver                                                              | Script` | Normal                                                                                      | Called after a plugin is loaded and registered into the tool. _Requires a scope of `driver` or `script`._ |
-| `onResolveDependencies` | `context: ConfigContext, drivers: Driver[]`                                  | Normal  | Called after a list of `Driver`s have been resolved in which to create configuration files. |
-| `onRunConfig`           | `context: ConfigContext, driverNames: string[]`                              | Normal  | Called before `beemo create-config` is ran.                                                 |
-| `onRunDriver`           | `context: DriverContext, driver: Driver`                                     | Normal  | Called before `beemo <driver>` is ran. _Requires a scope of the driver name._               |
-| `onRunScript`           | `context: ScriptContext`                                                     | Normal  | Called before `beemo run-script <script>` is ran. _Requires a scope of the script name._    |
-| `onScaffold`            | `context: ScaffoldContext, generator: string, action: string, name?: string` | Normal  | Called before templates are generated when scaffolding.                                     |
+| Event                   | Arguments                                                                    | Type   | Description                                                                                 |
+| ----------------------- | ---------------------------------------------------------------------------- | ------ | ------------------------------------------------------------------------------------------- |
+| `onExit`                | `code: number`                                                               | Normal | Called when the process exits, either successfully, or with an error.                       |
+| `onResolveDependencies` | `context: ConfigContext, drivers: Driver[]`                                  | Normal | Called after a list of `Driver`s have been resolved in which to create configuration files. |
+| `onRunCreateConfig`     | `context: ConfigContext, driverNames: string[]`                              | Normal | Called before `beemo create-config` is ran.                                                 |
+| `onRunDriver`           | `context: DriverContext, driver: Driver`                                     | Normal | Called before `beemo <driver>` is ran. _Requires a scope of the driver name._               |
+| `onRunScript`           | `context: ScriptContext`                                                     | Normal | Called before `beemo run-script <script>` is ran. _Requires a scope of the script name._    |
+| `onScaffold`            | `context: ScaffoldContext, generator: string, action: string, name?: string` | Normal | Called before templates are generated when scaffolding.                                     |
 
 ### Driver
 
