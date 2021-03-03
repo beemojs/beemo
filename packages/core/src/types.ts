@@ -85,6 +85,22 @@ export interface RoutineOptions {
 
 // CONFIG
 
+export interface BeemoConfig<T extends object = UnknownSettings> {
+  configure?: {
+    cleanup?: boolean;
+    parallel?: boolean;
+  };
+  debug?: boolean;
+  drivers?: PluginsSetting;
+  execute?: {
+    concurrency?: number;
+    graph?: boolean;
+  };
+  module?: string;
+  scripts?: PluginsSetting;
+  settings?: T;
+}
+
 export interface ConfigFile<T extends object = UnknownSettings> {
   configure: {
     cleanup: boolean;
