@@ -3,6 +3,24 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## 2.0.0-alpha.4 - 2021-03-03
+
+#### 🚀 Updates
+
+- Add "template" strategy for full driver config control. (#114) ([10ebc4b](https://github.com/beemojs/beemo/commit/10ebc4b)), closes [#114](https://github.com/beemojs/beemo/issues/114)
+- Add `expandGlobs` option to `DriverOptions`. (#121) ([b04da5d](https://github.com/beemojs/beemo/commit/b04da5d)), closes [#121](https://github.com/beemojs/beemo/issues/121)
+- Add additional lookups for boostrap file. ([de1f588](https://github.com/beemojs/beemo/commit/de1f588))
+
+#### ⚙️ Types
+
+- Add `BeemoConfig` for config files. ([dc75ef7](https://github.com/beemojs/beemo/commit/dc75ef7))
+
+**Note:** Version bump only for package @beemo/core
+
+
+
+
+
 ### 2.0.0-alpha.3 - 2021-02-25
 
 #### 🐞 Fixes
