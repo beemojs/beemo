@@ -40,12 +40,6 @@ export default class Context<
 
     this.args = args;
     this.argv = argv;
-
-    // TODO MIGRATE
-    // @ts-expect-error
-    this.addArg = this.addParam.bind(this);
-    // @ts-expect-error
-    this.addArgs = this.addParams.bind(this);
   }
 
   /**
