@@ -1,5 +1,5 @@
 import { JestConfig } from '@beemo/driver-jest';
-import baseConfig from '@milesj/build-tool-config/lib/configs/jest';
+import baseConfig from '@milesj/build-tool-config/src/configs/jest';
 
 const config: JestConfig = {
   ...baseConfig,
