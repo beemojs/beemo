@@ -9,7 +9,7 @@ yarn add @beemo/driver-lerna lerna
 
 ## Requirements
 
-- Lerna ^3.0.0
+- Lerna ^3.0.0 || ^4.0.0
 
 ## Usage
 
