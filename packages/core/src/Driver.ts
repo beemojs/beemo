@@ -158,7 +158,9 @@ export default abstract class Driver<
    * Return a list of dependent drivers.
    */
   getDependencies(): string[] {
-    const dependencies = Array.isArray(this.options.dependencies) ? this.options.dependencies : [];
+    const dependencies = (Array.isArray(this.options.dependencies)
+      ? this.options.dependencies
+      : []) as string[];
 
     return [
       // Always required; configured by the driver

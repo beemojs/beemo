@@ -101,12 +101,6 @@ export default class Tool extends Contract<ToolOptions> {
 
     this.project = new Project(this.cwd);
     this.configManager = new Config(this.options.projectName);
-
-    // TODO MIGRATE
-    // @ts-expect-error
-    this.getWorkspacePaths = this.project.getWorkspacePackagePaths.bind(this.project);
-    // @ts-expect-error
-    this.getWorkspaceGlobs = this.project.getWorkspaceGlobs.bind(this.project);
   }
 
   blueprint({ array, instance, string, union }: Predicates): Blueprint<ToolOptions> {
@@ -365,22 +359,5 @@ export default class Tool extends Contract<ToolOptions> {
     this.context = context;
 
     return context;
-  }
-
-  // TODO MIGRATE
-  /* eslint-disable @typescript-eslint/member-ordering, no-dupe-class-members */
-
-  getPlugin(type: 'driver', name: string): Driver;
-
-  getPlugin(type: 'script', name: string): Script;
-
-  getPlugin(type: 'driver' | 'script', name: string): unknown {
-    return type === 'driver' ? this.driverRegistry.get(name) : this.scriptRegistry.get(name);
-  }
-
-  isPluginEnabled(type: 'driver' | 'script', name: string): boolean {
-    return type === 'driver'
-      ? this.driverRegistry.isRegistered(name)
-      : this.scriptRegistry.isRegistered(name);
   }
 }
