@@ -1,5 +1,5 @@
 import { PrettierConfig } from '@beemo/driver-prettier';
-import baseConfig from '@milesj/build-tool-config/lib/configs/prettier';
+import baseConfig from '@milesj/build-tool-config/src/configs/prettier';
 
 const config: PrettierConfig = {
   ...baseConfig,
