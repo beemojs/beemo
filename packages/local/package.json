@@ -4,6 +4,12 @@
   "version": "0.2.0-alpha.0",
   "main": "./lib/index.js",
   "types": "./dts/index.d.ts",
+  "files": [
+    "dts/",
+    "lib/",
+    "src/",
+    "templates/"
+  ],
   "repository": {
     "type": "git",
     "url": "git@github.com:beemojs/beemo.git",

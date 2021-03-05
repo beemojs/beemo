@@ -17,6 +17,11 @@
   },
   "main": "./lib/index.js",
   "types": "./dts/index.d.ts",
+  "files": [
+    "dts/",
+    "lib/",
+    "src/"
+  ],
   "engines": {
     "node": ">=10.3.0",
     "npm": ">=6.1.0"
