@@ -14,7 +14,7 @@ import DriverContext from '../../contexts/DriverContext';
 import filterArgs, { OptionMap } from '../../helpers/filterArgs';
 import formatExecReturn from '../../helpers/formatExecReturn';
 import BatchStream from '../../streams/BatchStream';
-import Tool from '../../Tool';
+import type Tool from '../../Tool';
 import { Argv, Execution, RoutineOptions } from '../../types';
 
 const OPTION_PATTERN = /-?-[a-z0-9-]+(,|\s)/giu;
@@ -37,7 +37,7 @@ export default class ExecuteCommandRoutine extends Routine<
       argv: array(string()),
       forceConfigOption: bool(),
       packageRoot: string(),
-      tool: instance(Tool).required().notNullable(),
+      tool: instance<Tool>().required().notNullable(),
     };
   }
 

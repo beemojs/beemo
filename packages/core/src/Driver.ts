@@ -14,7 +14,6 @@ import {
 import ConfigContext from './contexts/ConfigContext';
 import DriverContext from './contexts/DriverContext';
 import isClassInstance from './helpers/isClassInstance';
-import Tool from './Tool';
 import {
   Argv,
   BeemoTool,
@@ -43,7 +42,7 @@ export default abstract class Driver<
   metadata!: DriverMetadata;
 
   // Set within a life-cycle
-  tool!: Tool;
+  tool!: BeemoTool;
 
   output: DriverOutput = {
     stderr: '',
@@ -104,7 +103,7 @@ export default abstract class Driver<
 
   bootstrap() {}
 
-  startup(tool: Tool) {
+  startup(tool: BeemoTool) {
     this.tool = tool;
     this.bootstrap();
   }

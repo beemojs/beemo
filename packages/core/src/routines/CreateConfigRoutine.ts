@@ -14,7 +14,7 @@ import {
 } from '../constants';
 import ConfigContext from '../contexts/ConfigContext';
 import Driver from '../Driver';
-import Tool from '../Tool';
+import type Tool from '../Tool';
 import { ConfigObject, ConfigTemplate, RoutineOptions } from '../types';
 
 export interface CreateConfigOptions extends RoutineOptions {
@@ -30,7 +30,7 @@ export default class CreateConfigRoutine<Ctx extends ConfigContext> extends Rout
     return {
       // @ts-expect-error Errors because Driver is abstract
       driver: instance(Driver).required().notNullable(),
-      tool: instance(Tool).required().notNullable(),
+      tool: instance<Tool>().required().notNullable(),
     };
   }
 

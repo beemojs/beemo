@@ -5,13 +5,13 @@ import { Bind, Blueprint, Predicates } from '@boost/common';
 import { color } from '@boost/internal';
 import { Routine } from '@boost/pipeline';
 import DriverContext from '../contexts/DriverContext';
-import Tool from '../Tool';
+import type Tool from '../Tool';
 import { RoutineOptions } from '../types';
 
 export default class CleanupConfigsRoutine extends Routine<unknown, unknown, RoutineOptions> {
   blueprint({ instance }: Predicates): Blueprint<RoutineOptions> {
     return {
-      tool: instance(Tool).required().notNullable(),
+      tool: instance<Tool>().required().notNullable(),
     };
   }
 

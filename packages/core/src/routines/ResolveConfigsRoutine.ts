@@ -2,7 +2,7 @@ import { Blueprint, Path, Predicates } from '@boost/common';
 import { color } from '@boost/internal';
 import { Routine } from '@boost/pipeline';
 import ConfigContext from '../contexts/ConfigContext';
-import Tool from '../Tool';
+import type Tool from '../Tool';
 import { RoutineOptions } from '../types';
 import CreateConfigRoutine from './CreateConfigRoutine';
 
@@ -11,7 +11,7 @@ export default class ResolveConfigsRoutine<
 > extends Routine<Path[], unknown, RoutineOptions> {
   blueprint({ instance }: Predicates): Blueprint<RoutineOptions> {
     return {
-      tool: instance(Tool).required().notNullable(),
+      tool: instance<Tool>().required().notNullable(),
     };
   }
 

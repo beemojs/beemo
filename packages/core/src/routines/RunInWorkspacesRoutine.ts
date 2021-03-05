@@ -9,6 +9,7 @@ import { PooledPipeline, Routine } from '@boost/pipeline';
 import { stripAnsi, style } from '@boost/terminal';
 import Context from '../contexts/Context';
 import isPatternMatch from '../helpers/isPatternMatch';
+import type Tool from '../Tool';
 import { ExecutionError, RoutineOptions } from '../types';
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -31,8 +32,7 @@ export default abstract class RunInWorkspacesRoutine<
 
   blueprint({ instance }: Predicates): Blueprint<RoutineOptions> {
     return {
-      // @ts-expect-error We cant import Tool because of cycles
-      tool: instance().required().notNullable(),
+      tool: instance<Tool>().required().notNullable(),
     };
   }
 
