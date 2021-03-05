@@ -18,6 +18,14 @@
   ],
   "main": "./lib/index.js",
   "types": "./dts/index.d.ts",
+  "files": [
+    "dts/",
+    "lib/",
+    "resources/",
+    "src/",
+    "test.d.ts",
+    "test.js"
+  ],
   "engines": {
     "node": ">=10.3.0",
     "npm": ">=6.1.0"

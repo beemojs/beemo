@@ -13,6 +13,12 @@
   "bin": {
     "beemo": "./lib/bin.js"
   },
+  "files": [
+    "bin.js",
+    "dts/",
+    "lib/",
+    "src/"
+  ],
   "engines": {
     "node": ">=10.3.0",
     "npm": ">=6.1.0"
