@@ -3,9 +3,9 @@ import { Arguments, Argv, OptionConfigMap, ParserOptions } from '@boost/args';
 import { Path, PortablePath } from '@boost/common';
 import { PluginsSetting } from '@boost/config';
 import { Pluggable } from '@boost/plugin';
-import Context from './contexts/Context';
-import ScriptContext from './contexts/ScriptContext';
-import Tool from './Tool';
+import type Context from './contexts/Context';
+import type ScriptContext from './contexts/ScriptContext';
+import type Tool from './Tool';
 
 export { Arguments, Argv, ParserOptions };
 

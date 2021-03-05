@@ -5,14 +5,13 @@ import { ConcurrentEvent } from '@boost/event';
 import { Plugin } from '@boost/plugin';
 import ScriptContext from './contexts/ScriptContext';
 import isClassInstance from './helpers/isClassInstance';
-import Tool from './Tool';
 import { Argv, BeemoTool, Scriptable } from './types';
 
 export default abstract class Script<O extends object = {}, Options extends object = {}>
   extends Plugin<BeemoTool, Options>
   implements Scriptable<O> {
   // Set within a life-cycle
-  tool!: Tool;
+  tool!: BeemoTool;
 
   readonly onBeforeExecute = new ConcurrentEvent<[ScriptContext, Argv]>('before-execute');
 
@@ -38,7 +37,7 @@ export default abstract class Script<O extends object = {}, Options extends obje
 
   bootstrap() {}
 
-  startup(tool: Tool) {
+  startup(tool: BeemoTool) {
     this.tool = tool;
     this.bootstrap();
   }
