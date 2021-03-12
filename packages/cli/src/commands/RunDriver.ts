@@ -96,7 +96,7 @@ export default class RunDriver extends Command<
       ...parent,
       options: {
         ...parent.options,
-        ...driver.commandOptions,
+        ...driver.metadata.commandOptions,
       },
     };
   }

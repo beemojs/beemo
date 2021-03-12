@@ -33,7 +33,14 @@ async function run() {
 
       // Register sub-commands for the driver
       driver.commands.forEach((command) => {
-        program.register(`${driver.getName()}:${command.path}`, command.config, command.runner);
+        program.register(
+          `${driver.getName()}:${command.path}`,
+          {
+            ...command.config,
+            category: 'driver',
+          },
+          command.runner,
+        );
       });
     });
   });

@@ -1,7 +1,12 @@
 import fs from 'fs';
-import { Path, Tool } from '@beemo/core';
+import ts from 'typescript';
+import { PackageStructure, Path, Tool } from '@beemo/core';
 import type { TypeScriptConfig } from '../types';
 import type TypeScriptDriver from '../TypeScriptDriver';
+
+function join(...parts: string[]): string {
+  return new Path(...parts).path();
+}
 
 function readFile(path: Path): Promise<TypeScriptConfig> {
   return new Promise((resolve, reject) => {
@@ -88,10 +93,139 @@ async function addProjectRefsToRootConfig(tool: Tool, driver: TypeScriptDriver) 
   await writeFile(configPath, config);
 }
 
+/**
+ * Create a `tsconfig.json` in each workspace package. Automatically link packages
+ * together using project references. Attempt to handle source and test folders.
+ */
+async function createProjectRefConfigsInWorkspaces(
+  tool: Tool,
+  driver: TypeScriptDriver,
+): Promise<unknown> {
+  const { root } = tool.project;
+  const {
+    buildFolder,
+    declarationOnly,
+    srcFolder,
+    testsFolder,
+    typesFolder,
+    globalTypes,
+    localTypes,
+  } = driver.options;
+  const optionsConfigPath = root.append('tsconfig.options.json');
+  const globalTypesPath = root.append(typesFolder, '**/*');
+  const namesToPaths: Record<string, string> = {};
+  const workspacePackages = tool.project.getWorkspacePackages<
+    PackageStructure & {
+      tsconfig?: Pick<TypeScriptConfig, 'compilerOptions' | 'exclude' | 'include'>;
+    }
+  >();
+
+  // Map package name to absolute paths
+  workspacePackages.forEach((wsPkg) => {
+    namesToPaths[wsPkg.package.name] = wsPkg.metadata.packagePath;
+  });
+
+  // Create a config file in each package
+  return Promise.all(
+    workspacePackages.map(
+      // eslint-disable-next-line complexity
+      ({
+        package: { dependencies = {}, devDependencies = {}, peerDependencies = {}, tsconfig = {} },
+        metadata: workspace,
+      }) => {
+        const pkgPath = new Path(workspace.packagePath);
+        const srcPath = pkgPath.append(srcFolder);
+        const testsPath = pkgPath.append(testsFolder);
+        const references: ts.ProjectReference[] = [];
+        const promises: Promise<unknown>[] = [];
+
+        // Extract and determine references
+        Object.keys({ ...dependencies, ...devDependencies, ...peerDependencies }).forEach(
+          (depName) => {
+            if (namesToPaths[depName]) {
+              references.push({
+                path: pkgPath.relativeTo(namesToPaths[depName]).path(),
+              });
+            }
+          },
+        );
+
+        // Build package config
+        if (srcFolder && srcPath.exists()) {
+          const packageConfig: TypeScriptConfig = {
+            compilerOptions: {
+              ...tsconfig.compilerOptions,
+              declarationDir: buildFolder,
+              outDir: buildFolder,
+              rootDir: srcFolder,
+            },
+            exclude: [buildFolder],
+            extends: pkgPath.relativeTo(optionsConfigPath).path(),
+            include: [join(srcFolder, '**/*')],
+            references,
+          };
+
+          if (declarationOnly) {
+            packageConfig.compilerOptions!.emitDeclarationOnly = true;
+          }
+
+          if (localTypes) {
+            packageConfig.include!.push(join(typesFolder, '**/*'));
+          }
+
+          if (globalTypes) {
+            packageConfig.include!.push(pkgPath.relativeTo(globalTypesPath).path());
+          }
+
+          if (testsFolder) {
+            packageConfig.exclude!.push(testsFolder);
+          }
+
+          if (Array.isArray(tsconfig.include)) {
+            packageConfig.include!.push(...tsconfig.include);
+          }
+
+          if (Array.isArray(tsconfig.exclude)) {
+            packageConfig.exclude!.push(...tsconfig.exclude);
+          }
+
+          promises.push(writeFile(pkgPath.append('tsconfig.json'), packageConfig));
+        }
+
+        // Build tests specific package config
+        if (testsFolder && testsPath.exists()) {
+          const testConfig: TypeScriptConfig = {
+            compilerOptions: {
+              composite: false,
+              emitDeclarationOnly: false,
+              noEmit: true,
+              rootDir: '.',
+            },
+            extends: testsPath.relativeTo(optionsConfigPath).path(),
+            include: ['**/*'],
+            references: [{ path: '..' }],
+          };
+
+          if (localTypes) {
+            testConfig.include!.push(join('..', typesFolder, '**/*'));
+          }
+
+          if (globalTypes) {
+            testConfig.include!.push(testsPath.relativeTo(globalTypesPath).path());
+          }
+
+          promises.push(writeFile(testsPath.append('tsconfig.json'), testConfig));
+        }
+
+        return Promise.all(promises);
+      },
+    ),
+  );
+}
+
 export default async function syncProjectRefs(tool: Tool) {
-  // Load the TS driver so we have access to its configured options
   const driver = (await tool.driverRegistry.load('typescript')) as TypeScriptDriver;
 
-  // Add `references` to the root config file
   await addProjectRefsToRootConfig(tool, driver);
+  await createProjectRefConfigsInWorkspaces(tool, driver);
 }

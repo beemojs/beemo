@@ -80,7 +80,8 @@ export interface Driverable extends Pluggable<BeemoTool> {
 
 // DRIVER COMMANDS
 
-export interface DriverCommandConfig<O extends object, P extends PrimitiveType[]> extends Command {
+export interface DriverCommandConfig<O extends object, P extends PrimitiveType[]>
+  extends Omit<Command, 'category'> {
   allowUnknownOptions?: boolean;
   allowVariadicParams?: boolean | string;
   options?: MapOptionConfig<O>;
