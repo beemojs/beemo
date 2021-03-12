@@ -29,19 +29,21 @@ async function run() {
 
     // Add a command for each driver
     tool.driverRegistry.getAll().forEach((driver) => {
-      program.register(new RunDriver({ driver, parallelArgv }));
+      const command = new RunDriver({ driver, parallelArgv });
+
+      // Path is required for sub-command registration
+      command.constructor.path = driver.getName();
 
       // Register sub-commands for the driver
-      driver.commands.forEach((command) => {
-        program.register(
-          `${driver.getName()}:${command.path}`,
-          {
-            ...command.config,
-            category: 'driver',
-          },
-          command.runner,
+      driver.commands.forEach(({ path, config, runner }) => {
+        command.register<{}, []>(
+          `${driver.getName()}:${path}`,
+          { ...config, category: 'driver' },
+          (options, params, rest) => runner(tool, options, params, rest),
         );
       });
+
+      program.register(command);
     });
   });
 }

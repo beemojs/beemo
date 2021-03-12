@@ -89,6 +89,7 @@ export interface DriverCommandConfig<O extends object, P extends PrimitiveType[]
 }
 
 export type DriverCommandRunner<O extends object, P extends PrimitiveType[]> = (
+  tool: Tool,
   options: O,
   params: P,
   rest: string[],
