@@ -66,24 +66,6 @@ export default class RunDriver extends Command<
     };
   }
 
-  getMetadata(): CommandMetadata {
-    const { driver } = this.options;
-    const parent = super.getMetadata();
-
-    if (!driver) {
-      return parent;
-    }
-
-    return {
-      ...super.getMetadata(),
-      category: 'driver',
-      description:
-        driver.metadata.description || tool.msg('app:run', { title: driver.metadata.title }),
-      params: [],
-      path: driver.getName(),
-    };
-  }
-
   getParserOptions(): ParserOptions<DriverContextOptions & GlobalOptions> {
     const { driver } = this.options;
     const parent = super.getParserOptions();

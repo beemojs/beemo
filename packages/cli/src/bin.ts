@@ -30,14 +30,21 @@ async function run() {
     // Add a command for each driver
     tool.driverRegistry.getAll().forEach((driver) => {
       const command = new RunDriver({ driver, parallelArgv });
+      const path = driver.getName();
 
-      // Path is required for sub-command registration
-      command.constructor.path = driver.getName();
+      // Override command metadata
+      Object.assign(command.constructor, {
+        category: 'driver',
+        description:
+          driver.metadata.description || tool.msg('app:run', { title: driver.metadata.title }),
+        params: [],
+        path,
+      });
 
       // Register sub-commands for the driver
-      driver.commands.forEach(({ path, config, runner }) => {
+      driver.commands.forEach(({ path: subpath, config, runner }) => {
         command.register<{}, []>(
-          `${driver.getName()}:${path}`,
+          `${path}:${subpath}`,
           { ...config, category: 'driver' },
           (options, params, rest) => runner(tool, options, params, rest),
         );
