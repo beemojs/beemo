@@ -42,21 +42,17 @@ async function addProjectRefsToRootConfig(tool: Tool, driver: TypeScriptDriver) 
   const configPath = root.append('tsconfig.json');
   const optionsConfigPath = root.append('tsconfig.options.json');
 
-  // Load root config
+  // Load both configs
   const config = await readFile(configPath);
+  const optionsConfig = await readFile(optionsConfigPath);
 
-  // Extract root compiler options to a new config file
-  await writeFile(optionsConfigPath, {
-    compilerOptions: {
-      ...config.compilerOptions,
-      // Required for project references
-      composite: true,
-      declaration: true,
-      declarationMap: true,
-      // Remove by marking as undefined
-      outDir: undefined,
-      outFile: undefined,
-    },
+  // Update compiler options
+  Object.assign(optionsConfig.compilerOptions, {
+    composite: true,
+    declaration: true,
+    declarationMap: true,
+    outDir: undefined,
+    outFile: undefined,
   });
 
   // Delete problematic root options
@@ -89,8 +85,9 @@ async function addProjectRefsToRootConfig(tool: Tool, driver: TypeScriptDriver) 
     }
   });
 
-  // Write the new config file
+  // Write updated config files
   await writeFile(configPath, config);
+  await writeFile(optionsConfigPath, optionsConfig);
 }
 
 /**
@@ -224,7 +221,7 @@ async function createProjectRefConfigsInWorkspaces(
 }
 
 export default async function syncProjectRefs(tool: Tool) {
-  const driver = (await tool.driverRegistry.load('typescript')) as TypeScriptDriver;
+  const driver = tool.driverRegistry.get<TypeScriptDriver>('typescript');
 
   await addProjectRefsToRootConfig(tool, driver);
   await createProjectRefConfigsInWorkspaces(tool, driver);
