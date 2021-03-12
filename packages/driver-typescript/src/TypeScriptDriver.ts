@@ -1,5 +1,6 @@
 import rimraf from 'rimraf';
 import { Blueprint, Driver, DriverContext, Path, Predicates } from '@beemo/core';
+import { Event } from '@boost/event';
 import syncProjectRefs from './commands/syncProjectRefs';
 import { TypeScriptConfig, TypeScriptOptions } from './types';
 
@@ -7,6 +8,10 @@ import { TypeScriptConfig, TypeScriptOptions } from './types';
 // Failure: Writes to stdout on syntax and type error
 export default class TypeScriptDriver extends Driver<TypeScriptConfig, TypeScriptOptions> {
   readonly name = '@beemo/driver-typescript';
+
+  readonly onCreateProjectConfigFile = new Event<[Path, TypeScriptConfig, boolean]>(
+    'create-project-config-file',
+  );
 
   blueprint(preds: Predicates): Blueprint<TypeScriptOptions> {
     const { bool, string } = preds;

@@ -29,31 +29,31 @@ module.exports = {
 ### CLI options
 
 - `--[no-]clean` (bool) - Clean the target `outDir` before transpiling. Defaults to `true`.
-- `--reference-workspaces` (bool) - Automatically generate project references based on workspace
-  dependency graph. Defaults to `false`.
 
 ## Events
 
-| Event                       | Arguments                                                                        | Description                                                                             |
-| --------------------------- | -------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------- |
-| `onCreateProjectConfigFile` | `context: DriverContext, path: Path, config: TypeScriptConfig, isTests: boolean` | Called before a workspace package config file is written when using project references. |
+| Event                       | Arguments                                                | Description                                                                             |
+| --------------------------- | -------------------------------------------------------- | --------------------------------------------------------------------------------------- |
+| `onCreateProjectConfigFile` | `path: Path, config: TypeScriptConfig, isTests: boolean` | Called before a workspace package config file is written when using project references. |
 
-## Workspaces support
+## Commands
 
-TypeScript supports 2 forms of workspaces, the 1st with native
-[project references](https://www.typescriptlang.org/docs/handbook/project-references.html), and the
-2nd with the [Beemo --workspaces](../workspaces.md) implementation.
+### `sync-project-refs`
 
-### Project references
+Managing [project references](https://www.typescriptlang.org/docs/handbook/project-references.html)
+manually can be tedious, and honestly, quite hard. Beemo mitigates this by automating the creation
+of `tsconfig.json` files, with correct project references (based on package dependencies), in every
+workspace package.
 
-Managing project references manually can be tedious, and honestly, quite hard. Beemo mitigates this
-process by automating the creation of `tsconfig.json` files, with correct project references (based
-on `dependencies` and `peerDependencies`), in every workspace package. To opt-in to this feature,
-pass `--reference-workspaces` alongside `--build`.
+Run the following command in your project root to make use of this.
+
+```bash
+beemo typescript:sync-project-refs
+```
 
 By default, the config will compile a `src` folder into a `lib` folder, while including a local
-`types` folder. A `tests` folder will receive a custom config file, which type checks the folder but
-does not compile. A represenation of this is as follows:
+`types` folder and a global `types` folder. A `tests` folder will receive a custom config file,
+which type checks the folder but does not compile. A represenation of this is as follows:
 
 ```bash
 packages/
@@ -68,7 +68,7 @@ packages/
     src/
     tests/
       tsconfig.json # Created for tests only
-    tsconfig.json # Created
+    tsconfig.json
 types/ # Global types folder
 tsconfig.json # Created with refs that point to each package
 ```
@@ -98,26 +98,3 @@ module.exports = {
 
 > If your tests are co-located with your source files, the tests specific `tsconfig.json` file will
 > be skipped.
-
-### Beemo workspaces
-
-When using Beemo workspaces, the TypeScript driver will copy the `tsconfig.json` from the root into
-each package, instead of referencing with a `--project` option, or using `extends` (which has many
-issues with relative paths). It will then execute a child process in each package, in the correct
-order, based on the dependency graph.
-
-This works great if the root config is never used, but the situations where _it may be_ (for
-example, with Jest), then custom logic will need to be added to your config file to handle both
-cases. Something like the following.
-
-```js
-// .config/beemo/typescript.js
-module.exports = function typescript(args, tool) {
-  // The --workspaces option is not passed, but the project uses workspaces.
-  const runningInWorkspaceEnabledRoot = !args.workspaces && !!tool.package.workspaces;
-
-  return {
-    include: [runningInWorkspaceEnabledRoot ? './packages/*/src/**/*' : './src/**/*'],
-  };
-};
-```

@@ -1,6 +1,6 @@
 import execa from 'execa';
 import mergeWith from 'lodash/mergeWith';
-import { OptionConfigMap, PrimitiveType } from '@boost/args';
+import { PrimitiveType } from '@boost/args';
 import { Blueprint, isObject, optimal, Path, Predicates, predicates } from '@boost/common';
 import { ConcurrentEvent, Event } from '@boost/event';
 import { Plugin } from '@boost/plugin';
@@ -36,8 +36,6 @@ export default abstract class Driver<
   >
   extends Plugin<BeemoTool, Options>
   implements Driverable {
-  commandOptions: OptionConfigMap = {};
-
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   commands: DriverCommandRegistration<any, any>[] = [];
 
