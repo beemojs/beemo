@@ -1,5 +1,6 @@
 import execa from 'execa';
 import mergeWith from 'lodash/mergeWith';
+import { OptionConfigMap, PrimitiveType } from '@boost/args';
 import { Blueprint, isObject, optimal, Path, Predicates, predicates } from '@boost/common';
 import { ConcurrentEvent, Event } from '@boost/event';
 import { Plugin } from '@boost/plugin';
@@ -19,7 +20,9 @@ import {
   BeemoTool,
   ConfigObject,
   Driverable,
-  DriverCommandOptions,
+  DriverCommandConfig,
+  DriverCommandRegistration,
+  DriverCommandRunner,
   DriverMetadata,
   DriverOptions,
   DriverOutput,
@@ -33,7 +36,10 @@ export default abstract class Driver<
   >
   extends Plugin<BeemoTool, Options>
   implements Driverable {
-  command: DriverCommandOptions = {};
+  commandOptions: OptionConfigMap = {};
+
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  commands: DriverCommandRegistration<any, any>[] = [];
 
   // Set after instantiation
   config!: Config;
@@ -217,10 +223,23 @@ export default abstract class Driver<
   }
 
   /**
-   * Setup additional command options.
+   * Register a sub-command within the CLI.
    */
-  setCommandOptions(options: DriverCommandOptions): this {
-    const blueprint: Blueprint<DriverCommandOptions> = {};
+  registerCommand<O extends object, P extends PrimitiveType[]>(
+    path: string,
+    config: DriverCommandConfig<O, P>,
+    runner: DriverCommandRunner<O, P>,
+  ) {
+    this.commands.push({ config, path, runner });
+
+    return this;
+  }
+
+  /**
+   * Setup additional command line options for this driver.
+   */
+  setCommandOptions(options: OptionConfigMap): this {
+    const blueprint: Blueprint<OptionConfigMap> = {};
     const { shape, string } = predicates;
 
     Object.keys(options).forEach((key) => {
@@ -230,7 +249,7 @@ export default abstract class Driver<
       });
     });
 
-    this.command = optimal(options, blueprint, {
+    this.commandOptions = optimal(options, blueprint, {
       name: this.constructor.name,
       unknown: true,
     });

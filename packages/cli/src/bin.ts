@@ -30,6 +30,11 @@ async function run() {
     // Add a command for each driver
     tool.driverRegistry.getAll().forEach((driver) => {
       program.register(new RunDriver({ driver, parallelArgv }));
+
+      // Register sub-commands for the driver
+      driver.commands.forEach((command) => {
+        program.register(`${driver.getName()}:${command.path}`, command.config, command.runner);
+      });
     });
   });
 }
