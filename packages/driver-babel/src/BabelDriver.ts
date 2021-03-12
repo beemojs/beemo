@@ -10,19 +10,18 @@ export default class BabelDriver extends Driver<BabelConfig> {
   bootstrap() {
     this.setMetadata({
       bin: 'babel',
+      commandOptions: {
+        clean: {
+          default: false,
+          description: this.tool.msg('app:babelCleanOption'),
+          type: 'boolean',
+        },
+      },
       configName: 'babel.config.js',
       configOption: '--config-file',
       description: this.tool.msg('app:babelDescription'),
       title: 'Babel',
       watchOptions: ['-w', '--watch'],
-    });
-
-    this.setCommandOptions({
-      clean: {
-        default: false,
-        description: this.tool.msg('app:babelCleanOption'),
-        type: 'boolean',
-      },
     });
 
     this.onBeforeExecute.listen(this.handleCleanTarget);

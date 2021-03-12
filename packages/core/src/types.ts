@@ -5,6 +5,7 @@ import {
   Command,
   MapOptionConfig,
   MapParamConfig,
+  OptionConfigMap,
   ParserOptions,
   PrimitiveType,
 } from '@boost/args';
@@ -53,6 +54,7 @@ export interface DriverOptions {
 
 export interface DriverMetadata {
   bin: string;
+  commandOptions: OptionConfigMap;
   configName: string;
   configOption: string;
   configStrategy: 'copy' | 'create' | 'reference' | 'template';

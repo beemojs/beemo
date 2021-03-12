@@ -236,32 +236,10 @@ export default abstract class Driver<
   }
 
   /**
-   * Setup additional command line options for this driver.
-   */
-  setCommandOptions(options: OptionConfigMap): this {
-    const blueprint: Blueprint<OptionConfigMap> = {};
-    const { shape, string } = predicates;
-
-    Object.keys(options).forEach((key) => {
-      blueprint[key] = shape({
-        description: string().notEmpty().required(),
-        type: string().oneOf<'boolean' | 'number' | 'string'>(['string', 'number', 'boolean']),
-      });
-    });
-
-    this.commandOptions = optimal(options, blueprint, {
-      name: this.constructor.name,
-      unknown: true,
-    });
-
-    return this;
-  }
-
-  /**
    * Set metadata about the binary/executable in which this driver wraps.
    */
   setMetadata(metadata: Partial<DriverMetadata>): this {
-    const { array, bool, string } = predicates;
+    const { array, bool, string, object, shape } = predicates;
 
     this.metadata = optimal(
       metadata,
@@ -269,6 +247,12 @@ export default abstract class Driver<
         bin: string()
           .match(/^[a-z]{1}[a-zA-Z0-9-]+$/u)
           .required(),
+        commandOptions: object(
+          shape({
+            description: string().notEmpty().required(),
+            type: string().oneOf<'boolean' | 'number' | 'string'>(['string', 'number', 'boolean']),
+          }),
+        ),
         configName: string().required(),
         configOption: string('--config'),
         configStrategy: string(STRATEGY_CREATE).oneOf([

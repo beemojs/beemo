@@ -11,6 +11,7 @@ import {
   Predicates,
 } from '@beemo/core';
 import { Event } from '@boost/event';
+import syncProjectRefs from './commands/syncProjectRefs';
 import { TypeScriptConfig, TypeScriptOptions } from './types';
 
 function join(...parts: string[]): string {
@@ -44,6 +45,13 @@ export default class TypeScriptDriver extends Driver<TypeScriptConfig, TypeScrip
   bootstrap() {
     this.setMetadata({
       bin: 'tsc',
+      commandOptions: {
+        clean: {
+          default: false,
+          description: this.tool.msg('app:typescriptCleanOption'),
+          type: 'boolean',
+        },
+      },
       configName: 'tsconfig.json',
       configOption: '',
       description: this.tool.msg('app:typescriptDescription'),
@@ -53,15 +61,9 @@ export default class TypeScriptDriver extends Driver<TypeScriptConfig, TypeScrip
       workspaceStrategy: 'copy',
     });
 
-    this.setCommandOptions({
-      clean: {
-        default: false,
-        description: this.tool.msg('app:typescriptCleanOption'),
-        type: 'boolean',
-      },
-    });
+    // TODO
+    this.registerCommand('sync-project-refs', { description: '' }, syncProjectRefs);
 
-    this.onCreateConfigFile.listen(this.handlePrepareConfigs);
     this.onBeforeExecute.listen(this.handleCleanTarget);
     this.onBeforeExecute.listen(this.handleProjectReferences);
   }
@@ -218,68 +220,6 @@ export default class TypeScriptDriver extends Driver<TypeScriptConfig, TypeScrip
   }
 
   /**
-   * Extract compiler options from the root config into a separate config purely for
-   * extending options. Update the root config with references to all workspaces.
-   */
-  prepareProjectRefsRootConfigs(
-    workspaceRoot: Path,
-    configPath: Path,
-    config: TypeScriptConfig,
-  ): Path {
-    const { srcFolder, testsFolder } = this.options;
-    const optionsPath = configPath.parent().append('tsconfig.options.json');
-
-    // Extract compiler options to a new config file
-    fs.writeFileSync(
-      optionsPath.path(),
-      this.formatConfig({
-        compilerOptions: {
-          ...config.compilerOptions,
-          // Required for project references
-          composite: true,
-          declaration: true,
-          declarationMap: true,
-          // Remove by marking as undefined
-          outDir: undefined,
-          outFile: undefined,
-        },
-      }),
-    );
-
-    // Delete problematic root options
-    delete config.compilerOptions;
-    delete config.include;
-    delete config.exclude;
-
-    // Generate references and update paths
-    config.extends = './tsconfig.options.json';
-    config.files = [];
-    config.references = [];
-
-    this.tool.project.getWorkspacePackages().forEach(({ metadata }) => {
-      const pkgPath = new Path(metadata.packagePath);
-      const srcPath = pkgPath.append(srcFolder);
-      const testsPath = pkgPath.append(testsFolder);
-
-      // Reference a package *only* if it has a src folder
-      if (srcFolder && srcPath.exists()) {
-        config.references!.push({
-          path: workspaceRoot.relativeTo(pkgPath).path(),
-        });
-
-        // Reference a separate tests folder if it exists
-        if (testsFolder && testsPath.exists()) {
-          config.references!.push({
-            path: workspaceRoot.relativeTo(testsPath).path(),
-          });
-        }
-      }
-    });
-
-    return optionsPath;
-  }
-
-  /**
    * Automatically clean the target folder if `outDir` and `--clean` is used.
    */
   private handleCleanTarget = (context: DriverContext) => {
@@ -290,25 +230,6 @@ export default class TypeScriptDriver extends Driver<TypeScriptConfig, TypeScrip
     }
 
     return Promise.resolve();
-  };
-
-  /**
-   * Define references and compiler options when `--reference-workspaces` option is passed.
-   */
-  private handlePrepareConfigs = (
-    context: ConfigContext,
-    configPath: Path,
-    config: TypeScriptConfig,
-  ) => {
-    if (!context.getRiskyOption('referenceWorkspaces')) {
-      return;
-    }
-
-    // Add to context so that it can be automatically cleaned up
-    context.addConfigPath(
-      'typescript',
-      this.prepareProjectRefsRootConfigs(context.workspaceRoot, configPath, config),
-    );
   };
 
   /**
