@@ -1,6 +1,7 @@
 import { ScriptContextOptions, ScriptContextParams } from '@beemo/core';
-import { Arg, Command, Config, GlobalOptions } from '@boost/cli';
+import { Arg, Config } from '@boost/cli';
 import { tool } from '../setup';
+import BaseRunCommand from './BaseRunCommand';
 
 @Config('run-script', tool.msg('app:cliCommandRunScript'), {
   aliases: ['run'],
@@ -8,22 +9,7 @@ import { tool } from '../setup';
   allowVariadicParams: true,
   category: 'core',
 })
-export default class RunScript extends Command<
-  GlobalOptions & ScriptContextOptions,
-  ScriptContextParams
-> {
-  @Arg.Number(tool.msg('app:cliOptionConcurrency'))
-  concurrency: number = 0;
-
-  @Arg.Flag(tool.msg('app:cliOptionGraph'))
-  graph: boolean = false;
-
-  @Arg.String(tool.msg('app:cliOptionStdio'), { choices: ['buffer', 'stream', 'inherit'] })
-  stdio: string = 'buffer';
-
-  @Arg.String(tool.msg('app:cliOptionWorkspaces'))
-  workspaces: string = '';
-
+export default class RunScript extends BaseRunCommand<ScriptContextOptions, ScriptContextParams> {
   @Arg.Params<ScriptContextParams>({
     description: tool.msg('app:cliArgScriptName'),
     label: 'name',

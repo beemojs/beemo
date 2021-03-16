@@ -1,5 +1,0 @@
-// Jest Snapshot v1, https://goo.gl/fbAQLP
-
-exports[`TypeScriptDriver handleProjectReferences() errors if --build isnt passed with --reference-workspaces 1`] = `"The --build option is required when using --reference-workspaces."`;
-
-exports[`TypeScriptDriver handleProjectReferences() errors if --reference-workspaces and --workspaces are passed 1`] = `"Options --workspaces and --reference-workspaces cannot be used in unison."`;

@@ -188,8 +188,8 @@ async function createProjectRefConfigsInWorkspaces(
 
           const configPath = pkgPath.append('tsconfig.json');
 
-          promises.push(writeFile(configPath, packageConfig));
           driver.onCreateProjectConfigFile.emit([configPath, packageConfig, false]);
+          promises.push(writeFile(configPath, packageConfig));
         }
 
         // Build tests specific package config
@@ -216,8 +216,8 @@ async function createProjectRefConfigsInWorkspaces(
 
           const configPath = testsPath.append('tsconfig.json');
 
-          promises.push(writeFile(testsPath.append('tsconfig.json'), testConfig));
           driver.onCreateProjectConfigFile.emit([configPath, testConfig, true]);
+          promises.push(writeFile(testsPath.append('tsconfig.json'), testConfig));
         }
 
         return Promise.all(promises);
@@ -230,5 +230,5 @@ export default async function syncProjectRefs(tool: Tool) {
   const driver = tool.driverRegistry.get<TypeScriptDriver>('typescript');
 
   await addProjectRefsToRootConfig(tool, driver);
-  // await createProjectRefConfigsInWorkspaces(tool, driver);
+  await createProjectRefConfigsInWorkspaces(tool, driver);
 }

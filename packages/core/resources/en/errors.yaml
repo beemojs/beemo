@@ -21,7 +21,3 @@ templatePathMissing: Failed to load configuration strategy template from "{{path
 templateTypeInvalid: Configuration strategy template must export a function, found {{type}}.
 templateRequired: Driver `template` option is required when `strategy` is "template".
 workspacesNotEnabled: Option --workspaces={{arg}} provided but project is not workspaces enabled.
-workspacesProjectRefsBuildRequired:
-  The --build option is required when using --reference-workspaces.
-workspacesProjectRefsMixed:
-  Options --workspaces and --reference-workspaces cannot be used in unison.
