@@ -194,55 +194,6 @@ describe('Driver', () => {
     });
   });
 
-  describe('setCommandOptions()', () => {
-    it('supports description as a string', () => {
-      driver.setCommandOptions({
-        foo: {
-          description: 'Foo',
-          type: 'string',
-        },
-      });
-
-      expect(driver.commandOptions).toEqual({
-        foo: {
-          description: 'Foo',
-          type: 'string',
-        },
-      });
-    });
-
-    it('doesnt support description as other types', () => {
-      expect(() => {
-        driver.setCommandOptions({
-          foo: {
-            // @ts-expect-error
-            description: 123,
-          },
-        });
-      }).toThrowErrorMatchingSnapshot();
-    });
-
-    it('doesnt support empty descriptions', () => {
-      expect(() => {
-        driver.setCommandOptions({
-          foo: {
-            description: '',
-            type: 'string',
-          },
-        });
-      }).toThrowErrorMatchingSnapshot();
-    });
-
-    it('requires a description', () => {
-      expect(() => {
-        driver.setCommandOptions({
-          // @ts-expect-error
-          foo: {},
-        });
-      }).toThrowErrorMatchingSnapshot();
-    });
-  });
-
   describe('setMetadata()', () => {
     const options = {
       bin: 'beemo',
@@ -325,6 +276,73 @@ describe('Driver', () => {
             ...options,
             // @ts-expect-error
             title: 123,
+          });
+        }).toThrowErrorMatchingSnapshot();
+      });
+    });
+
+    describe('command options', () => {
+      it.only('supports description as a string', () => {
+        driver.setMetadata({
+          ...options,
+          commandOptions: {
+            foo: {
+              description: 'Foo',
+              type: 'string',
+            },
+          },
+        });
+
+        expect(driver.metadata.commandOptions).toEqual({
+          foo: {
+            description: 'Foo',
+            type: 'string',
+          },
+        });
+      });
+
+      it('doesnt support description as other types', () => {
+        expect(() => {
+          driver.setMetadata({
+            ...options,
+            bin: 'beemo',
+            configName: 'beemo',
+            commandOptions: {
+              foo: {
+                // @ts-expect-error
+                description: 123,
+              },
+            },
+          });
+        }).toThrowErrorMatchingSnapshot();
+      });
+
+      it('doesnt support empty descriptions', () => {
+        expect(() => {
+          driver.setMetadata({
+            ...options,
+            bin: 'beemo',
+            configName: 'beemo',
+            commandOptions: {
+              foo: {
+                description: '',
+                type: 'string',
+              },
+            },
+          });
+        }).toThrowErrorMatchingSnapshot();
+      });
+
+      it('requires a description', () => {
+        expect(() => {
+          driver.setMetadata({
+            ...options,
+            bin: 'beemo',
+            configName: 'beemo',
+            commandOptions: {
+              // @ts-expect-error
+              foo: {},
+            },
           });
         }).toThrowErrorMatchingSnapshot();
       });

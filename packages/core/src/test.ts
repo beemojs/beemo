@@ -69,6 +69,8 @@ export function mockTool(argv: Argv = []): Tool {
 
   tool.config = mockToolConfig();
 
+  jest.spyOn(tool, 'msg').mockImplementation(() => '');
+
   return tool;
 }
 
