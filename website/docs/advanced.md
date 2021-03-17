@@ -1,6 +1,8 @@
-# Tips
+---
+title: Advanced
+---
 
-Some useful tips on utilizing Beemo like a pro!
+Some useful tips and advanced features on utilizing Beemo like a pro!
 
 ## Local Beemo setup
 
@@ -11,8 +13,8 @@ monorepos, or for testing your configuration module itself!
 In your Beemo config, use `@local` instead of the name of your configuration module. This will use
 the current working directory (`process.cwd()`) instead of the Node module path.
 
-```js
-module.exports = {
+```ts title=".config/beemo.ts"
+export default {
   module: '@local',
 };
 ```
@@ -48,7 +50,7 @@ the user generated the files.
 To work around this, we can define a `prepare` script to create all config files, which runs after
 every `yarn install` or `npm install`.
 
-```json
+```json title="package.json"
 {
   "scripts": {
     "prepare": "beemo create-config --silent"
@@ -105,9 +107,8 @@ Beemo supports custom project level configuration through the `settings` propert
 accepts an object of any key-value pair. This property is not used by Beemo itself, so is free from
 any possible collisions.
 
-```js
-// .config/beemo.js
-module.exports = {
+```js title=".config/beemo.ts"
+export default {
   module: '<config-module>',
   settings: {
     whateverYouWant: 'here',
@@ -152,7 +153,7 @@ require('@beemo/cli/bin');
 
 Be sure to reference your new executable in your configuration module's `package.json`.
 
-```json
+```json title="package.json"
 {
   "bin": {
     "bmo": "./bin/bmo.js"
@@ -163,9 +164,8 @@ Be sure to reference your new executable in your configuration module's `package
 If `BEEMO_CONFIG_MODULE` is not defined in your custom binary (above), each consumer will need to
 manually configure it.
 
-```js
-// .config/bmo.js
-module.exports = {
+```js title=".config/bmo.ts"
+export default {
   module: '@bmo/dev',
 };
 ```
@@ -173,7 +173,7 @@ module.exports = {
 ### Does change
 
 - Binary executable name and project title: `bmo run-driver babel`
-- Config file names: `.config/bmo.js`, `.config/bmo/babel.js`
+- Config file names: `.config/bmo.js`, `.config/bmo/babel.js`, etc
 - Beemo process global: `process.bmo`
 - Debug namespace: `DEBUG=bmo:*`
 

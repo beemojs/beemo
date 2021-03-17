@@ -1,4 +1,6 @@
-# Workspaces
+---
+title: Workspaces
+---
 
 Beemo has first class support for executing driver commands across workspaces (monorepos), using
 [Yarn workspaces](https://yarnpkg.com/lang/en/docs/workspaces/) or
@@ -17,8 +19,6 @@ yarn beemo typescript --workspaces=driver-*
 ```
 
 > Patterns are powered by [micromatch](https://github.com/micromatch/micromatch).
-
-![Beemo](https://raw.githubusercontent.com/beemojs/beemo/master/docs/img/workspaces.gif)
 
 ## Priority packages
 

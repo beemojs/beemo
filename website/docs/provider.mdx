@@ -1,4 +1,9 @@
-# Provider setup
+---
+title: Provider setup
+---
+
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
 
 To begin, create and clone a new repository on GitHub (or another VCS). This repository will be
 known as your "configuration module" going forward. I suggest naming it `dev`, or `dev-configs`,
@@ -23,19 +28,61 @@ Enter `0.0.0` for the version, and whatever you want for the remaining questions
 
 Now that we have a repository, we can install and setup Beemo. It's as easy as...
 
+<Tabs
+  groupId="package-manager"
+  defaultValue="yarn"
+  values={[
+    { label: 'Yarn', value: 'yarn' },
+    { label: 'NPM', value: 'npm' },
+  ]}
+>
+  <TabItem value="yarn">
+
 ```bash
 yarn add @beemo/core @beemo/cli
 ```
 
+  </TabItem>
+  <TabItem value="npm">
+
+```bash
+npm install @beemo/core @beemo/cli
+```
+
+  </TabItem>
+</Tabs>
+
 This will only install the core functionality. To support different developer tools like Babel,
 ESLint, and Jest, we need to install packages known as "drivers"
 ([view all available drivers](https://www.npmjs.com/search?q=beemo-driver)).
+
+<Tabs
+  groupId="package-manager"
+  defaultValue="yarn"
+  values={[
+    { label: 'Yarn', value: 'yarn' },
+    { label: 'NPM', value: 'npm' },
+  ]}
+>
+  <TabItem value="yarn">
 
 ```bash
 yarn add @beemo/driver-babel @babel/core
 yarn add @beemo/driver-eslint eslint
 yarn add @beemo/driver-jest jest
 ```
+
+  </TabItem>
+  <TabItem value="npm">
+
+```bash
+npm install @beemo/driver-babel @babel/core
+npm install @beemo/driver-eslint eslint
+npm install @beemo/driver-jest jest
+```
+
+  </TabItem>
+</Tabs>
 
 > Drivers and their peer dependencies must be installed as production dependencies.
 
@@ -47,35 +94,28 @@ we'd have the following:
 
 ```
 configs/
-  babel.js
-  eslint.js
-  jest.js
+  babel.ts
+  eslint.ts
+  jest.ts
 ```
 
 > The benefit of Beemo is that we can avoid different tooling conventions and standardize on a
 > single implementation. No more `.foorc`, `.foorc.js`, or `.foorc.json` nonsense. Just
-> `configs/<driver>.js`.
+> `configs/<driver>.ts` (and .js too).
 
-Each configuration file should return a JavaScript object. Easy enough.
+Each configuration file should return an object. Easy enough.
 
-```js
-// configs/babel.js
-module.exports = {
-  presets: [
-    [
-      '@babel/preset-env',
-      {
-        targets: { node: 'current' },
-      },
-    ],
-  ],
-};
-```
+<Tabs
+  groupId="format"
+  defaultValue="ts"
+  values={[
+    { label: 'TypeScript', value: 'ts' },
+    { label: 'JavaScript', value: 'js' },
+  ]}
+>
+  <TabItem value="ts">
 
-TypeScript configuration files are also supported.
-
-```ts
-// configs/babel.ts
+```ts title="configs/babel.ts"
 import { BabelConfig } from '@beemo/driver-babel';
 
 const config: BabelConfig = {
@@ -92,14 +132,34 @@ const config: BabelConfig = {
 export default config;
 ```
 
+  </TabItem>
+  <TabItem value="js">
+
+```js title="configs/babel.js"
+module.exports = {
+  presets: [
+    [
+      '@babel/preset-env',
+      {
+        targets: { node: 'current' },
+      },
+    ],
+  ],
+};
+```
+
+  </TabItem>
+</Tabs>
+
 You can access the command line args, the pipeline context, and the current
 [tool instance](./tool.md) on `process.beemo` (which allows for runtime conditional logic). For
 example, if `--react` was passed, we can enable the React preset.
 
-```js
-// configs/babel.js
+```ts title="configs/babel.ts"
+import { BabelConfig } from '@beemo/driver-babel';
+
 const { context, tool } = process.beemo;
-const presets = [
+const presets: BabelConfig['presets'] = [
   [
     '@babel/preset-env',
     {
@@ -112,7 +172,7 @@ if (context.args.react) {
   presets.push('@babel/preset-react');
 }
 
-module.exports = {
+export default {
   presets,
 };
 ```
@@ -135,8 +195,49 @@ Beemo supports executing custom scripts found within your configuration module. 
 create a file (in PascalCase) within the `scripts/` folder, extend the `Script` class provided by
 Beemo, and define the `execute()` and `parse()` methods.
 
-```js
-// scripts/InitProject.js
+<Tabs
+  groupId="format"
+  defaultValue="ts"
+  values={[
+    { label: 'TypeScript', value: 'ts' },
+    { label: 'JavaScript', value: 'js' },
+  ]}
+>
+  <TabItem value="ts">
+
+```ts title="scripts/InitProject.ts"
+import { Arguments, ParserOptions, Script, ScriptContext } from '@beemo/core';
+
+interface InitProjectOptions {
+  dryRun: boolean;
+}
+
+class InitProjectScript extends Script<InitProjectOptions> {
+  readonly name = 'init-project';
+
+  parse(): ParserOptions<InitProjectOptions> {
+    return {
+      dryRun: {
+        description: 'Execute a dry run',
+        type: 'boolean',
+      },
+    };
+  }
+
+  execute(context: ScriptContext, args: Arguments<InitProjectOptions>) {
+    if (args.dryRun) {
+      // Do something
+    }
+  }
+}
+
+export default () => new InitProjectScript();
+```
+
+  </TabItem>
+  <TabItem value="js">
+
+```js title="scripts/InitProject.js"
 const { Script } = require('@beemo/core');
 
 class InitProjectScript extends Script {
@@ -161,37 +262,8 @@ class InitProjectScript extends Script {
 module.exports = () => new InitProjectScript();
 ```
 
-Like configuration files, scripts can also be written in TypeScript.
-
-```ts
-// scripts/InitProject.ts
-import { Arguments, ParserOptions, Script, ScriptContext } from '@beemo/core';
-
-interface InitProjectOptions {
-  dryRun: boolean;
-}
-
-class InitProjectScript extends Script<InitProjectOptions> {
-  name = 'init-project';
-
-  parse(): ParserOptions<InitProjectOptions> {
-    return {
-      dryRun: {
-        description: 'Execute a dry run',
-        type: 'boolean',
-      },
-    };
-  }
-
-  execute(context: ScriptContext, args: Arguments<InitProjectOptions>) {
-    if (args.dryRun) {
-      // Do something
-    }
-  }
-}
-
-export default () => new InitProjectScript();
-```
+  </TabItem>
+</Tabs>
 
 The `parse()` method is optional but can be used to define parsing rules for CLI options (powered by
 [@boost/args](https://milesj.gitbook.io/boost/args)). If no rules are provided, default parsing

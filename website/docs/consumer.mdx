@@ -1,4 +1,9 @@
-# Consumer setup
+---
+title: Consumer setup
+---
+
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
 
 Now that you have a configuration module, we can integrate it across all projects. But first, go
 ahead and delete all the old config files and dependencies in each project (if they exist), as all
@@ -7,20 +12,75 @@ that logic should now be housed in your configuration module.
 Once you have a clean slate, install your configuration module, and BOOM, it's as easy as that. No
 more development dependency hell, just a single dependency.
 
+<Tabs
+  groupId="package-manager"
+  defaultValue="yarn"
+  values={[
+    { label: 'Yarn', value: 'yarn' },
+    { label: 'NPM', value: 'npm' },
+  ]}
+>
+  <TabItem value="yarn">
+
 ```bash
 yarn add <config-module> --dev
 ```
 
-With that being said, create a `.config/beemo.js` file (or `.json`, `.yaml`) in your project root
-with a `module` property that matches the name of your configuration module, or another third-party
-module (if you don't want to manage your own provider).
+  </TabItem>
+  <TabItem value="npm">
 
-```js
-// .config/beemo.js
+```bash
+npm install <config-module> --save-dev
+```
+
+  </TabItem>
+</Tabs>
+
+With that being said, create a `.config/beemo.ts` file (or `.js`, `.json`, `.yaml`) in your project
+root with a `module` property that matches the name of your configuration module, or another
+third-party module (if you don't want to manage your own provider).
+
+<Tabs
+  groupId="format"
+  defaultValue="ts"
+  values={[
+    { label: 'TypeScript', value: 'ts' },
+    { label: 'JavaScript', value: 'js' },
+    { label: 'JSON', value: 'json' },
+  ]}
+>
+  <TabItem value="ts">
+
+```ts title=".config/beemo.ts"
+import { BeemoConfig } from '@beemo/core';
+
+const config: BeemoConfig = {
+  module: '<config-module>',
+};
+
+export default config;
+```
+
+  </TabItem>
+  <TabItem value="js">
+
+```js title=".config/beemo.js"
 module.exports = {
   module: '<config-module>',
 };
 ```
+
+  </TabItem>
+  <TabItem value="json">
+
+```json title=".config/beemo.json"
+{
+  "module": "<config-module>"
+}
+```
+
+  </TabItem>
+</Tabs>
 
 ### Settings
 
@@ -47,21 +107,78 @@ drivers per project, a `drivers` property must be defined.
 This property accepts an array of strings, or objects, with the names of each driver you want to
 enable. For example, if we want to use Babel, ESLint, and Jest, we would have the following.
 
-```js
-// .config/beemo.js
+<Tabs
+  groupId="format"
+  defaultValue="ts"
+  values={[
+    { label: 'TypeScript', value: 'ts' },
+    { label: 'JavaScript', value: 'js' },
+  ]}
+>
+  <TabItem value="ts">
+
+```ts title=".config/beemo.ts"
+import { BeemoConfig } from '@beemo/core';
+
+const config: BeemoConfig = {
+  module: '<config-module>',
+  drivers: ['babel', 'eslint', 'jest'],
+};
+
+export default config;
+```
+
+  </TabItem>
+  <TabItem value="js">
+
+```js title=".config/beemo.js"
 module.exports = {
   module: '<config-module>',
   drivers: ['babel', 'eslint', 'jest'],
 };
 ```
 
+  </TabItem>
+</Tabs>
+
 Furthermore, drivers can be configured with options by using an object. If a driver does not require
 options, either pass an empty object, or a boolean `true`.
 
-```js
-// .config/beemo.js
+<Tabs
+  groupId="format"
+  defaultValue="ts"
+  values={[
+    { label: 'TypeScript', value: 'ts' },
+    { label: 'JavaScript', value: 'js' },
+  ]}
+>
+  <TabItem value="ts">
+
+```ts title=".config/beemo.ts"
+import { BeemoConfig } from '@beemo/core';
+
+const config: BeemoConfig = {
+  module: '<config-module>',
+  drivers: {
+    babel: true,
+    eslint: {
+      args: ['--color', '--report-unused-disable-directives'],
+    },
+    jest: {
+      env: { NODE_ENV: 'test' },
+    },
+  },
+};
+
+export default config;
+```
+
+  </TabItem>
+  <TabItem value="js">
+
+```js title=".config/beemo.js"
 module.exports = {
-  module: '@<username>/dev-tools',
+  module: '<config-module>',
   drivers: {
     babel: true,
     eslint: {
@@ -73,6 +190,9 @@ module.exports = {
   },
 };
 ```
+
+  </TabItem>
+</Tabs>
 
 Options can also be set through the [bootstrap and event system](./events.md).
 
@@ -102,7 +222,7 @@ and lastly, leave a beautiful message in your console.
 That being said, consistently remembering the correct commands and arguments to pass to `yarn` and
 `npx` is tedious. So why not use scripts? Feel free to steal the following.
 
-```json
+```json title="package.json"
 {
   "scripts": {
     "build": "beemo babel ./src --out-dir ./lib",
@@ -174,14 +294,41 @@ Your configuration module may now house and provide all configurations, but that
 applicable to _all_ consuming projects. To accomodate this, Beemo supports overriding of driver
 config on a project-by-project basis through a local `.config/beemo/<driver>.(js|ts)` file.
 
-```js
-// .config/beemo/eslint.js
+<Tabs
+  groupId="format"
+  defaultValue="ts"
+  values={[
+    { label: 'TypeScript', value: 'ts' },
+    { label: 'JavaScript', value: 'js' },
+  ]}
+>
+  <TabItem value="ts">
+
+```ts title=".config/beemo/eslint.ts"
+import { ESLintConfig } from '@beemo/driver-eslint';
+
+const config: ESLintConfig = {
+  rules: {
+    'no-param-reassign': 0,
+  },
+};
+
+export default config;
+```
+
+  </TabItem>
+  <TabItem value="js">
+
+```js title=".config/beemo/eslint.js"
 module.exports = {
   rules: {
     'no-param-reassign': 0,
   },
 };
 ```
+
+  </TabItem>
+</Tabs>
 
 > Some dev tools support `package.json` overrides like this, but it's preferred to use the Beemo
 > approach for interoperability.
@@ -197,8 +344,39 @@ path.
 To use templates, set the driver `strategy` option to "template", and the `template` option to a
 file path for the template function (relative to the `.config` folder).
 
-```js
-// .config/beemo.js
+<Tabs
+  groupId="format"
+  defaultValue="ts"
+  values={[
+    { label: 'TypeScript', value: 'ts' },
+    { label: 'JavaScript', value: 'js' },
+  ]}
+>
+  <TabItem value="ts">
+
+```ts title=".config/beemo.ts"
+import { BeemoConfig } from '@beemo/core';
+
+const config: BeemoConfig = {
+  module: '<config-module>',
+  drivers: [
+    [
+      'eslint',
+      {
+        strategy: 'template',
+        template: './path/to/custom/template.ts',
+      },
+    ],
+  ],
+};
+
+export default config;
+```
+
+  </TabItem>
+  <TabItem value="js">
+
+```js title=".config/beemo.js"
 module.exports = {
   module: '<config-module>',
   drivers: [
@@ -213,6 +391,9 @@ module.exports = {
 };
 ```
 
+  </TabItem>
+</Tabs>
+
 The template is merely a function that receives a list of config objects from multiple sources, and
 must return a single config object (or string), and an optional destination path. It also receives
 an options object with helpful information about the current process.
@@ -220,7 +401,7 @@ an options object with helpful information about the current process.
 To demonstrate the power of templates, let's write a custom template that generates a YAML
 configuration file for ESLint.
 
-```ts
+```ts title="./path/to/custom/template.ts"
 import { yaml } from '@boost/common';
 import { ConfigObject, ConfigTemplateResult, ConfigTemplateOptions } from '@beemo/core';
 

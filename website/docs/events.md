@@ -1,4 +1,6 @@
-# Listening to events
+---
+title: Event-driven tooling
+---
 
 What kind of tool would Beemo be without the ability to listen to events? A terrible one, and as
 such, Beemo totally supports them! Events provide an easy mechanism for hooking into the lifecycle
@@ -8,8 +10,7 @@ To begin, create an index file in your configuration module that exports a funct
 default export or as a named `bootstrap` export. This function will receive a
 [Beemo Tool instance](./tool.md) for the current process, in which listeners can be registered.
 
-```ts
-// index.ts
+```ts title="index.ts"
 import { Tool } from '@beemo/core';
 
 export default function bootstrap(tool: Tool) {

@@ -3,6 +3,15 @@
 module.exports = {
   docs: [
     'index',
+    'provider',
+    'consumer',
+    'driver',
+    'tool',
+    'events',
+    'scaffolding',
+    'workspaces',
+    'advanced',
+    'conventions',
     {
       type: 'link',
       label: 'Changelog',

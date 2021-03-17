@@ -1,4 +1,6 @@
-# Scaffolding
+---
+title: Scaffolding
+---
 
 Beemo can scaffold projects through the amazing [hygen](https://github.com/jondot/hygen) library.
 Hygen separates templates into groupings of "generators" and "actions", coupling a front matter
@@ -10,12 +12,10 @@ To make use of scaffolds, create `.ejs` files within your configuration module, 
 `./templates/<generator>/<action>`. For example, if I wanted to scaffold dotfiles, I may create the
 following template for a `.gitignore`.
 
-```
-// templates/project/dotfiles/gitignore.ejs
+```text title="templates/project/dotfiles/gitignore.ejs"
 ---
 to: .gitignore
 ---
-
 node_modules/
 logs/
 *.log

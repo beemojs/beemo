@@ -1,4 +1,6 @@
-# Conventions
+---
+title: Conventions
+---
 
 ## Naming
 
