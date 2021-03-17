@@ -8,7 +8,7 @@
     "dts/**/*.d.ts",
     "lib/**/*.{js,map}",
     "src/**/*.{ts,tsx,json}",
-    "templates/"
+    "templates/**/*"
   ],
   "repository": {
     "type": "git",

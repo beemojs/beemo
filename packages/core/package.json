@@ -21,7 +21,7 @@
   "files": [
     "dts/**/*.d.ts",
     "lib/**/*.{js,map}",
-    "resources/",
+    "resources/**/*.yaml",
     "src/**/*.{ts,tsx,json}",
     "test.d.ts",
     "test.js"
