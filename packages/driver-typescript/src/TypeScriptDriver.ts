@@ -1,7 +1,8 @@
 import rimraf from 'rimraf';
-import { Blueprint, Driver, DriverContext, Path, Predicates } from '@beemo/core';
+import { Blueprint, ConfigContext, Driver, DriverContext, Path, Predicates } from '@beemo/core';
 import { Event } from '@boost/event';
 import syncProjectRefs from './commands/syncProjectRefs';
+import { writeFile } from './helpers';
 import { TypeScriptConfig, TypeScriptOptions } from './types';
 
 // Success: Writes nothing to stdout or stderr
@@ -53,6 +54,7 @@ export default class TypeScriptDriver extends Driver<TypeScriptConfig, TypeScrip
       syncProjectRefs,
     );
 
+    this.onCreateConfigFile.listen(this.handlePrepareConfigs);
     this.onBeforeExecute.listen(this.handleCleanTarget);
   }
 
@@ -67,5 +69,70 @@ export default class TypeScriptDriver extends Driver<TypeScriptConfig, TypeScrip
     }
 
     return Promise.resolve();
+  };
+
+  /**
+   * Extract compiler options from the root config into a separate config purely for
+   * extending options. Update the root config with references to all workspaces.
+   */
+  private handlePrepareConfigs = (
+    context: ConfigContext,
+    configPath: Path,
+    config: TypeScriptConfig,
+  ) => {
+    const { tool } = this;
+    const { srcFolder, testsFolder } = this.options;
+    const workspacePackages = tool.project.getWorkspacePackages();
+
+    if (workspacePackages.length === 0) {
+      return;
+    }
+
+    // Extract compiler optionst to a separate config
+    const optionsConfigPath = configPath.parent().append('tsconfig.options.json');
+
+    void writeFile(optionsConfigPath, {
+      compilerOptions: {
+        ...config.compilerOptions,
+        composite: true,
+        declaration: true,
+        declarationMap: true,
+        outDir: undefined,
+        outFile: undefined,
+      },
+    });
+
+    // Delete problematic root options
+    delete config.compilerOptions;
+    delete config.include;
+    delete config.exclude;
+
+    // Generate references and update paths
+    config.extends = './tsconfig.options.json';
+    config.files = [];
+    config.references = [];
+
+    workspacePackages.forEach(({ metadata }) => {
+      const pkgPath = new Path(metadata.packagePath);
+      const srcPath = pkgPath.append(srcFolder);
+      const testsPath = pkgPath.append(testsFolder);
+
+      // Reference a package *only* if it has a src folder
+      if (srcFolder && srcPath.exists()) {
+        config.references!.push({
+          path: tool.project.root.relativeTo(pkgPath).path(),
+        });
+
+        // Reference a separate tests folder if it exists
+        if (testsFolder && testsPath.exists()) {
+          config.references!.push({
+            path: tool.project.root.relativeTo(testsPath).path(),
+          });
+        }
+      }
+    });
+
+    // Add to context so that it can be automatically cleaned up
+    context.addConfigPath('typescript', optionsConfigPath);
   };
 }
