@@ -1,5 +1,14 @@
 import { ExecaError, ExecaReturnValue } from 'execa';
-import { Arguments, Argv, OptionConfigMap, ParserOptions } from '@boost/args';
+import {
+  Arguments,
+  Argv,
+  Command,
+  MapOptionConfig,
+  MapParamConfig,
+  OptionConfigMap,
+  ParserOptions,
+  PrimitiveType,
+} from '@boost/args';
 import { Path, PortablePath } from '@boost/common';
 import { PluginsSetting } from '@boost/config';
 import { Pluggable } from '@boost/plugin';
@@ -32,8 +41,6 @@ export type StdioType = 'buffer' | 'inherit' | 'stream';
 
 // DRIVERS
 
-export type DriverCommandOptions = OptionConfigMap;
-
 export type DriverStrategy = 'copy' | 'create' | 'native' | 'none' | 'reference' | 'template';
 
 export interface DriverOptions {
@@ -47,6 +54,7 @@ export interface DriverOptions {
 
 export interface DriverMetadata {
   bin: string;
+  commandOptions: OptionConfigMap;
   configName: string;
   configOption: string;
   configStrategy: 'copy' | 'create' | 'reference' | 'template';
@@ -68,6 +76,29 @@ export interface DriverOutput {
 
 export interface Driverable extends Pluggable<BeemoTool> {
   metadata: DriverMetadata;
+}
+
+// DRIVER COMMANDS
+
+export interface DriverCommandConfig<O extends object, P extends PrimitiveType[]>
+  extends Omit<Command, 'category'> {
+  allowUnknownOptions?: boolean;
+  allowVariadicParams?: boolean | string;
+  options?: MapOptionConfig<O>;
+  params?: MapParamConfig<P>;
+}
+
+export type DriverCommandRunner<O extends object, P extends PrimitiveType[]> = (
+  tool: Tool,
+  options: O,
+  params: P,
+  rest: string[],
+) => Promise<string | undefined | void> | string | undefined | void;
+
+export interface DriverCommandRegistration<O extends object, P extends PrimitiveType[]> {
+  path: string;
+  config: DriverCommandConfig<O, P>;
+  runner: DriverCommandRunner<O, P>;
 }
 
 // SCRIPTS

@@ -21,7 +21,7 @@
     "prerelease": "yarn run pack && yarn test",
     "release": "lerna version --conventional-commits --changelog-preset conventional-changelog-beemo --create-release github --push && lerna publish from-git",
     "release:bump": "yarn run beemo run-script bump-peer-deps",
-    "type": "yarn run beemo typescript --build --reference-workspaces",
+    "type": "yarn run beemo typescript --build",
     "task:args": "ts-node packages/local/src/bins/extractOptionList.ts"
   },
   "devDependencies": {

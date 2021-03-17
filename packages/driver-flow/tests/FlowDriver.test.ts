@@ -6,8 +6,7 @@ describe('FlowDriver', () => {
 
   beforeEach(() => {
     driver = new FlowDriver();
-    driver.tool = mockTool();
-    driver.bootstrap();
+    driver.startup(mockTool());
   });
 
   it('sets options from constructor', () => {

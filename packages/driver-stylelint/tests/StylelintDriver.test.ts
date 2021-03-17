@@ -10,8 +10,7 @@ describe('StylelintDriver', () => {
 
   beforeEach(() => {
     driver = new StylelintDriver();
-    driver.tool = mockTool();
-    driver.bootstrap();
+    driver.startup(mockTool());
 
     context = stubDriverContext(driver);
 

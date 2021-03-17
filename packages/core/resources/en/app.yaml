@@ -56,4 +56,6 @@ signalBufferMessage: 'The following output was buffered before being interrupted
 stylelintDescription: Lint styles with stylelint
 typescriptCleanOption: Clean the target folder
 typescriptDescription: Type check files with TypeScript
+typescriptSyncProjectRefsDescription:
+  Create package-level project references based on workspace dependency graph
 webpackDescription: Bundle source files with Webpack

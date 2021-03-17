@@ -11,8 +11,7 @@ describe('BabelDriver', () => {
 
   beforeEach(() => {
     driver = new BabelDriver();
-    driver.tool = mockTool();
-    driver.bootstrap();
+    driver.startup(mockTool());
 
     context = stubDriverContext(driver);
   });
@@ -40,6 +39,13 @@ describe('BabelDriver', () => {
         bin: 'babel',
         configName: 'babel.config.js',
         configOption: '--config-file',
+        commandOptions: {
+          clean: {
+            default: false,
+            description: 'Clean the target folder',
+            type: 'boolean',
+          },
+        },
         dependencies: [],
         description: 'Transpile files with Babel',
         filterOptions: true,

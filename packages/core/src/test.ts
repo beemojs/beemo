@@ -124,7 +124,6 @@ export function stubDriverArgs(
   return stubArgs({
     concurrency: 1,
     graph: false,
-    referenceWorkspaces: false,
     stdio: 'buffer',
     workspaces: '',
     ...fields,

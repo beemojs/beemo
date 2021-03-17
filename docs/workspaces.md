@@ -48,15 +48,15 @@ strategies.
   is ran in each. Because of this, we suggest not using the root config for anything else.
 - **No support** - Workspaces do not work for this driver.
 
-| Driver     | Support                                                      |
-| ---------- | ------------------------------------------------------------ |
-| Babel      | Referenced using `--config-file`                             |
-| ESLint     | Root only (preferred), Referenced using `--config`           |
-| Flow       | Root only                                                    |
-| Jest       | Root only (preferred), Referenced using `--config`           |
-| Lerna      | Root only                                                    |
-| Mocha      | Root only                                                    |
-| Prettier   | Root only (preferred), Referenced using `--config`           |
-| Rollup     | N/A                                                          |
-| TypeScript | Use project references instead with `--reference-workspaces` |
-| Webpack    | N/A                                                          |
+| Driver     | Support                                            |
+| ---------- | -------------------------------------------------- |
+| Babel      | Referenced using `--config-file`                   |
+| ESLint     | Root only (preferred), Referenced using `--config` |
+| Flow       | Root only                                          |
+| Jest       | Root only (preferred), Referenced using `--config` |
+| Lerna      | Root only                                          |
+| Mocha      | Root only                                          |
+| Prettier   | Root only (preferred), Referenced using `--config` |
+| Rollup     | N/A                                                |
+| TypeScript | Use project references                             |
+| Webpack    | N/A                                                |

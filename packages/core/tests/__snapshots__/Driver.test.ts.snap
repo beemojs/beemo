@@ -16,13 +16,11 @@ exports[`Driver formatConfig() formats to JSON if config ends in .json 1`] = `
 }"
 `;
 
-exports[`Driver setCommandOptions() doesnt support description as other types 1`] = `"Invalid TestDriver field \\"foo.description\\". Must be a string, received 123."`;
-
-exports[`Driver setCommandOptions() doesnt support empty descriptions 1`] = `"Invalid TestDriver field \\"foo.description\\". String cannot be empty."`;
-
-exports[`Driver setCommandOptions() requires a description 1`] = `"Invalid TestDriver field \\"foo.description\\". Field is required and must be defined."`;
-
 exports[`Driver setMetadata() bin is required 1`] = `"Invalid TestDriver field \\"bin\\". Field is required and must be defined."`;
+
+exports[`Driver setMetadata() command options doesnt support description as other types 1`] = `"Invalid TestDriver field \\"commandOptions.foo.description\\". Must be a string, received 123."`;
+
+exports[`Driver setMetadata() command options requires a description 1`] = `"Invalid TestDriver field \\"commandOptions.foo.description\\". Field is required and must be defined."`;
 
 exports[`Driver setMetadata() configName doesnt support non-strings 1`] = `"Invalid TestDriver field \\"configName\\". Must be a string, received 123."`;
 

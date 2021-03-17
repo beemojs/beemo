@@ -10,8 +10,7 @@ describe('PrettierDriver', () => {
 
   beforeEach(() => {
     driver = new PrettierDriver();
-    driver.tool = mockTool();
-    driver.bootstrap();
+    driver.startup(mockTool());
 
     context = stubDriverContext(driver);
 

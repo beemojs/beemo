@@ -5,7 +5,6 @@ import ConfigContext from './ConfigContext';
 export interface DriverContextOptions {
   concurrency: number;
   graph: boolean;
-  referenceWorkspaces: boolean;
   stdio: StdioType;
   workspaces: string;
 }

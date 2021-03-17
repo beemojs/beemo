@@ -2,6 +2,7 @@ import CreateConfig from './commands/CreateConfig';
 import RunDriver from './commands/RunDriver';
 import RunScript from './commands/RunScript';
 import Scaffold from './commands/Scaffold';
+import createDriverCommand from './createDriverCommand';
 import { argv, parallelArgv, program, tool } from './setup';
 
 async function run() {
@@ -29,7 +30,7 @@ async function run() {
 
     // Add a command for each driver
     tool.driverRegistry.getAll().forEach((driver) => {
-      program.register(new RunDriver({ driver, parallelArgv }));
+      program.register(createDriverCommand(driver, parallelArgv));
     });
   });
 }
