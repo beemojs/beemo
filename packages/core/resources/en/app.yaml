@@ -57,5 +57,5 @@ stylelintDescription: Lint styles with stylelint
 typescriptCleanOption: Clean the target folder
 typescriptDescription: Type check files with TypeScript
 typescriptSyncProjectRefsDescription:
-  Automatically create project references based on workspace dependency graph
+  Create package-level project references based on workspace dependency graph
 webpackDescription: Bundle source files with Webpack
