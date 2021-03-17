@@ -1,0 +1,6 @@
+---
+title: Index
+slug: /
+---
+
+Sup
