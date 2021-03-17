@@ -7,6 +7,10 @@ Provides [TypeScript](https://github.com/microsoft/typescript) support by dynami
 yarn add @beemo/driver-typescript typescript
 ```
 
+> If using workspaces, the driver will assume and use project references, by injecting `references`
+> into the root config automatically, and separating compiler options into a `tsconfig.options.json`
+> file.
+
 ## Requirements
 
 - TypeScript ^4.0.0
@@ -51,9 +55,9 @@ Run the following command in your project root to make use of this.
 beemo typescript:sync-project-refs
 ```
 
-By default, the config will compile a `src` folder into a `lib` folder, while including a local
-`types` folder and a global `types` folder. A `tests` folder will receive a custom config file,
-which type checks the folder but does not compile. A represenation of this is as follows:
+By default, the config will compile a `src` folder into a `lib` folder, while including a local and
+global `types` folder. A `tests` folder will receive a custom config file, which type checks the
+folder but does not compile. A represenation of this is as follows:
 
 ```bash
 packages/

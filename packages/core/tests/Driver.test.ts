@@ -282,7 +282,7 @@ describe('Driver', () => {
     });
 
     describe('command options', () => {
-      it.only('supports description as a string', () => {
+      it('supports description as a string', () => {
         driver.setMetadata({
           ...options,
           commandOptions: {
