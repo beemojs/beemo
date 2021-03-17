@@ -317,22 +317,6 @@ describe('Driver', () => {
         }).toThrowErrorMatchingSnapshot();
       });
 
-      it('doesnt support empty descriptions', () => {
-        expect(() => {
-          driver.setMetadata({
-            ...options,
-            bin: 'beemo',
-            configName: 'beemo',
-            commandOptions: {
-              foo: {
-                description: '',
-                type: 'string',
-              },
-            },
-          });
-        }).toThrowErrorMatchingSnapshot();
-      });
-
       it('requires a description', () => {
         expect(() => {
           driver.setMetadata({

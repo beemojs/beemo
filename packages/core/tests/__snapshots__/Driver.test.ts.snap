@@ -20,8 +20,6 @@ exports[`Driver setMetadata() bin is required 1`] = `"Invalid TestDriver field \
 
 exports[`Driver setMetadata() command options doesnt support description as other types 1`] = `"Invalid TestDriver field \\"commandOptions.foo.description\\". Must be a string, received 123."`;
 
-exports[`Driver setMetadata() command options doesnt support empty descriptions 1`] = `"Invalid TestDriver field \\"commandOptions.foo.description\\". String cannot be empty."`;
-
 exports[`Driver setMetadata() command options requires a description 1`] = `"Invalid TestDriver field \\"commandOptions.foo.description\\". Field is required and must be defined."`;
 
 exports[`Driver setMetadata() configName doesnt support non-strings 1`] = `"Invalid TestDriver field \\"configName\\". Must be a string, received 123."`;

@@ -61,7 +61,7 @@ export default class TypeScriptDriver extends Driver<TypeScriptConfig, TypeScrip
   /**
    * Automatically clean the target folder if `outDir` and `--clean` is used.
    */
-  private handleCleanTarget = (context: DriverContext) => {
+  handleCleanTarget = (context: DriverContext) => {
     const outDir = context.getRiskyOption('outDir', true) || this.config.compilerOptions?.outDir;
 
     if (context.getRiskyOption('clean') && typeof outDir === 'string' && outDir) {
@@ -75,11 +75,7 @@ export default class TypeScriptDriver extends Driver<TypeScriptConfig, TypeScrip
    * Extract compiler options from the root config into a separate config purely for
    * extending options. Update the root config with references to all workspaces.
    */
-  private handlePrepareConfigs = (
-    context: ConfigContext,
-    configPath: Path,
-    config: TypeScriptConfig,
-  ) => {
+  handlePrepareConfigs = (context: ConfigContext, configPath: Path, config: TypeScriptConfig) => {
     const { tool } = this;
     const { srcFolder, testsFolder } = this.options;
     const workspacePackages = tool.project.getWorkspacePackages();
