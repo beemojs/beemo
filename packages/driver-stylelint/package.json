@@ -19,9 +19,9 @@
   "main": "./lib/index.js",
   "types": "./dts/index.d.ts",
   "files": [
-    "dts/",
-    "lib/",
-    "src/"
+    "dts/**/*.d.ts",
+    "lib/**/*.{js,map}",
+    "src/**/*.{ts,tsx,json}"
   ],
   "engines": {
     "node": ">=10.3.0",

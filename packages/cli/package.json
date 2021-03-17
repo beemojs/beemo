@@ -15,9 +15,9 @@
   },
   "files": [
     "bin.js",
-    "dts/",
-    "lib/",
-    "src/"
+    "dts/**/*.d.ts",
+    "lib/**/*.{js,map}",
+    "src/**/*.{ts,tsx,json}"
   ],
   "engines": {
     "node": ">=10.3.0",
