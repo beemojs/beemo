@@ -11,11 +11,12 @@ describe('TypeScriptDriver', () => {
   let context: DriverContext;
 
   beforeEach(() => {
-    driver = new TypeScriptDriver();
-    driver.tool = mockTool();
+    const tool = mockTool();
     // @ts-expect-error
-    driver.tool.project.root = new Path(getFixturePath('project-refs'));
-    driver.bootstrap();
+    tool.project.root = new Path(getFixturePath('project-refs'));
+
+    driver = new TypeScriptDriver();
+    driver.startup(tool);
     driver.config = {
       compilerOptions: {},
     };
@@ -49,20 +50,28 @@ describe('TypeScriptDriver', () => {
   });
 
   it('sets correct metadata', () => {
-    expect(driver.metadata).toEqual(
-      expect.objectContaining({
-        bin: 'tsc',
-        configName: 'tsconfig.json',
-        configOption: '',
-        dependencies: [],
-        description: 'Type check files with TypeScript',
-        filterOptions: true,
-        helpOption: '--help --all',
-        title: 'TypeScript',
-        useConfigOption: false,
-        workspaceStrategy: 'copy',
-      }),
-    );
+    expect(driver.metadata).toEqual({
+      bin: 'tsc',
+      commandOptions: {
+        clean: {
+          default: false,
+          description: 'Clean the target folder',
+          type: 'boolean',
+        },
+      },
+      configName: 'tsconfig.json',
+      configOption: '',
+      configStrategy: 'create',
+      dependencies: [],
+      description: 'Type check files with TypeScript',
+      filterOptions: true,
+      helpOption: '--help --all',
+      title: 'TypeScript',
+      useConfigOption: false,
+      versionOption: '--version',
+      watchOptions: ['-w', '--watch'],
+      workspaceStrategy: 'copy',
+    });
   });
 
   describe('handleCleanTarget()', () => {

@@ -6,8 +6,7 @@ describe('MochaDriver', () => {
 
   beforeEach(() => {
     driver = new MochaDriver();
-    driver.tool = mockTool();
-    driver.bootstrap();
+    driver.startup(mockTool());
   });
 
   it('sets options from constructor', () => {

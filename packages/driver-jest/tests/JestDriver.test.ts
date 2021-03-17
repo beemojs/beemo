@@ -6,8 +6,7 @@ describe('JestDriver', () => {
 
   beforeEach(() => {
     driver = new JestDriver();
-    driver.tool = mockTool();
-    driver.bootstrap();
+    driver.startup(mockTool());
   });
 
   it('sets options from constructor', () => {

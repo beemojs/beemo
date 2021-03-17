@@ -10,8 +10,7 @@ describe('ESLintDriver', () => {
 
   beforeEach(() => {
     driver = new ESLintDriver();
-    driver.tool = mockTool();
-    driver.bootstrap();
+    driver.startup(mockTool());
 
     context = stubDriverContext(driver);
 

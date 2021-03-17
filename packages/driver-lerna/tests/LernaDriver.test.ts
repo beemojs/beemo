@@ -6,8 +6,7 @@ describe('LernaDriver', () => {
 
   beforeEach(() => {
     driver = new LernaDriver();
-    driver.tool = mockTool();
-    driver.bootstrap();
+    driver.startup(mockTool());
   });
 
   it('sets options from constructor', () => {
