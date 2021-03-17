@@ -42,6 +42,10 @@
     "@beemo/core": "^2.0.0-alpha.0",
     "lerna": "^3.0.0 || ^4.0.0"
   },
+  "funding": {
+    "type": "ko-fi",
+    "url": "https://ko-fi.com/milesjohnson"
+  },
   "packemon": {
     "platform": "node"
   }

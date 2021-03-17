@@ -48,6 +48,10 @@
     "@boost/event": "^2.3.1",
     "@types/eslint": "*"
   },
+  "funding": {
+    "type": "ko-fi",
+    "url": "https://ko-fi.com/milesjohnson"
+  },
   "packemon": {
     "platform": "node"
   }

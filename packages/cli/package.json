@@ -45,6 +45,10 @@
     "debug": "^4.3.1",
     "time-require": "^0.1.2"
   },
+  "funding": {
+    "type": "ko-fi",
+    "url": "https://ko-fi.com/milesjohnson"
+  },
   "packemon": {
     "inputs": {
       "index": "src/index.ts",

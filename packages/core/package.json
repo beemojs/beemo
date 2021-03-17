@@ -63,6 +63,10 @@
     "@boost/test-utils": "^2.3.0",
     "@types/micromatch": "^4.0.1"
   },
+  "funding": {
+    "type": "ko-fi",
+    "url": "https://ko-fi.com/milesjohnson"
+  },
   "packemon": {
     "inputs": {
       "index": "src/index.ts",

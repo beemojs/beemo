@@ -50,6 +50,10 @@
   "dependencies": {
     "rimraf": "^3.0.2"
   },
+  "funding": {
+    "type": "ko-fi",
+    "url": "https://ko-fi.com/milesjohnson"
+  },
   "packemon": {
     "platform": "node"
   }

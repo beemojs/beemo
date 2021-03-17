@@ -53,6 +53,10 @@
       "integration/**/*"
     ]
   },
+  "funding": {
+    "type": "ko-fi",
+    "url": "https://ko-fi.com/milesjohnson"
+  },
   "packemon": {
     "platform": "node"
   }

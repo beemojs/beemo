@@ -43,6 +43,10 @@
     "@beemo/core": "^2.0.0-alpha.0",
     "rollup": "^2.0.0"
   },
+  "funding": {
+    "type": "ko-fi",
+    "url": "https://ko-fi.com/milesjohnson"
+  },
   "packemon": {
     "platform": "node"
   }
