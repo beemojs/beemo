@@ -19,10 +19,10 @@
   "main": "./lib/index.js",
   "types": "./dts/index.d.ts",
   "files": [
-    "dts/",
-    "lib/",
-    "resources/",
-    "src/",
+    "dts/**/*.d.ts",
+    "lib/**/*.{js,map}",
+    "resources/**/*.yaml",
+    "src/**/*.{ts,tsx,json}",
     "test.d.ts",
     "test.js"
   ],

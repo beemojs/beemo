@@ -5,10 +5,10 @@
   "main": "./lib/index.js",
   "types": "./dts/index.d.ts",
   "files": [
-    "dts/",
-    "lib/",
-    "src/",
-    "templates/"
+    "dts/**/*.d.ts",
+    "lib/**/*.{js,map}",
+    "src/**/*.{ts,tsx,json}",
+    "templates/**/*"
   ],
   "repository": {
     "type": "git",
