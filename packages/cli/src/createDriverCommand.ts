@@ -1,5 +1,5 @@
 import { Driver, DriverContextOptions } from '@beemo/core';
-import { Argv, Config } from '@boost/cli';
+import { Argv, Config, GlobalOptions, ParserOptions } from '@boost/cli';
 import BaseRunCommand from './commands/BaseRunCommand';
 import { tool } from './setup';
 
@@ -9,12 +9,28 @@ export default function createDriverCommand(
 ): BaseRunCommand<DriverContextOptions, []> {
   const path = driver.getName();
 
-  @Config(path, tool.msg('app:cliCommandRunDriver'), {
-    allowUnknownOptions: true,
-    allowVariadicParams: true,
-    category: 'driver',
-  })
+  @Config(
+    path,
+    driver.metadata.description || tool.msg('app:run', { title: driver.metadata.title }),
+    {
+      allowUnknownOptions: true,
+      allowVariadicParams: true,
+      category: 'driver',
+    },
+  )
   class RunExplicitDriver extends BaseRunCommand<DriverContextOptions, []> {
+    getParserOptions(): ParserOptions<DriverContextOptions & GlobalOptions> {
+      const parent = super.getParserOptions();
+
+      return {
+        ...parent,
+        options: {
+          ...parent.options,
+          ...driver.metadata.commandOptions,
+        },
+      };
+    }
+
     async run() {
       const pipeline = tool.createRunDriverPipeline(this.getArguments(), path, parallelArgv);
 

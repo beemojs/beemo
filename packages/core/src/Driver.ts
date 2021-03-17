@@ -247,7 +247,7 @@ export default abstract class Driver<
           .required(),
         commandOptions: object(
           shape({
-            description: string().notEmpty().required(),
+            description: string().required(),
             type: string().oneOf<'boolean' | 'number' | 'string'>(['string', 'number', 'boolean']),
           }),
         ),

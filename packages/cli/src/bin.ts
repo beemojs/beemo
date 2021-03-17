@@ -30,9 +30,7 @@ async function run() {
 
     // Add a command for each driver
     tool.driverRegistry.getAll().forEach((driver) => {
-      const command = createDriverCommand(driver, parallelArgv);
-
-      program.register(command);
+      program.register(createDriverCommand(driver, parallelArgv));
     });
   });
 }
