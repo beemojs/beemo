@@ -1,0 +1,106 @@
+---
+title: ESLint driver
+sidebar_label: ESLint
+---
+
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+
+Provides [ESLint](https://github.com/eslint/eslint) support by dynamically generating a
+`.eslintrc.js` config file.
+
+## Requirements
+
+- ESLint ^7.0.0
+
+## Events
+
+Can be listened to on the `ESLintDriver` instance.
+
+| Event                | Arguments                                                          | Description                               |
+| -------------------- | ------------------------------------------------------------------ | ----------------------------------------- |
+| `onCreateIgnoreFile` | `context: ConfigContext, path: Path, config: { ignore: string[] }` | Called before the ignore file is written. |
+
+## Installation
+
+In your configuration module, install the driver, ESLint, and any plugins.
+
+<Tabs
+  groupId="package-manager"
+  defaultValue="yarn"
+  values={[
+    { label: 'Yarn', value: 'yarn' },
+    { label: 'NPM', value: 'npm' },
+  ]}
+>
+  <TabItem value="yarn">
+
+```bash
+yarn add @beemo/driver-eslint eslint eslint-config-airbnb
+```
+
+  </TabItem>
+  <TabItem value="npm">
+
+```bash
+npm install @beemo/driver-eslint eslint eslint-config-airbnb
+```
+
+  </TabItem>
+</Tabs>
+
+Create a file at `configs/eslint.ts` (or `js`) in which to house your ESLint configuration.
+
+```ts title="configs/eslint.ts"
+import { ESLintConfig } from '@beemo/driver-eslint';
+
+const config: ESLintConfig = {
+  extends: ['airbnb'],
+  // ...
+};
+
+export default config;
+```
+
+## Integration
+
+In your consuming project, enable the driver by adding `eslint` to your `drivers` config.
+
+```ts title=".config/beemo.ts"
+import { BeemoConfig } from '@beemo/core';
+
+const config: BeemoConfig = {
+  module: '<config-module>',
+  drivers: ['eslint'],
+};
+
+export default config;
+```
+
+## Ignoring paths
+
+Instead of using an `.eslintignore` dotfile, you can define an `ignore` property in your
+configuration module's `configs/eslint.ts` file, or a project's `.config/beemo/eslint.ts` file. This
+property accepts an array of strings. For example:
+
+```bash title=".eslintignore"
+lib/
+*.min.js
+*.map
+```
+
+Becomes...
+
+```ts title=".config/beemo/eslint.ts"
+import { ESLintConfig } from '@beemo/driver-eslint';
+
+const config: ESLintConfig = {
+  // ...
+  ignore: ['lib/', '*.min.js', '*.map'],
+};
+
+export default config;
+```
+
+This feature follows the same configuration lifecycle as `.eslintrc.js`, with the added benefit of
+conditional logic, and being generated at runtime!

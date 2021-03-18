@@ -1,0 +1,108 @@
+---
+title: Stylelint driver
+sidebar_label: Stylelint
+---
+
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+
+Provides [Stylelint](https://stylelint.io/) support by dynamically generating a `.stylelintrc.js`
+config file.
+
+## Requirements
+
+- stylelint ^13.0.0
+
+## Events
+
+Can be listened to on the `StylelintDriver` instance.
+
+| Event                | Arguments                                                          | Description                               |
+| -------------------- | ------------------------------------------------------------------ | ----------------------------------------- |
+| `onCreateIgnoreFile` | `context: ConfigContext, path: Path, config: { ignore: string[] }` | Called before the ignore file is written. |
+
+## Installation
+
+In your configuration module, install the driver, stylelint, and any plugins.
+
+<Tabs
+  groupId="package-manager"
+  defaultValue="yarn"
+  values={[
+    { label: 'Yarn', value: 'yarn' },
+    { label: 'NPM', value: 'npm' },
+  ]}
+>
+  <TabItem value="yarn">
+
+```bash
+yarn add @beemo/driver-stylelint stylelint
+```
+
+  </TabItem>
+  <TabItem value="npm">
+
+```bash
+npm install @beemo/driver-stylelint stylelint
+```
+
+  </TabItem>
+</Tabs>
+
+Create a file at `configs/stylelint.ts` (or `js`) in which to house your stylelint configuration.
+
+```ts title="configs/stylelint.ts"
+import { StylelintConfig } from '@beemo/driver-stylelint';
+
+const config: StylelintConfig = {
+  rules: {
+    'color-no-invalid-hex': true,
+  },
+  // ...
+};
+
+export default config;
+```
+
+## Integration
+
+In your consuming project, enable the driver by adding `stylelint` to your `drivers` config.
+
+```ts title=".config/beemo.ts"
+import { BeemoConfig } from '@beemo/core';
+
+const config: BeemoConfig = {
+  module: '<config-module>',
+  drivers: ['stylelint'],
+};
+
+export default config;
+```
+
+## Ignoring paths
+
+Instead of using an `.stylelintignore` dotfile, you can define an `ignore` property in your
+configuration module's `configs/stylelint.ts` file, or a project's `.config/beemo/stylelint.ts`
+file. This property accepts an array of strings. For example:
+
+```bash title=".stylelintignore"
+lib/
+*.min.js
+*.map
+```
+
+Becomes...
+
+```ts title=".config/beemo/stylelint.ts"
+import { StylelintConfig } from '@beemo/driver-stylelint';
+
+const config: StylelintConfig = {
+  // ...
+  ignore: ['lib/', '*.min.js', '*.map'],
+};
+
+export default config;
+```
+
+This feature follows the same configuration lifecycle as `.stylelintrc.js`, with the added benefit
+of conditional logic, and being generated at runtime!

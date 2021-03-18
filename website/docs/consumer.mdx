@@ -5,9 +5,9 @@ title: Consumer setup
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 
-Now that you have a configuration module, we can integrate it across all projects. But first, go
-ahead and delete all the old config files and dependencies in each project (if they exist), as all
-that logic should now be housed in your configuration module.
+Now that you have a configuration module, we can integrate it downstream into a project. But first,
+go ahead and delete all the old config files and dependencies in each project (if they exist), as
+all that logic should now be housed in your configuration module.
 
 Once you have a clean slate, install your configuration module, and BOOM, it's as easy as that. No
 more development dependency hell, just a single dependency.
@@ -91,7 +91,7 @@ module.exports = {
 - `execute.concurrency` (`number`) - Number of builds to run in parallel. Defaults to the number of
   CPUs.
 - `execute.graph` (`boolean`) - Prioritize workspace builds based on
-  [dependency graph](./workspaces.md#priority-packages).
+  [dependency graph](./workspaces.md#priority-packages). Defaults to `true`.
 - `drivers` (`string[] | object`) - Drivers to enable for the consumer.
 - `scripts` (`string[] | object`) - Scripts to enable for the consumer.
 - `settings` (`object`) - Custom settings specific to your project that can easily be referenced.
@@ -104,8 +104,8 @@ Driver dependencies may have been installed in your configuration module, but th
 them available to the current project, as not all drivers will always be necessary. To enable
 drivers per project, a `drivers` property must be defined.
 
-This property accepts an array of strings, or objects, with the names of each driver you want to
-enable. For example, if we want to use Babel, ESLint, and Jest, we would have the following.
+This property accepts an array of strings/tuples or objects, with the names of each driver you want
+to enable. For example, if we want to use Babel, ESLint, and Jest, we would have the following.
 
 <Tabs
   groupId="format"
@@ -122,7 +122,16 @@ import { BeemoConfig } from '@beemo/core';
 
 const config: BeemoConfig = {
   module: '<config-module>',
-  drivers: ['babel', 'eslint', 'jest'],
+  drivers: [
+    'babel',
+    'eslint',
+    [
+      'jest',
+      {
+        env: { NODE_ENV: 'test' },
+      },
+    ],
+  ],
 };
 
 export default config;
@@ -134,7 +143,16 @@ export default config;
 ```js title=".config/beemo.js"
 module.exports = {
   module: '<config-module>',
-  drivers: ['babel', 'eslint', 'jest'],
+  drivers: [
+    'babel',
+    'eslint',
+    [
+      'jest',
+      {
+        env: { NODE_ENV: 'test' },
+      },
+    ],
+  ],
 };
 ```
 
