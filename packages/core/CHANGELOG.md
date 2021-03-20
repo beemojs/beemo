@@ -3,6 +3,34 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# 2.0.0-rc.0 - 2021-03-20
+
+#### 💥 Breaking
+
+- Support driver CLI commands. Move TS project reference syncing. (#123) ([ab78a75](https://github.com/beemojs/beemo/commit/ab78a75)), closes [#123](https://github.com/beemojs/beemo/issues/123)
+
+#### 📦 Dependencies
+
+- **[packemon]** Update to v0.13. ([1488e86](https://github.com/beemojs/beemo/commit/1488e86))
+- **[packemon]** Update to v0.14. (#124) ([4cce9df](https://github.com/beemojs/beemo/commit/4cce9df)), closes [#124](https://github.com/beemojs/beemo/issues/124)
+- Update dev tool dependencies. ([8d22a7b](https://github.com/beemojs/beemo/commit/8d22a7b))
+
+#### 📘 Docs
+
+- Migrate to Docusaurus. (#125) ([39ba2b4](https://github.com/beemojs/beemo/commit/39ba2b4)), closes [#125](https://github.com/beemojs/beemo/issues/125)
+
+#### 🛠 Internals
+
+- Add funding links. ([c176d75](https://github.com/beemojs/beemo/commit/c176d75))
+- Fix circular references. ([71134f6](https://github.com/beemojs/beemo/commit/71134f6))
+- Remove deprecated APIs. ([5bc3134](https://github.com/beemojs/beemo/commit/5bc3134))
+
+**Note:** Version bump only for package @beemo/core
+
+
+
+
+
 ## 2.0.0-alpha.4 - 2021-03-03
 
 #### 🚀 Updates

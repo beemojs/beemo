@@ -3,6 +3,20 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+### 0.2.0-rc.0 - 2021-03-20
+
+#### 📦 Dependencies
+
+- **[packemon]** Update to v0.13. ([1488e86](https://github.com/beemojs/beemo/commit/1488e86))
+- **[packemon]** Update to v0.14. (#124) ([4cce9df](https://github.com/beemojs/beemo/commit/4cce9df)), closes [#124](https://github.com/beemojs/beemo/issues/124)
+- Update dev tool dependencies. ([8d22a7b](https://github.com/beemojs/beemo/commit/8d22a7b))
+
+**Note:** Version bump only for package @beemo/local
+
+
+
+
+
 ## 0.2.0-alpha.0 - 2021-02-23
 
 #### 🚀 Updates

@@ -1,6 +1,6 @@
 {
   "name": "@beemo/driver-babel",
-  "version": "2.0.0-alpha.3",
+  "version": "2.0.0-rc.0",
   "release": "1614239076609",
   "description": "Babel driver for Beemo.",
   "keywords": [
