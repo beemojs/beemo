@@ -1,4 +1,4 @@
-# 🤖 Beemo v2 [IN DEV]
+# 🤖 Beemo
 
 [![Build Status](https://github.com/beemojs/beemo/workflows/Build/badge.svg)](https://github.com/beemojs/beemo/actions?query=branch%3Amaster)
 [![npm version](https://badge.fury.io/js/%40beemo%2Fcore.svg)](https://www.npmjs.com/package/@beemo/core)
@@ -9,7 +9,7 @@ Beemo aims to solve the multi-project maintenance fatigue by removing the follow
 all projects: config and dotfile management, multiple config patterns, up-to-date development
 dependencies, continuous copy and paste, and more.
 
-### Features
+## Features
 
 - Manage dev tools and configurations in a single repository.
 - Configure supported dev tools using `.js` or `.ts` files.

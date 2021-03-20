@@ -16,4 +16,4 @@ npm install @beemo/driver-mocha mocha --save
 
 ## Documentation
 
-[https://beemo.dev](https://beemo.dev)
+[https://beemo.dev/docs/drivers/mocha](https://beemo.dev/docs/drivers/mocha)

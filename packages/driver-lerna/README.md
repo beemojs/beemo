@@ -16,4 +16,4 @@ npm install @beemo/driver-lerna lerna --save
 
 ## Documentation
 
-[https://beemo.dev](https://beemo.dev)
+[https://beemo.dev/docs/drivers/lerna](https://beemo.dev/docs/drivers/lerna)

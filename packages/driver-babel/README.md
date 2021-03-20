@@ -17,4 +17,4 @@ npm install @beemo/driver-babel @babel/core --save
 
 ## Documentation
 
-[https://beemo.dev](https://beemo.dev)
+[https://beemo.dev/docs/drivers/babel](https://beemo.dev/docs/drivers/babel)

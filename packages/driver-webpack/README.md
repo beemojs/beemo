@@ -16,4 +16,4 @@ npm install @beemo/driver-webpack webpack  webpack-cli --save
 
 ## Documentation
 
-[https://beemo.dev](https://beemo.dev)
+[https://beemo.dev/docs/drivers/webpack](https://beemo.dev/docs/drivers/webpack)

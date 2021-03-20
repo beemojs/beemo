@@ -17,4 +17,4 @@ npm install @beemo/driver-stylelint stylelint --save
 
 ## Documentation
 
-[https://beemo.dev](https://beemo.dev)
+[https://beemo.dev/docs/drivers/stylelint](https://beemo.dev/docs/drivers/stylelint)

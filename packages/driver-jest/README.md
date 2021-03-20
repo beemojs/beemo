@@ -16,4 +16,4 @@ npm install @beemo/driver-jest jest --save
 
 ## Documentation
 
-[https://beemo.dev](https://beemo.dev)
+[https://beemo.dev/docs/drivers/jest](https://beemo.dev/docs/drivers/jest)

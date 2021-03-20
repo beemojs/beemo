@@ -17,4 +17,4 @@ npm install @beemo/driver-flow flow-bin --save
 
 ## Documentation
 
-[https://beemo.dev](https://beemo.dev)
+[https://beemo.dev/docs/drivers/flow](https://beemo.dev/docs/drivers/flow)
