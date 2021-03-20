@@ -25,7 +25,8 @@ export default function bootstrap(tool: Tool) {
 
 ### Bootstrap resolution
 
-The bootstrap file is looked for and resolved in the following order:
+The bootstrap file is looked for and resolved in the following order relative to the configuration
+module.
 
 - `index.ts`
 - `index.js`
@@ -33,7 +34,7 @@ The bootstrap file is looked for and resolved in the following order:
 - `lib/index.js`
 - `main` field in `package.json`
 
-## Supported Events
+## Supported events
 
 The following list of events, and their arguments, can be listened to.
 
@@ -41,7 +42,6 @@ The following list of events, and their arguments, can be listened to.
 
 | Event                   | Arguments                                                                    | Type   | Description                                                                                 |
 | ----------------------- | ---------------------------------------------------------------------------- | ------ | ------------------------------------------------------------------------------------------- |
-| `onExit`                | `code: number`                                                               | Normal | Called when the process exits, either successfully, or with an error.                       |
 | `onResolveDependencies` | `context: ConfigContext, drivers: Driver[]`                                  | Normal | Called after a list of `Driver`s have been resolved in which to create configuration files. |
 | `onRunCreateConfig`     | `context: ConfigContext, driverNames: string[]`                              | Normal | Called before `beemo create-config` is ran.                                                 |
 | `onRunDriver`           | `context: DriverContext, driver: Driver`                                     | Normal | Called before `beemo <driver>` is ran. _Requires a scope of the driver name._               |

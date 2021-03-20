@@ -20,7 +20,7 @@ const pkgs = [
 module.exports = {
   title: 'Beemo',
   tagline:
-    'Manage dev and build tools, their configuration, and commands in a single centralized repository.',
+    'Manage developer and build tools, their configuration, and common commands in a single centralized repository.',
   url: 'https://beemo.dev',
   baseUrl: '/',
   onBrokenLinks: 'throw',

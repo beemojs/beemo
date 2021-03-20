@@ -15,30 +15,60 @@ interface FeatureProps {
 const features: FeatureProps[][] = [
   [
     {
-      title: '📦 Zero-config packages',
-      description: <>TODO</>,
+      title: '🌐 Centralized configuration',
+      description: (
+        <>
+          All your tooling and configuration in a centralized location. Maintain once, install and
+          re-use everywhere.
+        </>
+      ),
     },
     {
-      title: '🧩 Multiple platforms',
-      description: <>TODO</>,
+      title: '🤖 Pragmatic drivers',
+      description: (
+        <>
+          Streamlined and deterministic tooling for popular projects in the frontend ecosystem, like
+          Babel, ESLint, Jest, TypeScript, and many more.
+        </>
+      ),
     },
     {
-      title: '🗂 Agnostic project structure',
-      description: <>TODO</>,
+      title: '🗂 Workspaces support',
+      description: (
+        <>
+          First-class support for executing drivers and commands across workspaces (monorepos) in a
+          consistent fashion.
+        </>
+      ),
     },
   ],
   [
     {
-      title: '🌐 Stable environments',
-      description: <>TODO</>,
+      title: '🧩 Typed configuration',
+      description: (
+        <>
+          Instead of configuring drivers with JSON, YAML, or JavaScript, use TypeScript. Ensure your
+          tooling is setup correctly with robust type-safety.
+        </>
+      ),
     },
     {
-      title: '⚡️ Runtime formats',
-      description: <>TODO</>,
+      title: '⚡️ Dynamic strategies',
+      description: (
+        <>
+          Generate driver config files at runtime using custom CLI arguments and one of many
+          efficient strategies: created, referenced, copied, manually templated, and more.
+        </>
+      ),
     },
     {
-      title: '🚀 Distribution checks',
-      description: <>TODO</>,
+      title: '🏗 Template scaffolding',
+      description: (
+        <>
+          Encapsulate common files and patterns into templates that can be easily scaffolded into
+          new or existing projects.
+        </>
+      ),
     },
   ],
 ];

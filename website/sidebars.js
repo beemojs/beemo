@@ -28,7 +28,7 @@ module.exports = {
     'scaffolding',
     'workspaces',
     'advanced',
-    'conventions',
+    // 'conventions',
     {
       type: 'category',
       label: 'Migrations',

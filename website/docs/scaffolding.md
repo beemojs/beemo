@@ -9,7 +9,7 @@ concept with [ejs](http://ejs.co/), to deliver a powerful and convenient experie
 ## Creating templates
 
 To make use of scaffolds, create `.ejs` files within your configuration module, located at
-`./templates/<generator>/<action>`. For example, if I wanted to scaffold dotfiles, I may create the
+`templates/<generator>/<action>`. For example, if I wanted to scaffold dotfiles, I may create the
 following template for a `.gitignore`.
 
 ```text title="templates/project/dotfiles/gitignore.ejs"
@@ -24,7 +24,7 @@ logs/
 > Hygen uses front matter to define target destination, overwrite rules, and more.
 > [View the official documentation for more information](http://www.hygen.io/templates).
 
-## Generating Files
+## Generating files
 
 Once our templates exist, we can generate files within our consumer using the
 `yarn beemo scaffold <generator> <action>` (or `npx beemo scaffold`) command. This command will copy
