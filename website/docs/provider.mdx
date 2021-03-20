@@ -178,7 +178,7 @@ export default {
 ```
 
 > Command line arguments are parsed into an object using
-> [@boost/args](https://milesj.gitbook.io/boost/args).
+> [@boost/args](https://boostlib.dev/docs/args).
 
 ### Config resolution
 
@@ -266,8 +266,8 @@ module.exports = () => new InitProjectScript();
 </Tabs>
 
 The `parse()` method is optional but can be used to define parsing rules for CLI options (powered by
-[@boost/args](https://milesj.gitbook.io/boost/args)). If no rules are provided, default parsing
-rules will be used.
+[@boost/args](https://boostlib.dev/docs/args)). If no rules are provided, default parsing rules will
+be used.
 
 The `execute()` method is required and is triggered when the `beemo run-script` command is ran. This
 method receives the current pipeline context as the 1st argument and options (parsed with `parse()`)

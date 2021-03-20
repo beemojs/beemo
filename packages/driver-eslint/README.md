@@ -17,4 +17,4 @@ npm install @beemo/driver-eslint eslint --save
 
 ## Documentation
 
-[https://milesj.gitbook.io/beemo](https://milesj.gitbook.io/beemo)
+[https://beemo.dev](https://beemo.dev)

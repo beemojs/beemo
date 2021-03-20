@@ -416,7 +416,7 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 
 #### 💥 Breaking
 
-- Migrated to the new [@boost/event](https://milesj.gitbook.io/boost/event) system.
+- Migrated to the new [@boost/event](https://boostlib.dev/docs/event) system.
 - Script names (on the command line) will now error if not in kebab case.
 - Scripts and Drivers now require an explicit `blueprint` method.
 - Renamed `--live` option to `--stdio`.
