@@ -16,4 +16,4 @@ npm install @beemo/driver-rollup rollup --save
 
 ## Documentation
 
-[https://milesj.gitbook.io/beemo](https://milesj.gitbook.io/beemo)
+[https://beemo.dev/docs/drivers/rollup](https://beemo.dev/docs/drivers/rollup)

@@ -1,0 +1,106 @@
+---
+title: Prettier driver
+sidebar_label: Prettier
+---
+
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+
+Provides [Prettier](https://github.com/prettier/prettier) support by dynamically generating a
+`prettier.config.js` config file.
+
+## Requirements
+
+- Prettier ^2.0.0
+
+## Events
+
+Can be listened to on the `PrettierDriver` instance.
+
+| Event                | Arguments                                                          | Description                               |
+| -------------------- | ------------------------------------------------------------------ | ----------------------------------------- |
+| `onCreateIgnoreFile` | `context: ConfigContext, path: Path, config: { ignore: string[] }` | Called before the ignore file is written. |
+
+## Installation
+
+In your configuration module, install the driver and Prettier.
+
+<Tabs
+  groupId="package-manager"
+  defaultValue="yarn"
+  values={[
+    { label: 'Yarn', value: 'yarn' },
+    { label: 'NPM', value: 'npm' },
+  ]}
+>
+  <TabItem value="yarn">
+
+```bash
+yarn add @beemo/driver-prettier prettier
+```
+
+  </TabItem>
+  <TabItem value="npm">
+
+```bash
+npm install @beemo/driver-prettier prettier
+```
+
+  </TabItem>
+</Tabs>
+
+Create a file at `configs/prettier.ts` (or `js`) in which to house your Prettier configuration.
+
+```ts title="configs/prettier.ts"
+import { PrettierConfig } from '@beemo/driver-prettier';
+
+const config: PrettierConfig = {
+  arrowParens: 'always',
+  trailingComma: 'all',
+  // ...
+};
+
+export default config;
+```
+
+## Integration
+
+In your consuming project, enable the driver by adding `prettier` to your `drivers` config.
+
+```ts title=".config/beemo.ts"
+import { BeemoConfig } from '@beemo/core';
+
+const config: BeemoConfig = {
+  module: '<config-module>',
+  drivers: ['prettier'],
+};
+
+export default config;
+```
+
+## Ignoring paths
+
+Instead of using an `.prettierignore` dotfile, you can define an `ignore` property in your
+configuration module's `configs/prettier.ts` file, or a project's `.config/beemo/prettier.ts` file.
+This property accepts an array of strings. For example:
+
+```bash title=".prettierignore"
+lib/
+*.min.js
+```
+
+Becomes...
+
+```ts title=".config/beemo/prettier.ts"
+import { PrettierConfig } from '@beemo/driver-prettier';
+
+const config: PrettierConfig = {
+  // ...
+  ignore: ['lib/', '*.min.js', '*.map'],
+};
+
+export default config;
+```
+
+This feature follows the same configuration lifecycle as `prettier.config.js`, with the added
+benefit of conditional logic, and being generated at runtime!

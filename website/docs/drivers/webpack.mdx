@@ -1,0 +1,76 @@
+---
+title: Webpack driver
+sidebar_label: Webpack
+---
+
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+
+Provides [Webpack](https://github.com/webpack/webpack) support by dynamically generating a
+`webpack.config.js` config file.
+
+## Requirements
+
+- Webpack ^4.0.0 || ^5.0.0
+
+## Installation
+
+In your configuration module, install the driver, Webpack, and any loaders or plugins.
+
+<Tabs
+  groupId="package-manager"
+  defaultValue="yarn"
+  values={[
+    { label: 'Yarn', value: 'yarn' },
+    { label: 'NPM', value: 'npm' },
+  ]}
+>
+  <TabItem value="yarn">
+
+```bash
+yarn add @beemo/driver-webpack webpack webpack-cli
+```
+
+  </TabItem>
+  <TabItem value="npm">
+
+```bash
+npm install @beemo/driver-webpack webpack webpack-cli
+```
+
+  </TabItem>
+</Tabs>
+
+Create a file at `configs/webpack.ts` (or `js`) in which to house your Webpack configuration.
+
+```ts title="configs/webpack.ts"
+import { WebpackConfig } from '@beemo/driver-webpack';
+import path from 'path';
+
+const config: WebpackConfig = {{
+  entry: './src/index.js',
+  output: {
+    path: path.resolve(__dirname, 'dist'),
+    filename: 'bundle.js',
+  },
+}
+  // ...
+};
+
+export default config;
+```
+
+## Integration
+
+In your consuming project, enable the driver by adding `webpack` to your `drivers` config.
+
+```ts title=".config/beemo.ts"
+import { BeemoConfig } from '@beemo/core';
+
+const config: BeemoConfig = {
+  module: '<config-module>',
+  drivers: ['webpack'],
+};
+
+export default config;
+```

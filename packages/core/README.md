@@ -1,4 +1,4 @@
-# 🤖 Beemo v2
+# 🤖 Beemo
 
 [![Build Status](https://github.com/beemojs/beemo/workflows/Build/badge.svg)](https://github.com/beemojs/beemo/actions?query=branch%3Amaster)
 [![npm version](https://badge.fury.io/js/%40beemo%2Fcore.svg)](https://www.npmjs.com/package/@beemo/core)
@@ -12,7 +12,7 @@ dependencies, continuous copy and paste, and more.
 ### Features
 
 - Manage dev tools and configurations in a single repository.
-- Configure supported dev tools using `.js` files.
+- Configure supported dev tools using `.js` or `.ts` files.
 - Customize and alter config at runtime with CLI options.
 - Pass custom CLI options to dev tool commands without failure.
 - Automatically expand glob patterns (a better alternative to bash).
@@ -35,4 +35,4 @@ dependencies, continuous copy and paste, and more.
 
 ## Documentation
 
-[https://milesj.gitbook.io/beemo](https://milesj.gitbook.io/beemo)
+[https://beemo.dev](https://beemo.dev)

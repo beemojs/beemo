@@ -16,4 +16,4 @@ npm install @beemo/driver-prettier prettier --save
 
 ## Documentation
 
-[https://milesj.gitbook.io/beemo](https://milesj.gitbook.io/beemo)
+[https://beemo.dev/docs/drivers/prettier](https://beemo.dev/docs/drivers/prettier)

@@ -1,0 +1,72 @@
+---
+title: Babel driver
+sidebar_label: Babel
+---
+
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+
+Provides [Babel](https://github.com/babel/babel) support by dynamically generating a
+`babel.config.js` config file.
+
+## Requirements
+
+- Babel ^7.0.0
+
+## Installation
+
+In your configuration module, install the driver, Babel, and any plugins or presets.
+
+<Tabs
+  groupId="package-manager"
+  defaultValue="yarn"
+  values={[
+    { label: 'Yarn', value: 'yarn' },
+    { label: 'NPM', value: 'npm' },
+  ]}
+>
+  <TabItem value="yarn">
+
+```bash
+yarn add @beemo/driver-babel @babel/core @babel/preset-env
+```
+
+  </TabItem>
+  <TabItem value="npm">
+
+```bash
+npm install @beemo/driver-babel @babel/core @babel/preset-env
+```
+
+  </TabItem>
+</Tabs>
+
+Create a file at `configs/babel.ts` (or `js`) in which to house your Babel configuration.
+
+```ts title="configs/babel.ts"
+import { BabelConfig } from '@beemo/driver-babel';
+
+const config: BabelConfig = {
+  presets: ['@babel/preset-env'],
+};
+
+export default config;
+```
+
+> Configuration files that return a function, and expect a Babel `api` instance, are currently not
+> supported, as they conflict with Beemo's [configuration functions](../provider.mdx#drivers).
+
+## Integration
+
+In your consuming project, enable the driver by adding `babel` to your `drivers` config.
+
+```ts title=".config/beemo.ts"
+import { BeemoConfig } from '@beemo/core';
+
+const config: BeemoConfig = {
+  module: '<config-module>',
+  drivers: ['babel'],
+};
+
+export default config;
+```

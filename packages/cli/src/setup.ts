@@ -8,7 +8,7 @@ import parseSpecialArgv from './parseSpecialArgv';
 
 const brandName = process.env.BEEMO_BRAND_NAME || 'Beemo';
 const binName = process.env.BEEMO_BRAND_BINARY || 'beemo';
-const manualURL = process.env.BEEMO_MANUAL_URL || 'https://milesj.gitbook.io/beemo';
+const manualURL = process.env.BEEMO_MANUAL_URL || 'https://beemo.dev';
 
 process.env.BOOSTJS_DEBUG_NAMESPACE = binName;
 

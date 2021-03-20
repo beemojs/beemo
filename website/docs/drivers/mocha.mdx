@@ -1,0 +1,71 @@
+---
+title: Mocha driver
+sidebar_label: Mocha
+---
+
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+
+Provides [Mocha](https://github.com/facebook/mocha) support by dynamically generating a
+`.mocharc.js` config file.
+
+## Requirements
+
+- Mocha ^8.0.0
+
+## Installation
+
+In your configuration module, install the driver and Mocha.
+
+<Tabs
+  groupId="package-manager"
+  defaultValue="yarn"
+  values={[
+    { label: 'Yarn', value: 'yarn' },
+    { label: 'NPM', value: 'npm' },
+  ]}
+>
+  <TabItem value="yarn">
+
+```bash
+yarn add @beemo/driver-mocha mocha
+```
+
+  </TabItem>
+  <TabItem value="npm">
+
+```bash
+npm install @beemo/driver-mocha mocha
+```
+
+  </TabItem>
+</Tabs>
+
+Create a file at `configs/mocha.ts` (or `js`) in which to house your Mocha configuration.
+
+```ts title="configs/mocha.ts"
+import { MochaConfig } from '@beemo/driver-mocha';
+
+const config: MochaConfig = {
+  asyncOnly: true,
+  checkLeaks: true,
+  // ...
+};
+
+export default config;
+```
+
+## Integration
+
+In your consuming project, enable the driver by adding `mocha` to your `drivers` config.
+
+```ts title=".config/beemo.ts"
+import { BeemoConfig } from '@beemo/core';
+
+const config: BeemoConfig = {
+  module: '<config-module>',
+  drivers: ['mocha'],
+};
+
+export default config;
+```

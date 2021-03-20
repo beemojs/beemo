@@ -1,0 +1,72 @@
+---
+title: Lerna driver
+sidebar_label: Lerna
+---
+
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+
+Provides [Lerna](https://github.com/lerna/lerna) support by dynamically generating a `lerna.json`
+config file.
+
+## Requirements
+
+- Lerna ^3.0.0 || ^4.0.0
+
+## Installation
+
+In your configuration module, install the driver and Lerna.
+
+<Tabs
+  groupId="package-manager"
+  defaultValue="yarn"
+  values={[
+    { label: 'Yarn', value: 'yarn' },
+    { label: 'NPM', value: 'npm' },
+  ]}
+>
+  <TabItem value="yarn">
+
+```bash
+yarn add @beemo/driver-lerna lerna
+```
+
+  </TabItem>
+  <TabItem value="npm">
+
+```bash
+npm install @beemo/driver-lerna lerna
+```
+
+  </TabItem>
+</Tabs>
+
+Create a file at `configs/lerna.ts` (or `js`) in which to house your Lerna configuration.
+
+```ts title="configs/lerna.ts"
+import { LernaConfig } from '@beemo/driver-lerna';
+
+const config: LernaConfig = {
+  version: 'independent',
+  npmClient: 'yarn',
+  useWorkspaces: true,
+  // ...
+};
+
+export default config;
+```
+
+## Integration
+
+In your consuming project, enable the driver by adding `lerna` to your `drivers` config.
+
+```ts title=".config/beemo.ts"
+import { BeemoConfig } from '@beemo/core';
+
+const config: BeemoConfig = {
+  module: '<config-module>',
+  drivers: ['lerna'],
+};
+
+export default config;
+```

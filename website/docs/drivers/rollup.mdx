@@ -1,0 +1,73 @@
+---
+title: Rollup driver
+sidebar_label: Rollup
+---
+
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+
+Provides [Rollup](https://github.com/rollup/rollup) support by dynamically generating a
+`rollup.config.js` config file.
+
+## Requirements
+
+- Rollup ^2.0.0
+
+## Installation
+
+In your configuration module, install the driver, Rollup, and any loaders or plugins.
+
+<Tabs
+  groupId="package-manager"
+  defaultValue="yarn"
+  values={[
+    { label: 'Yarn', value: 'yarn' },
+    { label: 'NPM', value: 'npm' },
+  ]}
+>
+  <TabItem value="yarn">
+
+```bash
+yarn add @beemo/driver-rollup rollup
+```
+
+  </TabItem>
+  <TabItem value="npm">
+
+```bash
+npm install @beemo/driver-rollup rollup
+```
+
+  </TabItem>
+</Tabs>
+
+Create a file at `configs/rollup.ts` (or `js`) in which to house your Rollup configuration.
+
+```ts title="configs/rollup.ts"
+import { RollupConfig } from '@beemo/driver-rollup';
+
+const config: RollupConfig = {
+  input: 'src/main.js',
+  output: {
+    file: 'bundle.js',
+    format: 'cjs',
+  },
+};
+
+export default config;
+```
+
+## Integration
+
+In your consuming project, enable the driver by adding `rollup` to your `drivers` config.
+
+```ts title=".config/beemo.ts"
+import { BeemoConfig } from '@beemo/core';
+
+const config: BeemoConfig = {
+  module: '<config-module>',
+  drivers: ['rollup'],
+};
+
+export default config;
+```

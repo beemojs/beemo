@@ -1,0 +1,70 @@
+---
+title: Jest driver
+sidebar_label: Jest
+---
+
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+
+Provides [Jest](https://github.com/facebook/jest) support by dynamically generating a
+`jest.config.js` config file.
+
+## Requirements
+
+- Jest ^26.0.0
+
+## Installation
+
+In your configuration module, install the driver, Jest, and [Babel](./babel.mdx) (if required).
+
+<Tabs
+  groupId="package-manager"
+  defaultValue="yarn"
+  values={[
+    { label: 'Yarn', value: 'yarn' },
+    { label: 'NPM', value: 'npm' },
+  ]}
+>
+  <TabItem value="yarn">
+
+```bash
+yarn add @beemo/driver-jest jest
+```
+
+  </TabItem>
+  <TabItem value="npm">
+
+```bash
+npm install @beemo/driver-jest jest
+```
+
+  </TabItem>
+</Tabs>
+
+Create a file at `configs/jest.ts` (or `js`) in which to house your Jest configuration.
+
+```ts title="configs/jest.ts"
+import { JestConfig } from '@beemo/driver-jest';
+
+const config: JestConfig = {
+  setupFilesAfterEnv: ['<rootDir>/tests/setup.ts'],
+  // ...
+};
+
+export default config;
+```
+
+## Integration
+
+In your consuming project, enable the driver by adding `jest` to your `drivers` config.
+
+```ts title=".config/beemo.ts"
+import { BeemoConfig } from '@beemo/core';
+
+const config: BeemoConfig = {
+  module: '<config-module>',
+  drivers: ['jest'],
+};
+
+export default config;
+```

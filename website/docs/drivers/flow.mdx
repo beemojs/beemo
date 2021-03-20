@@ -1,0 +1,92 @@
+---
+title: Flow driver
+sidebar_label: Flow
+---
+
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+
+Provides [Flow](https://github.com/facebook/flow) support by dynamically generating a `.flowconfig`
+config file.
+
+## Requirements
+
+- Flow
+
+## Installation
+
+In your configuration module, install the driver and Flow.
+
+<Tabs
+  groupId="package-manager"
+  defaultValue="yarn"
+  values={[
+    { label: 'Yarn', value: 'yarn' },
+    { label: 'NPM', value: 'npm' },
+  ]}
+>
+  <TabItem value="yarn">
+
+```bash
+yarn add @beemo/driver-flow flow-bin
+```
+
+  </TabItem>
+  <TabItem value="npm">
+
+```bash
+npm install @beemo/driver-flow flow-bin
+```
+
+  </TabItem>
+</Tabs>
+
+Create a file at `configs/flow.ts` (or `.js`) in which to house your Flow configuration.
+
+```ts title="configs/flow.ts"
+import { FlowConfig } from '@beemo/driver-flow';
+
+const config: FlowConfig = {
+  ignore: ['.*/node_modules/.*', '.*/tests/.*', '.*\\.test\\.js'],
+  include: ['./src'],
+  lints: {
+    untyped_import: 'warn',
+  },
+  options: {
+    emoji: true,
+    'module.ignore_non_literal_requires': true,
+    suppress_comment: '\\\\(.\\\\|\\n\\\\)*\\\\$FlowFixMe',
+  },
+};
+
+export default config;
+```
+
+### Config format
+
+In Beemo, Flow is configured using a JavaScript/TypeScript file, and not the `.flowconfig` file. To
+support this, the following conventions must be followed.
+
+- `ignore`, `include`, and `libs` are an array of strings.
+- `lints` is an object. Properties are snake case (underscored instead of dashed).
+- `options` is an object.
+  - Properties with a period must be quoted.
+  - `suppress_comment` must be double escaped or use `RegExp`.
+- `version` is a string.
+
+An example can be seen above.
+
+## Integration
+
+In your consuming project, enable the driver by adding `flow` to your `drivers` config.
+
+```ts title=".config/beemo.ts"
+import { BeemoConfig } from '@beemo/core';
+
+const config: BeemoConfig = {
+  module: '<config-module>',
+  drivers: ['flow'],
+};
+
+export default config;
+```
