@@ -5,11 +5,14 @@ import { Blueprint, isObject, optimal, Path, Predicates, predicates, toArray } f
 import { ConcurrentEvent, Event } from '@boost/event';
 import { Plugin } from '@boost/plugin';
 import {
+	STRATEGY_BUFFER,
 	STRATEGY_COPY,
 	STRATEGY_CREATE,
 	STRATEGY_NATIVE,
 	STRATEGY_NONE,
+	STRATEGY_PIPE,
 	STRATEGY_REFERENCE,
+	STRATEGY_STREAM,
 	STRATEGY_TEMPLATE,
 } from './constants';
 import { ConfigContext } from './contexts/ConfigContext';
@@ -23,6 +26,7 @@ import {
 	DriverCommandConfig,
 	DriverCommandRegistration,
 	DriverCommandRunner,
+	DriverConfigStrategy,
 	DriverMetadata,
 	DriverOptions,
 	DriverOutput,

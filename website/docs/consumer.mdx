@@ -92,6 +92,8 @@ module.exports = {
   CPUs.
 - `execute.graph` (`boolean`) - Prioritize workspace builds based on
   [dependency graph](./workspaces.md#priority-packages). Defaults to `true`.
+- `execute.output` (`buffer | pipe | stream | none`) - Override the
+  [output strategy](./driver.md#output-strategies) of all drivers. Is not defined by default.
 - `drivers` (`string[] | object`) - Drivers to enable for the consumer.
 - `scripts` (`string[] | object`) - Scripts to enable for the consumer.
 - `settings` (`object`) - Custom settings specific to your project that can easily be referenced.
@@ -225,6 +227,9 @@ Options can also be set through the [bootstrap and event system](./events.md).
   [execa](https://github.com/sindresorhus/execa).
 - `expandGlobs` (`boolean`) - Controls whether or not glob patterns in args are automatically
   expanded before being passed to the driver binary. Defaults to `true`.
+- `outputStrategy` (`buffer | pipe | stream | none`) - Type of
+  [strategy](./driver.md#output-strategies) to use when displaying driver command line output.
+  Default is `buffer`.
 - `template` (`string`) - File path to a template function for generating custom config files and
   paths. Is required when `configStrategy` is "template".
 

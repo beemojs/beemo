@@ -43,7 +43,7 @@ export type StdioType = 'buffer' | 'inherit' | 'stream';
 
 export type DriverConfigStrategy = 'copy' | 'create' | 'native' | 'none' | 'reference' | 'template';
 
-export type DriverStream = 'buffer' | 'inherit' | 'none' | 'pipe';
+export type DriverOutputStrategy = 'buffer' | 'none' | 'pipe' | 'stream';
 
 export interface DriverOptions {
 	args?: string[];
@@ -51,6 +51,7 @@ export interface DriverOptions {
 	dependencies?: string[];
 	env?: Record<string, string>;
 	expandGlobs?: boolean;
+	outputStrategy?: DriverOutputStrategy;
 	template?: string;
 }
 
@@ -118,21 +119,7 @@ export interface RoutineOptions {
 
 // CONFIG
 
-export interface BeemoConfig<T extends object = UnknownSettings> {
-	configure?: {
-		cleanup?: boolean;
-		parallel?: boolean;
-	};
-	debug?: boolean;
-	drivers?: PluginsSetting;
-	execute?: {
-		concurrency?: number;
-		graph?: boolean;
-	};
-	module?: string;
-	scripts?: PluginsSetting;
-	settings?: T;
-}
+export type ConfigExecuteStrategy = DriverOutputStrategy | '';
 
 export interface ConfigFile<T extends object = UnknownSettings> {
 	configure: {
@@ -144,10 +131,28 @@ export interface ConfigFile<T extends object = UnknownSettings> {
 	execute: {
 		concurrency: number;
 		graph: boolean;
+		output: ConfigExecuteStrategy;
 	};
 	module: string;
 	scripts: PluginsSetting;
 	settings: T;
+}
+
+export interface BeemoConfig<T extends object = UnknownSettings> {
+	configure?: {
+		cleanup?: boolean;
+		parallel?: boolean;
+	};
+	debug?: boolean;
+	drivers?: PluginsSetting;
+	execute?: {
+		concurrency?: number;
+		graph?: boolean;
+		output?: ConfigExecuteStrategy;
+	};
+	module?: string;
+	scripts?: PluginsSetting;
+	settings?: T;
 }
 
 export type ConfigObject = Record<string, unknown>;
