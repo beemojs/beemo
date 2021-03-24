@@ -41,14 +41,16 @@ export type StdioType = 'buffer' | 'inherit' | 'stream';
 
 // DRIVERS
 
-export type DriverStrategy = 'copy' | 'create' | 'native' | 'none' | 'reference' | 'template';
+export type DriverConfigStrategy = 'copy' | 'create' | 'native' | 'none' | 'reference' | 'template';
+
+export type DriverStream = 'buffer' | 'inherit' | 'none' | 'pipe';
 
 export interface DriverOptions {
 	args?: string[];
+	configStrategy?: DriverConfigStrategy;
 	dependencies?: string[];
 	env?: Record<string, string>;
 	expandGlobs?: boolean;
-	strategy?: DriverStrategy;
 	template?: string;
 }
 

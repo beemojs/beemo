@@ -25,10 +25,10 @@ describe('BabelDriver', () => {
 
 		expect(driver.options).toEqual({
 			args: ['--foo', '--bar=1'],
+			configStrategy: 'native',
 			dependencies: ['babel'],
 			env: { DEV: 'true' },
 			expandGlobs: true,
-			strategy: 'native',
 			template: '',
 		});
 	});
@@ -73,27 +73,27 @@ describe('BabelDriver', () => {
 	});
 
 	describe('handleCleanTarget()', () => {
-		it('doesnt run if no clean param', async () => {
+		it('doesnt run if no clean param', () => {
 			context.args.unknown.outDir = './lib';
 
-			await driver.onBeforeExecute.emit([context, []]);
+			driver.onBeforeExecute.emit([context, []]);
 
 			expect(rimraf.sync).not.toHaveBeenCalled();
 		});
 
-		it('doesnt run if no outDir param', async () => {
+		it('doesnt run if no outDir param', () => {
 			context.args.unknown.clean = '';
 
-			await driver.onBeforeExecute.emit([context, []]);
+			driver.onBeforeExecute.emit([context, []]);
 
 			expect(rimraf.sync).not.toHaveBeenCalled();
 		});
 
-		it('runs if both params', async () => {
+		it('runs if both params', () => {
 			context.args.unknown.outDir = './lib';
 			context.args.unknown.clean = '';
 
-			await driver.onBeforeExecute.emit([context, []]);
+			driver.onBeforeExecute.emit([context, []]);
 
 			expect(rimraf.sync).toHaveBeenCalledWith(Path.resolve('./lib').path());
 		});

@@ -30,10 +30,10 @@ describe('PrettierDriver', () => {
 
 		expect(driver.options).toEqual({
 			args: ['--foo', '--bar=1'],
+			configStrategy: 'native',
 			dependencies: ['babel'],
 			env: { DEV: 'true' },
 			expandGlobs: true,
-			strategy: 'native',
 			template: '',
 		});
 	});
@@ -69,7 +69,7 @@ describe('PrettierDriver', () => {
 					context,
 					new Path('/some/path/prettier.config.js'),
 					{
-						// @ts-expect-error Invalid type
+						// @ts-expect-error
 						ignore: 'foo',
 					},
 				]);

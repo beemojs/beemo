@@ -79,7 +79,7 @@ describe('CreateConfigRoutine', () => {
 
 	describe('run()', () => {
 		beforeEach(() => {
-			driver.configure({ strategy: STRATEGY_NATIVE });
+			driver.configure({ configStrategy: STRATEGY_NATIVE });
 		});
 
 		describe('create strategy', () => {
@@ -118,8 +118,8 @@ describe('CreateConfigRoutine', () => {
 				);
 			});
 
-			it('creates config file if `strategy` option is create', async () => {
-				driver.configure({ strategy: STRATEGY_CREATE });
+			it('creates config file if `configStrategy` option is create', async () => {
+				driver.configure({ configStrategy: STRATEGY_CREATE });
 
 				const envSpy = jest.spyOn(routine, 'setEnvVars');
 				const providerSpy = jest.spyOn(routine, 'loadConfigFromProvider');
@@ -154,7 +154,7 @@ describe('CreateConfigRoutine', () => {
 			});
 
 			it('merges provider and consumer configs', async () => {
-				driver.configure({ strategy: STRATEGY_CREATE });
+				driver.configure({ configStrategy: STRATEGY_CREATE });
 
 				context.workspaceRoot = new Path(getFixturePath('consumer-override'));
 				tool.config.module = 'from-config-module';
@@ -217,8 +217,8 @@ describe('CreateConfigRoutine', () => {
 				expect(path).toEqual(prependRoot('/babel.config.js'));
 			});
 
-			it('copies config file if `strategy` option is copy', async () => {
-				driver.configure({ strategy: STRATEGY_COPY });
+			it('copies config file if `configStrategy` option is copy', async () => {
+				driver.configure({ configStrategy: STRATEGY_COPY });
 
 				const envSpy = jest.spyOn(routine, 'setEnvVars');
 				const createSpy = jest.spyOn(routine, 'createConfigFile');
@@ -249,8 +249,8 @@ describe('CreateConfigRoutine', () => {
 				expect(path).toEqual(prependRoot('/babel.config.js'));
 			});
 
-			it('references config file if `strategy` option is reference', async () => {
-				driver.configure({ strategy: STRATEGY_REFERENCE });
+			it('references config file if `configStrategy` option is reference', async () => {
+				driver.configure({ configStrategy: STRATEGY_REFERENCE });
 
 				const envSpy = jest.spyOn(routine, 'setEnvVars');
 				const createSpy = jest.spyOn(routine, 'createConfigFile');
@@ -266,8 +266,8 @@ describe('CreateConfigRoutine', () => {
 		});
 
 		describe('native strategy', () => {
-			it('falls back to `configStrategy` metadata when `strategy` option is native', async () => {
-				driver.configure({ strategy: STRATEGY_NATIVE });
+			it('falls back to `configStrategy` metadata when `configStrategy` option is native', async () => {
+				driver.configure({ configStrategy: STRATEGY_NATIVE });
 				driver.metadata.configStrategy = STRATEGY_COPY;
 
 				const envSpy = jest.spyOn(routine, 'setEnvVars');
@@ -285,7 +285,7 @@ describe('CreateConfigRoutine', () => {
 
 		describe('none strategy', () => {
 			it('does nothing since routine is skipped', async () => {
-				driver.configure({ strategy: STRATEGY_NONE });
+				driver.configure({ configStrategy: STRATEGY_NONE });
 
 				const envSpy = jest.spyOn(routine, 'setEnvVars');
 
@@ -383,7 +383,7 @@ describe('CreateConfigRoutine', () => {
 	describe('createConfigFileFromTemplate()', () => {
 		beforeEach(() => {
 			driver.configure({
-				strategy: 'template',
+				configStrategy: 'template',
 				template: new Path(__dirname, './__fixtures__/template.js').path(),
 			});
 		});
@@ -394,7 +394,7 @@ describe('CreateConfigRoutine', () => {
 			});
 
 			await expect(routine.createConfigFileFromTemplate(context, [])).rejects.toThrow(
-				'Driver `template` option is required when `strategy` is "template".',
+				'Driver `template` option is required when `configStrategy` is "template".',
 			);
 		});
 

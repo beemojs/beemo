@@ -18,10 +18,10 @@ describe('FlowDriver', () => {
 
 		expect(driver.options).toEqual({
 			args: ['--foo', '--bar=1'],
+			configStrategy: 'native',
 			dependencies: ['babel'],
 			env: { DEV: 'true' },
 			expandGlobs: true,
-			strategy: 'native',
 			template: '',
 		});
 	});
@@ -177,6 +177,7 @@ describe('FlowDriver', () => {
 				expect(
 					driver.formatConfig({
 						options: {
+							// eslint-disable-next-line require-unicode-regexp
 							suppress_comment: /(.|\n)*\$FlowFixMe/,
 						},
 					}),

@@ -38,8 +38,8 @@ The default strategies for each tool are as follows:
 | TypeScript | Created    |
 | Webpack    | Referenced |
 
-> Default strategies can be overwritten with a driver's `strategy` option, which accepts `create`,
-> `reference`, `copy`, `template`, `native`, and `none`.
+> Default strategies can be overwritten with a driver's `configStrategy` option, which accepts
+> `create`, `reference`, `copy`, `template`, `native`, and `none`.
 
 ## Creating a driver
 

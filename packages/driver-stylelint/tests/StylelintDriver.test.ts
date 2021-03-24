@@ -30,10 +30,10 @@ describe('StylelintDriver', () => {
 
 		expect(driver.options).toEqual({
 			args: ['--foo', '--bar=1'],
+			configStrategy: 'native',
 			dependencies: ['babel'],
 			env: { DEV: 'true' },
 			expandGlobs: true,
-			strategy: 'native',
 			template: '',
 		});
 	});
@@ -122,7 +122,7 @@ describe('StylelintDriver', () => {
 					context,
 					new Path('/some/path/.stylelintrc.js'),
 					{
-						// @ts-expect-error Invalid type
+						// @ts-expect-error
 						ignore: 'abc',
 					},
 				]);

@@ -39,7 +39,7 @@ export class CreateConfigRoutine<Ctx extends ConfigContext> extends Routine<
 		const { metadata, options } = driver;
 		const name = metadata.title;
 		const strategy =
-			options.strategy === STRATEGY_NATIVE ? metadata.configStrategy : options.strategy;
+			options.configStrategy === STRATEGY_NATIVE ? metadata.configStrategy : options.configStrategy;
 
 		switch (strategy) {
 			case STRATEGY_REFERENCE:

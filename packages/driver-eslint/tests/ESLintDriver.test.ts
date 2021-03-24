@@ -30,10 +30,10 @@ describe('ESLintDriver', () => {
 
 		expect(driver.options).toEqual({
 			args: ['--foo', '--bar=1'],
+			configStrategy: 'native',
 			dependencies: ['babel'],
 			env: { DEV: 'true' },
 			expandGlobs: true,
-			strategy: 'native',
 			template: '',
 		});
 	});
@@ -128,7 +128,7 @@ describe('ESLintDriver', () => {
 					context,
 					new Path('/some/path/.eslintrc.js'),
 					{
-						// @ts-expect-error Invalid type
+						// @ts-expect-error
 						ignore: 'foo',
 					},
 				]);

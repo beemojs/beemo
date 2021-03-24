@@ -217,16 +217,16 @@ Options can also be set through the [bootstrap and event system](./events.md).
 ### Options
 
 - `args` (`string[]`) - Arguments to always pass when executing the driver binary.
+- `configStrategy` (`create | copy | reference | template | native | none`) - Type of
+  [strategy](./driver.md#config-strategies) to use when generating a config file. Default is
+  different per driver.
 - `dependencies` (`string[]`) - Other drivers that are required for this driver to run.
 - `env` (`object`) - Environment variables to pass when executing the driver binary with
   [execa](https://github.com/sindresorhus/execa).
 - `expandGlobs` (`boolean`) - Controls whether or not glob patterns in args are automatically
   expanded before being passed to the driver binary. Defaults to `true`.
-- `strategy` (`create | copy | reference | template | native | none`) - Type of
-  [strategy](./driver.md#config-strategies) to use when generating a config file. Default is
-  different per driver.
 - `template` (`string`) - File path to a template function for generating custom config files and
-  paths. Is required when `strategy` is "template".
+  paths. Is required when `configStrategy` is "template".
 
 ## Executing drivers
 
@@ -359,8 +359,8 @@ mitigate this problem, each driver supports a template based strategy, in which 
 function can be used to handle the config generation (custom merging, etc), and the destination file
 path.
 
-To use templates, set the driver `strategy` option to "template", and the `template` option to a
-file path for the template function (relative to the `.config` folder).
+To use templates, set the driver `configStrategy` option to "template", and the `template` option to
+a file path for the template function (relative to the `.config` folder).
 
 <Tabs
   groupId="format"
@@ -381,7 +381,7 @@ const config: BeemoConfig = {
 		[
 			'eslint',
 			{
-				strategy: 'template',
+				configStrategy: 'template',
 				template: './path/to/custom/template.ts',
 			},
 		],
@@ -401,7 +401,7 @@ module.exports = {
 		[
 			'eslint',
 			{
-				strategy: 'template',
+				configStrategy: 'template',
 				template: './path/to/custom/template.ts',
 			},
 		],
