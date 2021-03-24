@@ -49,6 +49,7 @@ export function mockToolConfig(): ConfigFile {
 		execute: {
 			concurrency: 1,
 			graph: true,
+			output: '',
 		},
 		module: '@local',
 		scripts: [],
@@ -122,7 +123,6 @@ export function stubDriverArgs(
 	return stubArgs({
 		concurrency: 1,
 		graph: false,
-		stdio: 'buffer',
 		workspaces: '',
 		...fields,
 	});
@@ -143,7 +143,6 @@ export function stubScriptArgs(
 	return stubArgs({
 		concurrency: 1,
 		graph: false,
-		stdio: 'buffer',
 		workspaces: '',
 		...fields,
 	});

@@ -37,8 +37,6 @@ export type Execution = ExecaReturnValue;
 
 export type ExecutionError = ExecaError;
 
-export type StdioType = 'buffer' | 'inherit' | 'stream';
-
 // DRIVERS
 
 export type DriverConfigStrategy = 'copy' | 'create' | 'native' | 'none' | 'reference' | 'template';

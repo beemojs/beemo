@@ -19,27 +19,32 @@ this, multiple strategies are in play when generating a config file at the root.
   file.
 - **Template created config** - The config is dynamically generated from the cusomer using a custom
   template function. This template controls both the config file contents and destination path.
-- **Native config** - Uses the configuration strategy defined for the driver.
+- **Native config** - Uses the native configuration strategy defined for the driver.
 - **No config** - Does nothing. Requires the consumer to create a local config file.
 
 The default strategies for each tool are as follows:
 
-| Driver     | Strategy   |
-| ---------- | ---------- |
-| Babel      | Created    |
-| ESLint     | Created    |
-| Flow       | Created    |
-| Jest       | Created    |
-| Lerna      | Created    |
-| Mocha      | Created    |
-| Prettier   | Created    |
-| Rollup     | Referenced |
-| Stylelint  | Created    |
-| TypeScript | Created    |
-| Webpack    | Referenced |
+| Strategy   | Driver                                                                   |
+| ---------- | ------------------------------------------------------------------------ |
+| Created    | Babel, ESLint, Flow, Jest, Lerna, Mocha, Prettier, Stylelint, TypeScript |
+| Referenced | Rollup, Webpack                                                          |
 
-> Default strategies can be overwritten with a driver's `configStrategy` option, which accepts
-> `create`, `reference`, `copy`, `template`, `native`, and `none`.
+> Default strategies can be overwritten with a driver's `configStrategy` option.
+
+## Output strategies
+
+Since Beemo executes drivers in a sub-process, we offer multiple strategies on how to display the
+driver's output.
+
+- **Buffered** - Driver output will be buffered and hidden until the Beemo process completes. Upon
+  completion, the buffered output will be logged _after_ Beemo's output.
+- **Piped** - Driver output will be logged _above_ and in parallel with Beemo's output.
+- **Streamed** - Beemo's output will be hidden and the driver output will be logged instead. This
+  output is akin to running the driver outside of Beemo.
+- **No output** - Neither Beemo's or the driver's output will be displayed.
+
+> Default strategy is to buffer, but this can be customized per driver with the `outputStrategy`
+> option, or for all drivers through the `execute.output` config setting.
 
 ## Creating a driver
 

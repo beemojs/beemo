@@ -11,9 +11,9 @@ describe('Context', () => {
 
 	describe('constructor()', () => {
 		it('sets args', () => {
-			const ctx = new Context(stubArgs({ stdio: 'pipe' }));
+			const ctx = new Context(stubArgs({ concurrency: 3 }));
 
-			expect(ctx.args).toEqual(stubArgs({ stdio: 'pipe' }));
+			expect(ctx.args).toEqual(stubArgs({ concurrency: 3 }));
 		});
 	});
 

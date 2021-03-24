@@ -74,7 +74,7 @@ export class ExecuteCommandRoutine extends Routine<unknown, unknown, ExecuteComm
 	}
 
 	/**
-	 * Capture live output via `--stdio=pipe` or `--watch`.
+	 * Capture output when output strategy is "stream" or "pipe".
 	 */
 	@Bind()
 	captureOutput(context: DriverContext, stream: execa.ExecaChildProcess) {
@@ -83,41 +83,38 @@ export class ExecuteCommandRoutine extends Routine<unknown, unknown, ExecuteComm
 		const isWatching = watchOptions.some((option) => {
 			// Option
 			if (option.startsWith('-')) {
-				const name = option.replace(/^-{1,2}/u, '');
-
-				// @ts-expect-error Allow this
-				return !!(args.options[name] || args.unknown[name]);
+				return !!context.getRiskyOption(option.replace(/^-{1,2}/u, ''));
 			}
 
 			// Param
 			return args.params.includes(option);
 		});
 
+		const outHandler = (chunk: Buffer) => {
+			console.log(String(chunk));
+		};
+
+		const errHandler = (chunk: Buffer) => {
+			console.log(String(chunk));
+		};
+
 		if (isWatching) {
 			const wait = 1000;
-			const handler = (chunk: Buffer) => {
-				process.stdout.write(String(chunk));
-			};
 
-			stream.stdout!.pipe(new BatchStream({ wait })).on('data', handler);
-			stream.stderr!.pipe(new BatchStream({ wait })).on('data', handler);
+			stream.stdout!.pipe(new BatchStream({ wait })).on('data', outHandler);
+			stream.stderr!.pipe(new BatchStream({ wait })).on('data', errHandler);
 
 			return 'watch';
 		}
 
-		// When streaming or inheriting, output immediately, otherwise swallow.
-		const { stdio } = args.options;
+		const strategy = primaryDriver.getOutputStrategy();
 
-		const handler = (chunk: Buffer) => {
-			if (stdio === 'stream' || stdio === 'inherit') {
-				process.stdout.write(String(chunk));
-			}
-		};
+		if (strategy === 'stream' || strategy === 'pipe') {
+			stream.stdout!.on('data', outHandler);
+			stream.stderr!.on('data', errHandler);
+		}
 
-		stream.stdout!.on('data', handler);
-		stream.stderr!.on('data', handler);
-
-		return stdio || 'buffer';
+		return strategy;
 	}
 
 	/**
@@ -199,7 +196,6 @@ export class ExecuteCommandRoutine extends Routine<unknown, unknown, ExecuteComm
 			driver.metadata.helpOption.split(' '),
 			{
 				env,
-				preferLocal: true,
 			},
 		);
 
@@ -347,7 +343,6 @@ export class ExecuteCommandRoutine extends Routine<unknown, unknown, ExecuteComm
 			const result = await this.executeCommand(driver.metadata.bin, argv, {
 				cwd,
 				env: driver.options.env,
-				preferLocal: true,
 				workUnit,
 				wrap: (stream) => this.captureOutput(context, stream),
 			});
@@ -359,7 +354,7 @@ export class ExecuteCommandRoutine extends Routine<unknown, unknown, ExecuteComm
 			await driver.onAfterExecute.emit([context, result]);
 
 			return result;
-		} catch (error: unknown) {
+		} catch (error) {
 			const result = error as ExecaError;
 
 			this.debug('  Failure: %o', formatExecReturn(result));
@@ -383,7 +378,7 @@ export class ExecuteCommandRoutine extends Routine<unknown, unknown, ExecuteComm
 			// https://nodejs.org/api/child_process.html#child_process_event_exit
 			throw result.exitCode === null && result.signal === 'SIGKILL'
 				? new ExitError('Out of memory!', 1)
-				: new ExitError((driver.extractErrorMessage(result) || '').trim(), result.exitCode);
+				: new ExitError((driver.extractErrorMessage(result) || '').trim(), error.exitCode);
 		}
 	}
 }
