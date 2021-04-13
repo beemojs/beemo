@@ -37,7 +37,10 @@ describe('Script', () => {
     it('calls execa internally', async () => {
       await script.executeCommand('yarn', ['install', '--immutable'], { cwd: '.' });
 
-      expect(execa).toHaveBeenCalledWith('yarn', ['install', '--immutable'], { cwd: '.' });
+      expect(execa).toHaveBeenCalledWith('yarn', ['install', '--immutable'], {
+        cwd: '.',
+        preferLocal: true,
+      });
     });
   });
 });

@@ -425,7 +425,10 @@ describe('ExecuteCommandRoutine', () => {
 
       await routine.extractNativeOptions(context);
 
-      expect(spy).toHaveBeenCalledWith('babel', ['--help', '--all'], { env: { DEV: 'true' } });
+      expect(spy).toHaveBeenCalledWith('babel', ['--help', '--all'], {
+        env: { DEV: 'true' },
+        preferLocal: true,
+      });
     });
 
     it('supports uppercased options', async () => {
@@ -568,6 +571,7 @@ describe('ExecuteCommandRoutine', () => {
       expect(routine.executeCommand).toHaveBeenCalledWith('babel', ['--wtf'], {
         cwd: getRoot().path(),
         env: { DEV: 'true' },
+        preferLocal: true,
         workUnit: task,
         wrap: expect.any(Function),
       });

@@ -38,6 +38,7 @@ describe('ScaffoldRoutine', () => {
 
       expect(spy).toHaveBeenCalledWith('babel', [], {
         input: 'const foo = {};',
+        preferLocal: true,
         shell: true,
       });
     });

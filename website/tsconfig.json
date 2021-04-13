@@ -4,6 +4,7 @@
   "compilerOptions": {
     "jsx": "react",
     "outDir": "lib",
-    "emitDeclarationOnly": true
+    "emitDeclarationOnly": true,
+    "types": ["node", "@docusaurus/module-type-aliases"]
   }
 }

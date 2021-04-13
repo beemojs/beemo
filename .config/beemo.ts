@@ -21,5 +21,7 @@ export default {
   settings: {
     decorators: true,
     node: true,
+    // Docusaurus
+    react: true,
   },
 };
