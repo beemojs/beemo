@@ -3,6 +3,18 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+### 0.2.0-rc.1 - 2021-04-13
+
+#### 📦 Dependencies
+
+- Update driver dependencies to latest. ([6e6c4cf](https://github.com/beemojs/beemo/commit/6e6c4cf))
+
+**Note:** Version bump only for package @beemo/local
+
+
+
+
+
 ### 0.2.0-rc.0 - 2021-03-20
 
 #### 📦 Dependencies
