@@ -45,7 +45,7 @@
     "eslint": "^7.0.0"
   },
   "dependencies": {
-    "@boost/event": "^2.3.1",
+    "@boost/event": "^2.3.2",
     "@types/eslint": "*"
   },
   "funding": {

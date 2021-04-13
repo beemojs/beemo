@@ -34,10 +34,10 @@
     "access": "public"
   },
   "dependencies": {
-    "@boost/cli": "^2.10.1",
+    "@boost/cli": "^2.10.4",
+    "debug": "^4.3.1",
     "ink": "^3.0.8",
-    "react": "^16.13.1",
-    "debug": "^4.3.1"
+    "react": "^16.13.1"
   },
   "peerDependencies": {
     "@beemo/core": "^2.0.0-alpha.0"
