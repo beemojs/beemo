@@ -56,8 +56,8 @@
     "fs-extra": "^9.1.0",
     "hygen": "^6.0.4",
     "is-glob": "^4.0.1",
-    "lodash": "^4.17.15",
-    "micromatch": "^4.0.2"
+    "lodash": "^4.17.21",
+    "micromatch": "^4.0.4"
   },
   "devDependencies": {
     "@boost/test-utils": "^2.3.1",
