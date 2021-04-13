@@ -46,7 +46,8 @@
     "debug": "^4.3.1"
   },
   "workspaces": [
-    "packages/*"
+    "packages/*",
+    "website"
   ],
   "funding": {
     "type": "ko-fi",
