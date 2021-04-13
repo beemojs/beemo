@@ -56,7 +56,10 @@ export default abstract class Script<O extends object = {}, Options extends obje
    * Execute a command with the given arguments and pass the results through a promise.
    */
   async executeCommand(command: string, args: string[], options: ExecaOptions = {}) /* infer */ {
-    return execa(command, args, options);
+    return execa(command, args, {
+      preferLocal: true,
+      ...options,
+    });
   }
 
   /**

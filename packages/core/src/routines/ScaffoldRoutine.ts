@@ -62,6 +62,7 @@ export default class ScaffoldRoutine extends Routine<unknown, unknown, RoutineOp
   private handleExec = (action: string, input: string) =>
     this.executeCommand(action, [], {
       input,
+      preferLocal: true,
       shell: true,
     });
 

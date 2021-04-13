@@ -1,9 +1,9 @@
 import React from 'react';
 import clsx from 'clsx';
-import Layout from '@theme/Layout';
 import Link from '@docusaurus/Link';
-import useDocusaurusContext from '@docusaurus/useDocusaurusContext';
 import useBaseUrl from '@docusaurus/useBaseUrl';
+import useDocusaurusContext from '@docusaurus/useDocusaurusContext';
+import Layout from '@theme/Layout';
 import styles from './styles.module.css';
 
 interface FeatureProps {
@@ -113,7 +113,7 @@ export default function Home() {
               frameBorder="0"
               scrolling="0"
               title="GitHub"
-            ></iframe>
+             />
           </div>
         </div>
       </header>

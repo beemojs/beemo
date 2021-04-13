@@ -203,6 +203,7 @@ export default class ExecuteCommandRoutine extends Routine<
       driver.metadata.helpOption.split(' '),
       {
         env,
+        preferLocal: true,
       },
     );
 
@@ -350,6 +351,7 @@ export default class ExecuteCommandRoutine extends Routine<
       const result = await this.executeCommand(driver.metadata.bin, argv, {
         cwd,
         env: driver.options.env,
+        preferLocal: true,
         workUnit,
         wrap: (stream) => this.captureOutput(context, stream),
       });
