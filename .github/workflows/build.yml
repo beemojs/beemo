@@ -18,7 +18,7 @@ jobs:
       - uses: actions/setup-node@v2
         with:
           node-version: ${{ matrix.node-version }}
-      - run: yarn install --ignore-engines --immutable
+      - run: yarn install --immutable
       - run: yarn run setup
       - run: yarn run type
       - run: yarn run coverage
@@ -35,7 +35,7 @@ jobs:
       - uses: actions/setup-node@v2
         with:
           node-version: ${{ matrix.node-version }}
-      - run: yarn install --ignore-engines --immutable
+      - run: yarn install --immutable
       - run: yarn run setup
       - run: yarn run type
       - run: yarn run test:int:pass
@@ -47,7 +47,7 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - uses: actions/setup-node@v2
-      - run: yarn install --ignore-engines --immutable
+      - run: yarn install --immutable
       - run: yarn run pack
   scaffold:
     name: Scaffold
@@ -55,7 +55,7 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - uses: actions/setup-node@v2
-      - run: yarn install --ignore-engines --immutable
+      - run: yarn install --immutable
       - run: yarn run build
       - run: yarn run beemo scaffold gen act
       - run: test -e TEST.md
@@ -67,5 +67,5 @@ jobs:
       - uses: actions/setup-node@v2
       - run: |
           cd website
-          yarn install --ignore-engines --immutable
+          yarn install --immutable
           yarn run build
