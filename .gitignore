@@ -47,3 +47,12 @@ tests/__fixtures__/**/tsconfig.options.json
 !packages/local/lib/configs/*.js
 !tests/__fixtures__/config-lib-module/lib
 !tests/__fixtures__/script-lib-module/lib
+
+# Yarn
+.yarn/*
+!.yarn/patches
+!.yarn/releases
+!.yarn/plugins
+!.yarn/sdks
+!.yarn/versions
+.pnp.*
