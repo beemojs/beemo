@@ -185,7 +185,7 @@ export default abstract class Driver<
    */
   getVersion(): string {
     const { bin, versionOption } = this.metadata;
-    const version = (execa.sync(bin, [versionOption])?.stdout || '').trim();
+    const version = (execa.sync(bin, [versionOption], { preferLocal: true })?.stdout || '').trim();
     const match = version.match(/(\d+)\.(\d+)\.(\d+)/u);
 
     return match ? match[0] : '0.0.0';

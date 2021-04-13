@@ -2,6 +2,9 @@
   "extends": "../tsconfig.options.json",
   "include": ["src/**/*", "types/**/*"],
   "compilerOptions": {
-    "jsx": "react"
+    "jsx": "react",
+    "outDir": "lib",
+    "emitDeclarationOnly": true,
+    "types": ["node", "@docusaurus/module-type-aliases"]
   }
 }

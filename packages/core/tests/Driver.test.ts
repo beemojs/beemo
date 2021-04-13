@@ -83,7 +83,7 @@ describe('Driver', () => {
       (execa.sync as jest.Mock).mockImplementation(() => ({ stdout: '' }));
 
       expect(driver.getVersion()).toBe('0.0.0');
-      expect(execa.sync).toHaveBeenCalledWith('foo', ['--version']);
+      expect(execa.sync).toHaveBeenCalledWith('foo', ['--version'], { preferLocal: true });
     });
 
     it('returns valid version from response', () => {

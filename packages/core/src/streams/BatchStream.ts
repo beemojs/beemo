@@ -34,11 +34,7 @@ export default class BatchStream extends Transform {
   }
 
   _transform(chunk: Buffer, encoding: string, callback: TransformCallback) {
-    if (this.bufferedBatch) {
-      this.bufferedBatch = Buffer.concat([this.bufferedBatch, chunk]);
-    } else {
-      this.bufferedBatch = chunk;
-    }
+    this.bufferedBatch = this.bufferedBatch ? Buffer.concat([this.bufferedBatch, chunk]) : chunk;
 
     if (this.timeout) {
       clearTimeout(this.timeout);

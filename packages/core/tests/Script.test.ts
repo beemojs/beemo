@@ -35,9 +35,12 @@ describe('Script', () => {
 
   describe('executeCommand()', () => {
     it('calls execa internally', async () => {
-      await script.executeCommand('yarn', ['install', '--frozen-lockfile'], { cwd: '.' });
+      await script.executeCommand('yarn', ['install', '--immutable'], { cwd: '.' });
 
-      expect(execa).toHaveBeenCalledWith('yarn', ['install', '--frozen-lockfile'], { cwd: '.' });
+      expect(execa).toHaveBeenCalledWith('yarn', ['install', '--immutable'], {
+        cwd: '.',
+        preferLocal: true,
+      });
     });
   });
 });

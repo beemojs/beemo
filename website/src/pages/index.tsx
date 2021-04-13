@@ -1,14 +1,17 @@
+/* eslint-disable no-use-before-define, sort-keys, import/no-unresolved, node/no-missing-import, react/jsx-no-literals, react/no-array-index-key */
+
 import React from 'react';
 import clsx from 'clsx';
-import Layout from '@theme/Layout';
 import Link from '@docusaurus/Link';
-import useDocusaurusContext from '@docusaurus/useDocusaurusContext';
 import useBaseUrl from '@docusaurus/useBaseUrl';
+import useDocusaurusContext from '@docusaurus/useDocusaurusContext';
+import Layout from '@theme/Layout';
 import styles from './styles.module.css';
 
 interface FeatureProps {
   title: string;
   description: React.ReactNode;
+  // eslint-disable-next-line react/require-default-props
   imageUrl?: string;
 }
 
@@ -91,8 +94,8 @@ function Feature({ imageUrl, title, description }: FeatureProps) {
 }
 
 export default function Home() {
-  const context = useDocusaurusContext();
-  const { siteConfig = {} } = context;
+  const context = useDocusaurusContext() as { siteConfig: { tagline: string; title: string } };
+  const siteConfig = context.siteConfig || {};
 
   return (
     <Layout title="Centralized development config" description={siteConfig.tagline}>
@@ -113,7 +116,7 @@ export default function Home() {
               frameBorder="0"
               scrolling="0"
               title="GitHub"
-            ></iframe>
+            />
           </div>
         </div>
       </header>
