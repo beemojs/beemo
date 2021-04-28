@@ -1704,15 +1704,16 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@beemo/config-babel@npm:^0.1.2":
-  version: 0.1.2
-  resolution: "@beemo/config-babel@npm:0.1.2"
+"@beemo/config-babel@npm:^0.1.3":
+  version: 0.1.3
+  resolution: "@beemo/config-babel@npm:0.1.3"
   dependencies:
-    babel-preset-beemo: ^0.1.2
+    babel-preset-beemo: ^0.1.3
   peerDependencies:
+    "@babel/core": ">=7.0.0"
     "@beemo/core": ^2.0.0-rc.0
     "@beemo/driver-babel": ^2.0.0-rc.0
-  checksum: 5d78245c3b4a35958dcea2edad161270cc47257c44d5a7e0681b376077ef026224327eb57d7a5a7a09025d4d88d11c7a6dcbdefe42a8b89b68d26d07de88d559
+  checksum: cb7ce09de2cff4ea9332f4fa81d76855d600342ef6e2e500d804e2d43290159b69e719cc4759506df746e6faaf594132e590317c815b7f088e30c3d1caa079ab
   languageName: node
   linkType: hard
 
@@ -1723,28 +1724,30 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@beemo/config-eslint@npm:^0.1.1":
-  version: 0.1.1
-  resolution: "@beemo/config-eslint@npm:0.1.1"
+"@beemo/config-eslint@npm:^0.1.2":
+  version: 0.1.2
+  resolution: "@beemo/config-eslint@npm:0.1.2"
   dependencies:
     "@beemo/config-constants": ^0.1.1
-    eslint-config-beemo: ^0.1.1
+    eslint-config-beemo: ^0.1.2
   peerDependencies:
     "@beemo/core": ^2.0.0-rc.0
     "@beemo/driver-eslint": ^2.0.0-rc.0
-  checksum: d3a9ce9289b21eb7b6dace496c4f51ae1040540c891c29a69f377eaf973d08b887f09462e16257474da3b6400d6921d9efaf919d98b89859f43e9c1af4cce1ab
+    eslint: ">=7.0.0"
+  checksum: e5566c10721e000a82c14512d19e6ff04e1d842bccdae996a203d773e81fccebdb4bd910e9d941018a281baa6364b7704d5012e15f4df00e2b75042193f24763
   languageName: node
   linkType: hard
 
-"@beemo/config-jest@npm:^0.1.2":
-  version: 0.1.2
-  resolution: "@beemo/config-jest@npm:0.1.2"
+"@beemo/config-jest@npm:^0.1.3":
+  version: 0.1.3
+  resolution: "@beemo/config-jest@npm:0.1.3"
   dependencies:
-    jest-preset-beemo: ^0.1.2
+    jest-preset-beemo: ^0.1.3
   peerDependencies:
     "@beemo/core": ^2.0.0-rc.0
     "@beemo/driver-jest": ^2.0.0-rc.0
-  checksum: 67c540b7448f749d5206f07f0316357d59b4a347dfe0fcd82e68ef433112aa643ae6e2f25813763a647ae3715d96520a3d986f4047c668e7990ee8f55ecc2444
+    jest: ">=26.0.0"
+  checksum: 2c516cabf6f53b86df3505154618ada559ca7647b109a6cd1262446331e161f18c37e40916b7039c64ec4203ddc7a1d373ab56bf13884adedfedeccdd69bd96e
   languageName: node
   linkType: hard
 
@@ -1940,9 +1943,9 @@ __metadata:
   resolution: "@beemo/local@workspace:packages/local"
   dependencies:
     "@babel/core": ^7.13.8
-    "@beemo/config-babel": ^0.1.2
-    "@beemo/config-eslint": ^0.1.1
-    "@beemo/config-jest": ^0.1.2
+    "@beemo/config-babel": ^0.1.3
+    "@beemo/config-eslint": ^0.1.2
+    "@beemo/config-jest": ^0.1.3
     "@beemo/config-prettier": ^0.1.1
     "@beemo/config-typescript": ^0.1.3
     "@milesj/build-tool-config": ^3.0.0-alpha.1
@@ -4617,7 +4620,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/jest@npm:*, @types/jest@npm:^26.0.22":
+"@types/jest@npm:^26.0.22, @types/jest@npm:^26.0.23":
   version: 26.0.23
   resolution: "@types/jest@npm:26.0.23"
   dependencies:
@@ -6300,9 +6303,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"babel-preset-beemo@npm:^0.1.2":
-  version: 0.1.2
-  resolution: "babel-preset-beemo@npm:0.1.2"
+"babel-preset-beemo@npm:^0.1.3":
+  version: 0.1.3
+  resolution: "babel-preset-beemo@npm:0.1.3"
   dependencies:
     "@babel/plugin-proposal-class-properties": ^7.13.0
     "@babel/plugin-proposal-decorators": ^7.13.15
@@ -6313,7 +6316,9 @@ __metadata:
     "@babel/preset-react": ^7.13.13
     "@babel/preset-typescript": ^7.13.0
     babel-plugin-transform-dev: ^2.0.1
-  checksum: 2aa5549d351d518365b632834f97e2c100d5d168ef96c54d695dcc7510986a7d95d4a8d4a02c95f4d06b98d4d2e462160a5956a6aebbf7c389d4e3ec89b42a8d
+  peerDependencies:
+    "@babel/core": ">=7.0.0"
+  checksum: df442c11a79773b81f2396ea69583766d9ad0ce37389dfe897ede4783d1a16f73518a91d7e94fd8011003e6d36c6efaf0394e0efce78557581290db01dfe51c8
   languageName: node
   linkType: hard
 
@@ -9436,18 +9441,18 @@ __metadata:
   languageName: node
   linkType: hard
 
-"eslint-config-beemo@npm:^0.1.1":
-  version: 0.1.1
-  resolution: "eslint-config-beemo@npm:0.1.1"
+"eslint-config-beemo@npm:^0.1.2":
+  version: 0.1.2
+  resolution: "eslint-config-beemo@npm:0.1.2"
   dependencies:
     "@beemo/config-constants": ^0.1.1
     "@typescript-eslint/eslint-plugin": ^4.22.0
     "@typescript-eslint/parser": ^4.22.0
     eslint-config-airbnb-base: ^14.2.1
-    eslint-config-prettier: ^8.2.0
+    eslint-config-prettier: ^8.3.0
     eslint-plugin-compat: ^3.9.0
     eslint-plugin-import: ^2.22.1
-    eslint-plugin-jest: ^24.1.5
+    eslint-plugin-jest: ^24.3.6
     eslint-plugin-jsx-a11y: ^6.4.1
     eslint-plugin-node: ^11.1.0
     eslint-plugin-promise: ^5.1.0
@@ -9457,8 +9462,8 @@ __metadata:
     eslint-plugin-simple-import-sort: ^7.0.0
     eslint-plugin-unicorn: ^29.0.0
   peerDependencies:
-    eslint: ^7.0.0
-  checksum: d872509ac8d75e25d8aa7da61362023626fba9d32043c8236f2665d8a657cd3dee8d35a925f698f76d880226854b1a5652a9ca79eba37e9fc6b1e705a7aaa498
+    eslint: ">=7.0.0"
+  checksum: e7cc54969bbee687926499f4fda38f0ff1fc8b4021da087c8009db0bcb8dd7be1a119013b07aa2a5e24da64c3458a1adc72a9dcd6e889f55f8a16e4327ae1eb0
   languageName: node
   linkType: hard
 
@@ -9470,6 +9475,17 @@ __metadata:
   bin:
     eslint-config-prettier: bin/cli.js
   checksum: 0fe60cc42dd84fd878ee437dfe73340ba8b18f41ba2538878c54ff15f24a6855bf7e048b36290022b21e0e050ee6cf61d66bfdf39bedb5ccc15c28997cda7016
+  languageName: node
+  linkType: hard
+
+"eslint-config-prettier@npm:^8.3.0":
+  version: 8.3.0
+  resolution: "eslint-config-prettier@npm:8.3.0"
+  peerDependencies:
+    eslint: ">=7.0.0"
+  bin:
+    eslint-config-prettier: bin/cli.js
+  checksum: 94ccbb50fb67e5e47e8ba6cfa257b5cbf53619990ab13f46b99518cfe9b900394b93bdf6ffedbde1a8e2997d301b0fbd73a6b4202146bc53475dfb30a8c812f2
   languageName: node
   linkType: hard
 
@@ -9557,21 +9573,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"eslint-plugin-jest@npm:^24.1.5":
-  version: 24.3.6
-  resolution: "eslint-plugin-jest@npm:24.3.6"
-  dependencies:
-    "@typescript-eslint/experimental-utils": ^4.0.1
-  peerDependencies:
-    "@typescript-eslint/eslint-plugin": ">= 4"
-    eslint: ">=5"
-  peerDependenciesMeta:
-    "@typescript-eslint/eslint-plugin":
-      optional: true
-  checksum: 13f4522cd838a6a356a080f76424579a58aa2f9b4f4b3fdd3713278718496c62ba3d8f53c0fb6ad6fd96ca6cfd6ee728f7dd51893b91eccfb4396b832f757afb
-  languageName: node
-  linkType: hard
-
 "eslint-plugin-jest@npm:^24.3.5":
   version: 24.3.5
   resolution: "eslint-plugin-jest@npm:24.3.5"
@@ -9584,6 +9585,21 @@ __metadata:
     "@typescript-eslint/eslint-plugin":
       optional: true
   checksum: 6352966b16a2a65cd5637f6d02ffcd59f52e8cb6cb8434d35520fe5b30cbf475e3a55a088fcf0d41d6f7c0dbd93e9b5c637707075fbb3d960b318c305c3ac7aa
+  languageName: node
+  linkType: hard
+
+"eslint-plugin-jest@npm:^24.3.6":
+  version: 24.3.6
+  resolution: "eslint-plugin-jest@npm:24.3.6"
+  dependencies:
+    "@typescript-eslint/experimental-utils": ^4.0.1
+  peerDependencies:
+    "@typescript-eslint/eslint-plugin": ">= 4"
+    eslint: ">=5"
+  peerDependenciesMeta:
+    "@typescript-eslint/eslint-plugin":
+      optional: true
+  checksum: 13f4522cd838a6a356a080f76424579a58aa2f9b4f4b3fdd3713278718496c62ba3d8f53c0fb6ad6fd96ca6cfd6ee728f7dd51893b91eccfb4396b832f757afb
   languageName: node
   linkType: hard
 
@@ -13264,14 +13280,16 @@ fsevents@^1.2.7:
   languageName: node
   linkType: hard
 
-"jest-preset-beemo@npm:^0.1.2":
-  version: 0.1.2
-  resolution: "jest-preset-beemo@npm:0.1.2"
+"jest-preset-beemo@npm:^0.1.3":
+  version: 0.1.3
+  resolution: "jest-preset-beemo@npm:0.1.3"
   dependencies:
     "@beemo/config-constants": ^0.1.1
-    "@types/jest": "*"
+    "@types/jest": ^26.0.23
     jest-circus: ^26.6.3
-  checksum: f685df1e8fcbd745cc29787406bfa270e16cd3cbbe20917660869c9af672041acd0353ba6fd94c7b878a52f6b5bcdb710a2fedf8f98e1811f5a854cd884df33d
+  peerDependencies:
+    jest: ">=26.0.0"
+  checksum: cf32dbb216ce8be4691b7a008f40d4ce757e1da73f173c7b1900b4cb3b17d2c16164a34e77c3f27f104f92d0c960b5b65df436b3658bd9107b710ee0e900ce6b
   languageName: node
   linkType: hard
 

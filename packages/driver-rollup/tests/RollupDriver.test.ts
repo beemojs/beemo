@@ -1,5 +1,5 @@
 import { mockTool } from '@beemo/core/test';
-import RollupDriver from '../src/RollupDriver';
+import { RollupDriver } from '../src/RollupDriver';
 
 describe('RollupDriver', () => {
   let driver: RollupDriver;

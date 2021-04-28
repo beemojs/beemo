@@ -50,6 +50,10 @@
     "packages/*",
     "website"
   ],
+  "engines": {
+    "node": ">=10.3.0",
+    "npm": ">=6.1.0"
+  },
   "funding": {
     "type": "ko-fi",
     "url": "https://ko-fi.com/milesjohnson"

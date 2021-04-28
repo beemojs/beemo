@@ -1,7 +1,7 @@
 import fs from 'fs';
 import { DriverContext, Path } from '@beemo/core';
 import { mockTool, stubDriverContext, stubExecResult } from '@beemo/core/test';
-import ESLintDriver from '../src/ESLintDriver';
+import { ESLintDriver } from '../src/ESLintDriver';
 
 describe('ESLintDriver', () => {
   let driver: ESLintDriver;
@@ -128,7 +128,7 @@ describe('ESLintDriver', () => {
           context,
           new Path('/some/path/.eslintrc.js'),
           {
-            // @ts-expect-error
+            // @ts-expect-error Invalid type
             ignore: 'foo',
           },
         ]);

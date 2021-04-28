@@ -12,16 +12,16 @@ import {
   STRATEGY_REFERENCE,
   STRATEGY_TEMPLATE,
 } from '../constants';
-import ConfigContext from '../contexts/ConfigContext';
-import Driver from '../Driver';
-import type Tool from '../Tool';
+import { ConfigContext } from '../contexts/ConfigContext';
+import { Driver } from '../Driver';
+import type { Tool } from '../Tool';
 import { ConfigObject, ConfigTemplate, RoutineOptions } from '../types';
 
 export interface CreateConfigOptions extends RoutineOptions {
   driver: Driver;
 }
 
-export default class CreateConfigRoutine<Ctx extends ConfigContext> extends Routine<
+export class CreateConfigRoutine<Ctx extends ConfigContext> extends Routine<
   Path,
   unknown,
   CreateConfigOptions
@@ -34,7 +34,7 @@ export default class CreateConfigRoutine<Ctx extends ConfigContext> extends Rout
     };
   }
 
-  execute(context: Ctx): Promise<Path> {
+  async execute(context: Ctx): Promise<Path> {
     const { driver, tool } = this.options;
     const { metadata, options } = driver;
     const name = metadata.title;
@@ -263,7 +263,7 @@ export default class CreateConfigRoutine<Ctx extends ConfigContext> extends Rout
    * Merge multiple configuration sources using the current driver.
    */
   @Bind()
-  mergeConfigs(context: Ctx, configs: ConfigObject[]): Promise<ConfigObject> {
+  async mergeConfigs(context: Ctx, configs: ConfigObject[]): Promise<ConfigObject> {
     const { driver } = this.options;
 
     this.debug('Merging %s config from %d sources', color.symbol(driver.getName()), configs.length);
@@ -299,7 +299,7 @@ export default class CreateConfigRoutine<Ctx extends ConfigContext> extends Rout
    * Load config from the consumer / local overrides.
    */
   @Bind()
-  loadConfigFromConsumer(context: Ctx, prevConfigs: ConfigObject[]): Promise<ConfigObject[]> {
+  async loadConfigFromConsumer(context: Ctx, prevConfigs: ConfigObject[]): Promise<ConfigObject[]> {
     const sourcePath = this.getConfigPath(context, true);
     const configs = [...prevConfigs];
 
@@ -318,7 +318,7 @@ export default class CreateConfigRoutine<Ctx extends ConfigContext> extends Rout
    * Load config from the provider / configuration module.
    */
   @Bind()
-  loadConfigFromProvider(context: Ctx, prevConfigs: ConfigObject[]): Promise<ConfigObject[]> {
+  async loadConfigFromProvider(context: Ctx, prevConfigs: ConfigObject[]): Promise<ConfigObject[]> {
     const sourcePath = this.getConfigPath(context);
     const configs = [...prevConfigs];
 
@@ -367,7 +367,7 @@ export default class CreateConfigRoutine<Ctx extends ConfigContext> extends Rout
    * Set environment variables defined by the driver.
    */
   @Bind()
-  setEnvVars(context: Ctx, configs: ConfigObject[]): Promise<ConfigObject[]> {
+  setEnvVars(context: Ctx, configs: ConfigObject[]): ConfigObject[] {
     const { env } = this.options.driver.options;
 
     // TODO: This may cause collisions, isolate somehow?
@@ -375,6 +375,6 @@ export default class CreateConfigRoutine<Ctx extends ConfigContext> extends Rout
       process.env[key] = env[key];
     });
 
-    return Promise.resolve(configs);
+    return configs;
   }
 }

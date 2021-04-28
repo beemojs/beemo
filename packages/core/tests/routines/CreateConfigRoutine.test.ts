@@ -8,9 +8,9 @@ import {
   STRATEGY_NONE,
   STRATEGY_REFERENCE,
 } from '../../src/constants';
-import ConfigContext from '../../src/contexts/ConfigContext';
-import Driver from '../../src/Driver';
-import CreateConfigRoutine from '../../src/routines/CreateConfigRoutine';
+import { ConfigContext } from '../../src/contexts/ConfigContext';
+import { Driver } from '../../src/Driver';
+import { CreateConfigRoutine } from '../../src/routines/CreateConfigRoutine';
 import {
   getRoot,
   mockDebugger,
@@ -19,7 +19,7 @@ import {
   prependRoot,
   stubConfigContext,
 } from '../../src/test';
-import Tool from '../../src/Tool';
+import { Tool } from '../../src/Tool';
 
 describe('CreateConfigRoutine', () => {
   let writeSpy: jest.SpyInstance;
@@ -42,7 +42,7 @@ describe('CreateConfigRoutine', () => {
     driver.configure({ args: ['--qux'] });
 
     routine = new CreateConfigRoutine('babel', 'Configure Babel', { driver, tool });
-    // @ts-expect-error
+    // @ts-expect-error Overwrite readonly
     routine.debug = mockDebugger();
 
     // eslint-disable-next-line @typescript-eslint/no-misused-promises
@@ -60,7 +60,7 @@ describe('CreateConfigRoutine', () => {
   });
 
   afterEach(() => {
-    // @ts-expect-error
+    // @ts-expect-error Delete
     delete process.beemo;
 
     writeSpy.mockRestore();

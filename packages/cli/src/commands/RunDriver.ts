@@ -1,7 +1,7 @@
 import { Blueprint, DriverContextOptions, DriverContextParams, Predicates } from '@beemo/core';
 import { Arg, Argv, Config } from '@boost/cli';
 import { tool } from '../setup';
-import BaseRunCommand from './BaseRunCommand';
+import { BaseRunCommand } from './BaseRunCommand';
 
 export interface RunDriverConfig {
   parallelArgv?: Argv[];
@@ -12,7 +12,7 @@ export interface RunDriverConfig {
   allowVariadicParams: true,
   category: 'core',
 })
-export default class RunDriver extends BaseRunCommand<DriverContextOptions, [], RunDriverConfig> {
+export class RunDriver extends BaseRunCommand<DriverContextOptions, [], RunDriverConfig> {
   @Arg.Params<DriverContextParams>({
     description: tool.msg('app:cliArgDriverName'),
     label: 'name',

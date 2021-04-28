@@ -1,5 +1,3 @@
-/* eslint-disable unicorn/import-index */
-
 import execa from 'execa';
 import { ArgList, Arguments, Argv } from '@boost/args';
 import { Path } from '@boost/common';
@@ -18,11 +16,11 @@ import {
   ScriptContext,
   ScriptContextOptions,
   Tool,
-} from './index';
+} from '.';
 
 export { mockDebugger };
 
-const TEST_ROOT = new Path(process.env.BEEMO_TEST_ROOT || process.cwd());
+const TEST_ROOT = new Path(process.env.BEEMO_TEST_ROOT ?? process.cwd());
 
 export class TestDriver<O extends object = {}> extends Driver<O> {
   readonly name = 'test-driver';
@@ -81,7 +79,7 @@ export function mockDriver<C extends object = {}>(
 
   // @ts-expect-error For testing purposes
   driver.name = name;
-  driver.tool = tool || mockTool();
+  driver.tool = tool ?? mockTool();
 
   driver.setMetadata({
     bin: name.toLowerCase(),
@@ -98,7 +96,7 @@ export function mockScript(name: string, tool: Tool | null = null): Script<{}> {
 
   // @ts-expect-error For testing purposes
   script.name = name;
-  script.tool = tool || mockTool();
+  script.tool = tool ?? mockTool();
 
   return script;
 }
@@ -167,7 +165,7 @@ export function stubConfigContext(): ConfigContext {
 }
 
 export function stubDriverContext(driver?: Driver): DriverContext {
-  return applyContext(new DriverContext(stubDriverArgs(), driver || new TestDriver()));
+  return applyContext(new DriverContext(stubDriverArgs(), driver ?? new TestDriver()));
 }
 
 export function stubScriptContext(script?: Script): ScriptContext {

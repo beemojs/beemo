@@ -8,7 +8,7 @@ export interface ParsedArgv {
 /**
  * Extract parallel commands and options into separate argv lists.
  */
-export default function parseSpecialArgv(argv: Argv): ParsedArgv {
+export function parseSpecialArgv(argv: Argv): ParsedArgv {
   const main: Argv = [];
   const parallel: Argv[] = [];
   let index = -1;

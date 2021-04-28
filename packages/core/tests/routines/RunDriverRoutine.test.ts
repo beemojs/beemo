@@ -2,10 +2,10 @@
 
 import { Path, Project } from '@boost/common';
 import { getFixturePath } from '@boost/test-utils';
-import DriverContext from '../../src/contexts/DriverContext';
-import Driver from '../../src/Driver';
+import { DriverContext } from '../../src/contexts/DriverContext';
+import { Driver } from '../../src/Driver';
 import { ExecuteCommandOptions } from '../../src/routines/driver/ExecuteCommandRoutine';
-import RunDriverRoutine from '../../src/routines/RunDriverRoutine';
+import { RunDriverRoutine } from '../../src/routines/RunDriverRoutine';
 import { AnyRoutine } from '../../src/routines/RunInWorkspacesRoutine';
 import { mockDebugger, mockDriver, mockTool, stubDriverContext } from '../../src/test';
 
@@ -51,7 +51,7 @@ describe('RunDriverRoutine', () => {
     context = stubDriverContext(driver);
 
     routine = new RunDriverRoutine('driver', 'Executing driver', { tool });
-    // @ts-expect-error
+    // @ts-expect-error Overwrite readonly
     routine.debug = mockDebugger();
   });
 
@@ -94,7 +94,7 @@ describe('RunDriverRoutine', () => {
         context.workspaceRoot = fixturePath;
         context.cwd = fixturePath;
 
-        // @ts-expect-error
+        // @ts-expect-error Overwrite readonly
         routine.options.tool.project = new Project(fixturePath);
       });
 

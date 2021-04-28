@@ -12,9 +12,9 @@ import {
   STRATEGY_REFERENCE,
   STRATEGY_TEMPLATE,
 } from './constants';
-import ConfigContext from './contexts/ConfigContext';
-import DriverContext from './contexts/DriverContext';
-import isClassInstance from './helpers/isClassInstance';
+import { ConfigContext } from './contexts/ConfigContext';
+import { DriverContext } from './contexts/DriverContext';
+import { isClassInstance } from './helpers/isClassInstance';
 import {
   Argv,
   BeemoTool,
@@ -30,7 +30,7 @@ import {
   Execution,
 } from './types';
 
-export default abstract class Driver<
+export abstract class Driver<
     Config extends object = {},
     Options extends DriverOptions = DriverOptions
   >
@@ -117,7 +117,8 @@ export default abstract class Driver<
    */
   doMerge(prevValue: unknown, nextValue: unknown): unknown {
     if (Array.isArray(prevValue) && Array.isArray(nextValue)) {
-      return Array.from(new Set(prevValue.concat(nextValue)));
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+      return [...new Set([...prevValue, ...nextValue])] as unknown;
     }
 
     return undefined;
@@ -154,7 +155,7 @@ export default abstract class Driver<
    * Return a list of user defined arguments.
    */
   getArgs(): Argv {
-    return Array.isArray(this.options.args) ? this.options.args : [];
+    return (Array.isArray(this.options.args) ? this.options.args : []) as Argv;
   }
 
   /**

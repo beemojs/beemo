@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-/* eslint-disable */
+/* eslint-disable node/shebang */
 
 process.env.BEEMO_BRAND_NAME = 'BMO';
 process.env.BEEMO_BRAND_BINARY = 'bmo';

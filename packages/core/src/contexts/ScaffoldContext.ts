@@ -1,5 +1,5 @@
 import { Arguments } from '../types';
-import Context from './Context';
+import { Context } from './Context';
 
 export interface ScaffoldContextOptions {
   dry: boolean;
@@ -7,10 +7,7 @@ export interface ScaffoldContextOptions {
 
 export type ScaffoldContextParams = [string, string, string];
 
-export default class ScaffoldContext extends Context<
-  ScaffoldContextOptions,
-  ScaffoldContextParams
-> {
+export class ScaffoldContext extends Context<ScaffoldContextOptions, ScaffoldContextParams> {
   action: string;
 
   generator: string;

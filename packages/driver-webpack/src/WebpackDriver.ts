@@ -3,7 +3,7 @@ import { WebpackConfig } from './types';
 
 // Success: Writes bundle/file metadata to stdout
 // Failure: Writes failed tests to stderr
-export default class WebpackDriver extends Driver<WebpackConfig> {
+export class WebpackDriver extends Driver<WebpackConfig> {
   readonly name = '@beemo/driver-webpack';
 
   bootstrap() {

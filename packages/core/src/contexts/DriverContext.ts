@@ -1,6 +1,6 @@
-import Driver from '../Driver';
+import { Driver } from '../Driver';
 import { Arguments, Argv, StdioType } from '../types';
-import ConfigContext from './ConfigContext';
+import { ConfigContext } from './ConfigContext';
 
 export interface DriverContextOptions {
   concurrency: number;
@@ -11,7 +11,7 @@ export interface DriverContextOptions {
 
 export type DriverContextParams = [string];
 
-export default class DriverContext<
+export class DriverContext<
   O extends DriverContextOptions = DriverContextOptions
 > extends ConfigContext<O> {
   // Name defined on the plugin (kebab case)

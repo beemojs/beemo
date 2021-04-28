@@ -1,3 +1,4 @@
+/* eslint-disable promise/prefer-await-to-callbacks */
 /* eslint-disable no-underscore-dangle */
 
 import { Transform, TransformCallback } from 'stream';
@@ -8,7 +9,7 @@ export interface BatchStreamOptions {
   wait?: number;
 }
 
-export default class BatchStream extends Transform {
+export class BatchStream extends Transform {
   bufferedBatch: Buffer | null = null;
 
   timeout: NodeJS.Timeout | null = null;
@@ -18,7 +19,7 @@ export default class BatchStream extends Transform {
   constructor(options: BatchStreamOptions = {}) {
     super();
 
-    this.waitThreshold = options.wait || WAIT_THRESHOLD;
+    this.waitThreshold = options.wait ?? WAIT_THRESHOLD;
   }
 
   flush() {

@@ -1,12 +1,12 @@
 import fs from 'fs-extra';
 import { Path } from '@boost/common';
 import { getFixturePath } from '@boost/test-utils';
-import Context from '../src/contexts/Context';
-import CleanupConfigsRoutine from '../src/routines/CleanupConfigsRoutine';
-import ResolveConfigsRoutine from '../src/routines/ResolveConfigsRoutine';
-import RunDriverRoutine from '../src/routines/RunDriverRoutine';
-import RunScriptRoutine from '../src/routines/RunScriptRoutine';
-import ScaffoldRoutine from '../src/routines/ScaffoldRoutine';
+import { Context } from '../src/contexts/Context';
+import { CleanupConfigsRoutine } from '../src/routines/CleanupConfigsRoutine';
+import { ResolveConfigsRoutine } from '../src/routines/ResolveConfigsRoutine';
+import { RunDriverRoutine } from '../src/routines/RunDriverRoutine';
+import { RunScriptRoutine } from '../src/routines/RunScriptRoutine';
+import { ScaffoldRoutine } from '../src/routines/ScaffoldRoutine';
 import {
   mockConsole,
   mockDriver,
@@ -17,7 +17,7 @@ import {
   stubScaffoldArgs,
   stubScriptArgs,
 } from '../src/test';
-import Tool from '../src/Tool';
+import { Tool } from '../src/Tool';
 
 jest.mock('execa');
 
@@ -306,7 +306,7 @@ describe('Tool', () => {
       it('sets args to context', () => {
         const pipeline = tool.createConfigurePipeline(stubConfigArgs());
 
-        expect(Array.from(pipeline.context.drivers)).toEqual([fooDriver, barDriver, bazDriver]);
+        expect([...pipeline.context.drivers]).toEqual([fooDriver, barDriver, bazDriver]);
       });
 
       it('emits `onRunCreateConfig` event with all names', () => {
@@ -323,7 +323,7 @@ describe('Tool', () => {
       it('sets args to context', () => {
         const pipeline = tool.createConfigurePipeline(stubConfigArgs(), ['foo']);
 
-        expect(Array.from(pipeline.context.drivers)).toEqual([fooDriver]);
+        expect([...pipeline.context.drivers]).toEqual([fooDriver]);
       });
 
       it('emits `onRunCreateConfig` event with each name', () => {

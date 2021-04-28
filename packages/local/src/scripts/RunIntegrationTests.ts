@@ -1,5 +1,5 @@
 import chalk from 'chalk';
-import execa from 'execa';
+import execa, { ExecaReturnValue } from 'execa';
 import fs from 'fs-extra';
 import {
   Arguments,
@@ -30,7 +30,7 @@ class RunIntegrationTestsScript extends Script<RunIntegrationTestsOptions> {
     };
   }
 
-  execute(context: ScriptContext, args: Arguments<RunIntegrationTestsOptions>) {
+  async execute(context: ScriptContext, args: Arguments<RunIntegrationTestsOptions>) {
     const { type } = args.options;
     const pkg = fs.readJsonSync(context.cwd.append('package.json').path()) as PackageStructure;
     const name = pkg.name.split('/')[1];
@@ -45,16 +45,16 @@ class RunIntegrationTestsScript extends Script<RunIntegrationTestsOptions> {
     console.log('Testing %s - %s', chalk.yellow(pkg.name), script);
 
     return Promise.all(
-      script.split('&&').map((command, index) => {
+      script.split('&&').map(async (command, index) => {
         const [cmd, ...cmdArgs] = command.trim().split(' ');
 
-        return (
-          execa(cmd, cmdArgs, { cwd: context.cwd.path(), preferLocal: true })
-            // Handles everything else
-            .then((response) => this.handleResult(name, type, response, index))
-            // Handles syntax errors
-            .catch((error) => this.handleResult(name, type, error, index))
-        );
+        try {
+          const result = await execa(cmd, cmdArgs, { cwd: context.cwd.path(), preferLocal: true });
+
+          return await this.handleResult(name, type, result, index);
+        } catch (error: unknown) {
+          return this.handleResult(name, type, error as ExecaReturnValue, index);
+        }
       }),
     );
   }

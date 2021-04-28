@@ -33,9 +33,9 @@
   },
   "devDependencies": {
     "@babel/core": "^7.13.8",
-    "@beemo/config-babel": "^0.1.2",
-    "@beemo/config-eslint": "^0.1.1",
-    "@beemo/config-jest": "^0.1.2",
+    "@beemo/config-babel": "^0.1.3",
+    "@beemo/config-eslint": "^0.1.2",
+    "@beemo/config-jest": "^0.1.3",
     "@beemo/config-prettier": "^0.1.1",
     "@beemo/config-typescript": "^0.1.3",
     "@milesj/build-tool-config": "^3.0.0-alpha.1",

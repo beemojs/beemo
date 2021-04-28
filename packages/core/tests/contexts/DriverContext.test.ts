@@ -1,4 +1,4 @@
-import DriverContext from '../../src/contexts/DriverContext';
+import { DriverContext } from '../../src/contexts/DriverContext';
 import { mockDriver, stubDriverArgs } from '../../src/test';
 
 describe('DriverContext', () => {
@@ -29,7 +29,7 @@ describe('DriverContext', () => {
 
       context = new DriverContext(stubDriverArgs(), driver);
 
-      expect(Array.from(context.drivers)).toEqual([driver]);
+      expect([...context.drivers]).toEqual([driver]);
     });
   });
 

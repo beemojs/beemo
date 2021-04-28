@@ -4,7 +4,7 @@ export interface ExecLike {
   stdout?: string;
 }
 
-export default function formatExecReturn<T extends ExecLike>(
+export function formatExecReturn<T extends ExecLike>(
   obj: T,
 ): Pick<T, Exclude<keyof T, 'command' | 'stderr' | 'stdout'>> {
   if (!obj || typeof obj !== 'object') {

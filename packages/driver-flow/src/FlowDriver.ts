@@ -3,7 +3,7 @@ import { FlowConfig, LintsConfig, OptionsConfig } from './types';
 
 // Success: Writes "Found 0 errors" to stdout and server output to stderr
 // Failure: Writes file list to stdout and server output to stderr
-export default class FlowDriver extends Driver<FlowConfig> {
+export class FlowDriver extends Driver<FlowConfig> {
   readonly name = '@beemo/driver-flow';
 
   bootstrap() {
@@ -64,7 +64,7 @@ export default class FlowDriver extends Driver<FlowConfig> {
         value = 'error';
       }
 
-      output.push(`${key.replace(/_/gu, '-')}=${String(value)}`);
+      output.push(`${key.replaceAll('_', '-')}=${String(value)}`);
     });
 
     return output;
@@ -76,7 +76,7 @@ export default class FlowDriver extends Driver<FlowConfig> {
     // http://caml.inria.fr/pub/docs/manual-ocaml/libref/Str.html#TYPEregexp
     option =
       value instanceof RegExp
-        ? value.source.replace(/\|/gu, '\\|').replace(/\(/gu, '\\(').replace(/\)/gu, '\\)')
+        ? value.source.replace(/\|/gu, '\\|').replaceAll('(', '\\(').replaceAll(')', '\\)')
         : String(value);
 
     return quote ? `'${option}'` : String(option);
@@ -89,10 +89,11 @@ export default class FlowDriver extends Driver<FlowConfig> {
       const value = options[key as keyof OptionsConfig];
 
       if (!value) {
-        return; // eslint-disable-line
+        return;
+      }
 
-        // Multiple values
-      } else if (Array.isArray(value)) {
+      // Multiple values
+      if (Array.isArray(value)) {
         value.forEach((val) => {
           output.push(`${key}=${this.formatOption(val)}`);
         });

@@ -12,9 +12,9 @@ import {
 import { Path, PortablePath } from '@boost/common';
 import { PluginsSetting } from '@boost/config';
 import { Pluggable } from '@boost/plugin';
-import type Context from './contexts/Context';
-import type ScriptContext from './contexts/ScriptContext';
-import type Tool from './Tool';
+import type { Context } from './contexts/Context';
+import type { ScriptContext } from './contexts/ScriptContext';
+import type { Tool } from './Tool';
 
 export type { Arguments, Argv, ParserOptions };
 
@@ -175,7 +175,6 @@ export type ConfigTemplate = (
 // OTHER
 
 declare global {
-  // eslint-disable-next-line @typescript-eslint/no-namespace
   namespace NodeJS {
     interface Process {
       beemo: BeemoProcess;

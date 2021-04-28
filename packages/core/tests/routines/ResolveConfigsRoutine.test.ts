@@ -1,17 +1,15 @@
-/* eslint-disable @typescript-eslint/no-confusing-void-expression */
-
 import fs from 'fs-extra';
-import ConfigContext from '../../src/contexts/ConfigContext';
-import Driver from '../../src/Driver';
-import ResolveConfigsRoutine from '../../src/routines/ResolveConfigsRoutine';
+import { ConfigContext } from '../../src/contexts/ConfigContext';
+import { Driver } from '../../src/Driver';
+import { ResolveConfigsRoutine } from '../../src/routines/ResolveConfigsRoutine';
 import { mockDebugger, mockDriver, mockTool, stubConfigContext } from '../../src/test';
-import Tool from '../../src/Tool';
+import { Tool } from '../../src/Tool';
 
 describe('ResolveConfigsRoutine', () => {
   let writeSpy: jest.SpyInstance;
   let copySpy: jest.SpyInstance;
   let routine: ResolveConfigsRoutine;
-  let plugins: { [name: string]: Driver };
+  let plugins: Record<string, Driver>;
   let tool: Tool;
   let driver: Driver;
   let context: ConfigContext;
@@ -23,7 +21,7 @@ describe('ResolveConfigsRoutine', () => {
     context = stubConfigContext();
 
     routine = new ResolveConfigsRoutine('config', 'Generating configurations', { tool });
-    // @ts-expect-error
+    // @ts-expect-error Overwrite readonly
     routine.debug = mockDebugger();
 
     context.addDriverDependency(driver);
@@ -88,21 +86,21 @@ describe('ResolveConfigsRoutine', () => {
   });
 
   describe('resolveDependencies()', () => {
-    it('adds primary driver when no dependencies', async () => {
-      await routine.resolveDependencies(context);
+    it('adds primary driver when no dependencies', () => {
+      routine.resolveDependencies(context);
 
-      expect(Array.from(context.drivers)).toEqual([driver]);
+      expect([...context.drivers]).toEqual([driver]);
     });
 
-    it('adds dependency to driver list', async () => {
+    it('adds dependency to driver list', () => {
       driver.metadata.dependencies = ['bar'];
 
-      await routine.resolveDependencies(context);
+      routine.resolveDependencies(context);
 
-      expect(Array.from(context.drivers)).toEqual([driver, mockDriver('bar', tool)]);
+      expect([...context.drivers]).toEqual([driver, mockDriver('bar', tool)]);
     });
 
-    it('handles sub-dependencies', async () => {
+    it('handles sub-dependencies', () => {
       plugins.bar = mockDriver('bar', tool, { dependencies: ['baz', 'qux'] });
       plugins.baz = mockDriver('baz', tool);
       plugins.qux = mockDriver('qux', tool, { dependencies: ['oof'] });
@@ -110,9 +108,9 @@ describe('ResolveConfigsRoutine', () => {
 
       driver.metadata.dependencies = ['bar'];
 
-      await routine.resolveDependencies(context);
+      routine.resolveDependencies(context);
 
-      expect(Array.from(context.drivers)).toEqual([
+      expect([...context.drivers]).toEqual([
         driver,
         plugins.bar,
         plugins.baz,
@@ -121,16 +119,16 @@ describe('ResolveConfigsRoutine', () => {
       ]);
     });
 
-    it('emits `onResolveDependencies` event', async () => {
+    it('emits `onResolveDependencies` event', () => {
       const spy = jest.fn();
 
       tool.onResolveDependencies.listen(spy);
 
       driver.metadata.dependencies = ['bar'];
 
-      await routine.resolveDependencies(context);
+      routine.resolveDependencies(context);
 
-      expect(spy).toHaveBeenCalledWith(context, Array.from(context.drivers));
+      expect(spy).toHaveBeenCalledWith(context, [...context.drivers]);
     });
   });
 });

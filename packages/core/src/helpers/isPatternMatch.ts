@@ -1,6 +1,6 @@
 import micromatch from 'micromatch';
 
-export default function isPatternMatch(
+export function isPatternMatch(
   string: string,
   pattern: string,
   options?: micromatch.Options,

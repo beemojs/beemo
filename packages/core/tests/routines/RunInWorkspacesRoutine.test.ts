@@ -1,12 +1,13 @@
 import { Predicates } from '@boost/common';
 import { Routine } from '@boost/pipeline';
-import Context from '../../src/contexts/Context';
-import Driver from '../../src/Driver';
-import RunInWorkspacesRoutine, {
+import { Context } from '../../src/contexts/Context';
+import { Driver } from '../../src/Driver';
+import {
   RunInWorkspacesContextArgs,
+  RunInWorkspacesRoutine,
 } from '../../src/routines/RunInWorkspacesRoutine';
 import { mockDebugger, mockDriver, mockTool, stubDriverContext } from '../../src/test';
-import Tool from '../../src/Tool';
+import { Tool } from '../../src/Tool';
 
 type Ctx = Context<RunInWorkspacesContextArgs>;
 
@@ -23,10 +24,10 @@ class PipedRoutine extends Routine<unknown, unknown, { error?: Error; type?: str
 
     if (error) {
       if (this.options.type === 'stderr') {
-        // @ts-expect-error
+        // @ts-expect-error Field doesnt exist
         error.stderr = 'Stderr message!';
       } else {
-        // @ts-expect-error
+        // @ts-expect-error Field doesnt exist
         error.stdout = 'Stdout info...';
       }
 
@@ -39,7 +40,7 @@ class PipedRoutine extends Routine<unknown, unknown, { error?: Error; type?: str
 
 class ExecuteRoutine extends RunInWorkspacesRoutine<Ctx> {
   pipeRoutine(context: Ctx, packageName?: string, packageRoot?: string) {
-    this.routines.push(new PipedRoutine(packageName || 'root', packageRoot || 'description'));
+    this.routines.push(new PipedRoutine(packageName ?? 'root', packageRoot ?? 'description'));
   }
 }
 
@@ -60,7 +61,7 @@ describe('RunInWorkspacesRoutine', () => {
     driver = mockDriver('primary', tool);
 
     routine = new ExecuteRoutine('driver', 'Executing driver', { tool });
-    // @ts-expect-error
+    // @ts-expect-error Overwrite readonly
     routine.debug = mockDebugger();
 
     // Setup packages
@@ -70,11 +71,7 @@ describe('RunInWorkspacesRoutine', () => {
     baz = new PipedRoutine('baz', 'baz');
     qux = new PipedRoutine('qux', 'qux');
 
-    routine.routines.push(primary);
-    routine.routines.push(foo);
-    routine.routines.push(bar);
-    routine.routines.push(baz);
-    routine.routines.push(qux);
+    routine.routines.push(primary, foo, bar, baz, qux);
 
     const packages = [
       {

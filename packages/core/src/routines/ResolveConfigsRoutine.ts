@@ -1,14 +1,16 @@
 import { Blueprint, Path, Predicates } from '@boost/common';
 import { color } from '@boost/internal';
 import { Routine } from '@boost/pipeline';
-import ConfigContext from '../contexts/ConfigContext';
-import type Tool from '../Tool';
+import { ConfigContext } from '../contexts/ConfigContext';
+import type { Tool } from '../Tool';
 import { RoutineOptions } from '../types';
-import CreateConfigRoutine from './CreateConfigRoutine';
+import { CreateConfigRoutine } from './CreateConfigRoutine';
 
-export default class ResolveConfigsRoutine<
-  Ctx extends ConfigContext = ConfigContext
-> extends Routine<Path[], unknown, RoutineOptions> {
+export class ResolveConfigsRoutine<Ctx extends ConfigContext = ConfigContext> extends Routine<
+  Path[],
+  unknown,
+  RoutineOptions
+> {
   blueprint({ instance }: Predicates): Blueprint<RoutineOptions> {
     return {
       tool: instance<Tool>().required().notNullable(),
@@ -87,6 +89,6 @@ export default class ResolveConfigsRoutine<
       context.addDriverDependency(driver);
     }
 
-    tool.onResolveDependencies.emit([context, Array.from(context.drivers)]);
+    tool.onResolveDependencies.emit([context, [...context.drivers]]);
   }
 }

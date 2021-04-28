@@ -1,7 +1,7 @@
 import rimraf from 'rimraf';
 import { DriverContext, Path } from '@beemo/core';
 import { mockTool, stubDriverContext } from '@beemo/core/test';
-import BabelDriver from '../src/BabelDriver';
+import { BabelDriver } from '../src/BabelDriver';
 
 jest.mock('rimraf');
 
@@ -73,27 +73,27 @@ describe('BabelDriver', () => {
   });
 
   describe('handleCleanTarget()', () => {
-    it('doesnt run if no clean param', () => {
+    it('doesnt run if no clean param', async () => {
       context.args.unknown.outDir = './lib';
 
-      driver.onBeforeExecute.emit([context, []]);
+      await driver.onBeforeExecute.emit([context, []]);
 
       expect(rimraf.sync).not.toHaveBeenCalled();
     });
 
-    it('doesnt run if no outDir param', () => {
+    it('doesnt run if no outDir param', async () => {
       context.args.unknown.clean = '';
 
-      driver.onBeforeExecute.emit([context, []]);
+      await driver.onBeforeExecute.emit([context, []]);
 
       expect(rimraf.sync).not.toHaveBeenCalled();
     });
 
-    it('runs if both params', () => {
+    it('runs if both params', async () => {
       context.args.unknown.outDir = './lib';
       context.args.unknown.clean = '';
 
-      driver.onBeforeExecute.emit([context, []]);
+      await driver.onBeforeExecute.emit([context, []]);
 
       expect(rimraf.sync).toHaveBeenCalledWith(Path.resolve('./lib').path());
     });

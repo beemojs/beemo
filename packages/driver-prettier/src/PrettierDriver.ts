@@ -5,7 +5,7 @@ import { PrettierArgs, PrettierConfig } from './types';
 
 // Success: Writes formatted files to stdout
 // Failure: Writes to stderr for no files found and syntax errors
-export default class PrettierDriver extends Driver<PrettierConfig> {
+export class PrettierDriver extends Driver<PrettierConfig> {
   readonly name = '@beemo/driver-prettier';
 
   readonly onCreateIgnoreFile = new Event<[ConfigContext, Path, { ignore: string[] }]>(
@@ -50,6 +50,7 @@ export default class PrettierDriver extends Driver<PrettierConfig> {
     context.addConfigPath('prettier', ignorePath);
 
     // Delete the property
+    // eslint-disable-next-line no-param-reassign
     delete config.ignore;
   };
 }

@@ -2,8 +2,8 @@ import fs from 'fs';
 import { Path, Tool } from '@beemo/core';
 import { mockTool } from '@beemo/core/test';
 import { getFixturePath } from '@boost/test-utils';
-import syncProjectRefs from '../../src/commands/syncProjectRefs';
-import TypeScriptDriver from '../../src/TypeScriptDriver';
+import { syncProjectRefs } from '../../src/commands/syncProjectRefs';
+import { TypeScriptDriver } from '../../src/TypeScriptDriver';
 
 describe('syncProjectRefs()', () => {
   let tool: Tool;
@@ -12,7 +12,7 @@ describe('syncProjectRefs()', () => {
 
   beforeEach(async () => {
     tool = mockTool();
-    // @ts-expect-error
+    // @ts-expect-error Overwrite readonly
     tool.project.root = new Path(getFixturePath('project-refs'));
 
     driver = new TypeScriptDriver();
@@ -266,8 +266,10 @@ describe('syncProjectRefs()', () => {
   it('emits `onCreateProjectConfigFile` event', async () => {
     const spy = jest.fn((filePath, config, isTests) => {
       if (isTests) {
+        // eslint-disable-next-line no-param-reassign
         config.compilerOptions.testsOnly = true;
       } else {
+        // eslint-disable-next-line no-param-reassign
         config.compilerOptions.srcOnly = true;
       }
     });

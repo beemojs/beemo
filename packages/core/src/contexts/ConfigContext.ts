@@ -1,7 +1,7 @@
-import Driver from '../Driver';
-import Context from './Context';
+import { Driver } from '../Driver';
+import { Context } from './Context';
 
-export default class ConfigContext<O extends object = {}> extends Context<O, string[]> {
+export class ConfigContext<O extends object = {}> extends Context<O, string[]> {
   // List of drivers involved in the current pipeline
   drivers: Set<Driver> = new Set();
 

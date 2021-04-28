@@ -2,9 +2,9 @@ import execa from 'execa';
 import fs from 'fs-extra';
 import { ExitError, Path } from '@boost/common';
 import { color } from '@boost/internal';
-import DriverContext from '../../../src/contexts/DriverContext';
-import Driver from '../../../src/Driver';
-import ExecuteCommandRoutine from '../../../src/routines/driver/ExecuteCommandRoutine';
+import { DriverContext } from '../../../src/contexts/DriverContext';
+import { Driver } from '../../../src/Driver';
+import { ExecuteCommandRoutine } from '../../../src/routines/driver/ExecuteCommandRoutine';
 import {
   getRoot,
   mockDebugger,
@@ -13,7 +13,7 @@ import {
   prependRoot,
   stubDriverContext,
 } from '../../../src/test';
-import Tool from '../../../src/Tool';
+import { Tool } from '../../../src/Tool';
 import { StdioType } from '../../../src/types';
 
 describe('ExecuteCommandRoutine', () => {
@@ -37,7 +37,7 @@ describe('ExecuteCommandRoutine', () => {
       argv: ['-a', '--foo', 'bar', 'baz'],
       tool,
     });
-    // @ts-expect-error
+    // @ts-expect-error Overwrite readonly
     routine.debug = mockDebugger();
   });
 
@@ -45,7 +45,7 @@ describe('ExecuteCommandRoutine', () => {
     it('errors if `forceConfigOption` is not a boolean', () => {
       expect(() => {
         routine = new ExecuteCommandRoutine('test', 'test', {
-          // @ts-expect-error
+          // @ts-expect-error Invalid type
           forceConfigOption: 'foo',
         });
       }).toThrowErrorMatchingSnapshot();
@@ -54,7 +54,7 @@ describe('ExecuteCommandRoutine', () => {
     it('errors if `packageRoot` is not a string', () => {
       expect(() => {
         routine = new ExecuteCommandRoutine('test', 'test', {
-          // @ts-expect-error
+          // @ts-expect-error Invalid type
           packageRoot: 123,
         });
       }).toThrowErrorMatchingSnapshot();
@@ -87,9 +87,9 @@ describe('ExecuteCommandRoutine', () => {
 
     beforeEach(() => {
       stream = {
-        // @ts-expect-error
+        // @ts-expect-error Invalid type
         stdout: new MockStream(),
-        // @ts-expect-error
+        // @ts-expect-error Invalid type
         stderr: new MockStream(),
       };
       writeSpy = jest.spyOn(process.stdout, 'write');
@@ -599,7 +599,7 @@ describe('ExecuteCommandRoutine', () => {
     it('persists exit code when a failure', async () => {
       (routine.executeCommand as jest.Mock).mockImplementation(() => {
         const error = new Error('Oops');
-        // @ts-expect-error
+        // @ts-expect-error Field doesnt exist on errors
         error.exitCode = 3;
 
         return Promise.reject(error);

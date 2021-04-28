@@ -1,17 +1,17 @@
 import { parse } from '@boost/args';
-import { Blueprint, Path, Predicates } from '@boost/common';
+import { Blueprint, instanceOf, Path, Predicates } from '@boost/common';
 import { Routine } from '@boost/pipeline';
-import ScriptContext from '../../contexts/ScriptContext';
-import formatExecReturn, { ExecLike } from '../../helpers/formatExecReturn';
-import Script from '../../Script';
-import type Tool from '../../Tool';
+import { ScriptContext } from '../../contexts/ScriptContext';
+import { ExecLike, formatExecReturn } from '../../helpers/formatExecReturn';
+import { Script } from '../../Script';
+import type { Tool } from '../../Tool';
 import { RoutineOptions } from '../../types';
 
 export interface ExecuteScriptOptions extends RoutineOptions {
   packageRoot?: string;
 }
 
-export default class ExecuteScriptRoutine extends Routine<unknown, Script, ExecuteScriptOptions> {
+export class ExecuteScriptRoutine extends Routine<unknown, Script, ExecuteScriptOptions> {
   blueprint({ instance, string }: Predicates): Blueprint<ExecuteScriptOptions> {
     return {
       packageRoot: string(),
@@ -49,11 +49,13 @@ export default class ExecuteScriptRoutine extends Routine<unknown, Script, Execu
       this.debug('  Success: %o', formatExecReturn(result as ExecLike));
 
       await script.onAfterExecute.emit([context, result]);
-    } catch (error) {
-      this.debug('  Failure: %o', formatExecReturn(error));
-      this.debug('  Error message: %s', error.message);
+    } catch (error: unknown) {
+      if (instanceOf(error, Error)) {
+        this.debug('  Failure: %o', formatExecReturn(error as ExecLike));
+        this.debug('  Error message: %s', error.message);
 
-      await script.onFailedExecute.emit([context, error]);
+        await script.onFailedExecute.emit([context, error]);
+      }
 
       throw error;
     }

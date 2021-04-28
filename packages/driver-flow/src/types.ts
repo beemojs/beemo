@@ -1,3 +1,5 @@
+/* eslint-disable camelcase */
+
 export type LintSetting = 'error' | 'off' | 'warn' | 0 | 1 | 2;
 
 export type LintsConfig = Record<string, LintSetting>;

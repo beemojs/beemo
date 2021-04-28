@@ -2,18 +2,18 @@
 
 import camelCase from 'lodash/camelCase';
 import upperFirst from 'lodash/upperFirst';
-import { Bind, PathResolver } from '@boost/common';
+import { Bind, instanceOf, PathResolver } from '@boost/common';
 import { EXECUTE_OPTIONS } from '../constants';
-import ScriptContext from '../contexts/ScriptContext';
-import filterArgs from '../helpers/filterArgs';
-import Script from '../Script';
-import RunInWorkspacesRoutine from './RunInWorkspacesRoutine';
-import ExecuteScriptRoutine from './script/ExecuteScriptRoutine';
+import { ScriptContext } from '../contexts/ScriptContext';
+import { filterArgs } from '../helpers/filterArgs';
+import { Script } from '../Script';
+import { RunInWorkspacesRoutine } from './RunInWorkspacesRoutine';
+import { ExecuteScriptRoutine } from './script/ExecuteScriptRoutine';
 
-export default class RunScriptRoutine extends RunInWorkspacesRoutine<ScriptContext> {
+export class RunScriptRoutine extends RunInWorkspacesRoutine<ScriptContext> {
   errors: Error[] = [];
 
-  getInitialValue(context: ScriptContext): Promise<Script> {
+  async getInitialValue(context: ScriptContext): Promise<Script> {
     const { tool } = this.options;
 
     return this.createWaterfallPipeline(context)
@@ -61,10 +61,12 @@ export default class RunScriptRoutine extends RunInWorkspacesRoutine<ScriptConte
       context.setScript(script);
 
       return script;
-    } catch (error) {
-      this.errors.push(
-        new Error(this.options.tool.msg('app:fromTool', { message: error.message })),
-      );
+    } catch (error: unknown) {
+      if (instanceOf(error, Error)) {
+        this.errors.push(
+          new Error(this.options.tool.msg('app:fromTool', { message: error.message })),
+        );
+      }
 
       return null;
     }
@@ -110,15 +112,18 @@ export default class RunScriptRoutine extends RunInWorkspacesRoutine<ScriptConte
 
     try {
       const { resolvedPath } = resolver.resolve();
+      const loadedScript = await tool.scriptRegistry.load(resolvedPath.path());
 
-      script = await tool.scriptRegistry.load(resolvedPath.path());
+      context.setScript(loadedScript);
 
-      context.setScript(script);
-    } catch (error) {
-      this.errors.push(new Error(tool.msg('app:fromModule', { message: error.message })));
+      return loadedScript;
+    } catch (error: unknown) {
+      if (instanceOf(error, Error)) {
+        this.errors.push(new Error(tool.msg('app:fromModule', { message: error.message })));
+      }
+
+      return null;
     }
-
-    return script || null;
   }
 
   /**

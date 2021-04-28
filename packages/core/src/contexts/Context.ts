@@ -10,7 +10,7 @@ export interface ConfigPath {
   path: Path;
 }
 
-export default class Context<
+export class Context<
   O extends object = {},
   P extends PrimitiveType[] = PrimitiveType[]
 > extends BaseContext {
@@ -61,10 +61,11 @@ export default class Context<
   addOption(arg: string, defaultValue: PrimitiveType = true, useEquals: boolean = false): this {
     let option = arg;
     let value = defaultValue;
+    let equals = useEquals;
 
     if (option.includes('=')) {
       [option, value] = option.split('=');
-      useEquals = true;
+      equals = true;
     }
 
     let name = trim(option, '-');
@@ -85,7 +86,7 @@ export default class Context<
 
     if (typeof value === 'boolean' || !value) {
       this.argv.push(option);
-    } else if (useEquals) {
+    } else if (equals) {
       this.argv.push(`${option}=${value}`);
     } else {
       this.argv.push(option, String(value));
@@ -147,8 +148,7 @@ export default class Context<
    * or null if not found.
    */
   getRiskyOption(name: string, raw: boolean = false): PrimitiveType | null {
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    let opt: any = this.getOption(name as keyof O);
+    let opt = (this.getOption(name as keyof O) as unknown) as PrimitiveType;
 
     if (opt !== null) {
       return opt;

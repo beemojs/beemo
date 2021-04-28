@@ -1,6 +1,5 @@
 import { Configuration } from 'webpack';
 
-// eslint-disable-next-line @typescript-eslint/no-empty-interface
 export interface WebpackConfig extends Configuration {}
 
 export interface WebpackArgs {

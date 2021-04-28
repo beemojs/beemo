@@ -6,7 +6,7 @@ import { RollupConfig } from './types';
 //  Writes input -> output file list to stderr
 // Failure:
 //  Writes input -> output file list to stderr with syntax/error
-export default class RollupDriver extends Driver<RollupConfig> {
+export class RollupDriver extends Driver<RollupConfig> {
   readonly name = '@beemo/driver-rollup';
 
   bootstrap() {

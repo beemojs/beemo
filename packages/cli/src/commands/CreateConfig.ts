@@ -6,7 +6,7 @@ import { tool } from '../setup';
   allowVariadicParams: 'names',
   category: 'core',
 })
-export default class CreateConfig extends Command<GlobalOptions> {
+export class CreateConfig extends Command<GlobalOptions> {
   async run(...names: string[]) {
     const pipeline = tool.createConfigurePipeline(this.getArguments(), names);
 

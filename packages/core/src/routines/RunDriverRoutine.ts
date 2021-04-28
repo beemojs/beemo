@@ -1,10 +1,10 @@
 import { EXECUTE_OPTIONS } from '../constants';
-import DriverContext from '../contexts/DriverContext';
-import filterArgs from '../helpers/filterArgs';
-import ExecuteCommandRoutine, { ExecuteCommandOptions } from './driver/ExecuteCommandRoutine';
-import RunInWorkspacesRoutine from './RunInWorkspacesRoutine';
+import { DriverContext } from '../contexts/DriverContext';
+import { filterArgs } from '../helpers/filterArgs';
+import { ExecuteCommandOptions, ExecuteCommandRoutine } from './driver/ExecuteCommandRoutine';
+import { RunInWorkspacesRoutine } from './RunInWorkspacesRoutine';
 
-export default class ExecuteDriverRoutine extends RunInWorkspacesRoutine<DriverContext> {
+export class RunDriverRoutine extends RunInWorkspacesRoutine<DriverContext> {
   pipeRoutine(context: DriverContext, packageName?: string, packageRoot?: string) {
     if (packageName) {
       this.pipeParallelBuilds(context, packageName, {
