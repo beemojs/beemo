@@ -1,3 +1,5 @@
+/* eslint-disable unicorn/prefer-string-replace-all */
+
 import { Driver, Execution } from '@beemo/core';
 import { FlowConfig, LintsConfig, OptionsConfig } from './types';
 
@@ -64,7 +66,7 @@ export class FlowDriver extends Driver<FlowConfig> {
         value = 'error';
       }
 
-      output.push(`${key.replaceAll('_', '-')}=${String(value)}`);
+      output.push(`${key.replace(/_/gu, '-')}=${String(value)}`);
     });
 
     return output;
@@ -76,7 +78,7 @@ export class FlowDriver extends Driver<FlowConfig> {
     // http://caml.inria.fr/pub/docs/manual-ocaml/libref/Str.html#TYPEregexp
     option =
       value instanceof RegExp
-        ? value.source.replace(/\|/gu, '\\|').replaceAll('(', '\\(').replaceAll(')', '\\)')
+        ? value.source.replace(/\|/gu, '\\|').replace(/\(/gu, '\\(').replace(/\)/gu, '\\)')
         : String(value);
 
     return quote ? `'${option}'` : String(option);
