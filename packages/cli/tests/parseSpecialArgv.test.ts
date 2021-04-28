@@ -1,4 +1,4 @@
-import parseSpecialArgv from '../src/parseSpecialArgv';
+import { parseSpecialArgv } from '../src/parseSpecialArgv';
 
 describe('parseSpecialArgv()', () => {
   it('passes args through', () => {
