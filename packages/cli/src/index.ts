@@ -4,3 +4,4 @@
  */
 
 // Export command to extend from
+export {};

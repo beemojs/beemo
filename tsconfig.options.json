@@ -6,23 +6,25 @@
     "esModuleInterop": true,
     "experimentalDecorators": true,
     "forceConsistentCasingInFileNames": true,
+    "isolatedModules": true,
     "lib": [
       "esnext",
       "dom"
     ],
-    "module": "commonjs",
+    "module": "esnext",
+    "moduleResolution": "node",
     "noEmitOnError": true,
     "noImplicitReturns": true,
     "pretty": true,
     "removeComments": false,
-    "resolveJsonModule": true,
+    "resolveJsonModule": false,
     "skipLibCheck": true,
     "sourceMap": false,
     "strict": true,
-    "target": "es2018",
-    "useDefineForClassFields": false,
-    "jsx": "react",
+    "target": "es2020",
     "composite": true,
-    "declarationMap": true
+    "declarationMap": true,
+    "emitDeclarationOnly": true,
+    "jsx": "react"
   }
 }

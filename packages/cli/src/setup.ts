@@ -2,7 +2,6 @@
 
 import debug from 'debug';
 import { Tool } from '@beemo/core';
-import corePackage from '@beemo/core/package.json';
 import { applyStyle, Program } from '@boost/cli';
 import parseSpecialArgv from './parseSpecialArgv';
 
@@ -30,7 +29,7 @@ export const tool = new Tool({
   projectName: binName,
 });
 
-const version = String(corePackage.version);
+const version = String(require('@beemo/core/package.json').version);
 
 const footer = applyStyle(
   [tool.msg('app:cliEpilogue', { manualURL }), tool.msg('app:poweredBy', { version })].join('\n'),

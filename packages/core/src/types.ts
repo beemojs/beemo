@@ -16,7 +16,7 @@ import type Context from './contexts/Context';
 import type ScriptContext from './contexts/ScriptContext';
 import type Tool from './Tool';
 
-export { Arguments, Argv, ParserOptions };
+export type { Arguments, Argv, ParserOptions };
 
 export type BeemoTool = Tool;
 
