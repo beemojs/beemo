@@ -4,8 +4,11 @@ import { JestConfig } from '@beemo/driver-jest';
 const config: JestConfig = {
   ...baseConfig,
   coveragePathIgnorePatterns: [
-    'core/lib', // This is being included for some reason
+    'cli/src/commands',
     'core/src/streams',
+    'driver-*/src/index.ts',
+    'local/',
+    'website/',
   ],
   testPathIgnorePatterns: ['integration'],
 };
