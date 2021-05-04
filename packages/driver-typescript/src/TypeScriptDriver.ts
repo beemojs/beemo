@@ -106,7 +106,7 @@ export default class TypeScriptDriver extends Driver<TypeScriptConfig, TypeScrip
     // Generate references and update paths
     config.extends = './tsconfig.options.json';
     config.files = [];
-    config.references = [];
+    config.references ||= [];
 
     workspacePackages.forEach(({ metadata }) => {
       const pkgPath = new Path(metadata.packagePath);
