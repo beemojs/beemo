@@ -1,5 +1,3 @@
-/* eslint-disable unicorn/prefer-string-replace-all */
-
 import { Driver, Execution } from '@beemo/core';
 import { FlowConfig, LintsConfig, OptionsConfig } from './types';
 
@@ -58,12 +56,26 @@ export class FlowDriver extends Driver<FlowConfig> {
     Object.keys(lints).forEach((key) => {
       let value = lints[key];
 
-      if (value === 0) {
-        value = 'off';
-      } else if (value === 1) {
-        value = 'warn';
-      } else if (value === 2) {
-        value = 'error';
+      switch (value) {
+        case 0:
+        case 'off': {
+          value = 'off';
+
+          break;
+        }
+        case 1:
+        case 'warn': {
+          value = 'warn';
+
+          break;
+        }
+        case 2:
+        case 'error': {
+          value = 'error';
+
+          break;
+        }
+        // no default
       }
 
       output.push(`${key.replace(/_/gu, '-')}=${String(value)}`);
