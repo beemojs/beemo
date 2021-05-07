@@ -1,6 +1,6 @@
-import Script from '../Script';
+import { Script } from '../Script';
 import { Arguments, StdioType } from '../types';
-import Context from './Context';
+import { Context } from './Context';
 
 export interface ScriptContextOptions {
   concurrency: number;
@@ -11,7 +11,7 @@ export interface ScriptContextOptions {
 
 export type ScriptContextParams = [string];
 
-export default class ScriptContext extends Context<ScriptContextOptions, ScriptContextParams> {
+export class ScriptContext extends Context<ScriptContextOptions, ScriptContextParams> {
   // Script instance
   script: Script | null = null;
 

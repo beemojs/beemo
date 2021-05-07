@@ -7,9 +7,9 @@ import {
 } from '@boost/common';
 import { PooledPipeline, Routine } from '@boost/pipeline';
 import { stripAnsi, style } from '@boost/terminal';
-import Context from '../contexts/Context';
-import isPatternMatch from '../helpers/isPatternMatch';
-import type Tool from '../Tool';
+import { Context } from '../contexts/Context';
+import { isPatternMatch } from '../helpers/isPatternMatch';
+import type { Tool } from '../Tool';
 import { ExecutionError, RoutineOptions } from '../types';
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -23,7 +23,7 @@ export interface RunInWorkspacesContextArgs {
 
 const MAX_ERROR_LINES = 5;
 
-export default abstract class RunInWorkspacesRoutine<
+export abstract class RunInWorkspacesRoutine<
   Ctx extends Context<RunInWorkspacesContextArgs>
 > extends Routine<unknown, unknown, RoutineOptions> {
   routines: AnyRoutine[] = [];
@@ -62,7 +62,6 @@ export default abstract class RunInWorkspacesRoutine<
     const concurrency =
       context.args.options.concurrency || tool.config.execute.concurrency || undefined;
 
-    // eslint-disable-next-line no-restricted-syntax
     for (const batch of batches) {
       const pipeline = batch.reduce(
         (pl, routine) => pl.add(routine),
@@ -158,7 +157,7 @@ export default abstract class RunInWorkspacesRoutine<
 
     // Create lookups
     const packages: PackageStructure[] = []; // Without metadata
-    const metadata: { [name: string]: WorkspacePackage['metadata'] } = {}; // By package name
+    const metadata: Record<string, WorkspacePackage['metadata']> = {}; // By package name
 
     this.workspacePackages.forEach((wsp) => {
       packages.push(wsp.package);

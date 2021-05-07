@@ -3,7 +3,7 @@ import { Arg, Command, Config, GlobalOptions } from '@boost/cli';
 import { tool } from '../setup';
 
 @Config('scaffold', tool.msg('app:cliCommandScaffold'), { category: 'core' })
-export default class Scaffold extends Command<
+export class Scaffold extends Command<
   GlobalOptions & ScaffoldContextOptions,
   ScaffoldContextParams
 > {

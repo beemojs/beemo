@@ -1,7 +1,7 @@
 import { Arg, Command, GlobalOptions, PrimitiveType } from '@boost/cli';
 import { tool } from '../setup';
 
-export default abstract class BaseRunCommand<
+export abstract class BaseRunCommand<
   O extends object,
   P extends PrimitiveType[],
   C extends object = {}

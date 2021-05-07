@@ -12,9 +12,9 @@
     "linter"
   ],
   "scripts": {
-    "integration:cli": "eslint --invalid-option",
-    "integration:fail": "eslint ./integration/fail.js ./integration/fail-syntax.js",
-    "integration:pass": "eslint ./integration/pass.js"
+    "integration:cli": "eslint --no-eslintrc --invalid-option",
+    "integration:fail": "eslint --no-eslintrc ./integration/fail.js ./integration/fail-syntax.js",
+    "integration:pass": "eslint --no-eslintrc ./integration/pass.js"
   },
   "main": "./lib/index.js",
   "types": "./dts/index.d.ts",
@@ -38,7 +38,7 @@
     "access": "public"
   },
   "devDependencies": {
-    "eslint": "^7.24.0"
+    "eslint": "^7.25.0"
   },
   "peerDependencies": {
     "@beemo/core": "^2.0.0-alpha.0",

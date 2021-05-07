@@ -1,11 +1,14 @@
+import baseConfig from '@beemo/config-jest';
 import { JestConfig } from '@beemo/driver-jest';
-import baseConfig from '@milesj/build-tool-config/src/configs/jest';
 
 const config: JestConfig = {
   ...baseConfig,
   coveragePathIgnorePatterns: [
-    'core/lib', // This is being included for some reason
+    'cli/src/commands',
     'core/src/streams',
+    'driver-*/src/index.ts',
+    'local/',
+    'website/',
   ],
   testPathIgnorePatterns: ['integration'],
 };

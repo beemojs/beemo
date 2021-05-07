@@ -1,5 +1,5 @@
 import execa from 'execa';
-import Driver from '../src/Driver';
+import { Driver } from '../src/Driver';
 import { mockDriver, stubExecResult } from '../src/test';
 
 jest.mock('execa');
@@ -23,7 +23,7 @@ describe('Driver', () => {
   describe('.validate()', () => {
     it('errors if no options object', () => {
       expect(() => {
-        // @ts-expect-error
+        // @ts-expect-error Allow no options
         Driver.validate({});
       }).toThrow('`Driver` requires an options object.');
     });
@@ -253,7 +253,7 @@ describe('Driver', () => {
         expect(() => {
           driver.setMetadata({
             ...options,
-            // @ts-expect-error
+            // @ts-expect-error Invalid type
             configName: 123,
           });
         }).toThrowErrorMatchingSnapshot();
@@ -274,7 +274,7 @@ describe('Driver', () => {
         expect(() => {
           driver.setMetadata({
             ...options,
-            // @ts-expect-error
+            // @ts-expect-error Invalid type
             title: 123,
           });
         }).toThrowErrorMatchingSnapshot();
@@ -309,7 +309,7 @@ describe('Driver', () => {
             configName: 'beemo',
             commandOptions: {
               foo: {
-                // @ts-expect-error
+                // @ts-expect-error Invalid type
                 description: 123,
               },
             },
@@ -324,7 +324,7 @@ describe('Driver', () => {
             bin: 'beemo',
             configName: 'beemo',
             commandOptions: {
-              // @ts-expect-error
+              // @ts-expect-error Invalid type
               foo: {},
             },
           });

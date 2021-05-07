@@ -1,5 +1,5 @@
 import execa from 'execa';
-import Script from '../src/Script';
+import { Script } from '../src/Script';
 import { mockScript } from '../src/test';
 
 jest.mock('execa');
@@ -14,14 +14,14 @@ describe('Script', () => {
   describe('.validate()', () => {
     it('errors if no parse function', () => {
       expect(() => {
-        // @ts-expect-error
+        // @ts-expect-error Allow missing parse
         Script.validate({});
       }).toThrow('`Script` requires a `parse()` method.');
     });
 
     it('errors if no execute function', () => {
       expect(() => {
-        // @ts-expect-error
+        // @ts-expect-error Allow missing execute
         Script.validate({ parse() {} });
       }).toThrow('`Script` requires an `execute()` method.');
     });

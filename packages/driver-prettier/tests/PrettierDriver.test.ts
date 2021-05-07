@@ -1,7 +1,7 @@
 import fs from 'fs';
 import { DriverContext, Path } from '@beemo/core';
 import { mockTool, stubDriverContext } from '@beemo/core/test';
-import PrettierDriver from '../src/PrettierDriver';
+import { PrettierDriver } from '../src/PrettierDriver';
 
 describe('PrettierDriver', () => {
   let driver: PrettierDriver;
@@ -69,7 +69,7 @@ describe('PrettierDriver', () => {
           context,
           new Path('/some/path/prettier.config.js'),
           {
-            // @ts-expect-error
+            // @ts-expect-error Invalid type
             ignore: 'foo',
           },
         ]);

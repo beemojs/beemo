@@ -1,7 +1,7 @@
 import { ScriptContextOptions, ScriptContextParams } from '@beemo/core';
 import { Arg, Config } from '@boost/cli';
 import { tool } from '../setup';
-import BaseRunCommand from './BaseRunCommand';
+import { BaseRunCommand } from './BaseRunCommand';
 
 @Config('run-script', tool.msg('app:cliCommandRunScript'), {
   aliases: ['run'],
@@ -9,7 +9,7 @@ import BaseRunCommand from './BaseRunCommand';
   allowVariadicParams: true,
   category: 'core',
 })
-export default class RunScript extends BaseRunCommand<ScriptContextOptions, ScriptContextParams> {
+export class RunScript extends BaseRunCommand<ScriptContextOptions, ScriptContextParams> {
   @Arg.Params<ScriptContextParams>({
     description: tool.msg('app:cliArgScriptName'),
     label: 'name',

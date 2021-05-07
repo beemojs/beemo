@@ -1,5 +1,5 @@
 import { Path } from '@boost/common';
-import Context from '../../src/contexts/Context';
+import { Context } from '../../src/contexts/Context';
 import { stubArgs } from '../../src/test';
 
 describe('Context', () => {
@@ -140,7 +140,7 @@ describe('Context', () => {
 
   describe('getOption()', () => {
     it('returns null if arg doesnt exist', () => {
-      // @ts-expect-error
+      // @ts-expect-error Allow invalid name
       expect(context.getOption('bar')).toBeNull();
     });
 

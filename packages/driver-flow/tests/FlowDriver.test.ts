@@ -1,5 +1,5 @@
 import { mockTool, stubExecResult } from '@beemo/core/test';
-import FlowDriver from '../src/FlowDriver';
+import { FlowDriver } from '../src/FlowDriver';
 
 describe('FlowDriver', () => {
   let driver: FlowDriver;
@@ -177,7 +177,6 @@ describe('FlowDriver', () => {
         expect(
           driver.formatConfig({
             options: {
-              // eslint-disable-next-line require-unicode-regexp
               suppress_comment: /(.|\n)*\$FlowFixMe/,
             },
           }),

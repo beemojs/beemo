@@ -1,4 +1,4 @@
-import ConfigContext from '../../src/contexts/ConfigContext';
+import { ConfigContext } from '../../src/contexts/ConfigContext';
 import { mockDriver, stubArgs } from '../../src/test';
 
 describe('ConfigContext', () => {
@@ -18,13 +18,13 @@ describe('ConfigContext', () => {
 
   describe('addDriverDependency()', () => {
     it('adds a driver', () => {
-      expect(Array.from(context.drivers)).toEqual([]);
+      expect([...context.drivers]).toEqual([]);
 
       const driver = mockDriver('test');
 
       context.addDriverDependency(driver);
 
-      expect(Array.from(context.drivers)).toEqual([driver]);
+      expect([...context.drivers]).toEqual([driver]);
     });
 
     it('errors when not a driver', () => {

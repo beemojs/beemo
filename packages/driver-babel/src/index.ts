@@ -4,10 +4,11 @@
  */
 
 import { DriverOptions } from '@beemo/core';
-import BabelDriver from './BabelDriver';
+import { BabelDriver } from './BabelDriver';
 
 export * from './types';
 
+// eslint-disable-next-line import/no-default-export
 export default function babelDriver(options?: DriverOptions) {
   return new BabelDriver(options);
 }

@@ -48,7 +48,6 @@ Options:
   -h, --help                           output usage information
 `;
 
-// eslint-disable-next-line no-undef
 const execa = jest.genMockFromModule('execa');
 
 execa.mockImplementation((cmd, args = []) => {

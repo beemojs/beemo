@@ -1,5 +1,5 @@
 import { mockTool } from '@beemo/core/test';
-import MochaDriver from '../src/MochaDriver';
+import { MochaDriver } from '../src/MochaDriver';
 
 describe('MochaDriver', () => {
   let driver: MochaDriver;

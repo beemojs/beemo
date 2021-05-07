@@ -1,13 +1,15 @@
+/* eslint-disable no-param-reassign */
+
 import rimraf from 'rimraf';
 import { Blueprint, ConfigContext, Driver, DriverContext, Path, Predicates } from '@beemo/core';
 import { Event } from '@boost/event';
-import syncProjectRefs from './commands/syncProjectRefs';
+import { syncProjectRefs } from './commands/syncProjectRefs';
 import { writeFile } from './helpers';
 import { TypeScriptConfig, TypeScriptOptions } from './types';
 
 // Success: Writes nothing to stdout or stderr
 // Failure: Writes to stdout on syntax and type error
-export default class TypeScriptDriver extends Driver<TypeScriptConfig, TypeScriptOptions> {
+export class TypeScriptDriver extends Driver<TypeScriptConfig, TypeScriptOptions> {
   readonly name = '@beemo/driver-typescript';
 
   readonly onCreateProjectConfigFile = new Event<[Path, TypeScriptConfig, boolean]>(
@@ -62,6 +64,7 @@ export default class TypeScriptDriver extends Driver<TypeScriptConfig, TypeScrip
    * Automatically clean the target folder if `outDir` and `--clean` is used.
    */
   handleCleanTarget = (context: DriverContext) => {
+    // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
     const outDir = context.getRiskyOption('outDir', true) || this.config.compilerOptions?.outDir;
 
     if (context.getRiskyOption('clean') && typeof outDir === 'string' && outDir) {

@@ -4,42 +4,17 @@
  */
 
 import { Blueprint, PackageStructure, Path, PortablePath, Predicates } from '@boost/common';
-import ConfigContext from './contexts/ConfigContext';
-import Context from './contexts/Context';
-import DriverContext, { DriverContextOptions, DriverContextParams } from './contexts/DriverContext';
-import ScaffoldContext, {
-  ScaffoldContextOptions,
-  ScaffoldContextParams,
-} from './contexts/ScaffoldContext';
-import ScriptContext, { ScriptContextOptions, ScriptContextParams } from './contexts/ScriptContext';
-import Driver from './Driver';
-import Script from './Script';
-import Tool from './Tool';
-
-export {
-  ConfigContext,
-  Context,
-  Driver,
-  DriverContext,
-  Path,
-  ScaffoldContext,
-  Script,
-  ScriptContext,
-  Tool,
-};
-
-export type {
-  Blueprint,
-  DriverContextOptions,
-  DriverContextParams,
-  PackageStructure,
-  PortablePath,
-  Predicates,
-  ScaffoldContextOptions,
-  ScaffoldContextParams,
-  ScriptContextOptions,
-  ScriptContextParams,
-};
 
 export * from './constants';
+export * from './contexts/ConfigContext';
+export * from './contexts/Context';
+export * from './contexts/DriverContext';
+export * from './contexts/ScaffoldContext';
+export * from './contexts/ScriptContext';
+export * from './Driver';
+export * from './Script';
+export * from './Tool';
 export * from './types';
+
+export { Path };
+export type { Blueprint, PackageStructure, PortablePath, Predicates };

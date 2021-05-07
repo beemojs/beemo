@@ -25,7 +25,7 @@ class BumpPeerDepsScript extends Script<BumpPeerDepsOptions> {
     };
   }
 
-  execute(context: ScriptContext, args: Arguments<BumpPeerDepsOptions>) {
+  async execute(context: ScriptContext, args: Arguments<BumpPeerDepsOptions>) {
     const { release } = args.options;
 
     if (!RELEASE_TYPES.includes(release)) {
@@ -34,9 +34,9 @@ class BumpPeerDepsScript extends Script<BumpPeerDepsOptions> {
 
     console.log('Loading packages and incrementing versions');
 
-    const versions: { [name: string]: string } = {};
-    const packages: { [name: string]: PackageStructure } = {};
-    const packagePaths: { [name: string]: string } = {};
+    const versions: Record<string, string> = {};
+    const packages: Record<string, PackageStructure> = {};
+    const packagePaths: Record<string, string> = {};
 
     glob
       .sync('./packages/*/package.json', { cwd: this.tool.project.root.path() })
@@ -66,6 +66,7 @@ class BumpPeerDepsScript extends Script<BumpPeerDepsOptions> {
               chalk.green(nextVersion),
             );
 
+            // eslint-disable-next-line no-param-reassign
             data.peerDependencies![peerName] = nextVersion;
           });
         }

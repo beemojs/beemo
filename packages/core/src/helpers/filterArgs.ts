@@ -1,15 +1,13 @@
 import { Argv } from '../types';
 
-export interface OptionMap {
-  [option: string]: boolean;
-}
+export type OptionMap = Record<string, boolean>;
 
 export interface FilterArgOptions {
   allow?: OptionMap;
   block?: OptionMap;
 }
 
-export default function filterArgs(argv: Argv, { allow, block }: FilterArgOptions) {
+export function filterArgs(argv: Argv, { allow, block }: FilterArgOptions) {
   const filteredArgv: Argv = [];
   const unknownArgv: Argv = [];
   const isInvalid = (option: string) => (allow && !allow[option]) || block?.[option];

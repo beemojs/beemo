@@ -1,5 +1,5 @@
 import { mockDriver, mockTool, stubExecResult } from '@beemo/core/test';
-import JestDriver from '../src/JestDriver';
+import { JestDriver } from '../src/JestDriver';
 
 describe('JestDriver', () => {
   let driver: JestDriver;

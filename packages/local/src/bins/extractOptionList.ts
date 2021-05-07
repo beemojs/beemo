@@ -55,7 +55,7 @@ execa('npx', [bin, ...args, ...binArgs])
         let option = opt.trim();
 
         // Trim trailing comma
-        if (option.slice(-1) === ',') {
+        if (option.endsWith(',')) {
           option = option.slice(0, -1);
         }
 
@@ -66,13 +66,13 @@ execa('npx', [bin, ...args, ...binArgs])
         option = option.replace(/^no-/u, '');
 
         // Camel case
-        option = option.replace(/-([a-z])/gu, (match, char) => char.toUpperCase());
+        option = option.replace(/-([a-z])/gu, (match, char) => String(char).toUpperCase());
 
         optionTypes.set(option, type);
       });
     });
 
-    Array.from(optionTypes.entries())
+    [...optionTypes.entries()]
       .sort((a, b) => a[0].localeCompare(b[0]))
       .forEach((arg) => {
         const opt = arg[0].includes('.') ? `'${arg[0]}'` : arg[0];

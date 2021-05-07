@@ -1,7 +1,7 @@
 import fs from 'fs';
 import { DriverContext, Path } from '@beemo/core';
 import { mockTool, stubDriverContext, stubExecResult } from '@beemo/core/test';
-import StylelintDriver from '../src/StylelintDriver';
+import { StylelintDriver } from '../src/StylelintDriver';
 
 describe('StylelintDriver', () => {
   let driver: StylelintDriver;
@@ -122,7 +122,7 @@ describe('StylelintDriver', () => {
           context,
           new Path('/some/path/.stylelintrc.js'),
           {
-            // @ts-expect-error
+            // @ts-expect-error Invalid type
             ignore: 'abc',
           },
         ]);

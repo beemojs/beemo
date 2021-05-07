@@ -1,9 +1,9 @@
 import { Driver, DriverContextOptions } from '@beemo/core';
 import { Argv, Config, GlobalOptions, ParserOptions } from '@boost/cli';
-import BaseRunCommand from './commands/BaseRunCommand';
+import { BaseRunCommand } from './commands/BaseRunCommand';
 import { tool } from './setup';
 
-export default function createDriverCommand(
+export function createDriverCommand(
   driver: Driver,
   parallelArgv?: Argv[],
 ): BaseRunCommand<DriverContextOptions, []> {

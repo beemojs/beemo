@@ -36,7 +36,6 @@ mocha.opts
 prettier.config.js
 rollup.config.js
 webpack.config.js
-tsconfig.eslint.json
 *.tsbuildinfo
 
 # Tests

@@ -2,13 +2,13 @@
 
 import { Path, Project } from '@boost/common';
 import { copyFixtureToNodeModule, getFixturePath } from '@boost/test-utils';
-import ScriptContext from '../../src/contexts/ScriptContext';
+import { ScriptContext } from '../../src/contexts/ScriptContext';
 import { AnyRoutine } from '../../src/routines/RunInWorkspacesRoutine';
-import RunScriptRoutine from '../../src/routines/RunScriptRoutine';
+import { RunScriptRoutine } from '../../src/routines/RunScriptRoutine';
 import { ExecuteScriptOptions } from '../../src/routines/script/ExecuteScriptRoutine';
-import Script from '../../src/Script';
+import { Script } from '../../src/Script';
 import { mockDebugger, mockScript, mockTool, stubScriptContext } from '../../src/test';
-import Tool from '../../src/Tool';
+import { Tool } from '../../src/Tool';
 
 describe('RunScriptRoutine', () => {
   let fixtures: Function[] = [];
@@ -43,7 +43,7 @@ describe('RunScriptRoutine', () => {
     context.scriptName = 'build';
 
     routine = new RunScriptRoutine('script', 'Executing script', { tool });
-    // @ts-expect-error
+    // @ts-expect-error Overwrite readonly
     routine.debug = mockDebugger();
 
     fixtures = [];
@@ -73,7 +73,7 @@ describe('RunScriptRoutine', () => {
         context.workspaceRoot = fixturePath;
         context.cwd = fixturePath;
 
-        // @ts-expect-error
+        // @ts-expect-error Overwrite readonly
         tool.project = new Project(fixturePath);
       });
 

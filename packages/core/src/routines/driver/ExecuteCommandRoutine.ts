@@ -10,11 +10,11 @@ import { Bind, Blueprint, ExitError, Path, Predicates } from '@boost/common';
 import { color } from '@boost/internal';
 import { AnyWorkUnit, Routine, WaterfallPipeline } from '@boost/pipeline';
 import { STRATEGY_COPY } from '../../constants';
-import DriverContext from '../../contexts/DriverContext';
-import filterArgs, { OptionMap } from '../../helpers/filterArgs';
-import formatExecReturn from '../../helpers/formatExecReturn';
-import BatchStream from '../../streams/BatchStream';
-import type Tool from '../../Tool';
+import { DriverContext } from '../../contexts/DriverContext';
+import { filterArgs, OptionMap } from '../../helpers/filterArgs';
+import { formatExecReturn } from '../../helpers/formatExecReturn';
+import { BatchStream } from '../../streams/BatchStream';
+import type { Tool } from '../../Tool';
 import { Argv, Execution, RoutineOptions } from '../../types';
 
 const OPTION_PATTERN = /-?-[a-z0-9-]+(,|\s)/giu;
@@ -26,11 +26,7 @@ export interface ExecuteCommandOptions extends RoutineOptions {
   packageRoot?: string;
 }
 
-export default class ExecuteCommandRoutine extends Routine<
-  unknown,
-  unknown,
-  ExecuteCommandOptions
-> {
+export class ExecuteCommandRoutine extends Routine<unknown, unknown, ExecuteCommandOptions> {
   blueprint({ array, bool, instance, string }: Predicates): Blueprint<ExecuteCommandOptions> {
     return {
       additionalArgv: array(string()),
@@ -41,7 +37,7 @@ export default class ExecuteCommandRoutine extends Routine<
     };
   }
 
-  execute(context: DriverContext) {
+  async execute(context: DriverContext) {
     const { tool } = this.options;
     const { forceConfigOption, packageRoot } = this.options;
     const { metadata, options } = context.primaryDriver;
@@ -151,7 +147,7 @@ export default class ExecuteCommandRoutine extends Routine<
     this.debug('Expanding glob patterns');
 
     argv.forEach((arg) => {
-      if (arg.charAt(0) !== '-' && isGlob(arg)) {
+      if (!arg.startsWith('-') && isGlob(arg)) {
         const paths = glob
           .sync(arg, {
             cwd: String(context.cwd),
@@ -208,7 +204,7 @@ export default class ExecuteCommandRoutine extends Routine<
     );
 
     const nativeOptions: OptionMap = {};
-    const matches = stdout.match(OPTION_PATTERN) || [];
+    const matches = stdout.match(OPTION_PATTERN) ?? [];
 
     matches.forEach((option) => {
       // Trim trailing comma or space
@@ -363,7 +359,7 @@ export default class ExecuteCommandRoutine extends Routine<
       await driver.onAfterExecute.emit([context, result]);
 
       return result;
-    } catch (error) {
+    } catch (error: unknown) {
       const result = error as ExecaError;
 
       this.debug('  Failure: %o', formatExecReturn(result));
@@ -387,7 +383,7 @@ export default class ExecuteCommandRoutine extends Routine<
       // https://nodejs.org/api/child_process.html#child_process_event_exit
       throw result.exitCode === null && result.signal === 'SIGKILL'
         ? new ExitError('Out of memory!', 1)
-        : new ExitError((driver.extractErrorMessage(result) || '').trim(), error.exitCode);
+        : new ExitError((driver.extractErrorMessage(result) || '').trim(), result.exitCode);
     }
   }
 }

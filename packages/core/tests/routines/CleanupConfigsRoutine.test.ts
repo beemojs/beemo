@@ -1,10 +1,10 @@
 import fs from 'fs-extra';
 import { Path } from '@boost/common';
-import DriverContext from '../../src/contexts/DriverContext';
-import Driver from '../../src/Driver';
-import CleanupConfigsRoutine from '../../src/routines/CleanupConfigsRoutine';
+import { DriverContext } from '../../src/contexts/DriverContext';
+import { Driver } from '../../src/Driver';
+import { CleanupConfigsRoutine } from '../../src/routines/CleanupConfigsRoutine';
 import { mockDebugger, mockDriver, mockTool, stubDriverContext } from '../../src/test';
-import Tool from '../../src/Tool';
+import { Tool } from '../../src/Tool';
 
 describe('CleanupConfigsRoutine', () => {
   let tool: Tool;
@@ -13,17 +13,17 @@ describe('CleanupConfigsRoutine', () => {
   let routine: CleanupConfigsRoutine;
   let removeSpy: jest.SpyInstance;
 
-  beforeEach(() => {
+  beforeEach(async () => {
     tool = mockTool();
     driver = mockDriver('test-driver', tool);
     context = stubDriverContext(driver);
 
     routine = new CleanupConfigsRoutine('cleanup', 'Cleaning up', { tool });
-    // @ts-expect-error
+    // @ts-expect-error Overwrite readonly
     routine.debug = mockDebugger();
 
-    tool.driverRegistry.load(driver);
-    tool.driverRegistry.load(mockDriver('other-driver', tool));
+    await tool.driverRegistry.load(driver);
+    await tool.driverRegistry.load(mockDriver('other-driver', tool));
 
     removeSpy = jest.spyOn(fs, 'remove').mockImplementation(() => Promise.resolve());
   });

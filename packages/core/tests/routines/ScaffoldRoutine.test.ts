@@ -1,9 +1,9 @@
 import * as hygen from 'hygen';
 import { Path } from '@boost/common';
-import ScaffoldContext from '../../src/contexts/ScaffoldContext';
-import ScaffoldRoutine from '../../src/routines/ScaffoldRoutine';
+import { ScaffoldContext } from '../../src/contexts/ScaffoldContext';
+import { ScaffoldRoutine } from '../../src/routines/ScaffoldRoutine';
 import { mockConsole, mockDebugger, mockTool, stubScaffoldContext } from '../../src/test';
-import Tool from '../../src/Tool';
+import { Tool } from '../../src/Tool';
 
 jest.mock('hygen');
 
@@ -19,7 +19,7 @@ describe('ScaffoldRoutine', () => {
     context = stubScaffoldContext();
 
     routine = new ScaffoldRoutine('scaffold', 'Scaffolding templates', { tool });
-    // @ts-expect-error
+    // @ts-expect-error Overwrite readonly
     routine.debug = mockDebugger();
 
     logSpy = mockConsole('log');
@@ -30,11 +30,11 @@ describe('ScaffoldRoutine', () => {
   });
 
   describe('handleExec()', () => {
-    it('executes command internally', () => {
+    it('executes command internally', async () => {
       const spy = jest.spyOn(routine, 'executeCommand').mockImplementation();
 
-      // @ts-expect-error
-      routine.handleExec('babel', 'const foo = {};');
+      // @ts-expect-error Access private
+      await routine.handleExec('babel', 'const foo = {};');
 
       expect(spy).toHaveBeenCalledWith('babel', [], {
         input: 'const foo = {};',

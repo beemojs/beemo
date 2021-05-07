@@ -2,7 +2,7 @@ import { Blueprint, Predicates } from '@boost/common';
 import { Configuration, createPluginsPredicate, mergePlugins } from '@boost/config';
 import { ConfigFile } from './types';
 
-export default class Config extends Configuration<ConfigFile> {
+export class Config extends Configuration<ConfigFile> {
   blueprint(predicates: Predicates, onConstruction: boolean): Blueprint<ConfigFile> {
     const { bool, number, object, shape, string } = predicates;
     const moduleSchema = string(process.env.BEEMO_CONFIG_MODULE);

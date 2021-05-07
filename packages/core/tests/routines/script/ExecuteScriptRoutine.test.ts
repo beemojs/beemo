@@ -1,7 +1,7 @@
 import { Path } from '@boost/common';
-import ScriptContext from '../../../src/contexts/ScriptContext';
-import ExecuteScriptRoutine from '../../../src/routines/script/ExecuteScriptRoutine';
-import Script from '../../../src/Script';
+import { ScriptContext } from '../../../src/contexts/ScriptContext';
+import { ExecuteScriptRoutine } from '../../../src/routines/script/ExecuteScriptRoutine';
+import { Script } from '../../../src/Script';
 import {
   mockDebugger,
   mockScript,
@@ -9,7 +9,7 @@ import {
   stubScriptContext,
   TestScript,
 } from '../../../src/test';
-import Tool from '../../../src/Tool';
+import { Tool } from '../../../src/Tool';
 
 describe('ExecuteScriptRoutine', () => {
   let routine: ExecuteScriptRoutine;
@@ -23,7 +23,7 @@ describe('ExecuteScriptRoutine', () => {
     context = stubScriptContext();
 
     routine = new ExecuteScriptRoutine('script', 'Run script', { tool });
-    // @ts-expect-error
+    // @ts-expect-error Overwrite readonly
     routine.debug = mockDebugger();
   });
 

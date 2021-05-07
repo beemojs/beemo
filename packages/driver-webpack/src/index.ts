@@ -4,10 +4,11 @@
  */
 
 import { DriverOptions } from '@beemo/core';
-import WebpackDriver from './WebpackDriver';
+import { WebpackDriver } from './WebpackDriver';
 
 export * from './types';
 
+// eslint-disable-next-line import/no-default-export
 export default function webpackDriver(options?: DriverOptions) {
   return new WebpackDriver(options);
 }

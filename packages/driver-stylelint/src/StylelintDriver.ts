@@ -5,7 +5,7 @@ import { StylelintArgs, StylelintConfig } from './types';
 
 // Success: Writes warnings to stdout
 // Failure: Writes failures to stdout
-export default class StylelintDriver extends Driver<StylelintConfig> {
+export class StylelintDriver extends Driver<StylelintConfig> {
   readonly name = '@beemo/driver-stylelint';
 
   readonly onCreateIgnoreFile = new Event<[ConfigContext, Path, { ignore: string[] }]>(
@@ -49,6 +49,7 @@ export default class StylelintDriver extends Driver<StylelintConfig> {
     // Add to context so that it can be automatically cleaned up
     context.addConfigPath('stylelint', ignorePath);
 
+    // eslint-disable-next-line no-param-reassign
     delete config.ignore;
   };
 }

@@ -1,4 +1,4 @@
-/* eslint-disable no-use-before-define, sort-keys, import/no-unresolved, node/no-missing-import, react/jsx-no-literals, react/no-array-index-key */
+/* eslint-disable sort-keys, import/no-unresolved, react/jsx-no-literals, react/no-array-index-key */
 
 import React from 'react';
 import clsx from 'clsx';
@@ -11,7 +11,6 @@ import styles from './styles.module.css';
 interface FeatureProps {
   title: string;
   description: React.ReactNode;
-  // eslint-disable-next-line react/require-default-props
   imageUrl?: string;
 }
 
@@ -83,7 +82,7 @@ function Feature({ imageUrl, title, description }: FeatureProps) {
     <div className={clsx('col col--4', styles.feature)}>
       {imgUrl && (
         <div className="text--center">
-          <img className={styles.featureImage} src={imgUrl} alt={title} />
+          <img alt={title} className={styles.featureImage} src={imgUrl} />
         </div>
       )}
 
@@ -93,12 +92,13 @@ function Feature({ imageUrl, title, description }: FeatureProps) {
   );
 }
 
+// eslint-disable-next-line import/no-default-export
 export default function Home() {
   const context = useDocusaurusContext() as { siteConfig: { tagline: string; title: string } };
   const siteConfig = context.siteConfig || {};
 
   return (
-    <Layout title="Centralized development config" description={siteConfig.tagline}>
+    <Layout description={siteConfig.tagline} title="Centralized development config">
       <header className={clsx('hero hero--primary', styles.heroBanner)}>
         <div className="container">
           <h1 className="hero__title">{siteConfig.title}</h1>
@@ -112,9 +112,9 @@ export default function Home() {
             </Link>
 
             <iframe
-              src="https://ghbtns.com/github-btn.html?user=beemojs&repo=beemo&type=star&count=true&size=large"
               frameBorder="0"
               scrolling="0"
+              src="https://ghbtns.com/github-btn.html?user=beemojs&repo=beemo&type=star&count=true&size=large"
               title="GitHub"
             />
           </div>

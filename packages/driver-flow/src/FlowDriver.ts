@@ -3,7 +3,7 @@ import { FlowConfig, LintsConfig, OptionsConfig } from './types';
 
 // Success: Writes "Found 0 errors" to stdout and server output to stderr
 // Failure: Writes file list to stdout and server output to stderr
-export default class FlowDriver extends Driver<FlowConfig> {
+export class FlowDriver extends Driver<FlowConfig> {
   readonly name = '@beemo/driver-flow';
 
   bootstrap() {
@@ -56,12 +56,26 @@ export default class FlowDriver extends Driver<FlowConfig> {
     Object.keys(lints).forEach((key) => {
       let value = lints[key];
 
-      if (value === 0) {
-        value = 'off';
-      } else if (value === 1) {
-        value = 'warn';
-      } else if (value === 2) {
-        value = 'error';
+      switch (value) {
+        case 0:
+        case 'off': {
+          value = 'off';
+
+          break;
+        }
+        case 1:
+        case 'warn': {
+          value = 'warn';
+
+          break;
+        }
+        case 2:
+        case 'error': {
+          value = 'error';
+
+          break;
+        }
+        // no default
       }
 
       output.push(`${key.replace(/_/gu, '-')}=${String(value)}`);
@@ -89,10 +103,11 @@ export default class FlowDriver extends Driver<FlowConfig> {
       const value = options[key as keyof OptionsConfig];
 
       if (!value) {
-        return; // eslint-disable-line
+        return;
+      }
 
-        // Multiple values
-      } else if (Array.isArray(value)) {
+      // Multiple values
+      if (Array.isArray(value)) {
         value.forEach((val) => {
           output.push(`${key}=${this.formatOption(val)}`);
         });

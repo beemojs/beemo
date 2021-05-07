@@ -6,7 +6,7 @@ module.exports = class FromNodeModuleScript extends MockScript {
   }
 
   execute() {
-    // eslint-disable-next-line
+    // eslint-disable-next-line no-magic-numbers
     return 123;
   }
 };

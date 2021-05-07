@@ -1,21 +1,21 @@
 /* eslint-disable no-console, @typescript-eslint/member-ordering */
 
 import { engine, Logger } from 'hygen';
-import { Bind, Blueprint, Predicates } from '@boost/common';
+import { Bind, Blueprint, instanceOf, Predicates } from '@boost/common';
 import { color } from '@boost/internal';
 import { Routine } from '@boost/pipeline';
-import ScaffoldContext from '../contexts/ScaffoldContext';
-import type Tool from '../Tool';
+import { ScaffoldContext } from '../contexts/ScaffoldContext';
+import type { Tool } from '../Tool';
 import { RoutineOptions } from '../types';
 
-export default class ScaffoldRoutine extends Routine<unknown, unknown, RoutineOptions> {
+export class ScaffoldRoutine extends Routine<unknown, unknown, RoutineOptions> {
   blueprint({ instance }: Predicates): Blueprint<RoutineOptions> {
     return {
       tool: instance<Tool>().required().notNullable(),
     };
   }
 
-  execute(context: ScaffoldContext) {
+  async execute(context: ScaffoldContext) {
     return this.createWaterfallPipeline(context)
       .pipe(this.options.tool.msg('app:scaffoldRunGenerator'), this.runGenerator)
       .run();
@@ -46,9 +46,9 @@ export default class ScaffoldRoutine extends Routine<unknown, unknown, RoutineOp
         logger: new Logger(console.log),
         templates,
       });
-    } catch (error) {
+    } catch (error: unknown) {
       // Intercept hygen error to provide a better error message
-      if (error.message.startsWith("I can't find action")) {
+      if (instanceOf(error, Error) && error.message.startsWith("I can't find action")) {
         throw new Error(tool.msg('errors:scaffoldNoTemplates', { path: args.join('/') }));
       }
 

@@ -4,18 +4,18 @@ import fs from 'fs-extra';
 import { Bind, Blueprint, Predicates } from '@boost/common';
 import { color } from '@boost/internal';
 import { Routine } from '@boost/pipeline';
-import DriverContext from '../contexts/DriverContext';
-import type Tool from '../Tool';
+import { DriverContext } from '../contexts/DriverContext';
+import type { Tool } from '../Tool';
 import { RoutineOptions } from '../types';
 
-export default class CleanupConfigsRoutine extends Routine<unknown, unknown, RoutineOptions> {
+export class CleanupConfigsRoutine extends Routine<unknown, unknown, RoutineOptions> {
   blueprint({ instance }: Predicates): Blueprint<RoutineOptions> {
     return {
       tool: instance<Tool>().required().notNullable(),
     };
   }
 
-  execute(context: DriverContext) {
+  async execute(context: DriverContext) {
     return this.createWaterfallPipeline(context)
       .pipe(this.options.tool.msg('app:configCleanup'), this.deleteConfigFiles)
       .run();

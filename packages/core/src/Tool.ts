@@ -20,20 +20,20 @@ import { color } from '@boost/internal';
 import { WaterfallPipeline } from '@boost/pipeline';
 import { Registry } from '@boost/plugin';
 import { createTranslator, Translator } from '@boost/translate';
-import Config from './Config';
+import { Config } from './Config';
 import { KEBAB_PATTERN } from './constants';
-import ConfigContext from './contexts/ConfigContext';
-import Context from './contexts/Context';
-import DriverContext from './contexts/DriverContext';
-import ScaffoldContext from './contexts/ScaffoldContext';
-import ScriptContext from './contexts/ScriptContext';
-import Driver from './Driver';
-import CleanupConfigsRoutine from './routines/CleanupConfigsRoutine';
-import ResolveConfigsRoutine from './routines/ResolveConfigsRoutine';
-import RunDriverRoutine from './routines/RunDriverRoutine';
-import RunScriptRoutine from './routines/RunScriptRoutine';
-import ScaffoldRoutine from './routines/ScaffoldRoutine';
-import Script from './Script';
+import { ConfigContext } from './contexts/ConfigContext';
+import { Context } from './contexts/Context';
+import { DriverContext } from './contexts/DriverContext';
+import { ScaffoldContext } from './contexts/ScaffoldContext';
+import { ScriptContext } from './contexts/ScriptContext';
+import { Driver } from './Driver';
+import { CleanupConfigsRoutine } from './routines/CleanupConfigsRoutine';
+import { ResolveConfigsRoutine } from './routines/ResolveConfigsRoutine';
+import { RunDriverRoutine } from './routines/RunDriverRoutine';
+import { RunScriptRoutine } from './routines/RunScriptRoutine';
+import { ScaffoldRoutine } from './routines/ScaffoldRoutine';
+import { Script } from './Script';
 import { Argv, BootstrapFile, ConfigFile } from './types';
 
 export interface ToolOptions {
@@ -43,7 +43,7 @@ export interface ToolOptions {
   resourcePaths?: string[];
 }
 
-export default class Tool extends Contract<ToolOptions> {
+export class Tool extends Contract<ToolOptions> {
   config!: ConfigFile;
 
   context?: Context;
@@ -83,8 +83,7 @@ export default class Tool extends Contract<ToolOptions> {
     this.cwd = Path.create(this.options.cwd);
 
     this.debug = createDebugger('core');
-    // eslint-disable-next-line global-require
-    this.debug('Using beemo v%s', require('../package.json').version);
+    this.debug('Using beemo v%s', (require('../package.json') as PackageStructure).version);
 
     this.msg = createTranslator(
       ['app', 'common', 'errors'],
@@ -157,7 +156,7 @@ export default class Tool extends Contract<ToolOptions> {
       return this;
     }
 
-    const bootstrap = bootstrapModule?.bootstrap || bootstrapModule?.default || bootstrapModule;
+    const bootstrap = bootstrapModule?.bootstrap ?? bootstrapModule?.default ?? bootstrapModule;
     const isFunction = typeof bootstrap === 'function';
 
     this.debug.invariant(isFunction, 'Executing bootstrap function', 'Found', 'Not found');

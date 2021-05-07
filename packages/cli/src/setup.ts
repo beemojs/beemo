@@ -1,10 +1,9 @@
-/* eslint-disable import/no-extraneous-dependencies */
+/* eslint-disable import/no-extraneous-dependencies, @typescript-eslint/prefer-nullish-coalescing */
 
 import debug from 'debug';
-import { Tool } from '@beemo/core';
-import corePackage from '@beemo/core/package.json';
+import { PackageStructure, Tool } from '@beemo/core';
 import { applyStyle, Program } from '@boost/cli';
-import parseSpecialArgv from './parseSpecialArgv';
+import { parseSpecialArgv } from './parseSpecialArgv';
 
 const brandName = process.env.BEEMO_BRAND_NAME || 'Beemo';
 const binName = process.env.BEEMO_BRAND_BINARY || 'beemo';
@@ -14,7 +13,6 @@ process.env.BOOSTJS_DEBUG_NAMESPACE = binName;
 
 // Instrument our CLI for require() performance
 if (process.env.TIMING) {
-  // eslint-disable-next-line global-require
   require('time-require');
 
   // Boost doesn't enable the debugger early enough,
@@ -30,7 +28,7 @@ export const tool = new Tool({
   projectName: binName,
 });
 
-const version = String(corePackage.version);
+const { version } = require('@beemo/core/package.json') as PackageStructure;
 
 const footer = applyStyle(
   [tool.msg('app:cliEpilogue', { manualURL }), tool.msg('app:poweredBy', { version })].join('\n'),

@@ -2,13 +2,13 @@ import ts from 'typescript';
 import { PackageStructure, Path, Tool } from '@beemo/core';
 import { join, writeFile } from '../helpers';
 import type { TypeScriptConfig } from '../types';
-import type TypeScriptDriver from '../TypeScriptDriver';
+import type { TypeScriptDriver } from '../TypeScriptDriver';
 
 /**
  * Create a `tsconfig.json` in each workspace package. Automatically link packages
  * together using project references. Attempt to handle source and test folders.
  */
-export default async function syncProjectRefs(tool: Tool) {
+export async function syncProjectRefs(tool: Tool) {
   const driver = tool.driverRegistry.get<TypeScriptDriver>('typescript');
   const { root } = tool.project;
   const {

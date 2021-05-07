@@ -1,5 +1,5 @@
 import { mockTool } from '@beemo/core/test';
-import LernaDriver from '../src/LernaDriver';
+import { LernaDriver } from '../src/LernaDriver';
 
 describe('LernaDriver', () => {
   let driver: LernaDriver;
