@@ -3,6 +3,19 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+### 2.0.0-rc.2 - 2021-05-07
+
+#### 🛠 Internals
+
+- Migrate to Yarn 2. (#130) ([d0d6332](https://github.com/beemojs/beemo/commit/d0d6332)), closes [#130](https://github.com/beemojs/beemo/issues/130)
+- Switch to @beemo/dev for configs. (#131) ([8996d55](https://github.com/beemojs/beemo/commit/8996d55)), closes [#131](https://github.com/beemojs/beemo/issues/131)
+
+**Note:** Version bump only for package @beemo/core
+
+
+
+
+
 ### 2.0.0-rc.1 - 2021-04-13
 
 #### 📦 Dependencies

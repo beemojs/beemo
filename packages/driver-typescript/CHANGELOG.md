@@ -3,6 +3,22 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+### 2.0.0-rc.2 - 2021-05-07
+
+#### 🐞 Fixes
+
+- Allow adding additional project reference in tsconfig (#132) ([ebdaaf2](https://github.com/beemojs/beemo/commit/ebdaaf2)), closes [#132](https://github.com/beemojs/beemo/issues/132)
+
+#### 🛠 Internals
+
+- Switch to @beemo/dev for configs. (#131) ([8996d55](https://github.com/beemojs/beemo/commit/8996d55)), closes [#131](https://github.com/beemojs/beemo/issues/131)
+
+**Note:** Version bump only for package @beemo/driver-typescript
+
+
+
+
+
 ### 2.0.0-rc.1 - 2021-04-13
 
 #### 📦 Dependencies

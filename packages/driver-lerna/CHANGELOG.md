@@ -3,6 +3,18 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+### 2.0.0-rc.1 - 2021-05-07
+
+#### 🛠 Internals
+
+- Switch to @beemo/dev for configs. (#131) ([8996d55](https://github.com/beemojs/beemo/commit/8996d55)), closes [#131](https://github.com/beemojs/beemo/issues/131)
+
+**Note:** Version bump only for package @beemo/driver-lerna
+
+
+
+
+
 # 2.0.0-rc.0 - 2021-03-20
 
 #### 💥 Breaking
