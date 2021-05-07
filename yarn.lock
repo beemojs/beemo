@@ -1769,50 +1769,50 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@beemo/config-constants@npm:^0.1.2":
-  version: 0.1.2
-  resolution: "@beemo/config-constants@npm:0.1.2"
-  checksum: c5c90cbefab70a065cf78d17744af53a1cba39ee057a6d4c25e448634f07f286cc369a8f9be194d44829cd6c360515a172d3896871cdda00cf7389fb479df44f
+"@beemo/config-constants@npm:^0.1.3":
+  version: 0.1.3
+  resolution: "@beemo/config-constants@npm:0.1.3"
+  checksum: a07feff4403e1793cf56eae6f7e323aa6d7f4095daf7d2cec96a0a78449b0bc545039a1787d361998d59abd23fa82e82a773311bab4b04f4db619baf967ba419
   languageName: node
   linkType: hard
 
-"@beemo/config-eslint@npm:^0.1.3":
-  version: 0.1.3
-  resolution: "@beemo/config-eslint@npm:0.1.3"
+"@beemo/config-eslint@npm:^0.1.4":
+  version: 0.1.4
+  resolution: "@beemo/config-eslint@npm:0.1.4"
   dependencies:
-    "@beemo/config-constants": ^0.1.2
-    eslint-config-beemo: ^0.1.3
+    "@beemo/config-constants": ^0.1.3
+    eslint-config-beemo: ^0.1.4
   peerDependencies:
     "@beemo/core": ^2.0.0-rc.0
     "@beemo/driver-eslint": ^2.0.0-rc.0
     eslint: ">=7.0.0"
-  checksum: e93b7bb1389462bb32dacdcfe505cda8fe437fddefa126ee69763250e14951f225e5e85975298cc7722a78d3875644033cb39d5de69dfeebe610eae07812f7f6
+  checksum: 4831017121f830ac200e6e62de7a1f859ef8482c840c75fde02a9f73acb5bc1a82282c4e6b256658e1f8dfb7a405dc4107c5d795944a3d27459d0ed0c79e4129
   languageName: node
   linkType: hard
 
-"@beemo/config-jest@npm:^0.1.4":
-  version: 0.1.4
-  resolution: "@beemo/config-jest@npm:0.1.4"
+"@beemo/config-jest@npm:^0.1.5":
+  version: 0.1.5
+  resolution: "@beemo/config-jest@npm:0.1.5"
   dependencies:
-    jest-preset-beemo: ^0.1.4
+    jest-preset-beemo: ^0.1.5
   peerDependencies:
     "@beemo/core": ^2.0.0-rc.0
     "@beemo/driver-jest": ^2.0.0-rc.0
     jest: ">=26.0.0"
-  checksum: 50c2b58e6b81808a42386ac292082332c3f4cb6ec00271e1ce30d9aab242442808091d3fedfb4b4c459bf107c3f90d6947b0f564e0661d133c7c99582965b067
+  checksum: 818741c5af3ac44625475fb467598cee8d8247d56c8108d4ff192128850abc380de775e188dd082bf6e0bc55b49c0987af937fcfe7f68fc1e03142a34c358429
   languageName: node
   linkType: hard
 
-"@beemo/config-prettier@npm:^0.1.2":
-  version: 0.1.2
-  resolution: "@beemo/config-prettier@npm:0.1.2"
+"@beemo/config-prettier@npm:^0.1.3":
+  version: 0.1.3
+  resolution: "@beemo/config-prettier@npm:0.1.3"
   dependencies:
-    "@beemo/config-constants": ^0.1.2
+    "@beemo/config-constants": ^0.1.3
     prettier-config-beemo: ^0.1.0
   peerDependencies:
     "@beemo/core": ^2.0.0-rc.0
     "@beemo/driver-prettier": ^2.0.0-rc.0
-  checksum: b46b80845d4986439439ceacccaabdef83c963b6bf479a97bf930c0ae3e41794a3dc278c02984c8c605a33b29da48f32d7c87df8fd14f324447f6b13c1b9d0f3
+  checksum: a5420dfed2ddbad5d6f5445204425551c300d22fba15fd75dab75484c07ede4596e24576ec4492c4b6cef6bd28315f8fc2e4fa7ed3f5a0f51b597e0327d6e579
   languageName: node
   linkType: hard
 
@@ -1854,17 +1854,17 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@beemo/dev@npm:^0.1.6":
-  version: 0.1.6
-  resolution: "@beemo/dev@npm:0.1.6"
+"@beemo/dev@npm:^0.1.7":
+  version: 0.1.7
+  resolution: "@beemo/dev@npm:0.1.7"
   dependencies:
     "@babel/cli": ^7.13.0
     "@babel/core": ^7.14.0
     "@beemo/cli": ^2.0.0-rc.1
     "@beemo/config-babel": ^0.1.4
-    "@beemo/config-eslint": ^0.1.3
-    "@beemo/config-jest": ^0.1.4
-    "@beemo/config-prettier": ^0.1.2
+    "@beemo/config-eslint": ^0.1.4
+    "@beemo/config-jest": ^0.1.5
+    "@beemo/config-prettier": ^0.1.3
     "@beemo/config-typescript": ^0.1.3
     "@beemo/core": ^2.0.0-rc.1
     "@beemo/driver-babel": ^2.0.0-rc.1
@@ -1876,7 +1876,7 @@ __metadata:
     jest: ^26.6.3
     prettier: ^2.2.1
     typescript: ^4.2.4
-  checksum: 27c44051de86a941334cf44ec4545ae9df9831d6ab7288bbfbdcfb8490f6c738ae82366cf41061a14377608d7253a2ada5c008721253d19557722cea0a30b63e
+  checksum: bd39ad90b31229026be991d7035838f26dd87cc43ae8edf604f3847430be56733a27038bd6c322cadc81e7b9107113a3dc1fd086e70edd9f959151f2adc25e13
   languageName: node
   linkType: hard
 
@@ -2020,7 +2020,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@beemo/local@workspace:packages/local"
   dependencies:
-    "@beemo/dev": ^0.1.6
+    "@beemo/dev": ^0.1.7
     chalk: ^4.1.1
     execa: ^5.0.0
     fast-glob: ^3.2.5
@@ -9458,11 +9458,11 @@ __metadata:
   languageName: node
   linkType: hard
 
-"eslint-config-beemo@npm:^0.1.3":
-  version: 0.1.3
-  resolution: "eslint-config-beemo@npm:0.1.3"
+"eslint-config-beemo@npm:^0.1.4":
+  version: 0.1.4
+  resolution: "eslint-config-beemo@npm:0.1.4"
   dependencies:
-    "@beemo/config-constants": ^0.1.2
+    "@beemo/config-constants": ^0.1.3
     "@typescript-eslint/eslint-plugin": ^4.22.1
     "@typescript-eslint/parser": ^4.22.1
     eslint-config-airbnb-base: ^14.2.1
@@ -9480,7 +9480,7 @@ __metadata:
     eslint-plugin-unicorn: ^31.0.0
   peerDependencies:
     eslint: ">=7.0.0"
-  checksum: fd50fa7192e3470151774135d02ef00b6d77e719c8882efaa8f5c6142e029c75d9a419f319c97063810bf5d339d1af252d9bf3ad5690a707963cac0f760bf7a3
+  checksum: e19c5bf1431c32df4eee0db3a9471b13bccab67e94df706cb4690b253056997b8472ef696cb1be4c711fe08b6edeeb9200c12908fa48cd10ff719d561eb5cb0e
   languageName: node
   linkType: hard
 
@@ -13221,16 +13221,16 @@ fsevents@^1.2.7:
   languageName: node
   linkType: hard
 
-"jest-preset-beemo@npm:^0.1.4":
-  version: 0.1.4
-  resolution: "jest-preset-beemo@npm:0.1.4"
+"jest-preset-beemo@npm:^0.1.5":
+  version: 0.1.5
+  resolution: "jest-preset-beemo@npm:0.1.5"
   dependencies:
-    "@beemo/config-constants": ^0.1.2
+    "@beemo/config-constants": ^0.1.3
     "@types/jest": ^26.0.23
     jest-circus: ^26.6.3
   peerDependencies:
     jest: ">=26.0.0"
-  checksum: e62cab46ceb65bfc2fa03c9044469f1f8d089278f24df0b7e88542f5d7ad09ae6461a1944c1b8318912a3f297ec1e03f9b2811a564d098735697c918f0c10025
+  checksum: 5ee6d05388b867559615dde4a78804c8d642542ee722426eb327eca8830a1ee3a8bbfdcab14ba4be2c144a92a0d4d2d6a52179558442bb3c8d4f7d9fbb396d5d
   languageName: node
   linkType: hard
 

@@ -1,4 +1,4 @@
 // Proposal requires plugin
-class Foo {
-  #id = 123;
-}
+async do {
+  await Promise.resolve();
+};
