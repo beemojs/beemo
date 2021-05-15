@@ -1745,7 +1745,7 @@ __metadata:
   resolution: "@beemo/cli@workspace:packages/cli"
   dependencies:
     "@boost/cli": ^2.10.4
-    debug: ^4.3.2
+    debug: ^4.3.1
     ink: ^3.0.8
     react: ^16.14.0
     time-require: ^0.1.2
@@ -1885,9 +1885,9 @@ __metadata:
   resolution: "@beemo/driver-babel@workspace:packages/driver-babel"
   dependencies:
     "@babel/cli": ^7.13.16
-    "@babel/core": ^7.14.0
+    "@babel/core": ^7.14.2
     "@babel/plugin-proposal-class-properties": ^7.13.0
-    "@babel/preset-env": ^7.14.1
+    "@babel/preset-env": ^7.14.2
     rimraf: ^3.0.2
   peerDependencies:
     "@babel/core": ^7.0.0
