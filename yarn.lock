@@ -1745,7 +1745,7 @@ __metadata:
   resolution: "@beemo/cli@workspace:packages/cli"
   dependencies:
     "@boost/cli": ^2.10.4
-    debug: ^4.3.1
+    debug: ^4.3.2
     ink: ^3.0.8
     react: ^16.14.0
     time-require: ^0.1.2
@@ -1901,7 +1901,7 @@ __metadata:
   dependencies:
     "@boost/event": ^2.3.2
     "@types/eslint": "*"
-    eslint: ^7.25.0
+    eslint: ^7.26.0
   peerDependencies:
     "@beemo/core": ^2.0.0-alpha.0
     eslint: ^7.0.0
@@ -1912,7 +1912,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@beemo/driver-flow@workspace:packages/driver-flow"
   dependencies:
-    flow-bin: ^0.150.1
+    flow-bin: ^0.151.0
   peerDependencies:
     "@beemo/core": ^2.0.0-alpha.0
     flow-bin: "*"
@@ -1970,7 +1970,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@beemo/driver-rollup@workspace:packages/driver-rollup"
   dependencies:
-    rollup: ^2.45.2
+    rollup: ^2.48.0
   peerDependencies:
     "@beemo/core": ^2.0.0-alpha.0
     rollup: ^2.0.0
@@ -2008,7 +2008,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@beemo/driver-webpack@workspace:packages/driver-webpack"
   dependencies:
-    webpack: ^5.36.2
+    webpack: ^5.37.0
     webpack-cli: ^4.7.0
   peerDependencies:
     "@beemo/core": ^2.0.0-alpha.0
@@ -2697,9 +2697,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@eslint/eslintrc@npm:^0.4.0":
-  version: 0.4.0
-  resolution: "@eslint/eslintrc@npm:0.4.0"
+"@eslint/eslintrc@npm:^0.4.1":
+  version: 0.4.1
+  resolution: "@eslint/eslintrc@npm:0.4.1"
   dependencies:
     ajv: ^6.12.4
     debug: ^4.1.1
@@ -2710,7 +2710,7 @@ __metadata:
     js-yaml: ^3.13.1
     minimatch: ^3.0.4
     strip-json-comments: ^3.1.1
-  checksum: d3f51b741997cbf36662d8b5a52985bfa5d2873e48cadccd95c67fcce1706327ec98ebb6f0be79c6ecbc31bdeca32c2b1c4f66fd1cf3934c434d1ac269cbceac
+  checksum: 418f5810c8dd9897d2457ceef098197d0e5f1ad345fbe4cd9256fd4223d7ea83d5e350f9091b3ab3483b6b1c367fa560df3ba1fccc7eb8ca6e1aae5a5b126d60
   languageName: node
   linkType: hard
 
@@ -6174,7 +6174,7 @@ __metadata:
     packemon: ^0.16.2
     ts-node: ^9.1.1
     typescript: ^4.2.4
-    webpack: ^5.36.2
+    webpack: ^5.37.0
   languageName: unknown
   linkType: soft
 
@@ -9086,12 +9086,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"eslint@npm:^7.25.0":
-  version: 7.25.0
-  resolution: "eslint@npm:7.25.0"
+"eslint@npm:^7.25.0, eslint@npm:^7.26.0":
+  version: 7.26.0
+  resolution: "eslint@npm:7.26.0"
   dependencies:
     "@babel/code-frame": 7.12.11
-    "@eslint/eslintrc": ^0.4.0
+    "@eslint/eslintrc": ^0.4.1
     ajv: ^6.10.0
     chalk: ^4.0.0
     cross-spawn: ^7.0.2
@@ -9129,7 +9129,7 @@ __metadata:
     v8-compile-cache: ^2.0.3
   bin:
     eslint: bin/eslint.js
-  checksum: 6e1782e2264ebf987504746ee82e996bf0ef2c29a2eaea869b54cb8aa1eaf10945b1d563618515e65ac934ca626f3609282127773f45868ad4a98744458a3c62
+  checksum: 08f99befd764fbd6ea811e9eec27d5c6b9dc9d1bbfe5ffa1016e4f1fe526a4f45ea127c4e30c554c423ee55eb290ce9af4fb7fedf9b7af3f84076a444c2bbdf6
   languageName: node
   linkType: hard
 
@@ -9772,12 +9772,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"flow-bin@npm:^0.150.1":
-  version: 0.150.1
-  resolution: "flow-bin@npm:0.150.1"
+"flow-bin@npm:^0.151.0":
+  version: 0.151.0
+  resolution: "flow-bin@npm:0.151.0"
   bin:
     flow: cli.js
-  checksum: b6bbc54904b3d0486e1b2695671ec7f6d7eb5890c9586faadaf0f27e1e973b2bbe14c0d8719f9d08620cb9cf3b3aad980777d3864d3c999efb97874e1f979fab
+  checksum: aac63a52fbf58015eadb72e10a0add832589507a41b3ae19f1a828ca6c22c9e97d1baa90aba4fa59648172315ccb74bc690a471fe59bdfc7002201dce93a0e5e
   languageName: node
   linkType: hard
 
@@ -17803,7 +17803,7 @@ resolve@~1.19.0:
   languageName: node
   linkType: hard
 
-"rollup@npm:^2.45.2, rollup@npm:^2.48.0":
+"rollup@npm:^2.48.0":
   version: 2.48.0
   resolution: "rollup@npm:2.48.0"
   dependencies:
@@ -20744,9 +20744,9 @@ resolve@~1.19.0:
   languageName: node
   linkType: hard
 
-"webpack@npm:^5.28.0, webpack@npm:^5.36.2":
-  version: 5.36.2
-  resolution: "webpack@npm:5.36.2"
+"webpack@npm:^5.28.0, webpack@npm:^5.37.0":
+  version: 5.37.0
+  resolution: "webpack@npm:5.37.0"
   dependencies:
     "@types/eslint-scope": ^3.7.0
     "@types/estree": ^0.0.47
@@ -20776,7 +20776,7 @@ resolve@~1.19.0:
       optional: true
   bin:
     webpack: bin/webpack.js
-  checksum: 221f75148a40809ce4c8c2f51e3510d716a75ba086ddd18f4d8313f2f18f18efce74b55bfee58223b8ae2d8bcab035d07d2a8f5690c3f3f6a4ce59d015879179
+  checksum: 50c9ce5d9f8d274aa11a57581a2f21b2305f48a96eb7f380a6dab629392fea2b842764f94e7e91cbc28026d69facd5d1456c843b41ba7508f716ff8caacf4214
   languageName: node
   linkType: hard
 
