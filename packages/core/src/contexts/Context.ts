@@ -12,7 +12,7 @@ export interface ConfigPath {
 
 export class Context<
   O extends object = {},
-  P extends PrimitiveType[] = PrimitiveType[]
+  P extends PrimitiveType[] = PrimitiveType[],
 > extends BaseContext {
   // Parsed command line arguments as an object
   args: Arguments<O, P>;
@@ -148,7 +148,7 @@ export class Context<
    * or null if not found.
    */
   getRiskyOption(name: string, raw: boolean = false): PrimitiveType | null {
-    let opt = (this.getOption(name as keyof O) as unknown) as PrimitiveType;
+    let opt = this.getOption(name as keyof O) as unknown as PrimitiveType;
 
     if (opt !== null) {
       return opt;

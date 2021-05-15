@@ -12,7 +12,7 @@ export interface DriverContextOptions {
 export type DriverContextParams = [string];
 
 export class DriverContext<
-  O extends DriverContextOptions = DriverContextOptions
+  O extends DriverContextOptions = DriverContextOptions,
 > extends ConfigContext<O> {
   // Name defined on the plugin (kebab case)
   driverName: string = '';

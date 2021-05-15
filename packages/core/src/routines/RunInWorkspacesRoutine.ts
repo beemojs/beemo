@@ -24,7 +24,7 @@ export interface RunInWorkspacesContextArgs {
 const MAX_ERROR_LINES = 5;
 
 export abstract class RunInWorkspacesRoutine<
-  Ctx extends Context<RunInWorkspacesContextArgs>
+  Ctx extends Context<RunInWorkspacesContextArgs>,
 > extends Routine<unknown, unknown, RoutineOptions> {
   routines: AnyRoutine[] = [];
 

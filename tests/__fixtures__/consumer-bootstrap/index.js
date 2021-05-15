@@ -1,3 +1,3 @@
-module.exports = function(tool) {
+module.exports = function (tool) {
   console.log('Bootstrapped', tool);
 };

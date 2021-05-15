@@ -4,7 +4,7 @@ import { tool } from '../setup';
 export abstract class BaseRunCommand<
   O extends object,
   P extends PrimitiveType[],
-  C extends object = {}
+  C extends object = {},
 > extends Command<GlobalOptions & O, P, C> {
   @Arg.Number(tool.msg('app:cliOptionConcurrency'))
   concurrency: number = 0;

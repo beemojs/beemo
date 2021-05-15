@@ -32,10 +32,11 @@ import {
 
 export abstract class Driver<
     Config extends object = {},
-    Options extends DriverOptions = DriverOptions
+    Options extends DriverOptions = DriverOptions,
   >
   extends Plugin<BeemoTool, Options>
-  implements Driverable {
+  implements Driverable
+{
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   commands: DriverCommandRegistration<any, any>[] = [];
 
@@ -162,9 +163,9 @@ export abstract class Driver<
    * Return a list of dependent drivers.
    */
   getDependencies(): string[] {
-    const dependencies = (Array.isArray(this.options.dependencies)
-      ? this.options.dependencies
-      : []) as string[];
+    const dependencies = (
+      Array.isArray(this.options.dependencies) ? this.options.dependencies : []
+    ) as string[];
 
     return [
       // Always required; configured by the driver

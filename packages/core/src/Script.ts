@@ -9,7 +9,8 @@ import { Argv, BeemoTool, Scriptable } from './types';
 
 export abstract class Script<O extends object = {}, Options extends object = {}>
   extends Plugin<BeemoTool, Options>
-  implements Scriptable<O> {
+  implements Scriptable<O>
+{
   // Set within a life-cycle
   tool!: BeemoTool;
 
