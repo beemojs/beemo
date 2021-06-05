@@ -3,6 +3,27 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# 2.0.0-rc.3 - 2021-06-05
+
+#### 💥 Breaking
+
+- Update Node.js requirement to v12. (#134) ([f2423f8](https://github.com/beemojs/beemo/commit/f2423f8)), closes [#134](https://github.com/beemojs/beemo/issues/134)
+
+#### 🎨 Styles
+
+- Switch to tabs from spaces. (#133) ([ab4d6c3](https://github.com/beemojs/beemo/commit/ab4d6c3)), closes [#133](https://github.com/beemojs/beemo/issues/133)
+
+#### 📦 Dependencies
+
+- Update driver dependencies to latest. ([e382067](https://github.com/beemojs/beemo/commit/e382067))
+- Update driver dependencies to latest. ([3cca9a3](https://github.com/beemojs/beemo/commit/3cca9a3))
+
+**Note:** Version bump only for package @beemo/driver-eslint
+
+
+
+
+
 ### 2.0.0-rc.2 - 2021-05-07
 
 #### 🛠 Internals

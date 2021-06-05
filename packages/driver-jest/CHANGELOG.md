@@ -3,6 +3,26 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# 2.0.0-rc.2 - 2021-06-05
+
+#### 💥 Breaking
+
+- Update Node.js requirement to v12. (#134) ([f2423f8](https://github.com/beemojs/beemo/commit/f2423f8)), closes [#134](https://github.com/beemojs/beemo/issues/134)
+
+#### 🚀 Updates
+
+- Support Jest v27. ([1aac829](https://github.com/beemojs/beemo/commit/1aac829))
+
+#### 🎨 Styles
+
+- Switch to tabs from spaces. (#133) ([ab4d6c3](https://github.com/beemojs/beemo/commit/ab4d6c3)), closes [#133](https://github.com/beemojs/beemo/issues/133)
+
+**Note:** Version bump only for package @beemo/driver-jest
+
+
+
+
+
 ### 2.0.0-rc.1 - 2021-05-07
 
 #### 🛠 Internals
