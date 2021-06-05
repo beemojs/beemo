@@ -8,7 +8,6 @@ import { RollupDriver } from './RollupDriver';
 
 export * from './types';
 
-// eslint-disable-next-line import/no-default-export
 export default function rollupDriver(options?: DriverOptions) {
   return new RollupDriver(options);
 }
