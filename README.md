@@ -28,6 +28,8 @@ dependencies, continuous copy and paste, and more.
 - Integrated watch/live mode.
 - And much more.
 
+test
+
 ## Requirements
 
 - Node 10.3+
