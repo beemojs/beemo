@@ -24,8 +24,8 @@
     "src/**/*.{ts,tsx,json}"
   ],
   "engines": {
-    "node": ">=10.3.0",
-    "npm": ">=6.1.0"
+    "node": ">=12.0.0",
+    "npm": ">=6.9.0"
   },
   "repository": {
     "type": "git",
@@ -53,6 +53,7 @@
     "url": "https://ko-fi.com/milesjohnson"
   },
   "packemon": {
-    "platform": "node"
+    "platform": "node",
+    "support": "current"
   }
 }
