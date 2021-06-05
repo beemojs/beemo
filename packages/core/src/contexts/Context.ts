@@ -6,163 +6,163 @@ import { Context as BaseContext } from '@boost/pipeline';
 import { Arguments, Argv } from '../types';
 
 export interface ConfigPath {
-  driver: string;
-  path: Path;
+	driver: string;
+	path: Path;
 }
 
 export class Context<
-  O extends object = {},
-  P extends PrimitiveType[] = PrimitiveType[],
+	O extends object = {},
+	P extends PrimitiveType[] = PrimitiveType[],
 > extends BaseContext {
-  // Parsed command line arguments as an object
-  args: Arguments<O, P>;
+	// Parsed command line arguments as an object
+	args: Arguments<O, P>;
 
-  // Raw command line arguments as a list of strings
-  argv: Argv;
+	// Raw command line arguments as a list of strings
+	argv: Argv;
 
-  // List of driver configs currently registered
-  configPaths: ConfigPath[] = [];
+	// List of driver configs currently registered
+	configPaths: ConfigPath[] = [];
 
-  // Current working directory
-  cwd!: Path;
+	// Current working directory
+	cwd!: Path;
 
-  // Absolute path to the configuration module
-  configModuleRoot!: Path;
+	// Absolute path to the configuration module
+	configModuleRoot!: Path;
 
-  // Absolute path to the folder containing `package.json` (Yarn workspaces) or `lerna.json`
-  workspaceRoot!: Path;
+	// Absolute path to the folder containing `package.json` (Yarn workspaces) or `lerna.json`
+	workspaceRoot!: Path;
 
-  // List of paths (with trailing glob star) for each defined workspace
-  workspaces: FilePath[] = [];
+	// List of paths (with trailing glob star) for each defined workspace
+	workspaces: FilePath[] = [];
 
-  constructor(args: Arguments<O, P>, argv: Argv = []) {
-    super();
+	constructor(args: Arguments<O, P>, argv: Argv = []) {
+		super();
 
-    this.args = args;
-    this.argv = argv;
-  }
+		this.args = args;
+		this.argv = argv;
+	}
 
-  /**
-   * Add a config path for the defined driver.
-   */
-  addConfigPath(driverName: string, path: Path): this {
-    this.configPaths.push({
-      driver: driverName,
-      path,
-    });
+	/**
+	 * Add a config path for the defined driver.
+	 */
+	addConfigPath(driverName: string, path: Path): this {
+		this.configPaths.push({
+			driver: driverName,
+			path,
+		});
 
-    return this;
-  }
+		return this;
+	}
 
-  /**
-   * Add an option argument to both the args object and argv list.
-   * If the option is not supported, it will be added to the unknown options object.
-   */
-  addOption(arg: string, defaultValue: PrimitiveType = true, useEquals: boolean = false): this {
-    let option = arg;
-    let value = defaultValue;
-    let equals = useEquals;
+	/**
+	 * Add an option argument to both the args object and argv list.
+	 * If the option is not supported, it will be added to the unknown options object.
+	 */
+	addOption(arg: string, defaultValue: PrimitiveType = true, useEquals: boolean = false): this {
+		let option = arg;
+		let value = defaultValue;
+		let equals = useEquals;
 
-    if (option.includes('=')) {
-      [option, value] = option.split('=');
-      equals = true;
-    }
+		if (option.includes('=')) {
+			[option, value] = option.split('=');
+			equals = true;
+		}
 
-    let name = trim(option, '-');
+		let name = trim(option, '-');
 
-    if (name.startsWith('no-')) {
-      name = name.slice(3);
-      value = false;
-    }
+		if (name.startsWith('no-')) {
+			name = name.slice(3);
+			value = false;
+		}
 
-    const optName = camelCase(name);
+		const optName = camelCase(name);
 
-    if (optName in this.args.options) {
-      // @ts-expect-error Allow this
-      this.args.options[optName] = value;
-    } else {
-      this.args.unknown[optName] = String(value);
-    }
+		if (optName in this.args.options) {
+			// @ts-expect-error Allow this
+			this.args.options[optName] = value;
+		} else {
+			this.args.unknown[optName] = String(value);
+		}
 
-    if (typeof value === 'boolean' || !value) {
-      this.argv.push(option);
-    } else if (equals) {
-      this.argv.push(`${option}=${value}`);
-    } else {
-      this.argv.push(option, String(value));
-    }
+		if (typeof value === 'boolean' || !value) {
+			this.argv.push(option);
+		} else if (equals) {
+			this.argv.push(`${option}=${value}`);
+		} else {
+			this.argv.push(option, String(value));
+		}
 
-    return this;
-  }
+		return this;
+	}
 
-  /**
-   * Add multiple boolean option arguments.
-   */
-  addOptions(args: string[]): this {
-    args.forEach((arg) => {
-      this.addOption(arg);
-    });
+	/**
+	 * Add multiple boolean option arguments.
+	 */
+	addOptions(args: string[]): this {
+		args.forEach((arg) => {
+			this.addOption(arg);
+		});
 
-    return this;
-  }
+		return this;
+	}
 
-  /**
-   * Add a parameter to the argv list.
-   */
-  addParam(arg: string): this {
-    this.args.params.push(arg);
-    this.argv.push(arg);
+	/**
+	 * Add a parameter to the argv list.
+	 */
+	addParam(arg: string): this {
+		this.args.params.push(arg);
+		this.argv.push(arg);
 
-    return this;
-  }
+		return this;
+	}
 
-  /**
-   * Add multiple parameters.
-   */
-  addParams(args: string[]): this {
-    args.forEach((arg) => {
-      this.addParam(arg);
-    });
+	/**
+	 * Add multiple parameters.
+	 */
+	addParams(args: string[]): this {
+		args.forEach((arg) => {
+			this.addParam(arg);
+		});
 
-    return this;
-  }
+		return this;
+	}
 
-  /**
-   * Find a configuration path by file name.
-   */
-  findConfigByName(name: string): ConfigPath | undefined {
-    return this.configPaths.find(
-      (config) => String(config.path).endsWith(name) || config.driver === name,
-    );
-  }
+	/**
+	 * Find a configuration path by file name.
+	 */
+	findConfigByName(name: string): ConfigPath | undefined {
+		return this.configPaths.find(
+			(config) => String(config.path).endsWith(name) || config.driver === name,
+		);
+	}
 
-  /**
-   * Return a configured option value by name, or a fallback value if not found.
-   */
-  getOption<K extends keyof O>(name: K): O[K] | null {
-    return this.args.options[name] ?? null;
-  }
+	/**
+	 * Return a configured option value by name, or a fallback value if not found.
+	 */
+	getOption<K extends keyof O>(name: K): O[K] | null {
+		return this.args.options[name] ?? null;
+	}
 
-  /**
-   * Return either a configured option value, or an unknown option value,
-   * or null if not found.
-   */
-  getRiskyOption(name: string, raw: boolean = false): PrimitiveType | null {
-    let opt = this.getOption(name as keyof O) as unknown as PrimitiveType;
+	/**
+	 * Return either a configured option value, or an unknown option value,
+	 * or null if not found.
+	 */
+	getRiskyOption(name: string, raw: boolean = false): PrimitiveType | null {
+		let opt = this.getOption(name as keyof O) as unknown as PrimitiveType;
 
-    if (opt !== null) {
-      return opt;
-    }
+		if (opt !== null) {
+			return opt;
+		}
 
-    opt = this.args.unknown[name];
+		opt = this.args.unknown[name];
 
-    // Unknown options without a value (`--foo`) are set with an empty string.
-    // Technically the option exists and is truthy, but to avoid falsy checks,
-    // let's convert an empty string to true since it's equivalent to a flag.
-    if ((opt === '' || opt === 'true') && !raw) {
-      opt = true;
-    }
+		// Unknown options without a value (`--foo`) are set with an empty string.
+		// Technically the option exists and is truthy, but to avoid falsy checks,
+		// let's convert an empty string to true since it's equivalent to a flag.
+		if ((opt === '' || opt === 'true') && !raw) {
+			opt = true;
+		}
 
-    return opt ?? null;
-  }
+		return opt ?? null;
+	}
 }

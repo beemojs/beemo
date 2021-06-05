@@ -5,78 +5,78 @@ import semver from 'semver';
 import { Arguments, PackageStructure, ParserOptions, Script, ScriptContext } from '@beemo/core';
 
 export interface BumpPeerDepsOptions {
-  release: 'major' | 'minor' | 'patch';
+	release: 'major' | 'minor' | 'patch';
 }
 
 const RELEASE_TYPES: BumpPeerDepsOptions['release'][] = ['major', 'minor', 'patch'];
 
 class BumpPeerDepsScript extends Script<BumpPeerDepsOptions> {
-  name = '@beemo/script-bump-peer-deps';
+	name = '@beemo/script-bump-peer-deps';
 
-  parse(): ParserOptions<BumpPeerDepsOptions> {
-    return {
-      options: {
-        release: {
-          default: 'minor',
-          description: 'Release type',
-          type: 'string',
-        },
-      },
-    };
-  }
+	parse(): ParserOptions<BumpPeerDepsOptions> {
+		return {
+			options: {
+				release: {
+					default: 'minor',
+					description: 'Release type',
+					type: 'string',
+				},
+			},
+		};
+	}
 
-  async execute(context: ScriptContext, args: Arguments<BumpPeerDepsOptions>) {
-    const { release } = args.options;
+	async execute(context: ScriptContext, args: Arguments<BumpPeerDepsOptions>) {
+		const { release } = args.options;
 
-    if (!RELEASE_TYPES.includes(release)) {
-      throw new Error('Please pass one of major, minor, or patch to --release.');
-    }
+		if (!RELEASE_TYPES.includes(release)) {
+			throw new Error('Please pass one of major, minor, or patch to --release.');
+		}
 
-    console.log('Loading packages and incrementing versions');
+		console.log('Loading packages and incrementing versions');
 
-    const versions: Record<string, string> = {};
-    const packages: Record<string, PackageStructure> = {};
-    const packagePaths: Record<string, string> = {};
+		const versions: Record<string, string> = {};
+		const packages: Record<string, PackageStructure> = {};
+		const packagePaths: Record<string, string> = {};
 
-    glob
-      .sync('./packages/*/package.json', { cwd: this.tool.project.root.path() })
-      .forEach((path) => {
-        const data = fs.readJsonSync(path) as { name: string; version: string };
+		glob
+			.sync('./packages/*/package.json', { cwd: this.tool.project.root.path() })
+			.forEach((path) => {
+				const data = fs.readJsonSync(path) as { name: string; version: string };
 
-        versions[data.name] = semver.inc(data.version, release)!;
-        packages[data.name] = data;
-        packagePaths[data.name] = path;
-      });
+				versions[data.name] = semver.inc(data.version, release)!;
+				packages[data.name] = data;
+				packagePaths[data.name] = path;
+			});
 
-    return Promise.all(
-      Object.entries(packages).map(([name, data]) => {
-        if (data.peerDependencies) {
-          Object.keys(data.peerDependencies).forEach((peerName) => {
-            if (!versions[peerName]) {
-              return;
-            }
+		return Promise.all(
+			Object.entries(packages).map(([name, data]) => {
+				if (data.peerDependencies) {
+					Object.keys(data.peerDependencies).forEach((peerName) => {
+						if (!versions[peerName]) {
+							return;
+						}
 
-            const nextVersion = `^${versions[peerName]}`;
+						const nextVersion = `^${versions[peerName]}`;
 
-            console.log(
-              `Bumping %s peer %s from %s to %s`,
-              chalk.yellow(name),
-              chalk.cyan(peerName),
-              chalk.gray(data.peerDependencies![peerName]),
-              chalk.green(nextVersion),
-            );
+						console.log(
+							`Bumping %s peer %s from %s to %s`,
+							chalk.yellow(name),
+							chalk.cyan(peerName),
+							chalk.gray(data.peerDependencies![peerName]),
+							chalk.green(nextVersion),
+						);
 
-            // eslint-disable-next-line no-param-reassign
-            data.peerDependencies![peerName] = nextVersion;
-          });
-        }
+						// eslint-disable-next-line no-param-reassign
+						data.peerDependencies![peerName] = nextVersion;
+					});
+				}
 
-        return fs.writeJson(packagePaths[name], data, { spaces: 2 });
-      }),
-    );
-  }
+				return fs.writeJson(packagePaths[name], data, { spaces: 2 });
+			}),
+		);
+	}
 }
 
 export default function bumpPeerDeps() {
-  return new BumpPeerDepsScript();
+	return new BumpPeerDepsScript();
 }

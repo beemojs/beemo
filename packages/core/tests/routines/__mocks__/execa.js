@@ -1,11 +1,11 @@
 class Stream {
-  pipe() {
-    return this;
-  }
+	pipe() {
+		return this;
+	}
 
-  on() {
-    return this;
-  }
+	on() {
+		return this;
+	}
 }
 
 const BABEL_HELP = `
@@ -51,14 +51,14 @@ Options:
 const execa = jest.genMockFromModule('execa');
 
 execa.mockImplementation((cmd, args = []) => {
-  const promise = Promise.resolve({
-    stdout: cmd === 'babel' && args.includes('--help') ? BABEL_HELP : '',
-  });
+	const promise = Promise.resolve({
+		stdout: cmd === 'babel' && args.includes('--help') ? BABEL_HELP : '',
+	});
 
-  promise.stdout = new Stream();
-  promise.stderr = new Stream();
+	promise.stdout = new Stream();
+	promise.stderr = new Stream();
 
-  return promise;
+	return promise;
 });
 
 module.exports = execa;

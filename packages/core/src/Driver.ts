@@ -5,281 +5,281 @@ import { Blueprint, isObject, optimal, Path, Predicates, predicates, toArray } f
 import { ConcurrentEvent, Event } from '@boost/event';
 import { Plugin } from '@boost/plugin';
 import {
-  STRATEGY_COPY,
-  STRATEGY_CREATE,
-  STRATEGY_NATIVE,
-  STRATEGY_NONE,
-  STRATEGY_REFERENCE,
-  STRATEGY_TEMPLATE,
+	STRATEGY_COPY,
+	STRATEGY_CREATE,
+	STRATEGY_NATIVE,
+	STRATEGY_NONE,
+	STRATEGY_REFERENCE,
+	STRATEGY_TEMPLATE,
 } from './constants';
 import { ConfigContext } from './contexts/ConfigContext';
 import { DriverContext } from './contexts/DriverContext';
 import { isClassInstance } from './helpers/isClassInstance';
 import {
-  Argv,
-  BeemoTool,
-  ConfigObject,
-  Driverable,
-  DriverCommandConfig,
-  DriverCommandRegistration,
-  DriverCommandRunner,
-  DriverMetadata,
-  DriverOptions,
-  DriverOutput,
-  DriverStrategy,
-  Execution,
+	Argv,
+	BeemoTool,
+	ConfigObject,
+	Driverable,
+	DriverCommandConfig,
+	DriverCommandRegistration,
+	DriverCommandRunner,
+	DriverMetadata,
+	DriverOptions,
+	DriverOutput,
+	DriverStrategy,
+	Execution,
 } from './types';
 
 export abstract class Driver<
-    Config extends object = {},
-    Options extends DriverOptions = DriverOptions,
-  >
-  extends Plugin<BeemoTool, Options>
-  implements Driverable
+		Config extends object = {},
+		Options extends DriverOptions = DriverOptions,
+	>
+	extends Plugin<BeemoTool, Options>
+	implements Driverable
 {
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  commands: DriverCommandRegistration<any, any>[] = [];
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any
+	commands: DriverCommandRegistration<any, any>[] = [];
 
-  // Set after instantiation
-  config!: Config;
+	// Set after instantiation
+	config!: Config;
 
-  // Set after instantiation
-  metadata!: DriverMetadata;
+	// Set after instantiation
+	metadata!: DriverMetadata;
 
-  // Set within a life-cycle
-  tool!: BeemoTool;
+	// Set within a life-cycle
+	tool!: BeemoTool;
 
-  output: DriverOutput = {
-    stderr: '',
-    stdout: '',
-  };
+	output: DriverOutput = {
+		stderr: '',
+		stdout: '',
+	};
 
-  readonly onLoadProviderConfig = new Event<[ConfigContext, Path, Config]>('load-provider-config');
+	readonly onLoadProviderConfig = new Event<[ConfigContext, Path, Config]>('load-provider-config');
 
-  readonly onLoadConsumerConfig = new Event<[ConfigContext, Config]>('load-consumer-config');
+	readonly onLoadConsumerConfig = new Event<[ConfigContext, Config]>('load-consumer-config');
 
-  readonly onMergeConfig = new Event<[ConfigContext, Config]>('merge-config');
+	readonly onMergeConfig = new Event<[ConfigContext, Config]>('merge-config');
 
-  readonly onCreateConfigFile = new Event<[ConfigContext, Path, Config]>('create-config-file');
+	readonly onCreateConfigFile = new Event<[ConfigContext, Path, Config]>('create-config-file');
 
-  readonly onCopyConfigFile = new Event<[ConfigContext, Path, Config]>('copy-config-file');
+	readonly onCopyConfigFile = new Event<[ConfigContext, Path, Config]>('copy-config-file');
 
-  readonly onReferenceConfigFile = new Event<[ConfigContext, Path, Config]>(
-    'reference-config-file',
-  );
+	readonly onReferenceConfigFile = new Event<[ConfigContext, Path, Config]>(
+		'reference-config-file',
+	);
 
-  readonly onTemplateConfigFile = new Event<[ConfigContext, Path, ConfigObject | string]>(
-    'template-config-file',
-  );
+	readonly onTemplateConfigFile = new Event<[ConfigContext, Path, ConfigObject | string]>(
+		'template-config-file',
+	);
 
-  readonly onDeleteConfigFile = new Event<[ConfigContext, Path]>('delete-config-file');
+	readonly onDeleteConfigFile = new Event<[ConfigContext, Path]>('delete-config-file');
 
-  readonly onBeforeExecute = new ConcurrentEvent<[DriverContext, Argv]>('before-execute');
+	readonly onBeforeExecute = new ConcurrentEvent<[DriverContext, Argv]>('before-execute');
 
-  readonly onAfterExecute = new ConcurrentEvent<[DriverContext, unknown]>('after-execute');
+	readonly onAfterExecute = new ConcurrentEvent<[DriverContext, unknown]>('after-execute');
 
-  readonly onFailedExecute = new ConcurrentEvent<[DriverContext, Error]>('failed-execute');
+	readonly onFailedExecute = new ConcurrentEvent<[DriverContext, Error]>('failed-execute');
 
-  static validate(driver: Driver) {
-    const name = (isClassInstance(driver) && driver.constructor.name) || 'Driver';
+	static validate(driver: Driver) {
+		const name = (isClassInstance(driver) && driver.constructor.name) || 'Driver';
 
-    if (!isObject(driver.options)) {
-      throw new Error(`\`${name}\` requires an options object.`);
-    }
-  }
+		if (!isObject(driver.options)) {
+			throw new Error(`\`${name}\` requires an options object.`);
+		}
+	}
 
-  blueprint({ array, object, string, bool }: Predicates): Blueprint<DriverOptions> {
-    return {
-      args: array(string()),
-      dependencies: array(string()),
-      env: object(string()),
-      expandGlobs: bool(true),
-      strategy: string(STRATEGY_NATIVE).oneOf<DriverStrategy>([
-        STRATEGY_NATIVE,
-        STRATEGY_CREATE,
-        STRATEGY_REFERENCE,
-        STRATEGY_TEMPLATE,
-        STRATEGY_COPY,
-        STRATEGY_NONE,
-      ]),
-      template: string(),
-    };
-  }
+	blueprint({ array, object, string, bool }: Predicates): Blueprint<DriverOptions> {
+		return {
+			args: array(string()),
+			dependencies: array(string()),
+			env: object(string()),
+			expandGlobs: bool(true),
+			strategy: string(STRATEGY_NATIVE).oneOf<DriverStrategy>([
+				STRATEGY_NATIVE,
+				STRATEGY_CREATE,
+				STRATEGY_REFERENCE,
+				STRATEGY_TEMPLATE,
+				STRATEGY_COPY,
+				STRATEGY_NONE,
+			]),
+			template: string(),
+		};
+	}
 
-  bootstrap() {}
+	bootstrap() {}
 
-  startup(tool: BeemoTool) {
-    this.tool = tool;
-    this.bootstrap();
-  }
+	startup(tool: BeemoTool) {
+		this.tool = tool;
+		this.bootstrap();
+	}
 
-  /**
-   * Special case for merging arrays.
-   */
-  doMerge(prevValue: unknown, nextValue: unknown): unknown {
-    if (Array.isArray(prevValue) && Array.isArray(nextValue)) {
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-      return [...new Set([...prevValue, ...nextValue])] as unknown;
-    }
+	/**
+	 * Special case for merging arrays.
+	 */
+	doMerge(prevValue: unknown, nextValue: unknown): unknown {
+		if (Array.isArray(prevValue) && Array.isArray(nextValue)) {
+			// eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+			return [...new Set([...prevValue, ...nextValue])] as unknown;
+		}
 
-    return undefined;
-  }
+		return undefined;
+	}
 
-  /**
-   * Extract the error message when the driver fails to execute.
-   */
-  extractErrorMessage(error: { message: string }): string {
-    return error.message.split('\n', 1)[0] || '';
-  }
+	/**
+	 * Extract the error message when the driver fails to execute.
+	 */
+	extractErrorMessage(error: { message: string }): string {
+		return error.message.split('\n', 1)[0] || '';
+	}
 
-  /**
-   * Format the configuration file before it's written.
-   */
-  formatConfig(data: Config): string {
-    const content = JSON.stringify(data, null, 2);
+	/**
+	 * Format the configuration file before it's written.
+	 */
+	formatConfig(data: Config): string {
+		const content = JSON.stringify(data, null, 2);
 
-    if (this.metadata.configName.endsWith('.js')) {
-      return `module.exports = ${content};`;
-    }
+		if (this.metadata.configName.endsWith('.js')) {
+			return `module.exports = ${content};`;
+		}
 
-    return content;
-  }
+		return content;
+	}
 
-  /**
-   * Return the module name without the Beemo namespace.
-   */
-  getName(): string {
-    return this.name.split('-').pop()!;
-  }
+	/**
+	 * Return the module name without the Beemo namespace.
+	 */
+	getName(): string {
+		return this.name.split('-').pop()!;
+	}
 
-  /**
-   * Return a list of user defined arguments.
-   */
-  getArgs(): Argv {
-    return toArray(this.options.args);
-  }
+	/**
+	 * Return a list of user defined arguments.
+	 */
+	getArgs(): Argv {
+		return toArray(this.options.args);
+	}
 
-  /**
-   * Return a list of dependent drivers.
-   */
-  getDependencies(): string[] {
-    return [
-      // Always required; configured by the driver
-      ...this.metadata.dependencies,
-      // Custom; configured by the consumer
-      ...toArray(this.options.dependencies),
-    ];
-  }
+	/**
+	 * Return a list of dependent drivers.
+	 */
+	getDependencies(): string[] {
+		return [
+			// Always required; configured by the driver
+			...this.metadata.dependencies,
+			// Custom; configured by the consumer
+			...toArray(this.options.dependencies),
+		];
+	}
 
-  /**
-   * Return a list of supported CLI options.
-   */
-  getSupportedOptions(): string[] {
-    return [];
-  }
+	/**
+	 * Return a list of supported CLI options.
+	 */
+	getSupportedOptions(): string[] {
+		return [];
+	}
 
-  /**
-   * Extract the current version of the installed driver via its binary.
-   */
-  getVersion(): string {
-    const { bin, versionOption } = this.metadata;
-    const version = (execa.sync(bin, [versionOption], { preferLocal: true })?.stdout || '').trim();
-    const match = version.match(/(\d+)\.(\d+)\.(\d+)/u);
+	/**
+	 * Extract the current version of the installed driver via its binary.
+	 */
+	getVersion(): string {
+		const { bin, versionOption } = this.metadata;
+		const version = (execa.sync(bin, [versionOption], { preferLocal: true })?.stdout || '').trim();
+		const match = version.match(/(\d+)\.(\d+)\.(\d+)/u);
 
-    return match ? match[0] : '0.0.0';
-  }
+		return match ? match[0] : '0.0.0';
+	}
 
-  /**
-   * Merge multiple configuration objects.
-   */
-  mergeConfig(prev: Config, next: Config): Config {
-    return mergeWith(prev, next, this.doMerge);
-  }
+	/**
+	 * Merge multiple configuration objects.
+	 */
+	mergeConfig(prev: Config, next: Config): Config {
+		return mergeWith(prev, next, this.doMerge);
+	}
 
-  /**
-   * Handle command failures according to this driver.
-   */
-  processFailure(error: Execution) {
-    const { stderr = '', stdout = '' } = error;
-    const out = (stderr || stdout).trim();
+	/**
+	 * Handle command failures according to this driver.
+	 */
+	processFailure(error: Execution) {
+		const { stderr = '', stdout = '' } = error;
+		const out = (stderr || stdout).trim();
 
-    if (out) {
-      this.setOutput('stderr', out);
-    }
-  }
+		if (out) {
+			this.setOutput('stderr', out);
+		}
+	}
 
-  /**
-   * Handle successful commands according to this driver.
-   */
-  processSuccess(response: Execution) {
-    const { stderr = '', stdout = '' } = response;
+	/**
+	 * Handle successful commands according to this driver.
+	 */
+	processSuccess(response: Execution) {
+		const { stderr = '', stdout = '' } = response;
 
-    this.setOutput('stderr', stderr.trim());
-    this.setOutput('stdout', stdout.trim());
-  }
+		this.setOutput('stderr', stderr.trim());
+		this.setOutput('stdout', stdout.trim());
+	}
 
-  /**
-   * Register a sub-command within the CLI.
-   */
-  registerCommand<O extends object, P extends PrimitiveType[]>(
-    path: string,
-    config: DriverCommandConfig<O, P>,
-    runner: DriverCommandRunner<O, P>,
-  ) {
-    this.commands.push({ config, path, runner });
+	/**
+	 * Register a sub-command within the CLI.
+	 */
+	registerCommand<O extends object, P extends PrimitiveType[]>(
+		path: string,
+		config: DriverCommandConfig<O, P>,
+		runner: DriverCommandRunner<O, P>,
+	) {
+		this.commands.push({ config, path, runner });
 
-    return this;
-  }
+		return this;
+	}
 
-  /**
-   * Set metadata about the binary/executable in which this driver wraps.
-   */
-  setMetadata(metadata: Partial<DriverMetadata>): this {
-    const { array, bool, string, object, shape } = predicates;
+	/**
+	 * Set metadata about the binary/executable in which this driver wraps.
+	 */
+	setMetadata(metadata: Partial<DriverMetadata>): this {
+		const { array, bool, string, object, shape } = predicates;
 
-    this.metadata = optimal(
-      metadata,
-      {
-        bin: string()
-          .match(/^[a-z]{1}[a-zA-Z0-9-]+$/u)
-          .required(),
-        commandOptions: object(
-          shape({
-            description: string().required(),
-            type: string().oneOf<'boolean' | 'number' | 'string'>(['string', 'number', 'boolean']),
-          }),
-        ),
-        configName: string().required(),
-        configOption: string('--config'),
-        configStrategy: string(STRATEGY_CREATE).oneOf([
-          STRATEGY_CREATE,
-          STRATEGY_REFERENCE,
-          STRATEGY_COPY,
-        ]),
-        dependencies: array(string()),
-        description: string(),
-        filterOptions: bool(true),
-        helpOption: string('--help'),
-        title: string().required(),
-        useConfigOption: bool(),
-        versionOption: string('--version'),
-        watchOptions: array(string()),
-        workspaceStrategy: string(STRATEGY_REFERENCE).oneOf([STRATEGY_REFERENCE, STRATEGY_COPY]),
-      },
-      {
-        name: this.constructor.name,
-      },
-    );
+		this.metadata = optimal(
+			metadata,
+			{
+				bin: string()
+					.match(/^[a-z]{1}[a-zA-Z0-9-]+$/u)
+					.required(),
+				commandOptions: object(
+					shape({
+						description: string().required(),
+						type: string().oneOf<'boolean' | 'number' | 'string'>(['string', 'number', 'boolean']),
+					}),
+				),
+				configName: string().required(),
+				configOption: string('--config'),
+				configStrategy: string(STRATEGY_CREATE).oneOf([
+					STRATEGY_CREATE,
+					STRATEGY_REFERENCE,
+					STRATEGY_COPY,
+				]),
+				dependencies: array(string()),
+				description: string(),
+				filterOptions: bool(true),
+				helpOption: string('--help'),
+				title: string().required(),
+				useConfigOption: bool(),
+				versionOption: string('--version'),
+				watchOptions: array(string()),
+				workspaceStrategy: string(STRATEGY_REFERENCE).oneOf([STRATEGY_REFERENCE, STRATEGY_COPY]),
+			},
+			{
+				name: this.constructor.name,
+			},
+		);
 
-    return this;
-  }
+		return this;
+	}
 
-  /**
-   * Store the raw output of the driver's execution.
-   */
-  setOutput(type: keyof DriverOutput, value: string): this {
-    this.output[type] = value.trim();
+	/**
+	 * Store the raw output of the driver's execution.
+	 */
+	setOutput(type: keyof DriverOutput, value: string): this {
+		this.output[type] = value.trim();
 
-    return this;
-  }
+		return this;
+	}
 }

@@ -47,7 +47,7 @@ Create a file at `configs/babel.ts` (or `js`) in which to house your Babel confi
 import { BabelConfig } from '@beemo/driver-babel';
 
 const config: BabelConfig = {
-  presets: ['@babel/preset-env'],
+	presets: ['@babel/preset-env'],
 };
 
 export default config;
@@ -64,8 +64,8 @@ In your consuming project, enable the driver by adding `babel` to your `drivers`
 import { BeemoConfig } from '@beemo/core';
 
 const config: BeemoConfig = {
-  module: '<config-module>',
-  drivers: ['babel'],
+	module: '<config-module>',
+	drivers: ['babel'],
 };
 
 export default config;

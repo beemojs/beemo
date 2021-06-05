@@ -7,74 +7,74 @@ import { mockDebugger, mockDriver, mockTool, stubDriverContext } from '../../src
 import { Tool } from '../../src/Tool';
 
 describe('CleanupConfigsRoutine', () => {
-  let tool: Tool;
-  let driver: Driver;
-  let context: DriverContext;
-  let routine: CleanupConfigsRoutine;
-  let removeSpy: jest.SpyInstance;
+	let tool: Tool;
+	let driver: Driver;
+	let context: DriverContext;
+	let routine: CleanupConfigsRoutine;
+	let removeSpy: jest.SpyInstance;
 
-  beforeEach(async () => {
-    tool = mockTool();
-    driver = mockDriver('test-driver', tool);
-    context = stubDriverContext(driver);
+	beforeEach(async () => {
+		tool = mockTool();
+		driver = mockDriver('test-driver', tool);
+		context = stubDriverContext(driver);
 
-    routine = new CleanupConfigsRoutine('cleanup', 'Cleaning up', { tool });
-    // @ts-expect-error Overwrite readonly
-    routine.debug = mockDebugger();
+		routine = new CleanupConfigsRoutine('cleanup', 'Cleaning up', { tool });
+		// @ts-expect-error Overwrite readonly
+		routine.debug = mockDebugger();
 
-    await tool.driverRegistry.load(driver);
-    await tool.driverRegistry.load(mockDriver('other-driver', tool));
+		await tool.driverRegistry.load(driver);
+		await tool.driverRegistry.load(mockDriver('other-driver', tool));
 
-    removeSpy = jest.spyOn(fs, 'remove').mockImplementation(() => Promise.resolve());
-  });
+		removeSpy = jest.spyOn(fs, 'remove').mockImplementation(() => Promise.resolve());
+	});
 
-  afterEach(() => {
-    removeSpy.mockRestore();
-  });
+	afterEach(() => {
+		removeSpy.mockRestore();
+	});
 
-  describe('execute()', () => {
-    it('attempts to delete files', async () => {
-      context.configPaths = [{ driver: 'test-driver', path: new Path('./foo.json') }];
+	describe('execute()', () => {
+		it('attempts to delete files', async () => {
+			context.configPaths = [{ driver: 'test-driver', path: new Path('./foo.json') }];
 
-      await routine.execute(context);
+			await routine.execute(context);
 
-      expect(removeSpy).toHaveBeenCalled();
-    });
-  });
+			expect(removeSpy).toHaveBeenCalled();
+		});
+	});
 
-  describe('deleteConfigFiles()', () => {
-    it('does nothing when no config paths', async () => {
-      await routine.deleteConfigFiles(context);
+	describe('deleteConfigFiles()', () => {
+		it('does nothing when no config paths', async () => {
+			await routine.deleteConfigFiles(context);
 
-      expect(removeSpy).not.toHaveBeenCalled();
-    });
+			expect(removeSpy).not.toHaveBeenCalled();
+		});
 
-    it('calls remove for each config path', async () => {
-      context.configPaths = [
-        { driver: 'test-driver', path: new Path('./foo.json') },
-        { driver: 'other-driver', path: new Path('./.barrc') },
-      ];
+		it('calls remove for each config path', async () => {
+			context.configPaths = [
+				{ driver: 'test-driver', path: new Path('./foo.json') },
+				{ driver: 'other-driver', path: new Path('./.barrc') },
+			];
 
-      await routine.deleteConfigFiles(context);
+			await routine.deleteConfigFiles(context);
 
-      expect(removeSpy).toHaveBeenCalledWith('foo.json');
-      expect(removeSpy).toHaveBeenCalledWith('.barrc');
-    });
+			expect(removeSpy).toHaveBeenCalledWith('foo.json');
+			expect(removeSpy).toHaveBeenCalledWith('.barrc');
+		});
 
-    it('emits `onDeleteConfigFile` event', async () => {
-      const spy = jest.fn();
+		it('emits `onDeleteConfigFile` event', async () => {
+			const spy = jest.fn();
 
-      context.primaryDriver.onDeleteConfigFile.listen(spy);
+			context.primaryDriver.onDeleteConfigFile.listen(spy);
 
-      context.configPaths = [
-        { driver: 'test-driver', path: new Path('./foo.json') },
-        { driver: 'other-driver', path: new Path('./.barrc') },
-      ];
+			context.configPaths = [
+				{ driver: 'test-driver', path: new Path('./foo.json') },
+				{ driver: 'other-driver', path: new Path('./.barrc') },
+			];
 
-      await routine.deleteConfigFiles(context);
+			await routine.deleteConfigFiles(context);
 
-      expect(spy).toHaveBeenCalledWith(context, new Path('foo.json'));
-      expect(spy).not.toHaveBeenCalledWith(context, new Path('.barrc'));
-    });
-  });
+			expect(spy).toHaveBeenCalledWith(context, new Path('foo.json'));
+			expect(spy).not.toHaveBeenCalledWith(context, new Path('.barrc'));
+		});
+	});
 });

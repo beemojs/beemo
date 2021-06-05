@@ -47,9 +47,9 @@ Create a file at `configs/mocha.ts` (or `js`) in which to house your Mocha confi
 import { MochaConfig } from '@beemo/driver-mocha';
 
 const config: MochaConfig = {
-  asyncOnly: true,
-  checkLeaks: true,
-  // ...
+	asyncOnly: true,
+	checkLeaks: true,
+	// ...
 };
 
 export default config;
@@ -63,8 +63,8 @@ In your consuming project, enable the driver by adding `mocha` to your `drivers`
 import { BeemoConfig } from '@beemo/core';
 
 const config: BeemoConfig = {
-  module: '<config-module>',
-  drivers: ['mocha'],
+	module: '<config-module>',
+	drivers: ['mocha'],
 };
 
 export default config;

@@ -59,10 +59,10 @@ Create a file at `configs/typescript.ts` (or `js`) in which to house your TypeSc
 import { TypeScriptConfig } from '@beemo/driver-typescript';
 
 const config: TypeScriptConfig = {
-  compilerOptions: {
-    strict: true,
-  },
-  // ...
+	compilerOptions: {
+		strict: true,
+	},
+	// ...
 };
 
 export default config;
@@ -76,8 +76,8 @@ In your consuming project, enable the driver by adding `typescript` to your `dri
 import { BeemoConfig } from '@beemo/core';
 
 const config: BeemoConfig = {
-  module: '<config-module>',
-  drivers: ['typescript'],
+	module: '<config-module>',
+	drivers: ['typescript'],
 };
 
 export default config;
@@ -135,16 +135,16 @@ To customize this process, the following options are available.
 import { BeemoConfig } from '@beemo/core';
 
 const config: BeemoConfig = {
-  module: '<config-module>',
-  drivers: [
-    [
-      'typescript',
-      {
-        globalTypes: true,
-        testsFolder: 'test',
-      },
-    ],
-  ],
+	module: '<config-module>',
+	drivers: [
+		[
+			'typescript',
+			{
+				globalTypes: true,
+				testsFolder: 'test',
+			},
+		],
+	],
 };
 
 export default config;

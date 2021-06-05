@@ -1,4 +1,4 @@
 // Proposal requires plugin
-async do {
-  await Promise.resolve();
-};
+(async do {
+	await Promise.resolve();
+});

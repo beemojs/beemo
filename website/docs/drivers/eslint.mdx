@@ -55,8 +55,8 @@ Create a file at `configs/eslint.ts` (or `js`) in which to house your ESLint con
 import { ESLintConfig } from '@beemo/driver-eslint';
 
 const config: ESLintConfig = {
-  extends: ['airbnb'],
-  // ...
+	extends: ['airbnb'],
+	// ...
 };
 
 export default config;
@@ -70,8 +70,8 @@ In your consuming project, enable the driver by adding `eslint` to your `drivers
 import { BeemoConfig } from '@beemo/core';
 
 const config: BeemoConfig = {
-  module: '<config-module>',
-  drivers: ['eslint'],
+	module: '<config-module>',
+	drivers: ['eslint'],
 };
 
 export default config;
@@ -95,8 +95,8 @@ Becomes...
 import { ESLintConfig } from '@beemo/driver-eslint';
 
 const config: ESLintConfig = {
-  // ...
-  ignore: ['lib/', '*.min.js', '*.map'],
+	// ...
+	ignore: ['lib/', '*.min.js', '*.map'],
 };
 
 export default config;

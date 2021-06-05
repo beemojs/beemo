@@ -8,7 +8,6 @@ import { ESLintDriver } from './ESLintDriver';
 
 export * from './types';
 
-// eslint-disable-next-line import/no-default-export
 export default function eslintDriver(options?: DriverOptions) {
-  return new ESLintDriver(options);
+	return new ESLintDriver(options);
 }

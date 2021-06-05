@@ -47,16 +47,16 @@ Create a file at `configs/flow.ts` (or `.js`) in which to house your Flow config
 import { FlowConfig } from '@beemo/driver-flow';
 
 const config: FlowConfig = {
-  ignore: ['.*/node_modules/.*', '.*/tests/.*', '.*\\.test\\.js'],
-  include: ['./src'],
-  lints: {
-    untyped_import: 'warn',
-  },
-  options: {
-    emoji: true,
-    'module.ignore_non_literal_requires': true,
-    suppress_comment: '\\\\(.\\\\|\\n\\\\)*\\\\$FlowFixMe',
-  },
+	ignore: ['.*/node_modules/.*', '.*/tests/.*', '.*\\.test\\.js'],
+	include: ['./src'],
+	lints: {
+		untyped_import: 'warn',
+	},
+	options: {
+		emoji: true,
+		'module.ignore_non_literal_requires': true,
+		suppress_comment: '\\\\(.\\\\|\\n\\\\)*\\\\$FlowFixMe',
+	},
 };
 
 export default config;
@@ -84,8 +84,8 @@ In your consuming project, enable the driver by adding `flow` to your `drivers` 
 import { BeemoConfig } from '@beemo/core';
 
 const config: BeemoConfig = {
-  module: '<config-module>',
-  drivers: ['flow'],
+	module: '<config-module>',
+	drivers: ['flow'],
 };
 
 export default config;

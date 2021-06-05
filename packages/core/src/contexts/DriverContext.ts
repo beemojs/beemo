@@ -3,43 +3,43 @@ import { Arguments, Argv, StdioType } from '../types';
 import { ConfigContext } from './ConfigContext';
 
 export interface DriverContextOptions {
-  concurrency: number;
-  graph: boolean;
-  stdio: StdioType;
-  workspaces: string;
+	concurrency: number;
+	graph: boolean;
+	stdio: StdioType;
+	workspaces: string;
 }
 
 export type DriverContextParams = [string];
 
 export class DriverContext<
-  O extends DriverContextOptions = DriverContextOptions,
+	O extends DriverContextOptions = DriverContextOptions,
 > extends ConfigContext<O> {
-  // Name defined on the plugin (kebab case)
-  driverName: string = '';
+	// Name defined on the plugin (kebab case)
+	driverName: string = '';
 
-  // Nested list of argv for each parallel execution
-  parallelArgv: Argv[] = [];
+	// Nested list of argv for each parallel execution
+	parallelArgv: Argv[] = [];
 
-  // The primary driver that initiated the pipeline
-  primaryDriver: Driver;
+	// The primary driver that initiated the pipeline
+	primaryDriver: Driver;
 
-  constructor(args: Arguments<O>, driver: Driver, parallelArgv: Argv[] = []) {
-    super(args);
+	constructor(args: Arguments<O>, driver: Driver, parallelArgv: Argv[] = []) {
+		super(args);
 
-    this.driverName = driver.getName();
-    this.parallelArgv = parallelArgv;
-    this.primaryDriver = driver;
+		this.driverName = driver.getName();
+		this.parallelArgv = parallelArgv;
+		this.primaryDriver = driver;
 
-    // Add primary driver to driver list
-    this.drivers.add(driver);
-  }
+		// Add primary driver to driver list
+		this.drivers.add(driver);
+	}
 
-  /**
-   * Add a parallel command with additional argv.
-   */
-  addParallelCommand(argv: Argv): this {
-    this.parallelArgv.push(argv);
+	/**
+	 * Add a parallel command with additional argv.
+	 */
+	addParallelCommand(argv: Argv): this {
+		this.parallelArgv.push(argv);
 
-    return this;
-  }
+		return this;
+	}
 }

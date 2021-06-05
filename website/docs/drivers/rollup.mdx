@@ -47,11 +47,11 @@ Create a file at `configs/rollup.ts` (or `js`) in which to house your Rollup con
 import { RollupConfig } from '@beemo/driver-rollup';
 
 const config: RollupConfig = {
-  input: 'src/main.js',
-  output: {
-    file: 'bundle.js',
-    format: 'cjs',
-  },
+	input: 'src/main.js',
+	output: {
+		file: 'bundle.js',
+		format: 'cjs',
+	},
 };
 
 export default config;
@@ -65,8 +65,8 @@ In your consuming project, enable the driver by adding `rollup` to your `drivers
 import { BeemoConfig } from '@beemo/core';
 
 const config: BeemoConfig = {
-  module: '<config-module>',
-  drivers: ['rollup'],
+	module: '<config-module>',
+	drivers: ['rollup'],
 };
 
 export default config;

@@ -6,50 +6,50 @@ import { Transform, TransformCallback } from 'stream';
 const WAIT_THRESHOLD = 500;
 
 export interface BatchStreamOptions {
-  wait?: number;
+	wait?: number;
 }
 
 export class BatchStream extends Transform {
-  bufferedBatch: Buffer | null = null;
+	bufferedBatch: Buffer | null = null;
 
-  timeout: NodeJS.Timeout | null = null;
+	timeout: NodeJS.Timeout | null = null;
 
-  waitThreshold: number = 0;
+	waitThreshold: number = 0;
 
-  constructor(options: BatchStreamOptions = {}) {
-    super();
+	constructor(options: BatchStreamOptions = {}) {
+		super();
 
-    this.waitThreshold = options.wait ?? WAIT_THRESHOLD;
-  }
+		this.waitThreshold = options.wait ?? WAIT_THRESHOLD;
+	}
 
-  flush() {
-    if (this.bufferedBatch) {
-      this.push(this.bufferedBatch);
-      this.bufferedBatch = null;
-    }
+	flush() {
+		if (this.bufferedBatch) {
+			this.push(this.bufferedBatch);
+			this.bufferedBatch = null;
+		}
 
-    if (this.timeout) {
-      clearTimeout(this.timeout);
-      this.timeout = null;
-    }
-  }
+		if (this.timeout) {
+			clearTimeout(this.timeout);
+			this.timeout = null;
+		}
+	}
 
-  _transform(chunk: Buffer, encoding: string, callback: TransformCallback) {
-    this.bufferedBatch = this.bufferedBatch ? Buffer.concat([this.bufferedBatch, chunk]) : chunk;
+	_transform(chunk: Buffer, encoding: string, callback: TransformCallback) {
+		this.bufferedBatch = this.bufferedBatch ? Buffer.concat([this.bufferedBatch, chunk]) : chunk;
 
-    if (this.timeout) {
-      clearTimeout(this.timeout);
-    }
+		if (this.timeout) {
+			clearTimeout(this.timeout);
+		}
 
-    this.timeout = setTimeout(() => {
-      this.flush();
-    }, this.waitThreshold);
+		this.timeout = setTimeout(() => {
+			this.flush();
+		}, this.waitThreshold);
 
-    callback();
-  }
+		callback();
+	}
 
-  _flush(callback: TransformCallback) {
-    this.flush();
-    callback();
-  }
+	_flush(callback: TransformCallback) {
+		this.flush();
+		callback();
+	}
 }

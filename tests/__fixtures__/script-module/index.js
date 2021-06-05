@@ -1,16 +1,16 @@
 const { Script } = require('@beemo/core');
 
 class BuildScript extends Script {
-  constructor() {
-    super();
+	constructor() {
+		super();
 
-    this.name = 'script-build';
-    this.lib = false;
-  }
+		this.name = 'script-build';
+		this.lib = false;
+	}
 
-  execute() {}
+	execute() {}
 }
 
 module.exports = function build() {
-  return new BuildScript();
+	return new BuildScript();
 };

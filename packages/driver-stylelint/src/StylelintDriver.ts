@@ -6,50 +6,50 @@ import { StylelintArgs, StylelintConfig } from './types';
 // Success: Writes warnings to stdout
 // Failure: Writes failures to stdout
 export class StylelintDriver extends Driver<StylelintConfig> {
-  readonly name = '@beemo/driver-stylelint';
+	readonly name = '@beemo/driver-stylelint';
 
-  readonly onCreateIgnoreFile = new Event<[ConfigContext, Path, { ignore: string[] }]>(
-    'create-ignore-file',
-  );
+	readonly onCreateIgnoreFile = new Event<[ConfigContext, Path, { ignore: string[] }]>(
+		'create-ignore-file',
+	);
 
-  bootstrap() {
-    this.setMetadata({
-      bin: 'stylelint',
-      configName: '.stylelintrc.js',
-      description: this.tool.msg('app:stylelintDescription'),
-      title: 'stylelint',
-    });
+	bootstrap() {
+		this.setMetadata({
+			bin: 'stylelint',
+			configName: '.stylelintrc.js',
+			description: this.tool.msg('app:stylelintDescription'),
+			title: 'stylelint',
+		});
 
-    this.onCreateConfigFile.listen(this.handleCreateIgnoreFile);
-  }
+		this.onCreateConfigFile.listen(this.handleCreateIgnoreFile);
+	}
 
-  /**
-   * If an "ignore" property exists in the stylelint config, create a ".sylelintignore" file.
-   */
-  private handleCreateIgnoreFile = (
-    context: ConfigContext<StylelintArgs>,
-    configPath: Path,
-    config: StylelintConfig,
-  ) => {
-    if (!config.ignore) {
-      return;
-    }
+	/**
+	 * If an "ignore" property exists in the stylelint config, create a ".sylelintignore" file.
+	 */
+	private handleCreateIgnoreFile = (
+		context: ConfigContext<StylelintArgs>,
+		configPath: Path,
+		config: StylelintConfig,
+	) => {
+		if (!config.ignore) {
+			return;
+		}
 
-    if (!Array.isArray(config.ignore)) {
-      throw new TypeError(this.tool.msg('errors:stylelintIgnoreInvalid'));
-    }
+		if (!Array.isArray(config.ignore)) {
+			throw new TypeError(this.tool.msg('errors:stylelintIgnoreInvalid'));
+		}
 
-    const ignorePath = configPath.parent().append('.stylelintignore');
-    const { ignore } = config;
+		const ignorePath = configPath.parent().append('.stylelintignore');
+		const { ignore } = config;
 
-    this.onCreateIgnoreFile.emit([context, ignorePath, { ignore }]);
+		this.onCreateIgnoreFile.emit([context, ignorePath, { ignore }]);
 
-    fs.writeFileSync(ignorePath.path(), ignore.join('\n'));
+		fs.writeFileSync(ignorePath.path(), ignore.join('\n'));
 
-    // Add to context so that it can be automatically cleaned up
-    context.addConfigPath('stylelint', ignorePath);
+		// Add to context so that it can be automatically cleaned up
+		context.addConfigPath('stylelint', ignorePath);
 
-    // eslint-disable-next-line no-param-reassign
-    delete config.ignore;
-  };
+		// eslint-disable-next-line no-param-reassign
+		delete config.ignore;
+	};
 }

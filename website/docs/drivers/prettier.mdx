@@ -55,9 +55,9 @@ Create a file at `configs/prettier.ts` (or `js`) in which to house your Prettier
 import { PrettierConfig } from '@beemo/driver-prettier';
 
 const config: PrettierConfig = {
-  arrowParens: 'always',
-  trailingComma: 'all',
-  // ...
+	arrowParens: 'always',
+	trailingComma: 'all',
+	// ...
 };
 
 export default config;
@@ -71,8 +71,8 @@ In your consuming project, enable the driver by adding `prettier` to your `drive
 import { BeemoConfig } from '@beemo/core';
 
 const config: BeemoConfig = {
-  module: '<config-module>',
-  drivers: ['prettier'],
+	module: '<config-module>',
+	drivers: ['prettier'],
 };
 
 export default config;
@@ -95,8 +95,8 @@ Becomes...
 import { PrettierConfig } from '@beemo/driver-prettier';
 
 const config: PrettierConfig = {
-  // ...
-  ignore: ['lib/', '*.min.js', '*.map'],
+	// ...
+	ignore: ['lib/', '*.min.js', '*.map'],
 };
 
 export default config;

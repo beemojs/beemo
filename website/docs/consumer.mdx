@@ -55,7 +55,7 @@ third-party module (if you don't want to manage your own provider).
 import { BeemoConfig } from '@beemo/core';
 
 const config: BeemoConfig = {
-  module: '<config-module>',
+	module: '<config-module>',
 };
 
 export default config;
@@ -66,7 +66,7 @@ export default config;
 
 ```js title=".config/beemo.js"
 module.exports = {
-  module: '<config-module>',
+	module: '<config-module>',
 };
 ```
 
@@ -75,7 +75,7 @@ module.exports = {
 
 ```json title=".config/beemo.json"
 {
-  "module": "<config-module>"
+	"module": "<config-module>"
 }
 ```
 
@@ -121,17 +121,17 @@ to enable. For example, if we want to use Babel, ESLint, and Jest, we would have
 import { BeemoConfig } from '@beemo/core';
 
 const config: BeemoConfig = {
-  module: '<config-module>',
-  drivers: [
-    'babel',
-    'eslint',
-    [
-      'jest',
-      {
-        env: { NODE_ENV: 'test' },
-      },
-    ],
-  ],
+	module: '<config-module>',
+	drivers: [
+		'babel',
+		'eslint',
+		[
+			'jest',
+			{
+				env: { NODE_ENV: 'test' },
+			},
+		],
+	],
 };
 
 export default config;
@@ -142,17 +142,17 @@ export default config;
 
 ```js title=".config/beemo.js"
 module.exports = {
-  module: '<config-module>',
-  drivers: [
-    'babel',
-    'eslint',
-    [
-      'jest',
-      {
-        env: { NODE_ENV: 'test' },
-      },
-    ],
-  ],
+	module: '<config-module>',
+	drivers: [
+		'babel',
+		'eslint',
+		[
+			'jest',
+			{
+				env: { NODE_ENV: 'test' },
+			},
+		],
+	],
 };
 ```
 
@@ -176,16 +176,16 @@ options, either pass an empty object, or a boolean `true`.
 import { BeemoConfig } from '@beemo/core';
 
 const config: BeemoConfig = {
-  module: '<config-module>',
-  drivers: {
-    babel: true,
-    eslint: {
-      args: ['--color', '--report-unused-disable-directives'],
-    },
-    jest: {
-      env: { NODE_ENV: 'test' },
-    },
-  },
+	module: '<config-module>',
+	drivers: {
+		babel: true,
+		eslint: {
+			args: ['--color', '--report-unused-disable-directives'],
+		},
+		jest: {
+			env: { NODE_ENV: 'test' },
+		},
+	},
 };
 
 export default config;
@@ -196,16 +196,16 @@ export default config;
 
 ```js title=".config/beemo.js"
 module.exports = {
-  module: '<config-module>',
-  drivers: {
-    babel: true,
-    eslint: {
-      args: ['--color', '--report-unused-disable-directives'],
-    },
-    jest: {
-      env: { NODE_ENV: 'test' },
-    },
-  },
+	module: '<config-module>',
+	drivers: {
+		babel: true,
+		eslint: {
+			args: ['--color', '--report-unused-disable-directives'],
+		},
+		jest: {
+			env: { NODE_ENV: 'test' },
+		},
+	},
 };
 ```
 
@@ -242,13 +242,13 @@ That being said, consistently remembering the correct commands and arguments to 
 
 ```json title="package.json"
 {
-  "scripts": {
-    "build": "beemo babel ./src --out-dir ./lib",
-    "lint": "beemo eslint ./src ./tests",
-    "test": "beemo jest",
-    "format": "beemo prettier --write \"./{src,tests}/**/*.{js,json,md}\"",
-    "type": "beemo typescript"
-  }
+	"scripts": {
+		"build": "beemo babel ./src --out-dir ./lib",
+		"lint": "beemo eslint ./src ./tests",
+		"test": "beemo jest",
+		"format": "beemo prettier --write \"./{src,tests}/**/*.{js,json,md}\"",
+		"type": "beemo typescript"
+	}
 }
 ```
 
@@ -326,9 +326,9 @@ config on a project-by-project basis through a local `.config/beemo/<driver>.(js
 import { ESLintConfig } from '@beemo/driver-eslint';
 
 const config: ESLintConfig = {
-  rules: {
-    'no-param-reassign': 0,
-  },
+	rules: {
+		'no-param-reassign': 0,
+	},
 };
 
 export default config;
@@ -339,9 +339,9 @@ export default config;
 
 ```js title=".config/beemo/eslint.js"
 module.exports = {
-  rules: {
-    'no-param-reassign': 0,
-  },
+	rules: {
+		'no-param-reassign': 0,
+	},
 };
 ```
 
@@ -376,16 +376,16 @@ file path for the template function (relative to the `.config` folder).
 import { BeemoConfig } from '@beemo/core';
 
 const config: BeemoConfig = {
-  module: '<config-module>',
-  drivers: [
-    [
-      'eslint',
-      {
-        strategy: 'template',
-        template: './path/to/custom/template.ts',
-      },
-    ],
-  ],
+	module: '<config-module>',
+	drivers: [
+		[
+			'eslint',
+			{
+				strategy: 'template',
+				template: './path/to/custom/template.ts',
+			},
+		],
+	],
 };
 
 export default config;
@@ -396,16 +396,16 @@ export default config;
 
 ```js title=".config/beemo.js"
 module.exports = {
-  module: '<config-module>',
-  drivers: [
-    [
-      'eslint',
-      {
-        strategy: 'template',
-        template: './path/to/custom/template.ts',
-      },
-    ],
-  ],
+	module: '<config-module>',
+	drivers: [
+		[
+			'eslint',
+			{
+				strategy: 'template',
+				template: './path/to/custom/template.ts',
+			},
+		],
+	],
 };
 ```
 
@@ -424,21 +424,21 @@ import { yaml } from '@boost/common';
 import { ConfigObject, ConfigTemplateResult, ConfigTemplateOptions } from '@beemo/core';
 
 export default function customTemplate(
-  configs: ConfigObject[],
-  options: ConfigTemplateOptions,
+	configs: ConfigObject[],
+	options: ConfigTemplateOptions,
 ): ConfigTemplateResult {
-  // Manually merge the list of configs into a single config object
-  // using the rules of the driver, or ones unique to your project.
-  const config = mergeConfigs(configs);
+	// Manually merge the list of configs into a single config object
+	// using the rules of the driver, or ones unique to your project.
+	const config = mergeConfigs(configs);
 
-  // A template must return a `config` property, which can be an object
-  // that will be formatted as JSON/JS, or a string which will be written as-is.
-  // It can also return an optional `path` property, allowing the destination
-  // config file path to be customized.
-  return {
-    config: yaml.stringify(config),
-    path: options.context.cwd.append('.eslintrc.yaml'),
-  };
+	// A template must return a `config` property, which can be an object
+	// that will be formatted as JSON/JS, or a string which will be written as-is.
+	// It can also return an optional `path` property, allowing the destination
+	// config file path to be customized.
+	return {
+		config: yaml.stringify(config),
+		path: options.context.cwd.append('.eslintrc.yaml'),
+	};
 }
 ```
 

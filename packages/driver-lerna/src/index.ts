@@ -8,7 +8,6 @@ import { LernaDriver } from './LernaDriver';
 
 export * from './types';
 
-// eslint-disable-next-line import/no-default-export
 export default function lernaDriver(options?: DriverOptions) {
-  return new LernaDriver(options);
+	return new LernaDriver(options);
 }
