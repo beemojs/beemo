@@ -10,5 +10,5 @@ export * from './types';
 
 // eslint-disable-next-line import/no-default-export
 export default function babelDriver(options?: DriverOptions) {
-  return new BabelDriver(options);
+	return new BabelDriver(options);
 }

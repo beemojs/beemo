@@ -10,5 +10,5 @@ export * from './types';
 
 // eslint-disable-next-line import/no-default-export
 export default function stylelintDriver(options?: DriverOptions) {
-  return new StylelintDriver(options);
+	return new StylelintDriver(options);
 }

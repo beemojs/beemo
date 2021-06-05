@@ -55,10 +55,10 @@ Create a file at `configs/stylelint.ts` (or `js`) in which to house your styleli
 import { StylelintConfig } from '@beemo/driver-stylelint';
 
 const config: StylelintConfig = {
-  rules: {
-    'color-no-invalid-hex': true,
-  },
-  // ...
+	rules: {
+		'color-no-invalid-hex': true,
+	},
+	// ...
 };
 
 export default config;
@@ -72,8 +72,8 @@ In your consuming project, enable the driver by adding `stylelint` to your `driv
 import { BeemoConfig } from '@beemo/core';
 
 const config: BeemoConfig = {
-  module: '<config-module>',
-  drivers: ['stylelint'],
+	module: '<config-module>',
+	drivers: ['stylelint'],
 };
 
 export default config;
@@ -97,8 +97,8 @@ Becomes...
 import { StylelintConfig } from '@beemo/driver-stylelint';
 
 const config: StylelintConfig = {
-  // ...
-  ignore: ['lib/', '*.min.js', '*.map'],
+	// ...
+	ignore: ['lib/', '*.min.js', '*.map'],
 };
 
 export default config;

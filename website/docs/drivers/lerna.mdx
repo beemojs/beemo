@@ -47,10 +47,10 @@ Create a file at `configs/lerna.ts` (or `js`) in which to house your Lerna confi
 import { LernaConfig } from '@beemo/driver-lerna';
 
 const config: LernaConfig = {
-  version: 'independent',
-  npmClient: 'yarn',
-  useWorkspaces: true,
-  // ...
+	version: 'independent',
+	npmClient: 'yarn',
+	useWorkspaces: true,
+	// ...
 };
 
 export default config;
@@ -64,8 +64,8 @@ In your consuming project, enable the driver by adding `lerna` to your `drivers`
 import { BeemoConfig } from '@beemo/core';
 
 const config: BeemoConfig = {
-  module: '<config-module>',
-  drivers: ['lerna'],
+	module: '<config-module>',
+	drivers: ['lerna'],
 };
 
 export default config;

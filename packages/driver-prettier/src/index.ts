@@ -10,5 +10,5 @@ export * from './types';
 
 // eslint-disable-next-line import/no-default-export
 export default function prettierDriver(options?: DriverOptions) {
-  return new PrettierDriver(options);
+	return new PrettierDriver(options);
 }

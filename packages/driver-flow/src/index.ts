@@ -10,5 +10,5 @@ export * from './types';
 
 // eslint-disable-next-line import/no-default-export
 export default function flowDriver(options?: DriverOptions) {
-  return new FlowDriver(options);
+	return new FlowDriver(options);
 }

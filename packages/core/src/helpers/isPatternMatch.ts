@@ -1,24 +1,24 @@
 import micromatch from 'micromatch';
 
 export function isPatternMatch(
-  string: string,
-  pattern: string,
-  options?: micromatch.Options,
+	string: string,
+	pattern: string,
+	options?: micromatch.Options,
 ): boolean {
-  if (!string || !pattern) {
-    return false;
-  }
+	if (!string || !pattern) {
+		return false;
+	}
 
-  // Wildcard all (*)
-  if (pattern === '*') {
-    return true;
-  }
+	// Wildcard all (*)
+	if (pattern === '*') {
+		return true;
+	}
 
-  // Whitelist (foo,bar)
-  if (pattern.includes(',') && !pattern.includes('{')) {
-    return pattern.split(',').includes(string);
-  }
+	// Whitelist (foo,bar)
+	if (pattern.includes(',') && !pattern.includes('{')) {
+		return pattern.split(',').includes(string);
+	}
 
-  // Patterns ([a-z], foo|bar, etc)
-  return micromatch.isMatch(string, pattern, options);
+	// Patterns ([a-z], foo|bar, etc)
+	return micromatch.isMatch(string, pattern, options);
 }

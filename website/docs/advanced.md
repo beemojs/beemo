@@ -15,7 +15,7 @@ the current working directory (`process.cwd()`) instead of the Node module path.
 
 ```ts title=".config/beemo.ts"
 export default {
-  module: '@local',
+	module: '@local',
 };
 ```
 
@@ -52,9 +52,9 @@ every `yarn install` or `npm install`.
 
 ```json title="package.json"
 {
-  "scripts": {
-    "prepare": "beemo create-config --silent"
-  }
+	"scripts": {
+		"prepare": "beemo create-config --silent"
+	}
 }
 ```
 
@@ -109,11 +109,11 @@ any possible collisions.
 
 ```js title=".config/beemo.ts"
 export default {
-  module: '<config-module>',
-  settings: {
-    whateverYouWant: 'here',
-    coolRight: true,
-  },
+	module: '<config-module>',
+	settings: {
+		whateverYouWant: 'here',
+		coolRight: true,
+	},
 };
 ```
 
@@ -155,9 +155,9 @@ Be sure to reference your new executable in your configuration module's `package
 
 ```json title="package.json"
 {
-  "bin": {
-    "bmo": "./bin/bmo.js"
-  }
+	"bin": {
+		"bmo": "./bin/bmo.js"
+	}
 }
 ```
 
@@ -166,7 +166,7 @@ manually configure it.
 
 ```js title=".config/bmo.ts"
 export default {
-  module: '@bmo/dev',
+	module: '@bmo/dev',
 };
 ```
 

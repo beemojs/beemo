@@ -1,6 +1,6 @@
 {
-  "rules": {
-    "sort-keys": "off",
-    "@typescript-eslint/camelcase": "off"
-  }
+	"rules": {
+		"sort-keys": "off",
+		"@typescript-eslint/camelcase": "off"
+	}
 }

@@ -10,128 +10,128 @@ import { TypeScriptConfig, TypeScriptOptions } from './types';
 // Success: Writes nothing to stdout or stderr
 // Failure: Writes to stdout on syntax and type error
 export class TypeScriptDriver extends Driver<TypeScriptConfig, TypeScriptOptions> {
-  readonly name = '@beemo/driver-typescript';
+	readonly name = '@beemo/driver-typescript';
 
-  readonly onCreateProjectConfigFile = new Event<[Path, TypeScriptConfig, boolean]>(
-    'create-project-config-file',
-  );
+	readonly onCreateProjectConfigFile = new Event<[Path, TypeScriptConfig, boolean]>(
+		'create-project-config-file',
+	);
 
-  blueprint(preds: Predicates): Blueprint<TypeScriptOptions> {
-    const { bool, string } = preds;
+	blueprint(preds: Predicates): Blueprint<TypeScriptOptions> {
+		const { bool, string } = preds;
 
-    return {
-      ...super.blueprint(preds),
-      buildFolder: string('lib'),
-      declarationOnly: bool(),
-      globalTypes: bool(true),
-      localTypes: bool(true),
-      srcFolder: string('src'),
-      testsFolder: string('tests'),
-      typesFolder: string('types'),
-    };
-  }
+		return {
+			...super.blueprint(preds),
+			buildFolder: string('lib'),
+			declarationOnly: bool(),
+			globalTypes: bool(true),
+			localTypes: bool(true),
+			srcFolder: string('src'),
+			testsFolder: string('tests'),
+			typesFolder: string('types'),
+		};
+	}
 
-  bootstrap() {
-    this.setMetadata({
-      bin: 'tsc',
-      commandOptions: {
-        clean: {
-          default: false,
-          description: this.tool.msg('app:typescriptCleanOption'),
-          type: 'boolean',
-        },
-      },
-      configName: 'tsconfig.json',
-      configOption: '',
-      description: this.tool.msg('app:typescriptDescription'),
-      helpOption: '--help --all',
-      title: 'TypeScript',
-      watchOptions: ['-w', '--watch'],
-      workspaceStrategy: 'copy',
-    });
+	bootstrap() {
+		this.setMetadata({
+			bin: 'tsc',
+			commandOptions: {
+				clean: {
+					default: false,
+					description: this.tool.msg('app:typescriptCleanOption'),
+					type: 'boolean',
+				},
+			},
+			configName: 'tsconfig.json',
+			configOption: '',
+			description: this.tool.msg('app:typescriptDescription'),
+			helpOption: '--help --all',
+			title: 'TypeScript',
+			watchOptions: ['-w', '--watch'],
+			workspaceStrategy: 'copy',
+		});
 
-    this.registerCommand(
-      'sync-project-refs',
-      { description: this.tool.msg('app:typescriptSyncProjectRefsDescription') },
-      syncProjectRefs,
-    );
+		this.registerCommand(
+			'sync-project-refs',
+			{ description: this.tool.msg('app:typescriptSyncProjectRefsDescription') },
+			syncProjectRefs,
+		);
 
-    this.onCreateConfigFile.listen(this.handlePrepareConfigs);
-    this.onBeforeExecute.listen(this.handleCleanTarget);
-  }
+		this.onCreateConfigFile.listen(this.handlePrepareConfigs);
+		this.onBeforeExecute.listen(this.handleCleanTarget);
+	}
 
-  /**
-   * Automatically clean the target folder if `outDir` and `--clean` is used.
-   */
-  handleCleanTarget = (context: DriverContext) => {
-    // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
-    const outDir = context.getRiskyOption('outDir', true) || this.config.compilerOptions?.outDir;
+	/**
+	 * Automatically clean the target folder if `outDir` and `--clean` is used.
+	 */
+	handleCleanTarget = (context: DriverContext) => {
+		// eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
+		const outDir = context.getRiskyOption('outDir', true) || this.config.compilerOptions?.outDir;
 
-    if (context.getRiskyOption('clean') && typeof outDir === 'string' && outDir) {
-      rimraf.sync(Path.resolve(outDir).path());
-    }
+		if (context.getRiskyOption('clean') && typeof outDir === 'string' && outDir) {
+			rimraf.sync(Path.resolve(outDir).path());
+		}
 
-    return Promise.resolve();
-  };
+		return Promise.resolve();
+	};
 
-  /**
-   * Extract compiler options from the root config into a separate config purely for
-   * extending options. Update the root config with references to all workspaces.
-   */
-  handlePrepareConfigs = (context: ConfigContext, configPath: Path, config: TypeScriptConfig) => {
-    const { tool } = this;
-    const { srcFolder, testsFolder } = this.options;
-    const workspacePackages = tool.project.getWorkspacePackages();
+	/**
+	 * Extract compiler options from the root config into a separate config purely for
+	 * extending options. Update the root config with references to all workspaces.
+	 */
+	handlePrepareConfigs = (context: ConfigContext, configPath: Path, config: TypeScriptConfig) => {
+		const { tool } = this;
+		const { srcFolder, testsFolder } = this.options;
+		const workspacePackages = tool.project.getWorkspacePackages();
 
-    if (workspacePackages.length === 0) {
-      return;
-    }
+		if (workspacePackages.length === 0) {
+			return;
+		}
 
-    // Extract compiler optionst to a separate config
-    const optionsConfigPath = configPath.parent().append('tsconfig.options.json');
+		// Extract compiler optionst to a separate config
+		const optionsConfigPath = configPath.parent().append('tsconfig.options.json');
 
-    void writeFile(optionsConfigPath, {
-      compilerOptions: {
-        ...config.compilerOptions,
-        composite: true,
-        declaration: true,
-        declarationMap: true,
-        outDir: undefined,
-        outFile: undefined,
-      },
-    });
+		void writeFile(optionsConfigPath, {
+			compilerOptions: {
+				...config.compilerOptions,
+				composite: true,
+				declaration: true,
+				declarationMap: true,
+				outDir: undefined,
+				outFile: undefined,
+			},
+		});
 
-    // Delete problematic root options
-    delete config.compilerOptions;
-    delete config.include;
-    delete config.exclude;
+		// Delete problematic root options
+		delete config.compilerOptions;
+		delete config.include;
+		delete config.exclude;
 
-    // Generate references and update paths
-    config.extends = './tsconfig.options.json';
-    config.files = [];
-    config.references ||= [];
+		// Generate references and update paths
+		config.extends = './tsconfig.options.json';
+		config.files = [];
+		config.references ||= [];
 
-    workspacePackages.forEach(({ metadata }) => {
-      const pkgPath = new Path(metadata.packagePath);
-      const srcPath = pkgPath.append(srcFolder);
-      const testsPath = pkgPath.append(testsFolder);
+		workspacePackages.forEach(({ metadata }) => {
+			const pkgPath = new Path(metadata.packagePath);
+			const srcPath = pkgPath.append(srcFolder);
+			const testsPath = pkgPath.append(testsFolder);
 
-      // Reference a package *only* if it has a src folder
-      if (srcFolder && srcPath.exists()) {
-        config.references!.push({
-          path: tool.project.root.relativeTo(pkgPath).path(),
-        });
+			// Reference a package *only* if it has a src folder
+			if (srcFolder && srcPath.exists()) {
+				config.references!.push({
+					path: tool.project.root.relativeTo(pkgPath).path(),
+				});
 
-        // Reference a separate tests folder if it exists
-        if (testsFolder && testsPath.exists()) {
-          config.references!.push({
-            path: tool.project.root.relativeTo(testsPath).path(),
-          });
-        }
-      }
-    });
+				// Reference a separate tests folder if it exists
+				if (testsFolder && testsPath.exists()) {
+					config.references!.push({
+						path: tool.project.root.relativeTo(testsPath).path(),
+					});
+				}
+			}
+		});
 
-    // Add to context so that it can be automatically cleaned up
-    context.addConfigPath('typescript', optionsConfigPath);
-  };
+		// Add to context so that it can be automatically cleaned up
+		context.addConfigPath('typescript', optionsConfigPath);
+	};
 }

@@ -47,8 +47,8 @@ Create a file at `configs/jest.ts` (or `js`) in which to house your Jest configu
 import { JestConfig } from '@beemo/driver-jest';
 
 const config: JestConfig = {
-  setupFilesAfterEnv: ['<rootDir>/tests/setup.ts'],
-  // ...
+	setupFilesAfterEnv: ['<rootDir>/tests/setup.ts'],
+	// ...
 };
 
 export default config;
@@ -62,8 +62,8 @@ In your consuming project, enable the driver by adding `jest` to your `drivers` 
 import { BeemoConfig } from '@beemo/core';
 
 const config: BeemoConfig = {
-  module: '<config-module>',
-  drivers: ['jest'],
+	module: '<config-module>',
+	drivers: ['jest'],
 };
 
 export default config;

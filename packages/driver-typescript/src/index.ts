@@ -10,5 +10,5 @@ export * from './types';
 
 // eslint-disable-next-line import/no-default-export
 export default function typeScriptDriver(options?: DriverOptions) {
-  return new TypeScriptDriver(options);
+	return new TypeScriptDriver(options);
 }

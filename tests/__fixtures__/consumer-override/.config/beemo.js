@@ -1,3 +1,3 @@
 module.exports = {
-  drivers: ['babel'],
+	drivers: ['babel'],
 };

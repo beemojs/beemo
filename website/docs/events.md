@@ -14,10 +14,10 @@ default export or as a named `bootstrap` export. This function will receive a
 import { Tool } from '@beemo/core';
 
 export default function bootstrap(tool: Tool) {
-  // Add command line args to every execution
-  tool.driverRegistry.get('eslint').onBeforeExecute.listen((context) => {
-    context.addOptions(['--color', '--report-unused-disable-directives']);
-  });
+	// Add command line args to every execution
+	tool.driverRegistry.get('eslint').onBeforeExecute.listen((context) => {
+		context.addOptions(['--color', '--report-unused-disable-directives']);
+	});
 }
 ```
 

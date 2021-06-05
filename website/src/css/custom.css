@@ -6,43 +6,43 @@
  */
 
 :root {
-  --ifm-code-font-size: 95%;
+	--ifm-code-font-size: 95%;
 }
 
 /* https://lyft-colorbox.herokuapp.com/#steps=7#hue_start=182#hue_end=190#hue_curve=easeInQuad#sat_start=4#sat_end=90#sat_curve=easeOutQuad#sat_rate=130#lum_start=100#lum_end=53#lum_curve=easeOutQuad#lock_hex=40D5BC#minor_steps_map=0 */
 html[data-theme='light'] {
-  --ifm-color-primary: #11c7b6;
-  --ifm-color-primary-dark: #00b2b0;
-  --ifm-color-primary-darker: #008a96;
-  --ifm-color-primary-darkest: #006275;
-  --ifm-color-primary-light: #40d5bc;
-  --ifm-color-primary-lighter: #83dad1;
-  --ifm-color-primary-lightest: #a8d9d8;
+	--ifm-color-primary: #11c7b6;
+	--ifm-color-primary-dark: #00b2b0;
+	--ifm-color-primary-darker: #008a96;
+	--ifm-color-primary-darkest: #006275;
+	--ifm-color-primary-light: #40d5bc;
+	--ifm-color-primary-lighter: #83dad1;
+	--ifm-color-primary-lightest: #a8d9d8;
 }
 
 /* https://lyft-colorbox.herokuapp.com/#steps=7#hue_start=182#hue_end=190#hue_curve=easeInQuad#sat_start=4#sat_end=90#sat_curve=easeOutQuad#sat_rate=130#lum_start=100#lum_end=53#lum_curve=easeOutQuad#lock_hex=40D5BC#minor_steps_map=0 */
 html[data-theme='dark'] {
-  --ifm-color-primary: #12cebc;
-  --ifm-color-primary-dark: #00bebb;
-  --ifm-color-primary-darker: #0098a5;
-  --ifm-color-primary-darkest: #007187;
-  --ifm-color-primary-light: #40d5bc;
-  --ifm-color-primary-lighter: #8be7de;
-  --ifm-color-primary-lightest: #bcf3f1;
+	--ifm-color-primary: #12cebc;
+	--ifm-color-primary-dark: #00bebb;
+	--ifm-color-primary-darker: #0098a5;
+	--ifm-color-primary-darkest: #007187;
+	--ifm-color-primary-light: #40d5bc;
+	--ifm-color-primary-lighter: #8be7de;
+	--ifm-color-primary-lightest: #bcf3f1;
 }
 
 .hero__subtitle {
-  width: 80%;
-  margin-left: auto;
-  margin-right: auto;
+	width: 80%;
+	margin-left: auto;
+	margin-right: auto;
 }
 
 @media screen and (min-width: 966px) {
-  .hero__subtitle {
-    width: 60%;
-  }
+	.hero__subtitle {
+		width: 60%;
+	}
 }
 
 .text--muted {
-  color: var(--ifm-color-secondary-darkest);
+	color: var(--ifm-color-secondary-darkest);
 }

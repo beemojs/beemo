@@ -10,5 +10,5 @@ export * from './types';
 
 // eslint-disable-next-line import/no-default-export
 export default function mochaDriver(options?: DriverOptions) {
-  return new MochaDriver(options);
+	return new MochaDriver(options);
 }

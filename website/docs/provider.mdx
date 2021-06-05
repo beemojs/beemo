@@ -119,14 +119,14 @@ Each configuration file should return an object. Easy enough.
 import { BabelConfig } from '@beemo/driver-babel';
 
 const config: BabelConfig = {
-  presets: [
-    [
-      '@babel/preset-env',
-      {
-        targets: { node: 'current' },
-      },
-    ],
-  ],
+	presets: [
+		[
+			'@babel/preset-env',
+			{
+				targets: { node: 'current' },
+			},
+		],
+	],
 };
 
 export default config;
@@ -137,14 +137,14 @@ export default config;
 
 ```js title="configs/babel.js"
 module.exports = {
-  presets: [
-    [
-      '@babel/preset-env',
-      {
-        targets: { node: 'current' },
-      },
-    ],
-  ],
+	presets: [
+		[
+			'@babel/preset-env',
+			{
+				targets: { node: 'current' },
+			},
+		],
+	],
 };
 ```
 
@@ -160,20 +160,20 @@ import { BabelConfig } from '@beemo/driver-babel';
 
 const { context, tool } = process.beemo;
 const presets: BabelConfig['presets'] = [
-  [
-    '@babel/preset-env',
-    {
-      targets: { node: 'current' },
-    },
-  ],
+	[
+		'@babel/preset-env',
+		{
+			targets: { node: 'current' },
+		},
+	],
 ];
 
 if (context.args.react) {
-  presets.push('@babel/preset-react');
+	presets.push('@babel/preset-react');
 }
 
 export default {
-  presets,
+	presets,
 };
 ```
 
@@ -209,26 +209,26 @@ Beemo, and define the `execute()` and `parse()` methods.
 import { Arguments, ParserOptions, Script, ScriptContext } from '@beemo/core';
 
 interface InitProjectOptions {
-  dryRun: boolean;
+	dryRun: boolean;
 }
 
 class InitProjectScript extends Script<InitProjectOptions> {
-  readonly name = 'init-project';
+	readonly name = 'init-project';
 
-  parse(): ParserOptions<InitProjectOptions> {
-    return {
-      dryRun: {
-        description: 'Execute a dry run',
-        type: 'boolean',
-      },
-    };
-  }
+	parse(): ParserOptions<InitProjectOptions> {
+		return {
+			dryRun: {
+				description: 'Execute a dry run',
+				type: 'boolean',
+			},
+		};
+	}
 
-  execute(context: ScriptContext, args: Arguments<InitProjectOptions>) {
-    if (args.dryRun) {
-      // Do something
-    }
-  }
+	execute(context: ScriptContext, args: Arguments<InitProjectOptions>) {
+		if (args.dryRun) {
+			// Do something
+		}
+	}
 }
 
 export default () => new InitProjectScript();
@@ -241,22 +241,22 @@ export default () => new InitProjectScript();
 const { Script } = require('@beemo/core');
 
 class InitProjectScript extends Script {
-  name = 'init-project';
+	name = 'init-project';
 
-  parse() {
-    return {
-      dryRun: {
-        description: 'Execute a dry run',
-        type: 'boolean',
-      },
-    };
-  }
+	parse() {
+		return {
+			dryRun: {
+				description: 'Execute a dry run',
+				type: 'boolean',
+			},
+		};
+	}
 
-  execute(context, args) {
-    if (args.dryRun) {
-      // Do something
-    }
-  }
+	execute(context, args) {
+		if (args.dryRun) {
+			// Do something
+		}
+	}
 }
 
 module.exports = () => new InitProjectScript();
@@ -300,8 +300,8 @@ You can also set the access in `package.json`.
 
 ```json
 {
-  "publishConfig": {
-    "access": "public"
-  }
+	"publishConfig": {
+		"access": "public"
+	}
 }
 ```
