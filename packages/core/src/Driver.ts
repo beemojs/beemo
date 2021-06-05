@@ -1,7 +1,7 @@
 import execa from 'execa';
 import mergeWith from 'lodash/mergeWith';
 import { PrimitiveType } from '@boost/args';
-import { Blueprint, isObject, optimal, Path, Predicates, predicates } from '@boost/common';
+import { Blueprint, isObject, optimal, Path, Predicates, predicates, toArray } from '@boost/common';
 import { ConcurrentEvent, Event } from '@boost/event';
 import { Plugin } from '@boost/plugin';
 import {
@@ -156,22 +156,18 @@ export abstract class Driver<
    * Return a list of user defined arguments.
    */
   getArgs(): Argv {
-    return (Array.isArray(this.options.args) ? this.options.args : []) as Argv;
+    return toArray(this.options.args);
   }
 
   /**
    * Return a list of dependent drivers.
    */
   getDependencies(): string[] {
-    const dependencies = (
-      Array.isArray(this.options.dependencies) ? this.options.dependencies : []
-    ) as string[];
-
     return [
       // Always required; configured by the driver
       ...this.metadata.dependencies,
       // Custom; configured by the consumer
-      ...dependencies,
+      ...toArray(this.options.dependencies),
     ];
   }
 

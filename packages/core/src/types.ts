@@ -28,9 +28,9 @@ export interface BeemoProcess<C extends Context = Context> {
 export type UnknownSettings = Record<string, unknown>;
 
 export interface BootstrapFile {
+  (tool: BeemoTool): Promise<void> | void;
   bootstrap?: (tool: BeemoTool) => Promise<void> | void;
   default?: (tool: BeemoTool) => Promise<void> | void;
-  (tool: BeemoTool): Promise<void> | void;
 }
 
 export type Execution = ExecaReturnValue;
