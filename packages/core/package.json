@@ -51,7 +51,7 @@
     "@boost/plugin": "^2.3.3",
     "@boost/terminal": "^2.2.1",
     "@boost/translate": "^2.2.5",
-    "execa": "^5.0.0",
+    "execa": "^5.1.1",
     "fast-glob": "^3.2.5",
     "fs-extra": "^9.1.0",
     "hygen": "^6.1.0",
