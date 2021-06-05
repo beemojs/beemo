@@ -8,7 +8,6 @@ import { JestDriver } from './JestDriver';
 
 export * from './types';
 
-// eslint-disable-next-line import/no-default-export
 export default function jestDriver(options?: DriverOptions) {
 	return new JestDriver(options);
 }

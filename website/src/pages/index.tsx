@@ -1,4 +1,4 @@
-/* eslint-disable sort-keys, import/no-unresolved, react/jsx-no-literals, react/no-array-index-key */
+/* eslint-disable import/no-unresolved, react/jsx-no-literals, react/no-array-index-key */
 
 import React from 'react';
 import clsx from 'clsx';
@@ -92,7 +92,6 @@ function Feature({ imageUrl, title, description }: FeatureProps) {
 	);
 }
 
-// eslint-disable-next-line import/no-default-export
 export default function Home() {
 	const context = useDocusaurusContext() as { siteConfig: { tagline: string; title: string } };
 	const siteConfig = context.siteConfig || {};
