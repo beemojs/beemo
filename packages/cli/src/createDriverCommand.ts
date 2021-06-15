@@ -24,6 +24,7 @@ export function createDriverCommand(
 
 			return {
 				...parent,
+				loose: true,
 				options: {
 					...parent.options,
 					...driver.metadata.commandOptions,
