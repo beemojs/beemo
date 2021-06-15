@@ -349,10 +349,23 @@ export class Tool extends Contract<ToolOptions> {
 		context.workspaces = this.project.getWorkspaceGlobs();
 
 		// Make the tool available for all processes
-		process[this.options.projectName as 'beemo'] = {
+		const processObject = {
 			context,
 			tool: this,
 		};
+
+		Object.defineProperties(process, {
+			beemo: {
+				configurable: true,
+				enumerable: true,
+				value: processObject,
+			},
+			[this.options.projectName]: {
+				configurable: true,
+				enumerable: true,
+				value: processObject,
+			},
+		});
 
 		// Set the current class to the tool instance
 		this.context = context;
