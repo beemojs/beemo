@@ -19,6 +19,7 @@ lib/
 node_modules/
 dist/
 reports/
+mjs/
 
 # Custom
 *.min.js
