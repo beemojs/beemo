@@ -4,9 +4,9 @@ import { WebpackConfig } from './types';
 // Success: Writes bundle/file metadata to stdout
 // Failure: Writes failed tests to stderr
 export class WebpackDriver extends Driver<WebpackConfig> {
-	readonly name = '@beemo/driver-webpack';
+	override readonly name = '@beemo/driver-webpack';
 
-	bootstrap() {
+	override bootstrap() {
 		this.setMetadata({
 			bin: 'webpack',
 			configName: 'webpack.config.js',

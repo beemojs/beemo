@@ -4,9 +4,9 @@ import { FlowConfig, LintsConfig, OptionsConfig } from './types';
 // Success: Writes "Found 0 errors" to stdout and server output to stderr
 // Failure: Writes file list to stdout and server output to stderr
 export class FlowDriver extends Driver<FlowConfig> {
-	readonly name = '@beemo/driver-flow';
+	override readonly name = '@beemo/driver-flow';
 
-	bootstrap() {
+	override bootstrap() {
 		this.setMetadata({
 			bin: 'flow',
 			configName: '.flowconfig',
@@ -16,7 +16,7 @@ export class FlowDriver extends Driver<FlowConfig> {
 		});
 	}
 
-	formatConfig(data: FlowConfig): string {
+	override formatConfig(data: FlowConfig): string {
 		const output: string[] = [];
 
 		Object.keys(data).forEach((key) => {
@@ -134,7 +134,7 @@ export class FlowDriver extends Driver<FlowConfig> {
 
 	// https://github.com/facebook/flow/blob/e466b0ee519622a8977e89708be156a73e570ef0/hack/utils/exit_status.ml#L78
 	// https://github.com/facebook/flow/blob/e466b0ee519622a8977e89708be156a73e570ef0/src/common/flowExitStatus.ml#L54
-	processFailure(error: Execution) {
+	override processFailure(error: Execution) {
 		if (error.exitCode === 2) {
 			this.setOutput('stderr', error.stdout); // Command failures
 		} else {

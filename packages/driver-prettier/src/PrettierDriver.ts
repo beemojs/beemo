@@ -6,13 +6,13 @@ import { PrettierArgs, PrettierConfig } from './types';
 // Success: Writes formatted files to stdout
 // Failure: Writes to stderr for no files found and syntax errors
 export class PrettierDriver extends Driver<PrettierConfig> {
-	readonly name = '@beemo/driver-prettier';
+	override readonly name = '@beemo/driver-prettier';
 
 	readonly onCreateIgnoreFile = new Event<[ConfigContext, Path, { ignore: string[] }]>(
 		'create-ignore-file',
 	);
 
-	bootstrap() {
+	override bootstrap() {
 		this.setMetadata({
 			bin: 'prettier',
 			configName: 'prettier.config.js',

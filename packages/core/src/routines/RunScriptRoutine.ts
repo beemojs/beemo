@@ -13,7 +13,7 @@ import { ExecuteScriptRoutine } from './script/ExecuteScriptRoutine';
 export class RunScriptRoutine extends RunInWorkspacesRoutine<ScriptContext> {
 	errors: Error[] = [];
 
-	async getInitialValue(context: ScriptContext): Promise<Script> {
+	override async getInitialValue(context: ScriptContext): Promise<Script> {
 		const { tool } = this.options;
 
 		return this.createWaterfallPipeline(context)

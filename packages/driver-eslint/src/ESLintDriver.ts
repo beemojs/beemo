@@ -6,13 +6,13 @@ import { ESLintArgs, ESLintConfig } from './types';
 // Success: Writes warnings to stdout
 // Failure: Writes failures to stderr
 export class ESLintDriver extends Driver<ESLintConfig> {
-	readonly name = '@beemo/driver-eslint';
+	override readonly name = '@beemo/driver-eslint';
 
 	readonly onCreateIgnoreFile = new Event<[ConfigContext, Path, { ignore: string[] }]>(
 		'create-ignore-file',
 	);
 
-	bootstrap() {
+	override bootstrap() {
 		this.setMetadata({
 			bin: 'eslint',
 			configName: '.eslintrc.js',
@@ -27,7 +27,7 @@ export class ESLintDriver extends Driver<ESLintConfig> {
 	 * ESLint writes warnings to stdout, so we need to display
 	 * both stdout and stderr on failure.
 	 */
-	processFailure(error: Execution) {
+	override processFailure(error: Execution) {
 		const { stderr, stdout } = error;
 
 		if (stderr) {

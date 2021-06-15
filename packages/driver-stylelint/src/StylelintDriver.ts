@@ -6,13 +6,13 @@ import { StylelintArgs, StylelintConfig } from './types';
 // Success: Writes warnings to stdout
 // Failure: Writes failures to stdout
 export class StylelintDriver extends Driver<StylelintConfig> {
-	readonly name = '@beemo/driver-stylelint';
+	override readonly name = '@beemo/driver-stylelint';
 
 	readonly onCreateIgnoreFile = new Event<[ConfigContext, Path, { ignore: string[] }]>(
 		'create-ignore-file',
 	);
 
-	bootstrap() {
+	override bootstrap() {
 		this.setMetadata({
 			bin: 'stylelint',
 			configName: '.stylelintrc.js',

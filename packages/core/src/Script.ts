@@ -38,7 +38,7 @@ export abstract class Script<O extends object = {}, Options extends object = {}>
 
 	bootstrap() {}
 
-	startup(tool: BeemoTool) {
+	override startup(tool: BeemoTool) {
 		this.tool = tool;
 		this.bootstrap();
 	}

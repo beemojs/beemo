@@ -29,7 +29,7 @@ export class RunDriver extends BaseRunCommand<DriverContextOptions, [], RunDrive
 		await pipeline.run();
 	}
 
-	blueprint({ array, string }: Predicates): Blueprint<RunDriverConfig> {
+	override blueprint({ array, string }: Predicates): Blueprint<RunDriverConfig> {
 		return {
 			parallelArgv: array(array(string())),
 		};

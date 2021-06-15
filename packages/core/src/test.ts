@@ -23,11 +23,11 @@ export { mockDebugger };
 const TEST_ROOT = new Path(process.env.BEEMO_TEST_ROOT ?? process.cwd());
 
 export class TestDriver<O extends object = {}> extends Driver<O> {
-	readonly name = 'test-driver';
+	override readonly name = 'test-driver';
 }
 
 export class TestScript<O extends object = {}> extends Script<O> {
-	readonly name = 'test-script';
+	override readonly name = 'test-script';
 
 	execute(): any {
 		return Promise.resolve();

@@ -108,7 +108,7 @@ export abstract class Driver<
 
 	bootstrap() {}
 
-	startup(tool: BeemoTool) {
+	override startup(tool: BeemoTool) {
 		this.tool = tool;
 		this.bootstrap();
 	}

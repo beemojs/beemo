@@ -15,9 +15,9 @@ export interface RunIntegrationTestsOptions {
 }
 
 class RunIntegrationTestsScript extends Script<RunIntegrationTestsOptions> {
-	name = '@beemo/script-run-integration-tests';
+	override readonly name = '@beemo/script-run-integration-tests';
 
-	parse(): ParserOptions<RunIntegrationTestsOptions> {
+	override parse(): ParserOptions<RunIntegrationTestsOptions> {
 		return {
 			options: {
 				type: {
@@ -88,6 +88,7 @@ class RunIntegrationTestsScript extends Script<RunIntegrationTestsOptions> {
 	}
 }
 
+// eslint-disable-next-line import/no-default-export
 export default function runIntegrationTests() {
 	return new RunIntegrationTestsScript();
 }

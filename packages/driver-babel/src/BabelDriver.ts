@@ -5,9 +5,9 @@ import { BabelArgs, BabelConfig } from './types';
 // Success: Writes file list to stdout
 // Failure: Throws SyntaxError to stderr
 export class BabelDriver extends Driver<BabelConfig> {
-	readonly name = '@beemo/driver-babel';
+	override readonly name = '@beemo/driver-babel';
 
-	bootstrap() {
+	override bootstrap() {
 		this.setMetadata({
 			bin: 'babel',
 			commandOptions: {
@@ -27,7 +27,7 @@ export class BabelDriver extends Driver<BabelConfig> {
 		this.onBeforeExecute.listen(this.handleCleanTarget);
 	}
 
-	extractErrorMessage(error: { message: string }): string {
+	override extractErrorMessage(error: { message: string }): string {
 		if (error.message.includes('SyntaxError')) {
 			return error.message.split(/\s+at/u, 1)[0].trim();
 		}

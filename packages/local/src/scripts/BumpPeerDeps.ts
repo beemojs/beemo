@@ -11,9 +11,9 @@ export interface BumpPeerDepsOptions {
 const RELEASE_TYPES: BumpPeerDepsOptions['release'][] = ['major', 'minor', 'patch'];
 
 class BumpPeerDepsScript extends Script<BumpPeerDepsOptions> {
-	name = '@beemo/script-bump-peer-deps';
+	override readonly name = '@beemo/script-bump-peer-deps';
 
-	parse(): ParserOptions<BumpPeerDepsOptions> {
+	override parse(): ParserOptions<BumpPeerDepsOptions> {
 		return {
 			options: {
 				release: {
@@ -77,6 +77,7 @@ class BumpPeerDepsScript extends Script<BumpPeerDepsOptions> {
 	}
 }
 
+// eslint-disable-next-line import/no-default-export
 export default function bumpPeerDeps() {
 	return new BumpPeerDepsScript();
 }

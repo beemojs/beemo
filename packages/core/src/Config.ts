@@ -24,7 +24,7 @@ export class Config extends Configuration<ConfigFile> {
 		};
 	}
 
-	bootstrap() {
+	override bootstrap() {
 		this.addProcessHandler('drivers', mergePlugins);
 		this.addProcessHandler('scripts', mergePlugins);
 	}

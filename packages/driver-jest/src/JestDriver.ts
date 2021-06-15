@@ -6,9 +6,9 @@ import { JestConfig } from './types';
 //  Writes coverage to stdout
 // Failure: Writes failed tests to stderr
 export class JestDriver extends Driver<JestConfig> {
-	readonly name = '@beemo/driver-jest';
+	override readonly name = '@beemo/driver-jest';
 
-	bootstrap() {
+	override bootstrap() {
 		this.setMetadata({
 			bin: 'jest',
 			configName: 'jest.config.js',
@@ -19,7 +19,7 @@ export class JestDriver extends Driver<JestConfig> {
 		});
 	}
 
-	getDependencies(): string[] {
+	override getDependencies(): string[] {
 		const deps = super.getDependencies();
 
 		if (this.tool.driverRegistry.isRegistered('babel') && !deps.includes('babel')) {
@@ -31,7 +31,7 @@ export class JestDriver extends Driver<JestConfig> {
 
 	// https://github.com/nodejs/node/issues/19218
 	// istanbul ignore next
-	getSupportedOptions(): string[] {
+	override getSupportedOptions(): string[] {
 		return [
 			'--all',
 			'--automock',
@@ -153,7 +153,7 @@ export class JestDriver extends Driver<JestConfig> {
 		];
 	}
 
-	processSuccess(response: Execution) {
+	override processSuccess(response: Execution) {
 		const out = response.stdout.trim();
 		const err = response.stderr.trim();
 

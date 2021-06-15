@@ -3,9 +3,9 @@ import { LernaConfig } from './types';
 
 // Success: Writes command output to stdout, version footer to stderr
 export class LernaDriver extends Driver<LernaConfig> {
-	readonly name = '@beemo/driver-lerna';
+	override readonly name = '@beemo/driver-lerna';
 
-	bootstrap() {
+	override bootstrap() {
 		this.setMetadata({
 			bin: 'lerna',
 			configName: 'lerna.json',

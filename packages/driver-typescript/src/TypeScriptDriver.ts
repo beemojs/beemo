@@ -10,13 +10,13 @@ import { TypeScriptConfig, TypeScriptOptions } from './types';
 // Success: Writes nothing to stdout or stderr
 // Failure: Writes to stdout on syntax and type error
 export class TypeScriptDriver extends Driver<TypeScriptConfig, TypeScriptOptions> {
-	readonly name = '@beemo/driver-typescript';
+	override readonly name = '@beemo/driver-typescript';
 
 	readonly onCreateProjectConfigFile = new Event<[Path, TypeScriptConfig, boolean]>(
 		'create-project-config-file',
 	);
 
-	blueprint(preds: Predicates): Blueprint<TypeScriptOptions> {
+	override blueprint(preds: Predicates): Blueprint<TypeScriptOptions> {
 		const { bool, string } = preds;
 
 		return {
@@ -31,7 +31,7 @@ export class TypeScriptDriver extends Driver<TypeScriptConfig, TypeScriptOptions
 		};
 	}
 
-	bootstrap() {
+	override bootstrap() {
 		this.setMetadata({
 			bin: 'tsc',
 			commandOptions: {

@@ -34,7 +34,7 @@ export class BatchStream extends Transform {
 		}
 	}
 
-	_transform(chunk: Buffer, encoding: string, callback: TransformCallback) {
+	override _transform(chunk: Buffer, encoding: string, callback: TransformCallback) {
 		this.bufferedBatch = this.bufferedBatch ? Buffer.concat([this.bufferedBatch, chunk]) : chunk;
 
 		if (this.timeout) {
@@ -48,7 +48,7 @@ export class BatchStream extends Transform {
 		callback();
 	}
 
-	_flush(callback: TransformCallback) {
+	override _flush(callback: TransformCallback) {
 		this.flush();
 		callback();
 	}

@@ -30,7 +30,7 @@ describe('ExecuteScriptRoutine', () => {
 	describe('execute()', () => {
 		it('calls the script parse() and execute()', async () => {
 			class BaseTestScript extends TestScript<{ foo: boolean }> {
-				parse() {
+				override parse() {
 					return {
 						options: {
 							foo: {
@@ -88,7 +88,7 @@ describe('ExecuteScriptRoutine', () => {
 
 		it('emits `onAfterExecute` event on success', async () => {
 			class SuccessScript extends TestScript {
-				execute() {
+				override execute() {
 					return Promise.resolve(123);
 				}
 			}
@@ -105,7 +105,7 @@ describe('ExecuteScriptRoutine', () => {
 
 		it('emits `onFailedExecute` event on failure', async () => {
 			class FailureScript extends TestScript {
-				execute() {
+				override execute() {
 					return Promise.reject(new Error('Oops'));
 				}
 			}

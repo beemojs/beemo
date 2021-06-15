@@ -19,7 +19,7 @@ export function createDriverCommand(
 		},
 	)
 	class RunExplicitDriver extends BaseRunCommand<DriverContextOptions, []> {
-		getParserOptions(): ParserOptions<DriverContextOptions & GlobalOptions> {
+		override getParserOptions(): ParserOptions<DriverContextOptions & GlobalOptions> {
 			const parent = super.getParserOptions();
 
 			return {

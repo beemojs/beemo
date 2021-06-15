@@ -7,9 +7,9 @@ import { RollupConfig } from './types';
 // Failure:
 //  Writes input -> output file list to stderr with syntax/error
 export class RollupDriver extends Driver<RollupConfig> {
-	readonly name = '@beemo/driver-rollup';
+	override readonly name = '@beemo/driver-rollup';
 
-	bootstrap() {
+	override bootstrap() {
 		this.setMetadata({
 			bin: 'rollup',
 			configName: 'rollup.config.js',
