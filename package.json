@@ -50,8 +50,8 @@
     "website"
   ],
   "engines": {
-    "node": ">=12.0.0",
-    "npm": ">=6.9.0"
+    "node": ">=12.17.0",
+    "npm": ">=6.13.0"
   },
   "funding": {
     "type": "ko-fi",
