@@ -6219,7 +6219,7 @@ __metadata:
     "@types/semver": ^7.3.6
     conventional-changelog-beemo: ^2.1.0
     lerna: ^4.0.0
-    packemon: ^1.0.0-alpha.0
+    packemon: ^1.0.0
     ts-node: ^9.1.1
     typescript: ^4.3.2
     webpack: ^5.38.1
@@ -15216,9 +15216,9 @@ fsevents@^1.2.7:
   languageName: node
   linkType: hard
 
-"packemon@npm:^1.0.0-alpha.0":
-  version: 1.0.0-alpha.0
-  resolution: "packemon@npm:1.0.0-alpha.0"
+"packemon@npm:^1.0.0":
+  version: 1.0.0
+  resolution: "packemon@npm:1.0.0"
   dependencies:
     "@babel/core": ^7.14.3
     "@babel/plugin-proposal-decorators": ^7.14.2
@@ -15259,7 +15259,7 @@ fsevents@^1.2.7:
     spdx-license-list: ^6.4.0
   bin:
     packemon: lib/bin.js
-  checksum: cf927bcd901dbb30bfa7ce118bf8f571214c7f3a31b3c9e77c9fa81c70adf5472d5c0de2acef111d90961ffba2d9398ac20a0ae937e6ea8b16468ccba6e68260
+  checksum: ee6907322ebd166f62c4932d81a662d59c1f47583130835748f6b89f6fd0525f486a75902e9b674f1b908c97837ff5b590c6150a006c33eddac93b0ef025cf7d
   languageName: node
   linkType: hard
 
