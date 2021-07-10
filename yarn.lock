@@ -1924,8 +1924,8 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@beemo/driver-jest@workspace:packages/driver-jest"
   dependencies:
-    "@jest/types": ^27.0.2
-    jest: ^27.0.4
+    "@jest/types": ^27.0.6
+    jest: ^27.0.6
   peerDependencies:
     "@beemo/core": ^2.0.0-alpha.0
     jest: ^26.0.0 || ^27.0.0
@@ -2957,7 +2957,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@jest/types@npm:^27.0.2, @jest/types@npm:^27.0.6":
+"@jest/types@npm:^27.0.6":
   version: 27.0.6
   resolution: "@jest/types@npm:27.0.6"
   dependencies:
@@ -4670,7 +4670,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/jest@npm:^26.0.23, @types/jest@npm:^26.0.24":
+"@types/jest@npm:^26.0.24":
   version: 26.0.24
   resolution: "@types/jest@npm:26.0.24"
   dependencies:
@@ -6210,7 +6210,7 @@ __metadata:
     "@types/eslint": ^7.2.13
     "@types/fs-extra": ^9.0.11
     "@types/is-glob": ^4.0.1
-    "@types/jest": ^26.0.23
+    "@types/jest": ^26.0.24
     "@types/lodash": ^4.14.170
     "@types/node": ^15.12.1
     "@types/prettier": ^2.2.3
@@ -12641,7 +12641,7 @@ fsevents@^1.2.7:
   languageName: node
   linkType: hard
 
-"jest@npm:^27.0.4, jest@npm:^27.0.6":
+"jest@npm:^27.0.6":
   version: 27.0.6
   resolution: "jest@npm:27.0.6"
   dependencies:
