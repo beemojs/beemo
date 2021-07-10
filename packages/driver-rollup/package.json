@@ -37,7 +37,7 @@
     "access": "public"
   },
   "devDependencies": {
-    "rollup": "^2.50.6"
+    "rollup": "^2.53.0"
   },
   "peerDependencies": {
     "@beemo/core": "^2.0.0-alpha.0",
