@@ -1913,7 +1913,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@beemo/driver-flow@workspace:packages/driver-flow"
   dependencies:
-    flow-bin: ^0.152.0
+    flow-bin: ^0.155.0
   peerDependencies:
     "@beemo/core": ^2.0.0-alpha.0
     flow-bin: "*"
@@ -9818,12 +9818,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"flow-bin@npm:^0.152.0":
-  version: 0.152.0
-  resolution: "flow-bin@npm:0.152.0"
+"flow-bin@npm:^0.155.0":
+  version: 0.155.0
+  resolution: "flow-bin@npm:0.155.0"
   bin:
     flow: cli.js
-  checksum: 485a7bd5b2f1b709dbc28e93e6acaee32c22982485e1f5d38405287ef59c8b52c78dd168df1dfe5f6e7cd0188e310db84ff13b6e23a08782625bcc6f955c005b
+  checksum: cb0363bf257cf25103fe461c41ee151241286e2f4d01de11dc47180ef9ddb1320b1f1fcb390ab90238313a0930af15817d01f1af8109b0493ba193594315e184
   languageName: node
   linkType: hard
 
