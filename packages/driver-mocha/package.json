@@ -38,11 +38,11 @@
     "access": "public"
   },
   "devDependencies": {
-    "mocha": "^8.4.0"
+    "mocha": "^9.0.2"
   },
   "peerDependencies": {
     "@beemo/core": "^2.0.0-alpha.0",
-    "mocha": "^8.0.0"
+    "mocha": "^8.0.0 || ^9.0.0"
   },
   "funding": {
     "type": "ko-fi",
