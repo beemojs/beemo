@@ -1960,7 +1960,7 @@ __metadata:
   dependencies:
     "@boost/event": ^2.3.2
     "@types/prettier": "*"
-    prettier: ^2.3.1
+    prettier: ^2.3.2
   peerDependencies:
     "@beemo/core": ^2.0.0-alpha.0
     prettier: ^2.0.0
@@ -4819,10 +4819,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/prettier@npm:*, @types/prettier@npm:^2.1.5, @types/prettier@npm:^2.2.3":
-  version: 2.3.0
-  resolution: "@types/prettier@npm:2.3.0"
-  checksum: 7c1ef16234220519d52b8a154723caf5c5dc9d5eaa85bfe06e367ba57472dab7f7fdac1ca7c29d9010d58f74f3b5235a9f8bad0111d9bad74018eb8141371e7e
+"@types/prettier@npm:*, @types/prettier@npm:^2.1.5, @types/prettier@npm:^2.3.2":
+  version: 2.3.2
+  resolution: "@types/prettier@npm:2.3.2"
+  checksum: 7b425386aaf3b03fa63382ed1aceff367477ef9a52a2705978bfb1495fa1d8795316e1ab84671f6c8c5920de59a33d1567d837b9eb033996983efdfdbce84cb3
   languageName: node
   linkType: hard
 
@@ -6248,7 +6248,7 @@ __metadata:
     "@types/jest": ^26.0.24
     "@types/lodash": ^4.14.171
     "@types/node": ^16.3.1
-    "@types/prettier": ^2.2.3
+    "@types/prettier": ^2.3.2
     "@types/react": ^16.14.8
     "@types/rimraf": ^3.0.1
     "@types/semver": ^7.3.7
@@ -16334,7 +16334,7 @@ fsevents@^1.2.7:
   languageName: node
   linkType: hard
 
-"prettier@npm:^2.3.1, prettier@npm:^2.3.2":
+"prettier@npm:^2.3.2":
   version: 2.3.2
   resolution: "prettier@npm:2.3.2"
   bin:
