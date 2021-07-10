@@ -1971,7 +1971,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@beemo/driver-rollup@workspace:packages/driver-rollup"
   dependencies:
-    rollup: ^2.50.6
+    rollup: ^2.53.0
   peerDependencies:
     "@beemo/core": ^2.0.0-alpha.0
     rollup: ^2.0.0
@@ -10015,7 +10015,7 @@ fsevents@^1.2.7:
   languageName: node
   linkType: hard
 
-"fsevents@^2.3.2, fsevents@~2.3.1":
+"fsevents@^2.3.2, fsevents@~2.3.1, fsevents@~2.3.2":
   version: 2.3.2
   resolution: "fsevents@npm:2.3.2"
   dependencies:
@@ -10034,7 +10034,7 @@ fsevents@^1.2.7:
   languageName: node
   linkType: hard
 
-"fsevents@patch:fsevents@^2.3.2#builtin<compat/fsevents>, fsevents@patch:fsevents@~2.3.1#builtin<compat/fsevents>":
+"fsevents@patch:fsevents@^2.3.2#builtin<compat/fsevents>, fsevents@patch:fsevents@~2.3.1#builtin<compat/fsevents>, fsevents@patch:fsevents@~2.3.2#builtin<compat/fsevents>":
   version: 2.3.2
   resolution: "fsevents@patch:fsevents@npm%3A2.3.2#builtin<compat/fsevents>::version=2.3.2&hash=11e9ea"
   dependencies:
@@ -17819,17 +17819,17 @@ resolve@~1.19.0:
   languageName: node
   linkType: hard
 
-"rollup@npm:^2.50.6, rollup@npm:^2.51.2":
-  version: 2.51.2
-  resolution: "rollup@npm:2.51.2"
+"rollup@npm:^2.51.2, rollup@npm:^2.53.0":
+  version: 2.53.0
+  resolution: "rollup@npm:2.53.0"
   dependencies:
-    fsevents: ~2.3.1
+    fsevents: ~2.3.2
   dependenciesMeta:
     fsevents:
       optional: true
   bin:
     rollup: dist/bin/rollup
-  checksum: adad3fa3993c5843cdfdd9d6e370a5780182816175c154a3bfb437f01ca7838b2725c2b3030eb3ba3b1002f0ce77f091be78bbfc4aef4b75ddd83302138a19c6
+  checksum: f0b2ae6c2a4a3d3ff67fd7b4f81cd1b8a8c227a87c993b75d4c0d37986284b5e3f27257b3a8c182347067e775dc3e8c1ac36592e4805f3e2253ba128976216ac
   languageName: node
   linkType: hard
 
