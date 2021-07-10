@@ -1902,7 +1902,7 @@ __metadata:
   dependencies:
     "@boost/event": ^2.3.2
     "@types/eslint": "*"
-    eslint: ^7.28.0
+    eslint: ^7.30.0
   peerDependencies:
     "@beemo/core": ^2.0.0-alpha.0
     eslint: ^7.0.0
@@ -4563,13 +4563,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/eslint@npm:*, @types/eslint@npm:^7.2.13":
-  version: 7.2.13
-  resolution: "@types/eslint@npm:7.2.13"
+"@types/eslint@npm:*, @types/eslint@npm:^7.2.14":
+  version: 7.2.14
+  resolution: "@types/eslint@npm:7.2.14"
   dependencies:
     "@types/estree": "*"
     "@types/json-schema": "*"
-  checksum: e55906fa72e6288bd129652c4b3aa992d7219481265e1651564ba0d5fbacf41e39f97252a9001549eac544e5465f7f93ae81844b1e291f6cbf17c17ec048f729
+  checksum: e7ab90a295beae9495e3241a57078cc36dd1b7e58d0d2605d927abbe6eee5b8996ab6aff0f6d230da93d5f0361b737416dd8137f6c89d38f19d3d1f51f34d22d
   languageName: node
   linkType: hard
 
@@ -6207,7 +6207,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "beemo-root@workspace:."
   dependencies:
-    "@types/eslint": ^7.2.13
+    "@types/eslint": ^7.2.14
     "@types/fs-extra": ^9.0.11
     "@types/is-glob": ^4.0.1
     "@types/jest": ^26.0.24
@@ -9102,7 +9102,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"eslint@npm:^7.28.0, eslint@npm:^7.30.0":
+"eslint@npm:^7.30.0":
   version: 7.30.0
   resolution: "eslint@npm:7.30.0"
   dependencies:
