@@ -2253,7 +2253,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@docusaurus/core@npm:2.0.0-beta.ff31de0ff, @docusaurus/core@npm:^2.0.0-beta.1":
+"@docusaurus/core@npm:2.0.0-beta.ff31de0ff, @docusaurus/core@npm:^2.0.0-beta.3":
   version: 2.0.0-beta.ff31de0ff
   resolution: "@docusaurus/core@npm:2.0.0-beta.ff31de0ff"
   dependencies:
@@ -2381,7 +2381,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@docusaurus/module-type-aliases@npm:^2.0.0-beta.1":
+"@docusaurus/module-type-aliases@npm:^2.0.0-beta.3":
   version: 2.0.0-beta.ff31de0ff
   resolution: "@docusaurus/module-type-aliases@npm:2.0.0-beta.ff31de0ff"
   checksum: a1d9314bd56dc275b6789ea5a7ab01a4b253534590e41609948d0314fe151c969eaefad8ed958f6deb4e9cbacf4b9059775e335056707339f5db7c0c360ccee3
@@ -2525,7 +2525,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@docusaurus/preset-classic@npm:^2.0.0-beta.1":
+"@docusaurus/preset-classic@npm:^2.0.0-beta.3":
   version: 2.0.0-beta.ff31de0ff
   resolution: "@docusaurus/preset-classic@npm:2.0.0-beta.ff31de0ff"
   dependencies:
@@ -20783,9 +20783,9 @@ resolve@~1.19.0:
   version: 0.0.0-use.local
   resolution: "website@workspace:website"
   dependencies:
-    "@docusaurus/core": ^2.0.0-beta.1
-    "@docusaurus/module-type-aliases": ^2.0.0-beta.1
-    "@docusaurus/preset-classic": ^2.0.0-beta.1
+    "@docusaurus/core": ^2.0.0-beta.3
+    "@docusaurus/module-type-aliases": ^2.0.0-beta.3
+    "@docusaurus/preset-classic": ^2.0.0-beta.3
     "@mdx-js/react": ^1.6.22
     clsx: ^1.1.1
     react: ^16.14.0
