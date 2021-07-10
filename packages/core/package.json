@@ -52,8 +52,8 @@
     "@boost/terminal": "^2.2.1",
     "@boost/translate": "^2.2.5",
     "execa": "^5.1.1",
-    "fast-glob": "^3.2.5",
-    "fs-extra": "^9.1.0",
+    "fast-glob": "^3.2.7",
+    "fs-extra": "^10.0.0",
     "hygen": "^6.1.0",
     "is-glob": "^4.0.1",
     "lodash": "^4.17.21",
@@ -61,7 +61,7 @@
   },
   "devDependencies": {
     "@boost/test-utils": "^2.3.1",
-    "@types/micromatch": "^4.0.1"
+    "@types/micromatch": "^4.0.2"
   },
   "funding": {
     "type": "ko-fi",
