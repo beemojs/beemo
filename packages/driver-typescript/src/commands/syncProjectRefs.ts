@@ -23,12 +23,11 @@ export async function syncProjectRefs(tool: Tool) {
 	const optionsConfigPath = root.append('tsconfig.options.json');
 	const globalTypesPath = root.append(typesFolder, '**/*');
 	const namesToPaths: Record<string, string> = {};
-	const workspacePackages =
-		tool.project.getWorkspacePackages<
-			PackageStructure & {
-				tsconfig?: Pick<TypeScriptConfig, 'compilerOptions' | 'exclude' | 'include'>;
-			}
-		>();
+	const workspacePackages = tool.project.getWorkspacePackages<
+		PackageStructure & {
+			tsconfig?: Pick<TypeScriptConfig, 'compilerOptions' | 'exclude' | 'include'>;
+		}
+	>();
 
 	// Map package name to absolute paths
 	workspacePackages.forEach((wsPkg) => {
