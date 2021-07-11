@@ -1839,6 +1839,7 @@ __metadata:
     "@boost/debug": ^2.2.5
     "@boost/event": ^2.3.2
     "@boost/internal": ^2.2.2
+    "@boost/log": ^2.2.5
     "@boost/pipeline": ^2.2.5
     "@boost/plugin": ^2.3.3
     "@boost/terminal": ^2.2.1

@@ -18,6 +18,7 @@ export class Config extends Configuration<ConfigFile> {
 			execute: shape({
 				concurrency: number(3).gt(0),
 				graph: bool(true),
+				// Optimal requires a fix upstream. Does not support empty strings!
 				output: string<ConfigExecuteStrategy>() /* .oneOf<ConfigExecuteStrategy>([
           '',
           STRATEGY_BUFFER,
