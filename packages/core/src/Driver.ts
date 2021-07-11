@@ -185,7 +185,7 @@ export abstract class Driver<
 	 * Either return the tool override strategy, or the per-driver strategy.
 	 */
 	getOutputStrategy(): DriverOutputStrategy {
-		return this.tool.config.execute.output || this.options.outputStrategy || STRATEGY_BUFFER;
+		return (this.tool.config.execute.output || this.options.outputStrategy) ?? STRATEGY_BUFFER;
 	}
 
 	/**

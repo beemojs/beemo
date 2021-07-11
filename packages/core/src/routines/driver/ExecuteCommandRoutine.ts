@@ -95,7 +95,7 @@ export class ExecuteCommandRoutine extends Routine<unknown, unknown, ExecuteComm
 		};
 
 		const errHandler = (chunk: Buffer) => {
-			console.log(String(chunk));
+			console.error(String(chunk));
 		};
 
 		if (isWatching) {
@@ -196,6 +196,7 @@ export class ExecuteCommandRoutine extends Routine<unknown, unknown, ExecuteComm
 			driver.metadata.helpOption.split(' '),
 			{
 				env,
+				preferLocal: true,
 			},
 		);
 
@@ -343,6 +344,7 @@ export class ExecuteCommandRoutine extends Routine<unknown, unknown, ExecuteComm
 			const result = await this.executeCommand(driver.metadata.bin, argv, {
 				cwd,
 				env: driver.options.env,
+				preferLocal: true,
 				workUnit,
 				wrap: (stream) => this.captureOutput(context, stream),
 			});
@@ -354,7 +356,7 @@ export class ExecuteCommandRoutine extends Routine<unknown, unknown, ExecuteComm
 			await driver.onAfterExecute.emit([context, result]);
 
 			return result;
-		} catch (error) {
+		} catch (error: unknown) {
 			const result = error as ExecaError;
 
 			this.debug('  Failure: %o', formatExecReturn(result));
@@ -378,7 +380,7 @@ export class ExecuteCommandRoutine extends Routine<unknown, unknown, ExecuteComm
 			// https://nodejs.org/api/child_process.html#child_process_event_exit
 			throw result.exitCode === null && result.signal === 'SIGKILL'
 				? new ExitError('Out of memory!', 1)
-				: new ExitError((driver.extractErrorMessage(result) || '').trim(), error.exitCode);
+				: new ExitError((driver.extractErrorMessage(result) || '').trim(), result.exitCode);
 		}
 	}
 }

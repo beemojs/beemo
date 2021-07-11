@@ -34,6 +34,7 @@ describe('ESLintDriver', () => {
 			dependencies: ['babel'],
 			env: { DEV: 'true' },
 			expandGlobs: true,
+			outputStrategy: 'buffer',
 			template: '',
 		});
 	});
@@ -128,7 +129,7 @@ describe('ESLintDriver', () => {
 					context,
 					new Path('/some/path/.eslintrc.js'),
 					{
-						// @ts-expect-error
+						// @ts-expect-error Invalid type
 						ignore: 'foo',
 					},
 				]);

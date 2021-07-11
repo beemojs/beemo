@@ -34,6 +34,7 @@ describe('StylelintDriver', () => {
 			dependencies: ['babel'],
 			env: { DEV: 'true' },
 			expandGlobs: true,
+			outputStrategy: 'buffer',
 			template: '',
 		});
 	});
@@ -122,7 +123,7 @@ describe('StylelintDriver', () => {
 					context,
 					new Path('/some/path/.stylelintrc.js'),
 					{
-						// @ts-expect-error
+						// @ts-expect-error Invalid type
 						ignore: 'abc',
 					},
 				]);

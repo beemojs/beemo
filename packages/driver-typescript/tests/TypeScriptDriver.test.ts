@@ -16,7 +16,7 @@ describe('TypeScriptDriver', () => {
 
 	beforeEach(() => {
 		const tool = mockTool();
-		// @ts-expect-error
+		// @ts-expect-error Allow readonly
 		tool.project.root = new Path(getFixturePath('project-refs'));
 
 		driver = new TypeScriptDriver();
@@ -54,6 +54,7 @@ describe('TypeScriptDriver', () => {
 			buildFolder: 'lib',
 			globalTypes: true,
 			localTypes: false,
+			outputStrategy: 'buffer',
 			srcFolder: 'src',
 			testsFolder: 'tests',
 			typesFolder: 'types',
@@ -87,36 +88,36 @@ describe('TypeScriptDriver', () => {
 	});
 
 	describe('handleCleanTarget()', () => {
-		it('doesnt run if no config', () => {
+		it('doesnt run if no config', async () => {
 			driver.config = {};
 
-			driver.handleCleanTarget(context);
+			await driver.handleCleanTarget(context);
 
 			expect(rimraf.sync).not.toHaveBeenCalled();
 		});
 
-		it('doesnt run if no --clean param', () => {
+		it('doesnt run if no --clean param', async () => {
 			driver.config.compilerOptions = { outDir: './lib' };
 
-			driver.handleCleanTarget(context);
+			await driver.handleCleanTarget(context);
 
 			expect(rimraf.sync).not.toHaveBeenCalled();
 		});
 
-		it('doesnt run if no outDir param', () => {
+		it('doesnt run if no outDir param', async () => {
 			context.args.unknown.clean = '';
 			driver.config.compilerOptions = {};
 
-			driver.handleCleanTarget(context);
+			await driver.handleCleanTarget(context);
 
 			expect(rimraf.sync).not.toHaveBeenCalled();
 		});
 
-		it('runs if both params', () => {
+		it('runs if both params', async () => {
 			context.args.unknown.clean = '';
 			driver.config.compilerOptions = { outDir: './lib' };
 
-			driver.handleCleanTarget(context);
+			await driver.handleCleanTarget(context);
 
 			expect(rimraf.sync).toHaveBeenCalledWith(Path.resolve('./lib').path());
 		});

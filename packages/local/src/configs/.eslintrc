@@ -1,6 +1,7 @@
 {
 	"rules": {
 		"sort-keys": "off",
+		"import/no-default-export": "off",
 		"@typescript-eslint/camelcase": "off"
 	}
 }

@@ -34,6 +34,7 @@ describe('PrettierDriver', () => {
 			dependencies: ['babel'],
 			env: { DEV: 'true' },
 			expandGlobs: true,
+			outputStrategy: 'buffer',
 			template: '',
 		});
 	});
@@ -69,7 +70,7 @@ describe('PrettierDriver', () => {
 					context,
 					new Path('/some/path/prettier.config.js'),
 					{
-						// @ts-expect-error
+						// @ts-expect-error Invalid type
 						ignore: 'foo',
 					},
 				]);

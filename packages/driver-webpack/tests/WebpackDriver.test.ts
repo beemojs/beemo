@@ -22,6 +22,7 @@ describe('WebpackDriver', () => {
 			dependencies: ['babel'],
 			env: { DEV: 'true' },
 			expandGlobs: true,
+			outputStrategy: 'buffer',
 			template: '',
 		});
 	});

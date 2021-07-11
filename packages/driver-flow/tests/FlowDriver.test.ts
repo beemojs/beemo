@@ -22,6 +22,7 @@ describe('FlowDriver', () => {
 			dependencies: ['babel'],
 			env: { DEV: 'true' },
 			expandGlobs: true,
+			outputStrategy: 'buffer',
 			template: '',
 		});
 	});
@@ -177,7 +178,6 @@ describe('FlowDriver', () => {
 				expect(
 					driver.formatConfig({
 						options: {
-							// eslint-disable-next-line require-unicode-regexp
 							suppress_comment: /(.|\n)*\$FlowFixMe/,
 						},
 					}),

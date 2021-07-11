@@ -61,7 +61,8 @@ describe('ExecuteCommandRoutine', () => {
 	});
 
 	describe('captureOutput()', () => {
-		let writeSpy: jest.SpyInstance;
+		let logSpy: jest.SpyInstance;
+		let errorSpy: jest.SpyInstance;
 		let stream: execa.ExecaChildProcess;
 
 		class MockStream {
@@ -91,11 +92,14 @@ describe('ExecuteCommandRoutine', () => {
 				// @ts-expect-error Invalid type
 				stderr: new MockStream(),
 			};
-			writeSpy = jest.spyOn(process.stdout, 'write');
+
+			logSpy = jest.spyOn(console, 'log').mockImplementation();
+			errorSpy = jest.spyOn(console, 'error').mockImplementation();
 		});
 
 		afterEach(() => {
-			writeSpy.mockRestore();
+			logSpy.mockRestore();
+			errorSpy.mockRestore();
 		});
 
 		describe('watch', () => {
@@ -165,7 +169,7 @@ describe('ExecuteCommandRoutine', () => {
 				expect(errSpy).toHaveBeenCalledWith('data', expect.anything());
 			});
 
-			it('writes chunk to `process.stdout`', () => {
+			it('writes chunk to console', () => {
 				driver.metadata.watchOptions = ['--watch'];
 				context.args.unknown.watch = 'true';
 
@@ -173,7 +177,7 @@ describe('ExecuteCommandRoutine', () => {
 
 				stream.stdout!.emit('data');
 
-				expect(writeSpy).toHaveBeenCalledWith('buffered');
+				expect(logSpy).toHaveBeenCalledWith('buffered');
 			});
 		});
 
@@ -209,12 +213,12 @@ describe('ExecuteCommandRoutine', () => {
 					expect(errSpy).toHaveBeenCalledWith('data', expect.anything());
 				});
 
-				it('writes chunk to `process.stdout`', () => {
+				it('writes chunk to console', () => {
 					routine.captureOutput(context, stream);
 
 					stream.stdout!.emit('data');
 
-					expect(writeSpy).toHaveBeenCalledWith('buffered');
+					expect(logSpy).toHaveBeenCalledWith('buffered');
 				});
 			});
 		});
@@ -228,16 +232,6 @@ describe('ExecuteCommandRoutine', () => {
 
 			it('defaults to buffer if no option or not watching', () => {
 				expect(routine.captureOutput(context, stream)).toBe('buffer');
-			});
-
-			it('registers a data handler when buffering', () => {
-				const outSpy = jest.spyOn(stream.stdout!, 'on');
-				const errSpy = jest.spyOn(stream.stderr!, 'on');
-
-				routine.captureOutput(context, stream);
-
-				expect(outSpy).toHaveBeenCalledWith('data', expect.anything());
-				expect(errSpy).toHaveBeenCalledWith('data', expect.anything());
 			});
 		});
 	});
