@@ -78,6 +78,7 @@ export class ExecuteCommandRoutine extends Routine<unknown, unknown, ExecuteComm
 	 */
 	@Bind()
 	captureOutput(context: DriverContext, stream: execa.ExecaChildProcess) {
+		const { tool } = this.options;
 		const { args, primaryDriver } = context;
 		const { watchOptions } = primaryDriver.metadata;
 		const isWatching = watchOptions.some((option) => {
@@ -91,11 +92,11 @@ export class ExecuteCommandRoutine extends Routine<unknown, unknown, ExecuteComm
 		});
 
 		const outHandler = (chunk: Buffer) => {
-			console.log(String(chunk));
+			tool.outStream?.write(String(chunk));
 		};
 
 		const errHandler = (chunk: Buffer) => {
-			console.error(String(chunk));
+			tool.errStream?.write(String(chunk));
 		};
 
 		if (isWatching) {

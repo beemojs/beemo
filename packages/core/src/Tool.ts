@@ -17,6 +17,7 @@ import {
 import { createDebugger, Debugger } from '@boost/debug';
 import { Event } from '@boost/event';
 import { color } from '@boost/internal';
+import { Writable } from '@boost/log';
 import { WaterfallPipeline } from '@boost/pipeline';
 import { Registry } from '@boost/plugin';
 import { createTranslator, Translator } from '@boost/translate';
@@ -47,6 +48,10 @@ export class Tool extends Contract<ToolOptions> {
 	config!: ConfigFile;
 
 	context?: Context;
+
+	errStream?: Writable;
+
+	outStream?: Writable;
 
 	package!: PackageStructure;
 

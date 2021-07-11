@@ -86,6 +86,9 @@ describe('ExecuteCommandRoutine', () => {
 		}
 
 		beforeEach(() => {
+			tool.outStream = { write() {} };
+			tool.errStream = { write() {} };
+
 			stream = {
 				// @ts-expect-error Invalid type
 				stdout: new MockStream(),
@@ -93,8 +96,8 @@ describe('ExecuteCommandRoutine', () => {
 				stderr: new MockStream(),
 			};
 
-			logSpy = jest.spyOn(console, 'log').mockImplementation();
-			errorSpy = jest.spyOn(console, 'error').mockImplementation();
+			logSpy = jest.spyOn(tool.outStream, 'write');
+			errorSpy = jest.spyOn(tool.errStream, 'write');
 		});
 
 		afterEach(() => {
@@ -169,7 +172,7 @@ describe('ExecuteCommandRoutine', () => {
 				expect(errSpy).toHaveBeenCalledWith('data', expect.anything());
 			});
 
-			it('writes chunk to console', () => {
+			it('writes chunk to stdout stream', () => {
 				driver.metadata.watchOptions = ['--watch'];
 				context.args.unknown.watch = 'true';
 
@@ -213,7 +216,7 @@ describe('ExecuteCommandRoutine', () => {
 					expect(errSpy).toHaveBeenCalledWith('data', expect.anything());
 				});
 
-				it('writes chunk to console', () => {
+				it('writes chunk to stdout stream', () => {
 					routine.captureOutput(context, stream);
 
 					stream.stdout!.emit('data');
