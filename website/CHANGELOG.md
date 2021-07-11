@@ -3,6 +3,28 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# 1.0.0-rc.1 - 2021-07-11
+
+#### 💥 Breaking
+
+- Rework output streams with new strategies. (#126) ([82f288b](https://github.com/beemojs/beemo/commit/82f288b)), closes [#126](https://github.com/beemojs/beemo/issues/126)
+
+#### 📦 Dependencies
+
+- **[docusaurus]** Update to latest. ([6c7a4be](https://github.com/beemojs/beemo/commit/6c7a4be))
+- **[mocha]** Update to v9 and support as a peer. ([300eba8](https://github.com/beemojs/beemo/commit/300eba8))
+- **[packemon]** Update to v1 alpha. (#138) ([5e0e31f](https://github.com/beemojs/beemo/commit/5e0e31f)), closes [#138](https://github.com/beemojs/beemo/issues/138)
+
+#### 📘 Docs
+
+- **[docusaurus]** Update to beta.1. ([d1dbcd7](https://github.com/beemojs/beemo/commit/d1dbcd7))
+
+**Note:** Version bump only for package website
+
+
+
+
+
 # 1.0.0-rc.0 - 2021-06-05
 
 #### 💥 Breaking

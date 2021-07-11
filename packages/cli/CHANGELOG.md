@@ -3,6 +3,30 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# 2.0.0-rc.4 - 2021-07-11
+
+#### 💥 Breaking
+
+- Rework output streams with new strategies. (#126) ([82f288b](https://github.com/beemojs/beemo/commit/82f288b)), closes [#126](https://github.com/beemojs/beemo/issues/126)
+
+#### 🚀 Updates
+
+- Update to TS v4.3. ([5c3cc38](https://github.com/beemojs/beemo/commit/5c3cc38))
+
+#### 🐞 Fixes
+
+- Allow driver native short options to be passed. ([84b45c3](https://github.com/beemojs/beemo/commit/84b45c3))
+
+#### 📦 Dependencies
+
+- **[packemon]** Update to v1 alpha. (#138) ([5e0e31f](https://github.com/beemojs/beemo/commit/5e0e31f)), closes [#138](https://github.com/beemojs/beemo/issues/138)
+
+**Note:** Version bump only for package @beemo/cli
+
+
+
+
+
 # 2.0.0-rc.3 - 2021-06-05
 
 #### 💥 Breaking

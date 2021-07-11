@@ -3,6 +3,27 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# 1.0.0-rc.1 - 2021-07-11
+
+#### 💥 Breaking
+
+- Rework output streams with new strategies. (#126) ([82f288b](https://github.com/beemojs/beemo/commit/82f288b)), closes [#126](https://github.com/beemojs/beemo/issues/126)
+
+#### 🚀 Updates
+
+- Update to TS v4.3. ([5c3cc38](https://github.com/beemojs/beemo/commit/5c3cc38))
+
+#### 📦 Dependencies
+
+- Update types and root dependencies. ([d81f78b](https://github.com/beemojs/beemo/commit/d81f78b))
+- **[beemo]** Update to latest dev deps. ([b95cffe](https://github.com/beemojs/beemo/commit/b95cffe))
+
+**Note:** Version bump only for package @beemo/local
+
+
+
+
+
 # 1.0.0-rc.0 - 2021-06-05
 
 #### 💥 Breaking
