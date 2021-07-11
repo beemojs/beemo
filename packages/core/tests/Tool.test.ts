@@ -107,6 +107,7 @@ describe('Tool', () => {
 					execute: {
 						concurrency: 3,
 						graph: true,
+						output: '',
 					},
 					module: '',
 					scripts: {},
@@ -139,6 +140,7 @@ describe('Tool', () => {
 					execute: {
 						concurrency: 3,
 						graph: true,
+						output: '',
 					},
 					module: '@beemo/dev',
 					scripts: {

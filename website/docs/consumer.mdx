@@ -92,6 +92,8 @@ module.exports = {
   CPUs.
 - `execute.graph` (`boolean`) - Prioritize workspace builds based on
   [dependency graph](./workspaces.md#priority-packages). Defaults to `true`.
+- `execute.output` (`buffer | pipe | stream | none`) - Override the
+  [output strategy](./driver.md#output-strategies) of all drivers. Is not defined by default.
 - `drivers` (`string[] | object`) - Drivers to enable for the consumer.
 - `scripts` (`string[] | object`) - Scripts to enable for the consumer.
 - `settings` (`object`) - Custom settings specific to your project that can easily be referenced.
@@ -217,16 +219,19 @@ Options can also be set through the [bootstrap and event system](./events.md).
 ### Options
 
 - `args` (`string[]`) - Arguments to always pass when executing the driver binary.
+- `configStrategy` (`create | copy | reference | template | native | none`) - Type of
+  [strategy](./driver.md#config-strategies) to use when generating a config file. Default is
+  different per driver.
 - `dependencies` (`string[]`) - Other drivers that are required for this driver to run.
 - `env` (`object`) - Environment variables to pass when executing the driver binary with
   [execa](https://github.com/sindresorhus/execa).
 - `expandGlobs` (`boolean`) - Controls whether or not glob patterns in args are automatically
   expanded before being passed to the driver binary. Defaults to `true`.
-- `strategy` (`create | copy | reference | template | native | none`) - Type of
-  [strategy](./driver.md#config-strategies) to use when generating a config file. Default is
-  different per driver.
+- `outputStrategy` (`buffer | pipe | stream | none`) - Type of
+  [strategy](./driver.md#output-strategies) to use when displaying driver command line output.
+  Default is `buffer`.
 - `template` (`string`) - File path to a template function for generating custom config files and
-  paths. Is required when `strategy` is "template".
+  paths. Is required when `configStrategy` is "template".
 
 ## Executing drivers
 
@@ -259,12 +264,6 @@ The following options are available when executing a driver.
 - `--concurrency` (`number`) - Number of builds to run in parallel. Defaults to the amount of CPUs.
 - `--[no-]graph` (`bool`) - Prioritize workspace builds based on
   [dependency graph](./workspaces.md#priority-packages).
-- `--stdio` (`buffer | inherit | stream`) - Control how the underlying driver output is displayed in
-  the console. Defaults to "buffer".
-  - `buffer` - Renders Beemo output using the defined reporter(s). Underlying driver output will be
-    rendered on success or failure.
-  - `inherit` - Doesn't render Beemo output and instead streams the underlying driver output live.
-  - `stream` - A combination of `buffer` and `inherit`.
 - `--workspaces` (`string`) - Execute the command in each [workspace](./workspaces.md) defined by
   the pattern/value. Pass `*` to run in all workspaces.
 
@@ -272,11 +271,6 @@ The following options are available when executing a driver.
 
 If the underlying driver supports file watching, most commonly through a CLI option like `-w` or
 `--watch`, Beemo will attempt to capture and pipe this output to your terminal.
-
-### Live mode
-
-The Beemo console masks output of the underlying driver while it is executing. If you prefer to see
-the driver output live, simply pass `--stdio=stream` or `--stdio=inherit`.
 
 ## Executing scripts
 
@@ -359,8 +353,8 @@ mitigate this problem, each driver supports a template based strategy, in which 
 function can be used to handle the config generation (custom merging, etc), and the destination file
 path.
 
-To use templates, set the driver `strategy` option to "template", and the `template` option to a
-file path for the template function (relative to the `.config` folder).
+To use templates, set the driver `configStrategy` option to "template", and the `template` option to
+a file path for the template function (relative to the `.config` folder).
 
 <Tabs
   groupId="format"
@@ -381,7 +375,7 @@ const config: BeemoConfig = {
 		[
 			'eslint',
 			{
-				strategy: 'template',
+				configStrategy: 'template',
 				template: './path/to/custom/template.ts',
 			},
 		],
@@ -401,7 +395,7 @@ module.exports = {
 		[
 			'eslint',
 			{
-				strategy: 'template',
+				configStrategy: 'template',
 				template: './path/to/custom/template.ts',
 			},
 		],

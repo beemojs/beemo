@@ -1,11 +1,10 @@
 import { Driver } from '../Driver';
-import { Arguments, Argv, StdioType } from '../types';
+import { Arguments, Argv } from '../types';
 import { ConfigContext } from './ConfigContext';
 
 export interface DriverContextOptions {
 	concurrency: number;
 	graph: boolean;
-	stdio: StdioType;
 	workspaces: string;
 }
 

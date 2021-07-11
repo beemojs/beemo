@@ -12,9 +12,6 @@ export abstract class BaseRunCommand<
 	@Arg.Flag(tool.msg('app:cliOptionGraph'))
 	graph: boolean = false;
 
-	@Arg.String(tool.msg('app:cliOptionStdio'), { choices: ['buffer', 'stream', 'inherit'] })
-	stdio: string = 'buffer';
-
 	@Arg.String(tool.msg('app:cliOptionWorkspaces'))
 	workspaces: string = '';
 }

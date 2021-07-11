@@ -14,7 +14,6 @@ cliCommandScaffold: Generate files with templates from configuration module
 cliEpilogue: 'For more information, view the manual: {{manualURL}}'
 cliOptionConcurrency: Number of builds to run in parallel
 cliOptionDryRun: Execute a dry run
-cliOptionStdio: Customize how output is displayed
 cliOptionGraph: Prioritize workspace builds based on dependency graph
 cliOptionWorkspaces: Run command in each workspace (supports regex)
 configCleanup: Deleting config files

@@ -16,7 +16,7 @@ describe('TypeScriptDriver', () => {
 
 	beforeEach(() => {
 		const tool = mockTool();
-		// @ts-expect-error Overwrite readonly
+		// @ts-expect-error Allow readonly
 		tool.project.root = new Path(getFixturePath('project-refs'));
 
 		driver = new TypeScriptDriver();
@@ -46,14 +46,15 @@ describe('TypeScriptDriver', () => {
 
 		expect(driver.options).toEqual({
 			args: ['--foo', '--bar=1'],
+			configStrategy: 'native',
 			declarationOnly: false,
 			dependencies: ['babel'],
 			env: { DEV: 'true' },
 			expandGlobs: true,
-			strategy: 'native',
 			buildFolder: 'lib',
 			globalTypes: true,
 			localTypes: false,
+			outputStrategy: 'buffer',
 			srcFolder: 'src',
 			testsFolder: 'tests',
 			typesFolder: 'types',

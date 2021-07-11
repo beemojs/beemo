@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-unsafe-assignment */
+
 import { CreateConfig } from './commands/CreateConfig';
 import { RunDriver } from './commands/RunDriver';
 import { RunScript } from './commands/RunScript';
@@ -19,6 +21,12 @@ async function run() {
 		driver: 'Drivers',
 		script: 'Scripts',
 	});
+
+	// @ts-expect-error Inherit hidden buffer
+	tool.errStream = program.errBuffer;
+
+	// @ts-expect-error Inherit hidden buffer
+	tool.outStream = program.outBuffer;
 
 	// Run the program!
 	await program.runAndExit(argv, async () => {

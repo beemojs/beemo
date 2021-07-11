@@ -14,7 +14,6 @@ import {
 	stubDriverContext,
 } from '../../../src/test';
 import { Tool } from '../../../src/Tool';
-import { StdioType } from '../../../src/types';
 
 describe('ExecuteCommandRoutine', () => {
 	let routine: ExecuteCommandRoutine;
@@ -62,7 +61,8 @@ describe('ExecuteCommandRoutine', () => {
 	});
 
 	describe('captureOutput()', () => {
-		let writeSpy: jest.SpyInstance;
+		let logSpy: jest.SpyInstance;
+		let errorSpy: jest.SpyInstance;
 		let stream: execa.ExecaChildProcess;
 
 		class MockStream {
@@ -86,17 +86,23 @@ describe('ExecuteCommandRoutine', () => {
 		}
 
 		beforeEach(() => {
+			tool.outStream = { write() {} };
+			tool.errStream = { write() {} };
+
 			stream = {
 				// @ts-expect-error Invalid type
 				stdout: new MockStream(),
 				// @ts-expect-error Invalid type
 				stderr: new MockStream(),
 			};
-			writeSpy = jest.spyOn(process.stdout, 'write');
+
+			logSpy = jest.spyOn(tool.outStream, 'write');
+			errorSpy = jest.spyOn(tool.errStream, 'write');
 		});
 
 		afterEach(() => {
-			writeSpy.mockRestore();
+			logSpy.mockRestore();
+			errorSpy.mockRestore();
 		});
 
 		describe('watch', () => {
@@ -166,7 +172,7 @@ describe('ExecuteCommandRoutine', () => {
 				expect(errSpy).toHaveBeenCalledWith('data', expect.anything());
 			});
 
-			it('writes chunk to `process.stdout`', () => {
+			it('writes chunk to stdout stream', () => {
 				driver.metadata.watchOptions = ['--watch'];
 				context.args.unknown.watch = 'true';
 
@@ -174,21 +180,23 @@ describe('ExecuteCommandRoutine', () => {
 
 				stream.stdout!.emit('data');
 
-				expect(writeSpy).toHaveBeenCalledWith('buffered');
+				expect(logSpy).toHaveBeenCalledWith('buffered');
 			});
 		});
 
-		['stream', 'inherit'].forEach((stdio) => {
-			describe(`${stdio}`, () => {
+		['stream', 'pipe'].forEach((strategy) => {
+			describe(`${strategy}`, () => {
 				beforeEach(() => {
-					context.args.options.stdio = stdio as StdioType;
+					driver.configure({
+						outputStrategy: strategy as 'stream',
+					});
 				});
 
-				it('enables if `stdio` option is set', () => {
-					expect(routine.captureOutput(context, stream)).toBe(stdio);
+				it('enables if option is set', () => {
+					expect(routine.captureOutput(context, stream)).toBe(strategy);
 				});
 
-				it('doesnt pipe a batch stream when using `stdio`', () => {
+				it('doesnt pipe a batch stream', () => {
 					const outSpy = jest.spyOn(stream.stdout!, 'pipe');
 					const errSpy = jest.spyOn(stream.stderr!, 'pipe');
 
@@ -198,7 +206,7 @@ describe('ExecuteCommandRoutine', () => {
 					expect(errSpy).not.toHaveBeenCalled();
 				});
 
-				it('registers a data handler when using `stdio`', () => {
+				it('registers a data handler', () => {
 					const outSpy = jest.spyOn(stream.stdout!, 'on');
 					const errSpy = jest.spyOn(stream.stderr!, 'on');
 
@@ -208,33 +216,25 @@ describe('ExecuteCommandRoutine', () => {
 					expect(errSpy).toHaveBeenCalledWith('data', expect.anything());
 				});
 
-				it('writes chunk to `process.stdout`', () => {
+				it('writes chunk to stdout stream', () => {
 					routine.captureOutput(context, stream);
 
 					stream.stdout!.emit('data');
 
-					expect(writeSpy).toHaveBeenCalledWith('buffered');
+					expect(logSpy).toHaveBeenCalledWith('buffered');
 				});
 			});
 		});
 
 		describe('buffer', () => {
 			beforeEach(() => {
-				context.args.options.stdio = 'buffer';
+				driver.configure({
+					outputStrategy: 'buffer',
+				});
 			});
 
-			it('defaults to buffer if no `stdio` option or not watching', () => {
+			it('defaults to buffer if no option or not watching', () => {
 				expect(routine.captureOutput(context, stream)).toBe('buffer');
-			});
-
-			it('registers a data handler when buffering', () => {
-				const outSpy = jest.spyOn(stream.stdout!, 'on');
-				const errSpy = jest.spyOn(stream.stderr!, 'on');
-
-				routine.captureOutput(context, stream);
-
-				expect(outSpy).toHaveBeenCalledWith('data', expect.anything());
-				expect(errSpy).toHaveBeenCalledWith('data', expect.anything());
 			});
 		});
 	});

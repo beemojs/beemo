@@ -25,10 +25,11 @@ describe('BabelDriver', () => {
 
 		expect(driver.options).toEqual({
 			args: ['--foo', '--bar=1'],
+			configStrategy: 'native',
 			dependencies: ['babel'],
 			env: { DEV: 'true' },
 			expandGlobs: true,
-			strategy: 'native',
+			outputStrategy: 'buffer',
 			template: '',
 		});
 	});

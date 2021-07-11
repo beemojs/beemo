@@ -5,11 +5,14 @@ import { Blueprint, isObject, optimal, Path, Predicates, predicates, toArray } f
 import { ConcurrentEvent, Event } from '@boost/event';
 import { Plugin } from '@boost/plugin';
 import {
+	STRATEGY_BUFFER,
 	STRATEGY_COPY,
 	STRATEGY_CREATE,
 	STRATEGY_NATIVE,
 	STRATEGY_NONE,
+	STRATEGY_PIPE,
 	STRATEGY_REFERENCE,
+	STRATEGY_STREAM,
 	STRATEGY_TEMPLATE,
 } from './constants';
 import { ConfigContext } from './contexts/ConfigContext';
@@ -23,10 +26,11 @@ import {
 	DriverCommandConfig,
 	DriverCommandRegistration,
 	DriverCommandRunner,
+	DriverConfigStrategy,
 	DriverMetadata,
 	DriverOptions,
 	DriverOutput,
-	DriverStrategy,
+	DriverOutputStrategy,
 	Execution,
 } from './types';
 
@@ -91,15 +95,21 @@ export abstract class Driver<
 	blueprint({ array, object, string, bool }: Predicates): Blueprint<DriverOptions> {
 		return {
 			args: array(string()),
-			dependencies: array(string()),
-			env: object(string()),
-			expandGlobs: bool(true),
-			strategy: string(STRATEGY_NATIVE).oneOf<DriverStrategy>([
+			configStrategy: string(STRATEGY_NATIVE).oneOf<DriverConfigStrategy>([
 				STRATEGY_NATIVE,
 				STRATEGY_CREATE,
 				STRATEGY_REFERENCE,
 				STRATEGY_TEMPLATE,
 				STRATEGY_COPY,
+				STRATEGY_NONE,
+			]),
+			dependencies: array(string()),
+			env: object(string()),
+			expandGlobs: bool(true),
+			outputStrategy: string(STRATEGY_BUFFER).oneOf<DriverOutputStrategy>([
+				STRATEGY_BUFFER,
+				STRATEGY_PIPE,
+				STRATEGY_STREAM,
 				STRATEGY_NONE,
 			]),
 			template: string(),
@@ -169,6 +179,13 @@ export abstract class Driver<
 			// Custom; configured by the consumer
 			...toArray(this.options.dependencies),
 		];
+	}
+
+	/**
+	 * Either return the tool override strategy, or the per-driver strategy.
+	 */
+	getOutputStrategy(): DriverOutputStrategy {
+		return (this.tool.config.execute.output || this.options.outputStrategy) ?? STRATEGY_BUFFER;
 	}
 
 	/**
