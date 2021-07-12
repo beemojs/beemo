@@ -97,17 +97,17 @@ export class Tool extends Contract<ToolOptions> {
 		);
 
 		this.driverRegistry = new Registry('beemo', 'driver', {
-			resolve: this.resolveForPnP,
+			resolver: this.resolveForPnP,
 			validate: Driver.validate,
 		});
 
 		this.scriptRegistry = new Registry('beemo', 'script', {
-			resolve: this.resolveForPnP,
+			resolver: this.resolveForPnP,
 			validate: Script.validate,
 		});
 
 		this.project = new Project(this.cwd);
-		this.configManager = new Config(this.options.projectName);
+		this.configManager = new Config(this.options.projectName, this.resolveForPnP);
 	}
 
 	blueprint({ array, instance, string, union }: Predicates): Blueprint<ToolOptions> {

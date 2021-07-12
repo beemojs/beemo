@@ -41,17 +41,17 @@
     "access": "public"
   },
   "dependencies": {
-    "@boost/args": "^2.3.2",
-    "@boost/common": "^2.7.2",
-    "@boost/config": "^2.4.2",
-    "@boost/debug": "^2.2.5",
-    "@boost/event": "^2.3.2",
-    "@boost/internal": "^2.2.2",
-    "@boost/log": "^2.2.5",
-    "@boost/pipeline": "^2.2.5",
-    "@boost/plugin": "^2.3.3",
-    "@boost/terminal": "^2.2.1",
-    "@boost/translate": "^2.2.5",
+    "@boost/args": "^2.3.3",
+    "@boost/common": "^2.8.0",
+    "@boost/config": "^2.5.0",
+    "@boost/debug": "^2.2.6",
+    "@boost/event": "^2.3.3",
+    "@boost/internal": "^2.2.3",
+    "@boost/log": "^2.2.6",
+    "@boost/pipeline": "^2.2.6",
+    "@boost/plugin": "^2.4.0",
+    "@boost/terminal": "^2.2.2",
+    "@boost/translate": "^2.2.6",
     "execa": "^5.1.1",
     "fast-glob": "^3.2.7",
     "fs-extra": "^10.0.0",
@@ -61,7 +61,7 @@
     "micromatch": "^4.0.4"
   },
   "devDependencies": {
-    "@boost/test-utils": "^2.3.1",
+    "@boost/test-utils": "^2.3.2",
     "@types/micromatch": "^4.0.2"
   },
   "funding": {
