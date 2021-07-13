@@ -12,6 +12,7 @@ export class CreateConfig extends Command<GlobalOptions> {
 	run(...names: string[]) {
 		const pipeline = tool.createConfigurePipeline(this.getArguments(), names);
 
+		// @ts-expect-error Event type mismatch
 		return <App pipeline={pipeline} />;
 	}
 }

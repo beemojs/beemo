@@ -35,6 +35,7 @@
   },
   "dependencies": {
     "@boost/cli": "^2.10.5",
+    "@boost/common": "^2.8.0",
     "@boost/pipeline": "^2.2.6",
     "debug": "^4.3.2",
     "ink": "^3.0.8",
