@@ -1,4 +1,6 @@
+import React from 'react';
 import { Command, Config, GlobalOptions } from '@boost/cli';
+import { App } from '../components/App';
 import { tool } from '../setup';
 
 @Config('create-config', tool.msg('app:cliCommandConfig'), {
@@ -7,9 +9,9 @@ import { tool } from '../setup';
 	category: 'core',
 })
 export class CreateConfig extends Command<GlobalOptions> {
-	async run(...names: string[]) {
+	run(...names: string[]) {
 		const pipeline = tool.createConfigurePipeline(this.getArguments(), names);
 
-		await pipeline.run();
+		return <App pipeline={pipeline} />;
 	}
 }
