@@ -365,15 +365,6 @@ export class ExecuteCommandRoutine extends Routine<unknown, unknown, ExecuteComm
 
 			if (result.name !== 'MaxBufferError') {
 				driver.processFailure(result);
-
-				// TODO: Remove this temporary output once the CLI is finished
-				if (driver.output.stdout) {
-					console.log(driver.output.stdout);
-				}
-
-				if (driver.output.stderr) {
-					console.error(driver.output.stderr);
-				}
 			}
 
 			await driver.onFailedExecute.emit([context, result]);

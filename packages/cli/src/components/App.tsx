@@ -1,23 +1,23 @@
 import React, { useCallback, useEffect, useState } from 'react';
-import { Static } from 'ink';
+import { Box, Static } from 'ink';
 import { DriverOutputStrategy } from '@beemo/core';
 import { useProgram, useRenderLoop } from '@boost/cli';
 import { AnyWorkUnit, Context, Monitor, Routine, SerialPipeline, Task } from '@boost/pipeline';
 import { tool } from '../setup';
 import { RoutineRow, UnknownRoutine } from './RoutineRow';
+import { TaskRow, UnknownTask } from './TaskRow';
 
 export interface AppProps {
 	pipeline: SerialPipeline<{}, Context, unknown, unknown>;
 	outputStrategy?: DriverOutputStrategy;
 }
 
-const monitor = new Monitor();
-
 export function App({ pipeline, outputStrategy }: AppProps) {
 	const { exit } = useProgram();
 	const [workUnits, setWorkUnits] = useState<Set<AnyWorkUnit>>(new Set());
 	const [finishedRoutines, setFinishedRoutines] = useState<UnknownRoutine[]>([]);
 	const clearLoop = useRenderLoop();
+	const strategy = outputStrategy ?? tool.config.execute.output;
 
 	// Monitor for pipeline updates
 	const handleRunWorkUnit = useCallback((workUnit: AnyWorkUnit) => {
@@ -29,7 +29,7 @@ export function App({ pipeline, outputStrategy }: AppProps) {
 	}, []);
 
 	const handleFinishWorkUnit = useCallback((workUnit: AnyWorkUnit) => {
-		if (workUnit.depth === 0) {
+		if (workUnit instanceof Routine && workUnit.depth === 0) {
 			setFinishedRoutines((prev) => [...prev, workUnit as UnknownRoutine]);
 		}
 
@@ -41,6 +41,7 @@ export function App({ pipeline, outputStrategy }: AppProps) {
 	}, []);
 
 	useEffect(() => {
+		const monitor = new Monitor();
 		monitor.onWorkUnitRun.listen(handleRunWorkUnit);
 		monitor.onWorkUnitPass.listen(handleFinishWorkUnit);
 		monitor.onWorkUnitFail.listen(handleFinishWorkUnit);
@@ -60,16 +61,19 @@ export function App({ pipeline, outputStrategy }: AppProps) {
 		}
 
 		void run();
-	}, [clearLoop, exit, pipeline]);
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, []);
 
-	// Hide output if strategy is "none"
-	if ((outputStrategy || tool.config.execute.output) === 'none') {
+	// Hide Beemo output but not driver output
+	if (strategy === 'none' || strategy === 'stream') {
 		return null;
 	}
 
 	// Group based on type
-	const routines = [...workUnits].filter((unit) => unit instanceof Routine) as UnknownRoutine[];
-	const tasks = [...workUnits].filter((unit) => unit instanceof Task);
+	const routines = [...workUnits].filter(
+		(unit) => unit instanceof Routine && !unit.isSkipped(),
+	) as UnknownRoutine[];
+	const tasks = [...workUnits].filter((unit) => unit instanceof Task) as UnknownTask[];
 
 	return (
 		<>
@@ -77,9 +81,15 @@ export function App({ pipeline, outputStrategy }: AppProps) {
 				{(routine) => <RoutineRow key={`static-${routine.id}`} routine={routine} />}
 			</Static>
 
-			{routines.map((routine) => (
-				<RoutineRow key={routine.id} routine={routine} />
-			))}
+			<Box flexDirection="column">
+				{routines.map((routine) => (
+					<RoutineRow key={`routine-${routine.id}`} routine={routine} />
+				))}
+
+				{/* tasks.map((task) => (
+				<TaskRow key={`task-${task.id}`} task={task} />
+			)) */}
+			</Box>
 		</>
 	);
 }
