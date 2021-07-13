@@ -37,7 +37,7 @@
     "access": "public"
   },
   "devDependencies": {
-    "@boost/test-utils": "^2.3.1",
+    "@boost/test-utils": "^2.3.2",
     "typescript": "^4.3.5"
   },
   "peerDependencies": {
@@ -45,7 +45,7 @@
     "typescript": "^4.0.0"
   },
   "dependencies": {
-    "@boost/event": "^2.3.2",
+    "@boost/event": "^2.3.3",
     "rimraf": "^3.0.2"
   },
   "tsconfig": {

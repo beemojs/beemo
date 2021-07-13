@@ -1,5 +1,6 @@
 /* eslint-disable @typescript-eslint/member-ordering */
 
+import { createRequire } from 'module';
 import fs from 'fs-extra';
 import {
 	Bind,
@@ -96,15 +97,17 @@ export class Tool extends Contract<ToolOptions> {
 		);
 
 		this.driverRegistry = new Registry('beemo', 'driver', {
+			resolver: this.resolveForPnP,
 			validate: Driver.validate,
 		});
 
 		this.scriptRegistry = new Registry('beemo', 'script', {
+			resolver: this.resolveForPnP,
 			validate: Script.validate,
 		});
 
 		this.project = new Project(this.cwd);
-		this.configManager = new Config(this.options.projectName);
+		this.configManager = new Config(this.options.projectName, this.resolveForPnP);
 	}
 
 	blueprint({ array, instance, string, union }: Predicates): Blueprint<ToolOptions> {
@@ -197,7 +200,7 @@ export class Tool extends Contract<ToolOptions> {
 		let rootPath: Path;
 
 		try {
-			rootPath = Path.resolve(require.resolve(`${module}/package.json`)).parent();
+			rootPath = Path.resolve(this.resolveForPnP(`${module}/package.json`)).parent();
 		} catch {
 			throw new Error(this.msg('errors:moduleMissing', { module }));
 		}
@@ -341,6 +344,30 @@ export class Tool extends Contract<ToolOptions> {
 				tool: this,
 			}),
 		);
+	}
+
+	/**
+	 * Resolve modules on *behalf* of the configuration module and within the context
+	 * of its dependencies. This functionality is necessary to satisfy Yarn PnP and
+	 * resolving plugins that aren't listed as direct dependencies.
+	 */
+	@Bind()
+	resolveForPnP(id: string): string {
+		// Create a `require` on behalf of the project root
+		const rootRequire = createRequire(this.cwd.append('package.json').path());
+
+		// Attempt to resolve from the root incase dependencies have been defined there
+		try {
+			return rootRequire.resolve(id);
+		} catch {
+			// Ignore
+		}
+
+		// Otherwise, create a `require` on behalf of the configuration module,
+		// which is ALSO resolved from the root (assumes the config module is a dependency there)
+		const moduleRequire = createRequire(rootRequire.resolve(`${this.config.module}/package.json`));
+
+		return moduleRequire.resolve(id);
 	}
 
 	/**
