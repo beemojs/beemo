@@ -17,7 +17,7 @@ export function App({ pipeline, outputStrategy }: AppProps) {
 	const [workUnits, setWorkUnits] = useState<Set<AnyWorkUnit>>(new Set());
 	const [finishedRoutines, setFinishedRoutines] = useState<UnknownRoutine[]>([]);
 	const clearLoop = useRenderLoop();
-	const strategy = outputStrategy ?? tool.config.execute.output;
+	const strategy = (outputStrategy ?? tool.config.execute.output) as DriverOutputStrategy;
 
 	// Monitor for pipeline updates
 	const handleRunWorkUnit = useCallback((workUnit: AnyWorkUnit) => {
@@ -89,7 +89,7 @@ export function App({ pipeline, outputStrategy }: AppProps) {
 				))}
 
 				{tasks.map((task) => (
-					<TaskRow key={`task-${task.id}-${task.title}`} task={task} />
+					<TaskRow key={`task-${task.id}-${task.title}`} outputStrategy={strategy} task={task} />
 				))}
 			</Box>
 		</>

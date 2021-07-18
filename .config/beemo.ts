@@ -1,8 +1,5 @@
 export default {
 	module: '@beemo/local',
-	execute: {
-		// output: 'none',
-	},
 	drivers: [
 		'babel',
 		'eslint',
