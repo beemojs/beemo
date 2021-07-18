@@ -3,6 +3,7 @@ import rimraf from 'rimraf';
 import { DriverContext, Path } from '@beemo/core';
 import { mockTool, stubDriverContext } from '@beemo/core/test';
 import { getFixturePath } from '@boost/test-utils';
+import factory from '../src';
 import { TypeScriptDriver } from '../src/TypeScriptDriver';
 
 jest.mock('rimraf');
@@ -34,6 +35,20 @@ describe('TypeScriptDriver', () => {
 
 	afterEach(() => {
 		writeSpy.mockRestore();
+	});
+
+	it('index returns a driver instance', () => {
+		expect(factory()).toBeInstanceOf(TypeScriptDriver);
+	});
+
+	it('can pass options through factory', () => {
+		driver = factory({ args: ['--foo'] });
+
+		expect(driver.options).toEqual(
+			expect.objectContaining({
+				args: ['--foo'],
+			}),
+		);
 	});
 
 	it('sets options from constructor', () => {

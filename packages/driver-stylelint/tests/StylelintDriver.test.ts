@@ -1,6 +1,7 @@
 import fs from 'fs';
 import { DriverContext, Path } from '@beemo/core';
 import { mockTool, stubDriverContext, stubExecResult } from '@beemo/core/test';
+import factory from '../src';
 import { StylelintDriver } from '../src/StylelintDriver';
 
 describe('StylelintDriver', () => {
@@ -19,6 +20,20 @@ describe('StylelintDriver', () => {
 
 	afterEach(() => {
 		writeSpy.mockRestore();
+	});
+
+	it('index returns a driver instance', () => {
+		expect(factory()).toBeInstanceOf(StylelintDriver);
+	});
+
+	it('can pass options through factory', () => {
+		driver = factory({ args: ['--foo'] });
+
+		expect(driver.options).toEqual(
+			expect.objectContaining({
+				args: ['--foo'],
+			}),
+		);
 	});
 
 	it('sets options from constructor', () => {

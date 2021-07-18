@@ -3,11 +3,11 @@
  * @license     https://opensource.org/licenses/MIT
  */
 
-import { DriverOptions } from '@beemo/core';
+import { TypeScriptOptions } from './types';
 import { TypeScriptDriver } from './TypeScriptDriver';
 
 export * from './types';
 
-export default function typeScriptDriver(options?: DriverOptions) {
+export default function typeScriptDriver(options?: TypeScriptOptions) {
 	return new TypeScriptDriver(options);
 }

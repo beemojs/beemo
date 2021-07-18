@@ -1,6 +1,7 @@
 import fs from 'fs';
 import { DriverContext, Path } from '@beemo/core';
 import { mockTool, stubDriverContext } from '@beemo/core/test';
+import factory from '../src';
 import { PrettierDriver } from '../src/PrettierDriver';
 
 describe('PrettierDriver', () => {
@@ -19,6 +20,20 @@ describe('PrettierDriver', () => {
 
 	afterEach(() => {
 		writeSpy.mockRestore();
+	});
+
+	it('index returns a driver instance', () => {
+		expect(factory()).toBeInstanceOf(PrettierDriver);
+	});
+
+	it('can pass options through factory', () => {
+		driver = factory({ args: ['--foo'] });
+
+		expect(driver.options).toEqual(
+			expect.objectContaining({
+				args: ['--foo'],
+			}),
+		);
 	});
 
 	it('sets options from constructor', () => {

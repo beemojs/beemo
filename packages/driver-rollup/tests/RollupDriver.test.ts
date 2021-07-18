@@ -1,4 +1,5 @@
 import { mockTool } from '@beemo/core/test';
+import factory from '../src';
 import { RollupDriver } from '../src/RollupDriver';
 
 describe('RollupDriver', () => {
@@ -7,6 +8,20 @@ describe('RollupDriver', () => {
 	beforeEach(() => {
 		driver = new RollupDriver();
 		driver.startup(mockTool());
+	});
+
+	it('index returns a driver instance', () => {
+		expect(factory()).toBeInstanceOf(RollupDriver);
+	});
+
+	it('can pass options through factory', () => {
+		driver = factory({ args: ['--foo'] });
+
+		expect(driver.options).toEqual(
+			expect.objectContaining({
+				args: ['--foo'],
+			}),
+		);
 	});
 
 	it('sets options from constructor', () => {

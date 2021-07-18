@@ -1,4 +1,5 @@
 import { mockTool } from '@beemo/core/test';
+import factory from '../src';
 import { MochaDriver } from '../src/MochaDriver';
 
 describe('MochaDriver', () => {
@@ -7,6 +8,20 @@ describe('MochaDriver', () => {
 	beforeEach(() => {
 		driver = new MochaDriver();
 		driver.startup(mockTool());
+	});
+
+	it('index returns a driver instance', () => {
+		expect(factory()).toBeInstanceOf(MochaDriver);
+	});
+
+	it('can pass options through factory', () => {
+		driver = factory({ args: ['--foo'] });
+
+		expect(driver.options).toEqual(
+			expect.objectContaining({
+				args: ['--foo'],
+			}),
+		);
 	});
 
 	it('sets options from constructor', () => {

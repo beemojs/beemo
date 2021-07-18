@@ -1,4 +1,5 @@
 import { mockTool, stubExecResult } from '@beemo/core/test';
+import factory from '../src';
 import { FlowDriver } from '../src/FlowDriver';
 
 describe('FlowDriver', () => {
@@ -7,6 +8,20 @@ describe('FlowDriver', () => {
 	beforeEach(() => {
 		driver = new FlowDriver();
 		driver.startup(mockTool());
+	});
+
+	it('index returns a driver instance', () => {
+		expect(factory()).toBeInstanceOf(FlowDriver);
+	});
+
+	it('can pass options through factory', () => {
+		driver = factory({ args: ['--foo'] });
+
+		expect(driver.options).toEqual(
+			expect.objectContaining({
+				args: ['--foo'],
+			}),
+		);
 	});
 
 	it('sets options from constructor', () => {

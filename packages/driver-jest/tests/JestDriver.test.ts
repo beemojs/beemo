@@ -1,4 +1,5 @@
 import { mockDriver, mockTool, stubExecResult } from '@beemo/core/test';
+import factory from '../src';
 import { JestDriver } from '../src/JestDriver';
 
 describe('JestDriver', () => {
@@ -7,6 +8,20 @@ describe('JestDriver', () => {
 	beforeEach(() => {
 		driver = new JestDriver();
 		driver.startup(mockTool());
+	});
+
+	it('index returns a driver instance', () => {
+		expect(factory()).toBeInstanceOf(JestDriver);
+	});
+
+	it('can pass options through factory', () => {
+		driver = factory({ args: ['--foo'] });
+
+		expect(driver.options).toEqual(
+			expect.objectContaining({
+				args: ['--foo'],
+			}),
+		);
 	});
 
 	it('sets options from constructor', () => {

@@ -1,6 +1,7 @@
 import rimraf from 'rimraf';
 import { DriverContext, Path } from '@beemo/core';
 import { mockTool, stubDriverContext } from '@beemo/core/test';
+import factory from '../src';
 import { BabelDriver } from '../src/BabelDriver';
 
 jest.mock('rimraf');
@@ -14,6 +15,20 @@ describe('BabelDriver', () => {
 		driver.startup(mockTool());
 
 		context = stubDriverContext(driver);
+	});
+
+	it('index returns a driver instance', () => {
+		expect(factory()).toBeInstanceOf(BabelDriver);
+	});
+
+	it('can pass options through factory', () => {
+		driver = factory({ args: ['--foo'] });
+
+		expect(driver.options).toEqual(
+			expect.objectContaining({
+				args: ['--foo'],
+			}),
+		);
 	});
 
 	it('sets options from constructor', () => {
