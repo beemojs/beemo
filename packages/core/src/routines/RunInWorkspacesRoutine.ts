@@ -5,7 +5,7 @@ import {
 	Predicates,
 	WorkspacePackage,
 } from '@boost/common';
-import { PooledPipeline, Routine } from '@boost/pipeline';
+import { Routine } from '@boost/pipeline';
 import { stripAnsi, style } from '@boost/terminal';
 import { Context } from '../contexts/Context';
 import { isPatternMatch } from '../helpers/isPatternMatch';
@@ -65,7 +65,7 @@ export abstract class RunInWorkspacesRoutine<
 		for (const batch of batches) {
 			const pipeline = batch.reduce(
 				(pl, routine) => pl.add(routine),
-				new PooledPipeline(context, value, { concurrency }),
+				this.createPooledPipeline(context, value, { concurrency }),
 			);
 
 			// eslint-disable-next-line no-await-in-loop

@@ -1,3 +1,4 @@
+import React from 'react';
 import { ScriptContextOptions, ScriptContextParams } from '@beemo/core';
 import { Arg, Config } from '@boost/cli';
 import { tool } from '../setup';
@@ -17,8 +18,9 @@ export class RunScript extends BaseRunCommand<ScriptContextOptions, ScriptContex
 		type: 'string',
 	})
 	async run(name: string) {
+		const { App } = await import('../components/App');
 		const pipeline = tool.createRunScriptPipeline(this.getArguments(), name);
 
-		await pipeline.run();
+		return <App pipeline={pipeline} />;
 	}
 }

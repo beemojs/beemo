@@ -26,7 +26,7 @@ export class RunDriver extends BaseRunCommand<DriverContextOptions, [], RunDrive
 			this.options.parallelArgv,
 		);
 
-		await pipeline.run();
+		return this.renderDriver(pipeline);
 	}
 
 	override blueprint({ array, string }: Predicates): Blueprint<RunDriverConfig> {

@@ -1,3 +1,4 @@
+import React from 'react';
 import { Command, Config, GlobalOptions } from '@boost/cli';
 import { tool } from '../setup';
 
@@ -8,8 +9,10 @@ import { tool } from '../setup';
 })
 export class CreateConfig extends Command<GlobalOptions> {
 	async run(...names: string[]) {
+		const { App } = await import('../components/App');
 		const pipeline = tool.createConfigurePipeline(this.getArguments(), names);
 
-		await pipeline.run();
+		// @ts-expect-error Event type mismatch
+		return <App pipeline={pipeline} />;
 	}
 }

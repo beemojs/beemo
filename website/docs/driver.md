@@ -41,7 +41,8 @@ driver's output.
 - **Piped** - Driver output will be logged _above_ and in parallel with Beemo's output.
 - **Streamed** - Beemo's output will be hidden and the driver output will be logged instead. This
   output is akin to running the driver outside of Beemo.
-- **No output** - Neither Beemo's or the driver's output will be displayed.
+- **No output** - Neither Beemo's or the driver's output will be displayed, except for failure
+  output.
 
 > Default strategy is to buffer, but this can be customized per driver with the `outputStrategy`
 > option, or for all drivers through the `execute.output` config setting.

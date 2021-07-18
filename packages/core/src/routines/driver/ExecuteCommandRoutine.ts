@@ -8,7 +8,7 @@ import merge from 'lodash/merge';
 import { parse } from '@boost/args';
 import { Bind, Blueprint, ExitError, Path, Predicates } from '@boost/common';
 import { color } from '@boost/internal';
-import { AnyWorkUnit, Routine, WaterfallPipeline } from '@boost/pipeline';
+import { AnyWorkUnit, Routine } from '@boost/pipeline';
 import { STRATEGY_COPY } from '../../constants';
 import { DriverContext } from '../../contexts/DriverContext';
 import { filterArgs, OptionMap } from '../../helpers/filterArgs';
@@ -42,7 +42,7 @@ export class ExecuteCommandRoutine extends Routine<unknown, unknown, ExecuteComm
 		const { forceConfigOption, packageRoot } = this.options;
 		const { metadata, options } = context.primaryDriver;
 
-		let pipeline = new WaterfallPipeline(context).pipe(
+		let pipeline = this.createWaterfallPipeline(context).pipe(
 			tool.msg('app:driverExecuteGatherArgs'),
 			this.gatherArgs,
 		);
@@ -365,15 +365,6 @@ export class ExecuteCommandRoutine extends Routine<unknown, unknown, ExecuteComm
 
 			if (result.name !== 'MaxBufferError') {
 				driver.processFailure(result);
-
-				// TODO: Remove this temporary output once the CLI is finished
-				if (driver.output.stdout) {
-					console.log(driver.output.stdout);
-				}
-
-				if (driver.output.stderr) {
-					console.error(driver.output.stderr);
-				}
 			}
 
 			await driver.onFailedExecute.emit([context, result]);

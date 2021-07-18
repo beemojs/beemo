@@ -1,3 +1,4 @@
+import React from 'react';
 import { ScaffoldContextOptions, ScaffoldContextParams } from '@beemo/core';
 import { Arg, Command, Config, GlobalOptions } from '@boost/cli';
 import { tool } from '../setup';
@@ -30,8 +31,9 @@ export class Scaffold extends Command<
 		},
 	)
 	async run(generator: string, action: string, name: string = '') {
+		const { App } = await import('../components/App');
 		const pipeline = tool.createScaffoldPipeline(this.getArguments(), generator, action, name);
 
-		await pipeline.run();
+		return <App pipeline={pipeline} />;
 	}
 }

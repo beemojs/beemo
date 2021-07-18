@@ -35,7 +35,7 @@ export function createDriverCommand(
 		async run() {
 			const pipeline = tool.createRunDriverPipeline(this.getArguments(), path, parallelArgv);
 
-			await pipeline.run();
+			return this.renderDriver(pipeline);
 		}
 	}
 
