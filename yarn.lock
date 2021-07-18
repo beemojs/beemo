@@ -1907,7 +1907,7 @@ __metadata:
   dependencies:
     "@boost/event": ^2.3.3
     "@types/eslint": "*"
-    eslint: ^7.30.0
+    eslint: ^7.31.0
   peerDependencies:
     "@beemo/core": ^2.0.0-alpha.0
     eslint: ^7.0.0
@@ -1918,7 +1918,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@beemo/driver-flow@workspace:packages/driver-flow"
   dependencies:
-    flow-bin: ^0.155.0
+    flow-bin: ^0.155.1
   peerDependencies:
     "@beemo/core": ^2.0.0-alpha.0
     flow-bin: "*"
@@ -1976,7 +1976,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@beemo/driver-rollup@workspace:packages/driver-rollup"
   dependencies:
-    rollup: ^2.53.1
+    rollup: ^2.53.2
   peerDependencies:
     "@beemo/core": ^2.0.0-alpha.0
     rollup: ^2.0.0
@@ -2014,7 +2014,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@beemo/driver-webpack@workspace:packages/driver-webpack"
   dependencies:
-    webpack: ^5.44.0
+    webpack: ^5.45.1
     webpack-cli: ^4.7.2
   peerDependencies:
     "@beemo/core": ^2.0.0-alpha.0
@@ -2696,9 +2696,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@eslint/eslintrc@npm:^0.4.2":
-  version: 0.4.2
-  resolution: "@eslint/eslintrc@npm:0.4.2"
+"@eslint/eslintrc@npm:^0.4.3":
+  version: 0.4.3
+  resolution: "@eslint/eslintrc@npm:0.4.3"
   dependencies:
     ajv: ^6.12.4
     debug: ^4.1.1
@@ -2709,7 +2709,7 @@ __metadata:
     js-yaml: ^3.13.1
     minimatch: ^3.0.4
     strip-json-comments: ^3.1.1
-  checksum: 60b66ce4257bf5c36a920dea83a056102fef746e7afd7100a6fe245a126ff455f67f4948e75d28ed73090bff8f8556b6a996e74a124911ca703440bc245dbc23
+  checksum: fa916db689fac96c749571f03f931448d896ce07c3da40079082f28621f52defa36cc0c88bfcdd8d19b9981a6549c3a9a3977953db2f6945aba1135bb83a3d35
   languageName: node
   linkType: hard
 
@@ -4601,13 +4601,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/eslint@npm:*, @types/eslint@npm:^7.2.14":
-  version: 7.2.14
-  resolution: "@types/eslint@npm:7.2.14"
+"@types/eslint@npm:*, @types/eslint@npm:^7.28.0":
+  version: 7.28.0
+  resolution: "@types/eslint@npm:7.28.0"
   dependencies:
     "@types/estree": "*"
     "@types/json-schema": "*"
-  checksum: e7ab90a295beae9495e3241a57078cc36dd1b7e58d0d2605d927abbe6eee5b8996ab6aff0f6d230da93d5f0361b737416dd8137f6c89d38f19d3d1f51f34d22d
+  checksum: eae026f960db17c8a6e88b736eeabc6da553846ca88668d0757d1ee74e4abf2bed40ccff28548c89b088f513e9064f7a458c831dd8ef4445d0b5dc85eb94e791
   languageName: node
   linkType: hard
 
@@ -4718,7 +4718,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/json-schema@npm:*, @types/json-schema@npm:^7.0.5, @types/json-schema@npm:^7.0.6, @types/json-schema@npm:^7.0.7":
+"@types/json-schema@npm:*, @types/json-schema@npm:^7.0.5, @types/json-schema@npm:^7.0.7":
   version: 7.0.7
   resolution: "@types/json-schema@npm:7.0.7"
   checksum: b9d2c509fa4e0b82f58e73f5e6ab76c60ff1884ba41bb82f37fb1cece226d4a3e5a62fedf78a43da0005373a6713d9abe61c1e592906402c41c08ad6ab26d52b
@@ -4780,10 +4780,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/node@npm:*, @types/node@npm:^16.3.1":
-  version: 16.3.1
-  resolution: "@types/node@npm:16.3.1"
-  checksum: 2021138afd66a9235f4b64e412dd8a8d1199f3d17303c2868ab062a10214ba76b793bf4f59e14c3bf981623e099843855776390b445d840779cb171c2fcb97a9
+"@types/node@npm:*, @types/node@npm:^16.3.3":
+  version: 16.3.3
+  resolution: "@types/node@npm:16.3.3"
+  checksum: e597a54070815170d8f541c778900023f2522c27be9c56b2b8411d663da1ef5226f9d16ec158c5d9c84ddcc85551e3d02aa68046aa108b4c6085bc7c95a5bebb
   languageName: node
   linkType: hard
 
@@ -6270,12 +6270,12 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "beemo-root@workspace:."
   dependencies:
-    "@types/eslint": ^7.2.14
+    "@types/eslint": ^7.28.0
     "@types/fs-extra": ^9.0.12
     "@types/is-glob": ^4.0.2
     "@types/jest": ^26.0.24
     "@types/lodash": ^4.14.171
-    "@types/node": ^16.3.1
+    "@types/node": ^16.3.3
     "@types/prettier": ^2.3.2
     "@types/react": ^16.14.11
     "@types/rimraf": ^3.0.1
@@ -6285,7 +6285,7 @@ __metadata:
     packemon: ^1.2.0
     ts-node: ^10.1.0
     typescript: ^4.3.5
-    webpack: ^5.44.0
+    webpack: ^5.45.1
   languageName: unknown
   linkType: soft
 
@@ -9165,12 +9165,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"eslint@npm:^7.30.0":
-  version: 7.30.0
-  resolution: "eslint@npm:7.30.0"
+"eslint@npm:^7.30.0, eslint@npm:^7.31.0":
+  version: 7.31.0
+  resolution: "eslint@npm:7.31.0"
   dependencies:
     "@babel/code-frame": 7.12.11
-    "@eslint/eslintrc": ^0.4.2
+    "@eslint/eslintrc": ^0.4.3
     "@humanwhocodes/config-array": ^0.5.0
     ajv: ^6.10.0
     chalk: ^4.0.0
@@ -9211,7 +9211,7 @@ __metadata:
     v8-compile-cache: ^2.0.3
   bin:
     eslint: bin/eslint.js
-  checksum: 028048847e0252d6c972ac612fe37be55822ae2255d10d1bf68255749f7ae1364b2aa538cd95f3bc4d951fc7d36195e46b62fe8d215297ef9a6a8aeb8ca28a90
+  checksum: 38c000372bfafc3715da2d2b6db2a75d4b3b95ac2c20696d774185aa5b6118065a37d0a1292eaa91292e07f86d53a0993cf9bfb838a7a9b935524a125e21af98
   languageName: node
   linkType: hard
 
@@ -9846,12 +9846,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"flow-bin@npm:^0.155.0":
-  version: 0.155.0
-  resolution: "flow-bin@npm:0.155.0"
+"flow-bin@npm:^0.155.1":
+  version: 0.155.1
+  resolution: "flow-bin@npm:0.155.1"
   bin:
     flow: cli.js
-  checksum: cb0363bf257cf25103fe461c41ee151241286e2f4d01de11dc47180ef9ddb1320b1f1fcb390ab90238313a0930af15817d01f1af8109b0493ba193594315e184
+  checksum: 7b21d6dd0ddf16518d74f3dee75631ed334502038dd6bc7360f7d4d40dd312e52e806ebe9003f67aa5251310a9ab6dce3410b38fb93a93b654d0c95db9e52f8d
   languageName: node
   linkType: hard
 
@@ -17828,7 +17828,7 @@ resolve@~1.19.0:
   languageName: node
   linkType: hard
 
-"rollup@npm:^2.53.1, rollup@npm:^2.53.2":
+"rollup@npm:^2.53.2":
   version: 2.53.2
   resolution: "rollup@npm:2.53.2"
   dependencies:
@@ -17988,14 +17988,14 @@ resolve@~1.19.0:
   languageName: node
   linkType: hard
 
-"schema-utils@npm:^3.0.0":
-  version: 3.0.0
-  resolution: "schema-utils@npm:3.0.0"
+"schema-utils@npm:^3.0.0, schema-utils@npm:^3.1.0":
+  version: 3.1.0
+  resolution: "schema-utils@npm:3.1.0"
   dependencies:
-    "@types/json-schema": ^7.0.6
+    "@types/json-schema": ^7.0.7
     ajv: ^6.12.5
     ajv-keywords: ^3.5.2
-  checksum: a084f593f222560c412a4d8f40c92386c01c1c709f27c0672c2f02927a4d4d475f57f8b8e91198d0defb452add160476a03f07a05b26200a64b5124fa874e158
+  checksum: 804b78a4d212eff70e072263ef241a5ef5b26684a1a9d2611879bb3fa8497637f3a0e8212053b4bf6e9d7ab8b12a1c98ad0fe8db23497e6a057579db8ded8313
   languageName: node
   linkType: hard
 
@@ -20734,9 +20734,9 @@ resolve@~1.19.0:
   languageName: node
   linkType: hard
 
-"webpack@npm:^5.28.0, webpack@npm:^5.37.0, webpack@npm:^5.44.0":
-  version: 5.44.0
-  resolution: "webpack@npm:5.44.0"
+"webpack@npm:^5.28.0, webpack@npm:^5.37.0, webpack@npm:^5.45.1":
+  version: 5.45.1
+  resolution: "webpack@npm:5.45.1"
   dependencies:
     "@types/eslint-scope": ^3.7.0
     "@types/estree": ^0.0.50
@@ -20756,7 +20756,7 @@ resolve@~1.19.0:
     loader-runner: ^4.2.0
     mime-types: ^2.1.27
     neo-async: ^2.6.2
-    schema-utils: ^3.0.0
+    schema-utils: ^3.1.0
     tapable: ^2.1.1
     terser-webpack-plugin: ^5.1.3
     watchpack: ^2.2.0
@@ -20766,7 +20766,7 @@ resolve@~1.19.0:
       optional: true
   bin:
     webpack: bin/webpack.js
-  checksum: 541ee0607b143ccaf319cce5de1dd0faf527c0f432e6a95f992d73ae8c1b1187474c1e8ced43472525e2c7037cba19be96d75d7b1804644671501d0f2096bf28
+  checksum: f25a1c1db231d5a0773af2d8fa312e8915c9592ddae708c058be9abaa483d21051955fab69859671bd104ac49d3c21b74086cd258b4057477b5d017cd697cf87
   languageName: node
   linkType: hard
 
