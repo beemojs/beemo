@@ -1,6 +1,5 @@
 import React from 'react';
 import { Command, Config, GlobalOptions } from '@boost/cli';
-import { App } from '../components/App';
 import { tool } from '../setup';
 
 @Config('create-config', tool.msg('app:cliCommandConfig'), {
@@ -9,7 +8,8 @@ import { tool } from '../setup';
 	category: 'core',
 })
 export class CreateConfig extends Command<GlobalOptions> {
-	run(...names: string[]) {
+	async run(...names: string[]) {
+		const { App } = await import('../components/App');
 		const pipeline = tool.createConfigurePipeline(this.getArguments(), names);
 
 		// @ts-expect-error Event type mismatch

@@ -1,7 +1,7 @@
 export default {
 	module: '@beemo/local',
 	execute: {
-		output: 'none',
+		// output: 'none',
 	},
 	drivers: [
 		'babel',

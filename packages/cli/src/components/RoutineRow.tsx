@@ -1,9 +1,8 @@
-/* eslint-disable no-magic-numbers */
 /* eslint-disable no-nested-ternary */
 
 import React from 'react';
 import { Box, Text } from 'ink';
-import { Style } from '@boost/cli';
+import { Style } from '@boost/cli/react';
 import { Routine } from '@boost/pipeline';
 import { Duration } from './Duration';
 
@@ -23,7 +22,7 @@ export function RoutineRow({ routine }: RoutineRowProps) {
 		: 'muted';
 
 	return (
-		<Box paddingLeft={routine.depth * 2 + (routine.depth > 0 ? 4 : 0)}>
+		<Box paddingLeft={routine.depth + (routine.depth > 0 ? 3 : 0)} paddingRight={1}>
 			{routine.depth === 0 && (
 				<Box marginRight={1}>
 					<Style type="muted">{`[${routine.index + 1}]`}</Style>
@@ -31,6 +30,8 @@ export function RoutineRow({ routine }: RoutineRowProps) {
 			)}
 
 			<Box>
+				{routine.depth > 0 && <Style type="muted">└─ </Style>}
+
 				<Style bold type={status}>
 					{routine.key.toUpperCase()}
 				</Style>

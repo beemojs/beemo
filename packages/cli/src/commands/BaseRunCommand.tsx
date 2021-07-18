@@ -4,7 +4,6 @@ import React from 'react';
 import { DriverContext } from '@beemo/core';
 import { Arg, Command, GlobalOptions, PrimitiveType } from '@boost/cli';
 import { SerialPipeline } from '@boost/pipeline';
-import { App } from '../components/App';
 import { tool } from '../setup';
 
 export abstract class BaseRunCommand<
@@ -22,6 +21,7 @@ export abstract class BaseRunCommand<
 	workspaces: string = '';
 
 	async renderDriver(pipeline: SerialPipeline<{}, DriverContext, unknown, unknown>) {
+		const { App } = await import('../components/App');
 		const driver = pipeline.context.primaryDriver;
 		let hasError = false;
 

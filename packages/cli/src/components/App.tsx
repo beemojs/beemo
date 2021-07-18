@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import { Box, Static } from 'ink';
 import { DriverOutputStrategy } from '@beemo/core';
-import { useProgram, useRenderLoop } from '@boost/cli';
+import { useProgram, useRenderLoop } from '@boost/cli/react';
 import { AnyWorkUnit, Context, Monitor, Routine, SerialPipeline, Task } from '@boost/pipeline';
 import { tool } from '../setup';
 import { RoutineRow, UnknownRoutine } from './RoutineRow';
@@ -61,8 +61,7 @@ export function App({ pipeline, outputStrategy }: AppProps) {
 		}
 
 		void run();
-		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, []);
+	}, [clearLoop, exit, pipeline]);
 
 	// Hide Beemo output but not driver output
 	if (strategy === 'none' || strategy === 'stream') {
@@ -73,22 +72,25 @@ export function App({ pipeline, outputStrategy }: AppProps) {
 	const routines = [...workUnits].filter(
 		(unit) => unit instanceof Routine && !unit.isSkipped(),
 	) as UnknownRoutine[];
-	const tasks = [...workUnits].filter((unit) => unit instanceof Task) as UnknownTask[];
+
+	const tasks = [...workUnits].filter(
+		(unit) => unit instanceof Task && unit.isRunning(),
+	) as UnknownTask[];
 
 	return (
 		<>
 			<Static items={finishedRoutines}>
-				{(routine) => <RoutineRow key={`static-${routine.id}`} routine={routine} />}
+				{(routine) => <RoutineRow key={`static-${routine.id}-${routine.key}`} routine={routine} />}
 			</Static>
 
 			<Box flexDirection="column">
 				{routines.map((routine) => (
-					<RoutineRow key={`routine-${routine.id}`} routine={routine} />
+					<RoutineRow key={`routine-${routine.id}-${routine.key}`} routine={routine} />
 				))}
 
-				{/* tasks.map((task) => (
-				<TaskRow key={`task-${task.id}`} task={task} />
-			)) */}
+				{tasks.map((task) => (
+					<TaskRow key={`task-${task.id}-${task.title}`} task={task} />
+				))}
 			</Box>
 		</>
 	);

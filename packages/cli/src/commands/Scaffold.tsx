@@ -1,7 +1,6 @@
 import React from 'react';
 import { ScaffoldContextOptions, ScaffoldContextParams } from '@beemo/core';
 import { Arg, Command, Config, GlobalOptions } from '@boost/cli';
-import { App } from '../components/App';
 import { tool } from '../setup';
 
 @Config('scaffold', tool.msg('app:cliCommandScaffold'), { category: 'core' })
@@ -31,7 +30,8 @@ export class Scaffold extends Command<
 			type: 'string',
 		},
 	)
-	run(generator: string, action: string, name: string = '') {
+	async run(generator: string, action: string, name: string = '') {
+		const { App } = await import('../components/App');
 		const pipeline = tool.createScaffoldPipeline(this.getArguments(), generator, action, name);
 
 		return <App pipeline={pipeline} />;

@@ -25,7 +25,7 @@ configCreateLoadConsumer: Loading {{name}} config from local overrides
 configCreateMerge: Merging {{name}} config objects
 configGenerate: Creating config files
 configReference: Referencing {{name}} config file
-configSetEnvVars: Setting environment variables defined by driver
+configSetEnvVars: Setting environment variables defined by {{name}} driver
 driverRun: Running {{name}} v{{version}} driver
 driverExecute: Executing command
 driverExecuteCopyWorkspaceConfig: Copying config into workspace

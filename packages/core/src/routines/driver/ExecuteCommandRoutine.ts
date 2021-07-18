@@ -8,7 +8,7 @@ import merge from 'lodash/merge';
 import { parse } from '@boost/args';
 import { Bind, Blueprint, ExitError, Path, Predicates } from '@boost/common';
 import { color } from '@boost/internal';
-import { AnyWorkUnit, Routine, WaterfallPipeline } from '@boost/pipeline';
+import { AnyWorkUnit, Routine } from '@boost/pipeline';
 import { STRATEGY_COPY } from '../../constants';
 import { DriverContext } from '../../contexts/DriverContext';
 import { filterArgs, OptionMap } from '../../helpers/filterArgs';
@@ -42,7 +42,7 @@ export class ExecuteCommandRoutine extends Routine<unknown, unknown, ExecuteComm
 		const { forceConfigOption, packageRoot } = this.options;
 		const { metadata, options } = context.primaryDriver;
 
-		let pipeline = new WaterfallPipeline(context).pipe(
+		let pipeline = this.createWaterfallPipeline(context).pipe(
 			tool.msg('app:driverExecuteGatherArgs'),
 			this.gatherArgs,
 		);
