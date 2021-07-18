@@ -3,6 +3,23 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+### 2.0.0 - 2021-07-18
+
+#### ⚙️ Types
+
+- Export driver type from index. ([e0ffd40](https://github.com/beemojs/beemo/commit/e0ffd40))
+
+#### 🛠 Internals
+
+- Drop prerelease suffix from peer deps. ([b2783a5](https://github.com/beemojs/beemo/commit/b2783a5))
+- Increase code coverage. ([fe8251d](https://github.com/beemojs/beemo/commit/fe8251d))
+
+**Note:** Version bump only for package @beemo/driver-lerna
+
+
+
+
+
 # 2.0.0-rc.3 - 2021-07-11
 
 #### 💥 Breaking

@@ -3,6 +3,19 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## 2.0.0 - 2021-07-18
+
+#### 🚀 Updates
+
+- Add new CLI renderer and output. (#141) ([28928a0](https://github.com/beemojs/beemo/commit/28928a0)), closes [#141](https://github.com/beemojs/beemo/issues/141)
+- Initial support for PnP. (#140) ([7cc7271](https://github.com/beemojs/beemo/commit/7cc7271)), closes [#140](https://github.com/beemojs/beemo/issues/140)
+
+**Note:** Version bump only for package @beemo/core
+
+
+
+
+
 # 2.0.0-rc.4 - 2021-07-11
 
 #### 💥 Breaking

@@ -3,6 +3,18 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## 1.0.0 - 2021-07-18
+
+#### 🚀 Updates
+
+- Add new CLI renderer and output. (#141) ([28928a0](https://github.com/beemojs/beemo/commit/28928a0)), closes [#141](https://github.com/beemojs/beemo/issues/141)
+
+**Note:** Version bump only for package website
+
+
+
+
+
 # 1.0.0-rc.1 - 2021-07-11
 
 #### 💥 Breaking
