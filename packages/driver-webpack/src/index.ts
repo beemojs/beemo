@@ -6,6 +6,7 @@
 import { DriverOptions } from '@beemo/core';
 import { WebpackDriver } from './WebpackDriver';
 
+export type { WebpackDriver };
 export * from './types';
 
 export default function webpackDriver(options?: DriverOptions) {

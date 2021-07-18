@@ -6,6 +6,7 @@
 import { DriverOptions } from '@beemo/core';
 import { PrettierDriver } from './PrettierDriver';
 
+export type { PrettierDriver };
 export * from './types';
 
 export default function prettierDriver(options?: DriverOptions) {

@@ -6,6 +6,7 @@
 import { DriverOptions } from '@beemo/core';
 import { ESLintDriver } from './ESLintDriver';
 
+export type { ESLintDriver };
 export * from './types';
 
 export default function eslintDriver(options?: DriverOptions) {

@@ -6,6 +6,7 @@
 import { DriverOptions } from '@beemo/core';
 import { BabelDriver } from './BabelDriver';
 
+export type { BabelDriver };
 export * from './types';
 
 export default function babelDriver(options?: DriverOptions) {

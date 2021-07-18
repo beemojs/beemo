@@ -6,6 +6,7 @@
 import { TypeScriptOptions } from './types';
 import { TypeScriptDriver } from './TypeScriptDriver';
 
+export type { TypeScriptDriver };
 export * from './types';
 
 export default function typeScriptDriver(options?: TypeScriptOptions) {

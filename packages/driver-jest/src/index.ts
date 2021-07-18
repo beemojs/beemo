@@ -6,6 +6,7 @@
 import { DriverOptions } from '@beemo/core';
 import { JestDriver } from './JestDriver';
 
+export type { JestDriver };
 export * from './types';
 
 export default function jestDriver(options?: DriverOptions) {

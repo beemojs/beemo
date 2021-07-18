@@ -6,6 +6,7 @@
 import { DriverOptions } from '@beemo/core';
 import { MochaDriver } from './MochaDriver';
 
+export type { MochaDriver };
 export * from './types';
 
 export default function mochaDriver(options?: DriverOptions) {

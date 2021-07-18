@@ -6,6 +6,7 @@
 import { DriverOptions } from '@beemo/core';
 import { LernaDriver } from './LernaDriver';
 
+export type { LernaDriver };
 export * from './types';
 
 export default function lernaDriver(options?: DriverOptions) {

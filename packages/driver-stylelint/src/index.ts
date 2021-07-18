@@ -6,6 +6,7 @@
 import { DriverOptions } from '@beemo/core';
 import { StylelintDriver } from './StylelintDriver';
 
+export type { StylelintDriver };
 export * from './types';
 
 export default function stylelintDriver(options?: DriverOptions) {

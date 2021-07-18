@@ -6,6 +6,7 @@
 import { DriverOptions } from '@beemo/core';
 import { FlowDriver } from './FlowDriver';
 
+export type { FlowDriver };
 export * from './types';
 
 export default function flowDriver(options?: DriverOptions) {

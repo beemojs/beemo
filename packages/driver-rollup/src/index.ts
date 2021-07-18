@@ -6,6 +6,7 @@
 import { DriverOptions } from '@beemo/core';
 import { RollupDriver } from './RollupDriver';
 
+export type { RollupDriver };
 export * from './types';
 
 export default function rollupDriver(options?: DriverOptions) {
