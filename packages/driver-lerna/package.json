@@ -39,7 +39,7 @@
     "lerna": "^4.0.0"
   },
   "peerDependencies": {
-    "@beemo/core": "^2.0.0-alpha.0",
+    "@beemo/core": "^2.0.0",
     "lerna": "^3.0.0 || ^4.0.0"
   },
   "funding": {

@@ -42,7 +42,7 @@
     "react": "^16.14.0"
   },
   "peerDependencies": {
-    "@beemo/core": "^2.0.0-alpha.0"
+    "@beemo/core": "^2.0.0"
   },
   "devDependencies": {
     "time-require": "^0.1.2"

@@ -41,7 +41,7 @@
     "mocha": "^9.0.2"
   },
   "peerDependencies": {
-    "@beemo/core": "^2.0.0-alpha.0",
+    "@beemo/core": "^2.0.0",
     "mocha": "^8.0.0 || ^9.0.0"
   },
   "funding": {

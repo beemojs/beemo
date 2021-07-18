@@ -1753,7 +1753,7 @@ __metadata:
     react: ^16.14.0
     time-require: ^0.1.2
   peerDependencies:
-    "@beemo/core": ^2.0.0-alpha.0
+    "@beemo/core": ^2.0.0
   bin:
     beemo: ./lib/bin.js
   languageName: unknown
@@ -1897,7 +1897,7 @@ __metadata:
     rimraf: ^3.0.2
   peerDependencies:
     "@babel/core": ^7.0.0
-    "@beemo/core": ^2.0.0-alpha.0
+    "@beemo/core": ^2.0.0
   languageName: unknown
   linkType: soft
 
@@ -1909,7 +1909,7 @@ __metadata:
     "@types/eslint": "*"
     eslint: ^7.31.0
   peerDependencies:
-    "@beemo/core": ^2.0.0-alpha.0
+    "@beemo/core": ^2.0.0
     eslint: ^7.0.0
   languageName: unknown
   linkType: soft
@@ -1920,7 +1920,7 @@ __metadata:
   dependencies:
     flow-bin: ^0.155.1
   peerDependencies:
-    "@beemo/core": ^2.0.0-alpha.0
+    "@beemo/core": ^2.0.0
     flow-bin: "*"
   languageName: unknown
   linkType: soft
@@ -1932,7 +1932,7 @@ __metadata:
     "@jest/types": ^27.0.6
     jest: ^27.0.6
   peerDependencies:
-    "@beemo/core": ^2.0.0-alpha.0
+    "@beemo/core": ^2.0.0
     jest: ^26.0.0 || ^27.0.0
   languageName: unknown
   linkType: soft
@@ -1943,7 +1943,7 @@ __metadata:
   dependencies:
     lerna: ^4.0.0
   peerDependencies:
-    "@beemo/core": ^2.0.0-alpha.0
+    "@beemo/core": ^2.0.0
     lerna: ^3.0.0 || ^4.0.0
   languageName: unknown
   linkType: soft
@@ -1954,7 +1954,7 @@ __metadata:
   dependencies:
     mocha: ^9.0.2
   peerDependencies:
-    "@beemo/core": ^2.0.0-alpha.0
+    "@beemo/core": ^2.0.0
     mocha: ^8.0.0 || ^9.0.0
   languageName: unknown
   linkType: soft
@@ -1967,7 +1967,7 @@ __metadata:
     "@types/prettier": "*"
     prettier: ^2.3.2
   peerDependencies:
-    "@beemo/core": ^2.0.0-alpha.0
+    "@beemo/core": ^2.0.0
     prettier: ^2.0.0
   languageName: unknown
   linkType: soft
@@ -1978,7 +1978,7 @@ __metadata:
   dependencies:
     rollup: ^2.53.2
   peerDependencies:
-    "@beemo/core": ^2.0.0-alpha.0
+    "@beemo/core": ^2.0.0
     rollup: ^2.0.0
   languageName: unknown
   linkType: soft
@@ -1991,7 +1991,7 @@ __metadata:
     "@types/stylelint": "*"
     stylelint: ^13.13.1
   peerDependencies:
-    "@beemo/core": ^2.0.0-alpha.0
+    "@beemo/core": ^2.0.0
     stylelint: ^13.0.0
   languageName: unknown
   linkType: soft
@@ -2005,7 +2005,7 @@ __metadata:
     rimraf: ^3.0.2
     typescript: ^4.3.5
   peerDependencies:
-    "@beemo/core": ^2.0.0-alpha.0
+    "@beemo/core": ^2.0.0
     typescript: ^4.0.0
   languageName: unknown
   linkType: soft
@@ -2017,7 +2017,7 @@ __metadata:
     webpack: ^5.45.1
     webpack-cli: ^4.7.2
   peerDependencies:
-    "@beemo/core": ^2.0.0-alpha.0
+    "@beemo/core": ^2.0.0
     webpack: ^4.0.0 || ^5.0.0
   languageName: unknown
   linkType: soft
