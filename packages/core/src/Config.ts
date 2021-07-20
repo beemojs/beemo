@@ -27,7 +27,7 @@ export class Config extends Configuration<ConfigFile> {
           STRATEGY_NONE,
         ]), */,
 			}),
-			module: onConstruction ? moduleSchema : moduleSchema.required(),
+			module: onConstruction ? moduleSchema : moduleSchema.required().notEmpty(),
 			scripts: createPluginsPredicate(predicates),
 			settings: object(),
 		};
