@@ -3,6 +3,22 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+### 2.0.1 - 2021-07-20
+
+#### 🐞 Fixes
+
+- Dont run scripts through React so that they can inherit streams. ([1573d74](https://github.com/beemojs/beemo/commit/1573d74))
+
+#### 🛠 Internals
+
+- Enable Config tests. ([699fc11](https://github.com/beemojs/beemo/commit/699fc11))
+
+**Note:** Version bump only for package @beemo/core
+
+
+
+
+
 ## 2.0.0 - 2021-07-18
 
 #### 🚀 Updates
