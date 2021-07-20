@@ -58,7 +58,9 @@ export abstract class Script<O extends object = {}, Options extends object = {}>
 	 */
 	async executeCommand(command: string, args: string[], options: ExecaOptions = {}) /* infer */ {
 		return execa(command, args, {
+			extendEnv: true,
 			preferLocal: true,
+			stdio: 'inherit',
 			...options,
 		});
 	}

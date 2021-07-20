@@ -39,7 +39,9 @@ describe('Script', () => {
 
 			expect(execa).toHaveBeenCalledWith('yarn', ['install', '--immutable'], {
 				cwd: '.',
+				extendEnv: true,
 				preferLocal: true,
+				stdio: 'inherit',
 			});
 		});
 	});
