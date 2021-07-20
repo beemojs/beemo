@@ -38,7 +38,7 @@
     "@boost/common": "^2.8.1",
     "@boost/pipeline": "^2.2.7",
     "debug": "^4.3.2",
-    "ink": "^3.0.8",
+    "ink": "^3.0.9",
     "react": "^16.14.0"
   },
   "peerDependencies": {
