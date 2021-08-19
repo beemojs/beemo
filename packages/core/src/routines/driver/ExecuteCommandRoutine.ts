@@ -70,7 +70,9 @@ export class ExecuteCommandRoutine extends Routine<unknown, unknown, ExecuteComm
 			);
 		}
 
-		return pipeline.pipe(tool.msg('app:driverExecute'), this.runCommandWithArgs).run();
+		return pipeline
+			.pipe(tool.msg('app:driverExecute', { bin: metadata.bin }), this.runCommandWithArgs)
+			.run();
 	}
 
 	/**

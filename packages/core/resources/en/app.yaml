@@ -27,7 +27,7 @@ configGenerate: Creating config files
 configReference: Referencing {{name}} config file
 configSetEnvVars: Setting environment variables defined by {{name}} driver
 driverRun: Running {{name}} v{{version}} driver
-driverExecute: Executing command
+driverExecute: Executing {{bin}} command
 driverExecuteCopyWorkspaceConfig: Copying config into workspace
 driverExecuteExpandGlob: Expanding glob patterns
 driverExecuteFilterOptions: Filtering options
