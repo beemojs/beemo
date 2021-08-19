@@ -3,6 +3,22 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+### 2.0.2 - 2021-08-19
+
+#### 🐞 Fixes
+
+- Update execute command title to avoid React key collisions. ([10600c5](https://github.com/beemojs/beemo/commit/10600c5))
+
+#### 📦 Dependencies
+
+- **[beemo-dev]** Update to latest configs. ([526f36e](https://github.com/beemojs/beemo/commit/526f36e))
+
+**Note:** Version bump only for package @beemo/core
+
+
+
+
+
 ### 2.0.1 - 2021-07-20
 
 #### 🐞 Fixes

@@ -3,6 +3,18 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+### 2.0.1 - 2021-08-19
+
+#### 📦 Dependencies
+
+- Update driver dependencies to latest. ([0857f2e](https://github.com/beemojs/beemo/commit/0857f2e))
+
+**Note:** Version bump only for package @beemo/driver-mocha
+
+
+
+
+
 ### 2.0.0 - 2021-07-18
 
 #### ⚙️ Types
