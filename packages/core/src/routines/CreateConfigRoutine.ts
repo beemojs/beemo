@@ -268,6 +268,7 @@ export class CreateConfigRoutine<Ctx extends ConfigContext> extends Routine<
 
 		this.debug('Merging %s config from %d sources', color.symbol(driver.getName()), configs.length);
 
+		// eslint-disable-next-line unicorn/prefer-object-from-entries
 		const config = configs.reduce(
 			(masterConfig, cfg) => this.options.driver.mergeConfig(masterConfig, cfg),
 			{},
