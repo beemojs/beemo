@@ -46,7 +46,7 @@
   },
   "dependencies": {
     "@boost/event": "^2.3.3",
-    "@types/prettier": "*"
+    "@types/prettier": "^2.3.2"
   },
   "funding": {
     "type": "ko-fi",
