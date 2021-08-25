@@ -13,12 +13,12 @@ import {
 	PortablePath,
 	Predicates,
 	Project,
-	requireModule,
 } from '@boost/common';
 import { createDebugger, Debugger } from '@boost/debug';
 import { Event } from '@boost/event';
 import { color } from '@boost/internal';
 import { Writable } from '@boost/log';
+import { ModuleLike, requireModule } from '@boost/module';
 import { WaterfallPipeline } from '@boost/pipeline';
 import { Registry } from '@boost/plugin';
 import { createTranslator, Translator } from '@boost/translate';
@@ -141,7 +141,7 @@ export class Tool extends Contract<ToolOptions> {
 		this.debug('Bootstrapping configuration module');
 
 		const { module } = this.config;
-		let bootstrapModule: BootstrapFile | null = null;
+		let bootstrapModule: ModuleLike<BootstrapFile, { bootstrap?: BootstrapFile }> | null = null;
 
 		try {
 			const root = this.getConfigModuleRoot();
@@ -164,7 +164,7 @@ export class Tool extends Contract<ToolOptions> {
 			return this;
 		}
 
-		const bootstrap = bootstrapModule?.bootstrap ?? bootstrapModule?.default ?? bootstrapModule;
+		const bootstrap = bootstrapModule?.bootstrap ?? bootstrapModule?.default;
 		const isFunction = typeof bootstrap === 'function';
 
 		this.debug.invariant(isFunction, 'Executing bootstrap function', 'Found', 'Not found');

@@ -1844,6 +1844,7 @@ __metadata:
     "@boost/event": ^2.3.3
     "@boost/internal": ^2.2.3
     "@boost/log": ^2.2.8
+    "@boost/module": ^2.0.0
     "@boost/pipeline": ^2.2.8
     "@boost/plugin": ^2.4.2
     "@boost/terminal": ^2.2.3
@@ -2166,6 +2167,18 @@ __metadata:
     "@boost/translate": ^2.2.8
     chalk: ^4.1.1
   checksum: 42e5d89c05b26e84899edef26231c29bdf9c14dac413951f7ac69e5c4bdcaa03e20bb76953ca3e7f6535a860d12e3ce9825d93f3e16ba00391d8c55258d3b690
+  languageName: node
+  linkType: hard
+
+"@boost/module@npm:^2.0.0":
+  version: 2.0.0
+  resolution: "@boost/module@npm:2.0.0"
+  peerDependencies:
+    typescript: ^4.0.0
+  peerDependenciesMeta:
+    typescript:
+      optional: true
+  checksum: eeb61576d3c197123b9bce3d8c329fdf1703062e6ab6a69675fe9c3589d01b26e82ef7174f83d2a046fc1e6aa065cc96efcc18d2d9284e83080bc6f4f14c0263
   languageName: node
   linkType: hard
 

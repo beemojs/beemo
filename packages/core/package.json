@@ -48,6 +48,7 @@
     "@boost/event": "^2.3.3",
     "@boost/internal": "^2.2.3",
     "@boost/log": "^2.2.8",
+    "@boost/module": "^2.0.0",
     "@boost/pipeline": "^2.2.8",
     "@boost/plugin": "^2.4.2",
     "@boost/terminal": "^2.2.3",
