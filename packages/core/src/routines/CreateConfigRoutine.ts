@@ -2,8 +2,9 @@
 
 import fs from 'fs-extra';
 import camelCase from 'lodash/camelCase';
-import { Bind, Blueprint, Path, PathResolver, Predicates, requireModule } from '@boost/common';
+import { Bind, Blueprint, Path, PathResolver, Predicates } from '@boost/common';
 import { color } from '@boost/internal';
+import { requireModule } from '@boost/module';
 import { Routine } from '@boost/pipeline';
 import {
 	STRATEGY_COPY,
@@ -150,7 +151,7 @@ export class CreateConfigRoutine<Ctx extends ConfigContext> extends Routine<
 		}
 
 		try {
-			template = requireModule(templatePath);
+			template = requireModule<ConfigTemplate>(templatePath).default;
 		} catch {
 			throw new Error(
 				tool.msg('errors:templatePathMissing', {
@@ -283,7 +284,7 @@ export class CreateConfigRoutine<Ctx extends ConfigContext> extends Routine<
 	 * Load a config file with passing the args and tool to the file.
 	 */
 	loadConfigAtPath(filePath: Path): ConfigObject {
-		const config: ConfigObject = requireModule(filePath);
+		const config = requireModule<ConfigObject>(filePath).default;
 
 		if (typeof config === 'function') {
 			throw new TypeError(
