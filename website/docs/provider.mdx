@@ -217,9 +217,11 @@ class InitProjectScript extends Script<InitProjectOptions> {
 
 	parse(): ParserOptions<InitProjectOptions> {
 		return {
-			dryRun: {
-				description: 'Execute a dry run',
-				type: 'boolean',
+			options: {
+				dryRun: {
+					description: 'Execute a dry run',
+					type: 'boolean',
+				},
 			},
 		};
 	}

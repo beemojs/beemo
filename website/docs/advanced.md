@@ -53,7 +53,7 @@ every `yarn install` or `npm install`.
 ```json title="package.json"
 {
 	"scripts": {
-		"prepare": "beemo create-config --silent"
+		"prepare": "beemo create-config"
 	}
 }
 ```
