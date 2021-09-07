@@ -112,7 +112,9 @@ export class RunScriptRoutine extends RunInWorkspacesRoutine<ScriptContext> {
 
 		try {
 			const { resolvedPath } = resolver.resolve();
-			const loadedScript = await tool.scriptRegistry.load(resolvedPath.path());
+			const loadedScript = await tool.scriptRegistry.load(resolvedPath.path(), undefined, {
+				tool: this.options.tool,
+			});
 
 			context.setScript(loadedScript);
 
@@ -138,7 +140,7 @@ export class RunScriptRoutine extends RunInWorkspacesRoutine<ScriptContext> {
 			throw new Error(`Failed to load script from multiple sources:\n${messages}`);
 		}
 
-		void this.options.tool.scriptRegistry.load(script);
+		void this.options.tool.scriptRegistry.load(script, undefined, { tool: this.options.tool });
 
 		return script;
 	}
