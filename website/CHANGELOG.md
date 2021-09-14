@@ -3,6 +3,18 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+### 1.0.1 - 2021-09-14
+
+#### 📘 Docs
+
+- Fix outdated v1 examples. ([a1ee8ae](https://github.com/beemojs/beemo/commit/a1ee8ae))
+
+**Note:** Version bump only for package website
+
+
+
+
+
 ## 1.0.0 - 2021-07-18
 
 #### 🚀 Updates

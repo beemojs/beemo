@@ -3,6 +3,22 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+### 2.0.2 - 2021-09-14
+
+#### 🐞 Fixes
+
+- Fix duplicate React keys. ([19aaafd](https://github.com/beemojs/beemo/commit/19aaafd))
+
+#### 📦 Dependencies
+
+- **[boost]** Update to v2 latest. ([0c18751](https://github.com/beemojs/beemo/commit/0c18751))
+
+**Note:** Version bump only for package @beemo/cli
+
+
+
+
+
 ### 2.0.1 - 2021-07-20
 
 #### 🐞 Fixes

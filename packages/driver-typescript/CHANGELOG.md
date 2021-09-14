@@ -3,6 +3,18 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+### 2.0.1 - 2021-09-14
+
+#### 📦 Dependencies
+
+- Update driver dependencies to latest. ([1a40162](https://github.com/beemojs/beemo/commit/1a40162))
+
+**Note:** Version bump only for package @beemo/driver-typescript
+
+
+
+
+
 ## 2.0.0 - 2021-07-18
 
 #### 🚀 Updates

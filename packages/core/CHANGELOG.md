@@ -3,6 +3,27 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## 2.1.0 - 2021-09-14
+
+#### 🚀 Updates
+
+- Migrate to new @boost/module for config loading. ([2ab021b](https://github.com/beemojs/beemo/commit/2ab021b))
+
+#### 🐞 Fixes
+
+- Fix duplicate React keys. ([19aaafd](https://github.com/beemojs/beemo/commit/19aaafd))
+- **[core]** Pass in tool when loading script directly (#149) ([8385455](https://github.com/beemojs/beemo/commit/8385455)), closes [#149](https://github.com/beemojs/beemo/issues/149) [#146](https://github.com/beemojs/beemo/issues/146)
+
+#### 📦 Dependencies
+
+- **[boost]** Update to v2 latest. ([0c18751](https://github.com/beemojs/beemo/commit/0c18751))
+
+**Note:** Version bump only for package @beemo/core
+
+
+
+
+
 ### 2.0.2 - 2021-08-19
 
 #### 🐞 Fixes
