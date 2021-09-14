@@ -609,7 +609,7 @@ describe('ExecuteCommandRoutine', () => {
 				await routine.runCommandWithArgs(context, ['--wtf'], task);
 			} catch (error) {
 				expect(error).toBeInstanceOf(ExitError);
-				expect(error.code).toBe(3);
+				expect((error as ExitError).code).toBe(3);
 			}
 		});
 
