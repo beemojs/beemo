@@ -5,7 +5,7 @@ import { useProgram, useRenderLoop } from '@boost/cli/react';
 import { AnyWorkUnit, Context, Monitor, Routine, SerialPipeline, Task } from '@boost/pipeline';
 import { tool } from '../setup';
 import { RoutineRow, UnknownRoutine } from './RoutineRow';
-import { TaskRow, UnknownTask } from './TaskRow';
+import { TaskRow } from './TaskRow';
 
 export interface AppProps {
 	pipeline: SerialPipeline<{}, Context, unknown, unknown>;
@@ -73,9 +73,15 @@ export function App({ pipeline, outputStrategy }: AppProps) {
 		(unit) => unit instanceof Routine && !unit.isSkipped(),
 	) as UnknownRoutine[];
 
-	const tasks = [...workUnits].filter(
-		(unit) => unit instanceof Task && unit.isRunning(),
-	) as UnknownTask[];
+	const tasks = new Map<string, Task>();
+
+	workUnits.forEach((unit) => {
+		if (unit instanceof Task && unit.isRunning) {
+			// Similar tasks that are run in parallel may have the same ID,
+			// but we only want to display one of them, so index by ID.
+			tasks.set(unit.id, unit);
+		}
+	});
 
 	return (
 		<>
@@ -88,8 +94,8 @@ export function App({ pipeline, outputStrategy }: AppProps) {
 					<RoutineRow key={`routine-${routine.id}-${routine.key}`} routine={routine} />
 				))}
 
-				{tasks.map((task) => (
-					<TaskRow key={`task-${task.id}-${task.title}`} outputStrategy={strategy} task={task} />
+				{[...tasks].map(([id, task]) => (
+					<TaskRow key={`task-${id}-${task.title}`} outputStrategy={strategy} task={task} />
 				))}
 			</Box>
 		</>

@@ -279,7 +279,7 @@ describe('RunScriptRoutine', () => {
 
 			routine.postLoad(context, script);
 
-			expect(spy).toHaveBeenCalledWith(script);
+			expect(spy).toHaveBeenCalledWith(script, undefined, { tool });
 		});
 	});
 });
