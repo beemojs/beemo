@@ -57,7 +57,7 @@
     "fast-glob": "^3.2.7",
     "fs-extra": "^10.0.0",
     "hygen": "^6.1.0",
-    "is-glob": "^4.0.1",
+    "is-glob": "^4.0.3",
     "lodash": "^4.17.21",
     "micromatch": "^4.0.4"
   },
