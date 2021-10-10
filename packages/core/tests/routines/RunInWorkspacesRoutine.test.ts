@@ -119,7 +119,7 @@ describe('RunInWorkspacesRoutine', () => {
 
 			const response = await routine.execute(context);
 
-			expect(response).toEqual('foo');
+			expect(response).toBe('foo');
 		});
 
 		describe('workspaces', () => {

@@ -53,7 +53,7 @@ describe('Tool', () => {
 
 			await tool.bootstrap();
 
-			expect(tool.package).not.toBeUndefined();
+			expect(tool.package).toBeDefined();
 		});
 
 		it('loads drivers and scripts', async () => {
