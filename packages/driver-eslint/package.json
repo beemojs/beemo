@@ -42,7 +42,7 @@
   },
   "peerDependencies": {
     "@beemo/core": "^2.0.0",
-    "eslint": "^7.0.0"
+    "eslint": "^7.0.0 || ^8.0.0"
   },
   "dependencies": {
     "@boost/event": "^2.3.3",

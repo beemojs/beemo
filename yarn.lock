@@ -1917,7 +1917,7 @@ __metadata:
     eslint: ^7.32.0
   peerDependencies:
     "@beemo/core": ^2.0.0
-    eslint: ^7.0.0
+    eslint: ^7.0.0 || ^8.0.0
   languageName: unknown
   linkType: soft
 
