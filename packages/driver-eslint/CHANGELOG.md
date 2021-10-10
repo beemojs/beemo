@@ -3,6 +3,19 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+### 2.0.2 - 2021-10-10
+
+#### 📦 Dependencies
+
+- **[eslint]** Add support for v8. ([f53d21f](https://github.com/beemojs/beemo/commit/f53d21f))
+- Update driver dependencies to latest. ([a8c2c62](https://github.com/beemojs/beemo/commit/a8c2c62))
+
+**Note:** Version bump only for package @beemo/driver-eslint
+
+
+
+
+
 ### 2.0.1 - 2021-08-19
 
 #### 📦 Dependencies

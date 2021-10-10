@@ -3,6 +3,19 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+### 1.0.2 - 2021-10-10
+
+#### 📦 Dependencies
+
+- **[eslint]** Add support for v8. ([f53d21f](https://github.com/beemojs/beemo/commit/f53d21f))
+- **[react]** Update to v17. ([2fde3a8](https://github.com/beemojs/beemo/commit/2fde3a8))
+
+**Note:** Version bump only for package website
+
+
+
+
+
 ### 1.0.1 - 2021-09-14
 
 #### 📘 Docs
