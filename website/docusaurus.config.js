@@ -1,6 +1,8 @@
 /* eslint-disable sort-keys */
 
-const pkgs = [
+const path = require('path');
+
+const pkgNames = [
 	'cli',
 	'core',
 	'driver-babel',
@@ -14,8 +16,10 @@ const pkgs = [
 	'driver-stylelint',
 	'driver-typescript',
 	'driver-webpack',
-	// eslint-disable-next-line
-].map((name) => require(`../packages/${name}/package.json`));
+];
+
+// eslint-disable-next-line
+const pkgs = pkgNames.map((name) => require(`../packages/${name}/package.json`));
 
 module.exports = {
 	title: 'Beemo',
@@ -52,6 +56,11 @@ module.exports = {
 					position: 'left',
 				},
 				{
+					to: 'api',
+					label: 'API',
+					position: 'left',
+				},
+				{
 					href: 'https://github.com/beemojs/beemo',
 					label: 'GitHub',
 					position: 'right',
@@ -79,6 +88,16 @@ module.exports = {
 				theme: {
 					customCss: require.resolve('./src/css/custom.css'),
 				},
+			},
+		],
+	],
+	plugins: [
+		[
+			'docusaurus-plugin-typedoc-api',
+			{
+				projectRoot: path.join(__dirname, '..'),
+				packages: pkgNames.map((pkgName) => `packages/${pkgName}`),
+				minimal: true,
 			},
 		],
 	],
