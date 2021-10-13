@@ -41,18 +41,18 @@
     "access": "public"
   },
   "dependencies": {
-    "@boost/args": "^2.3.4",
-    "@boost/common": "^2.8.2",
-    "@boost/config": "^2.5.2",
-    "@boost/debug": "^2.2.8",
-    "@boost/event": "^2.3.3",
-    "@boost/internal": "^2.2.3",
-    "@boost/log": "^2.2.8",
-    "@boost/module": "^2.0.0",
-    "@boost/pipeline": "^2.2.8",
-    "@boost/plugin": "^2.4.2",
-    "@boost/terminal": "^2.2.3",
-    "@boost/translate": "^2.2.8",
+    "@boost/args": "^3.0.0",
+    "@boost/common": "^3.0.0",
+    "@boost/config": "^3.0.0",
+    "@boost/debug": "^3.0.0",
+    "@boost/event": "^3.0.0",
+    "@boost/internal": "^3.0.0",
+    "@boost/log": "^3.0.0",
+    "@boost/module": "^3.0.0",
+    "@boost/pipeline": "^3.0.0",
+    "@boost/plugin": "^3.0.0",
+    "@boost/terminal": "^3.0.0",
+    "@boost/translate": "^3.0.0",
     "execa": "^5.1.1",
     "fast-glob": "^3.2.7",
     "fs-extra": "^10.0.0",
@@ -62,7 +62,7 @@
     "micromatch": "^4.0.4"
   },
   "devDependencies": {
-    "@boost/test-utils": "^2.3.2",
+    "@boost/test-utils": "^3.0.0",
     "@types/micromatch": "^4.0.2"
   },
   "funding": {

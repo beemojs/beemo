@@ -1739,9 +1739,9 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@beemo/cli@workspace:packages/cli"
   dependencies:
-    "@boost/cli": ^2.11.2
-    "@boost/common": ^2.8.2
-    "@boost/pipeline": ^2.2.8
+    "@boost/cli": ^3.0.0
+    "@boost/common": ^3.0.0
+    "@boost/pipeline": ^3.0.0
     debug: ^4.3.2
     ink: ^3.2.0
     react: ^17.0.2
@@ -1831,19 +1831,19 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@beemo/core@workspace:packages/core"
   dependencies:
-    "@boost/args": ^2.3.4
-    "@boost/common": ^2.8.2
-    "@boost/config": ^2.5.2
-    "@boost/debug": ^2.2.8
-    "@boost/event": ^2.3.3
-    "@boost/internal": ^2.2.3
-    "@boost/log": ^2.2.8
-    "@boost/module": ^2.0.0
-    "@boost/pipeline": ^2.2.8
-    "@boost/plugin": ^2.4.2
-    "@boost/terminal": ^2.2.3
-    "@boost/test-utils": ^2.3.2
-    "@boost/translate": ^2.2.8
+    "@boost/args": ^3.0.0
+    "@boost/common": ^3.0.0
+    "@boost/config": ^3.0.0
+    "@boost/debug": ^3.0.0
+    "@boost/event": ^3.0.0
+    "@boost/internal": ^3.0.0
+    "@boost/log": ^3.0.0
+    "@boost/module": ^3.0.0
+    "@boost/pipeline": ^3.0.0
+    "@boost/plugin": ^3.0.0
+    "@boost/terminal": ^3.0.0
+    "@boost/test-utils": ^3.0.0
+    "@boost/translate": ^3.0.0
     "@types/micromatch": ^4.0.2
     execa: ^5.1.1
     fast-glob: ^3.2.7
@@ -1906,7 +1906,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@beemo/driver-eslint@workspace:packages/driver-eslint"
   dependencies:
-    "@boost/event": ^2.3.3
+    "@boost/event": ^3.0.0
     "@types/eslint": ^7.28.2
     eslint: ^8.2.0
   peerDependencies:
@@ -1964,7 +1964,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@beemo/driver-prettier@workspace:packages/driver-prettier"
   dependencies:
-    "@boost/event": ^2.3.3
+    "@boost/event": ^3.0.0
     "@types/prettier": ^2.4.1
     prettier: ^2.4.1
   peerDependencies:
@@ -1988,7 +1988,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@beemo/driver-stylelint@workspace:packages/driver-stylelint"
   dependencies:
-    "@boost/event": ^2.3.3
+    "@boost/event": ^3.0.0
     stylelint: ^14.0.1
   peerDependencies:
     "@beemo/core": ^2.0.0
@@ -2000,8 +2000,8 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@beemo/driver-typescript@workspace:packages/driver-typescript"
   dependencies:
-    "@boost/event": ^2.3.3
-    "@boost/test-utils": ^2.3.2
+    "@boost/event": ^3.0.0
+    "@boost/test-utils": ^3.0.0
     rimraf: ^3.0.2
     typescript: ^4.4.4
   peerDependencies:
@@ -2058,6 +2058,16 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@boost/args@npm:^3.0.0":
+  version: 3.0.0
+  resolution: "@boost/args@npm:3.0.0"
+  dependencies:
+    "@boost/internal": ^3.0.0
+    levenary: ^1.1.1
+  checksum: 5a9c9a60b5baf5e2472bb489b172130fa27fd44d44a8af033438cac8a72daa470c1a519f06971bfb509bbc2661eca370f6e5870b1a9d85c65b59e3524cc165c4
+  languageName: node
+  linkType: hard
+
 "@boost/cli@npm:^2.11.2":
   version: 2.11.2
   resolution: "@boost/cli@npm:2.11.2"
@@ -2076,6 +2086,27 @@ __metadata:
     ink: ^3.0.0
     react: ^16.8.0
   checksum: 9a7aa5a59b313858485429e6433fe7cbad01f67f103de59733a897d9214783c7e12b189cea3dde9ac5a4a34ed74344e2aded2f0ff229209d0d0d92e0d5f509d9
+  languageName: node
+  linkType: hard
+
+"@boost/cli@npm:^3.0.0":
+  version: 3.0.0
+  resolution: "@boost/cli@npm:3.0.0"
+  dependencies:
+    "@boost/args": ^3.0.0
+    "@boost/common": ^3.0.0
+    "@boost/event": ^3.0.0
+    "@boost/internal": ^3.0.0
+    "@boost/log": ^3.0.0
+    "@boost/terminal": ^3.0.0
+    "@boost/translate": ^3.0.0
+    execa: ^5.1.1
+    levenary: ^1.1.1
+    semver: ^7.3.5
+  peerDependencies:
+    ink: ^3.0.0
+    react: ^16.8.0 || ^17.0.0
+  checksum: 9abd9c8077f2bf2b9f3178626416aafd1808c46a29d60df9b1ddf460eee25c59f6ce8303a7fe2c240db02af02646626abe7ec4b7d8d95703ed5e13d49f2cca8d
   languageName: node
   linkType: hard
 
@@ -2099,16 +2130,38 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@boost/config@npm:^2.5.2":
-  version: 2.5.2
-  resolution: "@boost/config@npm:2.5.2"
+"@boost/common@npm:^3.0.0":
+  version: 3.0.0
+  resolution: "@boost/common@npm:3.0.0"
   dependencies:
-    "@boost/common": ^2.8.2
-    "@boost/debug": ^2.2.8
-    "@boost/event": ^2.3.3
-    "@boost/internal": ^2.2.3
+    "@boost/decorators": ^3.0.0
+    "@boost/internal": ^3.0.0
+    fast-glob: ^3.2.7
+    json5: ^2.2.0
+    optimal: ^5.1.0
+    pretty-ms: ^7.0.1
+    resolve: ^1.20.0
+    yaml: ^1.10.2
+  peerDependencies:
+    typescript: ^4.0.0
+  peerDependenciesMeta:
+    typescript:
+      optional: true
+  checksum: 47f40a02102b8c0960d243b7919f346bddbfac9acc36306aef9bcc8f9b584ad598ed44dba336ea7b664e199e41dff8ff4a348098b1cd7c4b68c49a8ab4ee86eb
+  languageName: node
+  linkType: hard
+
+"@boost/config@npm:^3.0.0":
+  version: 3.0.0
+  resolution: "@boost/config@npm:3.0.0"
+  dependencies:
+    "@boost/common": ^3.0.0
+    "@boost/debug": ^3.0.0
+    "@boost/event": ^3.0.0
+    "@boost/internal": ^3.0.0
+    "@boost/module": ^3.0.0
     minimatch: ^3.0.4
-  checksum: e44fe4e279fcaec7b23e0b51ab71e5ad00c21cd28773d3ed6b7611442d1ab1dbfafec16507c1d7d2ab30a1cbe956db3006e6d512623695ef585044610dcf2dfb
+  checksum: 3d5ad027497af3146aecdc0b1963b39dff4e1ccaa1491eb8a3ed2382f0e3fce380c9a17a5ee298ef9ab06525fb0eab5318861ce7569ac2d45357c7db72061e0c
   languageName: node
   linkType: hard
 
@@ -2126,10 +2179,31 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@boost/debug@npm:^3.0.0":
+  version: 3.0.0
+  resolution: "@boost/debug@npm:3.0.0"
+  dependencies:
+    "@boost/common": ^3.0.0
+    "@boost/internal": ^3.0.0
+    "@types/debug": ^4.1.7
+    debug: ^4.3.2
+    execa: ^5.1.1
+    fast-glob: ^3.2.7
+  checksum: 42f62ed37b5f42c1f6bc0cb3967be82dd087301d17fcc1922b1b94ee1832bfb807d0d60df66bac18cb417a5ae57fd2d1ba790736489660b24c5b6f3a4c1af2a0
+  languageName: node
+  linkType: hard
+
 "@boost/decorators@npm:^2.1.4":
   version: 2.1.4
   resolution: "@boost/decorators@npm:2.1.4"
   checksum: 647f3b0a8a1530eeaec20a11edaefa4d90f368524f24a8f9883659e076d700bad9949e5d7257f956d8f6f97cc181f9885abcedd039e35aa71fb238ad0d4380b2
+  languageName: node
+  linkType: hard
+
+"@boost/decorators@npm:^3.0.0":
+  version: 3.0.0
+  resolution: "@boost/decorators@npm:3.0.0"
+  checksum: a01844642c70cbe2938922ffee23d3f1ef491f19154479168d7ffa83939c3b29442f53f7b5201c99a5516baaa4fb8947a96921f3eeef0e57a361f97616b04aab
   languageName: node
   linkType: hard
 
@@ -2142,12 +2216,30 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@boost/event@npm:^3.0.0":
+  version: 3.0.0
+  resolution: "@boost/event@npm:3.0.0"
+  dependencies:
+    "@boost/internal": ^3.0.0
+  checksum: 36fda219a41af2d3ea7c090978e1905802882617e088b88cfa58ce15b340f67dadc6d8887ed8fa2d777d3e671d58210a62a89fdd2f31a3019b02578264781da2
+  languageName: node
+  linkType: hard
+
 "@boost/internal@npm:^2.2.3":
   version: 2.2.3
   resolution: "@boost/internal@npm:2.2.3"
   dependencies:
     debug: ^4.3.2
   checksum: f12615c42da617ff02152ae2161ca1d5dd2971b783a8f5f01ec30cef22d41fed23d7fb3396c145864da5483dfa1c253b3494d3f37860da8fd28e37d68f06a24f
+  languageName: node
+  linkType: hard
+
+"@boost/internal@npm:^3.0.0":
+  version: 3.0.0
+  resolution: "@boost/internal@npm:3.0.0"
+  dependencies:
+    debug: ^4.3.2
+  checksum: f137ce052aca267142ad24b13e6f350c304be7cc4ed173c672125a18b84a6ae93e47b12cc95b891278ceb101503c2060f7c5b9d06f470f073693a36a62279fc3
   languageName: node
   linkType: hard
 
@@ -2163,15 +2255,27 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@boost/module@npm:^2.0.0":
-  version: 2.0.0
-  resolution: "@boost/module@npm:2.0.0"
+"@boost/log@npm:^3.0.0":
+  version: 3.0.0
+  resolution: "@boost/log@npm:3.0.0"
+  dependencies:
+    "@boost/common": ^3.0.0
+    "@boost/internal": ^3.0.0
+    "@boost/translate": ^3.0.0
+    chalk: ^4.1.2
+  checksum: 394e925b38d52d7f1ce9d2d652ae3a207705f18148d51a0d1dd76c0522d1e6d55373819e77e0808f0bbbbb48b85277592333ca213dd5e9a3785546c041a2bbf4
+  languageName: node
+  linkType: hard
+
+"@boost/module@npm:^3.0.0":
+  version: 3.0.0
+  resolution: "@boost/module@npm:3.0.0"
   peerDependencies:
     typescript: ^4.0.0
   peerDependenciesMeta:
     typescript:
       optional: true
-  checksum: eeb61576d3c197123b9bce3d8c329fdf1703062e6ab6a69675fe9c3589d01b26e82ef7174f83d2a046fc1e6aa065cc96efcc18d2d9284e83080bc6f4f14c0263
+  checksum: 989de10a2b8240ff37a16ee9f36960eea0517cee4c1be1cbb0ebccbb4aa787eda2224b28faf7b89026e10af2d799c6b46733842387952b043e2080aa24db5c0e
   languageName: node
   linkType: hard
 
@@ -2191,17 +2295,34 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@boost/plugin@npm:^2.4.2":
-  version: 2.4.2
-  resolution: "@boost/plugin@npm:2.4.2"
+"@boost/pipeline@npm:^3.0.0":
+  version: 3.0.0
+  resolution: "@boost/pipeline@npm:3.0.0"
   dependencies:
-    "@boost/common": ^2.8.2
-    "@boost/debug": ^2.2.8
-    "@boost/event": ^2.3.3
-    "@boost/internal": ^2.2.3
+    "@boost/common": ^3.0.0
+    "@boost/debug": ^3.0.0
+    "@boost/event": ^3.0.0
+    "@boost/internal": ^3.0.0
+    "@boost/translate": ^3.0.0
+    execa: ^5.1.1
+    lodash: ^4.17.21
+    split: ^1.0.1
+  checksum: aff757d52e3c4b1acb6cb7d660ab978c26068a4d7f608aa2bd23b081a192999fd53f0da8abb6742294fc6b0a5370c44752b6230e5bb9c75786f556a65fd6733d
+  languageName: node
+  linkType: hard
+
+"@boost/plugin@npm:^3.0.0":
+  version: 3.0.0
+  resolution: "@boost/plugin@npm:3.0.0"
+  dependencies:
+    "@boost/common": ^3.0.0
+    "@boost/debug": ^3.0.0
+    "@boost/event": ^3.0.0
+    "@boost/internal": ^3.0.0
+    "@boost/module": ^3.0.0
     lodash: ^4.17.21
     pluralize: ^8.0.0
-  checksum: 8096e96f4cbc0a6d9fe7fe9130a4f9a47f265d0c1841a12b2cc1978d679bbbe2696606e760f4c5a53a3657ea9882fdaad9963dc4115037d9b555b3db68dd5226
+  checksum: 9a0f33b8a9f26e67e1dcefe3415ca87263d368953151c7b823c3f9ceec7ffe6042e839242d56fe047e832950bcc6de86e1baa6396e1757b23f364e67b291fc40
   languageName: node
   linkType: hard
 
@@ -2224,12 +2345,31 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@boost/test-utils@npm:^2.3.2":
-  version: 2.3.2
-  resolution: "@boost/test-utils@npm:2.3.2"
+"@boost/terminal@npm:^3.0.0":
+  version: 3.0.0
+  resolution: "@boost/terminal@npm:3.0.0"
+  dependencies:
+    ansi-escapes: ^4.3.2
+    ansi-regex: ^5.0.1
+    chalk: ^4.1.2
+    cli-truncate: ^2.1.0
+    figures: ^3.2.0
+    slice-ansi: ^4.0.0
+    string-width: ^4.2.3
+    strip-ansi: ^6.0.1
+    supports-hyperlinks: ^2.2.0
+    term-size: ^2.2.1
+    wrap-ansi: ^7.0.0
+  checksum: 0fe82964906505d9566e7319cd2b7c0ccdfb36e5da1a277e7d5acfa85853d4a60feb40cf4c562480aebf947f4e6db6a4a3e6be036466e5f023a8999bbfe396c2
+  languageName: node
+  linkType: hard
+
+"@boost/test-utils@npm:^3.0.0":
+  version: 3.0.0
+  resolution: "@boost/test-utils@npm:3.0.0"
   dependencies:
     fs-extra: ^9.1.0
-  checksum: 6a810d069f094481b9c13ea4b34196098da1f69a2550ffa1377e4dfeea43c7fe2f3733b412aa70a63dcd6a37df1c16c94c15f42a22d6bb177405a1129d46c6b7
+  checksum: f812cd4381f7d6bd8ebd49658eefa217970e782e648c5f2af049ea2d51caed5017b057c0c2f00b0a97fda7ecf6c6b20ed24798c5f383599f0f8661a60244c5fd
   languageName: node
   linkType: hard
 
@@ -2242,6 +2382,18 @@ __metadata:
     i18next: ^20.3.2
     os-locale: ^5.0.0
   checksum: bce77328cfb0fa22f21bb0efc45b44b5663096bf55fadb70acbc80066648ac0af22cd8abe9608efc0c687f2fc1a29162341ae25a864c9af11dd7e6fe7908a5b8
+  languageName: node
+  linkType: hard
+
+"@boost/translate@npm:^3.0.0":
+  version: 3.0.0
+  resolution: "@boost/translate@npm:3.0.0"
+  dependencies:
+    "@boost/common": ^3.0.0
+    "@boost/internal": ^3.0.0
+    i18next: ^21.2.6
+    os-locale: ^5.0.0
+  checksum: 6b9f10aa9c22ac349bde5562e595fcfe5a9e4997464af300b9f5719a3588787dde03931be1645e26aca7ad4168748fba8a9fce18921f47a4b79a429ca9260ced
   languageName: node
   linkType: hard
 
@@ -10746,6 +10898,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"i18next@npm:^21.2.6":
+  version: 21.3.0
+  resolution: "i18next@npm:21.3.0"
+  dependencies:
+    "@babel/runtime": ^7.12.0
+  checksum: 2527bbbfc604f7a234938ddcfee674405a085e64aec84a6d1b8f4a8de87ddfae9677afcad8bf6c75cdb419da1ce31e83c7bb2f693f5912ae8db811405ec24015
+  languageName: node
+  linkType: hard
+
 "iconv-lite@npm:0.4.24, iconv-lite@npm:^0.4.24":
   version: 0.4.24
   resolution: "iconv-lite@npm:0.4.24"
@@ -14306,6 +14467,13 @@ __metadata:
   version: 4.3.0
   resolution: "optimal@npm:4.3.0"
   checksum: 7cc1445f368a53cdc51c7b1ef5cb25084887d62f9ecf9e9dcc8b82d12f2eade55a484b73aaa93daf2fd47a6db6f854b6cf0ec06f6905091facc0fcfccdcc2eeb
+  languageName: node
+  linkType: hard
+
+"optimal@npm:^5.1.0":
+  version: 5.1.0
+  resolution: "optimal@npm:5.1.0"
+  checksum: 001dabd82bbd9bd75a822b32d77929d963d4d77839758d39afc7299bd2b3eb460c32147bd93526818f33d9fce0d67b4f96f2d1521cbd1e5b7a7eb0010fceae9a
   languageName: node
   linkType: hard
 

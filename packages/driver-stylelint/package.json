@@ -48,7 +48,7 @@
     "stylelint": "^13.0.0 || ^14.0.0"
   },
   "dependencies": {
-    "@boost/event": "^2.3.3"
+    "@boost/event": "^3.0.0"
   },
   "funding": {
     "type": "ko-fi",
