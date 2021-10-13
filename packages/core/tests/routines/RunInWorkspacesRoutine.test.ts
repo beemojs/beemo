@@ -1,4 +1,4 @@
-import { Predicates } from '@boost/common';
+import { Schemas } from '@boost/common';
 import { Routine } from '@boost/pipeline';
 import { Context } from '../../src/contexts/Context';
 import { Driver } from '../../src/Driver';
@@ -12,9 +12,9 @@ import { Tool } from '../../src/Tool';
 type Ctx = Context<RunInWorkspacesContextArgs>;
 
 class PipedRoutine extends Routine<unknown, unknown, { error?: Error; type?: string }> {
-	blueprint({ instance, string }: Predicates) {
+	blueprint({ instance, string }: Schemas) {
 		return {
-			error: instance(Error).nullable(),
+			error: instance().of(Error).nullable(),
 			type: string(),
 		};
 	}

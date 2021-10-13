@@ -11,8 +11,8 @@ import {
 	Path,
 	PathResolver,
 	PortablePath,
-	Predicates,
 	Project,
+	Schemas,
 } from '@boost/common';
 import { createDebugger, Debugger } from '@boost/debug';
 import { Event } from '@boost/event';
@@ -110,12 +110,12 @@ export class Tool extends Contract<ToolOptions> {
 		this.configManager = new Config(this.options.projectName, this.resolveForPnP);
 	}
 
-	blueprint({ array, instance, string, union }: Predicates): Blueprint<ToolOptions> {
+	blueprint({ array, instance, string, union }: Schemas): Blueprint<ToolOptions> {
 		return {
-			argv: array(string()),
-			cwd: union([instance(Path).notNullable(), string().notEmpty()], process.cwd()),
+			argv: array().of(string()),
+			cwd: union(process.cwd()).of([instance().of(Path).notNullable(), string().notEmpty()]),
 			projectName: string('beemo').camelCase().notEmpty(),
-			resourcePaths: array(string().notEmpty()),
+			resourcePaths: array().of(string().notEmpty()),
 		};
 	}
 
@@ -155,7 +155,7 @@ export class Tool extends Contract<ToolOptions> {
 				resolver.lookupNodeModule(module);
 			}
 
-			const { resolvedPath } = resolver.resolve();
+			const { resolvedPath } = await resolver.resolve();
 
 			bootstrapModule = requireModule(resolvedPath);
 		} catch {

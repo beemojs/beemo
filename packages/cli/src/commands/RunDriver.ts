@@ -1,4 +1,4 @@
-import { Blueprint, DriverContextOptions, DriverContextParams, Predicates } from '@beemo/core';
+import { Blueprint, DriverContextOptions, DriverContextParams, Schemas } from '@beemo/core';
 import { Arg, Argv, Config } from '@boost/cli';
 import { tool } from '../setup';
 import { BaseRunCommand } from './BaseRunCommand';
@@ -29,9 +29,9 @@ export class RunDriver extends BaseRunCommand<DriverContextOptions, [], RunDrive
 		return this.renderDriver(pipeline);
 	}
 
-	override blueprint({ array, string }: Predicates): Blueprint<RunDriverConfig> {
+	override blueprint({ array, string }: Schemas): Blueprint<RunDriverConfig> {
 		return {
-			parallelArgv: array(array(string())),
+			parallelArgv: array().of(array().of(string())),
 		};
 	}
 }

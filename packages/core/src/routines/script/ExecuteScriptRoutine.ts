@@ -1,5 +1,5 @@
 import { parse } from '@boost/args';
-import { Blueprint, instanceOf, Path, Predicates } from '@boost/common';
+import { Blueprint, instanceOf, Path, Schemas } from '@boost/common';
 import { Routine } from '@boost/pipeline';
 import { ScriptContext } from '../../contexts/ScriptContext';
 import { ExecLike, formatExecReturn } from '../../helpers/formatExecReturn';
@@ -12,10 +12,10 @@ export interface ExecuteScriptOptions extends RoutineOptions {
 }
 
 export class ExecuteScriptRoutine extends Routine<unknown, Script, ExecuteScriptOptions> {
-	blueprint({ instance, string }: Predicates): Blueprint<ExecuteScriptOptions> {
+	blueprint({ instance, string }: Schemas): Blueprint<ExecuteScriptOptions> {
 		return {
 			packageRoot: string(),
-			tool: instance<Tool>().required().notNullable(),
+			tool: instance().required().notNullable(),
 		};
 	}
 

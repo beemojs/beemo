@@ -2,7 +2,7 @@ import {
 	Blueprint,
 	PackageGraph,
 	PackageStructure,
-	Predicates,
+	Schemas,
 	WorkspacePackage,
 } from '@boost/common';
 import { Routine } from '@boost/pipeline';
@@ -30,9 +30,9 @@ export abstract class RunInWorkspacesRoutine<
 
 	workspacePackages: WorkspacePackage[] = [];
 
-	blueprint({ instance }: Predicates): Blueprint<RoutineOptions> {
+	blueprint({ instance }: Schemas): Blueprint<RoutineOptions> {
 		return {
-			tool: instance<Tool>().required().notNullable(),
+			tool: instance().required().notNullable(),
 		};
 	}
 
@@ -49,7 +49,7 @@ export abstract class RunInWorkspacesRoutine<
 			this.workspacePackages = tool.project.getWorkspacePackages();
 
 			this.getFilteredWorkspacePackages(context).forEach((pkg) => {
-				this.pipeRoutine(context, pkg.metadata.packageName, pkg.metadata.packagePath);
+				this.pipeRoutine(context, pkg.metadata.packageName, pkg.metadata.packagePath.path());
 			});
 		} else {
 			this.pipeRoutine(context);

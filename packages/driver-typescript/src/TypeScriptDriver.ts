@@ -1,7 +1,7 @@
 /* eslint-disable no-param-reassign */
 
 import rimraf from 'rimraf';
-import { Blueprint, ConfigContext, Driver, DriverContext, Path, Predicates } from '@beemo/core';
+import { Blueprint, ConfigContext, Driver, DriverContext, Path, Schemas } from '@beemo/core';
 import { Event } from '@boost/event';
 import { syncProjectRefs } from './commands/syncProjectRefs';
 import { writeFile } from './helpers';
@@ -16,11 +16,11 @@ export class TypeScriptDriver extends Driver<TypeScriptConfig, TypeScriptOptions
 		'create-project-config-file',
 	);
 
-	override blueprint(preds: Predicates): Blueprint<TypeScriptOptions> {
-		const { bool, string } = preds;
+	override blueprint(schemas: Schemas): Blueprint<TypeScriptOptions> {
+		const { bool, string } = schemas;
 
 		return {
-			...super.blueprint(preds),
+			...super.blueprint(schemas),
 			buildFolder: string('lib'),
 			declarationOnly: bool(),
 			globalTypes: bool(true),

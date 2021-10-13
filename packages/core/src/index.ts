@@ -3,7 +3,7 @@
  * @license     https://opensource.org/licenses/MIT
  */
 
-import { Blueprint, PackageStructure, Path, PortablePath, Predicates } from '@boost/common';
+import { Blueprint, PackageStructure, Path, PortablePath, Schemas } from '@boost/common';
 
 export * from './constants';
 export * from './contexts/ConfigContext';
@@ -17,4 +17,4 @@ export * from './Tool';
 export * from './types';
 
 export { Path };
-export type { Blueprint, PackageStructure, PortablePath, Predicates };
+export type { Blueprint, PackageStructure, PortablePath, Schemas };

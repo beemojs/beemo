@@ -1,6 +1,6 @@
 import execa, { Options as ExecaOptions } from 'execa';
 import { Arguments, ParserOptions } from '@boost/args';
-import { Blueprint, Predicates } from '@boost/common';
+import { Blueprint, Schemas } from '@boost/common';
 import { ConcurrentEvent } from '@boost/event';
 import { Plugin } from '@boost/plugin';
 import { ScriptContext } from './contexts/ScriptContext';
@@ -32,7 +32,7 @@ export abstract class Script<O extends object = {}, Options extends object = {}>
 		}
 	}
 
-	blueprint(preds: Predicates): Blueprint<object> {
+	blueprint(schemas: Schemas): Blueprint<object> {
 		return {};
 	}
 
