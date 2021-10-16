@@ -14,7 +14,7 @@ type Ctx = Context<RunInWorkspacesContextArgs>;
 class PipedRoutine extends Routine<unknown, unknown, { error?: Error; type?: string }> {
 	blueprint({ instance, string }: Schemas) {
 		return {
-			error: instance().of(Error).nullable(),
+			error: instance<Tool>().of(Error).nullable(),
 			type: string(),
 		};
 	}

@@ -13,7 +13,7 @@ export class ResolveConfigsRoutine<Ctx extends ConfigContext = ConfigContext> ex
 > {
 	blueprint({ instance }: Schemas): Blueprint<RoutineOptions> {
 		return {
-			tool: instance().required().notNullable(),
+			tool: instance<Tool>().required().notNullable(),
 		};
 	}
 

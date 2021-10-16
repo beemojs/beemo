@@ -1741,7 +1741,7 @@ __metadata:
   dependencies:
     "@boost/cli": ^3.0.0
     "@boost/common": ^3.0.0
-    "@boost/pipeline": ^3.0.0
+    "@boost/pipeline": ^3.1.1
     debug: ^4.3.2
     ink: ^3.2.0
     react: ^17.0.2
@@ -1833,14 +1833,14 @@ __metadata:
   dependencies:
     "@boost/args": ^3.0.0
     "@boost/common": ^3.0.0
-    "@boost/config": ^3.0.0
+    "@boost/config": ^3.0.1
     "@boost/debug": ^3.0.0
     "@boost/event": ^3.0.0
     "@boost/internal": ^3.0.0
     "@boost/log": ^3.0.0
-    "@boost/module": ^3.0.0
-    "@boost/pipeline": ^3.0.0
-    "@boost/plugin": ^3.0.0
+    "@boost/module": ^3.0.1
+    "@boost/pipeline": ^3.1.1
+    "@boost/plugin": ^3.0.1
     "@boost/terminal": ^3.0.0
     "@boost/test-utils": ^3.0.0
     "@boost/translate": ^3.0.0
@@ -2151,17 +2151,17 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@boost/config@npm:^3.0.0":
-  version: 3.0.0
-  resolution: "@boost/config@npm:3.0.0"
+"@boost/config@npm:^3.0.1":
+  version: 3.0.1
+  resolution: "@boost/config@npm:3.0.1"
   dependencies:
     "@boost/common": ^3.0.0
     "@boost/debug": ^3.0.0
     "@boost/event": ^3.0.0
     "@boost/internal": ^3.0.0
-    "@boost/module": ^3.0.0
+    "@boost/module": ^3.0.1
     minimatch: ^3.0.4
-  checksum: 3d5ad027497af3146aecdc0b1963b39dff4e1ccaa1491eb8a3ed2382f0e3fce380c9a17a5ee298ef9ab06525fb0eab5318861ce7569ac2d45357c7db72061e0c
+  checksum: d52740655f9333a16e6349bbcd57ae50f048495f1ded178cbeef4639d674e451c0207d42b17cdf5202417316512790c686919fb1b254fed1206f15ab204dc423
   languageName: node
   linkType: hard
 
@@ -2267,15 +2267,15 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@boost/module@npm:^3.0.0":
-  version: 3.0.0
-  resolution: "@boost/module@npm:3.0.0"
+"@boost/module@npm:^3.0.1":
+  version: 3.0.1
+  resolution: "@boost/module@npm:3.0.1"
   peerDependencies:
     typescript: ^4.0.0
   peerDependenciesMeta:
     typescript:
       optional: true
-  checksum: 989de10a2b8240ff37a16ee9f36960eea0517cee4c1be1cbb0ebccbb4aa787eda2224b28faf7b89026e10af2d799c6b46733842387952b043e2080aa24db5c0e
+  checksum: 42855a57a552052f01d0968edbcc21a78b859c3acfc60dd71fd0aa126099cd681be56cee1e40dc553c6bd7ee11cef38a511a855382d6389dfa6a55ced49b0b04
   languageName: node
   linkType: hard
 
@@ -2295,9 +2295,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@boost/pipeline@npm:^3.0.0":
-  version: 3.0.0
-  resolution: "@boost/pipeline@npm:3.0.0"
+"@boost/pipeline@npm:^3.1.1":
+  version: 3.1.1
+  resolution: "@boost/pipeline@npm:3.1.1"
   dependencies:
     "@boost/common": ^3.0.0
     "@boost/debug": ^3.0.0
@@ -2307,22 +2307,22 @@ __metadata:
     execa: ^5.1.1
     lodash: ^4.17.21
     split: ^1.0.1
-  checksum: aff757d52e3c4b1acb6cb7d660ab978c26068a4d7f608aa2bd23b081a192999fd53f0da8abb6742294fc6b0a5370c44752b6230e5bb9c75786f556a65fd6733d
+  checksum: 9be9bc317e2089012459d77607ffd917bd1b06fa89f8bd7892998723ebc15569264bfcf02dc71da19fe7287e1da208e4e27da1d9cd874f7a99bc386fc6b77f54
   languageName: node
   linkType: hard
 
-"@boost/plugin@npm:^3.0.0":
-  version: 3.0.0
-  resolution: "@boost/plugin@npm:3.0.0"
+"@boost/plugin@npm:^3.0.1":
+  version: 3.0.1
+  resolution: "@boost/plugin@npm:3.0.1"
   dependencies:
     "@boost/common": ^3.0.0
     "@boost/debug": ^3.0.0
     "@boost/event": ^3.0.0
     "@boost/internal": ^3.0.0
-    "@boost/module": ^3.0.0
+    "@boost/module": ^3.0.1
     lodash: ^4.17.21
     pluralize: ^8.0.0
-  checksum: 9a0f33b8a9f26e67e1dcefe3415ca87263d368953151c7b823c3f9ceec7ffe6042e839242d56fe047e832950bcc6de86e1baa6396e1757b23f364e67b291fc40
+  checksum: 53cfc7abad780bb21b937d275f30e15c404aea9a258ea023008f75cdbc1a959203bf4575d7aecb35541bd2de34b5e272cadafe84629420a94b4c202c4ee1aa65
   languageName: node
   linkType: hard
 
@@ -14471,9 +14471,9 @@ __metadata:
   linkType: hard
 
 "optimal@npm:^5.1.0":
-  version: 5.1.0
-  resolution: "optimal@npm:5.1.0"
-  checksum: 001dabd82bbd9bd75a822b32d77929d963d4d77839758d39afc7299bd2b3eb460c32147bd93526818f33d9fce0d67b4f96f2d1521cbd1e5b7a7eb0010fceae9a
+  version: 5.1.1
+  resolution: "optimal@npm:5.1.1"
+  checksum: 7e7d2c831126239fbbb0d5ac034aa8d6fc08e7fc798ecf8598895b83d9147c1defe7e6d02b6eb93e9269b581cfdb895f968d0d47c477096e0898f79287748693
   languageName: node
   linkType: hard
 

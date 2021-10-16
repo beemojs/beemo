@@ -31,7 +31,7 @@ export class CreateConfigRoutine<Ctx extends ConfigContext> extends Routine<
 		return {
 			// @ts-expect-error Errors because Driver is abstract
 			driver: instance().of(Driver).required().notNullable(),
-			tool: instance().required().notNullable(),
+			tool: instance<Tool>().required().notNullable(),
 		};
 	}
 
