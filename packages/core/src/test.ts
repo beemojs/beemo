@@ -1,6 +1,7 @@
 import execa from 'execa';
 import { ArgList, Arguments, Argv } from '@boost/args';
 import { Path } from '@boost/common';
+import { mockNormalizedFilePath } from '@boost/common/test';
 import { mockDebugger } from '@boost/debug/test';
 import {
 	ConfigContext,
@@ -20,7 +21,7 @@ import {
 
 export { mockDebugger };
 
-const TEST_ROOT = new Path(process.env.BEEMO_TEST_ROOT ?? process.cwd());
+const TEST_ROOT = mockNormalizedFilePath(process.env.BEEMO_TEST_ROOT ?? process.cwd());
 
 export class TestDriver<O extends object = {}> extends Driver<O> {
 	override readonly name = 'test-driver';
@@ -186,7 +187,7 @@ export function stubScaffoldContext(
 }
 
 export function prependRoot(part: string): Path {
-	return TEST_ROOT.append(part);
+	return mockNormalizedFilePath(TEST_ROOT, part);
 }
 
 export function getRoot(): Path {

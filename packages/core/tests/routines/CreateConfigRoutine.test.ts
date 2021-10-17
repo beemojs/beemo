@@ -1,5 +1,6 @@
 import fs from 'fs-extra';
 import { Path } from '@boost/common';
+import { mockNormalizedFilePath } from '@boost/common/test';
 import { copyFixtureToNodeModule, getFixturePath } from '@boost/test-utils';
 import {
 	STRATEGY_COPY,
@@ -496,47 +497,59 @@ list:
 
 	describe('getConfigPath()', () => {
 		describe('consumer', () => {
-			it('returns `.configs/beemo/file.js`', () => {
+			it('returns `.configs/beemo/file.js`', async () => {
 				context.workspaceRoot = new Path(getFixturePath('consumer-override'));
 
-				const path = routine.getConfigPath(context, true);
+				const path = await routine.getConfigPath(context, true);
 
-				expect(path).toEqual(context.workspaceRoot.append('.config/beemo/babel.js'));
+				expect(path).toEqual(
+					mockNormalizedFilePath(context.workspaceRoot.append('.config/beemo/babel.js')),
+				);
 			});
 
-			it('returns `.configs/<brand>/file.js` when branded', () => {
+			it('returns `.configs/<brand>/file.js` when branded', async () => {
 				tool.configure({ projectName: 'bmo' });
 
 				context.workspaceRoot = new Path(getFixturePath('consumer-branded'));
 
-				const path = routine.getConfigPath(context, true);
+				const path = await routine.getConfigPath(context, true);
 
-				expect(path).toEqual(context.workspaceRoot.append('.config/bmo/babel.js'));
+				expect(path).toEqual(
+					mockNormalizedFilePath(context.workspaceRoot.append('.config/bmo/babel.js')),
+				);
 			});
 		});
 
 		describe('provider', () => {
-			it('returns `configs/file.js`', () => {
+			it('returns `configs/file.js`', async () => {
 				tool.config.module = 'from-config-module';
 
 				fixtures.push(copyFixtureToNodeModule('config-module', 'from-config-module'));
 
-				const path = routine.getConfigPath(context);
+				const path = await routine.getConfigPath(context);
 
 				expect(path).toEqual(
-					new Path(process.cwd(), 'node_modules', 'from-config-module/configs/babel.js'),
+					mockNormalizedFilePath(
+						process.cwd(),
+						'node_modules',
+						'from-config-module/configs/babel.js',
+					),
 				);
 			});
 
-			it('returns `lib/configs/file.js`', () => {
+			it('returns `lib/configs/file.js`', async () => {
 				tool.config.module = 'from-config-lib-module';
 
 				fixtures.push(copyFixtureToNodeModule('config-lib-module', 'from-config-lib-module'));
 
-				const path = routine.getConfigPath(context);
+				const path = await routine.getConfigPath(context);
 
 				expect(path).toEqual(
-					new Path(process.cwd(), 'node_modules', 'from-config-lib-module/lib/configs/babel.js'),
+					mockNormalizedFilePath(
+						process.cwd(),
+						'node_modules',
+						'from-config-lib-module/lib/configs/babel.js',
+					),
 				);
 			});
 		});
@@ -546,22 +559,26 @@ list:
 				tool.config.module = '@local';
 			});
 
-			it('returns `configs/file.js`', () => {
+			it('returns `configs/file.js`', async () => {
 				context.workspaceRoot = new Path(getFixturePath('config-module'));
 
-				const path = routine.getConfigPath(context);
+				const path = await routine.getConfigPath(context);
 
-				expect(path).toEqual(new Path(getFixturePath('config-module', 'configs/babel.js')));
+				expect(path).toEqual(
+					mockNormalizedFilePath(getFixturePath('config-module', 'configs/babel.js')),
+				);
 			});
 
-			it('returns `lib/configs/file.js`', () => {
+			it('returns `lib/configs/file.js`', async () => {
 				context.workspaceRoot = new Path(getFixturePath('config-lib-module'));
 
 				fixtures.push(copyFixtureToNodeModule('config-lib-module', 'from-config-lib-module'));
 
-				const path = routine.getConfigPath(context);
+				const path = await routine.getConfigPath(context);
 
-				expect(path).toEqual(new Path(getFixturePath('config-lib-module', 'lib/configs/babel.js')));
+				expect(path).toEqual(
+					mockNormalizedFilePath(getFixturePath('config-lib-module', 'lib/configs/babel.js')),
+				);
 			});
 		});
 	});
@@ -697,10 +714,14 @@ list:
 
 			await routine.loadConfigFromProvider(context, []);
 
-			expect(spy).toHaveBeenCalledWith(context, getRoot().append('/configs/babel.js'), {
-				babel: true,
-				local: true,
-			});
+			expect(spy).toHaveBeenCalledWith(
+				context,
+				mockNormalizedFilePath(getRoot().append('/configs/babel.js')),
+				{
+					babel: true,
+					local: true,
+				},
+			);
 		});
 
 		it('doesnt trigger `onLoadProviderConfig` event if files does not exist', async () => {

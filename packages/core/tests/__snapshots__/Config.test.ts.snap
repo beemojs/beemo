@@ -1,3 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`Config errors if no module 1`] = `"Invalid Config field \\"module\\". String cannot be empty."`;
+exports[`Config errors if no module 1`] = `
+"The following validations have failed for \`Config\`:
+  - Invalid field \\"module\\". String cannot be empty."
+`;

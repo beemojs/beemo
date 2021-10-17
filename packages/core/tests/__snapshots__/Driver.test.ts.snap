@@ -16,18 +16,59 @@ exports[`Driver formatConfig() formats to JSON if config ends in .json 1`] = `
 }"
 `;
 
-exports[`Driver setMetadata() bin is required 1`] = `"Invalid TestDriver field \\"bin\\". Field is required and must be defined."`;
+exports[`Driver setMetadata() bin doesnt support underscores 1`] = `
+"The following validations have failed for \`TestDriver\`:
+  - Invalid field \\"bin\\". String does not match. (pattern \\"^[a-z]{1}[a-zA-Z0-9-]+$\\")"
+`;
 
-exports[`Driver setMetadata() command options doesnt support description as other types 1`] = `"Invalid TestDriver field \\"commandOptions.foo.description\\". Must be a string, received 123."`;
+exports[`Driver setMetadata() bin doesnt support uppercase 1`] = `
+"The following validations have failed for \`TestDriver\`:
+  - Invalid field \\"bin\\". String does not match. (pattern \\"^[a-z]{1}[a-zA-Z0-9-]+$\\")"
+`;
 
-exports[`Driver setMetadata() command options requires a description 1`] = `"Invalid TestDriver field \\"commandOptions.foo.description\\". Field is required and must be defined."`;
+exports[`Driver setMetadata() bin is required 1`] = `
+"The following validations have failed for \`TestDriver\`:
+  - Invalid field \\"bin\\". Field is required and must be defined.
+  - Invalid field \\"configName\\". Field is required and must be defined.
+  - Invalid field \\"title\\". Field is required and must be defined."
+`;
 
-exports[`Driver setMetadata() configName doesnt support non-strings 1`] = `"Invalid TestDriver field \\"configName\\". Must be a string, received 123."`;
+exports[`Driver setMetadata() command options doesnt support description as other types 1`] = `
+"The following validations have failed for \`TestDriver\`:
+  - Invalid field \\"foo\\".
+    - Invalid field \\"description\\". Must be a string, received number.
+    - Invalid field \\"type\\". String must be one of: string, number, boolean. Received \\"\\"."
+`;
 
-exports[`Driver setMetadata() configName is required 1`] = `"Invalid TestDriver field \\"configName\\". Field is required and must be defined."`;
+exports[`Driver setMetadata() command options requires a description 1`] = `
+"The following validations have failed for \`TestDriver\`:
+  - Invalid field \\"foo\\".
+    - Invalid field \\"description\\". Field is required and must be defined.
+    - Invalid field \\"type\\". String must be one of: string, number, boolean. Received \\"\\"."
+`;
 
-exports[`Driver setMetadata() title doesnt support non-strings 1`] = `"Invalid TestDriver field \\"title\\". Must be a string, received 123."`;
+exports[`Driver setMetadata() configName doesnt support non-strings 1`] = `
+"The following validations have failed for \`TestDriver\`:
+  - Invalid field \\"configName\\". Must be a string, received number."
+`;
 
-exports[`Driver setMetadata() title is required 1`] = `"Invalid TestDriver field \\"title\\". Field is required and must be defined."`;
+exports[`Driver setMetadata() configName is required 1`] = `
+"The following validations have failed for \`TestDriver\`:
+  - Invalid field \\"configName\\". Field is required and must be defined.
+  - Invalid field \\"title\\". Field is required and must be defined."
+`;
 
-exports[`Driver validates fields 1`] = `"Invalid Driver field \\"args\\". Must be an array, received true."`;
+exports[`Driver setMetadata() title doesnt support non-strings 1`] = `
+"The following validations have failed for \`TestDriver\`:
+  - Invalid field \\"title\\". Must be a string, received number."
+`;
+
+exports[`Driver setMetadata() title is required 1`] = `
+"The following validations have failed for \`TestDriver\`:
+  - Invalid field \\"title\\". Field is required and must be defined."
+`;
+
+exports[`Driver validates fields 1`] = `
+"The following validations have failed for \`Driver\`:
+  - Invalid field \\"args\\". Must be an array, received boolean."
+`;
