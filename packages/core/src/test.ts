@@ -19,6 +19,7 @@ import {
 	Tool,
 } from '.';
 
+export * from '@boost/common/test';
 export { mockDebugger };
 
 const TEST_ROOT = mockNormalizedFilePath(process.env.BEEMO_TEST_ROOT ?? process.cwd());

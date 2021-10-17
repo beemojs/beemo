@@ -1,6 +1,11 @@
 import fs from 'fs';
 import { DriverContext, Path } from '@beemo/core';
-import { mockTool, stubDriverContext, stubExecResult } from '@beemo/core/test';
+import {
+	mockNormalizedFilePath,
+	mockTool,
+	stubDriverContext,
+	stubExecResult,
+} from '@beemo/core/test';
 import factory from '../src';
 import { ESLintDriver } from '../src/ESLintDriver';
 
@@ -162,7 +167,7 @@ describe('ESLintDriver', () => {
 			expect(writeSpy).toHaveBeenCalledWith('/some/path/.eslintignore', 'foo\nbar\nbaz');
 
 			expect(context.configPaths).toEqual([
-				{ driver: 'eslint', path: new Path('/some/path/.eslintignore') },
+				{ driver: 'eslint', path: mockNormalizedFilePath('/some/path/.eslintignore') },
 			]);
 
 			expect(config).toEqual({ parser: 'babel' });
@@ -182,9 +187,13 @@ describe('ESLintDriver', () => {
 
 			driver.onCreateConfigFile.emit([context, new Path('/some/path/.eslintrc.js'), config]);
 
-			expect(createSpy).toHaveBeenCalledWith(context, new Path('/some/path/.eslintignore'), {
-				ignore: ['foo', 'bar', 'baz', 'qux'],
-			});
+			expect(createSpy).toHaveBeenCalledWith(
+				context,
+				mockNormalizedFilePath('/some/path/.eslintignore'),
+				{
+					ignore: ['foo', 'bar', 'baz', 'qux'],
+				},
+			);
 
 			expect(writeSpy).toHaveBeenCalledWith('/some/path/.eslintignore', 'foo\nbar\nbaz\nqux');
 		});

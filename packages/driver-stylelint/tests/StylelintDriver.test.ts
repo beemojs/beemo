@@ -1,6 +1,11 @@
 import fs from 'fs';
 import { DriverContext, Path } from '@beemo/core';
-import { mockTool, stubDriverContext, stubExecResult } from '@beemo/core/test';
+import {
+	mockNormalizedFilePath,
+	mockTool,
+	stubDriverContext,
+	stubExecResult,
+} from '@beemo/core/test';
 import factory from '../src';
 import { StylelintDriver } from '../src/StylelintDriver';
 
@@ -156,7 +161,7 @@ describe('StylelintDriver', () => {
 			expect(writeSpy).toHaveBeenCalledWith('/some/path/.stylelintignore', 'foo\nbar\nbaz');
 
 			expect(context.configPaths).toEqual([
-				{ driver: 'stylelint', path: new Path('/some/path/.stylelintignore') },
+				{ driver: 'stylelint', path: mockNormalizedFilePath('/some/path/.stylelintignore') },
 			]);
 
 			expect(config).toEqual({ extends: 'abc' });
@@ -176,9 +181,13 @@ describe('StylelintDriver', () => {
 
 			driver.onCreateConfigFile.emit([context, new Path('/some/path/.stylelintrc.js'), config]);
 
-			expect(createSpy).toHaveBeenCalledWith(context, new Path('/some/path/.stylelintignore'), {
-				ignore: ['foo', 'bar', 'baz', 'qux'],
-			});
+			expect(createSpy).toHaveBeenCalledWith(
+				context,
+				mockNormalizedFilePath('/some/path/.stylelintignore'),
+				{
+					ignore: ['foo', 'bar', 'baz', 'qux'],
+				},
+			);
 
 			expect(writeSpy).toHaveBeenCalledWith('/some/path/.stylelintignore', 'foo\nbar\nbaz\nqux');
 		});
