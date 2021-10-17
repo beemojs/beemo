@@ -33,7 +33,7 @@ export class ExecuteCommandRoutine extends Routine<unknown, unknown, ExecuteComm
 			argv: array().of(string()),
 			forceConfigOption: bool(),
 			packageRoot: string(),
-			tool: instance().required().notNullable(),
+			tool: instance<Tool>().required().notNullable(),
 		};
 	}
 

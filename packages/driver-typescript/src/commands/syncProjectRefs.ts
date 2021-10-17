@@ -31,7 +31,7 @@ export async function syncProjectRefs(tool: Tool) {
 
 	// Map package name to absolute paths
 	workspacePackages.forEach((wsPkg) => {
-		namesToPaths[wsPkg.package.name] = wsPkg.metadata.packagePath;
+		namesToPaths[wsPkg.package.name] = wsPkg.metadata.packagePath.path();
 	});
 
 	// Create a config file in each package

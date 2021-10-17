@@ -1,3 +1,5 @@
+/* eslint-disable max-classes-per-file */
+
 import { Driver, DriverContextOptions } from '@beemo/core';
 import { Argv, Config, GlobalOptions, ParserOptions } from '@boost/cli';
 import { BaseRunCommand } from './commands/BaseRunCommand';
@@ -43,11 +45,16 @@ export function createDriverCommand(
 
 	// Register sub-commands for the driver
 	driver.commands.forEach(({ path: subpath, config, runner }) => {
-		command.register<{}, []>(
-			`${path}:${subpath}`,
-			{ ...config, category: 'driver' },
-			(options, params, rest) => runner(tool, options, params, rest),
-		);
+		@Config(`${path}:${subpath}`, config.description, { ...config, category: 'driver' })
+		class DriverSubCommand extends BaseRunCommand<{}, [], {}> {
+			async run() {
+				const args = this.getArguments();
+
+				return runner(tool, args.options, args.params, args.rest);
+			}
+		}
+
+		command.register(new DriverSubCommand());
 	});
 
 	return command;
