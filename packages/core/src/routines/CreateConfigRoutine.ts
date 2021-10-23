@@ -363,7 +363,10 @@ export class CreateConfigRoutine<Ctx extends ConfigContext> extends Routine<
 
 		const requirePath = context.cwd.relativeTo(sourcePath);
 
-		await fs.writeFile(configPath.path(), `module.exports = require('./${requirePath}');`);
+		await fs.writeFile(
+			configPath.path(),
+			`module.exports = require('.${Path.SEP}${requirePath}');`,
+		);
 
 		return configPath;
 	}
