@@ -245,7 +245,7 @@ describe('Tool', () => {
 			tool.config.module = '@boost/common';
 
 			expect(tool.getConfigModuleRoot().path()).toEqual(
-				expect.stringMatching(/node_modules\/@boost\/common$/u),
+				expect.stringContaining(normalizeSeparators('node_modules/@boost/common')),
 			);
 			expect(tool.getConfigModuleRoot()).toBe(tool.getConfigModuleRoot());
 		});

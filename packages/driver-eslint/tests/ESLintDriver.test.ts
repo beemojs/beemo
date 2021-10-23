@@ -3,6 +3,7 @@ import { DriverContext, Path } from '@beemo/core';
 import {
 	mockNormalizedFilePath,
 	mockTool,
+	normalizeSeparators,
 	stubDriverContext,
 	stubExecResult,
 } from '@beemo/core/test';
@@ -164,7 +165,10 @@ describe('ESLintDriver', () => {
 
 			driver.onCreateConfigFile.emit([context, new Path('/some/path/.eslintrc.js'), config]);
 
-			expect(writeSpy).toHaveBeenCalledWith('/some/path/.eslintignore', 'foo\nbar\nbaz');
+			expect(writeSpy).toHaveBeenCalledWith(
+				normalizeSeparators('/some/path/.eslintignore'),
+				'foo\nbar\nbaz',
+			);
 
 			expect(context.configPaths).toEqual([
 				{ driver: 'eslint', path: mockNormalizedFilePath('/some/path/.eslintignore') },
@@ -195,7 +199,10 @@ describe('ESLintDriver', () => {
 				},
 			);
 
-			expect(writeSpy).toHaveBeenCalledWith('/some/path/.eslintignore', 'foo\nbar\nbaz\nqux');
+			expect(writeSpy).toHaveBeenCalledWith(
+				normalizeSeparators('/some/path/.eslintignore'),
+				'foo\nbar\nbaz\nqux',
+			);
 		});
 	});
 });

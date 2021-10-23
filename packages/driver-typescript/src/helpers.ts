@@ -1,8 +1,13 @@
 import fs from 'fs';
 import { Path } from '@beemo/core';
 
+// tsconfig.json uses forward slashes, so we have to manually handle this
+export function toForwardSlashes(part: string): string {
+	return part.replace(/\\/g, '/');
+}
+
 export function join(...parts: string[]): string {
-	return new Path(...parts).path();
+	return toForwardSlashes(new Path(...parts).path());
 }
 
 export async function writeFile(path: Path, data: unknown): Promise<void> {

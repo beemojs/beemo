@@ -1,6 +1,6 @@
 import ts from 'typescript';
 import { PackageStructure, Path, Tool } from '@beemo/core';
-import { join, writeFile } from '../helpers';
+import { join, toForwardSlashes, writeFile } from '../helpers';
 import type { TypeScriptConfig } from '../types';
 import type { TypeScriptDriver } from '../TypeScriptDriver';
 
@@ -53,7 +53,7 @@ export async function syncProjectRefs(tool: Tool) {
 					(depName) => {
 						if (namesToPaths[depName]) {
 							references.push({
-								path: pkgPath.relativeTo(namesToPaths[depName]).path(),
+								path: toForwardSlashes(pkgPath.relativeTo(namesToPaths[depName]).path()),
 							});
 						}
 					},
@@ -69,7 +69,7 @@ export async function syncProjectRefs(tool: Tool) {
 							rootDir: srcFolder,
 						},
 						exclude: [buildFolder],
-						extends: pkgPath.relativeTo(optionsConfigPath).path(),
+						extends: toForwardSlashes(pkgPath.relativeTo(optionsConfigPath).path()),
 						include: [join(srcFolder, '**/*')],
 						references,
 					};
@@ -83,7 +83,9 @@ export async function syncProjectRefs(tool: Tool) {
 					}
 
 					if (globalTypes) {
-						packageConfig.include!.push(pkgPath.relativeTo(globalTypesPath).path());
+						packageConfig.include!.push(
+							toForwardSlashes(pkgPath.relativeTo(globalTypesPath).path()),
+						);
 					}
 
 					if (testsFolder) {
@@ -113,7 +115,7 @@ export async function syncProjectRefs(tool: Tool) {
 							noEmit: true,
 							rootDir: '.',
 						},
-						extends: testsPath.relativeTo(optionsConfigPath).path(),
+						extends: toForwardSlashes(testsPath.relativeTo(optionsConfigPath).path()),
 						include: ['**/*'],
 						references: [{ path: '..' }],
 					};
@@ -123,7 +125,9 @@ export async function syncProjectRefs(tool: Tool) {
 					}
 
 					if (globalTypes) {
-						testConfig.include!.push(testsPath.relativeTo(globalTypesPath).path());
+						testConfig.include!.push(
+							toForwardSlashes(testsPath.relativeTo(globalTypesPath).path()),
+						);
 					}
 
 					const configPath = testsPath.append('tsconfig.json');

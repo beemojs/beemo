@@ -1,6 +1,7 @@
 import execa from 'execa';
 import fs from 'fs-extra';
 import { ExitError, Path } from '@boost/common';
+import { normalizeSeparators } from '@boost/common/test';
 import { color } from '@boost/internal';
 import { DriverContext } from '../../../src/contexts/DriverContext';
 import { Driver } from '../../../src/Driver';
@@ -368,8 +369,11 @@ describe('ExecuteCommandRoutine', () => {
 			const args = await routine.copyConfigToWorkspacePackage(context, ['foo', '--bar']);
 
 			expect(args).toEqual(['foo', '--bar']);
-			expect(copySpy).toHaveBeenCalledWith('.babelrc', '/some/root/.babelrc');
-			expect(copySpy).toHaveBeenCalledWith('jest.json', '/some/root/jest.json');
+			expect(copySpy).toHaveBeenCalledWith('.babelrc', normalizeSeparators('/some/root/.babelrc'));
+			expect(copySpy).toHaveBeenCalledWith(
+				'jest.json',
+				normalizeSeparators('/some/root/jest.json'),
+			);
 
 			copySpy.mockRestore();
 		});
@@ -390,9 +394,9 @@ describe('ExecuteCommandRoutine', () => {
 
 			expect(args).toEqual([
 				'--foo',
-				'../tests/__fixtures__',
-				'../tests/configs',
-				'../tests/setup.ts',
+				normalizeSeparators('../tests/__fixtures__'),
+				normalizeSeparators('../tests/configs'),
+				normalizeSeparators('../tests/setup.ts'),
 				'bar',
 			]);
 		});
