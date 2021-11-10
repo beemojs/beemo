@@ -49,7 +49,7 @@
   },
   "dependencies": {
     "@boost/event": "^2.3.3",
-    "@types/stylelint": "^13.13.2"
+    "@types/stylelint": "^13.13.3"
   },
   "funding": {
     "type": "ko-fi",

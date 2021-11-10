@@ -24,22 +24,22 @@
     "task:args": "ts-node packages/local/src/bins/extractOptionList.ts"
   },
   "devDependencies": {
-    "@types/eslint": "^7.28.1",
+    "@types/eslint": "^7.28.2",
     "@types/fs-extra": "^9.0.13",
     "@types/is-glob": "^4.0.2",
     "@types/jest": "^27.0.2",
-    "@types/lodash": "^4.14.175",
-    "@types/node": "^16.9.1",
+    "@types/lodash": "^4.14.176",
+    "@types/node": "^16.11.7",
     "@types/prettier": "^2.4.1",
-    "@types/react": "^17.0.27",
+    "@types/react": "^17.0.34",
     "@types/rimraf": "^3.0.2",
-    "@types/semver": "^7.3.8",
+    "@types/semver": "^7.3.9",
     "conventional-changelog-beemo": "^2.1.0",
     "lerna": "^4.0.0",
     "packemon": "^1.5.0",
-    "ts-node": "^10.2.1",
-    "typescript": "^4.4.3",
-    "webpack": "^5.58.1"
+    "ts-node": "^10.4.0",
+    "typescript": "^4.4.4",
+    "webpack": "^5.63.0"
   },
   "resolutions": {
     "chalk": "^4.0.0",
