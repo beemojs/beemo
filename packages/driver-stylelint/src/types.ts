@@ -1,10 +1,8 @@
-import { Configuration, SyntaxType } from 'stylelint';
-
-export type { SyntaxType };
+import { Config } from 'stylelint';
 
 export type FormatterType = 'compact' | 'json' | 'string' | 'tap' | 'unix' | 'verbose';
 
-export interface StylelintConfig extends Partial<Configuration> {
+export interface StylelintConfig extends Partial<Config> {
 	ignore?: string[];
 }
 
@@ -42,10 +40,8 @@ export interface StylelintArgs {
 	reportInvalidScopeDisables?: boolean;
 	reportNeedlessDisables?: boolean;
 	risd?: boolean;
-	s?: SyntaxType;
 	stdin?: boolean;
 	stdinFilename?: string;
-	syntax?: SyntaxType;
 	v?: boolean;
 	version?: boolean;
 }
