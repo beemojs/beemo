@@ -38,7 +38,7 @@
     "access": "public"
   },
   "devDependencies": {
-    "eslint": "^7.32.0"
+    "eslint": "^8.2.0"
   },
   "peerDependencies": {
     "@beemo/core": "^2.0.0",
@@ -46,7 +46,7 @@
   },
   "dependencies": {
     "@boost/event": "^2.3.3",
-    "@types/eslint": "^7.28.1"
+    "@types/eslint": "^7.28.2"
   },
   "funding": {
     "type": "ko-fi",

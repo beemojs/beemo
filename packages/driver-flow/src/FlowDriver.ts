@@ -29,18 +29,18 @@ export class FlowDriver extends Driver<FlowConfig> {
 			output.push(`[${key}]`);
 
 			switch (key) {
+				case 'lints':
+					output.push(...this.formatLintsSection(value as LintsConfig));
+					break;
+				case 'options':
+					output.push(...this.formatOptionsSection(value as OptionsConfig));
+					break;
 				default:
 					if (Array.isArray(value)) {
 						output.push(...value.map((v) => String(v)));
 					} else if (value) {
 						output.push(String(value));
 					}
-					break;
-				case 'lints':
-					output.push(...this.formatLintsSection(value as LintsConfig));
-					break;
-				case 'options':
-					output.push(...this.formatOptionsSection(value as OptionsConfig));
 					break;
 			}
 

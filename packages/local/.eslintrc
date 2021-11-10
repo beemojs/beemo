@@ -1,6 +1,7 @@
 {
 	"rules": {
 		"no-console": "off",
+		"no-restricted-exports": "off",
 		"import/no-extraneous-dependencies": "off"
 	}
 }
