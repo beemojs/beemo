@@ -1855,9 +1855,9 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@beemo/dev@npm:^1.7.1":
-  version: 1.7.1
-  resolution: "@beemo/dev@npm:1.7.1"
+"@beemo/dev@npm:^1.7.2":
+  version: 1.7.2
+  resolution: "@beemo/dev@npm:1.7.2"
   dependencies:
     "@babel/cli": ^7.16.0
     "@babel/core": ^7.16.0
@@ -1883,7 +1883,7 @@ __metadata:
       optional: true
     "@beemo/core":
       optional: true
-  checksum: 1b3dbf56ed502b4d4f2458a66a272b6b6d2d1770ff1bf72574bf6a2178cfc855dc2fbc440dcefc0f1e216e30661b66e5fc8cf09af2b18e51b70fddaa4518eb34
+  checksum: bbfb26c955856b59a829262abdb28dff1b9b307206edd75e4b329b31ff6f0298c8ad0de74a0e8fbc3acad8b78cb9b6862d083016dd666495c65077e105f57834
   languageName: node
   linkType: hard
 
@@ -2026,7 +2026,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@beemo/local@workspace:packages/local"
   dependencies:
-    "@beemo/dev": ^1.7.1
+    "@beemo/dev": ^1.7.2
     chalk: ^4.1.2
     execa: ^5.1.1
     fast-glob: ^3.2.7
