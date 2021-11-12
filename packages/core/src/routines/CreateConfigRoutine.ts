@@ -2,7 +2,7 @@
 
 import fs from 'fs-extra';
 import camelCase from 'lodash/camelCase';
-import { Bind, Blueprint, Path, PathResolver, Schemas } from '@boost/common';
+import { Bind, Blueprint, Path, PathResolver, Schemas, VirtualPath } from '@boost/common';
 import { color } from '@boost/internal';
 import { requireModule } from '@boost/module';
 import { Routine } from '@boost/pipeline';
@@ -361,12 +361,9 @@ export class CreateConfigRoutine<Ctx extends ConfigContext> extends Routine<
 
 		context.addConfigPath(driver.getName(), configPath);
 
-		const requirePath = context.cwd.relativeTo(sourcePath);
+		const requirePath = new VirtualPath(context.cwd.relativeTo(sourcePath));
 
-		await fs.writeFile(
-			configPath.path(),
-			`module.exports = require('.${Path.SEP}${requirePath}');`,
-		);
+		await fs.writeFile(configPath.path(), `module.exports = require('./${requirePath}');`);
 
 		return configPath;
 	}

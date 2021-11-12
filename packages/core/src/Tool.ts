@@ -278,7 +278,7 @@ export class Tool extends Contract<ToolOptions> {
 
 		this.debug('Running with %s v%s driver', driverName, version);
 
-		return new WaterfallPipeline(context, driverName)
+		return new WaterfallPipeline<typeof context, unknown>(context, driverName)
 			.pipe(
 				new ResolveConfigsRoutine('config', this.msg('app:configGenerate'), {
 					tool: this,

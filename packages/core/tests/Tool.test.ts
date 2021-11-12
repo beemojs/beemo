@@ -1,6 +1,6 @@
 import fs from 'fs-extra';
 import { Path } from '@boost/common';
-import { mockNormalizedFilePath, normalizeSeparators } from '@boost/common/test';
+import { normalizeSeparators } from '@boost/common/test';
 import { getFixturePath } from '@boost/test-utils';
 import { Context } from '../src/contexts/Context';
 import { CleanupConfigsRoutine } from '../src/routines/CleanupConfigsRoutine';

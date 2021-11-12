@@ -34,6 +34,7 @@ export class ResolveConfigsRoutine<Ctx extends ConfigContext = ConfigContext> ex
 
 		// Serial
 		const pipeline = routines.reduce(
+			// @ts-expect-error Ignore input types
 			(pl, routine) => pl.pipe(routine),
 			this.createWaterfallPipeline<Ctx, Path>(context),
 		);
