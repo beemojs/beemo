@@ -1,18 +1,10 @@
 /* eslint-disable no-param-reassign */
 
 import rimraf from 'rimraf';
-import {
-	Blueprint,
-	ConfigContext,
-	Driver,
-	DriverContext,
-	Path,
-	Schemas,
-	VirtualPath,
-} from '@beemo/core';
+import { Blueprint, ConfigContext, Driver, DriverContext, Path, Schemas } from '@beemo/core';
 import { Event } from '@boost/event';
 import { syncProjectRefs } from './commands/syncProjectRefs';
-import { writeFile } from './helpers';
+import { join, writeFile } from './helpers';
 import { TypeScriptConfig, TypeScriptOptions } from './types';
 
 // Success: Writes nothing to stdout or stderr
@@ -127,13 +119,13 @@ export class TypeScriptDriver extends Driver<TypeScriptConfig, TypeScriptOptions
 			// Reference a package *only* if it has a src folder
 			if (srcFolder && srcPath.exists()) {
 				config.references!.push({
-					path: new VirtualPath(tool.project.root.relativeTo(pkgPath)).path(),
+					path: join(tool.project.root.relativeTo(pkgPath)),
 				});
 
 				// Reference a separate tests folder if it exists
 				if (testsFolder && testsPath.exists()) {
 					config.references!.push({
-						path: new VirtualPath(tool.project.root.relativeTo(testsPath)).path(),
+						path: join(tool.project.root.relativeTo(testsPath)),
 					});
 				}
 			}

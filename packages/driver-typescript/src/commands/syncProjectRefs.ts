@@ -22,7 +22,7 @@ export async function syncProjectRefs(tool: Tool) {
 	} = driver.options;
 	const optionsConfigPath = root.append('tsconfig.options.json');
 	const globalTypesPath = root.append(typesFolder, '**/*');
-	const namesToPaths: Record<string, string> = {};
+	const namesToPaths: Record<string, Path> = {};
 	const workspacePackages = tool.project.getWorkspacePackages<
 		PackageStructure & {
 			tsconfig?: Pick<TypeScriptConfig, 'compilerOptions' | 'exclude' | 'include'>;
@@ -31,7 +31,7 @@ export async function syncProjectRefs(tool: Tool) {
 
 	// Map package name to absolute paths
 	workspacePackages.forEach((wsPkg) => {
-		namesToPaths[wsPkg.package.name] = wsPkg.metadata.packagePath.path();
+		namesToPaths[wsPkg.package.name] = wsPkg.metadata.packagePath;
 	});
 
 	// Create a config file in each package

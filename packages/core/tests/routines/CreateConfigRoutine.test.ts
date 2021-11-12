@@ -1,6 +1,6 @@
 import fs from 'fs-extra';
 import { Path } from '@boost/common';
-import { mockNormalizedFilePath, normalizeSeparators } from '@boost/common/test';
+import { mockNormalizedFilePath } from '@boost/common/test';
 import { copyFixtureToNodeModule, getFixturePath } from '@boost/test-utils';
 import {
 	STRATEGY_COPY,
@@ -751,7 +751,7 @@ list:
 
 			expect(writeSpy).toHaveBeenCalledWith(
 				prependRoot('/babel.config.js').path(),
-				`module.exports = require('${normalizeSeparators('./configs/babel.js')}');`,
+				`module.exports = require('./configs/babel.js');`,
 			);
 			expect(path).toEqual(prependRoot('/babel.config.js'));
 		});
