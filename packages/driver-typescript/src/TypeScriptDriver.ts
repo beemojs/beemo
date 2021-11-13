@@ -17,12 +17,13 @@ export class TypeScriptDriver extends Driver<TypeScriptConfig, TypeScriptOptions
 	);
 
 	override blueprint(schemas: Schemas): Blueprint<TypeScriptOptions> {
-		const { bool, string } = schemas;
+		const { array, bool, string } = schemas;
 
 		return {
 			...super.blueprint(schemas),
 			buildFolder: string('lib'),
 			declarationOnly: bool(),
+			devFolders: array().of(string()),
 			globalTypes: bool(true),
 			localTypes: bool(true),
 			srcFolder: string('src'),
@@ -80,7 +81,7 @@ export class TypeScriptDriver extends Driver<TypeScriptConfig, TypeScriptOptions
 	 */
 	handlePrepareConfigs = (context: ConfigContext, configPath: Path, config: TypeScriptConfig) => {
 		const { tool } = this;
-		const { srcFolder, testsFolder } = this.options;
+		const { devFolders = [], srcFolder, testsFolder } = this.options;
 		const workspacePackages = tool.project.getWorkspacePackages();
 
 		if (workspacePackages.length === 0) {
@@ -113,22 +114,27 @@ export class TypeScriptDriver extends Driver<TypeScriptConfig, TypeScriptOptions
 
 		workspacePackages.forEach(({ metadata }) => {
 			const pkgPath = new Path(metadata.packagePath);
-			const srcPath = pkgPath.append(srcFolder);
-			const testsPath = pkgPath.append(testsFolder);
+			const refPaths: Path[] = [];
 
-			// Reference a package *only* if it has a src folder
-			if (srcFolder && srcPath.exists()) {
-				config.references!.push({
-					path: join(tool.project.root.relativeTo(pkgPath)),
-				});
-
-				// Reference a separate tests folder if it exists
-				if (testsFolder && testsPath.exists()) {
-					config.references!.push({
-						path: join(tool.project.root.relativeTo(testsPath)),
-					});
-				}
+			if (srcFolder && pkgPath.append(srcFolder).exists()) {
+				refPaths.push(pkgPath);
 			}
+
+			if (testsFolder && pkgPath.append(testsFolder).exists()) {
+				refPaths.push(pkgPath.append(testsFolder));
+			}
+
+			devFolders.forEach((devFolder) => {
+				if (devFolder && pkgPath.append(devFolder).exists()) {
+					refPaths.push(pkgPath.append(devFolder));
+				}
+			});
+
+			refPaths.forEach((refPath) => {
+				config.references!.push({
+					path: join(tool.project.root.relativeTo(refPath)),
+				});
+			});
 		});
 
 		// Add to context so that it can be automatically cleaned up

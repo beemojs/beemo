@@ -14,6 +14,7 @@ export async function syncProjectRefs(tool: Tool) {
 	const {
 		buildFolder,
 		declarationOnly,
+		devFolders = [],
 		srcFolder,
 		testsFolder,
 		typesFolder,
@@ -37,14 +38,12 @@ export async function syncProjectRefs(tool: Tool) {
 	// Create a config file in each package
 	await Promise.all(
 		workspacePackages.map(
-			// eslint-disable-next-line complexity
 			({
 				package: { dependencies = {}, devDependencies = {}, peerDependencies = {}, tsconfig = {} },
 				metadata: workspace,
 			}) => {
 				const pkgPath = new Path(workspace.packagePath);
 				const srcPath = pkgPath.append(srcFolder);
-				const testsPath = pkgPath.append(testsFolder);
 				const references: ts.ProjectReference[] = [];
 				const promises: Promise<unknown>[] = [];
 
@@ -104,34 +103,47 @@ export async function syncProjectRefs(tool: Tool) {
 					promises.push(writeFile(configPath, packageConfig));
 				}
 
-				// Build tests specific package config
-				if (testsFolder && testsPath.exists()) {
-					const testConfig: TypeScriptConfig = {
+				// Build tests/other specific package config after src
+				const nestedRootPaths: Path[] = [];
+
+				if (testsFolder && pkgPath.append(testsFolder).exists()) {
+					nestedRootPaths.push(pkgPath.append(testsFolder));
+				}
+
+				devFolders.forEach((devFolder) => {
+					if (devFolder && pkgPath.append(devFolder).exists()) {
+						nestedRootPaths.push(pkgPath.append(devFolder));
+					}
+				});
+
+				nestedRootPaths.forEach((dirPath) => {
+					const relPathToRoot = join(dirPath.relativeTo(pkgPath));
+					const nestedConfig: TypeScriptConfig = {
 						compilerOptions: {
 							composite: false,
 							emitDeclarationOnly: false,
 							noEmit: true,
 							rootDir: '.',
 						},
-						extends: join(testsPath.relativeTo(optionsConfigPath)),
+						extends: join(dirPath.relativeTo(optionsConfigPath)),
 						include: ['**/*'],
-						references: [{ path: '..' }],
+						references: [{ path: relPathToRoot }],
 					};
 
 					if (localTypes) {
-						testConfig.include!.push(join('..', typesFolder, '**/*'));
+						nestedConfig.include!.push(join(relPathToRoot, typesFolder, '**/*'));
 					}
 
 					if (globalTypes) {
-						testConfig.include!.push(join(testsPath.relativeTo(globalTypesPath)));
+						nestedConfig.include!.push(join(dirPath.relativeTo(globalTypesPath)));
 					}
 
-					const configPath = testsPath.append('tsconfig.json');
+					const configPath = dirPath.append('tsconfig.json');
 
-					driver.onCreateProjectConfigFile.emit([configPath, testConfig, true]);
+					driver.onCreateProjectConfigFile.emit([configPath, nestedConfig, true]);
 
-					promises.push(writeFile(configPath, testConfig));
-				}
+					promises.push(writeFile(configPath, nestedConfig));
+				});
 
 				return Promise.all(promises);
 			},

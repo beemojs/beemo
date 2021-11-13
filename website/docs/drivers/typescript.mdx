@@ -125,6 +125,9 @@ To customize this process, the following options are available.
 - `buildFolder` (`string`) - Name of output directory relative to package root. Defaults to `lib`.
 - `declarationOnly` (`boolean`) - Only emit declaration files for all packages instead of source
   files. Defaults to `false`.
+- `devFolders` (`string[]`) - Names of additional directories relative to the package root, to be
+  considered a typcheck-only nested project reference. Useful for scripts, resources, etc. Defaults
+  to `[]`.
 - `globalTypes` (`boolean`) - Include global types defined in the root (usually cwd). Defaults to
   `false`.
 - `srcFolder` (`string`) - Name of source directory relative to package root. Defaults to `src`.

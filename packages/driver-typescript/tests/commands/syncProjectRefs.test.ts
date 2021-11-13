@@ -187,6 +187,46 @@ describe('syncProjectRefs()', () => {
 		);
 	});
 
+	it('supports custom `devFolders`', async () => {
+		driver.configure({
+			devFolders: ['scripts', 'nested/stories'],
+		});
+
+		await syncProjectRefs(tool);
+
+		expect(writeSpy).toHaveBeenCalledWith(
+			expect.stringContaining(normalizeSeparators('packages/bar/scripts/tsconfig.json')),
+			driver.formatConfig({
+				compilerOptions: {
+					composite: false,
+					emitDeclarationOnly: false,
+					noEmit: true,
+					rootDir: '.',
+				},
+				extends: '../../../tsconfig.options.json',
+				include: ['**/*', '../types/**/*', '../../../types/**/*'],
+				references: [{ path: '..' }],
+			}),
+			expect.any(Function),
+		);
+
+		expect(writeSpy).toHaveBeenCalledWith(
+			expect.stringContaining(normalizeSeparators('packages/bar/nested/stories/tsconfig.json')),
+			driver.formatConfig({
+				compilerOptions: {
+					composite: false,
+					emitDeclarationOnly: false,
+					noEmit: true,
+					rootDir: '.',
+				},
+				extends: '../../../../tsconfig.options.json',
+				include: ['**/*', '../../types/**/*', '../../../../types/**/*'],
+				references: [{ path: '../..' }],
+			}),
+			expect.any(Function),
+		);
+	});
+
 	it('excludes local types when `localTypes` is false', async () => {
 		driver.configure({ localTypes: false });
 

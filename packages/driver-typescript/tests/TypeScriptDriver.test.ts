@@ -64,6 +64,7 @@ describe('TypeScriptDriver', () => {
 			configStrategy: 'native',
 			declarationOnly: false,
 			dependencies: ['babel'],
+			devFolders: [],
 			env: { DEV: 'true' },
 			expandGlobs: true,
 			buildFolder: 'lib',
