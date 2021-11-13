@@ -3,6 +3,22 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+### 1.0.5 - 2021-11-13
+
+#### 📦 Dependencies
+
+- Update driver dependencies to latest. ([9d34ccb](https://github.com/beemojs/beemo/commit/9d34ccb))
+
+#### 🛠 Internals
+
+- Fix failing windows build. ([c895811](https://github.com/beemojs/beemo/commit/c895811))
+
+**Note:** Version bump only for package @beemo/local
+
+
+
+
+
 ### 1.0.4 - 2021-10-10
 
 **Note:** Version bump only for package @beemo/local

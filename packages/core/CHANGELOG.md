@@ -3,6 +3,22 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+### 2.1.2 - 2021-11-13
+
+#### 🐞 Fixes
+
+- Dont check config result for copy/reference. ([5d181fb](https://github.com/beemojs/beemo/commit/5d181fb))
+
+#### 📦 Dependencies
+
+- **[boost]** Update to v3. (#150) ([ba10988](https://github.com/beemojs/beemo/commit/ba10988)), closes [#150](https://github.com/beemojs/beemo/issues/150)
+
+**Note:** Version bump only for package @beemo/core
+
+
+
+
+
 ### 2.1.1 - 2021-10-10
 
 #### 📦 Dependencies

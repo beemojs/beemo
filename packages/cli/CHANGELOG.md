@@ -3,6 +3,18 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+### 2.0.4 - 2021-11-13
+
+#### 📦 Dependencies
+
+- **[boost]** Update to v3. (#150) ([ba10988](https://github.com/beemojs/beemo/commit/ba10988)), closes [#150](https://github.com/beemojs/beemo/issues/150)
+
+**Note:** Version bump only for package @beemo/cli
+
+
+
+
+
 ### 2.0.3 - 2021-10-10
 
 #### 📦 Dependencies

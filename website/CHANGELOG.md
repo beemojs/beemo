@@ -3,6 +3,27 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## 1.1.0 - 2021-11-13
+
+#### 🚀 Updates
+
+- Add `devFolders` option, for supporting additional project ref roots. ([f81a1c3](https://github.com/beemojs/beemo/commit/f81a1c3))
+- Support stylelint v14. ([4135d13](https://github.com/beemojs/beemo/commit/4135d13))
+
+#### 📦 Dependencies
+
+- **[docusaurus]** Update to beta.9. ([52ee7a4](https://github.com/beemojs/beemo/commit/52ee7a4))
+
+#### 📘 Docs
+
+- Add API integration. ([49c6156](https://github.com/beemojs/beemo/commit/49c6156))
+
+**Note:** Version bump only for package website
+
+
+
+
+
 ### 1.0.2 - 2021-10-10
 
 #### 📦 Dependencies
