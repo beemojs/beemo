@@ -111,7 +111,7 @@ export class RunScriptRoutine extends RunInWorkspacesRoutine<ScriptContext> {
 		}
 
 		try {
-			const { resolvedPath } = resolver.resolve();
+			const { resolvedPath } = await resolver.resolve();
 			const loadedScript = await tool.scriptRegistry.load(resolvedPath.path(), undefined, {
 				tool: this.options.tool,
 			});

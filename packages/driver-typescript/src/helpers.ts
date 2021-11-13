@@ -1,8 +1,9 @@
 import fs from 'fs';
-import { Path } from '@beemo/core';
+import { Path, PortablePath, VirtualPath } from '@beemo/core';
 
-export function join(...parts: string[]): string {
-	return new Path(...parts).path();
+// tsconfig.json uses forward slashes
+export function join(...parts: PortablePath[]): string {
+	return new VirtualPath(...parts).path();
 }
 
 export async function writeFile(path: Path, data: unknown): Promise<void> {

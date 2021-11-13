@@ -1,7 +1,8 @@
 import execa from 'execa';
 import mergeWith from 'lodash/mergeWith';
 import { PrimitiveType } from '@boost/args';
-import { Blueprint, isObject, optimal, Path, Predicates, predicates, toArray } from '@boost/common';
+import { isObject, Path, toArray } from '@boost/common';
+import { Blueprint, optimal, Schemas, schemas } from '@boost/common/optimal';
 import { ConcurrentEvent, Event } from '@boost/event';
 import { Plugin } from '@boost/plugin';
 import {
@@ -92,9 +93,9 @@ export abstract class Driver<
 		}
 	}
 
-	blueprint({ array, object, string, bool }: Predicates): Blueprint<DriverOptions> {
+	blueprint({ array, object, string, bool }: Schemas): Blueprint<DriverOptions> {
 		return {
-			args: array(string()),
+			args: array().of(string()),
 			configStrategy: string(STRATEGY_NATIVE).oneOf<DriverConfigStrategy>([
 				STRATEGY_NATIVE,
 				STRATEGY_CREATE,
@@ -103,8 +104,8 @@ export abstract class Driver<
 				STRATEGY_COPY,
 				STRATEGY_NONE,
 			]),
-			dependencies: array(string()),
-			env: object(string()),
+			dependencies: array().of(string()),
+			env: object().of(string()),
 			expandGlobs: bool(true),
 			outputStrategy: string(STRATEGY_BUFFER).oneOf<DriverOutputStrategy>([
 				STRATEGY_BUFFER,
@@ -252,15 +253,14 @@ export abstract class Driver<
 	 * Set metadata about the binary/executable in which this driver wraps.
 	 */
 	setMetadata(metadata: Partial<DriverMetadata>): this {
-		const { array, bool, string, object, shape } = predicates;
+		const { array, bool, string, object, shape } = schemas;
 
 		this.metadata = optimal(
-			metadata,
 			{
 				bin: string()
 					.match(/^[a-z]{1}[a-zA-Z0-9-]+$/u)
 					.required(),
-				commandOptions: object(
+				commandOptions: object().of(
 					shape({
 						description: string().required(),
 						type: string().oneOf<'boolean' | 'number' | 'string'>(['string', 'number', 'boolean']),
@@ -272,21 +272,22 @@ export abstract class Driver<
 					STRATEGY_CREATE,
 					STRATEGY_REFERENCE,
 					STRATEGY_COPY,
+					STRATEGY_TEMPLATE,
 				]),
-				dependencies: array(string()),
+				dependencies: array().of(string()),
 				description: string(),
 				filterOptions: bool(true),
 				helpOption: string('--help'),
 				title: string().required(),
 				useConfigOption: bool(),
 				versionOption: string('--version'),
-				watchOptions: array(string()),
+				watchOptions: array().of(string()),
 				workspaceStrategy: string(STRATEGY_REFERENCE).oneOf([STRATEGY_REFERENCE, STRATEGY_COPY]),
 			},
 			{
 				name: this.constructor.name,
 			},
-		);
+		).validate(metadata);
 
 		return this;
 	}

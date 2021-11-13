@@ -1,6 +1,11 @@
 import fs from 'fs';
 import { DriverContext, Path } from '@beemo/core';
-import { mockTool, stubDriverContext } from '@beemo/core/test';
+import {
+	mockNormalizedFilePath,
+	mockTool,
+	normalizeSeparators,
+	stubDriverContext,
+} from '@beemo/core/test';
 import factory from '../src';
 import { PrettierDriver } from '../src/PrettierDriver';
 
@@ -100,10 +105,13 @@ describe('PrettierDriver', () => {
 
 			driver.onCreateConfigFile.emit([context, new Path('/some/path/prettier.config.js'), config]);
 
-			expect(writeSpy).toHaveBeenCalledWith('/some/path/.prettierignore', 'foo\nbar\nbaz');
+			expect(writeSpy).toHaveBeenCalledWith(
+				normalizeSeparators('/some/path/.prettierignore'),
+				'foo\nbar\nbaz',
+			);
 
 			expect(context.configPaths).toEqual([
-				{ driver: 'prettier', path: new Path('/some/path/.prettierignore') },
+				{ driver: 'prettier', path: mockNormalizedFilePath('/some/path/.prettierignore') },
 			]);
 
 			expect(config).toEqual({ semi: true });
@@ -123,11 +131,18 @@ describe('PrettierDriver', () => {
 
 			driver.onCreateConfigFile.emit([context, new Path('/some/path/prettier.config.js'), config]);
 
-			expect(createSpy).toHaveBeenCalledWith(context, new Path('/some/path/.prettierignore'), {
-				ignore: ['foo', 'bar', 'baz', 'qux'],
-			});
+			expect(createSpy).toHaveBeenCalledWith(
+				context,
+				mockNormalizedFilePath('/some/path/.prettierignore'),
+				{
+					ignore: ['foo', 'bar', 'baz', 'qux'],
+				},
+			);
 
-			expect(writeSpy).toHaveBeenCalledWith('/some/path/.prettierignore', 'foo\nbar\nbaz\nqux');
+			expect(writeSpy).toHaveBeenCalledWith(
+				normalizeSeparators('/some/path/.prettierignore'),
+				'foo\nbar\nbaz\nqux',
+			);
 		});
 	});
 });

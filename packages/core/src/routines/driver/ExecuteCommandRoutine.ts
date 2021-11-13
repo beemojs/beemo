@@ -6,7 +6,7 @@ import fs from 'fs-extra';
 import isGlob from 'is-glob';
 import merge from 'lodash/merge';
 import { parse } from '@boost/args';
-import { Bind, Blueprint, ExitError, Path, Predicates } from '@boost/common';
+import { Bind, Blueprint, ExitError, Path, Schemas } from '@boost/common';
 import { color } from '@boost/internal';
 import { AnyWorkUnit, Routine } from '@boost/pipeline';
 import { STRATEGY_COPY } from '../../constants';
@@ -27,10 +27,10 @@ export interface ExecuteCommandOptions extends RoutineOptions {
 }
 
 export class ExecuteCommandRoutine extends Routine<unknown, unknown, ExecuteCommandOptions> {
-	blueprint({ array, bool, instance, string }: Predicates): Blueprint<ExecuteCommandOptions> {
+	blueprint({ array, bool, instance, string }: Schemas): Blueprint<ExecuteCommandOptions> {
 		return {
-			additionalArgv: array(string()),
-			argv: array(string()),
+			additionalArgv: array().of(string()),
+			argv: array().of(string()),
 			forceConfigOption: bool(),
 			packageRoot: string(),
 			tool: instance<Tool>().required().notNullable(),

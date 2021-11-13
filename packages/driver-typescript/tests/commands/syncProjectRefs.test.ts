@@ -1,6 +1,6 @@
 import fs from 'fs';
 import { Path, Tool } from '@beemo/core';
-import { mockTool } from '@beemo/core/test';
+import { mockTool, normalizeSeparators } from '@beemo/core/test';
 import { getFixturePath } from '@boost/test-utils';
 import { syncProjectRefs } from '../../src/commands/syncProjectRefs';
 import { TypeScriptDriver } from '../../src/TypeScriptDriver';
@@ -32,7 +32,7 @@ describe('syncProjectRefs()', () => {
 		await syncProjectRefs(tool);
 
 		expect(writeSpy).toHaveBeenCalledWith(
-			expect.stringContaining('packages/bar/tsconfig.json'),
+			expect.stringContaining(normalizeSeparators('packages/bar/tsconfig.json')),
 			driver.formatConfig({
 				compilerOptions: {
 					declarationDir: 'lib',
@@ -48,7 +48,7 @@ describe('syncProjectRefs()', () => {
 		);
 
 		expect(writeSpy).toHaveBeenCalledWith(
-			expect.stringContaining('packages/baz/tsconfig.json'),
+			expect.stringContaining(normalizeSeparators('packages/baz/tsconfig.json')),
 			driver.formatConfig({
 				compilerOptions: {
 					declarationDir: 'lib',
@@ -64,7 +64,7 @@ describe('syncProjectRefs()', () => {
 		);
 
 		expect(writeSpy).toHaveBeenCalledWith(
-			expect.stringContaining('packages/baz/tests/tsconfig.json'),
+			expect.stringContaining(normalizeSeparators('packages/baz/tests/tsconfig.json')),
 			driver.formatConfig({
 				compilerOptions: {
 					composite: false,
@@ -80,7 +80,7 @@ describe('syncProjectRefs()', () => {
 		);
 
 		expect(writeSpy).toHaveBeenCalledWith(
-			expect.stringContaining('packages/foo/tsconfig.json'),
+			expect.stringContaining(normalizeSeparators('packages/foo/tsconfig.json')),
 			driver.formatConfig({
 				compilerOptions: {
 					declarationDir: 'lib',
@@ -104,7 +104,7 @@ describe('syncProjectRefs()', () => {
 		await syncProjectRefs(tool);
 
 		expect(writeSpy).toHaveBeenCalledWith(
-			expect.stringContaining('packages/bar/tsconfig.json'),
+			expect.stringContaining(normalizeSeparators('packages/bar/tsconfig.json')),
 			driver.formatConfig({
 				compilerOptions: {
 					declarationDir: 'lib',
@@ -130,7 +130,7 @@ describe('syncProjectRefs()', () => {
 		await syncProjectRefs(tool);
 
 		expect(writeSpy).toHaveBeenCalledWith(
-			expect.stringContaining('packages/qux/tsconfig.json'),
+			expect.stringContaining(normalizeSeparators('packages/qux/tsconfig.json')),
 			driver.formatConfig({
 				compilerOptions: {
 					declarationDir: 'build',
@@ -155,7 +155,7 @@ describe('syncProjectRefs()', () => {
 		await syncProjectRefs(tool);
 
 		expect(writeSpy).toHaveBeenCalledWith(
-			expect.stringContaining('packages/foo/custom-tests/tsconfig.json'),
+			expect.stringContaining(normalizeSeparators('packages/foo/custom-tests/tsconfig.json')),
 			driver.formatConfig({
 				compilerOptions: {
 					composite: false,
@@ -171,7 +171,7 @@ describe('syncProjectRefs()', () => {
 		);
 
 		expect(writeSpy).toHaveBeenCalledWith(
-			expect.stringContaining('packages/foo/tsconfig.json'),
+			expect.stringContaining(normalizeSeparators('packages/foo/tsconfig.json')),
 			driver.formatConfig({
 				compilerOptions: {
 					declarationDir: 'lib',
@@ -193,7 +193,7 @@ describe('syncProjectRefs()', () => {
 		await syncProjectRefs(tool);
 
 		expect(writeSpy).toHaveBeenCalledWith(
-			expect.stringContaining('packages/baz/tsconfig.json'),
+			expect.stringContaining(normalizeSeparators('packages/baz/tsconfig.json')),
 			driver.formatConfig({
 				compilerOptions: {
 					declarationDir: 'lib',
@@ -209,7 +209,7 @@ describe('syncProjectRefs()', () => {
 		);
 
 		expect(writeSpy).toHaveBeenCalledWith(
-			expect.stringContaining('packages/baz/tests/tsconfig.json'),
+			expect.stringContaining(normalizeSeparators('packages/baz/tests/tsconfig.json')),
 			driver.formatConfig({
 				compilerOptions: {
 					composite: false,
@@ -231,7 +231,7 @@ describe('syncProjectRefs()', () => {
 		await syncProjectRefs(tool);
 
 		expect(writeSpy).toHaveBeenCalledWith(
-			expect.stringContaining('packages/baz/tsconfig.json'),
+			expect.stringContaining(normalizeSeparators('packages/baz/tsconfig.json')),
 			driver.formatConfig({
 				compilerOptions: {
 					declarationDir: 'lib',
@@ -247,7 +247,7 @@ describe('syncProjectRefs()', () => {
 		);
 
 		expect(writeSpy).toHaveBeenCalledWith(
-			expect.stringContaining('packages/baz/tests/tsconfig.json'),
+			expect.stringContaining(normalizeSeparators('packages/baz/tests/tsconfig.json')),
 			driver.formatConfig({
 				compilerOptions: {
 					composite: false,
@@ -281,7 +281,7 @@ describe('syncProjectRefs()', () => {
 		expect(spy).toHaveBeenCalledTimes(4);
 
 		expect(writeSpy).toHaveBeenCalledWith(
-			expect.stringContaining('packages/baz/tests/tsconfig.json'),
+			expect.stringContaining(normalizeSeparators('packages/baz/tests/tsconfig.json')),
 			driver.formatConfig({
 				compilerOptions: {
 					composite: false,
@@ -299,7 +299,7 @@ describe('syncProjectRefs()', () => {
 		);
 
 		expect(writeSpy).toHaveBeenCalledWith(
-			expect.stringContaining('packages/baz/tsconfig.json'),
+			expect.stringContaining(normalizeSeparators('packages/baz/tsconfig.json')),
 			driver.formatConfig({
 				compilerOptions: {
 					declarationDir: 'lib',

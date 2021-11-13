@@ -1,5 +1,6 @@
 import fs from 'fs-extra';
 import { Path } from '@boost/common';
+import { mockNormalizedFilePath } from '@boost/common/test';
 import { DriverContext } from '../../src/contexts/DriverContext';
 import { Driver } from '../../src/Driver';
 import { CleanupConfigsRoutine } from '../../src/routines/CleanupConfigsRoutine';
@@ -73,8 +74,8 @@ describe('CleanupConfigsRoutine', () => {
 
 			await routine.deleteConfigFiles(context);
 
-			expect(spy).toHaveBeenCalledWith(context, new Path('foo.json'));
-			expect(spy).not.toHaveBeenCalledWith(context, new Path('.barrc'));
+			expect(spy).toHaveBeenCalledWith(context, mockNormalizedFilePath('foo.json'));
+			expect(spy).not.toHaveBeenCalledWith(context, mockNormalizedFilePath('.barrc'));
 		});
 	});
 });

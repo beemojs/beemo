@@ -223,9 +223,7 @@ describe('Driver', () => {
 						...options,
 						bin: 'foo_123',
 					});
-				}).toThrow(
-					'Invalid TestDriver field "bin". String does not match. (pattern "^[a-z]{1}[a-zA-Z0-9-]+$")',
-				);
+				}).toThrowErrorMatchingSnapshot();
 			});
 
 			it('doesnt support uppercase', () => {
@@ -234,9 +232,7 @@ describe('Driver', () => {
 						...options,
 						bin: 'Foo_123',
 					});
-				}).toThrow(
-					'Invalid TestDriver field "bin". String does not match. (pattern "^[a-z]{1}[a-zA-Z0-9-]+$")',
-				);
+				}).toThrowErrorMatchingSnapshot();
 			});
 		});
 

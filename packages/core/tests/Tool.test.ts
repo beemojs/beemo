@@ -1,5 +1,6 @@
 import fs from 'fs-extra';
 import { Path } from '@boost/common';
+import { normalizeSeparators } from '@boost/common/test';
 import { getFixturePath } from '@boost/test-utils';
 import { Context } from '../src/contexts/Context';
 import { CleanupConfigsRoutine } from '../src/routines/CleanupConfigsRoutine';
@@ -234,7 +235,9 @@ describe('Tool', () => {
 			tool.config = mockToolConfig();
 			tool.config.module = '@local';
 
-			expect(tool.getConfigModuleRoot()).toEqual(tool.cwd);
+			expect(normalizeSeparators(tool.getConfigModuleRoot())).toEqual(
+				normalizeSeparators(tool.cwd),
+			);
 			expect(tool.getConfigModuleRoot()).toBe(tool.getConfigModuleRoot());
 		});
 
@@ -242,7 +245,7 @@ describe('Tool', () => {
 			tool.config.module = '@boost/common';
 
 			expect(tool.getConfigModuleRoot().path()).toEqual(
-				expect.stringMatching(/node_modules\/@boost\/common$/u),
+				expect.stringContaining(normalizeSeparators('node_modules/@boost/common')),
 			);
 			expect(tool.getConfigModuleRoot()).toBe(tool.getConfigModuleRoot());
 		});

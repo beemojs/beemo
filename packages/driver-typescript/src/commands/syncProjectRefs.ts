@@ -22,7 +22,7 @@ export async function syncProjectRefs(tool: Tool) {
 	} = driver.options;
 	const optionsConfigPath = root.append('tsconfig.options.json');
 	const globalTypesPath = root.append(typesFolder, '**/*');
-	const namesToPaths: Record<string, string> = {};
+	const namesToPaths: Record<string, Path> = {};
 	const workspacePackages = tool.project.getWorkspacePackages<
 		PackageStructure & {
 			tsconfig?: Pick<TypeScriptConfig, 'compilerOptions' | 'exclude' | 'include'>;
@@ -53,7 +53,7 @@ export async function syncProjectRefs(tool: Tool) {
 					(depName) => {
 						if (namesToPaths[depName]) {
 							references.push({
-								path: pkgPath.relativeTo(namesToPaths[depName]).path(),
+								path: join(pkgPath.relativeTo(namesToPaths[depName])),
 							});
 						}
 					},
@@ -69,7 +69,7 @@ export async function syncProjectRefs(tool: Tool) {
 							rootDir: srcFolder,
 						},
 						exclude: [buildFolder],
-						extends: pkgPath.relativeTo(optionsConfigPath).path(),
+						extends: join(pkgPath.relativeTo(optionsConfigPath)),
 						include: [join(srcFolder, '**/*')],
 						references,
 					};
@@ -83,7 +83,7 @@ export async function syncProjectRefs(tool: Tool) {
 					}
 
 					if (globalTypes) {
-						packageConfig.include!.push(pkgPath.relativeTo(globalTypesPath).path());
+						packageConfig.include!.push(join(pkgPath.relativeTo(globalTypesPath)));
 					}
 
 					if (testsFolder) {
@@ -113,7 +113,7 @@ export async function syncProjectRefs(tool: Tool) {
 							noEmit: true,
 							rootDir: '.',
 						},
-						extends: testsPath.relativeTo(optionsConfigPath).path(),
+						extends: join(testsPath.relativeTo(optionsConfigPath)),
 						include: ['**/*'],
 						references: [{ path: '..' }],
 					};
@@ -123,13 +123,14 @@ export async function syncProjectRefs(tool: Tool) {
 					}
 
 					if (globalTypes) {
-						testConfig.include!.push(testsPath.relativeTo(globalTypesPath).path());
+						testConfig.include!.push(join(testsPath.relativeTo(globalTypesPath)));
 					}
 
 					const configPath = testsPath.append('tsconfig.json');
 
 					driver.onCreateProjectConfigFile.emit([configPath, testConfig, true]);
-					promises.push(writeFile(testsPath.append('tsconfig.json'), testConfig));
+
+					promises.push(writeFile(configPath, testConfig));
 				}
 
 				return Promise.all(promises);

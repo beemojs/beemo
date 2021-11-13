@@ -1,4 +1,4 @@
-import { Blueprint, Path, Predicates } from '@boost/common';
+import { Blueprint, Path, Schemas } from '@boost/common';
 import { color } from '@boost/internal';
 import { Routine } from '@boost/pipeline';
 import { ConfigContext } from '../contexts/ConfigContext';
@@ -11,7 +11,7 @@ export class ResolveConfigsRoutine<Ctx extends ConfigContext = ConfigContext> ex
 	unknown,
 	RoutineOptions
 > {
-	blueprint({ instance }: Predicates): Blueprint<RoutineOptions> {
+	blueprint({ instance }: Schemas): Blueprint<RoutineOptions> {
 		return {
 			tool: instance<Tool>().required().notNullable(),
 		};
@@ -34,6 +34,7 @@ export class ResolveConfigsRoutine<Ctx extends ConfigContext = ConfigContext> ex
 
 		// Serial
 		const pipeline = routines.reduce(
+			// @ts-expect-error Ignore input types
 			(pl, routine) => pl.pipe(routine),
 			this.createWaterfallPipeline<Ctx, Path>(context),
 		);

@@ -1,7 +1,7 @@
 /* eslint-disable no-console, @typescript-eslint/member-ordering */
 
 import { engine, Logger } from 'hygen';
-import { Bind, Blueprint, instanceOf, Predicates } from '@boost/common';
+import { Bind, Blueprint, instanceOf, Schemas } from '@boost/common';
 import { color } from '@boost/internal';
 import { Routine } from '@boost/pipeline';
 import { ScaffoldContext } from '../contexts/ScaffoldContext';
@@ -9,7 +9,7 @@ import type { Tool } from '../Tool';
 import { RoutineOptions } from '../types';
 
 export class ScaffoldRoutine extends Routine<unknown, unknown, RoutineOptions> {
-	blueprint({ instance }: Predicates): Blueprint<RoutineOptions> {
+	blueprint({ instance }: Schemas): Blueprint<RoutineOptions> {
 		return {
 			tool: instance<Tool>().required().notNullable(),
 		};

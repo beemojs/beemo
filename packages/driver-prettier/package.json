@@ -45,7 +45,7 @@
     "prettier": "^2.0.0"
   },
   "dependencies": {
-    "@boost/event": "^2.3.3",
+    "@boost/event": "^3.0.0",
     "@types/prettier": "^2.4.1"
   },
   "funding": {

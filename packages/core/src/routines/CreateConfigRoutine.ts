@@ -2,7 +2,7 @@
 
 import fs from 'fs-extra';
 import camelCase from 'lodash/camelCase';
-import { Bind, Blueprint, Path, PathResolver, Predicates } from '@boost/common';
+import { Bind, Blueprint, Path, PathResolver, Schemas, VirtualPath } from '@boost/common';
 import { color } from '@boost/internal';
 import { requireModule } from '@boost/module';
 import { Routine } from '@boost/pipeline';
@@ -27,10 +27,10 @@ export class CreateConfigRoutine<Ctx extends ConfigContext> extends Routine<
 	unknown,
 	CreateConfigOptions
 > {
-	blueprint({ instance }: Predicates): Blueprint<CreateConfigOptions> {
+	blueprint({ instance }: Schemas): Blueprint<CreateConfigOptions> {
 		return {
 			// @ts-expect-error Errors because Driver is abstract
-			driver: instance(Driver).required().notNullable(),
+			driver: instance().of(Driver).required().notNullable(),
 			tool: instance<Tool>().required().notNullable(),
 		};
 	}
@@ -90,7 +90,7 @@ export class CreateConfigRoutine<Ctx extends ConfigContext> extends Routine<
 	async copyConfigFile(context: Ctx): Promise<Path> {
 		const { driver, tool } = this.options;
 		const { metadata } = driver;
-		const sourcePath = this.getConfigPath(context);
+		const sourcePath = await this.getConfigPath(context);
 		const configPath = context.cwd.append(metadata.configName);
 
 		if (!sourcePath) {
@@ -170,12 +170,12 @@ export class CreateConfigRoutine<Ctx extends ConfigContext> extends Routine<
 
 		const { config, path = driverConfigPath } = template(configs, {
 			configModule: tool.config.module,
-			consumerConfigPath: this.getConfigPath(context, true),
+			consumerConfigPath: await this.getConfigPath(context, true),
 			context,
 			driver,
 			driverConfigPath,
 			driverName: driver.getName(),
-			providerConfigPath: this.getConfigPath(context),
+			providerConfigPath: await this.getConfigPath(context),
 			templatePath,
 			tool,
 		});
@@ -199,7 +199,10 @@ export class CreateConfigRoutine<Ctx extends ConfigContext> extends Routine<
 	/**
 	 * Return an absolute file path for a config file in either the consumer or provider.
 	 */
-	getConfigPath({ cwd, workspaceRoot }: Ctx, fromConsumer: boolean = false): Path | null {
+	async getConfigPath(
+		{ cwd, workspaceRoot }: Ctx,
+		fromConsumer: boolean = false,
+	): Promise<Path | null> {
 		const { projectName } = this.options.tool.options;
 		const moduleName = this.options.tool.config.module;
 		const driverName = this.options.driver.getName();
@@ -246,7 +249,7 @@ export class CreateConfigRoutine<Ctx extends ConfigContext> extends Routine<
 		let configPath = null;
 
 		try {
-			configPath = resolver.resolvePath();
+			configPath = await resolver.resolvePath();
 		} catch {
 			// Ignore
 		}
@@ -257,7 +260,7 @@ export class CreateConfigRoutine<Ctx extends ConfigContext> extends Routine<
 			this.debug('Found at %s', color.filePath(configPath));
 		}
 
-		return configPath;
+		return configPath as Path;
 	}
 
 	/**
@@ -302,7 +305,7 @@ export class CreateConfigRoutine<Ctx extends ConfigContext> extends Routine<
 	 */
 	@Bind()
 	async loadConfigFromConsumer(context: Ctx, prevConfigs: ConfigObject[]): Promise<ConfigObject[]> {
-		const sourcePath = this.getConfigPath(context, true);
+		const sourcePath = await this.getConfigPath(context, true);
 		const configs = [...prevConfigs];
 
 		if (sourcePath) {
@@ -321,7 +324,7 @@ export class CreateConfigRoutine<Ctx extends ConfigContext> extends Routine<
 	 */
 	@Bind()
 	async loadConfigFromProvider(context: Ctx, prevConfigs: ConfigObject[]): Promise<ConfigObject[]> {
-		const sourcePath = this.getConfigPath(context);
+		const sourcePath = await this.getConfigPath(context);
 		const configs = [...prevConfigs];
 
 		if (sourcePath) {
@@ -342,7 +345,7 @@ export class CreateConfigRoutine<Ctx extends ConfigContext> extends Routine<
 	async referenceConfigFile(context: Ctx): Promise<Path> {
 		const { driver, tool } = this.options;
 		const { metadata } = driver;
-		const sourcePath = this.getConfigPath(context);
+		const sourcePath = await this.getConfigPath(context);
 		const configPath = context.cwd.append(metadata.configName);
 
 		if (!sourcePath) {
@@ -358,7 +361,7 @@ export class CreateConfigRoutine<Ctx extends ConfigContext> extends Routine<
 
 		context.addConfigPath(driver.getName(), configPath);
 
-		const requirePath = context.cwd.relativeTo(sourcePath);
+		const requirePath = new VirtualPath(context.cwd.relativeTo(sourcePath));
 
 		await fs.writeFile(configPath.path(), `module.exports = require('./${requirePath}');`);
 

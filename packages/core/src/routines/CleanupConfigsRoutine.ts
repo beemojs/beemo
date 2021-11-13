@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/member-ordering */
 
 import fs from 'fs-extra';
-import { Bind, Blueprint, Predicates } from '@boost/common';
+import { Bind, Blueprint, Schemas } from '@boost/common';
 import { color } from '@boost/internal';
 import { Routine } from '@boost/pipeline';
 import { DriverContext } from '../contexts/DriverContext';
@@ -9,7 +9,7 @@ import type { Tool } from '../Tool';
 import { RoutineOptions } from '../types';
 
 export class CleanupConfigsRoutine extends Routine<unknown, unknown, RoutineOptions> {
-	blueprint({ instance }: Predicates): Blueprint<RoutineOptions> {
+	blueprint({ instance }: Schemas): Blueprint<RoutineOptions> {
 		return {
 			tool: instance<Tool>().required().notNullable(),
 		};
