@@ -97,7 +97,7 @@ export class CreateConfigRoutine<Ctx extends ConfigContext> extends Routine<
 			throw new Error(tool.msg('errors:configCopySourceMissing'));
 		}
 
-		const config = this.loadConfigAtPath(sourcePath);
+		const config = this.loadConfigAtPath(sourcePath, false);
 
 		this.debug('Copying config file to %s', color.filePath(configPath));
 
@@ -286,10 +286,14 @@ export class CreateConfigRoutine<Ctx extends ConfigContext> extends Routine<
 	/**
 	 * Load a config file with passing the args and tool to the file.
 	 */
-	loadConfigAtPath(filePath: Path): ConfigObject {
+	loadConfigAtPath(filePath: Path, validate: boolean = true): ConfigObject {
 		const config = requireModule<ConfigObject>(filePath).default;
 
 		if (typeof config === 'function') {
+			if (!validate) {
+				return {};
+			}
+
 			throw new TypeError(
 				this.options.tool.msg('errors:configNoFunction', {
 					name: filePath.name(),
@@ -352,7 +356,7 @@ export class CreateConfigRoutine<Ctx extends ConfigContext> extends Routine<
 			throw new Error(tool.msg('errors:configReferenceSourceMissing'));
 		}
 
-		const config = this.loadConfigAtPath(sourcePath);
+		const config = this.loadConfigAtPath(sourcePath, false);
 
 		this.debug('Referencing config file to %s', color.filePath(configPath));
 
