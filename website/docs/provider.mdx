@@ -153,7 +153,9 @@ module.exports = {
 
 You can access the command line args, the pipeline context, and the current
 [tool instance](./tool.md) on `process.beemo` (which allows for runtime conditional logic). For
-example, if `--react` was passed, we can enable the React preset.
+example, if `--react` was passed, we can enable the React preset. _However_, this is only available
+when your configuration strategy is create, as we own the process, and _will not_ be available for
+copy/reference strategies.
 
 ```ts title="configs/babel.ts"
 import { BabelConfig } from '@beemo/driver-babel';
