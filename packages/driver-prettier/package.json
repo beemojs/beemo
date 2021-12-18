@@ -38,7 +38,7 @@
     "access": "public"
   },
   "devDependencies": {
-    "prettier": "^2.4.1"
+    "prettier": "^2.5.1"
   },
   "peerDependencies": {
     "@beemo/core": "^2.0.0",
@@ -46,7 +46,7 @@
   },
   "dependencies": {
     "@boost/event": "^3.0.0",
-    "@types/prettier": "^2.4.1"
+    "@types/prettier": "^2.4.2"
   },
   "funding": {
     "type": "ko-fi",

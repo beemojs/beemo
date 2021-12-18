@@ -41,7 +41,7 @@
     "access": "public"
   },
   "devDependencies": {
-    "stylelint": "^14.0.1"
+    "stylelint": "^14.1.0"
   },
   "peerDependencies": {
     "@beemo/core": "^2.0.0",
