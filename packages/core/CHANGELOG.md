@@ -3,6 +3,18 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+### 2.1.3 - 2021-12-18
+
+#### 🐞 Fixes
+
+- Dont use TS files for copy/reference strategies. ([4dd3d12](https://github.com/beemojs/beemo/commit/4dd3d12))
+
+**Note:** Version bump only for package @beemo/core
+
+
+
+
+
 ### 2.1.2 - 2021-11-13
 
 #### 🐞 Fixes

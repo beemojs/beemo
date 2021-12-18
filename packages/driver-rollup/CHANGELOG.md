@@ -3,6 +3,18 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+### 2.0.5 - 2021-12-18
+
+#### 📦 Dependencies
+
+- **[packemon]** Update to v1.9. ([2c5863e](https://github.com/beemojs/beemo/commit/2c5863e))
+
+**Note:** Version bump only for package @beemo/driver-rollup
+
+
+
+
+
 ### 2.0.4 - 2021-11-13
 
 #### 📦 Dependencies

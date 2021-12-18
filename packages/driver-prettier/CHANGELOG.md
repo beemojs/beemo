@@ -3,6 +3,18 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+### 2.0.5 - 2021-12-18
+
+#### 📦 Dependencies
+
+- Update driver dependencies to latest. ([a5cdf5a](https://github.com/beemojs/beemo/commit/a5cdf5a))
+
+**Note:** Version bump only for package @beemo/driver-prettier
+
+
+
+
+
 ### 2.0.4 - 2021-11-13
 
 #### 📦 Dependencies
