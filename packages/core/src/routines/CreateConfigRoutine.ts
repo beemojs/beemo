@@ -90,7 +90,7 @@ export class CreateConfigRoutine<Ctx extends ConfigContext> extends Routine<
 	async copyConfigFile(context: Ctx): Promise<Path> {
 		const { driver, tool } = this.options;
 		const { metadata } = driver;
-		const sourcePath = await this.getConfigPath(context);
+		const sourcePath = await this.getConfigPath(context, true);
 		const configPath = context.cwd.append(metadata.configName);
 
 		if (!sourcePath) {
@@ -170,7 +170,7 @@ export class CreateConfigRoutine<Ctx extends ConfigContext> extends Routine<
 
 		const { config, path = driverConfigPath } = template(configs, {
 			configModule: tool.config.module,
-			consumerConfigPath: await this.getConfigPath(context, true),
+			consumerConfigPath: await this.getConfigPath(context, false, true),
 			context,
 			driver,
 			driverConfigPath,
@@ -201,6 +201,7 @@ export class CreateConfigRoutine<Ctx extends ConfigContext> extends Routine<
 	 */
 	async getConfigPath(
 		{ cwd, workspaceRoot }: Ctx,
+		jsOnly: boolean = false,
 		fromConsumer: boolean = false,
 	): Promise<Path | null> {
 		const { projectName } = this.options.tool.options;
@@ -232,11 +233,21 @@ export class CreateConfigRoutine<Ctx extends ConfigContext> extends Routine<
 			// If module name is @local, allow for local development
 			// by looking for config files in the current project.
 			if (moduleName === '@local') {
+				if (jsOnly) {
+					resolver
+						.lookupFilePath(`configs/${configName}.js`, root)
+						.lookupFilePath(`lib/configs/${configName}.js`, root);
+				} else {
+					resolver
+						.lookupFilePath(`configs/${configName}.ts`, root)
+						.lookupFilePath(`configs/${configName}.js`, root)
+						.lookupFilePath(`src/configs/${configName}.ts`, root)
+						.lookupFilePath(`lib/configs/${configName}.js`, root);
+				}
+			} else if (jsOnly) {
 				resolver
-					.lookupFilePath(`configs/${configName}.ts`, root)
-					.lookupFilePath(`configs/${configName}.js`, root)
-					.lookupFilePath(`src/configs/${configName}.ts`, root)
-					.lookupFilePath(`lib/configs/${configName}.js`, root);
+					.lookupNodeModule(`${moduleName}/configs/${configName}.js`)
+					.lookupNodeModule(`${moduleName}/lib/configs/${configName}.js`);
 			} else {
 				resolver
 					.lookupNodeModule(`${moduleName}/configs/${configName}.ts`)
@@ -309,7 +320,7 @@ export class CreateConfigRoutine<Ctx extends ConfigContext> extends Routine<
 	 */
 	@Bind()
 	async loadConfigFromConsumer(context: Ctx, prevConfigs: ConfigObject[]): Promise<ConfigObject[]> {
-		const sourcePath = await this.getConfigPath(context, true);
+		const sourcePath = await this.getConfigPath(context, false, true);
 		const configs = [...prevConfigs];
 
 		if (sourcePath) {
@@ -349,7 +360,7 @@ export class CreateConfigRoutine<Ctx extends ConfigContext> extends Routine<
 	async referenceConfigFile(context: Ctx): Promise<Path> {
 		const { driver, tool } = this.options;
 		const { metadata } = driver;
-		const sourcePath = await this.getConfigPath(context);
+		const sourcePath = await this.getConfigPath(context, true);
 		const configPath = context.cwd.append(metadata.configName);
 
 		if (!sourcePath) {

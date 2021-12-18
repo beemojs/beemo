@@ -500,7 +500,7 @@ list:
 			it('returns `.configs/beemo/file.js`', async () => {
 				context.workspaceRoot = new Path(getFixturePath('consumer-override'));
 
-				const path = await routine.getConfigPath(context, true);
+				const path = await routine.getConfigPath(context, false, true);
 
 				expect(path).toEqual(
 					mockNormalizedFilePath(context.workspaceRoot.append('.config/beemo/babel.js')),
@@ -512,7 +512,7 @@ list:
 
 				context.workspaceRoot = new Path(getFixturePath('consumer-branded'));
 
-				const path = await routine.getConfigPath(context, true);
+				const path = await routine.getConfigPath(context, false, true);
 
 				expect(path).toEqual(
 					mockNormalizedFilePath(context.workspaceRoot.append('.config/bmo/babel.js')),
