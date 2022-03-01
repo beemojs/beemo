@@ -33,6 +33,7 @@ export class Config extends Configuration<ConfigFile> {
 	}
 
 	override bootstrap() {
+		this.configureFinder({ errorIfNoRootFound: true });
 		this.addProcessHandler('drivers', mergePlugins);
 		this.addProcessHandler('scripts', mergePlugins);
 	}

@@ -34,9 +34,9 @@
     "access": "public"
   },
   "dependencies": {
-    "@boost/cli": "^3.0.1",
-    "@boost/common": "^3.1.0",
-    "@boost/pipeline": "^3.2.0",
+    "@boost/cli": "^3.0.3",
+    "@boost/common": "^3.2.1",
+    "@boost/pipeline": "^3.2.2",
     "debug": "^4.3.3",
     "ink": "^3.2.0",
     "react": "^17.0.2"

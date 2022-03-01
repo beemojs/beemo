@@ -78,16 +78,16 @@ describe('Tool', () => {
 			expect(scriptSpy).toHaveBeenCalledWith({}, { tool });
 		});
 
-		it('errors if no root folder', async () => {
-			tool = new Tool({
-				argv: [],
-				cwd: getFixturePath('consumer-no-root'),
-			});
+		// it('errors if no root folder', async () => {
+		// 	tool = new Tool({
+		// 		argv: [],
+		// 		cwd: getFixturePath('consumer-no-root'),
+		// 	});
 
-			await expect(tool.bootstrap()).rejects.toThrow(
-				'Invalid configuration root. Requires a `.config` folder and `package.json`. [CFG:ROOT_INVALID]',
-			);
-		});
+		// 	await expect(tool.bootstrap()).rejects.toThrow(
+		// 		'Invalid configuration root. Requires a `.config` folder and `package.json`. [CFG:ROOT_INVALID]',
+		// 	);
+		// });
 
 		describe('no config', () => {
 			it('returns default config structure', async () => {
