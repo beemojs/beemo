@@ -305,6 +305,7 @@ describe('syncProjectRefs()', () => {
 
 	it('emits `onCreateProjectConfigFile` event', async () => {
 		const spy = jest.fn((filePath, config, isTests) => {
+			// eslint-disable-next-line jest/no-conditional-in-test
 			if (isTests) {
 				// eslint-disable-next-line no-param-reassign
 				config.compilerOptions.testsOnly = true;

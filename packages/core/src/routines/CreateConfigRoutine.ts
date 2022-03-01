@@ -80,7 +80,7 @@ export class CreateConfigRoutine<Ctx extends ConfigContext> extends Routine<
 				break;
 		}
 
-		return Promise.resolve(new Path());
+		return new Path();
 	}
 
 	/**
@@ -278,7 +278,7 @@ export class CreateConfigRoutine<Ctx extends ConfigContext> extends Routine<
 	 * Merge multiple configuration sources using the current driver.
 	 */
 	@Bind()
-	async mergeConfigs(context: Ctx, configs: ConfigObject[]): Promise<ConfigObject> {
+	mergeConfigs(context: Ctx, configs: ConfigObject[]): ConfigObject {
 		const { driver } = this.options;
 
 		this.debug('Merging %s config from %d sources', color.symbol(driver.getName()), configs.length);
@@ -291,7 +291,7 @@ export class CreateConfigRoutine<Ctx extends ConfigContext> extends Routine<
 
 		driver.onMergeConfig.emit([context, config]);
 
-		return Promise.resolve(config);
+		return config;
 	}
 
 	/**
@@ -331,7 +331,7 @@ export class CreateConfigRoutine<Ctx extends ConfigContext> extends Routine<
 			this.options.driver.onLoadConsumerConfig.emit([context, config]);
 		}
 
-		return Promise.resolve(configs);
+		return configs;
 	}
 
 	/**
@@ -350,7 +350,7 @@ export class CreateConfigRoutine<Ctx extends ConfigContext> extends Routine<
 			this.options.driver.onLoadProviderConfig.emit([context, sourcePath, config]);
 		}
 
-		return Promise.resolve(configs);
+		return configs;
 	}
 
 	/**

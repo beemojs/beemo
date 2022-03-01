@@ -189,7 +189,7 @@ export class ExecuteCommandRoutine extends Routine<unknown, unknown, ExecuteComm
 				nativeOptions[option] = true;
 			});
 
-			return Promise.resolve(nativeOptions);
+			return nativeOptions;
 		}
 
 		this.debug('Extracting native options from help output');

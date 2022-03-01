@@ -42,6 +42,7 @@ export class ScaffoldRoutine extends Routine<unknown, unknown, RoutineOptions> {
 				createPrompter: this.handlePrompter,
 				cwd: tool.cwd.path(),
 				debug: tool.config.debug,
+				// eslint-disable-next-line @typescript-eslint/no-misused-promises
 				exec: this.handleExec,
 				logger: new Logger(console.log),
 				templates,
@@ -59,12 +60,13 @@ export class ScaffoldRoutine extends Routine<unknown, unknown, RoutineOptions> {
 	/**
 	 * Handle shell executions from hygen.
 	 */
-	private handleExec = (action: string, input: string) =>
-		this.executeCommand(action, [], {
+	private handleExec = async (action: string, input: string) => {
+		await this.executeCommand(action, [], {
 			input,
 			preferLocal: true,
 			shell: true,
 		});
+	};
 
 	/**
 	 * Temporary solution until boost supports prompts.

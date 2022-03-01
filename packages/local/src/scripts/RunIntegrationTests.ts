@@ -39,7 +39,7 @@ class RunIntegrationTestsScript extends Script<RunIntegrationTestsOptions> {
 		if (!script) {
 			console.warn(`Script "integration:${type}" has not been defined for ${name}, skipping.`);
 
-			return Promise.resolve();
+			return undefined;
 		}
 
 		console.log('Testing %s - %s', chalk.yellow(pkg.name), script);
