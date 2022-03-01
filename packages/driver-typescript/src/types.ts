@@ -12,6 +12,7 @@ export type TargetSetting =
 	| 'es2019'
 	| 'es2020'
 	| 'es2021'
+	| 'es2022'
 	| 'esnext'
 	| 'json'
 	| 'latest';
@@ -19,14 +20,18 @@ export type TargetSetting =
 export type ModuleSetting =
 	| 'amd'
 	| 'commonjs'
+	| 'es6'
 	| 'es2015'
 	| 'es2020'
+	| 'es2022'
 	| 'esnext'
+	| 'node12'
+	| 'nodenext'
 	| 'none'
 	| 'system'
 	| 'umd';
 
-export type ModuleResolutionSetting = 'classic' | 'node';
+export type ModuleResolutionSetting = 'classic' | 'node' | 'node12' | 'nodenext';
 
 // https://github.com/microsoft/TypeScript/tree/master/lib
 export type LibSetting =
@@ -62,6 +67,7 @@ export type LibSetting =
 	| 'es2018.promise'
 	| 'es2018.regexp'
 	| 'es2018'
+	| 'es2019.array'
 	| 'es2019.full'
 	| 'es2019.object'
 	| 'es2019.string'
@@ -75,7 +81,13 @@ export type LibSetting =
 	| 'es2020.string'
 	| 'es2020.symbol.wellknown'
 	| 'es2020'
+	| 'es2021.promise'
+	| 'es2021.string'
+	| 'es2021.weakref'
 	| 'es2021'
+	| 'es2022'
+	| 'esnext.array'
+	| 'esnext.asynciterable'
 	| 'esnext.full'
 	| 'esnext.intl'
 	| 'esnext.promise'
@@ -121,6 +133,7 @@ export interface CompilerOptions {
 	emitDeclarationOnly?: boolean;
 	emitDecoratorMetadata?: boolean;
 	esModuleInterop?: boolean;
+	exactOptionalPropertyTypes?: boolean;
 	experimentalDecorators?: boolean;
 	forceConsistentCasingInFileNames?: boolean;
 	importHelpers?: boolean;
@@ -147,6 +160,7 @@ export interface CompilerOptions {
 	noErrorTruncation?: boolean;
 	noFallthroughCasesInSwitch?: boolean;
 	noImplicitAny?: boolean;
+	noImplicitOverride?: boolean;
 	noImplicitReturns?: boolean;
 	noImplicitThis?: boolean;
 	noImplicitUseStrict?: boolean;
@@ -162,6 +176,7 @@ export interface CompilerOptions {
 	paths?: Record<string, string[]>;
 	preserveConstEnums?: boolean;
 	preserveSymlinks?: boolean;
+	preserveValueImports?: boolean;
 	pretty?: boolean;
 	project?: string;
 	reactNamespace?: string;
@@ -187,6 +202,7 @@ export interface CompilerOptions {
 	typeRoots?: string[];
 	types?: string[];
 	useDefineForClassFields?: boolean;
+	useUnknownInCatchVariables?: boolean;
 }
 
 export interface TypeScriptConfig {
@@ -229,6 +245,7 @@ export interface TypeScriptArgs {
 	emitDeclarationOnly?: boolean;
 	emitDecoratorMetadata?: boolean;
 	esModuleInterop?: boolean;
+	exactOptionalPropertyTypes?: boolean;
 	experimentalDecorators?: boolean;
 	extendedDiagnostics?: boolean;
 	forceConsistentCasingInFileNames?: boolean;
@@ -266,6 +283,7 @@ export interface TypeScriptArgs {
 	noErrorTruncation?: boolean;
 	noFallthroughCasesInSwitch?: boolean;
 	noImplicitAny?: boolean;
+	noImplicitOverride?: boolean;
 	noImplicitReturns?: boolean;
 	noImplicitThis?: boolean;
 	noImplicitUseStrict?: boolean;
@@ -283,6 +301,7 @@ export interface TypeScriptArgs {
 	plugins?: string[];
 	preserveConstEnums?: boolean;
 	preserveSymlinks?: boolean;
+	preserveValueImports?: boolean;
 	preserveWatchOutput?: boolean;
 	pretty?: boolean;
 	project?: string;
@@ -311,6 +330,7 @@ export interface TypeScriptArgs {
 	typeRoots?: string[];
 	types?: string[];
 	useDefineForClassFields?: boolean;
+	useUnknownInCatchVariables?: boolean;
 	v?: boolean;
 	version?: boolean;
 	w?: boolean;
