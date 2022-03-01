@@ -3,6 +3,19 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+### 2.1.2 - 2022-03-01
+
+#### 📦 Dependencies
+
+- Update driver dependencies to latest. ([c9f7052](https://github.com/beemojs/beemo/commit/c9f7052))
+- **[boost]** Update to v3 latest. ([34bf962](https://github.com/beemojs/beemo/commit/34bf962))
+
+**Note:** Version bump only for package @beemo/driver-stylelint
+
+
+
+
+
 ### 2.1.1 - 2021-12-18
 
 #### 📦 Dependencies

@@ -1,6 +1,6 @@
 {
   "name": "@beemo/driver-stylelint",
-  "version": "2.1.1",
+  "version": "2.1.2",
   "release": "1614239076609",
   "description": "Stylelint driver for Beemo.",
   "keywords": [

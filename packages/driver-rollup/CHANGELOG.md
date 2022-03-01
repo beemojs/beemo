@@ -3,6 +3,18 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+### 2.0.6 - 2022-03-01
+
+#### 📦 Dependencies
+
+- Update driver dependencies to latest. ([c9f7052](https://github.com/beemojs/beemo/commit/c9f7052))
+
+**Note:** Version bump only for package @beemo/driver-rollup
+
+
+
+
+
 ### 2.0.5 - 2021-12-18
 
 #### 📦 Dependencies

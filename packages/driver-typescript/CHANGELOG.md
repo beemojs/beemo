@@ -3,6 +3,23 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+### 2.1.2 - 2022-03-01
+
+#### ⚙️ Types
+
+- Support newer ES2022 and ESNext types. ([4925bb1](https://github.com/beemojs/beemo/commit/4925bb1))
+
+#### 📦 Dependencies
+
+- **[beemo-dev]** Update to latest configs. ([fd4ef40](https://github.com/beemojs/beemo/commit/fd4ef40))
+- **[boost]** Update to v3 latest. ([34bf962](https://github.com/beemojs/beemo/commit/34bf962))
+
+**Note:** Version bump only for package @beemo/driver-typescript
+
+
+
+
+
 ### 2.1.1 - 2021-12-18
 
 #### 📦 Dependencies

@@ -3,6 +3,19 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+### 1.0.7 - 2022-03-01
+
+#### 📦 Dependencies
+
+- Update minor and patch versions. ([7e9040e](https://github.com/beemojs/beemo/commit/7e9040e))
+- **[beemo-dev]** Update to latest configs. ([fd4ef40](https://github.com/beemojs/beemo/commit/fd4ef40))
+
+**Note:** Version bump only for package @beemo/local
+
+
+
+
+
 ### 1.0.6 - 2021-12-18
 
 #### 📦 Dependencies
