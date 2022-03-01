@@ -54,9 +54,9 @@
     "@boost/terminal": "^3.0.0",
     "@boost/translate": "^3.0.3",
     "execa": "^5.1.1",
-    "fast-glob": "^3.2.7",
-    "fs-extra": "^10.0.0",
-    "hygen": "^6.1.0",
+    "fast-glob": "^3.2.11",
+    "fs-extra": "^10.0.1",
+    "hygen": "^6.1.5",
     "is-glob": "^4.0.3",
     "lodash": "^4.17.21",
     "micromatch": "^4.0.4"

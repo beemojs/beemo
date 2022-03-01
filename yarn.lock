@@ -1858,9 +1858,9 @@ __metadata:
     "@boost/translate": ^3.0.3
     "@types/micromatch": ^4.0.2
     execa: ^5.1.1
-    fast-glob: ^3.2.7
-    fs-extra: ^10.0.0
-    hygen: ^6.1.0
+    fast-glob: ^3.2.11
+    fs-extra: ^10.0.1
+    hygen: ^6.1.5
     is-glob: ^4.0.3
     lodash: ^4.17.21
     micromatch: ^4.0.4
@@ -2041,8 +2041,8 @@ __metadata:
     "@beemo/dev": ^1.7.8
     chalk: ^4.1.2
     execa: ^5.1.1
-    fast-glob: ^3.2.7
-    fs-extra: ^10.0.0
+    fast-glob: ^3.2.11
+    fs-extra: ^10.0.1
     semver: ^7.3.5
   peerDependencies:
     "@beemo/core": "*"
@@ -4891,10 +4891,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/node@npm:*, @types/node@npm:^16.11.26":
-  version: 16.11.26
-  resolution: "@types/node@npm:16.11.26"
-  checksum: 57757caaba3f0d95de82198cb276a1002c49b710108c932a1d02d7c91ff2fa57cfe2dd19fde60853b6dd90b0964b3cf35557981d2628e20aed6a909057aedfe6
+"@types/node@npm:*, @types/node@npm:^17.0.19":
+  version: 17.0.21
+  resolution: "@types/node@npm:17.0.21"
+  checksum: 89dcd2fe82f21d3634266f8384e9c865cf8af49685639fbdbd799bdd1040480fb1e8eeda2d3b9fce41edbe704d2a4be9f427118c4ae872e8d9bb7cbeb3c41a94
   languageName: node
   linkType: hard
 
@@ -4905,17 +4905,17 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/node@npm:^14.14.41":
-  version: 14.14.44
-  resolution: "@types/node@npm:14.14.44"
-  checksum: a6e9d60b5a9069bdf6f43dcad92b635b02572daeb69d4649871c59a34b5267dcc6612f01f20934365efd8d86ebd1639f8ca9e0a3fb34ce1850ca7f3325d6ecec
-  languageName: node
-  linkType: hard
-
 "@types/node@npm:^15.0.1":
   version: 15.12.2
   resolution: "@types/node@npm:15.12.2"
   checksum: 0dff080f306e4d5cd968bd43315238a227b1f54f4bb59fa9cee976535678f00755834c0288315029ae12f78b3db43efb5bfb700cf8aae882f184eb700229f974
+  languageName: node
+  linkType: hard
+
+"@types/node@npm:^16.11.26":
+  version: 16.11.26
+  resolution: "@types/node@npm:16.11.26"
+  checksum: 57757caaba3f0d95de82198cb276a1002c49b710108c932a1d02d7c91ff2fa57cfe2dd19fde60853b6dd90b0964b3cf35557981d2628e20aed6a909057aedfe6
   languageName: node
   linkType: hard
 
@@ -8457,14 +8457,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"ejs@npm:^3.1.3":
-  version: 3.1.5
-  resolution: "ejs@npm:3.1.5"
+"ejs@npm:^3.1.6":
+  version: 3.1.6
+  resolution: "ejs@npm:3.1.6"
   dependencies:
     jake: ^10.6.1
   bin:
     ejs: ./bin/cli.js
-  checksum: c735d1ffb9560e6427a64a26d26fbccbeefa733417be6c1ee9944b75242ef9ab0b23e382afe203786d099e8ccb4b901539b256b630665a6920e913def340bf5c
+  checksum: 81a9cdea0b4ded3b5a4b212b7c17e20bb07468f08394e2d519708d367957a70aef3d282a6d5d38bf6ad313ba25802b9193d4227f29b084d2ee0f28d115141d48
   languageName: node
   linkType: hard
 
@@ -8898,6 +8898,21 @@ __metadata:
   peerDependencies:
     eslint: ">=5.16.0"
   checksum: 5804c4f8a6e721f183ef31d46fbe3b4e1265832f352810060e0502aeac7de034df83352fc88643b19641bb2163f2587f1bd4119aff0fd21e8d98c57c450e013b
+  languageName: node
+  linkType: hard
+
+"eslint-plugin-prettier@npm:^4.0.0":
+  version: 4.0.0
+  resolution: "eslint-plugin-prettier@npm:4.0.0"
+  dependencies:
+    prettier-linter-helpers: ^1.0.0
+  peerDependencies:
+    eslint: ">=7.28.0"
+    prettier: ">=2.0.0"
+  peerDependenciesMeta:
+    eslint-config-prettier:
+      optional: true
+  checksum: 03d69177a3c21fa2229c7e427ce604429f0b20ab7f411e2e824912f572a207c7f5a41fd1f0a95b9b8afe121e291c1b1f1dc1d44c7aad4b0837487f9c19f5210d
   languageName: node
   linkType: hard
 
@@ -9357,7 +9372,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"fast-glob@npm:^3.2.11, fast-glob@npm:^3.2.5, fast-glob@npm:^3.2.7, fast-glob@npm:^3.2.9":
+"fast-diff@npm:^1.1.2":
+  version: 1.2.0
+  resolution: "fast-diff@npm:1.2.0"
+  checksum: 1b5306eaa9e826564d9e5ffcd6ebd881eb5f770b3f977fcbf38f05c824e42172b53c79920e8429c54eb742ce15a0caf268b0fdd5b38f6de52234c4a8368131ae
+  languageName: node
+  linkType: hard
+
+"fast-glob@npm:^3.2.11, fast-glob@npm:^3.2.5, fast-glob@npm:^3.2.9":
   version: 3.2.11
   resolution: "fast-glob@npm:3.2.11"
   dependencies:
@@ -10751,24 +10773,26 @@ __metadata:
   languageName: node
   linkType: hard
 
-"hygen@npm:^6.1.0":
-  version: 6.1.0
-  resolution: "hygen@npm:6.1.0"
+"hygen@npm:^6.1.5":
+  version: 6.1.5
+  resolution: "hygen@npm:6.1.5"
   dependencies:
-    "@types/node": ^14.14.41
-    chalk: ^4.1.1
+    "@types/node": ^17.0.19
+    chalk: ^4.1.2
     change-case: ^3.1.0
-    ejs: ^3.1.3
+    debug: ^4.3.3
+    ejs: ^3.1.6
     enquirer: ^2.3.6
+    eslint-plugin-prettier: ^4.0.0
     execa: ^5.0.0
     front-matter: ^4.0.2
-    fs-extra: ^9.1.0
-    ignore-walk: ^3.0.3
+    fs-extra: ^10.0.0
+    ignore-walk: ^4.0.1
     inflection: ^1.12.0
-    yargs-parser: ^20.2.7
+    yargs-parser: ^21.0.0
   bin:
     hygen: dist/bin.js
-  checksum: 3bfebcc40b415a162b44a0d4ccf889983465d1dc16fcb2e222f9176173dc3f9c9b6ea7edc1cdac035c2d2bcd9ba076c3a5af455c8973a5cc6065401851e4b3d5
+  checksum: fa545a4713fc75c8eeb1e0763a6b371e244c751ab7e41d4c81de0c3c147774a1fe0042be2ed6090887acc7cd3e8d2c20af6d89584b0e5bf974520568d3f074d8
   languageName: node
   linkType: hard
 
@@ -15536,6 +15560,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"prettier-linter-helpers@npm:^1.0.0":
+  version: 1.0.0
+  resolution: "prettier-linter-helpers@npm:1.0.0"
+  dependencies:
+    fast-diff: ^1.1.2
+  checksum: 00ce8011cf6430158d27f9c92cfea0a7699405633f7f1d4a45f07e21bf78e99895911cbcdc3853db3a824201a7c745bd49bfea8abd5fb9883e765a90f74f8392
+  languageName: node
+  linkType: hard
+
 "prettier@npm:^2.5.1":
   version: 2.5.1
   resolution: "prettier@npm:2.5.1"
@@ -19990,7 +20023,7 @@ resolve@~1.19.0:
   languageName: node
   linkType: hard
 
-"yargs-parser@npm:^20.2.2, yargs-parser@npm:^20.2.3, yargs-parser@npm:^20.2.7":
+"yargs-parser@npm:^20.2.2, yargs-parser@npm:^20.2.3":
   version: 20.2.7
   resolution: "yargs-parser@npm:20.2.7"
   checksum: ec0ea9e1b5699977380583f5ab1c0e2c6fc5f1ed374eb3053c458df00c543effba53628ad3297f3ccc769660518d5e376fd1cfb298b8e37077421aca8d75ae89
