@@ -33,7 +33,11 @@ module.exports = {
 	organizationName: 'beemojs',
 	projectName: 'beemo',
 	themeConfig: {
-		algolia: { apiKey: 'f8c50c2054d10e589209829dde85fb91', indexName: 'beemo' },
+		algolia: {
+			apiKey: '1b170ddbd51334e7ff1ae04a4a3c8cfc',
+			appId: 'CVDU6RRKBY',
+			indexName: 'beemo',
+		},
 		navbar: {
 			title: 'Beemo',
 			logo: {
