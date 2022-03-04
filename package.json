@@ -4,7 +4,7 @@
   "scripts": {
     "beemo": "node packages/cli/lib/bin.js",
     "docs": "cd website && yarn run start",
-    "setup": "yarn run build && yarn run beemo create-config",
+    "setup": "yarn run build",
     "check": "yarn run type && yarn run test && yarn run lint",
     "build": "packemon build --addEngines",
     "pack": "NODE_ENV=production packemon pack --addEngines --declaration=standard",
