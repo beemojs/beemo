@@ -4,6 +4,8 @@
 [![npm version](https://badge.fury.io/js/%40beemo%2Fcore.svg)](https://www.npmjs.com/package/@beemo/core)
 [![npm deps](https://david-dm.org/beemojs/beemo.svg?path=packages/core)](https://www.npmjs.com/package/@beemo/core)
 
+> # Beemo is no longer in development and will not be maintained or upgraded! We suggest migrating to a more thorough solution, like [moon](https://moonrepo.dev), a Rust based build system.
+
 Manage dev and build tools, their configuration, and commands in a single centralized repository.
 Beemo aims to solve the multi-project maintenance fatigue by removing the following burdens across
 all projects: config and dotfile management, multiple config patterns, up-to-date development
